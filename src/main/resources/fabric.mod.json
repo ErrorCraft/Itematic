@@ -25,11 +25,12 @@
   "mixins": [
     "itematic.mixins.json"
   ],
+  "accessWidener": "itematic.accesswidener",
 
   "depends": {
-    "fabricloader": ">=0.13.3",
+    "fabricloader": ">=0.14.10",
     "fabric": "*",
-    "minecraft": "1.18.x",
+    "minecraft": ">=1.19.3-alpha.22.42.a",
     "java": ">=17"
   },
   "suggests": {

@@ -1,0 +1,27 @@
+package errorcraft.itematic.mixin.util.registry;
+
+import com.google.common.collect.ImmutableList;
+import errorcraft.itematic.item.ItemUtil;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryLoader;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.List;
+
+@Mixin(RegistryLoader.class)
+public class RegistryLoaderExtender {
+    @Shadow
+    @Final
+    @Mutable
+    public static List<RegistryLoader.Entry<?>> DYNAMIC_REGISTRIES;
+
+    static {
+        DYNAMIC_REGISTRIES = new ImmutableList.Builder<RegistryLoader.Entry<?>>()
+            .addAll(DYNAMIC_REGISTRIES)
+            .add(new RegistryLoader.Entry<>(Registry.ITEM_KEY, ItemUtil.CODEC))
+            .build();
+    }
+}

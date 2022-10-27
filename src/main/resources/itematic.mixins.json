@@ -4,6 +4,14 @@
   "package": "errorcraft.itematic.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "item.ItemsExtender",
+    "util.registry.BuiltinRegistriesAccessor",
+    "util.registry.BuiltinRegistriesExtender",
+    "util.registry.RegistryAccessor",
+    "util.registry.RegistryExtender",
+    "util.registry.RegistryLoaderExtender",
+    "util.registry.SerializableRegistriesAccessor",
+    "util.registry.SerializableRegistriesExtender"
   ],
   "client": [
   ],

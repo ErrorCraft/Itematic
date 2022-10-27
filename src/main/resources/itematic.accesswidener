@@ -1,0 +1,5 @@
+accessWidener	v1	named
+
+accessible    class    net/minecraft/util/registry/SerializableRegistries$Info
+accessible    class    net/minecraft/util/registry/BuiltinRegistries$Initializer
+accessible    class    net/minecraft/util/registry/Registry$DefaultEntryGetter
