@@ -4,6 +4,16 @@
   "package": "errorcraft.itematic.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "item.ItemExtender",
+    "item.ItemGroupsExtender$BuildingBlocksExtender",
+    "item.ItemGroupsExtender$CombatExtender",
+    "item.ItemGroupsExtender$ConsumablesExtender",
+    "item.ItemGroupsExtender$CraftingExtender",
+    "item.ItemGroupsExtender$FunctionalExtender",
+    "item.ItemGroupsExtender$NaturalExtender",
+    "item.ItemGroupsExtender$RedstoneExtender",
+    "item.ItemGroupsExtender$SpawnEggsExtender",
+    "item.ItemGroupsExtender$ToolsExtender",
     "item.ItemsExtender",
     "util.registry.BuiltinRegistriesAccessor",
     "util.registry.BuiltinRegistriesExtender",
@@ -14,6 +24,7 @@
     "util.registry.SerializableRegistriesExtender"
   ],
   "client": [
+    "client.render.item.ItemRendererExtender"
   ],
   "injectors": {
     "defaultRequire": 1

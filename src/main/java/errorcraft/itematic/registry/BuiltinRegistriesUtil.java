@@ -12,12 +12,8 @@ public class BuiltinRegistriesUtil {
         return addDefaultedRegistry(defaultId, registryRef, initializer, Lifecycle.stable());
     }
 
-    public static <T> void addExistingRegistry(RegistryKey<Registry<T>> registryRef, DefaultedRegistry<T> registry, BuiltinRegistries.Initializer<T> initializer) {
-        BuiltinRegistriesAccessor.addRegistry(registryRef, registry, initializer, registry.getLifecycle());
-    }
-
     private static <T> DefaultedRegistry<T> addDefaultedRegistry(String defaultId, RegistryKey<Registry<T>> registryRef, BuiltinRegistries.Initializer<T> initializer, Lifecycle lifecycle) {
-        DefaultedRegistry<T> reg = new DefaultedRegistry<>(defaultId, registryRef, lifecycle, true);
+        DefaultedRegistry<T> reg = new DefaultedRegistry<>(defaultId, registryRef, lifecycle, false);
         return BuiltinRegistriesAccessor.addRegistry(registryRef, reg, initializer, lifecycle);
     }
 }
