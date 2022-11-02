@@ -24,7 +24,10 @@
     "util.registry.SerializableRegistriesExtender"
   ],
   "client": [
-    "client.render.item.ItemRendererExtender"
+    "client.network.ClientPlayNetworkHandlerExtender",
+    "client.render.item.ItemModelsExtender",
+    "client.render.item.ItemRendererExtender",
+    "client.render.model.ModelLoaderExtender"
   ],
   "injectors": {
     "defaultRequire": 1

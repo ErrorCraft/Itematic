@@ -10,6 +10,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public class RegistryUtil {
+    public static <T> Registry<T> getRegistry(@Nullable World world, RegistryKey<Registry<T>> key) {
+        if (world == null) {
+            return null;
+        }
+        return world.getRegistryManager().get(key);
+    }
+
     public static <T> boolean tagContains(@Nullable World world, TagKey<T> tag, T value) {
         if (world == null) {
             return false;
