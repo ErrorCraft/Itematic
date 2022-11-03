@@ -1,6 +1,7 @@
 package errorcraft.itematic.mixin.util.registry;
 
-import net.minecraft.util.registry.DefaultedRegistry;
+import com.mojang.serialization.Lifecycle;
+import net.minecraft.util.registry.MutableRegistry;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,13 +14,13 @@ import java.util.Objects;
 @Mixin(Registry.class)
 public class RegistryExtender {
     @Inject(
-        method = "createIntrusive(Lnet/minecraft/util/registry/RegistryKey;Ljava/lang/String;Lnet/minecraft/util/registry/Registry$DefaultEntryGetter;)Lnet/minecraft/util/registry/DefaultedRegistry;",
+        method = "create(Lnet/minecraft/util/registry/RegistryKey;Lnet/minecraft/util/registry/MutableRegistry;Lnet/minecraft/util/registry/Registry$DefaultEntryGetter;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/util/registry/MutableRegistry;",
         at = @At("HEAD"),
         cancellable = true
     )
-    private static <T> void createIntrusive(RegistryKey<? extends Registry<T>> key, String defaultId, Registry.DefaultEntryGetter<T> defaultEntryGetter, CallbackInfoReturnable<DefaultedRegistry<T>> info) {
+    private static <T, R extends MutableRegistry<T>> void doNotAddItemRegistry(RegistryKey<? extends Registry<T>> key, R registry, Registry.DefaultEntryGetter<T> defaultEntryGetter, Lifecycle lifecycle, CallbackInfoReturnable<R> info) {
         if (Objects.equals(key, Registry.ITEM_KEY)) {
-            info.setReturnValue(null);
+            info.setReturnValue(registry);
         }
     }
 }

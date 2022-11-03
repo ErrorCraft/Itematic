@@ -15,7 +15,7 @@ public class ItemGroupsExtender {
             at = @At("HEAD"),
             cancellable = true
         )
-        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, CallbackInfo info) {
+        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, boolean hasPermissions, CallbackInfo info) {
             info.cancel();
         }
     }
@@ -27,7 +27,7 @@ public class ItemGroupsExtender {
             at = @At("HEAD"),
             cancellable = true
         )
-        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, CallbackInfo info) {
+        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, boolean hasPermissions, CallbackInfo info) {
             info.cancel();
         }
     }
@@ -39,7 +39,7 @@ public class ItemGroupsExtender {
             at = @At("HEAD"),
             cancellable = true
         )
-        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, CallbackInfo info) {
+        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, boolean hasPermissions, CallbackInfo info) {
             info.cancel();
         }
     }
@@ -51,7 +51,7 @@ public class ItemGroupsExtender {
             at = @At("HEAD"),
             cancellable = true
         )
-        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, CallbackInfo info) {
+        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, boolean hasPermissions, CallbackInfo info) {
             info.cancel();
         }
     }
@@ -63,7 +63,7 @@ public class ItemGroupsExtender {
             at = @At("HEAD"),
             cancellable = true
         )
-        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, CallbackInfo info) {
+        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, boolean hasPermissions, CallbackInfo info) {
             info.cancel();
         }
     }
@@ -75,7 +75,7 @@ public class ItemGroupsExtender {
             at = @At("HEAD"),
             cancellable = true
         )
-        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, CallbackInfo info) {
+        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, boolean hasPermissions, CallbackInfo info) {
             info.cancel();
         }
     }
@@ -87,7 +87,7 @@ public class ItemGroupsExtender {
             at = @At("HEAD"),
             cancellable = true
         )
-        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, CallbackInfo info) {
+        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, boolean hasPermissions, CallbackInfo info) {
             info.cancel();
         }
     }
@@ -99,7 +99,7 @@ public class ItemGroupsExtender {
             at = @At("HEAD"),
             cancellable = true
         )
-        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, CallbackInfo info) {
+        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, boolean hasPermissions, CallbackInfo info) {
             info.cancel();
         }
     }
@@ -111,7 +111,7 @@ public class ItemGroupsExtender {
             at = @At("HEAD"),
             cancellable = true
         )
-        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, CallbackInfo info) {
+        private void removeItems(FeatureSet enabledFeatures, ItemGroup.Entries entries, boolean hasPermissions, CallbackInfo info) {
             info.cancel();
         }
     }
