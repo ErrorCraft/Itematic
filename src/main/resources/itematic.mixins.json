@@ -4,6 +4,7 @@
   "package": "errorcraft.itematic.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "entity.ItemEntityExtender",
     "item.ItemGroupsExtender$BuildingBlocksExtender",
     "item.ItemGroupsExtender$CombatExtender",
     "item.ItemGroupsExtender$ConsumablesExtender",
