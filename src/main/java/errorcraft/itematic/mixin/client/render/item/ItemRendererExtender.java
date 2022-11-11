@@ -15,6 +15,7 @@ import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKeys;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -40,7 +41,7 @@ public class ItemRendererExtender implements DynamicRegistryAccess {
     }
 
     public void loadDynamicEntries(DynamicRegistryManager registryManager) {
-        Registry<Item> registry = registryManager.get(Registry.ITEM_KEY);
+        Registry<Item> registry = registryManager.get(RegistryKeys.ITEM);
         if (registry == null) {
             return;
         }

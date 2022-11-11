@@ -11,7 +11,7 @@ public class ItemUtil {
         Codec.INT.fieldOf("max_count").forGetter(Item::getMaxCount)
     ).apply(instance, ItemUtil::create));
 
-    public static void initAndGetDefault(Registerable<Item> registerable) {
+    public static void bootstrap(Registerable<Item> registerable) {
         registerable.register(ItemKeys.AIR, Items.AIR);
         registerable.register(ItemKeys.STONE, Items.STONE);
     }

@@ -2,8 +2,8 @@ package errorcraft.itematic.mixin.util.registry;
 
 import errorcraft.itematic.item.ItemUtil;
 import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryBuilder;
+import net.minecraft.util.registry.RegistryKeys;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -22,6 +22,6 @@ public class BuiltinRegistriesExtender {
         at = @At("TAIL")
     )
     private static void initialiseItemRegistry(CallbackInfo info) {
-        REGISTRY_BUILDER.addRegistry(Registry.ITEM_KEY, ItemUtil::initAndGetDefault);
+        REGISTRY_BUILDER.addRegistry(RegistryKeys.ITEM, ItemUtil::bootstrap);
     }
 }

@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import errorcraft.itematic.item.ItemUtil;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.util.registry.RegistryKeys;
 import net.minecraft.util.registry.SerializableRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,9 +30,10 @@ public abstract class SerializableRegistriesExtender {
             target = "Lcom/google/common/collect/ImmutableMap$Builder;build()Lcom/google/common/collect/ImmutableMap;",
             shift = At.Shift.BEFORE
         ),
-        locals = LocalCapture.CAPTURE_FAILHARD
+        locals = LocalCapture.CAPTURE_FAILHARD,
+        remap = false
     )
     private static void addItemRegistryKey(CallbackInfoReturnable<Map<RegistryKey<? extends Registry<?>>, SerializableRegistries.Info<?>>> info, ImmutableMap.Builder<RegistryKey<? extends Registry<?>>, SerializableRegistries.Info<?>> builder) {
-        add(builder, Registry.ITEM_KEY, ItemUtil.CODEC);
+        add(builder, RegistryKeys.ITEM, ItemUtil.CODEC);
     }
 }

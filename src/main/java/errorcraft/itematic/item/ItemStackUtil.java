@@ -6,12 +6,13 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKeys;
 
 public class ItemStackUtil {
     private static final Identifier AIR = ItemKeys.AIR.getValue();
 
     public static NbtCompound writeToNbt(DynamicRegistryManager registryManager, ItemStack itemStack, NbtCompound nbt) {
-        Registry<Item> registry = registryManager.get(Registry.ITEM_KEY);
+        Registry<Item> registry = registryManager.get(RegistryKeys.ITEM);
         Identifier id = registry.getId(itemStack.getItem());
         itemStack.writeNbt(nbt);
         if (id == null) {
@@ -23,7 +24,7 @@ public class ItemStackUtil {
 
     public static ItemStack readFromNbt(DynamicRegistryManager registryManager, NbtCompound nbt) {
         ItemStack itemStack = ItemStack.fromNbt(nbt);
-        Registry<Item> registry = registryManager.get(Registry.ITEM_KEY);
+        Registry<Item> registry = registryManager.get(RegistryKeys.ITEM);
         Item item = registry.get(new Identifier(nbt.getString("id")));
         ItemStack actualItemStack = new ItemStack(item, itemStack.getCount());
         actualItemStack.setNbt(itemStack.getNbt());

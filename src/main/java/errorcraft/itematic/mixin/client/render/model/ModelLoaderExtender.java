@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.DefaultedRegistry;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKeys;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -26,7 +27,7 @@ public class ModelLoaderExtender {
         )
     )
     private Set<Identifier> useDynamicRegistry(DefaultedRegistry<Item> instance) {
-        Registry<Item> registry = RegistryUtil.getRegistry(MinecraftClient.getInstance().world, Registry.ITEM_KEY);
+        Registry<Item> registry = RegistryUtil.getRegistry(MinecraftClient.getInstance().world, RegistryKeys.ITEM);
         return registry == null ? Set.of() : registry.getIds();
     }
 }

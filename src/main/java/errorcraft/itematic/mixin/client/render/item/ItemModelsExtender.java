@@ -10,6 +10,7 @@ import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKeys;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,7 +31,7 @@ public abstract class ItemModelsExtender implements ItemModelsAccess {
         cancellable = true
     )
     private static void useDynamicRegistry(Item item, CallbackInfoReturnable<Integer> info) {
-        Registry<Item> registry = RegistryUtil.getRegistry(MinecraftClient.getInstance().world, Registry.ITEM_KEY);
+        Registry<Item> registry = RegistryUtil.getRegistry(MinecraftClient.getInstance().world, RegistryKeys.ITEM);
         info.setReturnValue(registry == null ? -1 : registry.getRawId(item));
     }
 
