@@ -25,7 +25,7 @@ public class ItemGroupExtender {
             method = "build",
             at = @At("HEAD")
         )
-        private void yes(CallbackInfoReturnable<ItemGroup> info) {
+        private void useEmptyEntries(CallbackInfoReturnable<ItemGroup> info) {
             if (this.type == ItemGroup.Type.CATEGORY) {
                 this.entryCollector = EMPTY_ENTRIES;
             }

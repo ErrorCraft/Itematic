@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "entity.ItemEntityExtender",
+    "entity.player.PlayerInventoryExtender",
     "item.ItemGroupExtender$BuilderExtender",
     "util.registry.BuiltinRegistriesExtender",
     "util.registry.RegistriesExtender",
