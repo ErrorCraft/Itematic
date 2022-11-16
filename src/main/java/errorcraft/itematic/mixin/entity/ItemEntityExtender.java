@@ -26,7 +26,7 @@ public abstract class ItemEntityExtender extends Entity {
         )
     )
     private NbtCompound writeCustomDataToNbtUseDynamicRegistry(ItemStack instance, NbtCompound nbt) {
-        return ItemStackUtil.writeToNbt(this.world.getRegistryManager(), instance, nbt);
+        return ItemStackUtil.writeToNbt(nbt, this.world.getRegistryManager(), instance);
     }
 
     @Redirect(
@@ -37,6 +37,6 @@ public abstract class ItemEntityExtender extends Entity {
         )
     )
     private ItemStack readCustomDataFromNbtUseDynamicRegistry(NbtCompound nbt) {
-        return ItemStackUtil.readFromNbt(this.world.getRegistryManager(), nbt);
+        return ItemStackUtil.readFromNbt(nbt, this.world.getRegistryManager());
     }
 }

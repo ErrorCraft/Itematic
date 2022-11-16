@@ -9,23 +9,24 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKeys;
 
 public class ItemStackUtil {
+    private static final String ID = "id";
     private static final Identifier AIR = ItemKeys.AIR.getValue();
 
-    public static NbtCompound writeToNbt(DynamicRegistryManager registryManager, ItemStack itemStack, NbtCompound nbt) {
+    public static NbtCompound writeToNbt(NbtCompound nbt, DynamicRegistryManager registryManager, ItemStack itemStack) {
         Registry<Item> registry = registryManager.get(RegistryKeys.ITEM);
         Identifier id = registry.getId(itemStack.getItem());
         itemStack.writeNbt(nbt);
         if (id == null) {
             id = AIR;
         }
-        nbt.putString("id", id.toString());
+        nbt.putString(ID, id.toString());
         return nbt;
     }
 
-    public static ItemStack readFromNbt(DynamicRegistryManager registryManager, NbtCompound nbt) {
+    public static ItemStack readFromNbt(NbtCompound nbt, DynamicRegistryManager registryManager) {
         ItemStack itemStack = ItemStack.fromNbt(nbt);
         Registry<Item> registry = registryManager.get(RegistryKeys.ITEM);
-        Item item = registry.get(new Identifier(nbt.getString("id")));
+        Item item = registry.get(new Identifier(nbt.getString(ID)));
         ItemStack actualItemStack = new ItemStack(item, itemStack.getCount());
         actualItemStack.setNbt(itemStack.getNbt());
         return actualItemStack;

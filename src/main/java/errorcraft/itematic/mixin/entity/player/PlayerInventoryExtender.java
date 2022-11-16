@@ -42,13 +42,13 @@ public class PlayerInventoryExtender {
     private void writeNbtUseDynamicRegistry(NbtList nbtList, CallbackInfoReturnable<NbtList> info) {
         DynamicRegistryManager registryManager = this.player.world.getRegistryManager();
         for (int i = 0; i < this.main.size(); i++) {
-            SlotUtil.writeToNbt(registryManager, i, this.main.get(i), nbtList);
+            SlotUtil.writeToNbt(nbtList, registryManager, i, this.main.get(i));
         }
         for (int i = 0; i < this.armor.size(); i++) {
-            SlotUtil.writeToNbt(registryManager, i + 100, this.armor.get(i), nbtList);
+            SlotUtil.writeToNbt(nbtList, registryManager, i + 100, this.armor.get(i));
         }
         for (int i = 0; i < this.offHand.size(); i++) {
-            SlotUtil.writeToNbt(registryManager, i + 150, this.offHand.get(i), nbtList);
+            SlotUtil.writeToNbt(nbtList, registryManager, i + 150, this.offHand.get(i));
         }
         info.setReturnValue(nbtList);
     }
@@ -65,7 +65,7 @@ public class PlayerInventoryExtender {
     )
     private void readNbtUseDynamicRegistry(NbtList nbtList, CallbackInfo info) {
         DynamicRegistryManager registryManager = this.player.world.getRegistryManager();
-        InventoryUtil.readFromNbt(registryManager, this::setItem, nbtList);
+        InventoryUtil.readFromNbt(nbtList, registryManager, this::setItem);
         info.cancel();
     }
 
