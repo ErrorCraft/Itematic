@@ -1,9 +1,9 @@
 package errorcraft.itematic.registry;
 
-import net.minecraft.tag.TagKey;
-import net.minecraft.util.registry.DynamicRegistryManager;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 

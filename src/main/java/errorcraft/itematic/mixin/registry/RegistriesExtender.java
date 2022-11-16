@@ -1,7 +1,7 @@
-package errorcraft.itematic.mixin.util.registry;
+package errorcraft.itematic.mixin.registry;
 
 import com.mojang.serialization.Lifecycle;
-import net.minecraft.util.registry.*;
+import net.minecraft.registry.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,7 +12,7 @@ import java.util.Objects;
 @Mixin(Registries.class)
 public class RegistriesExtender {
     @Inject(
-        method = "create(Lnet/minecraft/util/registry/RegistryKey;Lnet/minecraft/util/registry/MutableRegistry;Lnet/minecraft/util/registry/Registries$Initializer;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/util/registry/MutableRegistry;",
+        method = "create(Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/registry/MutableRegistry;Lnet/minecraft/registry/Registries$Initializer;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/registry/MutableRegistry;",
         at = @At("HEAD"),
         cancellable = true
     )

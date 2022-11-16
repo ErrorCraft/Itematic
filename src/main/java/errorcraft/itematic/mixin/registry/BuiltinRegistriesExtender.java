@@ -1,9 +1,9 @@
-package errorcraft.itematic.mixin.util.registry;
+package errorcraft.itematic.mixin.registry;
 
 import errorcraft.itematic.item.ItemUtil;
-import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.util.registry.RegistryBuilder;
-import net.minecraft.util.registry.RegistryKeys;
+import net.minecraft.registry.BuiltinRegistries;
+import net.minecraft.registry.RegistryBuilder;
+import net.minecraft.registry.RegistryKeys;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

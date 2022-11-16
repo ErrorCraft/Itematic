@@ -1,12 +1,12 @@
-package errorcraft.itematic.mixin.util.registry;
+package errorcraft.itematic.mixin.registry;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Codec;
 import errorcraft.itematic.item.ItemUtil;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.util.registry.RegistryKeys;
-import net.minecraft.util.registry.SerializableRegistries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.SerializableRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

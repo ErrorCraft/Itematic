@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.util.registry.Registerable;
+import net.minecraft.registry.Registerable;
 
 public class ItemUtil {
     public static final Codec<Item> CODEC = RecordCodecBuilder.create((instance) -> instance.group(

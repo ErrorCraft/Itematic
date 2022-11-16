@@ -1,6 +1,6 @@
 package errorcraft.itematic.access;
 
-import net.minecraft.util.registry.DynamicRegistryManager;
+import net.minecraft.registry.DynamicRegistryManager;
 
 public interface DynamicRegistryAccess {
     void loadDynamicEntries(DynamicRegistryManager registryManager);

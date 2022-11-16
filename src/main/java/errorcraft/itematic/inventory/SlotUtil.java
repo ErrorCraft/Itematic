@@ -1,12 +1,11 @@
 package errorcraft.itematic.inventory;
 
 import errorcraft.itematic.item.ItemStackUtil;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.registry.DynamicRegistryManager;
 
 import java.util.function.BiConsumer;
 

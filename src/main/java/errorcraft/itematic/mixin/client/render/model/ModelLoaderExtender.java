@@ -6,10 +6,10 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.item.Item;
+import net.minecraft.registry.DefaultedRegistry;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.DefaultedRegistry;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKeys;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -23,7 +23,7 @@ public class ModelLoaderExtender {
         method = "<init>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/util/registry/DefaultedRegistry;getIds()Ljava/util/Set;"
+            target = "Lnet/minecraft/registry/DefaultedRegistry;getIds()Ljava/util/Set;"
         )
     )
     private Set<Identifier> useDynamicRegistry(DefaultedRegistry<Item> instance) {

@@ -1,9 +1,9 @@
-package errorcraft.itematic.mixin.util.registry;
+package errorcraft.itematic.mixin.registry;
 
 import com.google.common.collect.ImmutableList;
 import errorcraft.itematic.item.ItemUtil;
-import net.minecraft.util.registry.RegistryKeys;
-import net.minecraft.util.registry.RegistryLoader;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryLoader;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
