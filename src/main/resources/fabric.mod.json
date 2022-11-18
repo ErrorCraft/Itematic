@@ -26,6 +26,13 @@
     "itematic.mixins.json"
   ],
   "accessWidener": "itematic.accesswidener",
+  "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/class_1730": [
+        "errorcraft/itematic/access/PlayerAccess"
+      ]
+    }
+  },
 
   "depends": {
     "fabricloader": ">=0.14.10",

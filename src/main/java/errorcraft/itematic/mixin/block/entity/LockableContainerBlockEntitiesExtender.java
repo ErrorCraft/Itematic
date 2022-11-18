@@ -2,9 +2,7 @@ package errorcraft.itematic.mixin.block.entity;
 
 import errorcraft.itematic.inventory.InventoryUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.block.entity.LootableContainerBlockEntity;
+import net.minecraft.block.entity.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
@@ -13,9 +11,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(ChestBlockEntity.class)
-public abstract class ChestBlockEntityExtender extends LootableContainerBlockEntity {
-    protected ChestBlockEntityExtender(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
+@Mixin({ AbstractFurnaceBlockEntity.class, BarrelBlockEntity.class, BrewingStandBlockEntity.class, ChestBlockEntity.class, DispenserBlockEntity.class, HopperBlockEntity.class })
+public abstract class LockableContainerBlockEntitiesExtender extends LockableContainerBlockEntity {
+    protected LockableContainerBlockEntitiesExtender(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }
 
@@ -28,7 +26,7 @@ public abstract class ChestBlockEntityExtender extends LootableContainerBlockEnt
     )
     private NbtCompound writeNbtUseDynamicRegistry(NbtCompound nbt, DefaultedList<ItemStack> stacks) {
         if (this.world != null) {
-            InventoryUtil.writeToNbt(nbt, this.world.getRegistryManager(), stacks);
+            return InventoryUtil.writeToNbt(nbt, this.world.getRegistryManager(), stacks);
         }
         return nbt;
     }

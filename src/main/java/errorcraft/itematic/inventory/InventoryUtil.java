@@ -12,15 +12,16 @@ import java.util.function.BiConsumer;
 public class InventoryUtil {
     private static final String ITEMS = "Items";
 
-    public static void writeToNbt(NbtCompound nbt, DynamicRegistryManager registryManager, DefaultedList<ItemStack> itemStacks) {
-        writeToNbt(nbt, registryManager, itemStacks, true);
+    public static NbtCompound writeToNbt(NbtCompound nbt, DynamicRegistryManager registryManager, DefaultedList<ItemStack> itemStacks) {
+        return writeToNbt(nbt, registryManager, itemStacks, true);
     }
 
-    public static void writeToNbt(NbtCompound nbt, DynamicRegistryManager registryManager, DefaultedList<ItemStack> itemStacks, boolean setIfEmpty) {
+    public static NbtCompound writeToNbt(NbtCompound nbt, DynamicRegistryManager registryManager, DefaultedList<ItemStack> itemStacks, boolean setIfEmpty) {
         NbtList list = writeToNbt(new NbtList(), registryManager, itemStacks);
         if (!list.isEmpty() || setIfEmpty) {
             nbt.put(ITEMS, list);
         }
+        return nbt;
     }
 
     public static NbtList writeToNbt(NbtList nbt, DynamicRegistryManager registryManager, DefaultedList<ItemStack> itemStacks) {
