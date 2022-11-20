@@ -30,7 +30,7 @@ public class EnderChestInventoryExtender extends SimpleInventory implements Play
         locals = LocalCapture.CAPTURE_FAILHARD,
         cancellable = true
     )
-    private void writeNbtUseDynamicRegistry(CallbackInfoReturnable<NbtList> info, NbtList nbtList) {
+    private void toNbtListUseDynamicRegistry(CallbackInfoReturnable<NbtList> info, NbtList nbtList) {
         info.setReturnValue(InventoryUtil.writeToNbt(nbtList, this.player.world.getRegistryManager(), this.stacks));
     }
 
@@ -39,7 +39,7 @@ public class EnderChestInventoryExtender extends SimpleInventory implements Play
         at = @At("HEAD"),
         cancellable = true
     )
-    private void readInventoryNbtUseDynamicRegistry(NbtList nbtList, CallbackInfo info) {
+    private void readNbtListUseDynamicRegistry(NbtList nbtList, CallbackInfo info) {
         InventoryUtil.readFromNbt(nbtList, this.player.world.getRegistryManager(), this.stacks);
         info.cancel();
     }

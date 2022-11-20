@@ -28,6 +28,7 @@
   ],
   "client": [
     "client.network.ClientPlayNetworkHandlerExtender",
+    "client.option.HotbarStorageEntryExtender",
     "client.render.item.ItemModelsExtender",
     "client.render.item.ItemRendererExtender",
     "client.render.model.ModelLoaderExtender"
