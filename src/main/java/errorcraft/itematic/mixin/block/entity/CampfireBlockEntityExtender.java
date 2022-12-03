@@ -2,7 +2,9 @@ package errorcraft.itematic.mixin.block.entity;
 
 import errorcraft.itematic.inventory.InventoryUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
@@ -11,9 +13,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin({ CampfireBlockEntity.class, ChiseledBookshelfBlockEntity.class })
-public abstract class InventoryBlockEntitiesExtender extends BlockEntity {
-    public InventoryBlockEntitiesExtender(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+@Mixin(CampfireBlockEntity.class)
+public abstract class CampfireBlockEntityExtender extends BlockEntity {
+    public CampfireBlockEntityExtender(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 

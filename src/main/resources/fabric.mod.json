@@ -28,8 +28,29 @@
   "accessWidener": "itematic.accesswidener",
   "custom": {
     "loom:injected_interfaces": {
+      "net/minecraft/class_185": [
+        "errorcraft/itematic/access/advancement/AdvancementDisplayAccess"
+      ],
       "net/minecraft/class_1730": [
         "errorcraft/itematic/access/PlayerAccess"
+      ],
+      "net/minecraft/class_2535": [
+        "errorcraft/itematic/access/network/ClientConnectionAccess"
+      ],
+      "net/minecraft/class_2540": [
+        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+      ],
+      "net/minecraft/class_2543": [
+        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+      ],
+      "net/minecraft/class_2545": [
+        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+      ],
+      "net/minecraft/class_2989": [
+        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+      ],
+      "net/minecraft/class_5257": [
+        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ]
     }
   },

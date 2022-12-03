@@ -6,8 +6,11 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientDynamicRegistryType;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.network.ClientConnection;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.registry.CombinedDynamicRegistries;
+import net.minecraft.registry.DynamicRegistryManager;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,11 +28,22 @@ public class ClientPlayNetworkHandlerExtender {
     @Final
     private MinecraftClient client;
 
+    @Shadow
+    @Final
+    private ClientConnection connection;
+
     @Inject(
         method = "onGameJoin",
-        at = @At("RETURN")
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;combinedDynamicRegistries:Lnet/minecraft/registry/CombinedDynamicRegistries;",
+            opcode = Opcodes.PUTFIELD,
+            shift = At.Shift.AFTER
+        )
     )
     private void loadDynamicItemEntries(GameJoinS2CPacket packet, CallbackInfo info) {
-        ((DynamicRegistryAccess) this.client.getItemRenderer()).loadDynamicEntries(this.combinedDynamicRegistries.getCombinedRegistryManager());
+        DynamicRegistryManager registryManager = this.combinedDynamicRegistries.getCombinedRegistryManager();
+        this.connection.onSetRegistryManager(registryManager);
+        ((DynamicRegistryAccess) this.client.getItemRenderer()).loadDynamicEntries(registryManager);
     }
 }
