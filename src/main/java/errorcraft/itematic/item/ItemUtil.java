@@ -14,6 +14,14 @@ public class ItemUtil {
     public static void bootstrap(Registerable<Item> registerable) {
         registerable.register(ItemKeys.AIR, Items.AIR);
         registerable.register(ItemKeys.STONE, Items.STONE);
+        registerable.register(ItemKeys.GRASS_BLOCK, Items.GRASS_BLOCK);
+        registerable.register(ItemKeys.SAND, Items.SAND);
+        registerable.register(ItemKeys.GRASS, Items.GRASS);
+        registerable.register(ItemKeys.SNOW, Items.SNOW);
+        registerable.register(ItemKeys.BARRIER, Items.BARRIER);
+        registerable.register(ItemKeys.REDSTONE, Items.REDSTONE);
+        registerable.register(ItemKeys.FEATHER, Items.FEATHER);
+        registerable.register(ItemKeys.WATER_BUCKET, Items.WATER_BUCKET);
     }
 
     private static Item create(int maxCount) {

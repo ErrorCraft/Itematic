@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "errorcraft.itematic.Itematic"
+    ],
+    "fabric-datagen": [
+      "errorcraft.itematic.data.ItematicData"
     ]
   },
   "mixins": [
