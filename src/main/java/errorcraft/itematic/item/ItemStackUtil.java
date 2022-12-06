@@ -3,6 +3,7 @@ package errorcraft.itematic.item;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
@@ -30,7 +31,9 @@ public class ItemStackUtil {
         Item item = registry.get(new Identifier(nbt.getString(ID_KEY)));
         int count = nbt.getByte(COUNT_KEY);
         ItemStack itemStack = new ItemStack(item, count);
-        itemStack.setNbt(nbt.getCompound(NBT_KEY));
+        if (nbt.contains(NBT_KEY, NbtElement.COMPOUND_TYPE)) {
+            itemStack.setNbt(nbt.getCompound(NBT_KEY));
+        }
         return itemStack;
     }
 }
