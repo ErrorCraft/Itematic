@@ -45,5 +45,6 @@ public class ClientPlayNetworkHandlerExtender {
         DynamicRegistryManager registryManager = this.combinedDynamicRegistries.getCombinedRegistryManager();
         this.connection.onSetRegistryManager(registryManager);
         ((DynamicRegistryAccess) this.client.getItemRenderer()).loadDynamicEntries(registryManager);
+        this.client.reloadResources();
     }
 }

@@ -34,6 +34,9 @@
       "net/minecraft/class_185": [
         "errorcraft/itematic/access/advancement/AdvancementDisplayAccess"
       ],
+      "net/minecraft/class_763": [
+        "errorcraft/itematic/access/client/render/item/ItemModelsAccess"
+      ],
       "net/minecraft/class_1730": [
         "errorcraft/itematic/access/PlayerAccess"
       ],
