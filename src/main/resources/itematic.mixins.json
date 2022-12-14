@@ -19,6 +19,7 @@
     "entity.vehicle.VehicleInventoryExtender",
     "inventory.EnderChestInventoryExtender",
     "item.ItemGroupExtender$BuilderExtender",
+    "item.ItemStackExtender",
     "loot.function.SetContentsLootFunctionExtender",
     "network.ClientConnectionExtender",
     "network.ClientConnectionExtender$ChannelInitializerExtender",
