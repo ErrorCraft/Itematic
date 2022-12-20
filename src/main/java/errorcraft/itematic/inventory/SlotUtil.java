@@ -10,18 +10,18 @@ import net.minecraft.util.collection.DefaultedList;
 import java.util.function.BiConsumer;
 
 public class SlotUtil {
-    private static final String SLOT = "Slot";
+    private static final String SLOT_KEY = "Slot";
 
-    public static void writeToNbt(NbtList nbt, DynamicRegistryManager registryManager, int slot, ItemStack itemStack) {
+    public static void writeToNbt(NbtList nbt, int slot, ItemStack itemStack) {
         if (itemStack.isEmpty()) {
             return;
         }
-        nbt.add(writeToNbt(new NbtCompound(), registryManager, slot, itemStack));
+        nbt.add(writeToNbt(new NbtCompound(), slot, itemStack));
     }
 
-    public static NbtCompound writeToNbt(NbtCompound nbt, DynamicRegistryManager registryManager, int slot, ItemStack itemStack) {
-        nbt.putByte(SLOT, ((byte) slot));
-        ItemStackUtil.writeToNbt(nbt, registryManager, itemStack);
+    public static NbtCompound writeToNbt(NbtCompound nbt, int slot, ItemStack itemStack) {
+        nbt.putByte(SLOT_KEY, ((byte) slot));
+        itemStack.writeNbt(nbt);
         return nbt;
     }
 
@@ -30,7 +30,7 @@ public class SlotUtil {
     }
 
     public static void readFromNbt(NbtCompound nbt, DynamicRegistryManager registryManager, BiConsumer<Integer, ItemStack> slotSetter) {
-        int slot = nbt.getByte(SLOT) & 0xFF;
+        int slot = nbt.getByte(SLOT_KEY) & 0xFF;
         ItemStack itemStack = ItemStackUtil.readFromNbt(nbt, registryManager);
         if (itemStack.isEmpty()) {
             return;

@@ -30,17 +30,6 @@ public abstract class ItemEntitiesExtender extends Entity {
     }
 
     @Redirect(
-        method = "writeCustomDataToNbt",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;writeNbt(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/nbt/NbtCompound;"
-        )
-    )
-    private NbtCompound writeCustomDataToNbtUseDynamicRegistry(ItemStack instance, NbtCompound nbt) {
-        return ItemStackUtil.writeToNbt(nbt, this.world.getRegistryManager(), instance);
-    }
-
-    @Redirect(
         method = "readCustomDataFromNbt",
         at = @At(
             value = "INVOKE",

@@ -28,17 +28,6 @@ public class ItemStackUtil {
     private static final String NBT_KEY = "tag";
     private static final Identifier AIR = ItemKeys.AIR.getValue();
 
-    public static NbtCompound writeToNbt(NbtCompound nbt, DynamicRegistryManager registryManager, ItemStack itemStack) {
-        Registry<Item> registry = registryManager.get(RegistryKeys.ITEM);
-        Identifier id = registry.getId(itemStack.getItem());
-        itemStack.writeNbt(nbt);
-        if (id == null) {
-            id = AIR;
-        }
-        nbt.putString(ID_KEY, id.toString());
-        return nbt;
-    }
-
     public static ItemStack readFromNbt(NbtCompound nbt, DynamicRegistryManager registryManager) {
         Registry<Item> registry = registryManager.get(RegistryKeys.ITEM);
         Identifier id = new Identifier(nbt.getString(ID_KEY));
@@ -63,6 +52,13 @@ public class ItemStackUtil {
             return AIR;
         }
         return key.get().getValue();
+    }
+
+    public static ItemStack ofNullable(@Nullable RegistryEntry<Item> entry, int count) {
+        if (entry == null) {
+            return ItemStack.EMPTY;
+        }
+        return new ItemStack(entry, count);
     }
 
     private static ItemStack create(RegistryEntry<Item> entry, int count, Optional<NbtCompound> nbt) {

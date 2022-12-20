@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import errorcraft.itematic.access.item.ItemStackAccess;
 import errorcraft.itematic.item.ItemStackUtil;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.DefaultedRegistry;
@@ -76,8 +77,22 @@ public class ItemStackExtender implements ItemStackAccess {
         )
     )
     @NotNull
-    private <T> Identifier getIdUseField(DefaultedRegistry<T> instance, T value) {
+    private <T> Identifier getIdUseEntry(DefaultedRegistry<T> instance, T value) {
         return ItemStackUtil.getId(this.entry);
+    }
+
+    @Redirect(
+        method = "copy",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack"
+        )
+    )
+    private ItemStack copyUseEntry(ItemConvertible item, int count) {
+        if (this.entry == null) {
+            return new ItemStack(item, count);
+        }
+        return new ItemStack(this.entry, count);
     }
 
     @Override

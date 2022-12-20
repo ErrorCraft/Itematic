@@ -1,6 +1,5 @@
 package errorcraft.itematic.mixin.block.entity;
 
-import errorcraft.itematic.inventory.InventoryUtil;
 import errorcraft.itematic.item.ItemStackUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -18,20 +17,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class SingleItemBlockEntitiesExtender extends BlockEntity {
     public SingleItemBlockEntitiesExtender(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-    }
-
-    @Redirect(
-        method = "writeNbt",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;writeNbt(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/nbt/NbtCompound;"
-        )
-    )
-    private NbtCompound writeNbtUseDynamicRegistry(ItemStack instance, NbtCompound nbt) {
-        if (this.world != null) {
-            return ItemStackUtil.writeToNbt(nbt, this.world.getRegistryManager(), instance);
-        }
-        return nbt;
     }
 
     @Redirect(
