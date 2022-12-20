@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.JsonHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,7 +33,7 @@ public class AdvancementExtender {
         }
 
         private static ItemStack getItemStack(JsonObject json, DynamicRegistryManager registryManager) {
-            Item item = JsonUtil.getItem(json, "item", registryManager);
+            RegistryEntry<Item> item = JsonUtil.getItem(json, "item", registryManager);
             NbtCompound nbt = JsonUtil.getNbtCompound(json, "nbt", null);
 
             ItemStack itemStack = new ItemStack(item);
