@@ -11,16 +11,16 @@ public class ItemUtil {
     ).apply(instance, ItemUtil::create));
 
     public static void bootstrap(Registerable<Item> registerable) {
-        registerable.register(ItemKeys.AIR, create(new ItemBase(64)));
-        registerable.register(ItemKeys.STONE, create(new ItemBase(64)));
-        registerable.register(ItemKeys.GRASS_BLOCK, create(new ItemBase(64)));
-        registerable.register(ItemKeys.SAND, create(new ItemBase(64)));
-        registerable.register(ItemKeys.GRASS, create(new ItemBase(64)));
-        registerable.register(ItemKeys.SNOW, create(new ItemBase(64)));
-        registerable.register(ItemKeys.BARRIER, create(new ItemBase(64)));
-        registerable.register(ItemKeys.REDSTONE, create(new ItemBase(64)));
-        registerable.register(ItemKeys.FEATHER, create(new ItemBase(64)));
-        registerable.register(ItemKeys.WATER_BUCKET, create(new ItemBase(1)));
+        registerable.register(ItemKeys.AIR, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build(), 64)));
+        registerable.register(ItemKeys.STONE, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE).build(), 64)));
+        registerable.register(ItemKeys.GRASS_BLOCK, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRASS_BLOCK).build(), 64)));
+        registerable.register(ItemKeys.SAND, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SAND).build(), 64)));
+        registerable.register(ItemKeys.GRASS, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRASS).build(), 64)));
+        registerable.register(ItemKeys.SNOW, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SNOW).build(), 64)));
+        registerable.register(ItemKeys.BARRIER, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARRIER).build(), 64)));
+        registerable.register(ItemKeys.REDSTONE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.REDSTONE).build(), 64)));
+        registerable.register(ItemKeys.FEATHER, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FEATHER).build(), 64)));
+        registerable.register(ItemKeys.WATER_BUCKET, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build(), 1)));
     }
 
     private static Item create(ItemBase base) {

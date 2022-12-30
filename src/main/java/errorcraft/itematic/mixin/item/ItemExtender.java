@@ -19,6 +19,15 @@ public class ItemExtender implements ItemAccess {
         return this.base.maxCount();
     }
 
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemBase implementation for data-driven items.
+     */
+    @Overwrite
+    public String getTranslationKey() {
+        return this.base.display().translationKey();
+    }
+
     @Override
     public ItemBase getItemBase() {
         return this.base;
