@@ -5,12 +5,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import errorcraft.itematic.access.item.ItemStackAccess;
 import errorcraft.itematic.item.ItemBase;
+import errorcraft.itematic.item.ItemKeys;
 import errorcraft.itematic.item.ItemStackUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.DefaultedRegistry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -110,6 +112,21 @@ public class ItemStackExtender implements ItemStackAccess {
     @Overwrite
     public int getMaxCount() {
         return this.item == null ? ItemBase.MAX_MAX_COUNT : this.item.getMaxCount();
+    }
+
+    @Redirect(
+        method = "getTooltip",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/registry/DefaultedRegistry;getId(Ljava/lang/Object;)Lnet/minecraft/util/Identifier;"
+        )
+    )
+    @NotNull
+    private <T> Identifier getTooltipUseRegistryEntry(DefaultedRegistry<T> instance, T t) {
+        if (this.entry == null) {
+            return ItemKeys.AIR.getValue();
+        }
+        return this.entry.getKey().map(RegistryKey::getValue).orElse(ItemKeys.AIR.getValue());
     }
 
     @Override
