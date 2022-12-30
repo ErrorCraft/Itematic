@@ -40,6 +40,9 @@
       "net/minecraft/class_1730": [
         "errorcraft/itematic/access/PlayerAccess"
       ],
+      "net/minecraft/class_1792": [
+        "errorcraft/itematic/access/item/ItemAccess"
+      ],
       "net/minecraft/class_1799": [
         "errorcraft/itematic/access/item/ItemStackAccess"
       ],

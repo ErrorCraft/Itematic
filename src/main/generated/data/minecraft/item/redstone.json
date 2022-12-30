@@ -1,3 +1,5 @@
 {
-  "max_count": 64
+  "base": {
+    "max_count": 64
+  }
 }

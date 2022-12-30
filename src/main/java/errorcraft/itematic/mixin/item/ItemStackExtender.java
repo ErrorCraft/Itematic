@@ -4,6 +4,7 @@ import com.mojang.datafixers.kinds.App;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import errorcraft.itematic.access.item.ItemStackAccess;
+import errorcraft.itematic.item.ItemBase;
 import errorcraft.itematic.item.ItemStackUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
@@ -14,7 +15,9 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,6 +31,10 @@ import java.util.function.Function;
 @Mixin(ItemStack.class)
 public class ItemStackExtender implements ItemStackAccess {
     @Shadow
+    @Final
+    private Item item;
+
+    @Shadow
     @Nullable
     private NbtCompound nbt;
 
@@ -37,7 +44,8 @@ public class ItemStackExtender implements ItemStackAccess {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
+            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
+            remap = false
         )
     )
     private static Codec<ItemStack> useCustomItemStackCodec(Function<RecordCodecBuilder.Instance<ItemStack>, ? extends App<RecordCodecBuilder.Mu<ItemStack>, ItemStack>> builder) {
@@ -93,6 +101,15 @@ public class ItemStackExtender implements ItemStackAccess {
             return new ItemStack(item, count);
         }
         return new ItemStack(this.entry, count);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses a null check instead of a default air item.
+     */
+    @Overwrite
+    public int getMaxCount() {
+        return this.item == null ? ItemBase.MAX_MAX_COUNT : this.item.getMaxCount();
     }
 
     @Override

@@ -3,29 +3,29 @@ package errorcraft.itematic.item;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.registry.Registerable;
 
 public class ItemUtil {
     public static final Codec<Item> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
-        Codec.INT.fieldOf("max_count").forGetter(Item::getMaxCount)
+        ItemBase.CODEC.fieldOf("base").forGetter(Item::getItemBase)
     ).apply(instance, ItemUtil::create));
 
     public static void bootstrap(Registerable<Item> registerable) {
-        registerable.register(ItemKeys.AIR, Items.AIR);
-        registerable.register(ItemKeys.STONE, Items.STONE);
-        registerable.register(ItemKeys.GRASS_BLOCK, Items.GRASS_BLOCK);
-        registerable.register(ItemKeys.SAND, Items.SAND);
-        registerable.register(ItemKeys.GRASS, Items.GRASS);
-        registerable.register(ItemKeys.SNOW, Items.SNOW);
-        registerable.register(ItemKeys.BARRIER, Items.BARRIER);
-        registerable.register(ItemKeys.REDSTONE, Items.REDSTONE);
-        registerable.register(ItemKeys.FEATHER, Items.FEATHER);
-        registerable.register(ItemKeys.WATER_BUCKET, Items.WATER_BUCKET);
+        registerable.register(ItemKeys.AIR, create(new ItemBase(64)));
+        registerable.register(ItemKeys.STONE, create(new ItemBase(64)));
+        registerable.register(ItemKeys.GRASS_BLOCK, create(new ItemBase(64)));
+        registerable.register(ItemKeys.SAND, create(new ItemBase(64)));
+        registerable.register(ItemKeys.GRASS, create(new ItemBase(64)));
+        registerable.register(ItemKeys.SNOW, create(new ItemBase(64)));
+        registerable.register(ItemKeys.BARRIER, create(new ItemBase(64)));
+        registerable.register(ItemKeys.REDSTONE, create(new ItemBase(64)));
+        registerable.register(ItemKeys.FEATHER, create(new ItemBase(64)));
+        registerable.register(ItemKeys.WATER_BUCKET, create(new ItemBase(1)));
     }
 
-    private static Item create(int maxCount) {
-        Item.Settings settings = new Item.Settings().maxCount(maxCount);
-        return new Item(settings);
+    private static Item create(ItemBase base) {
+        Item item = new Item(new Item.Settings());
+        item.setItemBase(base);
+        return item;
     }
 }
