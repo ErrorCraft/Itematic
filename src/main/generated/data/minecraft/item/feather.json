@@ -4,5 +4,10 @@
       "translation_key": "item.minecraft.feather"
     },
     "max_count": 64
+  },
+  "components": {
+    "minecraft:test": {
+      "test_boolean": true
+    }
   }
 }

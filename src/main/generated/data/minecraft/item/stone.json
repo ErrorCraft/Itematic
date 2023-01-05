@@ -4,5 +4,6 @@
       "translation_key": "block.minecraft.stone"
     },
     "max_count": 64
-  }
+  },
+  "components": {}
 }

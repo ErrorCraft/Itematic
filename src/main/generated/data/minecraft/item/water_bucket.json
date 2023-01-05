@@ -4,5 +4,6 @@
       "translation_key": "item.minecraft.water_bucket"
     },
     "max_count": 1
-  }
+  },
+  "components": {}
 }

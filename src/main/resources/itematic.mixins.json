@@ -28,6 +28,7 @@
     "network.PacketEncoderExtender",
     "predicate.entity.AdvancementEntityPredicateDeserializerExtender",
     "registry.BuiltinRegistriesExtender",
+    "registry.RegistriesAccessor",
     "registry.RegistriesExtender",
     "registry.RegistryLoaderExtender",
     "registry.SerializableRegistriesExtender",
