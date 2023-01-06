@@ -18,7 +18,7 @@ public record TestItemComponent(boolean testBoolean) implements ItemComponent {
     ).apply(instance, TestItemComponent::new));
 
     @Override
-    public ItemComponentType getType() {
+    public ItemComponentType<?> getType() {
         return ItemComponentTypes.TEST;
     }
 

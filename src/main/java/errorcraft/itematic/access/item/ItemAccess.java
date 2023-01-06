@@ -2,6 +2,7 @@ package errorcraft.itematic.access.item;
 
 import errorcraft.itematic.item.ItemBase;
 import errorcraft.itematic.item.component.ItemComponent;
+import errorcraft.itematic.item.component.ItemComponentSet;
 
 import java.util.Set;
 
@@ -10,8 +11,8 @@ public interface ItemAccess {
         return null;
     }
     default void setItemBase(ItemBase base) {}
-    default Set<ItemComponent> getComponents() {
+    default ItemComponentSet getComponents() {
         return null;
     }
-    default void setComponents(Set<ItemComponent> components) {}
+    default void setComponents(ItemComponentSet components) {}
 }

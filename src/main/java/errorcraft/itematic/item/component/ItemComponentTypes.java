@@ -7,16 +7,16 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
 public class ItemComponentTypes {
-    public static final RegistryKey<Registry<ItemComponentType>> ITEM_COMPONENT_TYPE_KEY = RegistryKey.ofRegistry(new Identifier("item_component_type"));
-    public static final Registry<ItemComponentType> ITEM_COMPONENT_TYPE = RegistriesAccessor.create(ITEM_COMPONENT_TYPE_KEY, r -> ItemComponentTypes.TEST);
+    public static final RegistryKey<Registry<ItemComponentType<?>>> ITEM_COMPONENT_TYPE_KEY = RegistryKey.ofRegistry(new Identifier("item_component_type"));
+    public static final Registry<ItemComponentType<?>> ITEM_COMPONENT_TYPE = RegistriesAccessor.create(ITEM_COMPONENT_TYPE_KEY, r -> ItemComponentTypes.TEST);
 
-    public static final ItemComponentType TEST = register("test", new ItemComponentType(TestItemComponent.CODEC));
+    public static final ItemComponentType<TestItemComponent> TEST = register("test", new ItemComponentType<>(TestItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 
     public static void init() {}
 
-    private static ItemComponentType register(String id, ItemComponentType type) {
+    private static <T extends ItemComponent> ItemComponentType<T> register(String id, ItemComponentType<T> type) {
         return Registry.register(ITEM_COMPONENT_TYPE, id, type);
     }
 }

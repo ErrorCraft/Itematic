@@ -3,6 +3,7 @@ package errorcraft.itematic.mixin.item;
 import errorcraft.itematic.access.item.ItemAccess;
 import errorcraft.itematic.item.ItemBase;
 import errorcraft.itematic.item.component.ItemComponent;
+import errorcraft.itematic.item.component.ItemComponentSet;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,12 +14,10 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-import java.util.Set;
-
 @Mixin(Item.class)
 public class ItemExtender implements ItemAccess {
     private ItemBase base;
-    private Set<ItemComponent> components;
+    private ItemComponentSet components;
 
     /**
      * @author ErrorCraft
@@ -66,12 +65,12 @@ public class ItemExtender implements ItemAccess {
     }
 
     @Override
-    public Set<ItemComponent> getComponents() {
+    public ItemComponentSet getComponents() {
         return this.components;
     }
 
     @Override
-    public void setComponents(Set<ItemComponent> components) {
+    public void setComponents(ItemComponentSet components) {
         this.components = components;
     }
 }
