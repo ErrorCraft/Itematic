@@ -4,6 +4,9 @@ import errorcraft.itematic.access.item.ItemAccess;
 import errorcraft.itematic.item.ItemBase;
 import errorcraft.itematic.item.component.ItemComponent;
 import errorcraft.itematic.item.component.ItemComponentSet;
+import errorcraft.itematic.item.component.ItemComponentTypes;
+import errorcraft.itematic.item.component.components.UseDurationItemComponent;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -43,6 +46,36 @@ public class ItemExtender implements ItemAccess {
             itemStack = result.getValue();
         }
         return TypedActionResult.pass(itemStack);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
+        for (ItemComponent component : this.components) {
+            stack = component.finishUsing(world, user, stack);
+        }
+        return stack;
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public boolean isFood() {
+        return this.components.contains(ItemComponentTypes.FOOD);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public int getMaxUseTime(ItemStack stack) {
+        return this.components.get(ItemComponentTypes.USE_DURATION).map(UseDurationItemComponent::ticks).orElse(0);
     }
 
     /**

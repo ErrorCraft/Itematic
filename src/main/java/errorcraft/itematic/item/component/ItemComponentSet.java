@@ -37,8 +37,8 @@ public class ItemComponentSet implements Iterable<ItemComponent> {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ItemComponent> T get(ItemComponentType<T> type) {
-        return (T) this.map.get(type);
+    public <T extends ItemComponent> Optional<T> get(ItemComponentType<T> type) {
+        return Optional.ofNullable((T) this.map.get(type));
     }
 
     public static class Builder {

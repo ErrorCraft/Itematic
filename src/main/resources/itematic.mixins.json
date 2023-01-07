@@ -13,6 +13,8 @@
     "block.entity.ShulkerBoxBlockEntityExtender",
     "block.entity.SingleItemBlockEntitiesExtender",
     "entity.ItemEntitiesExtender",
+    "entity.LivingEntityExtender",
+    "entity.player.HungerManagerExtender",
     "entity.player.PlayerEntityExtender",
     "entity.player.PlayerInventoryExtender",
     "entity.vehicle.VehicleInventoryExtender",
