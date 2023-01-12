@@ -6,6 +6,7 @@ import errorcraft.itematic.item.component.ItemComponent;
 import errorcraft.itematic.item.component.ItemComponentSet;
 import errorcraft.itematic.item.component.ItemComponentTypes;
 import errorcraft.itematic.item.component.components.UseDurationItemComponent;
+import errorcraft.itematic.util.ActionResultUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -37,15 +38,15 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
+        TypedActionResult<ItemStack> result = TypedActionResult.pass(user.getStackInHand(hand));
         for (ItemComponent component : this.components) {
-            TypedActionResult<ItemStack> result = component.use(world, user, hand, itemStack);
-            if (result.getResult() != ActionResult.PASS) {
-                return result;
+            TypedActionResult<ItemStack> newResult = component.use(world, user, hand, result.getValue());
+            if (newResult.getResult() == ActionResult.FAIL) {
+                return newResult;
             }
-            itemStack = result.getValue();
+            result = ActionResultUtil.max(newResult, result.getResult());
         }
-        return TypedActionResult.pass(itemStack);
+        return result;
     }
 
     /**
