@@ -11,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -47,6 +48,23 @@ public class ItemExtender implements ItemAccess {
             result = ActionResultUtil.max(newResult, result.getResult());
         }
         return result;
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        TypedActionResult<ItemStack> result = TypedActionResult.pass(context.getStack());
+        for (ItemComponent component : this.components) {
+            TypedActionResult<ItemStack> newResult = component.useOnBlock(context);
+            if (newResult.getResult() == ActionResult.FAIL) {
+                return newResult.getResult();
+            }
+            result = ActionResultUtil.max(newResult, result.getResult());
+        }
+        return result.getResult();
     }
 
     /**

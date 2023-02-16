@@ -26,6 +26,10 @@ public class ItemComponentSet implements Iterable<ItemComponent> {
         this.map = map;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @NotNull
     @Override
     public Iterator<ItemComponent> iterator() {
@@ -43,10 +47,6 @@ public class ItemComponentSet implements Iterable<ItemComponent> {
 
     public static class Builder {
         private final Set<ItemComponent> components = new HashSet<>();
-
-        public static Builder create() {
-            return new Builder();
-        }
 
         public Builder with(ItemComponent component) {
             this.components.add(component);

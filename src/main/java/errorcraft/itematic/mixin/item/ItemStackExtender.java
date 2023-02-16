@@ -133,4 +133,9 @@ public class ItemStackExtender implements ItemStackAccess {
     public Optional<NbtCompound> getOptionalNbt() {
         return Optional.ofNullable(this.nbt);
     }
+
+    @Override
+    public boolean isOf(RegistryKey<Item> key) {
+        return this.entry != null && this.entry.matchesKey(key);
+    }
 }

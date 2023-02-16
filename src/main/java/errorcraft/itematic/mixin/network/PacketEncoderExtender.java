@@ -13,7 +13,7 @@ public class PacketEncoderExtender implements DynamicRegistryManagerAccess {
     private DynamicRegistryManager registryManager;
 
     @ModifyVariable(
-        method = "encode(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/Packet;Lio/netty/buffer/ByteBuf;)V",
+        method = "encode(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/packet/Packet;Lio/netty/buffer/ByteBuf;)V",
         at = @At("STORE")
     )
     private PacketByteBuf encodeUseDynamicRegistryManager(PacketByteBuf packetByteBuf) {

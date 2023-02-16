@@ -1,5 +1,6 @@
 package errorcraft.itematic.item.component;
 
+import errorcraft.itematic.item.component.components.BlockItemComponent;
 import errorcraft.itematic.item.component.components.FoodItemComponent;
 import errorcraft.itematic.item.component.components.TestItemComponent;
 import errorcraft.itematic.item.component.components.UseDurationItemComponent;
@@ -15,6 +16,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<TestItemComponent> TEST = register("test", new ItemComponentType<>(TestItemComponent.CODEC));
     public static final ItemComponentType<UseDurationItemComponent> USE_DURATION = register("use_duration", new ItemComponentType<>(UseDurationItemComponent.CODEC));
     public static final ItemComponentType<FoodItemComponent> FOOD = register("food", new ItemComponentType<>(FoodItemComponent.CODEC));
+    public static final ItemComponentType<BlockItemComponent> BLOCK = register("block", new ItemComponentType<>(BlockItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 
