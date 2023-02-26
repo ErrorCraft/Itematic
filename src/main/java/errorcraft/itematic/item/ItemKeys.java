@@ -11,6 +11,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> GRASS_BLOCK = register("grass_block");
     public static final RegistryKey<Item> SAND = register("sand");
     public static final RegistryKey<Item> GRASS = register("grass");
+    public static final RegistryKey<Item> OAK_SLAB = register("oak_slab");
     public static final RegistryKey<Item> SNOW = register("snow");
     public static final RegistryKey<Item> BARRIER = register("barrier");
     public static final RegistryKey<Item> REDSTONE = register("redstone");

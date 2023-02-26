@@ -6,6 +6,7 @@
   "mixins": [
     "advancement.AdvancementDisplayExtender",
     "advancement.AdvancementExtender$BuilderExtender",
+    "block.SlabBlockExtender",
     "block.entity.BlockEntityExtender",
     "block.entity.CampfireBlockEntityExtender",
     "block.entity.ChiseledBookshelfBlockEntityExtender",
