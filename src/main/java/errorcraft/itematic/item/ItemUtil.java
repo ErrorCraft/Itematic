@@ -3,9 +3,7 @@ package errorcraft.itematic.item;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import errorcraft.itematic.item.component.ItemComponentSet;
-import errorcraft.itematic.item.component.components.BlockItemComponent;
-import errorcraft.itematic.item.component.components.FoodItemComponent;
-import errorcraft.itematic.item.component.components.TestItemComponent;
+import errorcraft.itematic.item.component.components.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.FoodComponents;
@@ -33,6 +31,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.BARRIER, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARRIER).build(), 64), ItemComponentSet.builder().with(new BlockItemComponent(Blocks.BARRIER)).build()));
         registerable.register(ItemKeys.REDSTONE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.REDSTONE).build(), 64), ItemComponentSet.builder().with(new BlockItemComponent(Blocks.REDSTONE_WIRE)).build()));
         registerable.register(ItemKeys.APPLE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.APPLE).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.APPLE)).build()));
+        registerable.register(ItemKeys.IRON_PICKAXE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_PICKAXE).build(), 1), ItemComponentSet.builder().with(new DamageableItemComponent(100), new ToolItemComponent(1)).build()));
         registerable.register(ItemKeys.FEATHER, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FEATHER).build(), 64), ItemComponentSet.builder().with(new TestItemComponent(true)).build()));
         registerable.register(ItemKeys.WATER_BUCKET, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build(), 1)));
     }

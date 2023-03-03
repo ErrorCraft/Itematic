@@ -1,9 +1,6 @@
 package errorcraft.itematic.item.component;
 
-import errorcraft.itematic.item.component.components.BlockItemComponent;
-import errorcraft.itematic.item.component.components.FoodItemComponent;
-import errorcraft.itematic.item.component.components.TestItemComponent;
-import errorcraft.itematic.item.component.components.UseDurationItemComponent;
+import errorcraft.itematic.item.component.components.*;
 import errorcraft.itematic.mixin.registry.RegistriesAccessor;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -17,6 +14,8 @@ public class ItemComponentTypes {
     public static final ItemComponentType<UseDurationItemComponent> USE_DURATION = register("use_duration", new ItemComponentType<>(UseDurationItemComponent.CODEC));
     public static final ItemComponentType<FoodItemComponent> FOOD = register("food", new ItemComponentType<>(FoodItemComponent.CODEC));
     public static final ItemComponentType<BlockItemComponent> BLOCK = register("block", new ItemComponentType<>(BlockItemComponent.CODEC));
+    public static final ItemComponentType<DamageableItemComponent> DAMAGEABLE = register("damageable", new ItemComponentType<>(DamageableItemComponent.CODEC));
+    public static final ItemComponentType<ToolItemComponent> TOOL = register("tool", new ItemComponentType<>(ToolItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

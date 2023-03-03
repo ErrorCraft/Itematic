@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.iron_pickaxe"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:damageable": {
+      "durability": 100
+    },
+    "minecraft:tool": {
+      "damage": 1
+    }
+  }
+}

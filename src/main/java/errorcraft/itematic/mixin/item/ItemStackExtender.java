@@ -7,6 +7,8 @@ import errorcraft.itematic.access.item.ItemStackAccess;
 import errorcraft.itematic.item.ItemBase;
 import errorcraft.itematic.item.ItemKeys;
 import errorcraft.itematic.item.ItemStackUtil;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -28,10 +30,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Mixin(ItemStack.class)
-public class ItemStackExtender implements ItemStackAccess {
+public abstract class ItemStackExtender implements ItemStackAccess {
     @Shadow
     @Final
     private Item item;
@@ -39,6 +42,9 @@ public class ItemStackExtender implements ItemStackAccess {
     @Shadow
     @Nullable
     private NbtCompound nbt;
+
+    @Shadow
+    public abstract <T extends LivingEntity> void damage(int amount, T entity, Consumer<T> breakCallback);
 
     private RegistryEntry<Item> entry;
 
@@ -68,6 +74,17 @@ public class ItemStackExtender implements ItemStackAccess {
     )
     private void constructorSetRegistryEntry(RegistryEntry<Item> entry, int count, CallbackInfo info) {
         this.entry = entry;
+    }
+
+    @Redirect(
+        method = "<init>(Lnet/minecraft/item/ItemConvertible;I)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/Item;isDamageable()Z"
+        )
+    )
+    private boolean constructorIsNeverDamageable(Item instance) {
+        return false;
     }
 
     @Inject(
@@ -137,5 +154,10 @@ public class ItemStackExtender implements ItemStackAccess {
     @Override
     public boolean isOf(RegistryKey<Item> key) {
         return this.entry != null && this.entry.matchesKey(key);
+    }
+
+    @Override
+    public void damage(int amount, LivingEntity entity) {
+        this.damage(amount, entity, e -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
     }
 }
