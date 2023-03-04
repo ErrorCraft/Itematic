@@ -8,12 +8,14 @@ import errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public record ToolItemComponent(int damage) implements ItemComponent {
+public record ToolItemComponent(int damage, float miningSpeed) implements ItemComponent {
     public static final Codec<ToolItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("damage").forGetter(ToolItemComponent::damage)
+        Codec.INT.fieldOf("damage").forGetter(ToolItemComponent::damage),
+        Codec.FLOAT.fieldOf("mining_speed").forGetter(ToolItemComponent::miningSpeed)
     ).apply(instance, ToolItemComponent::new));
 
     @Override
@@ -32,5 +34,12 @@ public record ToolItemComponent(int damage) implements ItemComponent {
             stack.damage(this.damage, miner);
         }
         return true;
+    }
+
+    public static ItemComponent[] from(ToolMaterial material, int damage) {
+        return new ItemComponent[] {
+            new DamageableItemComponent(material.getDurability()),
+            new ToolItemComponent(damage, material.getMiningSpeedMultiplier())
+        };
     }
 }

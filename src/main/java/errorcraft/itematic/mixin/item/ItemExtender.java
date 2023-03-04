@@ -6,6 +6,7 @@ import errorcraft.itematic.item.component.ItemComponent;
 import errorcraft.itematic.item.component.ItemComponentSet;
 import errorcraft.itematic.item.component.ItemComponentTypes;
 import errorcraft.itematic.item.component.components.DamageableItemComponent;
+import errorcraft.itematic.item.component.components.ToolItemComponent;
 import errorcraft.itematic.item.component.components.UseDurationItemComponent;
 import errorcraft.itematic.util.ActionResultUtil;
 import net.minecraft.block.BlockState;
@@ -147,6 +148,18 @@ public class ItemExtender implements ItemAccess {
             return 0;
         }
         return this.components.get(ItemComponentTypes.DAMAGEABLE).map(DamageableItemComponent::durability).orElse(0);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public float getMiningSpeedMultiplier(ItemStack stack, BlockState state) {
+        if (this.components == null) {
+            return 1.0f;
+        }
+        return this.components.get(ItemComponentTypes.TOOL).map(ToolItemComponent::miningSpeed).orElse(1.0f);
     }
 
     /**

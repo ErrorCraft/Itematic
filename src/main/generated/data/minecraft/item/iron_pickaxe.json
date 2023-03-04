@@ -7,10 +7,11 @@
   },
   "components": {
     "minecraft:damageable": {
-      "durability": 100
+      "durability": 250
     },
     "minecraft:tool": {
-      "damage": 1
+      "damage": 1,
+      "mining_speed": 6.0
     }
   }
 }

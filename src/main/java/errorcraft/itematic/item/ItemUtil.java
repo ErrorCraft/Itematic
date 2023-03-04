@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.Registerable;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
@@ -31,7 +32,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.BARRIER, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARRIER).build(), 64), ItemComponentSet.builder().with(new BlockItemComponent(Blocks.BARRIER)).build()));
         registerable.register(ItemKeys.REDSTONE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.REDSTONE).build(), 64), ItemComponentSet.builder().with(new BlockItemComponent(Blocks.REDSTONE_WIRE)).build()));
         registerable.register(ItemKeys.APPLE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.APPLE).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.APPLE)).build()));
-        registerable.register(ItemKeys.IRON_PICKAXE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_PICKAXE).build(), 1), ItemComponentSet.builder().with(new DamageableItemComponent(100), new ToolItemComponent(1)).build()));
+        registerable.register(ItemKeys.IRON_PICKAXE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_PICKAXE).build(), 1), ItemComponentSet.builder().with(ToolItemComponent.from(ToolMaterials.IRON, 1)).build()));
         registerable.register(ItemKeys.FEATHER, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FEATHER).build(), 64), ItemComponentSet.builder().with(new TestItemComponent(true)).build()));
         registerable.register(ItemKeys.WATER_BUCKET, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build(), 1)));
     }
