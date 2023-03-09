@@ -37,7 +37,14 @@ import java.util.function.Function;
 public abstract class ItemStackExtender implements ItemStackAccess {
     @Shadow
     @Final
+    public static ItemStack EMPTY;
+
+    @Shadow
+    @Final
     private Item item;
+
+    @Shadow
+    private int count;
 
     @Shadow
     @Nullable
@@ -129,6 +136,22 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     @Overwrite
     public int getMaxCount() {
         return this.item == null ? ItemBase.MAX_MAX_COUNT : this.item.getMaxCount();
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses an item key check instead of a default air item.
+     */
+    @Overwrite
+    @SuppressWarnings("ConstantConditions")
+    public boolean isEmpty() {
+        if ((Object)this == EMPTY) {
+            return true;
+        }
+        if (this.isOf(ItemKeys.AIR)) {
+            return true;
+        }
+        return this.count <= 0;
     }
 
     @Redirect(
