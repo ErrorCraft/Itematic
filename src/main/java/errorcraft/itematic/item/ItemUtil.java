@@ -6,6 +6,7 @@ import errorcraft.itematic.item.component.ItemComponentSet;
 import errorcraft.itematic.item.component.components.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterials;
@@ -35,6 +36,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.IRON_PICKAXE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_PICKAXE).build(), 1), ItemComponentSet.builder().with(ToolItemComponent.from(ToolMaterials.IRON, 1)).build()));
         registerable.register(ItemKeys.FEATHER, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FEATHER).build(), 64), ItemComponentSet.builder().with(new TestItemComponent(true)).build()));
         registerable.register(ItemKeys.WATER_BUCKET, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build(), 1)));
+        registerable.register(ItemKeys.PIG_SPAWN_EGG, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIG_SPAWN_EGG).build(), 64), ItemComponentSet.builder().with(new EntityItemComponent(EntityType.PIG)).build()));
     }
 
     public static RegistryKey<Item> keyFromBlock(Block block) {
