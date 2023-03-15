@@ -36,10 +36,15 @@ public record ToolItemComponent(int damage, float miningSpeed) implements ItemCo
         return true;
     }
 
+
     public static ItemComponent[] from(ToolMaterial material, int damage) {
+        return from(material, damage, true);
+    }
+
+    public static ItemComponent[] from(ToolMaterial material, int damage, boolean useMaterialMiningSpeedMultiplier) {
         return new ItemComponent[] {
             new DamageableItemComponent(material.getDurability()),
-            new ToolItemComponent(damage, material.getMiningSpeedMultiplier())
+            new ToolItemComponent(damage, useMaterialMiningSpeedMultiplier ? material.getMiningSpeedMultiplier() : 1.0f)
         };
     }
 }

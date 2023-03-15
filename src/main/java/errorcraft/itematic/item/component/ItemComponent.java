@@ -23,6 +23,10 @@ public interface ItemComponent {
         return TypedActionResult.pass(context.getStack());
     }
 
+    default boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        return false;
+    }
+
     default boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
         return false;
     }

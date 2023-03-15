@@ -17,6 +17,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<DamageableItemComponent> DAMAGEABLE = register("damageable", new ItemComponentType<>(DamageableItemComponent.CODEC));
     public static final ItemComponentType<ToolItemComponent> TOOL = register("tool", new ItemComponentType<>(ToolItemComponent.CODEC));
     public static final ItemComponentType<EntityItemComponent> ENTITY = register("entity", new ItemComponentType<>(EntityItemComponent.CODEC));
+    public static final ItemComponentType<WeaponItemComponent> WEAPON = register("weapon", new ItemComponentType<>(WeaponItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

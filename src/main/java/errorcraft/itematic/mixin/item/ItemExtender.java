@@ -79,6 +79,19 @@ public class ItemExtender implements ItemAccess {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        boolean result = false;
+        for (ItemComponent component : this.components) {
+            result |= component.postHit(stack, target, attacker);
+        }
+        return result;
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
         boolean result = false;
         for (ItemComponent component : this.components) {
@@ -114,6 +127,9 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public boolean isDamageable() {
+        if (this.components == null) {
+            return false;
+        }
         return this.components.contains(ItemComponentTypes.DAMAGEABLE);
     }
 
