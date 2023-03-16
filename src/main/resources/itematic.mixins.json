@@ -4,6 +4,7 @@
   "package": "errorcraft.itematic.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BootstrapExtender",
     "advancement.AdvancementDisplayExtender",
     "advancement.AdvancementExtender$BuilderExtender",
     "block.AbstractBlockExtender",
