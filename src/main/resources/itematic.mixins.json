@@ -8,6 +8,8 @@
     "advancement.AdvancementExtender$BuilderExtender",
     "block.AbstractBlockExtender",
     "block.CanReplaceBlockExtender",
+    "block.ComposterBlockExtender",
+    "block.ComposterBlockExtender$ComposterInventoryExtender",
     "block.entity.BlockEntityExtender",
     "block.entity.CampfireBlockEntityExtender",
     "block.entity.ChiseledBookshelfBlockEntityExtender",

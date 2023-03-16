@@ -4,6 +4,7 @@ import errorcraft.itematic.access.item.ItemAccess;
 import errorcraft.itematic.item.ItemBase;
 import errorcraft.itematic.item.component.ItemComponent;
 import errorcraft.itematic.item.component.ItemComponentSet;
+import errorcraft.itematic.item.component.ItemComponentType;
 import errorcraft.itematic.item.component.ItemComponentTypes;
 import errorcraft.itematic.item.component.components.DamageableItemComponent;
 import errorcraft.itematic.item.component.components.ToolItemComponent;
@@ -25,6 +26,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.Optional;
 
 @Mixin(Item.class)
 public class ItemExtender implements ItemAccess {
@@ -205,5 +208,15 @@ public class ItemExtender implements ItemAccess {
     @Override
     public void setComponents(ItemComponentSet components) {
         this.components = components;
+    }
+
+    @Override
+    public <T extends ItemComponent> boolean hasComponent(ItemComponentType<T> type) {
+        return this.components.contains(type);
+    }
+
+    @Override
+    public <T extends ItemComponent> Optional<T> getComponent(ItemComponentType<T> type) {
+        return this.components.get(type);
     }
 }

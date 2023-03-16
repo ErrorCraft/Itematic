@@ -7,6 +7,8 @@ import errorcraft.itematic.access.item.ItemStackAccess;
 import errorcraft.itematic.item.ItemBase;
 import errorcraft.itematic.item.ItemKeys;
 import errorcraft.itematic.item.ItemStackUtil;
+import errorcraft.itematic.item.component.ItemComponent;
+import errorcraft.itematic.item.component.ItemComponentType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
@@ -182,5 +184,18 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     @Override
     public void damage(int amount, LivingEntity entity) {
         this.damage(amount, entity, e -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
+    }
+
+    @Override
+    public <T extends ItemComponent> boolean hasComponent(ItemComponentType<T> type) {
+        return this.entry != null && this.entry.value().hasComponent(type);
+    }
+
+    @Override
+    public <T extends ItemComponent> Optional<T> getComponent(ItemComponentType<T> type) {
+        if (this.entry == null) {
+            return Optional.empty();
+        }
+        return this.entry.value().getComponent(type);
     }
 }

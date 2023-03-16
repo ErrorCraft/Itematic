@@ -8,6 +8,9 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:grass"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.3
     }
   }
 }
