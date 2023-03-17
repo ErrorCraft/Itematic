@@ -1,0 +1,20 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.baked_potato"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:compostable": {
+      "level_increase_chance": 0.85
+    },
+    "minecraft:food": {
+      "nutrition": 5,
+      "saturation_modifier": 0.6
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  }
+}

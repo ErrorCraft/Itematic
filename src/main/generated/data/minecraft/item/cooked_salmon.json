@@ -1,0 +1,17 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.cooked_salmon"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:food": {
+      "nutrition": 6,
+      "saturation_modifier": 0.8
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.enchanted_golden_apple"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:food": {
+      "always_edible": true,
+      "effects": [
+        {
+          "chance": 1.0,
+          "effect": {
+            "amplifier": 1,
+            "duration": 400,
+            "id": "minecraft:regeneration"
+          }
+        },
+        {
+          "chance": 1.0,
+          "effect": {
+            "amplifier": 0,
+            "duration": 6000,
+            "id": "minecraft:resistance"
+          }
+        },
+        {
+          "chance": 1.0,
+          "effect": {
+            "amplifier": 0,
+            "duration": 6000,
+            "id": "minecraft:fire_resistance"
+          }
+        },
+        {
+          "chance": 1.0,
+          "effect": {
+            "amplifier": 3,
+            "duration": 2400,
+            "id": "minecraft:absorption"
+          }
+        }
+      ],
+      "nutrition": 4,
+      "saturation_modifier": 1.2
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  }
+}

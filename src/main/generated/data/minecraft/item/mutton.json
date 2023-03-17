@@ -1,0 +1,17 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.mutton"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:food": {
+      "nutrition": 2,
+      "saturation_modifier": 0.3
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  }
+}

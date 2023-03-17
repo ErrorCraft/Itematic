@@ -1,0 +1,27 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.rotten_flesh"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:food": {
+      "effects": [
+        {
+          "chance": 0.8,
+          "effect": {
+            "amplifier": 0,
+            "duration": 600,
+            "id": "minecraft:hunger"
+          }
+        }
+      ],
+      "nutrition": 4,
+      "saturation_modifier": 0.1
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  }
+}

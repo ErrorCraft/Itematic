@@ -1,0 +1,17 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.mushroom_stew"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:food": {
+      "nutrition": 6,
+      "saturation_modifier": 0.6
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.suspicious_stew"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:food": {
+      "always_edible": true,
+      "nutrition": 6,
+      "saturation_modifier": 0.6
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  }
+}

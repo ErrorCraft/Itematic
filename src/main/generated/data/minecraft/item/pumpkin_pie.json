@@ -1,0 +1,20 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.pumpkin_pie"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:compostable": {
+      "level_increase_chance": 1.0
+    },
+    "minecraft:food": {
+      "nutrition": 8,
+      "saturation_modifier": 0.3
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  }
+}

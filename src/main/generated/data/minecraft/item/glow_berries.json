@@ -1,0 +1,23 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.glow_berries"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:cave_vines"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.3
+    },
+    "minecraft:food": {
+      "nutrition": 2,
+      "saturation_modifier": 0.1
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  }
+}

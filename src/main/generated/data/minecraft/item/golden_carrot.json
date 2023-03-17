@@ -1,0 +1,17 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.golden_carrot"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:food": {
+      "nutrition": 6,
+      "saturation_modifier": 1.2
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.spider_eye"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:food": {
+      "effects": [
+        {
+          "chance": 1.0,
+          "effect": {
+            "amplifier": 0,
+            "duration": 100,
+            "id": "minecraft:poison"
+          }
+        }
+      ],
+      "nutrition": 2,
+      "saturation_modifier": 0.8
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  }
+}
