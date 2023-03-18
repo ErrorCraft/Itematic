@@ -1,0 +1,14 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.iron_helmet"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:equipment": {
+      "slot": "head",
+      "swappable": true
+    }
+  }
+}

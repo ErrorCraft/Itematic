@@ -21,6 +21,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> MUSHROOM_STEW = register("mushroom_stew");
     public static final RegistryKey<Item> FEATHER = register("feather");
     public static final RegistryKey<Item> BREAD = register("bread");
+    public static final RegistryKey<Item> IRON_HELMET = register("iron_helmet");
     public static final RegistryKey<Item> PORKCHOP = register("porkchop");
     public static final RegistryKey<Item> COOKED_PORKCHOP = register("cooked_porkchop");
     public static final RegistryKey<Item> GOLDEN_APPLE = register("golden_apple");
@@ -56,6 +57,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> CHORUS_FRUIT = register("chorus_fruit");
     public static final RegistryKey<Item> BEETROOT = register("beetroot");
     public static final RegistryKey<Item> BEETROOT_SOUP = register("beetroot_soup");
+    public static final RegistryKey<Item> SHIELD = register("shield");
     public static final RegistryKey<Item> SUSPICIOUS_STEW = register("suspicious_stew");
     public static final RegistryKey<Item> SWEET_BERRIES = register("sweet_berries");
     public static final RegistryKey<Item> GLOW_BERRIES = register("glow_berries");

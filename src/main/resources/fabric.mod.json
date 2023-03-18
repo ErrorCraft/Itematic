@@ -37,6 +37,9 @@
       "net/minecraft/class_763": [
         "errorcraft/itematic/access/client/render/item/ItemModelsAccess"
       ],
+      "net/minecraft/class_1304": [
+        "errorcraft/itematic/access/entity/EquipmentSlotAccess"
+      ],
       "net/minecraft/class_1730": [
         "errorcraft/itematic/access/PlayerAccess"
       ],

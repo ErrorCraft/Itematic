@@ -17,6 +17,7 @@
     "block.entity.LockableContainerBlockEntitiesExtender",
     "block.entity.ShulkerBoxBlockEntityExtender",
     "block.entity.SingleItemBlockEntitiesExtender",
+    "entity.EquipmentSlotExtender",
     "entity.ItemEntitiesExtender",
     "entity.LivingEntityExtender",
     "entity.player.HungerManagerExtender",

@@ -19,6 +19,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<EntityItemComponent> ENTITY = register("entity", new ItemComponentType<>(EntityItemComponent.CODEC));
     public static final ItemComponentType<WeaponItemComponent> WEAPON = register("weapon", new ItemComponentType<>(WeaponItemComponent.CODEC));
     public static final ItemComponentType<CompostableItemComponent> COMPOSTABLE = register("compostable", new ItemComponentType<>(CompostableItemComponent.CODEC));
+    public static final ItemComponentType<EquipmentItemComponent> EQUIPMENT = register("equipment", new ItemComponentType<>(EquipmentItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 
