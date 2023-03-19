@@ -2,6 +2,9 @@ package errorcraft.itematic.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import errorcraft.itematic.item.armor.ArmorMaterial;
+import errorcraft.itematic.item.armor.ArmorMaterialKeys;
+import errorcraft.itematic.item.armor.ArmorMaterials;
 import errorcraft.itematic.item.component.ItemComponentSet;
 import errorcraft.itematic.item.component.components.*;
 import net.minecraft.block.Block;
@@ -11,10 +14,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterials;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.*;
 import net.minecraft.util.Identifier;
 
 public class ItemUtil {
@@ -24,6 +24,8 @@ public class ItemUtil {
     ).apply(instance, ItemUtil::create));
 
     public static void bootstrap(Registerable<Item> registerable) {
+        RegistryEntryLookup<ArmorMaterial> armorMaterials = registerable.getRegistryLookup(ArmorMaterials.ARMOR_MATERIAL_KEY);
+
         registerable.register(ItemKeys.AIR, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build(), 64)));
         registerable.register(ItemKeys.STONE, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE).build(), 64), ItemComponentSet.builder().with(new BlockItemComponent(Blocks.STONE)).build()));
         registerable.register(ItemKeys.GRASS_BLOCK, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRASS_BLOCK).build(), 64), ItemComponentSet.builder().with(new BlockItemComponent(Blocks.GRASS_BLOCK)).build()));
@@ -39,7 +41,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.MUSHROOM_STEW, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSHROOM_STEW).build(), 1), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.MUSHROOM_STEW)).build()));
         registerable.register(ItemKeys.FEATHER, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FEATHER).build(), 64), ItemComponentSet.builder().with(new TestItemComponent(true)).build()));
         registerable.register(ItemKeys.BREAD, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BREAD).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.BREAD)).with(new CompostableItemComponent(0.85f)).build()));
-        registerable.register(ItemKeys.IRON_HELMET, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build(), 1), ItemComponentSet.builder().with(new EquipmentItemComponent(EquipmentSlot.HEAD, true)).build()));
+        registerable.register(ItemKeys.IRON_HELMET, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build(), 1), ItemComponentSet.builder().with(new EquipmentItemComponent(EquipmentSlot.HEAD, true), new ArmorItemComponent(armorMaterials.getOrThrow(ArmorMaterialKeys.IRON))).build()));
         registerable.register(ItemKeys.PORKCHOP, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PORKCHOP).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.PORKCHOP)).build()));
         registerable.register(ItemKeys.COOKED_PORKCHOP, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_PORKCHOP).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.COOKED_PORKCHOP)).build()));
         registerable.register(ItemKeys.GOLDEN_APPLE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_APPLE).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.GOLDEN_APPLE)).build()));
