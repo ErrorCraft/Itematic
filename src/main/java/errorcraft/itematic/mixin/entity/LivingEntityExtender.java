@@ -1,7 +1,9 @@
 package errorcraft.itematic.mixin.entity;
 
 import errorcraft.itematic.item.component.ItemComponentTypes;
+import errorcraft.itematic.item.component.components.EquipmentItemComponent;
 import errorcraft.itematic.item.component.components.FoodItemComponent;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -41,5 +43,14 @@ public class LivingEntityExtender {
         for (FoodItemComponent.Effect effect : component.get().effects()) {
             effect.tryApply(targetEntity, world.random);
         }
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public static EquipmentSlot getPreferredEquipmentSlot(ItemStack stack) {
+        return stack.getComponent(ItemComponentTypes.EQUIPMENT).map(EquipmentItemComponent::slot).orElse(EquipmentSlot.MAINHAND);
     }
 }
