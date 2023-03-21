@@ -7,6 +7,7 @@ import errorcraft.itematic.item.armor.ArmorMaterials;
 import errorcraft.itematic.item.component.ItemComponent;
 import errorcraft.itematic.item.component.ItemComponentType;
 import errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 
@@ -23,5 +24,13 @@ public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material) implemen
     @Override
     public Codec<? extends ItemComponent> getCodec() {
         return CODEC;
+    }
+
+    public static ItemComponent[] from(net.minecraft.item.ArmorMaterial material, ArmorItem.Type type, RegistryEntry<ArmorMaterial> materialEntry) {
+        return new ItemComponent[] {
+            new DamageableItemComponent(material.getDurability(type)),
+            new EquipmentItemComponent(type.getEquipmentSlot(), true),
+            new ArmorItemComponent(materialEntry)
+        };
     }
 }

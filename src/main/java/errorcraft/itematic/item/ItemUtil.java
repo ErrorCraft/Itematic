@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterials;
@@ -41,7 +42,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.MUSHROOM_STEW, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSHROOM_STEW).build(), 1), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.MUSHROOM_STEW)).build()));
         registerable.register(ItemKeys.FEATHER, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FEATHER).build(), 64), ItemComponentSet.builder().with(new TestItemComponent(true)).build()));
         registerable.register(ItemKeys.BREAD, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BREAD).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.BREAD)).with(new CompostableItemComponent(0.85f)).build()));
-        registerable.register(ItemKeys.IRON_HELMET, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build(), 1), ItemComponentSet.builder().with(new EquipmentItemComponent(EquipmentSlot.HEAD, true), new ArmorItemComponent(armorMaterials.getOrThrow(ArmorMaterialKeys.IRON))).build()));
+        registerable.register(ItemKeys.IRON_HELMET, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build(), 1), ItemComponentSet.builder().with(ArmorItemComponent.from(net.minecraft.item.ArmorMaterials.IRON, ArmorItem.Type.HELMET, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON))).build()));
         registerable.register(ItemKeys.PORKCHOP, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PORKCHOP).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.PORKCHOP)).build()));
         registerable.register(ItemKeys.COOKED_PORKCHOP, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_PORKCHOP).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.COOKED_PORKCHOP)).build()));
         registerable.register(ItemKeys.GOLDEN_APPLE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_APPLE).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.GOLDEN_APPLE)).build()));

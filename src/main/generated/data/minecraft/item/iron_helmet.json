@@ -9,6 +9,9 @@
     "minecraft:armor": {
       "material": "minecraft:iron"
     },
+    "minecraft:damageable": {
+      "durability": 165
+    },
     "minecraft:equipment": {
       "slot": "head",
       "swappable": true
