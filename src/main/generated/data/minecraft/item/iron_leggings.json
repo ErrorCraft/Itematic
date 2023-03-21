@@ -1,0 +1,20 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.iron_leggings"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:armor": {
+      "material": "minecraft:iron"
+    },
+    "minecraft:damageable": {
+      "durability": 225
+    },
+    "minecraft:equipment": {
+      "slot": "legs",
+      "swappable": true
+    }
+  }
+}

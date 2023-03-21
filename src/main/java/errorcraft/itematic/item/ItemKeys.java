@@ -22,6 +22,9 @@ public class ItemKeys {
     public static final RegistryKey<Item> FEATHER = register("feather");
     public static final RegistryKey<Item> BREAD = register("bread");
     public static final RegistryKey<Item> IRON_HELMET = register("iron_helmet");
+    public static final RegistryKey<Item> IRON_CHESTPLATE = register("iron_chestplate");
+    public static final RegistryKey<Item> IRON_LEGGINGS = register("iron_leggings");
+    public static final RegistryKey<Item> IRON_BOOTS = register("iron_boots");
     public static final RegistryKey<Item> PORKCHOP = register("porkchop");
     public static final RegistryKey<Item> COOKED_PORKCHOP = register("cooked_porkchop");
     public static final RegistryKey<Item> GOLDEN_APPLE = register("golden_apple");

@@ -1,0 +1,20 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.iron_boots"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:armor": {
+      "material": "minecraft:iron"
+    },
+    "minecraft:damageable": {
+      "durability": 195
+    },
+    "minecraft:equipment": {
+      "slot": "feet",
+      "swappable": true
+    }
+  }
+}
