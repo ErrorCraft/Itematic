@@ -34,11 +34,17 @@
       "net/minecraft/class_185": [
         "errorcraft/itematic/access/advancement/AdvancementDisplayAccess"
       ],
+      "net/minecraft/class_507": [
+        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+      ],
       "net/minecraft/class_763": [
         "errorcraft/itematic/access/client/render/item/ItemModelsAccess"
       ],
       "net/minecraft/class_1304": [
         "errorcraft/itematic/access/entity/EquipmentSlotAccess"
+      ],
+      "net/minecraft/class_1662": [
+        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
       "net/minecraft/class_1730": [
         "errorcraft/itematic/access/PlayerAccess"
@@ -48,6 +54,15 @@
       ],
       "net/minecraft/class_1799": [
         "errorcraft/itematic/access/item/ItemStackAccess"
+      ],
+      "net/minecraft/class_1856": [
+        "errorcraft/itematic/access/recipe/IngredientAccess"
+      ],
+      "net/minecraft/class_1856\u0024class_1859": [
+        "errorcraft/itematic/access/recipe/IngredientEntryAccess"
+      ],
+      "net/minecraft/class_1863": [
+        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
       "net/minecraft/class_2535": [
         "errorcraft/itematic/access/network/ClientConnectionAccess"

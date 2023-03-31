@@ -8,6 +8,7 @@ import net.minecraft.client.network.ClientDynamicRegistryType;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
+import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.CombinedDynamicRegistries;
 import net.minecraft.registry.DynamicRegistryManager;
 import org.objectweb.asm.Opcodes;
@@ -32,6 +33,10 @@ public class ClientPlayNetworkHandlerExtender {
     @Final
     private ClientConnection connection;
 
+    @Shadow
+    @Final
+    private RecipeManager recipeManager;
+
     @Inject(
         method = "onGameJoin",
         at = @At(
@@ -44,6 +49,7 @@ public class ClientPlayNetworkHandlerExtender {
     private void loadDynamicItemEntries(GameJoinS2CPacket packet, CallbackInfo info) {
         DynamicRegistryManager registryManager = this.combinedDynamicRegistries.getCombinedRegistryManager();
         this.connection.onSetRegistryManager(registryManager);
+        this.recipeManager.setRegistryManager(registryManager);
         ((DynamicRegistryAccess) this.client.getItemRenderer()).loadDynamicEntries(registryManager);
         this.client.reloadResources();
     }
