@@ -21,6 +21,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<CompostableItemComponent> COMPOSTABLE = register("compostable", new ItemComponentType<>(CompostableItemComponent.CODEC));
     public static final ItemComponentType<EquipmentItemComponent> EQUIPMENT = register("equipment", new ItemComponentType<>(EquipmentItemComponent.CODEC));
     public static final ItemComponentType<ArmorItemComponent> ARMOR = register("armor", new ItemComponentType<>(ArmorItemComponent.CODEC));
+    public static final ItemComponentType<FuelItemComponent> FUEL = register("fuel", new ItemComponentType<>(FuelItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

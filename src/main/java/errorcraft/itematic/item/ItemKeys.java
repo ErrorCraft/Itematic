@@ -16,6 +16,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> BARRIER = register("barrier");
     public static final RegistryKey<Item> REDSTONE = register("redstone");
     public static final RegistryKey<Item> APPLE = register("apple");
+    public static final RegistryKey<Item> COAL = register("coal");
     public static final RegistryKey<Item> IRON_SWORD = register("iron_sword");
     public static final RegistryKey<Item> IRON_PICKAXE = register("iron_pickaxe");
     public static final RegistryKey<Item> MUSHROOM_STEW = register("mushroom_stew");

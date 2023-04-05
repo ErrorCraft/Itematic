@@ -45,7 +45,7 @@ public class RecipeManagerExtender implements DynamicRegistryManagerAccess {
         method = "setRecipes",
         at = @At("TAIL")
     )
-    private void setRecipesInitalizeRecipes(Iterable<Recipe<?>> recipes, CallbackInfo info) {
+    private void setRecipesInitializeRecipes(Iterable<Recipe<?>> recipes, CallbackInfo info) {
         for (Recipe<?> recipe : recipes) {
             this.initRecipe(recipe);
         }
