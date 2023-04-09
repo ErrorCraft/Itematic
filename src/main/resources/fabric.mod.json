@@ -31,6 +31,9 @@
   "accessWidener": "itematic.accesswidener",
   "custom": {
     "loom:injected_interfaces": {
+      "net/minecraft/class_77": [
+        "errorcraft/itematic/access/loot/entry/ItemEntryAccess"
+      ],
       "net/minecraft/class_185": [
         "errorcraft/itematic/access/advancement/AdvancementDisplayAccess"
       ],
