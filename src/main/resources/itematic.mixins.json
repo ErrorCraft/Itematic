@@ -60,6 +60,7 @@
     "server.DataPackContentsExtender",
     "server.ServerAdvancementLoaderExtender",
     "server.ServerNetworkIoExtender$ChildHandlerExtender",
+    "server.ServerPlayerInteractionManagerExtender",
     "world.ChunkRegionExtender",
     "world.ChunkSerializerExtender",
     "world.chunk.WorldChunkExtender"
@@ -71,6 +72,7 @@
     "client.gui.screen.ingame.InventoryScreenExtender",
     "client.gui.screen.recipebook.AbstractFurnaceRecipeBookScreenExtender",
     "client.gui.screen.recipebook.RecipeBookWidgetExtender",
+    "client.network.ClientPlayerInteractionManagerExtender",
     "client.network.ClientPlayNetworkHandlerExtender",
     "client.option.HotbarStorageEntryExtender",
     "client.render.entity.feature.ArmorFeatureRendererExtender",

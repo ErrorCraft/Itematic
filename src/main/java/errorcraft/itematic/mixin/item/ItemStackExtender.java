@@ -9,8 +9,10 @@ import errorcraft.itematic.item.ItemKeys;
 import errorcraft.itematic.item.ItemStackUtil;
 import errorcraft.itematic.item.component.ItemComponent;
 import errorcraft.itematic.item.component.ItemComponentType;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -19,6 +21,8 @@ import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -171,6 +175,17 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         return this.entry.getKey().map(RegistryKey::getValue).orElse(ItemKeys.AIR.getValue());
     }
 
+    @Inject(
+        method = "postMine",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void postMineUseRegistryEntryNullCheck(World world, BlockState state, BlockPos pos, PlayerEntity miner, CallbackInfo info) {
+        if (this.entry == null) {
+            info.cancel();
+        }
+    }
+
     @Override
     public Optional<NbtCompound> getOptionalNbt() {
         return Optional.ofNullable(this.nbt);
@@ -197,5 +212,13 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             return Optional.empty();
         }
         return this.entry.value().getComponent(type);
+    }
+
+    @Override
+    public boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
+        if (this.entry == null) {
+            return true;
+        }
+        return this.entry.value().canMine(state, world, pos, miner);
     }
 }
