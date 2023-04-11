@@ -1,22 +1,22 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.iron_pickaxe"
+      "translation_key": "item.minecraft.diamond_axe"
     },
     "max_count": 1
   },
   "components": {
     "minecraft:damageable": {
-      "durability": 250
+      "durability": 1561
     },
     "minecraft:tool": {
       "damage": 1,
       "mining_speeds": [
         {
-          "mining_speed": 6.0,
+          "mining_speed": 8.0,
           "tag": {
             "expected": true,
-            "id": "minecraft:mineable/pickaxe"
+            "id": "minecraft:mineable/axe"
           }
         }
       ]

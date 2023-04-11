@@ -84,6 +84,9 @@
       ],
       "net/minecraft/class_5257": [
         "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+      ],
+      "net/minecraft/class_8129": [
+        "errorcraft/itematic/access/predicate/TagPredicateAccess"
       ]
     }
   },

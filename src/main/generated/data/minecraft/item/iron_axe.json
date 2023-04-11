@@ -1,7 +1,7 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.iron_pickaxe"
+      "translation_key": "item.minecraft.iron_axe"
     },
     "max_count": 1
   },
@@ -16,7 +16,7 @@
           "mining_speed": 6.0,
           "tag": {
             "expected": true,
-            "id": "minecraft:mineable/pickaxe"
+            "id": "minecraft:mineable/axe"
           }
         }
       ]

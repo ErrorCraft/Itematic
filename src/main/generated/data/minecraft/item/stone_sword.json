@@ -1,13 +1,13 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.iron_sword"
+      "translation_key": "item.minecraft.stone_sword"
     },
     "max_count": 1
   },
   "components": {
     "minecraft:damageable": {
-      "durability": 250
+      "durability": 131
     },
     "minecraft:tool": {
       "damage": 2

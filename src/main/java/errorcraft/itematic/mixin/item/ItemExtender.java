@@ -7,7 +7,6 @@ import errorcraft.itematic.item.component.ItemComponentSet;
 import errorcraft.itematic.item.component.ItemComponentType;
 import errorcraft.itematic.item.component.ItemComponentTypes;
 import errorcraft.itematic.item.component.components.DamageableItemComponent;
-import errorcraft.itematic.item.component.components.ToolItemComponent;
 import errorcraft.itematic.item.component.components.UseDurationItemComponent;
 import errorcraft.itematic.util.ActionResultUtil;
 import net.minecraft.block.BlockState;
@@ -178,7 +177,7 @@ public class ItemExtender implements ItemAccess {
         if (this.components == null) {
             return 1.0f;
         }
-        return this.components.get(ItemComponentTypes.TOOL).map(ToolItemComponent::miningSpeed).orElse(1.0f);
+        return this.components.get(ItemComponentTypes.TOOL).map(component -> component.getMiningSpeed(state)).orElse(1.0f);
     }
 
     /**

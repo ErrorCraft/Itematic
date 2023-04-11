@@ -1,13 +1,16 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.iron_sword"
+      "translation_key": "item.minecraft.wooden_sword"
     },
     "max_count": 1
   },
   "components": {
     "minecraft:damageable": {
-      "durability": 250
+      "durability": 59
+    },
+    "minecraft:fuel": {
+      "ticks": 200
     },
     "minecraft:tool": {
       "damage": 2

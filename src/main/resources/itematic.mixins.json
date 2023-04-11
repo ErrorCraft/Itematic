@@ -38,6 +38,7 @@
     "network.DecoderHandlerExtender",
     "network.PacketByteBufExtender",
     "network.PacketEncoderExtender",
+    "predicate.TagPredicateExtender",
     "predicate.entity.AdvancementEntityPredicateDeserializerExtender",
     "recipe.CookingRecipeSerializerExtender",
     "recipe.CraftingDecoratedPotRecipeExtender",
