@@ -20,6 +20,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -38,6 +39,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackExtender implements ItemStackAccess {
@@ -160,6 +162,18 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         return this.count <= 0;
     }
 
+    /**
+     * @author ErrorCraft
+     * @reason Uses a null check instead of a default air item.
+     */
+    @Overwrite
+    public boolean isIn(TagKey<Item> tag) {
+        if (this.entry == null) {
+            return false;
+        }
+        return this.entry.isIn(tag);
+    }
+
     @Redirect(
         method = "getTooltip",
         at = @At(
@@ -220,5 +234,13 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             return true;
         }
         return this.entry.value().canMine(state, world, pos, miner);
+    }
+
+    @Override
+    public boolean itemKeyMatches(Predicate<RegistryKey<Item>> predicate) {
+        if (this.entry == null) {
+            return false;
+        }
+        return this.entry.matches(predicate);
     }
 }

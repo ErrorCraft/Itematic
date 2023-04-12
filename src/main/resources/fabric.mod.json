@@ -67,6 +67,9 @@
       "net/minecraft/class_1863": [
         "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
+      "net/minecraft/class_2073": [
+        "errorcraft/itematic/access/predicate/item/ItemPredicateAccess"
+      ],
       "net/minecraft/class_2535": [
         "errorcraft/itematic/access/network/ClientConnectionAccess"
       ],

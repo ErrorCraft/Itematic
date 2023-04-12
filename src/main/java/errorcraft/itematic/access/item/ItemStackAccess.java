@@ -12,10 +12,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public interface ItemStackAccess {
     default Optional<NbtCompound> getOptionalNbt() { return Optional.empty(); }
     default boolean isOf(RegistryKey<Item> key) {
+        return false;
+    }
+    default boolean itemKeyMatches(Predicate<RegistryKey<Item>> predicate) {
         return false;
     }
     default void damage(int amount, LivingEntity entity) {}
