@@ -1,12 +1,17 @@
 package errorcraft.itematic.data;
 
+import errorcraft.itematic.client.render.TexturedRenderLayersUtil;
 import errorcraft.itematic.enchantment.EnchantmentTags;
 import errorcraft.itematic.item.armor.ArmorMaterials;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.minecraft.client.texture.atlas.AtlasSource;
+import net.minecraft.client.texture.atlas.AtlasSourceManager;
+import net.minecraft.data.DataOutput;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
@@ -17,7 +22,9 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -64,6 +71,22 @@ public class ItematicData implements DataGeneratorEntrypoint {
         @Override
         public String getName() {
             return "Armor Materials";
+        }
+    }
+
+    private static class AtlasProvider extends FabricCodecDataProvider<List<AtlasSource>> {
+        protected AtlasProvider(FabricDataOutput dataOutput) {
+            super(dataOutput, DataOutput.OutputType.RESOURCE_PACK, "atlases", AtlasSourceManager.LIST_CODEC);
+        }
+
+        @Override
+        protected void configure(BiConsumer<Identifier, List<AtlasSource>> provider) {
+            TexturedRenderLayersUtil.bootstrap(provider);
+        }
+
+        @Override
+        public String getName() {
+            return "Atlases";
         }
     }
 
