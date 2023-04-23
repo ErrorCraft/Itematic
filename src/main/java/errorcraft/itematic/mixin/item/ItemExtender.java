@@ -12,22 +12,26 @@ import errorcraft.itematic.item.component.components.RepairableItemComponent;
 import errorcraft.itematic.item.component.components.UseDurationItemComponent;
 import errorcraft.itematic.util.ActionResultUtil;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mixin(Item.class)
@@ -114,6 +118,18 @@ public class ItemExtender implements ItemAccess {
             stack = component.finishUsing(world, user, stack);
         }
         return stack;
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        this.base.display().tooltip().ifPresent(tooltip::addAll);
+        for (ItemComponent component : this.components) {
+            component.appendTooltip(stack, world, tooltip, context);
+        }
     }
 
     /**
