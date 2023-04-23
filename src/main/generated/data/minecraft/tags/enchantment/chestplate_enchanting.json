@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:armor",
+    "minecraft:thorns",
+    "minecraft:unbreaking"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:leggings_enchanting",
+    "#minecraft:cursed",
+    "minecraft:swift_sneak",
+    "minecraft:mending",
+    "minecraft:thorns"
+  ]
+}

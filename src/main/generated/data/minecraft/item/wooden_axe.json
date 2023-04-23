@@ -9,6 +9,13 @@
     "minecraft:damageable": {
       "durability": 59
     },
+    "minecraft:enchantable": {
+      "enchantability": 15,
+      "enchantments": "minecraft:axe_enchanting"
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:axe_forging"
+    },
     "minecraft:fuel": {
       "ticks": 200
     },

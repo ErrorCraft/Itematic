@@ -9,6 +9,13 @@
     "minecraft:damageable": {
       "durability": 2031
     },
+    "minecraft:enchantable": {
+      "enchantability": 15,
+      "enchantments": "minecraft:pickaxe_enchanting"
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:pickaxe_forging"
+    },
     "minecraft:tool": {
       "damage": 1,
       "mining_speeds": [

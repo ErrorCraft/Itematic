@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:armor",
+    "minecraft:feather_falling",
+    "minecraft:depth_strider",
+    "minecraft:unbreaking"
+  ]
+}

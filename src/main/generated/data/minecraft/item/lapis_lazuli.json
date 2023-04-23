@@ -1,0 +1,9 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.lapis_lazuli"
+    },
+    "max_count": 64
+  },
+  "components": {}
+}

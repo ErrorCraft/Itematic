@@ -12,9 +12,16 @@
     "minecraft:damageable": {
       "durability": 195
     },
+    "minecraft:enchantable": {
+      "enchantability": 9,
+      "enchantments": "minecraft:boots_enchanting"
+    },
     "minecraft:equipment": {
       "slot": "feet",
       "swappable": true
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:boots_forging"
     }
   }
 }

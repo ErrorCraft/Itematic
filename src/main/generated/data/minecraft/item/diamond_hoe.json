@@ -9,6 +9,13 @@
     "minecraft:damageable": {
       "durability": 1561
     },
+    "minecraft:enchantable": {
+      "enchantability": 10,
+      "enchantments": "minecraft:hoe_enchanting"
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:hoe_forging"
+    },
     "minecraft:tool": {
       "damage": 1,
       "mining_speeds": [

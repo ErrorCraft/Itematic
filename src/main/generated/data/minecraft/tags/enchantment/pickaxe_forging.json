@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:pickaxe_enchanting",
+    "#minecraft:cursed",
+    "minecraft:mending"
+  ]
+}

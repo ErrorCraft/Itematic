@@ -9,6 +9,13 @@
     "minecraft:damageable": {
       "durability": 32
     },
+    "minecraft:enchantable": {
+      "enchantability": 22,
+      "enchantments": "minecraft:shovel_enchanting"
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:shovel_forging"
+    },
     "minecraft:tool": {
       "damage": 1,
       "mining_speeds": [

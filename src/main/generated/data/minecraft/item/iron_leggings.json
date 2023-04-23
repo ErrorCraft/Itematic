@@ -12,9 +12,16 @@
     "minecraft:damageable": {
       "durability": 225
     },
+    "minecraft:enchantable": {
+      "enchantability": 9,
+      "enchantments": "minecraft:leggings_enchanting"
+    },
     "minecraft:equipment": {
       "slot": "legs",
       "swappable": true
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:leggings_forging"
     }
   }
 }

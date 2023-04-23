@@ -7,6 +7,7 @@ import errorcraft.itematic.item.component.ItemComponentSet;
 import errorcraft.itematic.item.component.ItemComponentType;
 import errorcraft.itematic.item.component.ItemComponentTypes;
 import errorcraft.itematic.item.component.components.DamageableItemComponent;
+import errorcraft.itematic.item.component.components.EnchantableItemComponent;
 import errorcraft.itematic.item.component.components.UseDurationItemComponent;
 import errorcraft.itematic.util.ActionResultUtil;
 import net.minecraft.block.BlockState;
@@ -133,6 +134,30 @@ public class ItemExtender implements ItemAccess {
             return false;
         }
         return this.components.contains(ItemComponentTypes.DAMAGEABLE);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public boolean isEnchantable(ItemStack stack) {
+        if (this.components == null) {
+            return false;
+        }
+        return stack.getCount() == 1 && this.components.contains(ItemComponentTypes.ENCHANTABLE);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public int getEnchantability() {
+        if (this.components == null) {
+            return 0;
+        }
+        return this.components.get(ItemComponentTypes.ENCHANTABLE).map(EnchantableItemComponent::enchantability).orElse(0);
     }
 
     /**

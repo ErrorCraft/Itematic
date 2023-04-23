@@ -22,6 +22,9 @@ public class ItemComponentTypes {
     public static final ItemComponentType<EquipmentItemComponent> EQUIPMENT = register("equipment", new ItemComponentType<>(EquipmentItemComponent.CODEC));
     public static final ItemComponentType<ArmorItemComponent> ARMOR = register("armor", new ItemComponentType<>(ArmorItemComponent.CODEC));
     public static final ItemComponentType<FuelItemComponent> FUEL = register("fuel", new ItemComponentType<>(FuelItemComponent.CODEC));
+    public static final ItemComponentType<EnchantableItemComponent> ENCHANTABLE = register("enchantable", new ItemComponentType<>(EnchantableItemComponent.CODEC));
+    public static final ItemComponentType<EnchantmentHolderItemComponent> ENCHANTMENT_HOLDER = register("enchantment_holder", new ItemComponentType<>(EnchantmentHolderItemComponent.CODEC));
+    public static final ItemComponentType<ForgeableItemComponent> FORGEABLE = register("forgeable", new ItemComponentType<>(ForgeableItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

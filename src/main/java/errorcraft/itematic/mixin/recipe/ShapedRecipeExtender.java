@@ -3,15 +3,13 @@ package errorcraft.itematic.mixin.recipe;
 import com.google.gson.JsonObject;
 import errorcraft.itematic.recipe.RecipeSerializerUtil;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(ShapedRecipe.class)
 public class ShapedRecipeExtender {
@@ -26,14 +24,15 @@ public class ShapedRecipeExtender {
         return null;
     }
 
-    @Inject(
+    @Redirect(
         method = "outputFromJson",
-        at = @At("RETURN"),
-        locals = LocalCapture.CAPTURE_FAILHARD,
-        cancellable = true
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack"
+        )
     )
-    private static void outputFromJsonUseRegistryEntry(JsonObject json, CallbackInfoReturnable<ItemStack> info, Item item, int i) {
+    private static ItemStack outputFromJsonUseRegistryEntry(ItemConvertible item, int count, JsonObject json) {
         RegistryEntry<Item> itemEntry = RecipeSerializerUtil.getItem(json);
-        info.setReturnValue(new ItemStack(itemEntry, i));
+        return new ItemStack(itemEntry, count);
     }
 }

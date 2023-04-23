@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:efficiency",
+    "minecraft:silk_touch",
+    "minecraft:unbreaking",
+    "minecraft:fortune"
+  ]
+}

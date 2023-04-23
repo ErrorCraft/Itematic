@@ -12,9 +12,16 @@
     "minecraft:damageable": {
       "durability": 240
     },
+    "minecraft:enchantable": {
+      "enchantability": 9,
+      "enchantments": "minecraft:chestplate_enchanting"
+    },
     "minecraft:equipment": {
       "slot": "chest",
       "swappable": true
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:chestplate_forging"
     }
   }
 }

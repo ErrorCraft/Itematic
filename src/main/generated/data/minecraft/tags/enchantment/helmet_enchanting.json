@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:armor",
+    "minecraft:respiration",
+    "minecraft:aqua_affinity",
+    "minecraft:unbreaking"
+  ]
+}

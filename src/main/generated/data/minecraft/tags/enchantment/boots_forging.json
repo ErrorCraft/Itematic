@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:boots_enchanting",
+    "#minecraft:cursed",
+    "minecraft:frost_walker",
+    "minecraft:soul_speed",
+    "minecraft:mending",
+    "minecraft:thorns"
+  ]
+}

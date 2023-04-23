@@ -12,9 +12,16 @@
     "minecraft:damageable": {
       "durability": 165
     },
+    "minecraft:enchantable": {
+      "enchantability": 9,
+      "enchantments": "minecraft:helmet_enchanting"
+    },
     "minecraft:equipment": {
       "slot": "head",
       "swappable": true
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:helmet_forging"
     }
   }
 }

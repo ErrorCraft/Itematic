@@ -49,6 +49,10 @@ public abstract class ItemStackExtender implements ItemStackAccess {
 
     @Shadow
     @Final
+    private static String UNBREAKABLE_KEY;
+
+    @Shadow
+    @Final
     private Item item;
 
     @Shadow
@@ -148,6 +152,18 @@ public abstract class ItemStackExtender implements ItemStackAccess {
 
     /**
      * @author ErrorCraft
+     * @reason Uses a null check instead of a default air item.
+     */
+    @Overwrite
+    public int getMaxDamage() {
+        if (this.entry == null) {
+            return 0;
+        }
+        return this.entry.value().getMaxDamage();
+    }
+
+    /**
+     * @author ErrorCraft
      * @reason Uses an item key check instead of a default air item.
      */
     @Overwrite
@@ -172,6 +188,53 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             return false;
         }
         return this.entry.isIn(tag);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses a null check instead of a default air item.
+     */
+    @Overwrite
+    public boolean isDamageable() {
+        if (this.entry == null) {
+            return false;
+        }
+        if (!this.entry.value().isDamageable()) {
+            return false;
+        }
+        return this.nbt == null || !this.nbt.getBoolean(UNBREAKABLE_KEY);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses a null check instead of a default air item.
+     */
+    @Overwrite
+    public boolean itemMatches(Predicate<RegistryEntry<Item>> predicate) {
+        if (this.entry == null) {
+            return false;
+        }
+        return predicate.test(this.entry);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses a null check instead of a default air item.
+     */
+    @Overwrite
+    public boolean itemMatches(RegistryEntry<Item> itemEntry) {
+        return this.entry == itemEntry;
+    }
+
+    @Inject(
+        method = "isEnchantable",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void isEnchantableCheckNullEntry(CallbackInfoReturnable<Boolean> info) {
+        if (this.entry == null) {
+            info.setReturnValue(false);
+        }
     }
 
     @Redirect(

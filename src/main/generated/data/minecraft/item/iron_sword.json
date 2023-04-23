@@ -9,6 +9,13 @@
     "minecraft:damageable": {
       "durability": 250
     },
+    "minecraft:enchantable": {
+      "enchantability": 14,
+      "enchantments": "minecraft:sword_enchanting"
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:sword_forging"
+    },
     "minecraft:tool": {
       "damage": 2
     },

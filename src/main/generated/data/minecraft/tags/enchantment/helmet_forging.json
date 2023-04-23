@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:helmet_enchanting",
+    "#minecraft:cursed",
+    "minecraft:mending",
+    "minecraft:thorns"
+  ]
+}

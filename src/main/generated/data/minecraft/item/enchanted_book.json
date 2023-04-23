@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.enchanted_book"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:enchantment_holder": {
+      "enchantments_key": "StoredEnchantments"
+    }
+  }
+}

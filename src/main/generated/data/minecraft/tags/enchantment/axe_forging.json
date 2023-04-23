@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:axe_enchanting",
+    "#minecraft:cursed",
+    "minecraft:mending",
+    "minecraft:bane_of_arthropods",
+    "minecraft:sharpness",
+    "minecraft:smite"
+  ]
+}

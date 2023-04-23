@@ -17,6 +17,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> REDSTONE = register("redstone");
     public static final RegistryKey<Item> APPLE = register("apple");
     public static final RegistryKey<Item> COAL = register("coal");
+    public static final RegistryKey<Item> LAPIS_LAZULI = register("lapis_lazuli");
     public static final RegistryKey<Item> WOODEN_SWORD = register("wooden_sword");
     public static final RegistryKey<Item> WOODEN_SHOVEL = register("wooden_shovel");
     public static final RegistryKey<Item> WOODEN_PICKAXE = register("wooden_pickaxe");
@@ -59,6 +60,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> GOLDEN_APPLE = register("golden_apple");
     public static final RegistryKey<Item> ENCHANTED_GOLDEN_APPLE = register("enchanted_golden_apple");
     public static final RegistryKey<Item> WATER_BUCKET = register("water_bucket");
+    public static final RegistryKey<Item> BOOK = register("book");
     public static final RegistryKey<Item> COD = register("cod");
     public static final RegistryKey<Item> SALMON = register("salmon");
     public static final RegistryKey<Item> TROPICAL_FISH = register("tropical_fish");
@@ -81,6 +83,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> POISONOUS_POTATO = register("poisonous_potato");
     public static final RegistryKey<Item> GOLDEN_CARROT = register("golden_carrot");
     public static final RegistryKey<Item> PUMPKIN_PIE = register("pumpkin_pie");
+    public static final RegistryKey<Item> ENCHANTED_BOOK = register("enchanted_book");
     public static final RegistryKey<Item> RABBIT = register("rabbit");
     public static final RegistryKey<Item> COOKED_RABBIT = register("cooked_rabbit");
     public static final RegistryKey<Item> RABBIT_STEW = register("rabbit_stew");
