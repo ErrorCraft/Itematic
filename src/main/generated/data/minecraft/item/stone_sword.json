@@ -16,6 +16,9 @@
     "minecraft:forgeable": {
       "enchantments": "minecraft:sword_forging"
     },
+    "minecraft:repairable": {
+      "items": "minecraft:repairs_stone_tool"
+    },
     "minecraft:tool": {
       "damage": 2
     },

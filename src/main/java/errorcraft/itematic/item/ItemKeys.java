@@ -9,6 +9,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> AIR = register("air");
     public static final RegistryKey<Item> STONE = register("stone");
     public static final RegistryKey<Item> GRASS_BLOCK = register("grass_block");
+    public static final RegistryKey<Item> COBBLESTONE = register("cobblestone");
+    public static final RegistryKey<Item> OAK_PLANKS = register("oak_planks");
     public static final RegistryKey<Item> SAND = register("sand");
     public static final RegistryKey<Item> GRASS = register("grass");
     public static final RegistryKey<Item> OAK_SLAB = register("oak_slab");
@@ -17,7 +19,11 @@ public class ItemKeys {
     public static final RegistryKey<Item> REDSTONE = register("redstone");
     public static final RegistryKey<Item> APPLE = register("apple");
     public static final RegistryKey<Item> COAL = register("coal");
+    public static final RegistryKey<Item> DIAMOND = register("diamond");
     public static final RegistryKey<Item> LAPIS_LAZULI = register("lapis_lazuli");
+    public static final RegistryKey<Item> IRON_INGOT = register("iron_ingot");
+    public static final RegistryKey<Item> GOLD_INGOT = register("gold_ingot");
+    public static final RegistryKey<Item> NETHERITE_INGOT = register("netherite_ingot");
     public static final RegistryKey<Item> WOODEN_SWORD = register("wooden_sword");
     public static final RegistryKey<Item> WOODEN_SHOVEL = register("wooden_shovel");
     public static final RegistryKey<Item> WOODEN_PICKAXE = register("wooden_pickaxe");

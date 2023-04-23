@@ -18,6 +18,7 @@
     "block.entity.LockableContainerBlockEntitiesExtender",
     "block.entity.ShulkerBoxBlockEntityExtender",
     "block.entity.SingleItemBlockEntitiesExtender",
+    "data.server.tag.TagProviderExtender",
     "enchantment.AcceptableItemEnchantmentsExtender",
     "enchantment.EnchantmentHelperExtender",
     "entity.EquipmentSlotExtender",

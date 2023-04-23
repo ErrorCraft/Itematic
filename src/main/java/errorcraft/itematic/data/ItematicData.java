@@ -2,6 +2,8 @@ package errorcraft.itematic.data;
 
 import errorcraft.itematic.client.render.TexturedRenderLayersUtil;
 import errorcraft.itematic.enchantment.EnchantmentTags;
+import errorcraft.itematic.item.ItemKeys;
+import errorcraft.itematic.item.ItemTagsUtil;
 import errorcraft.itematic.item.armor.ArmorMaterials;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -15,10 +17,12 @@ import net.minecraft.data.DataOutput;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
@@ -36,6 +40,7 @@ public class ItematicData implements DataGeneratorEntrypoint {
         pack.addProvider(ArmorMaterialProvider::new);
         pack.addProvider(AtlasProvider::new);
         pack.addProvider(EnchantmentTagProvider::new);
+        pack.addProvider(ItemTagProvider::new);
     }
 
     private static <T> void addAll(FabricDynamicRegistryProvider.Entries entries, RegistryWrapper.Impl<T> registry) {
@@ -161,6 +166,32 @@ public class ItematicData implements DataGeneratorEntrypoint {
 
         private static boolean isTargetable(Enchantment enchantment, EnchantmentTarget enchantmentTarget) {
             return enchantment.target == enchantmentTarget || enchantment.target == EnchantmentTarget.BREAKABLE;
+        }
+    }
+
+    private static class ItemTagProvider extends FabricTagProvider<Item> {
+        public ItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, RegistryKeys.ITEM, registriesFuture);
+        }
+
+        @Override
+        protected void configure(RegistryWrapper.WrapperLookup arg) {
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_IRON_ARMOR)
+                .add(ItemKeys.IRON_INGOT);
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_WOODEN_TOOL)
+                .addTag(ItemTags.PLANKS);
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_STONE_TOOL)
+                .addTag(ItemTags.STONE_TOOL_MATERIALS);
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_GOLDEN_TOOL)
+                .add(ItemKeys.GOLD_INGOT);
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_IRON_TOOL)
+                .add(ItemKeys.IRON_INGOT);
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_DIAMOND_TOOL)
+                .add(ItemKeys.DIAMOND);
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_NETHERITE_TOOL)
+                .add(ItemKeys.NETHERITE_INGOT);
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_SHIELD)
+                .addTag(ItemTags.PLANKS);
         }
     }
 }

@@ -19,6 +19,9 @@
     "minecraft:fuel": {
       "ticks": 200
     },
+    "minecraft:repairable": {
+      "items": "minecraft:repairs_wooden_tool"
+    },
     "minecraft:tool": {
       "damage": 2
     },

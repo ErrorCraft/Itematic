@@ -8,6 +8,9 @@
   "components": {
     "minecraft:equipment": {
       "slot": "offhand"
+    },
+    "minecraft:repairable": {
+      "items": "minecraft:repairs_shield"
     }
   }
 }

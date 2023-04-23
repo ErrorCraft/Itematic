@@ -16,6 +16,9 @@
     "minecraft:forgeable": {
       "enchantments": "minecraft:axe_forging"
     },
+    "minecraft:repairable": {
+      "items": "minecraft:repairs_golden_tool"
+    },
     "minecraft:tool": {
       "damage": 1,
       "mining_speeds": [
