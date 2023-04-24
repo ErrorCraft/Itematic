@@ -26,6 +26,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<EnchantmentHolderItemComponent> ENCHANTMENT_HOLDER = register("enchantment_holder", new ItemComponentType<>(EnchantmentHolderItemComponent.CODEC));
     public static final ItemComponentType<ForgeableItemComponent> FORGEABLE = register("forgeable", new ItemComponentType<>(ForgeableItemComponent.CODEC));
     public static final ItemComponentType<RepairableItemComponent> REPAIRABLE = register("repairable", new ItemComponentType<>(RepairableItemComponent.CODEC));
+    public static final ItemComponentType<FoilItemComponent> FOIL = register("foil", new ItemComponentType<>(FoilItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

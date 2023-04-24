@@ -240,6 +240,17 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         }
     }
 
+    @Inject(
+        method = "hasGlint",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void hasGlintCheckNullEntry(CallbackInfoReturnable<Boolean> info) {
+        if (this.entry == null) {
+            info.setReturnValue(false);
+        }
+    }
+
     @Redirect(
         method = "getTooltip",
         at = @At(

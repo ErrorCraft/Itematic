@@ -6,10 +6,7 @@ import errorcraft.itematic.item.component.ItemComponent;
 import errorcraft.itematic.item.component.ItemComponentSet;
 import errorcraft.itematic.item.component.ItemComponentType;
 import errorcraft.itematic.item.component.ItemComponentTypes;
-import errorcraft.itematic.item.component.components.DamageableItemComponent;
-import errorcraft.itematic.item.component.components.EnchantableItemComponent;
-import errorcraft.itematic.item.component.components.RepairableItemComponent;
-import errorcraft.itematic.item.component.components.UseDurationItemComponent;
+import errorcraft.itematic.item.component.components.*;
 import errorcraft.itematic.util.ActionResultUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
@@ -175,6 +172,17 @@ public class ItemExtender implements ItemAccess {
             .map(RepairableItemComponent::items)
             .map(ingredient::isIn)
             .orElse(false);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public boolean hasGlint(ItemStack stack) {
+        return this.getComponent(ItemComponentTypes.FOIL)
+            .map(FoilItemComponent::foil)
+            .orElseGet(stack::hasEnchantments);
     }
 
     /**

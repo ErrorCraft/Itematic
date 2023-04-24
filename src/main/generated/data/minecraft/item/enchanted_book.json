@@ -8,6 +8,9 @@
   "components": {
     "minecraft:enchantment_holder": {
       "enchantments_key": "StoredEnchantments"
+    },
+    "minecraft:foil": {
+      "foil": true
     }
   }
 }
