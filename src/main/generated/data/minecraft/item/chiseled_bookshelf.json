@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.chiseled_bookshelf"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:chiseled_bookshelf"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

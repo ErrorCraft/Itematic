@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.composter"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:composter"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

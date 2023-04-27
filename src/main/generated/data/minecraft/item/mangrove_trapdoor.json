@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.mangrove_trapdoor"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:mangrove_trapdoor"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

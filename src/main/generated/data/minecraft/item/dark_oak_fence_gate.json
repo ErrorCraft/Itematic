@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.dark_oak_fence_gate"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:dark_oak_fence_gate"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.jungle_button"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:jungle_button"
+    },
+    "minecraft:fuel": {
+      "ticks": 100
+    }
+  }
+}

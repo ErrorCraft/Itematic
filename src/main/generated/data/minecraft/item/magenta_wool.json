@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.magenta_wool"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:magenta_wool"
+    },
+    "minecraft:fuel": {
+      "ticks": 100
+    }
+  }
+}

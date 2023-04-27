@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.birch_fence"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:birch_fence"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.mangrove_wood"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:mangrove_wood"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

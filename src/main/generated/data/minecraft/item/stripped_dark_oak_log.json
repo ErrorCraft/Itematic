@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.stripped_dark_oak_log"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:stripped_dark_oak_log"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

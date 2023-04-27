@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.red_carpet"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:red_carpet"
+    },
+    "minecraft:fuel": {
+      "ticks": 67
+    }
+  }
+}

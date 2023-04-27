@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.birch_hanging_sign"
+    },
+    "max_count": 16
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:birch_hanging_sign"
+    },
+    "minecraft:fuel": {
+      "ticks": 800
+    }
+  }
+}

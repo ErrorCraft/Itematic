@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.chest"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:chest"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

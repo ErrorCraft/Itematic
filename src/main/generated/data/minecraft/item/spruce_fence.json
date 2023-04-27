@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.spruce_fence"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:spruce_fence"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

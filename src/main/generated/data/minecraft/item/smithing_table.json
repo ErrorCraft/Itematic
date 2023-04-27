@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.smithing_table"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:smithing_table"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

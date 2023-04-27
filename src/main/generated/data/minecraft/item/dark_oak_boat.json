@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.dark_oak_boat"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:fuel": {
+      "ticks": 1200
+    }
+  }
+}

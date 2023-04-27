@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.blaze_rod"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:fuel": {
+      "ticks": 2400
+    }
+  }
+}

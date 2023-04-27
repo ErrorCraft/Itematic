@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.purple_banner"
+    },
+    "max_count": 16
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:purple_banner"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

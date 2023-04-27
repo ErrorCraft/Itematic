@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.light_blue_carpet"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:light_blue_carpet"
+    },
+    "minecraft:fuel": {
+      "ticks": 67
+    }
+  }
+}

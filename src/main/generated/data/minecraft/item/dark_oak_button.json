@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.dark_oak_button"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:dark_oak_button"
+    },
+    "minecraft:fuel": {
+      "ticks": 100
+    }
+  }
+}

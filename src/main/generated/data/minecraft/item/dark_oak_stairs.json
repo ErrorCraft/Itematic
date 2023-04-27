@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.dark_oak_stairs"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:dark_oak_stairs"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

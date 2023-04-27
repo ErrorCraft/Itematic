@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.white_banner"
+    },
+    "max_count": 16
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:white_banner"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

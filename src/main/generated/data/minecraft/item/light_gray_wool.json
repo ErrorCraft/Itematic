@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.light_gray_wool"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:light_gray_wool"
+    },
+    "minecraft:fuel": {
+      "ticks": 100
+    }
+  }
+}

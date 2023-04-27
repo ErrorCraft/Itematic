@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.cherry_trapdoor"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:cherry_trapdoor"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

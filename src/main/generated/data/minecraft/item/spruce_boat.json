@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.spruce_boat"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:fuel": {
+      "ticks": 1200
+    }
+  }
+}

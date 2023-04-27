@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.cherry_stairs"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:cherry_stairs"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

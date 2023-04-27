@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.crafting_table"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:crafting_table"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    }
+  }
+}

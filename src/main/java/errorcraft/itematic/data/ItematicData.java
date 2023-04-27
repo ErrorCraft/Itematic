@@ -192,6 +192,8 @@ public class ItematicData implements DataGeneratorEntrypoint {
                 .add(ItemKeys.NETHERITE_INGOT);
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_SHIELD)
                 .addTag(ItemTags.PLANKS);
+            this.getOrCreateTagBuilder(ItemTagsUtil.FURNACE_MINECART_FUEL)
+                .add(ItemKeys.COAL, ItemKeys.CHARCOAL);
         }
     }
 }

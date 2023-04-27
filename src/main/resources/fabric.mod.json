@@ -43,11 +43,20 @@
       "net/minecraft/class_763": [
         "errorcraft/itematic/access/client/render/item/ItemModelsAccess"
       ],
+      "net/minecraft/class_1297": [
+        "errorcraft/itematic/access/entity/EntityAccess"
+      ],
       "net/minecraft/class_1304": [
         "errorcraft/itematic/access/entity/EquipmentSlotAccess"
       ],
+      "net/minecraft/class_1309": [
+        "errorcraft/itematic/access/entity/LivingEntityAccess"
+      ],
       "net/minecraft/class_1662": [
         "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+      ],
+      "net/minecraft/class_1690": [
+        "errorcraft/itematic/access/entity/vehicle/BoatEntityAccess"
       ],
       "net/minecraft/class_1730": [
         "errorcraft/itematic/access/PlayerAccess"

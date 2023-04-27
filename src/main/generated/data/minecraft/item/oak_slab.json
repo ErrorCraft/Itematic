@@ -8,6 +8,9 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:oak_slab"
+    },
+    "minecraft:fuel": {
+      "ticks": 150
     }
   }
 }

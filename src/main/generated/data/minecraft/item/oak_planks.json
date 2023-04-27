@@ -8,6 +8,9 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:oak_planks"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
     }
   }
 }
