@@ -17,17 +17,6 @@ public interface VehicleInventoryExtender {
     World getWorld();
 
     @Redirect(
-        method = "writeInventoryToNbt",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/inventory/Inventories;writeNbt(Lnet/minecraft/nbt/NbtCompound;Lnet/minecraft/util/collection/DefaultedList;)Lnet/minecraft/nbt/NbtCompound;"
-        )
-    )
-    private NbtCompound writeInventoryToNbtUseDynamicRegistry(NbtCompound nbt, DefaultedList<ItemStack> stacks) {
-        return InventoryUtil.writeToNbt(nbt, this.getWorld().getRegistryManager(), stacks);
-    }
-
-    @Redirect(
         method = "readInventoryFromNbt",
         at = @At(
             value = "INVOKE",

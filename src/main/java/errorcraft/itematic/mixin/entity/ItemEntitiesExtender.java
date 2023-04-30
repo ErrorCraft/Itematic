@@ -37,6 +37,6 @@ public abstract class ItemEntitiesExtender extends Entity {
         )
     )
     private ItemStack readCustomDataFromNbtUseDynamicRegistry(NbtCompound nbt) {
-        return ItemStackUtil.readFromNbt(nbt, this.world.getRegistryManager());
+        return ItemStackUtil.readFromNbt(nbt, this.getWorld().getRegistryManager());
     }
 }

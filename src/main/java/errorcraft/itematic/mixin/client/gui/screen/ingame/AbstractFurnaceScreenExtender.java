@@ -21,6 +21,6 @@ public class AbstractFurnaceScreenExtender<T extends AbstractFurnaceScreenHandle
         at = @At("TAIL")
     )
     private void initSetRecipeBookDynamicRegistryManager(AbstractFurnaceScreenHandler handler, AbstractFurnaceRecipeBookScreen recipeBook, PlayerInventory inventory, Text title, Identifier background, CallbackInfo info) {
-        recipeBook.setRegistryManager(inventory.player.world.getRegistryManager());
+        recipeBook.setRegistryManager(inventory.player.getWorld().getRegistryManager());
     }
 }

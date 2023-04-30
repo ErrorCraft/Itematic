@@ -28,6 +28,6 @@ public class InventoryScreenExtender {
         )
     )
     private void initSetRecipeBookDynamicRegistryManager(PlayerEntity player, CallbackInfo info) {
-        this.recipeBook.setRegistryManager(player.world.getRegistryManager());
+        this.recipeBook.setRegistryManager(player.getWorld().getRegistryManager());
     }
 }

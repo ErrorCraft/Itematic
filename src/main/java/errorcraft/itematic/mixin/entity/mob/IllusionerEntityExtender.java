@@ -28,7 +28,7 @@ public abstract class IllusionerEntityExtender extends SpellcastingIllagerEntity
         )
     )
     private ItemStack initializeNewItemStackUseRegistryEntry(ItemConvertible item) {
-        RegistryEntry<Item> entry = this.world.getRegistryManager().get(RegistryKeys.ITEM).entryOf(ItemKeys.BOW);
+        RegistryEntry<Item> entry = this.getWorld().getRegistryManager().get(RegistryKeys.ITEM).entryOf(ItemKeys.BOW);
         return new ItemStack(entry);
     }
 }

@@ -91,6 +91,9 @@
       "net/minecraft/class_2545": [
         "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
+      "net/minecraft/class_2586": [
+        "errorcraft/itematic/access/block/entity/BlockEntityAccess"
+      ],
       "net/minecraft/class_2989": [
         "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],

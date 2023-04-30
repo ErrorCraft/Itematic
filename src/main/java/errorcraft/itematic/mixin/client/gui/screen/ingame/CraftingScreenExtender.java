@@ -30,6 +30,6 @@ public class CraftingScreenExtender {
         )
     )
     private void initSetRecipeBookDynamicRegistryManager(CraftingScreenHandler handler, PlayerInventory inventory, Text title, CallbackInfo info) {
-        this.recipeBook.setRegistryManager(inventory.player.world.getRegistryManager());
+        this.recipeBook.setRegistryManager(inventory.player.getWorld().getRegistryManager());
     }
 }

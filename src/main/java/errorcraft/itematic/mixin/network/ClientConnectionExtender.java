@@ -1,8 +1,10 @@
 package errorcraft.itematic.mixin.network;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import errorcraft.itematic.access.network.ClientConnectionAccess;
 import errorcraft.itematic.util.EventUtil;
-import io.netty.channel.ChannelHandler;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelPipeline;
 import net.fabricmc.fabric.api.event.Event;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.DecoderHandler;
@@ -12,8 +14,8 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Consumer;
 
@@ -27,44 +29,17 @@ public class ClientConnectionExtender implements ClientConnectionAccess {
         @Final
         ClientConnection field_11663;
 
-        @ModifyArg(
+        @Inject(
             method = "initChannel",
             at = @At(
                 value = "INVOKE",
-                target = "Lio/netty/channel/ChannelPipeline;addLast(Ljava/lang/String;Lio/netty/channel/ChannelHandler;)Lio/netty/channel/ChannelPipeline;",
-                ordinal = 0,
-                remap = false
-            ),
-            slice = @Slice(
-                from = @At(
-                    value = "CONSTANT",
-                    args = "stringValue=decoder"
-                )
+                target = "Lnet/minecraft/network/ClientConnection;addHandlers(Lio/netty/channel/ChannelPipeline;Lnet/minecraft/network/NetworkSide;)V",
+                shift = At.Shift.AFTER
             )
         )
-        private ChannelHandler initChannelDecoderUseDynamicRegistry(ChannelHandler channelHandler) {
-            this.field_11663.addSetRegistryManagerConsumer(((DecoderHandler)channelHandler)::setRegistryManager);
-            return channelHandler;
-        }
-
-        @ModifyArg(
-            method = "initChannel",
-            at = @At(
-                value = "INVOKE",
-                target = "Lio/netty/channel/ChannelPipeline;addLast(Ljava/lang/String;Lio/netty/channel/ChannelHandler;)Lio/netty/channel/ChannelPipeline;",
-                ordinal = 0,
-                remap = false
-            ),
-            slice = @Slice(
-                from = @At(
-                    value = "CONSTANT",
-                    args = "stringValue=encoder"
-                )
-            )
-        )
-        private ChannelHandler initChannelEncoderUseDynamicRegistry(ChannelHandler channelHandler) {
-            this.field_11663.addSetRegistryManagerConsumer(((PacketEncoder)channelHandler)::setRegistryManager);
-            return channelHandler;
+        private void initChannelSetRegistryManager(Channel channel, CallbackInfo info, @Local ChannelPipeline channelPipeline) {
+            this.field_11663.addSetRegistryManagerConsumer(channelPipeline.get(DecoderHandler.class)::setRegistryManager);
+            this.field_11663.addSetRegistryManagerConsumer(channelPipeline.get(PacketEncoder.class)::setRegistryManager);
         }
     }
 

@@ -11,8 +11,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(EnderChestInventory.class)
 public class EnderChestInventoryExtender extends SimpleInventory implements PlayerAccess {
@@ -20,27 +18,12 @@ public class EnderChestInventoryExtender extends SimpleInventory implements Play
     private PlayerEntity player;
 
     @Inject(
-        method = "toNbtList",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/nbt/NbtList;<init>()V",
-            shift = At.Shift.BY,
-            by = 2
-        ),
-        locals = LocalCapture.CAPTURE_FAILHARD,
-        cancellable = true
-    )
-    private void toNbtListUseDynamicRegistry(CallbackInfoReturnable<NbtList> info, NbtList nbtList) {
-        info.setReturnValue(InventoryUtil.writeToNbt(nbtList, this.player.world.getRegistryManager(), this.stacks));
-    }
-
-    @Inject(
         method = "readNbtList",
         at = @At("HEAD"),
         cancellable = true
     )
     private void readNbtListUseDynamicRegistry(NbtList nbtList, CallbackInfo info) {
-        InventoryUtil.readFromNbt(nbtList, this.player.world.getRegistryManager(), this.stacks);
+        InventoryUtil.readFromNbt(nbtList, this.player.getWorld().getRegistryManager(), this.stacks);
         info.cancel();
     }
 

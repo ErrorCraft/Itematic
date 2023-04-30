@@ -36,7 +36,7 @@ public class InputSlotFillerExtender<C extends Inventory> {
     )
     private void fillInputSlotsSetDynamicRegistryManager(ServerPlayerEntity entity, @Nullable Recipe<C> recipe, boolean craftAll, CallbackInfo ci) {
         if (this.registry == null) {
-            DynamicRegistryManager registryManager = entity.world.getRegistryManager();
+            DynamicRegistryManager registryManager = entity.getWorld().getRegistryManager();
             this.matcher.setRegistryManager(registryManager);
             this.registry = registryManager.get(RegistryKeys.ITEM);
         }

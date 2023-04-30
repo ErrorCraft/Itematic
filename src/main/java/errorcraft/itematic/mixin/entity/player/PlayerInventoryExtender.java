@@ -45,7 +45,7 @@ public class PlayerInventoryExtender {
         cancellable = true
     )
     private void readNbtUseDynamicRegistry(NbtList nbtList, CallbackInfo info) {
-        DynamicRegistryManager registryManager = this.player.world.getRegistryManager();
+        DynamicRegistryManager registryManager = this.player.getWorld().getRegistryManager();
         InventoryUtil.readFromNbt(nbtList, registryManager, this::setItem);
         info.cancel();
     }

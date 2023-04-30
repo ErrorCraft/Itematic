@@ -18,20 +18,6 @@ public abstract class LockableContainerBlockEntitiesExtender extends LockableCon
     }
 
     @Redirect(
-        method = "writeNbt",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/inventory/Inventories;writeNbt(Lnet/minecraft/nbt/NbtCompound;Lnet/minecraft/util/collection/DefaultedList;)Lnet/minecraft/nbt/NbtCompound;"
-        )
-    )
-    private NbtCompound writeNbtUseDynamicRegistry(NbtCompound nbt, DefaultedList<ItemStack> stacks) {
-        if (this.world != null) {
-            return InventoryUtil.writeToNbt(nbt, this.world.getRegistryManager(), stacks);
-        }
-        return nbt;
-    }
-
-    @Redirect(
         method = "readNbt",
         at = @At(
             value = "INVOKE",
@@ -39,8 +25,6 @@ public abstract class LockableContainerBlockEntitiesExtender extends LockableCon
         )
     )
     private void readNbtUseDynamicRegistry(NbtCompound nbt, DefaultedList<ItemStack> stacks) {
-        if (this.world != null) {
-            InventoryUtil.readFromNbt(nbt, this.world.getRegistryManager(), stacks);
-        }
+        InventoryUtil.readFromNbt(nbt, this.getRegistryManager(), stacks);
     }
 }

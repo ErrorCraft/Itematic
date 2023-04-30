@@ -58,7 +58,7 @@ public abstract class BoatEntityExtender extends Entity implements BoatEntityAcc
         )
     )
     private ItemEntity fallDropItemUseRegistryEntry(BoatEntity instance, ItemConvertible itemConvertible) {
-        RegistryEntry<Item> entry = this.world.getRegistryManager().get(RegistryKeys.ITEM).entryOf(ItemKeys.STICK);
+        RegistryEntry<Item> entry = this.getWorld().getRegistryManager().get(RegistryKeys.ITEM).entryOf(ItemKeys.STICK);
         return this.dropItem(entry);
     }
 
@@ -78,7 +78,7 @@ public abstract class BoatEntityExtender extends Entity implements BoatEntityAcc
     }
 
     private RegistryEntry<Item> asItemRegistryEntry() {
-        Registry<Item> registry = this.world.getRegistryManager().get(RegistryKeys.ITEM);
+        Registry<Item> registry = this.getWorld().getRegistryManager().get(RegistryKeys.ITEM);
         return registry.entryOf(this.asItemKey());
     }
 }

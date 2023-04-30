@@ -20,20 +20,6 @@ public abstract class ShulkerBoxBlockEntityExtender extends LootableContainerBlo
     }
 
     @Redirect(
-        method = "writeNbt",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/inventory/Inventories;writeNbt(Lnet/minecraft/nbt/NbtCompound;Lnet/minecraft/util/collection/DefaultedList;Z)Lnet/minecraft/nbt/NbtCompound;"
-        )
-    )
-    private NbtCompound writeNbtUseDynamicRegistry(NbtCompound nbt, DefaultedList<ItemStack> stacks, boolean setIfEmpty) {
-        if (this.world != null) {
-            return InventoryUtil.writeToNbt(nbt, this.world.getRegistryManager(), stacks, setIfEmpty);
-        }
-        return nbt;
-    }
-
-    @Redirect(
         method = "readInventoryNbt",
         at = @At(
             value = "INVOKE",
@@ -41,8 +27,6 @@ public abstract class ShulkerBoxBlockEntityExtender extends LootableContainerBlo
         )
     )
     private void readInventoryNbtUseDynamicRegistry(NbtCompound nbt, DefaultedList<ItemStack> stacks) {
-        if (this.world != null) {
-            InventoryUtil.readFromNbt(nbt, this.world.getRegistryManager(), stacks);
-        }
+        InventoryUtil.readFromNbt(nbt, this.getRegistryManager(), stacks);
     }
 }

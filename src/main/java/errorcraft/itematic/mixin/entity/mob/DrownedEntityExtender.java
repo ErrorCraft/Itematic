@@ -29,7 +29,7 @@ public class DrownedEntityExtender extends ZombieEntity {
         )
     )
     private ItemStack initEquipmentNewItemStackUseRegistryEntry(ItemConvertible item) {
-        RegistryEntry<Item> entry = this.world.getRegistryManager().get(RegistryKeys.ITEM).entryOf(ItemKeys.FISHING_ROD);
+        RegistryEntry<Item> entry = this.getWorld().getRegistryManager().get(RegistryKeys.ITEM).entryOf(ItemKeys.FISHING_ROD);
         return new ItemStack(entry);
     }
 }
