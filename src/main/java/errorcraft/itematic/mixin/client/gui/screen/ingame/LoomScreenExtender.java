@@ -6,11 +6,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.LoomScreen;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.LoomScreenHandler;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,7 +30,6 @@ public abstract class LoomScreenExtender extends HandledScreen<LoomScreenHandler
     )
     @SuppressWarnings("ConstantConditions")
     private ItemStack drawBannerNewItemStackUseRegistryEntry(ItemConvertible item) {
-        RegistryEntry<Item> entry = this.client.world.getRegistryManager().get(RegistryKeys.ITEM).entryOf(ItemKeys.GRAY_BANNER);
-        return new ItemStack(entry);
+        return new ItemStack(this.client.world.getItem(ItemKeys.GRAY_BANNER));
     }
 }

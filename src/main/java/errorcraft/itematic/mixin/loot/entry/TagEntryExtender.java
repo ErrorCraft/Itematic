@@ -5,7 +5,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.entry.TagEntry;
 import net.minecraft.registry.DefaultedRegistry;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +23,7 @@ public class TagEntryExtender {
         )
     )
     private Iterable<RegistryEntry<Item>> generateLootUseDynamicRegistry(DefaultedRegistry<Item> instance, TagKey<Item> tagKey, Consumer<ItemStack> lootConsumer, LootContext context) {
-        return context.getWorld().getRegistryManager().get(RegistryKeys.ITEM).iterateEntries(tagKey);
+        return context.getWorld().getItemAccess().iterateEntries(tagKey);
     }
 
     @Redirect(
@@ -35,6 +34,6 @@ public class TagEntryExtender {
         )
     )
     private Iterable<RegistryEntry<Item>> growUseDynamicRegistry(DefaultedRegistry<Item> instance, TagKey<Item> tagKey, LootContext context) {
-        return context.getWorld().getRegistryManager().get(RegistryKeys.ITEM).iterateEntries(tagKey);
+        return context.getWorld().getItemAccess().iterateEntries(tagKey);
     }
 }

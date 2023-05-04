@@ -7,7 +7,6 @@ import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,6 +42,6 @@ public abstract class ThrownItemEntityExtender extends ThrownEntity implements T
     }
 
     private RegistryEntry<Item> getDefaultItemRegistryEntry() {
-        return this.getWorld().getRegistryManager().get(RegistryKeys.ITEM).entryOf(this.getDefaultItemKey());
+        return this.getWorld().getItem(this.getDefaultItemKey());
     }
 }

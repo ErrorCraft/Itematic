@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import errorcraft.itematic.access.loot.entry.ItemEntryAccess;
+import errorcraft.itematic.item.ItemAccess;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -13,7 +14,6 @@ import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.registry.DefaultedRegistry;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -39,8 +39,8 @@ public class ItemEntryExtender implements ItemEntryAccess {
         cancellable = true
     )
     private void generateLootStoreRegistryEntryUseDynamicRegistry(Consumer<ItemStack> lootConsumer, LootContext context, CallbackInfo info, @Share("entry") LocalRef<RegistryEntry<Item>> entry) {
-        Registry<Item> registry = context.getWorld().getRegistryManager().get(RegistryKeys.ITEM);
-        Optional<RegistryEntry.Reference<Item>> optional = registry.getEntry(this.itemKey);
+        ItemAccess itemAccess = context.getWorld().getItemAccess();
+        Optional<RegistryEntry.Reference<Item>> optional = itemAccess.getOptionalEntry(this.itemKey);
         if (optional.isEmpty()) {
             info.cancel();
             return;

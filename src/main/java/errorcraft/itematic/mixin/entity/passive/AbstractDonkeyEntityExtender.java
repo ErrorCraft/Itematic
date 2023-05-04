@@ -5,8 +5,6 @@ import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -40,8 +38,7 @@ public class AbstractDonkeyEntityExtender {
             )
         )
         private ItemStack getNewItemStackUseRegistryEntry(ItemConvertible item) {
-            RegistryEntry<Item> entry = this.field_27867.getWorld().getRegistryManager().get(RegistryKeys.ITEM).entryOf(ItemKeys.CHEST);
-            return new ItemStack(entry);
+            return new ItemStack(this.field_27867.getWorld().getItem(ItemKeys.CHEST));
         }
 
         @Redirect(

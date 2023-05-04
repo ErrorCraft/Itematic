@@ -4,11 +4,8 @@ import errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,7 +26,6 @@ public class DrownedEntityExtender extends ZombieEntity {
         )
     )
     private ItemStack initEquipmentNewItemStackUseRegistryEntry(ItemConvertible item) {
-        RegistryEntry<Item> entry = this.getWorld().getRegistryManager().get(RegistryKeys.ITEM).entryOf(ItemKeys.FISHING_ROD);
-        return new ItemStack(entry);
+        return new ItemStack(this.getWorld().getItem(ItemKeys.FISHING_ROD));
     }
 }

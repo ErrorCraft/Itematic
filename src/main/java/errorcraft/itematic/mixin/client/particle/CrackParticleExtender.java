@@ -6,11 +6,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.CrackParticle;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -27,8 +24,7 @@ public class CrackParticleExtender {
             )
         )
         private ItemStack createParticleNewItemStackUseRegistryEntry(ItemConvertible item, @Local ClientWorld clientWorld) {
-            RegistryEntry<Item> entry = clientWorld.getRegistryManager().get(RegistryKeys.ITEM).entryOf(ItemKeys.SNOWBALL);
-            return new ItemStack(entry);
+            return new ItemStack(clientWorld.getItem(ItemKeys.SNOWBALL));
         }
     }
 }

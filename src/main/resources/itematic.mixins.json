@@ -94,6 +94,7 @@
     "server.ServerPlayerInteractionManagerExtender",
     "world.ChunkRegionExtender",
     "world.ChunkSerializerExtender",
+    "world.WorldExtender",
     "world.chunk.WorldChunkExtender"
   ],
   "client": [
