@@ -10,4 +10,8 @@ public record ItemBase(ItemBaseDisplay display, int maxCount) {
     ).apply(instance, ItemBase::new));
     public static final int MIN_MAX_COUNT = 1;
     public static final int MAX_MAX_COUNT = 64;
+
+    public ItemBase(ItemBaseDisplay display) {
+        this(display, MAX_MAX_COUNT);
+    }
 }
