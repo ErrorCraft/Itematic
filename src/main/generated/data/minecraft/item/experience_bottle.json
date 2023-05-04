@@ -1,0 +1,17 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.experience_bottle"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:projectile": {
+      "entity": "minecraft:experience_bottle"
+    },
+    "minecraft:throwable": {
+      "speed": 0.7,
+      "y_speed_modifier_angle": -20.0
+    }
+  }
+}

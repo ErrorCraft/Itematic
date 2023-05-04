@@ -1,0 +1,20 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.ender_pearl"
+    },
+    "max_count": 16
+  },
+  "components": {
+    "minecraft:cooldown": {
+      "ticks": 20
+    },
+    "minecraft:projectile": {
+      "entity": "minecraft:ender_pearl"
+    },
+    "minecraft:throwable": {
+      "speed": 1.5,
+      "y_speed_modifier_angle": 0.0
+    }
+  }
+}

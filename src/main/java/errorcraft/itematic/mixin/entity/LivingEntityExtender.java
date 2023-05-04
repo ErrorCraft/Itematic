@@ -21,7 +21,8 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityExtender implements LivingEntityAccess {
-    @Shadow public abstract boolean isHolding(Predicate<ItemStack> predicate);
+    @Shadow
+    public abstract boolean isHolding(Predicate<ItemStack> predicate);
 
     @Redirect(
         method = "eatFood",

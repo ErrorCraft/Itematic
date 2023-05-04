@@ -7,6 +7,7 @@ import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.registry.BuiltinRegistries;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryOps;
+import net.minecraft.registry.ServerDynamicRegistryType;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -38,6 +39,9 @@ public class GameJoinS2CPacketExtender {
         )
     )
     private DynamicOps<NbtElement> writeEncodeUseDynamicRegistryManager(DynamicOps<NbtElement> ops) {
-        return RegistryOps.of(NbtOps.INSTANCE, this.registryManager);
+        DynamicRegistryManager registryManager = ServerDynamicRegistryType.createCombinedDynamicRegistries()
+            .with(ServerDynamicRegistryType.WORLDGEN, this.registryManager)
+            .getCombinedRegistryManager();
+        return RegistryOps.of(NbtOps.INSTANCE, registryManager);
     }
 }

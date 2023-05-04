@@ -280,8 +280,10 @@ public class ItemKeys {
     public static final RegistryKey<Item> BAMBOO_HANGING_SIGN = register("bamboo_hanging_sign");
     public static final RegistryKey<Item> WATER_BUCKET = register("water_bucket");
     public static final RegistryKey<Item> LAVA_BUCKET = register("lava_bucket");
+    public static final RegistryKey<Item> SNOWBALL = register("snowball");
     public static final RegistryKey<Item> DRIED_KELP_BLOCK = register("dried_kelp_block");
     public static final RegistryKey<Item> BOOK = register("book");
+    public static final RegistryKey<Item> EGG = register("egg");
     public static final RegistryKey<Item> FISHING_ROD = register("fishing_rod");
     public static final RegistryKey<Item> COD = register("cod");
     public static final RegistryKey<Item> SALMON = register("salmon");
@@ -297,9 +299,11 @@ public class ItemKeys {
     public static final RegistryKey<Item> CHICKEN = register("chicken");
     public static final RegistryKey<Item> COOKED_CHICKEN = register("cooked_chicken");
     public static final RegistryKey<Item> ROTTEN_FLESH = register("rotten_flesh");
+    public static final RegistryKey<Item> ENDER_PEARL = register("ender_pearl");
     public static final RegistryKey<Item> BLAZE_ROD = register("blaze_rod");
     public static final RegistryKey<Item> SPIDER_EYE = register("spider_eye");
     public static final RegistryKey<Item> PIG_SPAWN_EGG = register("pig_spawn_egg");
+    public static final RegistryKey<Item> EXPERIENCE_BOTTLE = register("experience_bottle");
     public static final RegistryKey<Item> CARROT = register("carrot");
     public static final RegistryKey<Item> POTATO = register("potato");
     public static final RegistryKey<Item> BAKED_POTATO = register("baked_potato");

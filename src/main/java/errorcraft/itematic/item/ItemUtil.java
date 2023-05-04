@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
 import errorcraft.itematic.enchantment.EnchantmentTags;
+import errorcraft.itematic.entity.EntityTypeKeys;
 import errorcraft.itematic.item.armor.ArmorMaterial;
 import errorcraft.itematic.item.armor.ArmorMaterialKeys;
 import errorcraft.itematic.item.armor.ArmorMaterials;
@@ -27,6 +28,7 @@ public class ItemUtil {
     public static void bootstrap(Registerable<Item> registerable) {
         RegistryEntryLookup<ArmorMaterial> armorMaterials = registerable.getRegistryLookup(ArmorMaterials.ARMOR_MATERIAL_KEY);
         RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
+        RegistryEntryLookup<EntityType<?>> entityTypes = registerable.getRegistryLookup(RegistryKeys.ENTITY_TYPE);
 
         registerable.register(ItemKeys.AIR, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build(), 64)));
         registerable.register(ItemKeys.STONE, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE).build(), 64), ItemComponentSet.builder().with(new BlockItemComponent(Blocks.STONE)).build()));
@@ -302,8 +304,10 @@ public class ItemUtil {
         registerable.register(ItemKeys.BAMBOO_HANGING_SIGN, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_HANGING_SIGN).build(), 16), ItemComponentSet.builder().with(new BlockItemComponent(Blocks.BAMBOO_HANGING_SIGN), new FuelItemComponent(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME)).build()));
         registerable.register(ItemKeys.WATER_BUCKET, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build(), 1)));
         registerable.register(ItemKeys.LAVA_BUCKET, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LAVA_BUCKET).build(), 1), ItemComponentSet.builder().with(new FuelItemComponent(FurnaceBlockEntityUtil.LAVA_FUEL_TIME)).build()));
+        registerable.register(ItemKeys.SNOWBALL, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNOWBALL).build(), 16), ItemComponentSet.builder().with(new ThrowableItemComponent(1.5f, 0.0f), new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.SNOWBALL))).build()));
         registerable.register(ItemKeys.DRIED_KELP_BLOCK, create(new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRIED_KELP_BLOCK).build(), 64), ItemComponentSet.builder().with(new BlockItemComponent(Blocks.DRIED_KELP_BLOCK), new CompostableItemComponent(0.5f), new FuelItemComponent(FurnaceBlockEntityUtil.DRIED_KELP_BLOCK_FUEL_TIME)).build()));
         registerable.register(ItemKeys.BOOK, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOOK).build(), 64), ItemComponentSet.builder().with(EnchantableItemComponent.transforms(1, items.getOrThrow(ItemKeys.ENCHANTED_BOOK))).build()));
+        registerable.register(ItemKeys.EGG, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EGG).build(), 16), ItemComponentSet.builder().with(new ThrowableItemComponent(1.5f, 0.0f), new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.EGG))).build()));
         registerable.register(ItemKeys.FISHING_ROD, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FISHING_ROD).build(), 1), ItemComponentSet.builder().with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME)).build()));
         registerable.register(ItemKeys.COD, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COD).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.COD)).build()));
         registerable.register(ItemKeys.SALMON, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SALMON).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.SALMON)).build()));
@@ -319,9 +323,11 @@ public class ItemUtil {
         registerable.register(ItemKeys.CHICKEN, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHICKEN).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.CHICKEN)).build()));
         registerable.register(ItemKeys.COOKED_CHICKEN, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_CHICKEN).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.COOKED_CHICKEN)).build()));
         registerable.register(ItemKeys.ROTTEN_FLESH, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ROTTEN_FLESH).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.ROTTEN_FLESH)).build()));
+        registerable.register(ItemKeys.ENDER_PEARL, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDER_PEARL).build(), 16), ItemComponentSet.builder().with(new ThrowableItemComponent(1.5f, 0.0f), new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.ENDER_PEARL)), new CooldownItemComponent(20)).build()));
         registerable.register(ItemKeys.BLAZE_ROD, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLAZE_ROD).build(), 64), ItemComponentSet.builder().with(new FuelItemComponent(FurnaceBlockEntityUtil.BLAZE_ROD_FUEL_TIME)).build()));
         registerable.register(ItemKeys.SPIDER_EYE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPIDER_EYE).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.SPIDER_EYE)).build()));
         registerable.register(ItemKeys.PIG_SPAWN_EGG, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIG_SPAWN_EGG).build(), 64), ItemComponentSet.builder().with(new EntityItemComponent(EntityType.PIG)).build()));
+        registerable.register(ItemKeys.EXPERIENCE_BOTTLE, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EXPERIENCE_BOTTLE).build(), 64), ItemComponentSet.builder().with(new ThrowableItemComponent(0.7f, -20.0f), new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE))).build()));
         registerable.register(ItemKeys.CARROT, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CARROT).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.CARROT)).with(new BlockItemComponent(Blocks.CARROTS), new CompostableItemComponent(0.65f)).build()));
         registerable.register(ItemKeys.POTATO, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POTATO).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.POTATO)).with(new BlockItemComponent(Blocks.POTATOES), new CompostableItemComponent(0.65f)).build()));
         registerable.register(ItemKeys.BAKED_POTATO, create(new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAKED_POTATO).build(), 64), ItemComponentSet.builder().with(FoodItemComponent.from(FoodComponents.BAKED_POTATO)).with(new CompostableItemComponent(0.85f)).build()));

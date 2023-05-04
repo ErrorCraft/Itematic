@@ -1,0 +1,17 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.snowball"
+    },
+    "max_count": 16
+  },
+  "components": {
+    "minecraft:projectile": {
+      "entity": "minecraft:snowball"
+    },
+    "minecraft:throwable": {
+      "speed": 1.5,
+      "y_speed_modifier_angle": 0.0
+    }
+  }
+}

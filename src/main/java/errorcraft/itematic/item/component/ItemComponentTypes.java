@@ -27,6 +27,9 @@ public class ItemComponentTypes {
     public static final ItemComponentType<ForgeableItemComponent> FORGEABLE = register("forgeable", new ItemComponentType<>(ForgeableItemComponent.CODEC));
     public static final ItemComponentType<RepairableItemComponent> REPAIRABLE = register("repairable", new ItemComponentType<>(RepairableItemComponent.CODEC));
     public static final ItemComponentType<FoilItemComponent> FOIL = register("foil", new ItemComponentType<>(FoilItemComponent.CODEC));
+    public static final ItemComponentType<ThrowableItemComponent> THROWABLE = register("throwable", new ItemComponentType<>(ThrowableItemComponent.CODEC));
+    public static final ItemComponentType<ProjectileItemComponent> PROJECTILE = register("projectile", new ItemComponentType<>(ProjectileItemComponent.CODEC));
+    public static final ItemComponentType<CooldownItemComponent> COOLDOWN = register("cooldown", new ItemComponentType<>(CooldownItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

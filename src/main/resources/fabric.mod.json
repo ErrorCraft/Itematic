@@ -97,6 +97,9 @@
       "net/minecraft/class_2989": [
         "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
+      "net/minecraft/class_3857": [
+        "errorcraft/itematic/access/entity/projectile/thrown/ThrownItemEntityAccess"
+      ],
       "net/minecraft/class_5257": [
         "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
