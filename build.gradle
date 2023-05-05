@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.0-SNAPSHOT'
+	id 'fabric-loom' version '1.2-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -45,6 +45,15 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 loom {
+	splitEnvironmentSourceSets()
+
+	mods {
+		itematic {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+
 	runs {
 		datagenClient {
 			inherit client

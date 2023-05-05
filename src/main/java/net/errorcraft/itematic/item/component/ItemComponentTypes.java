@@ -1,0 +1,41 @@
+package net.errorcraft.itematic.item.component;
+
+import net.errorcraft.itematic.item.component.components.*;
+import net.errorcraft.itematic.mixin.registry.RegistriesAccessor;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.util.Identifier;
+
+public class ItemComponentTypes {
+    public static final RegistryKey<Registry<ItemComponentType<?>>> ITEM_COMPONENT_TYPE_KEY = RegistryKey.ofRegistry(new Identifier("item_component_type"));
+    public static final Registry<ItemComponentType<?>> ITEM_COMPONENT_TYPE = RegistriesAccessor.create(ITEM_COMPONENT_TYPE_KEY, r -> ItemComponentTypes.TEST);
+
+    public static final ItemComponentType<TestItemComponent> TEST = register("test", new ItemComponentType<>(TestItemComponent.CODEC));
+    public static final ItemComponentType<UseDurationItemComponent> USE_DURATION = register("use_duration", new ItemComponentType<>(UseDurationItemComponent.CODEC));
+    public static final ItemComponentType<FoodItemComponent> FOOD = register("food", new ItemComponentType<>(FoodItemComponent.CODEC));
+    public static final ItemComponentType<BlockItemComponent> BLOCK = register("block", new ItemComponentType<>(BlockItemComponent.CODEC));
+    public static final ItemComponentType<DamageableItemComponent> DAMAGEABLE = register("damageable", new ItemComponentType<>(DamageableItemComponent.CODEC));
+    public static final ItemComponentType<ToolItemComponent> TOOL = register("tool", new ItemComponentType<>(ToolItemComponent.CODEC));
+    public static final ItemComponentType<EntityItemComponent> ENTITY = register("entity", new ItemComponentType<>(EntityItemComponent.CODEC));
+    public static final ItemComponentType<WeaponItemComponent> WEAPON = register("weapon", new ItemComponentType<>(WeaponItemComponent.CODEC));
+    public static final ItemComponentType<CompostableItemComponent> COMPOSTABLE = register("compostable", new ItemComponentType<>(CompostableItemComponent.CODEC));
+    public static final ItemComponentType<EquipmentItemComponent> EQUIPMENT = register("equipment", new ItemComponentType<>(EquipmentItemComponent.CODEC));
+    public static final ItemComponentType<ArmorItemComponent> ARMOR = register("armor", new ItemComponentType<>(ArmorItemComponent.CODEC));
+    public static final ItemComponentType<FuelItemComponent> FUEL = register("fuel", new ItemComponentType<>(FuelItemComponent.CODEC));
+    public static final ItemComponentType<EnchantableItemComponent> ENCHANTABLE = register("enchantable", new ItemComponentType<>(EnchantableItemComponent.CODEC));
+    public static final ItemComponentType<EnchantmentHolderItemComponent> ENCHANTMENT_HOLDER = register("enchantment_holder", new ItemComponentType<>(EnchantmentHolderItemComponent.CODEC));
+    public static final ItemComponentType<ForgeableItemComponent> FORGEABLE = register("forgeable", new ItemComponentType<>(ForgeableItemComponent.CODEC));
+    public static final ItemComponentType<RepairableItemComponent> REPAIRABLE = register("repairable", new ItemComponentType<>(RepairableItemComponent.CODEC));
+    public static final ItemComponentType<FoilItemComponent> FOIL = register("foil", new ItemComponentType<>(FoilItemComponent.CODEC));
+    public static final ItemComponentType<ThrowableItemComponent> THROWABLE = register("throwable", new ItemComponentType<>(ThrowableItemComponent.CODEC));
+    public static final ItemComponentType<ProjectileItemComponent> PROJECTILE = register("projectile", new ItemComponentType<>(ProjectileItemComponent.CODEC));
+    public static final ItemComponentType<CooldownItemComponent> COOLDOWN = register("cooldown", new ItemComponentType<>(CooldownItemComponent.CODEC));
+
+    private ItemComponentTypes() {}
+
+    public static void init() {}
+
+    private static <T extends ItemComponent> ItemComponentType<T> register(String id, ItemComponentType<T> type) {
+        return Registry.register(ITEM_COMPONENT_TYPE, id, type);
+    }
+}

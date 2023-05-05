@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "package": "net.errorcraft.itematic.mixin.client",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "MinecraftClientExtender",
+    "gui.screen.ingame.AbstractFurnaceScreenExtender",
+    "gui.screen.ingame.CraftingScreenExtender",
+    "gui.screen.ingame.InventoryScreenExtender",
+    "gui.screen.ingame.LoomScreenExtender",
+    "gui.screen.recipebook.AbstractFurnaceRecipeBookScreenExtender",
+    "gui.screen.recipebook.RecipeBookWidgetExtender",
+    "network.ClientPlayerInteractionManagerExtender",
+    "network.ClientPlayNetworkHandlerExtender",
+    "option.HotbarStorageEntryExtender",
+    "particle.CrackParticleExtender$SnowballFactoryExtender",
+    "render.entity.FishingBobberEntityRendererExtender",
+    "render.entity.feature.ArmorFeatureRendererExtender",
+    "render.item.ItemModelsExtender",
+    "render.item.ItemRendererExtender",
+    "render.model.BakedModelManagerExtender",
+    "render.model.ModelLoaderExtender"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

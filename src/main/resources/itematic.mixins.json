@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "errorcraft.itematic.mixin",
+  "package": "net.errorcraft.itematic.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BootstrapExtender",
@@ -96,25 +96,6 @@
     "world.ChunkSerializerExtender",
     "world.WorldExtender",
     "world.chunk.WorldChunkExtender"
-  ],
-  "client": [
-    "client.MinecraftClientExtender",
-    "client.gui.screen.ingame.AbstractFurnaceScreenExtender",
-    "client.gui.screen.ingame.CraftingScreenExtender",
-    "client.gui.screen.ingame.InventoryScreenExtender",
-    "client.gui.screen.ingame.LoomScreenExtender",
-    "client.gui.screen.recipebook.AbstractFurnaceRecipeBookScreenExtender",
-    "client.gui.screen.recipebook.RecipeBookWidgetExtender",
-    "client.network.ClientPlayerInteractionManagerExtender",
-    "client.network.ClientPlayNetworkHandlerExtender",
-    "client.option.HotbarStorageEntryExtender",
-    "client.particle.CrackParticleExtender$SnowballFactoryExtender",
-    "client.render.entity.FishingBobberEntityRendererExtender",
-    "client.render.entity.feature.ArmorFeatureRendererExtender",
-    "client.render.item.ItemModelsExtender",
-    "client.render.item.ItemRendererExtender",
-    "client.render.model.BakedModelManagerExtender",
-    "client.render.model.ModelLoaderExtender"
   ],
   "injectors": {
     "defaultRequire": 1

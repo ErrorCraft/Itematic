@@ -19,103 +19,107 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "errorcraft.itematic.Itematic"
+      "net.errorcraft.itematic.Itematic"
     ],
     "fabric-datagen": [
-      "errorcraft.itematic.data.ItematicData"
+      "net.errorcraft.itematic.data.ItematicData"
     ]
   },
   "mixins": [
-    "itematic.mixins.json"
+    "itematic.mixins.json",
+    {
+      "config": "itematic.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "accessWidener": "itematic.accesswidener",
   "custom": {
     "loom:injected_interfaces": {
       "net/minecraft/class_77": [
-        "errorcraft/itematic/access/loot/entry/ItemEntryAccess"
+        "net/errorcraft/itematic/access/loot/entry/ItemEntryAccess"
       ],
       "net/minecraft/class_185": [
-        "errorcraft/itematic/access/advancement/AdvancementDisplayAccess"
+        "net/errorcraft/itematic/access/advancement/AdvancementDisplayAccess"
       ],
       "net/minecraft/class_507": [
-        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
       "net/minecraft/class_763": [
-        "errorcraft/itematic/access/client/render/item/ItemModelsAccess"
+        "net/errorcraft/itematic/access/client/render/item/ItemModelsAccess"
       ],
       "net/minecraft/class_1297": [
-        "errorcraft/itematic/access/entity/EntityAccess"
+        "net/errorcraft/itematic/access/entity/EntityAccess"
       ],
       "net/minecraft/class_1304": [
-        "errorcraft/itematic/access/entity/EquipmentSlotAccess"
+        "net/errorcraft/itematic/access/entity/EquipmentSlotAccess"
       ],
       "net/minecraft/class_1309": [
-        "errorcraft/itematic/access/entity/LivingEntityAccess"
+        "net/errorcraft/itematic/access/entity/LivingEntityAccess"
       ],
       "net/minecraft/class_1662": [
-        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
       "net/minecraft/class_1690": [
-        "errorcraft/itematic/access/entity/vehicle/BoatEntityAccess"
+        "net/errorcraft/itematic/access/entity/vehicle/BoatEntityAccess"
       ],
       "net/minecraft/class_1730": [
-        "errorcraft/itematic/access/PlayerAccess"
+        "net/errorcraft/itematic/access/PlayerAccess"
       ],
       "net/minecraft/class_1792": [
-        "errorcraft/itematic/access/item/ItemAccess"
+        "net/errorcraft/itematic/access/item/ItemAccess"
       ],
       "net/minecraft/class_1799": [
-        "errorcraft/itematic/access/item/ItemStackAccess"
+        "net/errorcraft/itematic/access/item/ItemStackAccess"
       ],
       "net/minecraft/class_1856": [
-        "errorcraft/itematic/access/recipe/IngredientAccess"
+        "net/errorcraft/itematic/access/recipe/IngredientAccess"
       ],
       "net/minecraft/class_1856\u0024class_1859": [
-        "errorcraft/itematic/access/recipe/IngredientEntryAccess"
+        "net/errorcraft/itematic/access/recipe/IngredientEntryAccess"
       ],
       "net/minecraft/class_1863": [
-        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
       "net/minecraft/class_1937": [
-        "errorcraft/itematic/access/world/WorldAccess"
+        "net/errorcraft/itematic/access/world/WorldAccess"
       ],
       "net/minecraft/class_2073": [
-        "errorcraft/itematic/access/predicate/item/ItemPredicateAccess"
+        "net/errorcraft/itematic/access/predicate/item/ItemPredicateAccess"
       ],
       "net/minecraft/class_2535": [
-        "errorcraft/itematic/access/network/ClientConnectionAccess"
+        "net/errorcraft/itematic/access/network/ClientConnectionAccess"
       ],
       "net/minecraft/class_2540": [
-        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
       "net/minecraft/class_2543": [
-        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
       "net/minecraft/class_2545": [
-        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
       "net/minecraft/class_2586": [
-        "errorcraft/itematic/access/block/entity/BlockEntityAccess"
+        "net/errorcraft/itematic/access/block/entity/BlockEntityAccess"
       ],
       "net/minecraft/class_2989": [
-        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
       "net/minecraft/class_3857": [
-        "errorcraft/itematic/access/entity/projectile/thrown/ThrownItemEntityAccess"
+        "net/errorcraft/itematic/access/entity/projectile/thrown/ThrownItemEntityAccess"
       ],
       "net/minecraft/class_5257": [
-        "errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
       "net/minecraft/class_8129": [
-        "errorcraft/itematic/access/predicate/TagPredicateAccess"
+        "net/errorcraft/itematic/access/predicate/TagPredicateAccess"
       ]
     }
   },
 
   "depends": {
-    "fabricloader": ">=0.14.10",
-    "fabric": "*",
-    "minecraft": ">=1.19.3-alpha.22.42.a",
+    "fabricloader": ">=0.14.19",
+    "fabric-api": "*",
+    "minecraft": ">=1.20-alpha.23.18.a",
     "java": ">=17"
   },
   "suggests": {
