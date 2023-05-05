@@ -5,10 +5,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
+import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.armor.ArmorMaterialKeys;
-import net.errorcraft.itematic.item.armor.ArmorMaterials;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
+import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -25,7 +26,7 @@ public class ItemUtil {
     ).apply(instance, ItemUtil::create));
 
     public static void bootstrap(Registerable<Item> registerable) {
-        RegistryEntryLookup<net.errorcraft.itematic.item.armor.ArmorMaterial> armorMaterials = registerable.getRegistryLookup(ArmorMaterials.ARMOR_MATERIAL_KEY);
+        RegistryEntryLookup<ArmorMaterial> armorMaterials = registerable.getRegistryLookup(ItematicRegistryKeys.ARMOR_MATERIAL);
         RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
         RegistryEntryLookup<EntityType<?>> entityTypes = registerable.getRegistryLookup(RegistryKeys.ENTITY_TYPE);
 
@@ -1793,8 +1794,8 @@ public class ItemUtil {
         registerable.register(ItemKeys.IRON_HELMET, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build(), 1),
             ItemComponentSet.builder()
-                .with(ArmorItemComponent.from(net.minecraft.item.ArmorMaterials.IRON, ArmorItem.Type.HELMET, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON)))
-                .with(EnchantableItemComponent.enchants(net.minecraft.item.ArmorMaterials.IRON, EnchantmentTags.HELMET_ENCHANTING))
+                .with(ArmorItemComponent.from(ArmorMaterials.IRON, ArmorItem.Type.HELMET, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.HELMET_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_IRON_ARMOR))
                 .build()
@@ -1802,8 +1803,8 @@ public class ItemUtil {
         registerable.register(ItemKeys.IRON_CHESTPLATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_CHESTPLATE).build(), 1),
             ItemComponentSet.builder()
-                .with(ArmorItemComponent.from(net.minecraft.item.ArmorMaterials.IRON, ArmorItem.Type.CHESTPLATE, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON)))
-                .with(EnchantableItemComponent.enchants(net.minecraft.item.ArmorMaterials.IRON, EnchantmentTags.CHESTPLATE_ENCHANTING))
+                .with(ArmorItemComponent.from(ArmorMaterials.IRON, ArmorItem.Type.CHESTPLATE, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.CHESTPLATE_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_IRON_ARMOR))
                 .build()
@@ -1811,8 +1812,8 @@ public class ItemUtil {
         registerable.register(ItemKeys.IRON_LEGGINGS, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_LEGGINGS).build(), 1),
             ItemComponentSet.builder()
-                .with(ArmorItemComponent.from(net.minecraft.item.ArmorMaterials.IRON, ArmorItem.Type.LEGGINGS, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON)))
-                .with(EnchantableItemComponent.enchants(net.minecraft.item.ArmorMaterials.IRON, EnchantmentTags.LEGGINGS_ENCHANTING))
+                .with(ArmorItemComponent.from(ArmorMaterials.IRON, ArmorItem.Type.LEGGINGS, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.LEGGINGS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_IRON_ARMOR))
                 .build()
@@ -1820,8 +1821,8 @@ public class ItemUtil {
         registerable.register(ItemKeys.IRON_BOOTS, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_BOOTS).build(), 1),
             ItemComponentSet.builder()
-                .with(ArmorItemComponent.from(net.minecraft.item.ArmorMaterials.IRON, ArmorItem.Type.BOOTS, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON)))
-                .with(EnchantableItemComponent.enchants(net.minecraft.item.ArmorMaterials.IRON, EnchantmentTags.BOOTS_ENCHANTING))
+                .with(ArmorItemComponent.from(ArmorMaterials.IRON, ArmorItem.Type.BOOTS, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.BOOTS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_IRON_ARMOR))
                 .build()

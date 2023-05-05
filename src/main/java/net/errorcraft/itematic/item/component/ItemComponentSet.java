@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component;
 
 import com.mojang.serialization.MapCodec;
+import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.serialisation.SetMapCodec;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ItemComponentSet implements Iterable<ItemComponent> {
-    public static final MapCodec<ItemComponentSet> CODEC = SetMapCodec.ofRegistry(ItemComponentTypes.ITEM_COMPONENT_TYPE, ItemComponentType::codec, ItemComponent::getCodec, ItemComponent::getType).xmap(ItemComponentSet::new, v -> v.values);
+    public static final MapCodec<ItemComponentSet> CODEC = SetMapCodec.ofRegistry(ItematicRegistries.ITEM_COMPONENT_TYPE, ItemComponentType::codec, ItemComponent::getCodec, ItemComponent::getType).xmap(ItemComponentSet::new, v -> v.values);
     private final Set<ItemComponent> values;
     private final HashMap<ItemComponentType<?>, ItemComponent> map;
 

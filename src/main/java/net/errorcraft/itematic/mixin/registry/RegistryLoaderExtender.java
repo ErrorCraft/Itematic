@@ -3,7 +3,7 @@ package net.errorcraft.itematic.mixin.registry;
 import com.google.common.collect.ImmutableList;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
-import net.errorcraft.itematic.item.armor.ArmorMaterials;
+import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryLoader;
 import org.spongepowered.asm.mixin.Final;
@@ -24,7 +24,7 @@ public class RegistryLoaderExtender {
         DYNAMIC_REGISTRIES = new ImmutableList.Builder<RegistryLoader.Entry<?>>()
             .addAll(DYNAMIC_REGISTRIES)
             .add(new RegistryLoader.Entry<>(RegistryKeys.ITEM, ItemUtil.CODEC))
-            .add(new RegistryLoader.Entry<>(ArmorMaterials.ARMOR_MATERIAL_KEY, ArmorMaterial.CODEC))
+            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterial.CODEC))
             .build();
     }
 }

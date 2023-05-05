@@ -4,7 +4,7 @@ import net.errorcraft.itematic.client.render.TexturedRenderLayersUtil;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemTagsUtil;
-import net.errorcraft.itematic.item.armor.ArmorMaterials;
+import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -70,7 +70,7 @@ public class ItematicData implements DataGeneratorEntrypoint {
 
         @Override
         protected void configure(RegistryWrapper.WrapperLookup registries, Entries entries) {
-            addAll(entries, registries.getWrapperOrThrow(ArmorMaterials.ARMOR_MATERIAL_KEY));
+            addAll(entries, registries.getWrapperOrThrow(ItematicRegistryKeys.ARMOR_MATERIAL));
         }
 
         @Override
