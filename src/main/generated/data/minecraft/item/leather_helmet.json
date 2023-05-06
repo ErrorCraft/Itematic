@@ -1,0 +1,33 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.leather_helmet"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:armor": {
+      "material": "minecraft:leather"
+    },
+    "minecraft:damageable": {
+      "durability": 55
+    },
+    "minecraft:dyeable": {
+      "default_color": 10511680
+    },
+    "minecraft:enchantable": {
+      "enchantability": 15,
+      "enchantments": "minecraft:helmet_enchanting"
+    },
+    "minecraft:equipment": {
+      "slot": "head",
+      "swappable": true
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:helmet_forging"
+    },
+    "minecraft:repairable": {
+      "items": "minecraft:repairs_leather_armor"
+    }
+  }
+}

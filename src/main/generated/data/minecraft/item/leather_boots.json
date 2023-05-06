@@ -1,0 +1,33 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.leather_boots"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:armor": {
+      "material": "minecraft:leather"
+    },
+    "minecraft:damageable": {
+      "durability": 65
+    },
+    "minecraft:dyeable": {
+      "default_color": 10511680
+    },
+    "minecraft:enchantable": {
+      "enchantability": 15,
+      "enchantments": "minecraft:boots_enchanting"
+    },
+    "minecraft:equipment": {
+      "slot": "feet",
+      "swappable": true
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:boots_forging"
+    },
+    "minecraft:repairable": {
+      "items": "minecraft:repairs_leather_armor"
+    }
+  }
+}

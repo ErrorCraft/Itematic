@@ -6,6 +6,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 public class ItemTagsUtil {
+    public static final TagKey<Item> REPAIRS_LEATHER_ARMOR = of("repairs_leather_armor");
     public static final TagKey<Item> REPAIRS_IRON_ARMOR = of("repairs_iron_armor");
 
     public static final TagKey<Item> REPAIRS_WOODEN_TOOL = of("repairs_wooden_tool");

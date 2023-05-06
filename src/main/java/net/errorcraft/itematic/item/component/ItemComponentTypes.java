@@ -25,6 +25,8 @@ public class ItemComponentTypes {
     public static final ItemComponentType<ThrowableItemComponent> THROWABLE = register("throwable", new ItemComponentType<>(ThrowableItemComponent.CODEC));
     public static final ItemComponentType<ProjectileItemComponent> PROJECTILE = register("projectile", new ItemComponentType<>(ProjectileItemComponent.CODEC));
     public static final ItemComponentType<CooldownItemComponent> COOLDOWN = register("cooldown", new ItemComponentType<>(CooldownItemComponent.CODEC));
+    public static final ItemComponentType<DyeItemComponent> DYE = register("dye", new ItemComponentType<>(DyeItemComponent.CODEC));
+    public static final ItemComponentType<DyeableItemComponent> DYEABLE = register("dyeable", new ItemComponentType<>(DyeableItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

@@ -12,6 +12,7 @@
     "block.CanReplaceBlockExtender",
     "block.ComposterBlockExtender",
     "block.ComposterBlockExtender$ComposterInventoryExtender",
+    "block.PowderSnowBlockExtender",
     "block.entity.AbstractFurnaceBlockEntityExtender",
     "block.entity.BlockEntityExtender",
     "block.entity.LockableContainerBlockEntitiesExtender",

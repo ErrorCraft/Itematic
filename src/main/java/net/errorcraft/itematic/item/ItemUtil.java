@@ -17,6 +17,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.registry.*;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 
 public class ItemUtil {
@@ -1791,6 +1792,46 @@ public class ItemUtil {
                 .with(new CompostableItemComponent(0.85f))
                 .build()
         ));
+        registerable.register(ItemKeys.LEATHER_HELMET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_HELMET).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.LEATHER, ArmorItem.Type.HELMET, armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.HELMET_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_LEATHER_ARMOR))
+                .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.LEATHER_CHESTPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_CHESTPLATE).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.CHESTPLATE_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_LEATHER_ARMOR))
+                .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.LEATHER_LEGGINGS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_LEGGINGS).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.LEATHER, ArmorItem.Type.LEGGINGS, armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.LEGGINGS_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_LEATHER_ARMOR))
+                .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.LEATHER_BOOTS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_BOOTS).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.LEATHER, ArmorItem.Type.BOOTS, armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.BOOTS_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_LEATHER_ARMOR))
+                .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
+                .build()
+        ));
         registerable.register(ItemKeys.IRON_HELMET, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build(), 1),
             ItemComponentSet.builder()
@@ -1993,6 +2034,9 @@ public class ItemUtil {
                 .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.SNOWBALL)))
                 .build()
         ));
+        registerable.register(ItemKeys.LEATHER, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER).build())
+        ));
         registerable.register(ItemKeys.DRIED_KELP_BLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRIED_KELP_BLOCK).build()),
             ItemComponentSet.builder()
@@ -2054,6 +2098,102 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_SALMON).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.COOKED_SALMON))
+                .build()
+        ));
+        registerable.register(ItemKeys.WHITE_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WHITE_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.WHITE))
+                .build()
+        ));
+        registerable.register(ItemKeys.ORANGE_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ORANGE_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.ORANGE))
+                .build()
+        ));
+        registerable.register(ItemKeys.MAGENTA_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MAGENTA_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.MAGENTA))
+                .build()
+        ));
+        registerable.register(ItemKeys.LIGHT_BLUE_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LIGHT_BLUE_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.LIGHT_BLUE))
+                .build()
+        ));
+        registerable.register(ItemKeys.YELLOW_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.YELLOW_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.YELLOW))
+                .build()
+        ));
+        registerable.register(ItemKeys.LIME_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LIME_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.LIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.PINK_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PINK_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.PINK))
+                .build()
+        ));
+        registerable.register(ItemKeys.GRAY_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GRAY_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.GRAY))
+                .build()
+        ));
+        registerable.register(ItemKeys.LIGHT_GRAY_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LIGHT_GRAY_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.LIGHT_GRAY))
+                .build()
+        ));
+        registerable.register(ItemKeys.CYAN_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CYAN_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.CYAN))
+                .build()
+        ));
+        registerable.register(ItemKeys.PURPLE_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PURPLE_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.PURPLE))
+                .build()
+        ));
+        registerable.register(ItemKeys.BLUE_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLUE_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.BLUE))
+                .build()
+        ));
+        registerable.register(ItemKeys.BROWN_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BROWN_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.BROWN))
+                .build()
+        ));
+        registerable.register(ItemKeys.GREEN_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GREEN_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.GREEN))
+                .build()
+        ));
+        registerable.register(ItemKeys.RED_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RED_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.RED))
+                .build()
+        ));
+        registerable.register(ItemKeys.BLACK_DYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLACK_DYE).build()),
+            ItemComponentSet.builder()
+                .with(new DyeItemComponent(DyeColor.BLACK))
                 .build()
         ));
         registerable.register(ItemKeys.COOKIE, create(

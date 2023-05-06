@@ -5,6 +5,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
 public class ArmorMaterialKeys {
+    public static final RegistryKey<ArmorMaterial> LEATHER = register("leather");
     public static final RegistryKey<ArmorMaterial> IRON = register("iron");
 
     private ArmorMaterialKeys() {}

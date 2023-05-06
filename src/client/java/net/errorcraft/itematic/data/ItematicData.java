@@ -176,6 +176,8 @@ public class ItematicData implements DataGeneratorEntrypoint {
 
         @Override
         protected void configure(RegistryWrapper.WrapperLookup arg) {
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_LEATHER_ARMOR)
+                .add(ItemKeys.LEATHER);
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_IRON_ARMOR)
                 .add(ItemKeys.IRON_INGOT);
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_WOODEN_TOOL)

@@ -7,6 +7,7 @@ public class ArmorMaterials {
     private ArmorMaterials() {}
 
     public static void bootstrap(Registerable<ArmorMaterial> registerable) {
+        registerable.register(ArmorMaterialKeys.LEATHER, new ArmorMaterial(new Identifier("leather")));
         registerable.register(ArmorMaterialKeys.IRON, new ArmorMaterial(new Identifier("iron")));
     }
 }
