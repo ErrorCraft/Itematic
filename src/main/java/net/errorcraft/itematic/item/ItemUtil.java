@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
@@ -12,7 +13,6 @@ import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -35,6 +35,7 @@ public class ItemUtil {
         RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
         RegistryEntryLookup<EntityType<?>> entityTypes = registerable.getRegistryLookup(RegistryKeys.ENTITY_TYPE);
         RegistryEntryLookup<Biome> biomes = registerable.getRegistryLookup(RegistryKeys.BIOME);
+        RegistryEntryLookup<Block> blocks = registerable.getRegistryLookup(RegistryKeys.BLOCK);
 
         registerable.register(ItemKeys.AIR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build())
@@ -42,410 +43,410 @@ public class ItemUtil {
         registerable.register(ItemKeys.STONE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STONE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STONE)))
                 .build()
         ));
         registerable.register(ItemKeys.GRASS_BLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRASS_BLOCK).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.GRASS_BLOCK))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.GRASS_BLOCK)))
                 .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.COBBLESTONE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COBBLESTONE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.COBBLESTONE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.COBBLESTONE)))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_PLANKS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_PLANKS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_PLANKS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_PLANKS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_PLANKS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_PLANKS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_PLANKS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_PLANKS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_PLANKS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_PLANKS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_PLANKS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_PLANKS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_PLANKS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_PLANKS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_PLANKS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_PLANKS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_PLANKS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_PLANKS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_PLANKS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_PLANKS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_PLANKS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_PLANKS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_PLANKS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_PLANKS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_PLANKS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_PLANKS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_PLANKS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_PLANKS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_PLANKS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_PLANKS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_PLANKS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_PLANKS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_PLANKS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_PLANKS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_PLANKS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_PLANKS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_MOSAIC, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_MOSAIC).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_MOSAIC))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_SAPLING, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_SAPLING).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_SAPLING))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_SAPLING)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_SAPLING, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_SAPLING).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_SAPLING))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_SAPLING)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_SAPLING, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_SAPLING).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_SAPLING))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_SAPLING)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_SAPLING, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_SAPLING).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_SAPLING))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_SAPLING)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_SAPLING, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_SAPLING).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_SAPLING))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_SAPLING)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_SAPLING, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_SAPLING).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_SAPLING))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_SAPLING)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_SAPLING, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SAPLING).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_SAPLING))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_SAPLING)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_PROPAGULE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_PROPAGULE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_PROPAGULE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_PROPAGULE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SAND, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SAND).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SAND))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SAND)))
                 .build()
         ));
         registerable.register(ItemKeys.COAL_BLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COAL_BLOCK).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.COAL_BLOCK))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.COAL_BLOCK)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.COAL_BLOCK_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_ROOTS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_ROOTS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_ROOTS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_ROOTS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_BLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_BLOCK).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_BLOCK))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_BLOCK)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_OAK_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_OAK_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_OAK_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_OAK_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_SPRUCE_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_SPRUCE_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_SPRUCE_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_SPRUCE_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_BIRCH_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_BIRCH_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_BIRCH_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_BIRCH_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_JUNGLE_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_JUNGLE_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_JUNGLE_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_JUNGLE_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_ACACIA_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_ACACIA_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_ACACIA_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_ACACIA_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_CHERRY_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_CHERRY_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_CHERRY_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_CHERRY_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_DARK_OAK_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_DARK_OAK_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_DARK_OAK_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_DARK_OAK_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_MANGROVE_LOG, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_MANGROVE_LOG).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_MANGROVE_LOG))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_MANGROVE_LOG)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_OAK_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_OAK_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_OAK_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_OAK_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_SPRUCE_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_SPRUCE_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_SPRUCE_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_SPRUCE_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_BIRCH_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_BIRCH_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_BIRCH_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_BIRCH_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_JUNGLE_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_JUNGLE_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_JUNGLE_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_JUNGLE_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_ACACIA_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_ACACIA_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_ACACIA_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_ACACIA_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_CHERRY_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_CHERRY_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_CHERRY_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_CHERRY_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_DARK_OAK_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_DARK_OAK_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_DARK_OAK_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_DARK_OAK_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_MANGROVE_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_MANGROVE_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_MANGROVE_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_MANGROVE_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_BAMBOO_BLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_BAMBOO_BLOCK).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.STRIPPED_BAMBOO_BLOCK))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_BAMBOO_BLOCK)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_WOOD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_WOOD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_LEAVES).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_LEAVES))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_LEAVES)))
                 .with(new CompostableItemComponent(0.3f))
                 .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
@@ -453,7 +454,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.SPRUCE_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_LEAVES).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_LEAVES))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_LEAVES)))
                 .with(new CompostableItemComponent(0.3f))
                 .with(new TintedItemComponent(new ConstantItemColor(FoliageColors.getSpruceColor())))
                 .build()
@@ -461,7 +462,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.BIRCH_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_LEAVES).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_LEAVES))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_LEAVES)))
                 .with(new CompostableItemComponent(0.3f))
                 .with(new TintedItemComponent(new ConstantItemColor(FoliageColors.getBirchColor())))
                 .build()
@@ -469,7 +470,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.JUNGLE_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_LEAVES).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_LEAVES))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_LEAVES)))
                 .with(new CompostableItemComponent(0.3f))
                 .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
@@ -477,7 +478,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.ACACIA_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_LEAVES).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_LEAVES))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_LEAVES)))
                 .with(new CompostableItemComponent(0.3f))
                 .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
@@ -485,7 +486,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.DARK_OAK_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_LEAVES).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_LEAVES))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_LEAVES)))
                 .with(new CompostableItemComponent(0.3f))
                 .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
@@ -493,7 +494,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.MANGROVE_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_LEAVES).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_LEAVES))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_LEAVES)))
                 .with(new CompostableItemComponent(0.3f))
                 .with(new TintedItemComponent(new ConstantItemColor(FoliageColors.getMangroveColor())))
                 .build()
@@ -501,7 +502,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.GRASS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRASS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.GRASS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.GRASS)))
                 .with(new CompostableItemComponent(0.3f))
                 .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
@@ -509,7 +510,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.FERN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FERN).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.FERN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.FERN)))
                 .with(new CompostableItemComponent(0.65f))
                 .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
@@ -517,7 +518,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.AZALEA, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AZALEA).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.AZALEA))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.AZALEA)))
                 .with(new CompostableItemComponent(0.65f))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
@@ -525,7 +526,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.FLOWERING_AZALEA, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FLOWERING_AZALEA).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.FLOWERING_AZALEA))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.FLOWERING_AZALEA)))
                 .with(new CompostableItemComponent(0.85f))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
@@ -533,314 +534,314 @@ public class ItemUtil {
         registerable.register(ItemKeys.DEAD_BUSH, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_BUSH).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DEAD_BUSH))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DEAD_BUSH)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.WHITE_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.WHITE_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WHITE_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ORANGE_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ORANGE_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ORANGE_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MAGENTA_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MAGENTA_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MAGENTA_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.LIGHT_BLUE_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LIGHT_BLUE_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LIGHT_BLUE_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.YELLOW_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.YELLOW_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.YELLOW_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.LIME_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LIME_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LIME_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.PINK_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.PINK_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.PINK_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.GRAY_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.GRAY_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.GRAY_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.LIGHT_GRAY_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LIGHT_GRAY_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LIGHT_GRAY_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CYAN_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CYAN_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CYAN_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.PURPLE_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.PURPLE_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.PURPLE_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BLUE_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BLUE_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BLUE_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BROWN_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BROWN_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BROWN_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.GREEN_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.GREEN_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.GREEN_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.RED_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.RED_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.RED_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BLACK_WOOL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_WOOL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BLACK_WOOL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BLACK_WOOL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BAMBOO_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_SLAB, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_SLAB).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_SLAB))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_SLAB)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_SLAB, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_SLAB).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_SLAB))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_SLAB)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_SLAB, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_SLAB).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_SLAB))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_SLAB)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_SLAB, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_SLAB).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_SLAB))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_SLAB)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_SLAB, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_SLAB).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_SLAB))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_SLAB)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_SLAB, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_SLAB).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_SLAB))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_SLAB)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_SLAB, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SLAB).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_SLAB))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_SLAB)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_SLAB, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_SLAB).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_SLAB))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_SLAB)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_SLAB, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_SLAB).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_SLAB))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_SLAB)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_MOSAIC_SLAB, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_MOSAIC_SLAB).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_MOSAIC_SLAB))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC_SLAB)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BOOKSHELF, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BOOKSHELF).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BOOKSHELF))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BOOKSHELF)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHISELED_BOOKSHELF, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHISELED_BOOKSHELF).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHISELED_BOOKSHELF))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHISELED_BOOKSHELF)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHEST, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHEST).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHEST))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHEST)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CRAFTING_TABLE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRAFTING_TABLE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CRAFTING_TABLE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRAFTING_TABLE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.LADDER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LADDER).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LADDER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LADDER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SNOW, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SNOW).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SNOW))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SNOW)))
                 .build()
         ));
         registerable.register(ItemKeys.JUKEBOX, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUKEBOX).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUKEBOX))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUKEBOX)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_FENCE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_FENCE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_FENCE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_FENCE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_FENCE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_FENCE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_FENCE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_FENCE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_FENCE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_FENCE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_FENCE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_FENCE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_FENCE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_FENCE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_FENCE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_FENCE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_FENCE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_FENCE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_FENCE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_FENCE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_FENCE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_FENCE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_FENCE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_FENCE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_FENCE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_FENCE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_FENCE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_FENCE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_FENCE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_FENCE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_FENCE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_FENCE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_FENCE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_FENCE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_FENCE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_FENCE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.VINE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.VINE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.VINE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.VINE)))
                 .with(new CompostableItemComponent(0.5f))
                 .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
@@ -848,7 +849,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.LILY_PAD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LILY_PAD).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LILY_PAD))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LILY_PAD)))
                 .with(new CompostableItemComponent(0.65f))
                 .with(new TintedItemComponent(new ConstantItemColor(0x71c35c)))
                 .build()
@@ -856,195 +857,195 @@ public class ItemUtil {
         registerable.register(ItemKeys.OAK_STAIRS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_STAIRS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_STAIRS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_STAIRS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_STAIRS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_STAIRS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_STAIRS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_STAIRS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_STAIRS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_STAIRS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_STAIRS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_STAIRS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_STAIRS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_STAIRS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_STAIRS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_STAIRS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_STAIRS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_STAIRS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_STAIRS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_STAIRS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_STAIRS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_STAIRS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_STAIRS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_STAIRS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_STAIRS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_STAIRS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_STAIRS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_STAIRS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_STAIRS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_STAIRS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_STAIRS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_STAIRS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_STAIRS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_STAIRS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_STAIRS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_STAIRS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_MOSAIC_STAIRS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_MOSAIC_STAIRS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_MOSAIC_STAIRS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC_STAIRS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BARRIER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARRIER).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BARRIER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BARRIER)))
                 .build()
         ));
         registerable.register(ItemKeys.WHITE_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.WHITE_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WHITE_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ORANGE_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ORANGE_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ORANGE_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MAGENTA_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MAGENTA_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MAGENTA_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.LIGHT_BLUE_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LIGHT_BLUE_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LIGHT_BLUE_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.YELLOW_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.YELLOW_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.YELLOW_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.LIME_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LIME_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LIME_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.PINK_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.PINK_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.PINK_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.GRAY_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.GRAY_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.GRAY_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.LIGHT_GRAY_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LIGHT_GRAY_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LIGHT_GRAY_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CYAN_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CYAN_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CYAN_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.PURPLE_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.PURPLE_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.PURPLE_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BLUE_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BLUE_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BLUE_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BROWN_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BROWN_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BROWN_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.GREEN_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.GREEN_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.GREEN_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.RED_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.RED_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.RED_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BLACK_CARPET, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_CARPET).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BLACK_CARPET))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BLACK_CARPET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.TALL_GRASS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TALL_GRASS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.TALL_GRASS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.TALL_GRASS)))
                 .with(new CompostableItemComponent(0.5f))
                 .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
@@ -1052,7 +1053,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.LARGE_FERN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LARGE_FERN).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LARGE_FERN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LARGE_FERN)))
                 .with(new CompostableItemComponent(0.65f))
                 .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
@@ -1060,356 +1061,356 @@ public class ItemUtil {
         registerable.register(ItemKeys.SCAFFOLDING, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SCAFFOLDING).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SCAFFOLDING))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SCAFFOLDING)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SCAFFOLDING_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.REDSTONE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.REDSTONE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.REDSTONE_WIRE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.REDSTONE_WIRE)))
                 .build()
         ));
         registerable.register(ItemKeys.LECTERN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LECTERN).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LECTERN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LECTERN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DAYLIGHT_DETECTOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DAYLIGHT_DETECTOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DAYLIGHT_DETECTOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DAYLIGHT_DETECTOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.TRAPPED_CHEST, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TRAPPED_CHEST).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.TRAPPED_CHEST))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.TRAPPED_CHEST)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.NOTE_BLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NOTE_BLOCK).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.NOTE_BLOCK))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.NOTE_BLOCK)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_BUTTON, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_BUTTON).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_BUTTON))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_BUTTON)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_BUTTON, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_BUTTON).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_BUTTON))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_BUTTON)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_BUTTON, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_BUTTON).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_BUTTON))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_BUTTON)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_BUTTON, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_BUTTON).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_BUTTON))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_BUTTON)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_BUTTON, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_BUTTON).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_BUTTON))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_BUTTON)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_BUTTON, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_BUTTON).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_BUTTON))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_BUTTON)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_BUTTON, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_BUTTON).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_BUTTON))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_BUTTON)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_BUTTON, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_BUTTON).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_BUTTON))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_BUTTON)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_BUTTON, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_BUTTON).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_BUTTON))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_BUTTON)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_PRESSURE_PLATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_PRESSURE_PLATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_PRESSURE_PLATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_PRESSURE_PLATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_PRESSURE_PLATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_PRESSURE_PLATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_PRESSURE_PLATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_PRESSURE_PLATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_PRESSURE_PLATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_PRESSURE_PLATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_PRESSURE_PLATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_PRESSURE_PLATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_PRESSURE_PLATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_PRESSURE_PLATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_PRESSURE_PLATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_PRESSURE_PLATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_PRESSURE_PLATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_PRESSURE_PLATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_PRESSURE_PLATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_PRESSURE_PLATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_PRESSURE_PLATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_PRESSURE_PLATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_PRESSURE_PLATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_PRESSURE_PLATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_PRESSURE_PLATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_PRESSURE_PLATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_PRESSURE_PLATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_PRESSURE_PLATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_PRESSURE_PLATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_PRESSURE_PLATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_PRESSURE_PLATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_PRESSURE_PLATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_PRESSURE_PLATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_PRESSURE_PLATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_PRESSURE_PLATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_PRESSURE_PLATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_DOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_DOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_DOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_DOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_DOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_DOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_DOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_DOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_DOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_DOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_DOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_DOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_DOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_DOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_DOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_DOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_DOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_DOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_DOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_DOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_DOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_DOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_DOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_DOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_DOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_DOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_DOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_DOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_DOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_DOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_DOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_DOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_DOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_DOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_DOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_DOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_TRAPDOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_TRAPDOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_TRAPDOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_TRAPDOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_TRAPDOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_TRAPDOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_TRAPDOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_TRAPDOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_TRAPDOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_TRAPDOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_TRAPDOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_TRAPDOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_TRAPDOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_TRAPDOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_TRAPDOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_TRAPDOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_TRAPDOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_TRAPDOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_TRAPDOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_TRAPDOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_TRAPDOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_TRAPDOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_TRAPDOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_TRAPDOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_TRAPDOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_TRAPDOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_TRAPDOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_TRAPDOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_TRAPDOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_TRAPDOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_TRAPDOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_TRAPDOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_TRAPDOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_TRAPDOOR).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_TRAPDOOR))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_TRAPDOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_FENCE_GATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_FENCE_GATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_FENCE_GATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_FENCE_GATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_FENCE_GATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_FENCE_GATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_FENCE_GATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_FENCE_GATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_FENCE_GATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_FENCE_GATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_FENCE_GATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_FENCE_GATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_FENCE_GATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_FENCE_GATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_FENCE_GATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_FENCE_GATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_FENCE_GATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_FENCE_GATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_FENCE_GATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_FENCE_GATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_FENCE_GATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_FENCE_GATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_FENCE_GATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_FENCE_GATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_FENCE_GATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_FENCE_GATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_FENCE_GATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_FENCE_GATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_FENCE_GATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_FENCE_GATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_FENCE_GATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_FENCE_GATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_FENCE_GATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_FENCE_GATE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_FENCE_GATE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_FENCE_GATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
@@ -2004,126 +2005,126 @@ public class ItemUtil {
         registerable.register(ItemKeys.OAK_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_HANGING_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_HANGING_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.OAK_HANGING_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.OAK_HANGING_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_HANGING_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_HANGING_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SPRUCE_HANGING_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SPRUCE_HANGING_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_HANGING_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_HANGING_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BIRCH_HANGING_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BIRCH_HANGING_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_HANGING_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_HANGING_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.JUNGLE_HANGING_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.JUNGLE_HANGING_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_HANGING_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_HANGING_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ACACIA_HANGING_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ACACIA_HANGING_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CHERRY_HANGING_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_HANGING_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CHERRY_HANGING_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CHERRY_HANGING_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_HANGING_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_HANGING_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DARK_OAK_HANGING_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DARK_OAK_HANGING_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_HANGING_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_HANGING_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MANGROVE_HANGING_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_HANGING_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_HANGING_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_HANGING_SIGN).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BAMBOO_HANGING_SIGN))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_HANGING_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                 .build()
         ));
@@ -2149,7 +2150,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.DRIED_KELP_BLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRIED_KELP_BLOCK).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.DRIED_KELP_BLOCK))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.DRIED_KELP_BLOCK)))
                 .with(new CompostableItemComponent(0.5f))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DRIED_KELP_BLOCK_FUEL_TIME))
                 .build()
@@ -2394,7 +2395,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CARROT).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.CARROT))
-                .with(new BlockItemComponent(Blocks.CARROTS))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CARROTS)))
                 .with(new CompostableItemComponent(0.65f))
                 .build()
         ));
@@ -2402,7 +2403,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POTATO).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.POTATO))
-                .with(new BlockItemComponent(Blocks.POTATOES))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.POTATOES)))
                 .with(new CompostableItemComponent(0.65f))
                 .build()
         ));
@@ -2472,112 +2473,112 @@ public class ItemUtil {
         registerable.register(ItemKeys.WHITE_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.WHITE_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WHITE_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.ORANGE_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.ORANGE_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ORANGE_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.MAGENTA_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.MAGENTA_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MAGENTA_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.LIGHT_BLUE_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LIGHT_BLUE_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LIGHT_BLUE_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.YELLOW_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.YELLOW_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.YELLOW_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.LIME_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LIME_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LIME_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.PINK_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.PINK_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.PINK_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.GRAY_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.GRAY_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.GRAY_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.LIGHT_GRAY_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LIGHT_GRAY_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LIGHT_GRAY_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CYAN_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CYAN_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CYAN_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.PURPLE_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.PURPLE_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.PURPLE_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BLUE_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BLUE_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BLUE_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BROWN_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BROWN_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BROWN_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.GREEN_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.GREEN_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.GREEN_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.RED_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.RED_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.RED_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BLACK_BANNER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_BANNER).build(), 16),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BLACK_BANNER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BLACK_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
@@ -2622,42 +2623,42 @@ public class ItemUtil {
         registerable.register(ItemKeys.LOOM, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LOOM).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.LOOM))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LOOM)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.COMPOSTER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COMPOSTER).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.COMPOSTER))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.COMPOSTER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.BARREL, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARREL).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.BARREL))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BARREL)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.CARTOGRAPHY_TABLE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CARTOGRAPHY_TABLE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.CARTOGRAPHY_TABLE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CARTOGRAPHY_TABLE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.FLETCHING_TABLE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FLETCHING_TABLE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.FLETCHING_TABLE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.FLETCHING_TABLE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.SMITHING_TABLE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMITHING_TABLE).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(Blocks.SMITHING_TABLE))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SMITHING_TABLE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
@@ -2665,7 +2666,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SWEET_BERRIES).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.SWEET_BERRIES))
-                .with(new BlockItemComponent(Blocks.SWEET_BERRY_BUSH))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SWEET_BERRY_BUSH)))
                 .with(new CompostableItemComponent(0.3f))
                 .build()
         ));
@@ -2673,7 +2674,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOW_BERRIES).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.GLOW_BERRIES))
-                .with(new BlockItemComponent(Blocks.CAVE_VINES))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CAVE_VINES)))
                 .with(new CompostableItemComponent(0.3f))
                 .build()
         ));

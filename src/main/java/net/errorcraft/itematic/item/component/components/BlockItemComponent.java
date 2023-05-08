@@ -16,7 +16,9 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
@@ -32,9 +34,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record BlockItemComponent(Block block) implements ItemComponent {
+public record BlockItemComponent(RegistryEntry<Block> block) implements ItemComponent {
     public static final Codec<BlockItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Registries.BLOCK.getCodec().fieldOf("block").forGetter(BlockItemComponent::block)
+        RegistryFixedCodec.of(RegistryKeys.BLOCK).fieldOf("block").forGetter(BlockItemComponent::block)
     ).apply(instance, BlockItemComponent::new));
 
     @Override
@@ -54,7 +56,7 @@ public record BlockItemComponent(Block block) implements ItemComponent {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        this.block.appendTooltip(stack, world, tooltip, context);
+        this.block.value().appendTooltip(stack, world, tooltip, context);
     }
 
     private ActionResult place(ItemPlacementContext context) {
@@ -92,7 +94,7 @@ public record BlockItemComponent(Block block) implements ItemComponent {
 
     @Nullable
     private BlockState getPlacementState(ItemPlacementContext context) {
-        BlockState blockState = this.block.getPlacementState(context);
+        BlockState blockState = this.block.value().getPlacementState(context);
         return blockState != null && this.canPlace(context, blockState) ? blockState : null;
     }
 
