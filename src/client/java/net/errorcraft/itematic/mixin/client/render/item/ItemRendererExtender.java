@@ -2,6 +2,10 @@ package net.errorcraft.itematic.mixin.client.render.item;
 
 import net.errorcraft.itematic.access.DynamicRegistryAccess;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.color.ItemColor;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.TintedItemComponent;
+import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.Item;
@@ -30,6 +34,20 @@ public class ItemRendererExtender implements DynamicRegistryAccess {
     )
     private static boolean method_51795IsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.isOf(ItemKeys.CLOCK);
+    }
+
+    @Redirect(
+        method = "renderBakedItemQuads",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/color/item/ItemColors;getColor(Lnet/minecraft/item/ItemStack;I)I"
+        )
+    )
+    private int renderBakedItemQuadsGetColorUseItemComponent(ItemColors instance, ItemStack item, int tintIndex) {
+        return item.getComponent(ItemComponentTypes.TINTED)
+            .map(TintedItemComponent::tint)
+            .map(c -> c.getColor(item, tintIndex))
+            .orElse(ItemColor.DEFAULT_COLOR);
     }
 
     public void loadDynamicEntries(DynamicRegistryManager registryManager) {

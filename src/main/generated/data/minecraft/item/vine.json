@@ -1,17 +1,20 @@
 {
   "base": {
     "display": {
-      "translation_key": "block.minecraft.grass_block"
+      "translation_key": "block.minecraft.vine"
     },
     "max_count": 64
   },
   "components": {
     "minecraft:block": {
-      "block": "minecraft:grass_block"
+      "block": "minecraft:vine"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.5
     },
     "minecraft:tinted": {
       "tint": {
-        "type": "minecraft:grass",
+        "type": "minecraft:foliage",
         "biome": "minecraft:plains"
       }
     }

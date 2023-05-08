@@ -28,6 +28,11 @@
     },
     "minecraft:repairable": {
       "items": "minecraft:repairs_leather_armor"
+    },
+    "minecraft:tinted": {
+      "tint": {
+        "type": "minecraft:dyeable"
+      }
     }
   }
 }

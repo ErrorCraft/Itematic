@@ -1,13 +1,16 @@
 {
   "base": {
     "display": {
-      "translation_key": "block.minecraft.grass_block"
+      "translation_key": "block.minecraft.large_fern"
     },
     "max_count": 64
   },
   "components": {
     "minecraft:block": {
-      "block": "minecraft:grass_block"
+      "block": "minecraft:large_fern"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.65
     },
     "minecraft:tinted": {
       "tint": {

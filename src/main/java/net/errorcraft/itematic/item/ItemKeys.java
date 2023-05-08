@@ -65,7 +65,15 @@ public class ItemKeys {
     public static final RegistryKey<Item> CHERRY_WOOD = register("cherry_wood");
     public static final RegistryKey<Item> DARK_OAK_WOOD = register("dark_oak_wood");
     public static final RegistryKey<Item> MANGROVE_WOOD = register("mangrove_wood");
+    public static final RegistryKey<Item> OAK_LEAVES = register("oak_leaves");
+    public static final RegistryKey<Item> SPRUCE_LEAVES = register("spruce_leaves");
+    public static final RegistryKey<Item> BIRCH_LEAVES = register("birch_leaves");
+    public static final RegistryKey<Item> JUNGLE_LEAVES = register("jungle_leaves");
+    public static final RegistryKey<Item> ACACIA_LEAVES = register("acacia_leaves");
+    public static final RegistryKey<Item> DARK_OAK_LEAVES = register("dark_oak_leaves");
+    public static final RegistryKey<Item> MANGROVE_LEAVES = register("mangrove_leaves");
     public static final RegistryKey<Item> GRASS = register("grass");
+    public static final RegistryKey<Item> FERN = register("fern");
     public static final RegistryKey<Item> AZALEA = register("azalea");
     public static final RegistryKey<Item> FLOWERING_AZALEA = register("flowering_azalea");
     public static final RegistryKey<Item> DEAD_BUSH = register("dead_bush");
@@ -112,6 +120,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> DARK_OAK_FENCE = register("dark_oak_fence");
     public static final RegistryKey<Item> MANGROVE_FENCE = register("mangrove_fence");
     public static final RegistryKey<Item> BAMBOO_FENCE = register("bamboo_fence");
+    public static final RegistryKey<Item> VINE = register("vine");
+    public static final RegistryKey<Item> LILY_PAD = register("lily_pad");
     public static final RegistryKey<Item> OAK_STAIRS = register("oak_stairs");
     public static final RegistryKey<Item> SPRUCE_STAIRS = register("spruce_stairs");
     public static final RegistryKey<Item> BIRCH_STAIRS = register("birch_stairs");
@@ -139,6 +149,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> GREEN_CARPET = register("green_carpet");
     public static final RegistryKey<Item> RED_CARPET = register("red_carpet");
     public static final RegistryKey<Item> BLACK_CARPET = register("black_carpet");
+    public static final RegistryKey<Item> TALL_GRASS = register("tall_grass");
+    public static final RegistryKey<Item> LARGE_FERN = register("large_fern");
     public static final RegistryKey<Item> SCAFFOLDING = register("scaffolding");
     public static final RegistryKey<Item> REDSTONE = register("redstone");
     public static final RegistryKey<Item> LECTERN = register("lectern");

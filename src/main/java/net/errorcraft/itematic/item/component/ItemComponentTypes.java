@@ -27,6 +27,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<CooldownItemComponent> COOLDOWN = register("cooldown", new ItemComponentType<>(CooldownItemComponent.CODEC));
     public static final ItemComponentType<DyeItemComponent> DYE = register("dye", new ItemComponentType<>(DyeItemComponent.CODEC));
     public static final ItemComponentType<DyeableItemComponent> DYEABLE = register("dyeable", new ItemComponentType<>(DyeableItemComponent.CODEC));
+    public static final ItemComponentType<TintedItemComponent> TINTED = register("tinted", new ItemComponentType<>(TintedItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

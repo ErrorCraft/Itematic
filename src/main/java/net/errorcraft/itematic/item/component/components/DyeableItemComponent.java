@@ -5,6 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.item.DyeableItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 
 public record DyeableItemComponent(int defaultColor) implements ItemComponent {
     public static final Codec<DyeableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -19,5 +23,13 @@ public record DyeableItemComponent(int defaultColor) implements ItemComponent {
     @Override
     public Codec<? extends ItemComponent> getCodec() {
         return CODEC;
+    }
+
+    public int getColor(ItemStack stack) {
+        NbtCompound display = stack.getSubNbt(DyeableItem.DISPLAY_KEY);
+        if (display != null && display.contains(DyeableItem.COLOR_KEY, NbtElement.NUMBER_TYPE)) {
+            return display.getInt(DyeableItem.COLOR_KEY);
+        }
+        return this.defaultColor;
     }
 }

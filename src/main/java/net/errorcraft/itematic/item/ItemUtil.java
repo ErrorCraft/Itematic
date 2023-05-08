@@ -7,11 +7,13 @@ import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.armor.ArmorMaterialKeys;
+import net.errorcraft.itematic.item.color.colors.*;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.*;
@@ -19,6 +21,8 @@ import net.minecraft.registry.*;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeKeys;
 
 public class ItemUtil {
     public static final Codec<Item> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
@@ -30,6 +34,7 @@ public class ItemUtil {
         RegistryEntryLookup<ArmorMaterial> armorMaterials = registerable.getRegistryLookup(ItematicRegistryKeys.ARMOR_MATERIAL);
         RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
         RegistryEntryLookup<EntityType<?>> entityTypes = registerable.getRegistryLookup(RegistryKeys.ENTITY_TYPE);
+        RegistryEntryLookup<Biome> biomes = registerable.getRegistryLookup(RegistryKeys.BIOME);
 
         registerable.register(ItemKeys.AIR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build())
@@ -44,6 +49,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRASS_BLOCK).build()),
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(Blocks.GRASS_BLOCK))
+                .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.COBBLESTONE, create(
@@ -436,17 +442,83 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.OAK_LEAVES, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_LEAVES).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(Blocks.OAK_LEAVES))
+                .with(new CompostableItemComponent(0.3f))
+                .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .build()
+        ));
+        registerable.register(ItemKeys.SPRUCE_LEAVES, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_LEAVES).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(Blocks.SPRUCE_LEAVES))
+                .with(new CompostableItemComponent(0.3f))
+                .with(new TintedItemComponent(new ConstantItemColor(FoliageColors.getSpruceColor())))
+                .build()
+        ));
+        registerable.register(ItemKeys.BIRCH_LEAVES, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_LEAVES).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(Blocks.BIRCH_LEAVES))
+                .with(new CompostableItemComponent(0.3f))
+                .with(new TintedItemComponent(new ConstantItemColor(FoliageColors.getBirchColor())))
+                .build()
+        ));
+        registerable.register(ItemKeys.JUNGLE_LEAVES, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_LEAVES).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(Blocks.JUNGLE_LEAVES))
+                .with(new CompostableItemComponent(0.3f))
+                .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .build()
+        ));
+        registerable.register(ItemKeys.ACACIA_LEAVES, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_LEAVES).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(Blocks.ACACIA_LEAVES))
+                .with(new CompostableItemComponent(0.3f))
+                .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .build()
+        ));
+        registerable.register(ItemKeys.DARK_OAK_LEAVES, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_LEAVES).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(Blocks.DARK_OAK_LEAVES))
+                .with(new CompostableItemComponent(0.3f))
+                .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .build()
+        ));
+        registerable.register(ItemKeys.MANGROVE_LEAVES, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_LEAVES).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(Blocks.MANGROVE_LEAVES))
+                .with(new CompostableItemComponent(0.3f))
+                .with(new TintedItemComponent(new ConstantItemColor(FoliageColors.getMangroveColor())))
+                .build()
+        ));
         registerable.register(ItemKeys.GRASS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRASS).build()),
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(Blocks.GRASS))
                 .with(new CompostableItemComponent(0.3f))
+                .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .build()
+        ));
+        registerable.register(ItemKeys.FERN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FERN).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(Blocks.FERN))
+                .with(new CompostableItemComponent(0.65f))
+                .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.AZALEA, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AZALEA).build()),
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(Blocks.AZALEA))
+                .with(new CompostableItemComponent(0.65f))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
@@ -454,6 +526,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FLOWERING_AZALEA).build()),
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(Blocks.FLOWERING_AZALEA))
+                .with(new CompostableItemComponent(0.85f))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
@@ -764,6 +837,22 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.VINE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.VINE).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(Blocks.VINE))
+                .with(new CompostableItemComponent(0.5f))
+                .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .build()
+        ));
+        registerable.register(ItemKeys.LILY_PAD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LILY_PAD).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(Blocks.LILY_PAD))
+                .with(new CompostableItemComponent(0.65f))
+                .with(new TintedItemComponent(new ConstantItemColor(0x71c35c)))
+                .build()
+        ));
         registerable.register(ItemKeys.OAK_STAIRS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_STAIRS).build()),
             ItemComponentSet.builder()
@@ -950,6 +1039,22 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(Blocks.BLACK_CARPET))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.TALL_GRASS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TALL_GRASS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(Blocks.TALL_GRASS))
+                .with(new CompostableItemComponent(0.5f))
+                .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .build()
+        ));
+        registerable.register(ItemKeys.LARGE_FERN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LARGE_FERN).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(Blocks.LARGE_FERN))
+                .with(new CompostableItemComponent(0.65f))
+                .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.SCAFFOLDING, create(
@@ -1800,6 +1905,7 @@ public class ItemUtil {
                 .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_LEATHER_ARMOR))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
+                .with(new TintedItemComponent(new DyeableItemColor()))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER_CHESTPLATE, create(
@@ -1810,6 +1916,7 @@ public class ItemUtil {
                 .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_LEATHER_ARMOR))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
+                .with(new TintedItemComponent(new DyeableItemColor()))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER_LEGGINGS, create(
@@ -1820,6 +1927,7 @@ public class ItemUtil {
                 .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_LEATHER_ARMOR))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
+                .with(new TintedItemComponent(new DyeableItemColor()))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER_BOOTS, create(
@@ -1830,6 +1938,7 @@ public class ItemUtil {
                 .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_LEATHER_ARMOR))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
+                .with(new TintedItemComponent(new DyeableItemColor()))
                 .build()
         ));
         registerable.register(ItemKeys.IRON_HELMET, create(
@@ -2271,6 +2380,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIG_SPAWN_EGG).build()),
             ItemComponentSet.builder()
                 .with(new EntityItemComponent(EntityType.PIG))
+                .with(new TintedItemComponent(IndexItemColor.of(0xf0a5a2, 0xdb635f)))
                 .build()
         ));
         registerable.register(ItemKeys.EXPERIENCE_BOTTLE, create(

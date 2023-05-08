@@ -1,20 +1,20 @@
 {
   "base": {
     "display": {
-      "translation_key": "block.minecraft.grass"
+      "translation_key": "block.minecraft.dark_oak_leaves"
     },
     "max_count": 64
   },
   "components": {
     "minecraft:block": {
-      "block": "minecraft:grass"
+      "block": "minecraft:dark_oak_leaves"
     },
     "minecraft:compostable": {
       "level_increase_chance": 0.3
     },
     "minecraft:tinted": {
       "tint": {
-        "type": "minecraft:grass",
+        "type": "minecraft:foliage",
         "biome": "minecraft:plains"
       }
     }

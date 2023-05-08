@@ -9,6 +9,9 @@
     "minecraft:block": {
       "block": "minecraft:flowering_azalea"
     },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.85
+    },
     "minecraft:fuel": {
       "ticks": 100
     }

@@ -1,21 +1,21 @@
 {
   "base": {
     "display": {
-      "translation_key": "block.minecraft.grass"
+      "translation_key": "block.minecraft.spruce_leaves"
     },
     "max_count": 64
   },
   "components": {
     "minecraft:block": {
-      "block": "minecraft:grass"
+      "block": "minecraft:spruce_leaves"
     },
     "minecraft:compostable": {
       "level_increase_chance": 0.3
     },
     "minecraft:tinted": {
       "tint": {
-        "type": "minecraft:grass",
-        "biome": "minecraft:plains"
+        "type": "minecraft:constant",
+        "color": 6396257
       }
     }
   }

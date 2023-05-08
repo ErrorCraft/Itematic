@@ -1,0 +1,24 @@
+package net.errorcraft.itematic.item.color.colors;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.color.ItemColor;
+import net.errorcraft.itematic.item.color.ItemColorType;
+import net.errorcraft.itematic.item.color.ItemColorTypes;
+import net.minecraft.item.ItemStack;
+
+public record ConstantItemColor(int color) implements ItemColor {
+    public static final Codec<ConstantItemColor> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.INT.fieldOf("color").forGetter(ConstantItemColor::color)
+    ).apply(instance, ConstantItemColor::new));
+
+    @Override
+    public int getColor(ItemStack stack, int tintIndex) {
+        return this.color;
+    }
+
+    @Override
+    public ItemColorType<?> getType() {
+        return ItemColorTypes.CONSTANT;
+    }
+}
