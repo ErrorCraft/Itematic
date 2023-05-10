@@ -1522,6 +1522,18 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.TURTLE_HELMET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TURTLE_HELMET).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.TURTLE, ArmorItem.Type.HELMET, armorMaterials.getOrThrow(ArmorMaterialKeys.TURTLE)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.TURTLE, EnchantmentTags.HELMET_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_TURTLE_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.SCUTE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SCUTE).build())
+        ));
         registerable.register(ItemKeys.APPLE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.APPLE).build()),
             ItemComponentSet.builder()
@@ -1942,6 +1954,42 @@ public class ItemUtil {
                 .with(new TintedItemComponent(new DyeableItemColor()))
                 .build()
         ));
+        registerable.register(ItemKeys.CHAINMAIL_HELMET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_HELMET).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.CHAIN, ArmorItem.Type.HELMET, armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.HELMET_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_CHAINMAIL_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.CHAINMAIL_CHESTPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_CHESTPLATE).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.CHAIN, ArmorItem.Type.CHESTPLATE, armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.CHESTPLATE_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_CHAINMAIL_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.CHAINMAIL_LEGGINGS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_LEGGINGS).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.CHAIN, ArmorItem.Type.LEGGINGS, armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.LEGGINGS_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_CHAINMAIL_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.CHAINMAIL_BOOTS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_BOOTS).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.CHAIN, ArmorItem.Type.BOOTS, armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.BOOTS_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_CHAINMAIL_ARMOR))
+                .build()
+        ));
         registerable.register(ItemKeys.IRON_HELMET, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build(), 1),
             ItemComponentSet.builder()
@@ -1976,6 +2024,114 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.BOOTS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_IRON_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.DIAMOND_HELMET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HELMET).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.DIAMOND, ArmorItem.Type.HELMET, armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.HELMET_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_DIAMOND_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.DIAMOND_CHESTPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_CHESTPLATE).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.DIAMOND, ArmorItem.Type.CHESTPLATE, armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.CHESTPLATE_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_DIAMOND_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.DIAMOND_LEGGINGS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_LEGGINGS).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.DIAMOND, ArmorItem.Type.LEGGINGS, armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.LEGGINGS_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_DIAMOND_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.DIAMOND_BOOTS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_BOOTS).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.DIAMOND, ArmorItem.Type.BOOTS, armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.BOOTS_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_DIAMOND_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.GOLDEN_HELMET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HELMET).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.GOLD, ArmorItem.Type.HELMET, armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.HELMET_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_GOLDEN_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.GOLDEN_CHESTPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_CHESTPLATE).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.GOLD, ArmorItem.Type.CHESTPLATE, armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.CHESTPLATE_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_GOLDEN_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.GOLDEN_LEGGINGS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_LEGGINGS).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.GOLD, ArmorItem.Type.LEGGINGS, armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.LEGGINGS_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_GOLDEN_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.GOLDEN_BOOTS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_BOOTS).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.GOLD, ArmorItem.Type.BOOTS, armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.BOOTS_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_GOLDEN_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.NETHERITE_HELMET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HELMET).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.HELMET_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_NETHERITE_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.NETHERITE_CHESTPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_CHESTPLATE).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.CHESTPLATE_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_NETHERITE_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.NETHERITE_LEGGINGS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_LEGGINGS).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.NETHERITE, ArmorItem.Type.LEGGINGS, armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.LEGGINGS_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_NETHERITE_ARMOR))
+                .build()
+        ));
+        registerable.register(ItemKeys.NETHERITE_BOOTS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_BOOTS).build(), 1),
+            ItemComponentSet.builder()
+                .with(ArmorItemComponent.from(ArmorMaterials.NETHERITE, ArmorItem.Type.BOOTS, armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE)))
+                .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.BOOTS_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
+                .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_NETHERITE_ARMOR))
                 .build()
         ));
         registerable.register(ItemKeys.PORKCHOP, create(

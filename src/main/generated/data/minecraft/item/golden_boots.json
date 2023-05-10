@@ -1,0 +1,30 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.golden_boots"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:armor": {
+      "material": "minecraft:gold"
+    },
+    "minecraft:damageable": {
+      "durability": 91
+    },
+    "minecraft:enchantable": {
+      "enchantability": 25,
+      "enchantments": "minecraft:boots_enchanting"
+    },
+    "minecraft:equipment": {
+      "slot": "feet",
+      "swappable": true
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:boots_forging"
+    },
+    "minecraft:repairable": {
+      "items": "minecraft:repairs_golden_armor"
+    }
+  }
+}

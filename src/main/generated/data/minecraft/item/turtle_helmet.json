@@ -1,0 +1,30 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.turtle_helmet"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:armor": {
+      "material": "minecraft:turtle"
+    },
+    "minecraft:damageable": {
+      "durability": 275
+    },
+    "minecraft:enchantable": {
+      "enchantability": 9,
+      "enchantments": "minecraft:helmet_enchanting"
+    },
+    "minecraft:equipment": {
+      "slot": "head",
+      "swappable": true
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:helmet_forging"
+    },
+    "minecraft:repairable": {
+      "items": "minecraft:repairs_turtle_armor"
+    }
+  }
+}

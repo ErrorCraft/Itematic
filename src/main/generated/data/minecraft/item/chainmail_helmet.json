@@ -1,0 +1,30 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.chainmail_helmet"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:armor": {
+      "material": "minecraft:chainmail"
+    },
+    "minecraft:damageable": {
+      "durability": 165
+    },
+    "minecraft:enchantable": {
+      "enchantability": 12,
+      "enchantments": "minecraft:helmet_enchanting"
+    },
+    "minecraft:equipment": {
+      "slot": "head",
+      "swappable": true
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:helmet_forging"
+    },
+    "minecraft:repairable": {
+      "items": "minecraft:repairs_chainmail_armor"
+    }
+  }
+}

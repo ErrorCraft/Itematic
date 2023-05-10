@@ -178,8 +178,18 @@ public class ItematicData implements DataGeneratorEntrypoint {
         protected void configure(RegistryWrapper.WrapperLookup arg) {
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_LEATHER_ARMOR)
                 .add(ItemKeys.LEATHER);
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_CHAINMAIL_ARMOR)
+                .add(ItemKeys.IRON_INGOT);
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_IRON_ARMOR)
                 .add(ItemKeys.IRON_INGOT);
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_GOLDEN_ARMOR)
+                .add(ItemKeys.GOLD_INGOT);
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_DIAMOND_ARMOR)
+                .add(ItemKeys.DIAMOND);
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_NETHERITE_ARMOR)
+                .add(ItemKeys.NETHERITE_INGOT);
+            this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_TURTLE_ARMOR)
+                .add(ItemKeys.SCUTE);
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_WOODEN_TOOL)
                 .addTag(ItemTags.PLANKS);
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_STONE_TOOL)

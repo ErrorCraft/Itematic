@@ -16,6 +16,7 @@
     "particle.CrackParticleExtender$SnowballFactoryExtender",
     "render.entity.FishingBobberEntityRendererExtender",
     "render.entity.feature.ArmorFeatureRendererExtender",
+    "render.entity.feature.HeadFeatureRendererExtender",
     "render.item.ItemModelsExtender",
     "render.item.ItemRendererExtender",
     "render.model.BakedModelManagerExtender",

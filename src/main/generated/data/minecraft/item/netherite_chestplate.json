@@ -1,0 +1,30 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.netherite_chestplate"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:armor": {
+      "material": "minecraft:netherite"
+    },
+    "minecraft:damageable": {
+      "durability": 592
+    },
+    "minecraft:enchantable": {
+      "enchantability": 15,
+      "enchantments": "minecraft:chestplate_enchanting"
+    },
+    "minecraft:equipment": {
+      "slot": "chest",
+      "swappable": true
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:chestplate_forging"
+    },
+    "minecraft:repairable": {
+      "items": "minecraft:repairs_netherite_armor"
+    }
+  }
+}

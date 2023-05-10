@@ -7,7 +7,12 @@ import net.minecraft.util.Identifier;
 
 public class ItemTagsUtil {
     public static final TagKey<Item> REPAIRS_LEATHER_ARMOR = of("repairs_leather_armor");
+    public static final TagKey<Item> REPAIRS_CHAINMAIL_ARMOR = of("repairs_chainmail_armor");
     public static final TagKey<Item> REPAIRS_IRON_ARMOR = of("repairs_iron_armor");
+    public static final TagKey<Item> REPAIRS_GOLDEN_ARMOR = of("repairs_golden_armor");
+    public static final TagKey<Item> REPAIRS_DIAMOND_ARMOR = of("repairs_diamond_armor");
+    public static final TagKey<Item> REPAIRS_NETHERITE_ARMOR = of("repairs_netherite_armor");
+    public static final TagKey<Item> REPAIRS_TURTLE_ARMOR = of("repairs_turtle_armor");
 
     public static final TagKey<Item> REPAIRS_WOODEN_TOOL = of("repairs_wooden_tool");
     public static final TagKey<Item> REPAIRS_STONE_TOOL = of("repairs_stone_tool");
