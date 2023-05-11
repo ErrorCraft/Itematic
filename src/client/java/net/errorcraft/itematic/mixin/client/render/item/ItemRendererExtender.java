@@ -26,13 +26,13 @@ public class ItemRendererExtender implements DynamicRegistryAccess {
     private ItemModels models;
 
     @Redirect(
-        method = "method_51795",
+        method = "usesDynamicDisplay",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private static boolean method_51795IsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
+    private static boolean usesDynamicDisplayIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.isOf(ItemKeys.CLOCK);
     }
 

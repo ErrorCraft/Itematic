@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(SuspiciousStewRecipe.class)
 public class SuspiciousStewRecipeExtender {
     @Redirect(
-        method = "matches(Lnet/minecraft/inventory/CraftingInventory;Lnet/minecraft/world/World;)Z",
+        method = "matches(Lnet/minecraft/class_8566;Lnet/minecraft/world/World;)Z",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
