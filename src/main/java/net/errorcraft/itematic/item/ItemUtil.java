@@ -2536,7 +2536,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.PIG_SPAWN_EGG, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIG_SPAWN_EGG).build()),
             ItemComponentSet.builder()
-                .with(new EntityItemComponent(EntityType.PIG))
+                .with(new EntityItemComponent(entityTypes.getOrThrow(EntityTypeKeys.PIG)))
                 .with(new TintedItemComponent(IndexItemColor.of(0xf0a5a2, 0xdb635f)))
                 .build()
         ));
