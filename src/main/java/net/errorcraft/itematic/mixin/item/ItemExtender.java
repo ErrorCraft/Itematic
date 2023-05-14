@@ -68,7 +68,12 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public ActionResult useOnBlock(ItemUsageContext context) {
-        TypedActionResult<ItemStack> result = TypedActionResult.pass(context.getStack());
+        ItemStack stack = context.getStack();
+        if (!context.ignoresPlacementComponent() && stack.hasComponent(ItemComponentTypes.CAN_PLACE_ON_FLUIDS)) {
+            return ActionResult.PASS;
+        }
+
+        TypedActionResult<ItemStack> result = TypedActionResult.pass(stack);
         for (ItemComponent component : this.components) {
             TypedActionResult<ItemStack> newResult = component.useOnBlock(context);
             if (newResult.getResult() == ActionResult.FAIL) {

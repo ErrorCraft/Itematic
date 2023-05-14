@@ -21,6 +21,8 @@ import net.minecraft.registry.*;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.RaycastContext;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 
@@ -850,6 +852,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LILY_PAD).build()),
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LILY_PAD)))
+                .with(new CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling.SOURCE_ONLY, Direction.UP.getVector()))
                 .with(new CompostableItemComponent(0.65f))
                 .with(new TintedItemComponent(new ConstantItemColor(0x71c35c)))
                 .build()

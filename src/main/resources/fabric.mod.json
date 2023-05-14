@@ -71,6 +71,9 @@
       "net/minecraft/class_1799": [
         "net/errorcraft/itematic/access/item/ItemStackAccess"
       ],
+      "net/minecraft/class_1838": [
+        "net/errorcraft/itematic/access/item/ItemUsageContextAccess"
+      ],
       "net/minecraft/class_1856": [
         "net/errorcraft/itematic/access/recipe/IngredientAccess"
       ],
@@ -106,6 +109,9 @@
       ],
       "net/minecraft/class_3857": [
         "net/errorcraft/itematic/access/entity/projectile/thrown/ThrownItemEntityAccess"
+      ],
+      "net/minecraft/class_3959\u0024class_242": [
+        "net/minecraft/util/StringIdentifiable"
       ],
       "net/minecraft/class_5257": [
         "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
