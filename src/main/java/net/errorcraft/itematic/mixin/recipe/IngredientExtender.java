@@ -1,27 +1,34 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import com.google.gson.JsonObject;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.access.recipe.IngredientAccess;
 import net.errorcraft.itematic.access.recipe.IngredientEntryAccess;
+import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.recipe.RecipeSerializerUtil;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 
 @Mixin(Ingredient.class)
 public class IngredientExtender implements IngredientAccess {
@@ -37,13 +44,44 @@ public class IngredientExtender implements IngredientAccess {
         method = "entryFromJson",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/recipe/ShapedRecipe;getItem(Lcom/google/gson/JsonObject;)Lnet/minecraft/item/Item;"
-        ),
-        cancellable = true
+            target = "Lnet/minecraft/registry/DefaultedRegistry;getOrEmpty(Lnet/minecraft/util/Identifier;)Ljava/util/Optional;"
+        )
     )
-    private static void entryFromJsonUseRegistryEntry(JsonObject json, CallbackInfoReturnable<Ingredient.Entry> info) {
-        RegistryEntry<Item> item = RecipeSerializerUtil.getItem(json);
-        info.setReturnValue(StackEntryAccess.create(new ItemStack(item)));
+    private static void entryFromJsonStoreRegistryEntry(JsonObject json, boolean bl, CallbackInfoReturnable<Ingredient.Entry> info, @Share("entry") LocalRef<RegistryEntry<Item>> entry) {
+        entry.set(RecipeSerializerUtil.getItem(json));
+    }
+
+    @Redirect(
+        method = "entryFromJson",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/registry/DefaultedRegistry;getOrEmpty(Lnet/minecraft/util/Identifier;)Ljava/util/Optional;"
+        )
+    )
+    private static Optional<Item> entryFromJsonGetOrEmptyUseRegistryEntry(DefaultedRegistry<Item> instance, Identifier identifier, @Share("entry") LocalRef<RegistryEntry<Item>> entry) {
+        return Optional.of(entry.get().value());
+    }
+
+    @Redirect(
+        method = "entryFromJson",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/item/Items;AIR:Lnet/minecraft/item/Item;"
+        )
+    )
+    private static Item entryFromJsonGetAirUseDynamicRegistry() {
+        return RecipeSerializerUtil.getItemRegistry().get(ItemKeys.AIR);
+    }
+
+    @Redirect(
+        method = "entryFromJson",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack"
+        )
+    )
+    private static ItemStack entryFromJsonNewItemStackUseRegistryEntry(ItemConvertible item, @Share("entry") LocalRef<RegistryEntry<Item>> entry) {
+        return new ItemStack(entry.get());
     }
 
     @Override
@@ -75,14 +113,6 @@ public class IngredientExtender implements IngredientAccess {
         @Override
         public Collection<ItemStack> getStacks(Registry<Item> registry) {
             return this.getStacks();
-        }
-    }
-
-    @Mixin(Ingredient.StackEntry.class)
-    public interface StackEntryAccess {
-        @Invoker("<init>")
-        static Ingredient.StackEntry create(ItemStack stack) {
-            throw new AssertionError();
         }
     }
 }

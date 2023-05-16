@@ -191,9 +191,9 @@ public class ItematicData implements DataGeneratorEntrypoint {
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_TURTLE_ARMOR)
                 .add(ItemKeys.SCUTE);
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_WOODEN_TOOL)
-                .addTag(ItemTags.PLANKS);
+                .forceAddTag(ItemTags.PLANKS);
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_STONE_TOOL)
-                .addTag(ItemTags.STONE_TOOL_MATERIALS);
+                .forceAddTag(ItemTags.STONE_TOOL_MATERIALS);
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_GOLDEN_TOOL)
                 .add(ItemKeys.GOLD_INGOT);
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_IRON_TOOL)
@@ -203,7 +203,7 @@ public class ItematicData implements DataGeneratorEntrypoint {
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_NETHERITE_TOOL)
                 .add(ItemKeys.NETHERITE_INGOT);
             this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_SHIELD)
-                .addTag(ItemTags.PLANKS);
+                .forceAddTag(ItemTags.PLANKS);
             this.getOrCreateTagBuilder(ItemTagsUtil.FURNACE_MINECART_FUEL)
                 .add(ItemKeys.COAL, ItemKeys.CHARCOAL);
         }
