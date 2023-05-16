@@ -37,12 +37,13 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> type) implements 
         if (context.getWorld().isClient()) {
             return TypedActionResult.success(stack);
         }
-        EntityType<?> entityType = this.getEntityType(stack.getSubNbt(EntityType.ENTITY_TAG_KEY));
+        EntityType<?> entityType = this.getEntityType(stack);
         EntityPlacer placer = EntityPlacer.of(context, entityType);
         return placer.place();
     }
 
-    private EntityType<?> getEntityType(NbtCompound nbt) {
+    public EntityType<?> getEntityType(ItemStack stack) {
+        NbtCompound nbt = stack.getSubNbt(EntityType.ENTITY_TAG_KEY);
         if (nbt == null) {
             return this.type.value();
         }

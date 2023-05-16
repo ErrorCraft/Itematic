@@ -53,6 +53,9 @@
       "net/minecraft/class_1304": [
         "net/errorcraft/itematic/access/entity/EquipmentSlotAccess"
       ],
+      "net/minecraft/class_1308": [
+        "net/errorcraft/itematic/access/entity/mob/MobEntityAccess"
+      ],
       "net/minecraft/class_1309": [
         "net/errorcraft/itematic/access/entity/LivingEntityAccess"
       ],

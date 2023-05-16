@@ -68,12 +68,11 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public ActionResult useOnBlock(ItemUsageContext context) {
-        ItemStack stack = context.getStack();
-        if (!context.ignoresPlacementComponent() && stack.hasComponent(ItemComponentTypes.CAN_PLACE_ON_FLUIDS)) {
+        if (this.stopsPlacement(context)) {
             return ActionResult.PASS;
         }
 
-        TypedActionResult<ItemStack> result = TypedActionResult.pass(stack);
+        TypedActionResult<ItemStack> result = TypedActionResult.pass(context.getStack());
         for (ItemComponent component : this.components) {
             TypedActionResult<ItemStack> newResult = component.useOnBlock(context);
             if (newResult.getResult() == ActionResult.FAIL) {
@@ -82,6 +81,12 @@ public class ItemExtender implements ItemAccess {
             result = ActionResultUtil.max(newResult, result.getResult());
         }
         return result.getResult();
+    }
+
+    private boolean stopsPlacement(ItemUsageContext context) {
+        return !context.ignoresPlacementComponent() && this.getComponent(ItemComponentTypes.CAN_PLACE_ON_FLUIDS)
+            .map(CanPlaceOnFluidsItemComponent::allowOriginalPlacement)
+            .orElse(false);
     }
 
     /**

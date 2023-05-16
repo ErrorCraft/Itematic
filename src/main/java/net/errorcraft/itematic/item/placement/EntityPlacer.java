@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.item.placement;
 
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -45,6 +46,9 @@ public class EntityPlacer extends Placer {
     }
 
     private boolean tryModifySpawnerBlock() {
+        if (!this.stack.hasComponent(ItemComponentTypes.SPAWN_EGG)) {
+            return false;
+        }
         if (!this.blockState.isOf(Blocks.SPAWNER)) {
             return false;
         }

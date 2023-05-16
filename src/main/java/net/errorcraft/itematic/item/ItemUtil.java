@@ -8,7 +8,10 @@ import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.armor.ArmorMaterialKeys;
-import net.errorcraft.itematic.item.color.colors.*;
+import net.errorcraft.itematic.item.color.colors.ConstantItemColor;
+import net.errorcraft.itematic.item.color.colors.DyeableItemColor;
+import net.errorcraft.itematic.item.color.colors.FoliageItemColor;
+import net.errorcraft.itematic.item.color.colors.GrassItemColor;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
@@ -852,7 +855,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LILY_PAD).build()),
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LILY_PAD)))
-                .with(new CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling.SOURCE_ONLY, Direction.UP.getVector()))
+                .with(new CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling.SOURCE_ONLY, false, Direction.UP.getVector()))
                 .with(new CompostableItemComponent(0.65f))
                 .with(new TintedItemComponent(new ConstantItemColor(0x71c35c)))
                 .build()
@@ -2536,11 +2539,16 @@ public class ItemUtil {
                 .with(FoodItemComponent.from(FoodComponents.SPIDER_EYE))
                 .build()
         ));
+        registerable.register(ItemKeys.COW_SPAWN_EGG, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COW_SPAWN_EGG).build()),
+            ItemComponentSet.builder()
+                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.COW), 0x443626, 0xa1a1a1))
+                .build()
+        ));
         registerable.register(ItemKeys.PIG_SPAWN_EGG, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIG_SPAWN_EGG).build()),
             ItemComponentSet.builder()
-                .with(new EntityItemComponent(entityTypes.getOrThrow(EntityTypeKeys.PIG)))
-                .with(new TintedItemComponent(IndexItemColor.of(0xf0a5a2, 0xdb635f)))
+                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.PIG), 0xf0a5a2, 0xdb635f))
                 .build()
         ));
         registerable.register(ItemKeys.EXPERIENCE_BOTTLE, create(

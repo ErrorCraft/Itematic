@@ -14,15 +14,21 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
-public record CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling handler, Vec3i offset) implements ItemComponent {
+public record CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling handler, boolean allowOriginalPlacement, Vec3i offset) implements ItemComponent {
     public static final Codec<CanPlaceOnFluidsItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         StringIdentifiable.createCodec(RaycastContext.FluidHandling::values).fieldOf("handler").forGetter(CanPlaceOnFluidsItemComponent::handler),
+        Codec.BOOL.fieldOf("allow_original_placement").forGetter(CanPlaceOnFluidsItemComponent::allowOriginalPlacement),
         Vec3i.CODEC.optionalFieldOf("offset", Vec3i.ZERO).forGetter(CanPlaceOnFluidsItemComponent::offset)
     ).apply(instance, CanPlaceOnFluidsItemComponent::new));
+
+    public CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling handler, boolean allowOriginalPlacement) {
+        this(handler, allowOriginalPlacement, Vec3i.ZERO);
+    }
 
     @Override
     public ItemComponentType<?> getType() {
@@ -36,7 +42,12 @@ public record CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling handler
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand, ItemStack stack) {
-        ItemUsageContext itemUsageContext = new ItemUsageContext(world, user, hand, stack, this.raycast(world, user));
+        BlockHitResult blockHitResult = this.raycast(world, user);
+        if (blockHitResult.getType() != HitResult.Type.BLOCK) {
+            return TypedActionResult.pass(stack);
+        }
+
+        ItemUsageContext itemUsageContext = new ItemUsageContext(world, user, hand, stack, blockHitResult);
         itemUsageContext.setIgnoresPlacementComponent(true);
         ActionResult result = stack.useOnBlock(itemUsageContext);
         return new TypedActionResult<>(result, stack);

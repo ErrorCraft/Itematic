@@ -354,6 +354,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ENDER_PEARL = register("ender_pearl");
     public static final RegistryKey<Item> BLAZE_ROD = register("blaze_rod");
     public static final RegistryKey<Item> SPIDER_EYE = register("spider_eye");
+    public static final RegistryKey<Item> COW_SPAWN_EGG = register("cow_spawn_egg");
     public static final RegistryKey<Item> PIG_SPAWN_EGG = register("pig_spawn_egg");
     public static final RegistryKey<Item> EXPERIENCE_BOTTLE = register("experience_bottle");
     public static final RegistryKey<Item> CARROT = register("carrot");

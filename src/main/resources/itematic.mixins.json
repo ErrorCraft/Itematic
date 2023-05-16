@@ -30,6 +30,7 @@
     "entity.mob.AbstractSkeletonEntityExtender",
     "entity.mob.DrownedEntityExtender",
     "entity.mob.IllusionerEntityExtender",
+    "entity.mob.MobEntityExtender",
     "entity.mob.PillagerEntityExtender",
     "entity.mob.ZombieEntityExtender",
     "entity.passive.AbstractDonkeyEntityExtender",

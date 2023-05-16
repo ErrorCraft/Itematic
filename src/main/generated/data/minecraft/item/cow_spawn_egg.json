@@ -1,7 +1,7 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.pig_spawn_egg"
+      "translation_key": "item.minecraft.cow_spawn_egg"
     },
     "max_count": 64
   },
@@ -11,15 +11,15 @@
       "handler": "source_only"
     },
     "minecraft:entity": {
-      "type": "minecraft:pig"
+      "type": "minecraft:cow"
     },
     "minecraft:spawn_egg": {},
     "minecraft:tinted": {
       "tint": {
         "type": "minecraft:index",
         "indices": [
-          15771042,
-          14377823
+          4470310,
+          10592673
         ]
       }
     }
