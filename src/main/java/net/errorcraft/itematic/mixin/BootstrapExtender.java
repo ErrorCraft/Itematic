@@ -15,4 +15,13 @@ public class BootstrapExtender {
         )
     )
     private static void doNotRegisterCompostableItems() {}
+
+    @Redirect(
+        method = "initialize",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/block/dispenser/DispenserBehavior;registerDefaults()V"
+        )
+    )
+    private static void doNotRegisterDispenserBehaviors() {}
 }
