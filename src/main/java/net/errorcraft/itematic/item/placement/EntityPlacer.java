@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -24,22 +25,30 @@ import java.util.Optional;
 public class EntityPlacer extends Placer {
     private final EntityType<?> entityType;
     private final Direction direction;
+    private final boolean mayModifyBlock;
+    private final SpawnReason spawnReason;
 
-    public EntityPlacer(ItemStack stack, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, EntityType<?> entityType, Direction direction) {
+    public EntityPlacer(ItemStack stack, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, EntityType<?> entityType, Direction direction, boolean mayModifyBlock, SpawnReason spawnReason) {
         super(stack, world, blockPos, blockState, player);
         this.entityType = entityType;
         this.direction = direction;
+        this.mayModifyBlock = mayModifyBlock;
+        this.spawnReason = spawnReason;
     }
 
-    public static EntityPlacer of(ItemUsageContext context, EntityType<?> entityType) {
+    public static EntityPlacer spawned(ItemUsageContext context, EntityType<?> entityType) {
         World world = context.getWorld();
         BlockPos blockPos = context.getBlockPos();
-        return new EntityPlacer(context.getStack(), world, blockPos, world.getBlockState(blockPos), context.getPlayer(), entityType, context.getSide());
+        return new EntityPlacer(context.getStack(), world, blockPos, world.getBlockState(blockPos), context.getPlayer(), entityType, context.getSide(), true, SpawnReason.SPAWN_EGG);
+    }
+
+    public static EntityPlacer dispensed(BlockPointer pointer, ItemStack stack, EntityType<?> entityType, Direction direction) {
+        return new EntityPlacer(stack, pointer.getWorld(), pointer.getPos(), pointer.getBlockState(), null, entityType, direction, false, SpawnReason.DISPENSER);
     }
 
     @Override
     public TypedActionResult<ItemStack> place() {
-        if (!this.tryModifySpawnerBlock()) {
+        if (!this.mayModifyBlock || !this.tryModifySpawnerBlock()) {
             this.placeEntity();
         }
         return TypedActionResult.consume(this.stack);
@@ -69,10 +78,10 @@ public class EntityPlacer extends Placer {
     }
 
     private void placeEntity() {
-        BlockPos blockPos2 = this.blockState.getCollisionShape(world, blockPos).isEmpty() ? blockPos : blockPos.offset(direction);
-        if (this.entityType.spawnFromItemStack((ServerWorld) this.world, this.stack, this.player, blockPos2, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockPos, blockPos2) && direction == Direction.UP) != null) {
+        BlockPos offset = this.blockState.getCollisionShape(this.world, this.blockPos).isEmpty() ? this.blockPos : this.blockPos.offset(this.direction);
+        if (this.entityType.spawnFromItemStack((ServerWorld) this.world, this.stack, this.player, offset, this.spawnReason, true, !Objects.equals(this.blockPos, offset) && this.direction == Direction.UP) != null) {
             this.stack.decrement(1);
-            world.emitGameEvent(player, GameEvent.ENTITY_PLACE, blockPos);
+            this.world.emitGameEvent(this.player, GameEvent.ENTITY_PLACE, this.blockPos);
         }
     }
 }

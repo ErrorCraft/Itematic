@@ -12,6 +12,9 @@
     "minecraft:damageable": {
       "durability": 165
     },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:armor"
+    },
     "minecraft:enchantable": {
       "enchantability": 9,
       "enchantments": "minecraft:helmet_enchanting"

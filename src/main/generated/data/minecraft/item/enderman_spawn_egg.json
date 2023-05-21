@@ -1,7 +1,7 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.pig_spawn_egg"
+      "translation_key": "item.minecraft.enderman_spawn_egg"
     },
     "max_count": 64
   },
@@ -14,15 +14,15 @@
       "behavior": "minecraft:entity"
     },
     "minecraft:entity": {
-      "type": "minecraft:pig"
+      "type": "minecraft:enderman"
     },
     "minecraft:spawn_egg": {},
     "minecraft:tinted": {
       "tint": {
         "type": "minecraft:index",
         "indices": [
-          15771042,
-          14377823
+          1447446,
+          0
         ]
       }
     }

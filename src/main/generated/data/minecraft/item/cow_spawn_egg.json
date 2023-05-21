@@ -10,6 +10,9 @@
       "allow_original_placement": true,
       "handler": "source_only"
     },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:entity"
+    },
     "minecraft:entity": {
       "type": "minecraft:cow"
     },

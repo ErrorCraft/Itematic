@@ -38,7 +38,7 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> type) implements 
             return TypedActionResult.success(stack);
         }
         EntityType<?> entityType = this.getEntityType(stack);
-        EntityPlacer placer = EntityPlacer.of(context, entityType);
+        EntityPlacer placer = EntityPlacer.spawned(context, entityType);
         return placer.place();
     }
 

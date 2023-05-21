@@ -12,6 +12,9 @@
     "minecraft:damageable": {
       "durability": 195
     },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:armor"
+    },
     "minecraft:enchantable": {
       "enchantability": 12,
       "enchantments": "minecraft:boots_enchanting"

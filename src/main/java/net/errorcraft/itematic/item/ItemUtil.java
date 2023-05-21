@@ -14,8 +14,10 @@ import net.errorcraft.itematic.item.color.colors.FoliageItemColor;
 import net.errorcraft.itematic.item.color.colors.GrassItemColor;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
+import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.minecraft.block.Block;
+import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -41,6 +43,7 @@ public class ItemUtil {
         RegistryEntryLookup<EntityType<?>> entityTypes = registerable.getRegistryLookup(RegistryKeys.ENTITY_TYPE);
         RegistryEntryLookup<Biome> biomes = registerable.getRegistryLookup(RegistryKeys.BIOME);
         RegistryEntryLookup<Block> blocks = registerable.getRegistryLookup(RegistryKeys.BLOCK);
+        RegistryEntryLookup<DispenserBehavior> dispenseBehaviors = registerable.getRegistryLookup(ItematicRegistryKeys.DISPENSE_BEHAVIOR);
 
         registerable.register(ItemKeys.AIR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build())
@@ -1535,6 +1538,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.TURTLE, EnchantmentTags.HELMET_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_TURTLE_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.SCUTE, create(
@@ -1923,6 +1927,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.HELMET_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_LEATHER_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
                 .with(new TintedItemComponent(new DyeableItemColor()))
                 .build()
@@ -1934,6 +1939,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.CHESTPLATE_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_LEATHER_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
                 .with(new TintedItemComponent(new DyeableItemColor()))
                 .build()
@@ -1945,6 +1951,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.LEGGINGS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_LEATHER_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
                 .with(new TintedItemComponent(new DyeableItemColor()))
                 .build()
@@ -1956,6 +1963,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.BOOTS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_LEATHER_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
                 .with(new TintedItemComponent(new DyeableItemColor()))
                 .build()
@@ -1967,6 +1975,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.HELMET_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_CHAINMAIL_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.CHAINMAIL_CHESTPLATE, create(
@@ -1976,6 +1985,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.CHESTPLATE_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_CHAINMAIL_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.CHAINMAIL_LEGGINGS, create(
@@ -1985,6 +1995,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.LEGGINGS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_CHAINMAIL_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.CHAINMAIL_BOOTS, create(
@@ -1994,6 +2005,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.BOOTS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_CHAINMAIL_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.IRON_HELMET, create(
@@ -2003,6 +2015,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.HELMET_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_IRON_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.IRON_CHESTPLATE, create(
@@ -2012,6 +2025,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.CHESTPLATE_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_IRON_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.IRON_LEGGINGS, create(
@@ -2021,6 +2035,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.LEGGINGS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_IRON_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.IRON_BOOTS, create(
@@ -2030,6 +2045,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.BOOTS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_IRON_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.DIAMOND_HELMET, create(
@@ -2039,6 +2055,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.HELMET_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_DIAMOND_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.DIAMOND_CHESTPLATE, create(
@@ -2048,6 +2065,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.CHESTPLATE_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_DIAMOND_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.DIAMOND_LEGGINGS, create(
@@ -2057,6 +2075,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.LEGGINGS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_DIAMOND_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.DIAMOND_BOOTS, create(
@@ -2066,6 +2085,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.BOOTS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_DIAMOND_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_HELMET, create(
@@ -2075,6 +2095,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.HELMET_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_GOLDEN_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_CHESTPLATE, create(
@@ -2084,6 +2105,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.CHESTPLATE_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_GOLDEN_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_LEGGINGS, create(
@@ -2093,6 +2115,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.LEGGINGS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_GOLDEN_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_BOOTS, create(
@@ -2102,6 +2125,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.BOOTS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_GOLDEN_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_HELMET, create(
@@ -2111,6 +2135,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.HELMET_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_NETHERITE_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_CHESTPLATE, create(
@@ -2120,6 +2145,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.CHESTPLATE_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_NETHERITE_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_LEGGINGS, create(
@@ -2129,6 +2155,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.LEGGINGS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_NETHERITE_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_BOOTS, create(
@@ -2138,6 +2165,7 @@ public class ItemUtil {
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.BOOTS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_NETHERITE_ARMOR))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.PORKCHOP, create(
@@ -2304,6 +2332,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new ThrowableItemComponent(1.5f, 0.0f))
                 .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.SNOWBALL)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER, create(
@@ -2328,6 +2357,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new ThrowableItemComponent(1.5f, 0.0f))
                 .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.EGG)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .build()
         ));
         registerable.register(ItemKeys.FISHING_ROD, create(
@@ -2543,12 +2573,21 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COW_SPAWN_EGG).build()),
             ItemComponentSet.builder()
                 .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.COW), 0x443626, 0xa1a1a1))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ENTITY)))
+                .build()
+        ));
+        registerable.register(ItemKeys.ENDERMAN_SPAWN_EGG, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDERMAN_SPAWN_EGG).build()),
+            ItemComponentSet.builder()
+                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.ENDERMAN), 0x161616, 0x000000))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ENTITY)))
                 .build()
         ));
         registerable.register(ItemKeys.PIG_SPAWN_EGG, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIG_SPAWN_EGG).build()),
             ItemComponentSet.builder()
                 .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.PIG), 0xf0a5a2, 0xdb635f))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ENTITY)))
                 .build()
         ));
         registerable.register(ItemKeys.EXPERIENCE_BOTTLE, create(
@@ -2556,6 +2595,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new ThrowableItemComponent(0.7f, -20.0f))
                 .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .build()
         ));
         registerable.register(ItemKeys.CARROT, create(

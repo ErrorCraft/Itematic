@@ -30,6 +30,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<TintedItemComponent> TINTED = register("tinted", new ItemComponentType<>(TintedItemComponent.CODEC));
     public static final ItemComponentType<CanPlaceOnFluidsItemComponent> CAN_PLACE_ON_FLUIDS = register("can_place_on_fluids", new ItemComponentType<>(CanPlaceOnFluidsItemComponent.CODEC));
     public static final ItemComponentType<SpawnEggItemComponent> SPAWN_EGG = register("spawn_egg", new ItemComponentType<>(SpawnEggItemComponent.CODEC));
+    public static final ItemComponentType<DispensableItemComponent> DISPENSABLE = register("dispensable", new ItemComponentType<>(DispensableItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

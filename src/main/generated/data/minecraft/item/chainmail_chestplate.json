@@ -12,6 +12,9 @@
     "minecraft:damageable": {
       "durability": 240
     },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:armor"
+    },
     "minecraft:enchantable": {
       "enchantability": 12,
       "enchantments": "minecraft:chestplate_enchanting"

@@ -12,6 +12,9 @@
     "minecraft:damageable": {
       "durability": 75
     },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:armor"
+    },
     "minecraft:dyeable": {
       "default_color": 10511680
     },

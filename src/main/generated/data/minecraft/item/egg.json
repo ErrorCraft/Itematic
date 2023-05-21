@@ -6,6 +6,9 @@
     "max_count": 16
   },
   "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:projectile"
+    },
     "minecraft:projectile": {
       "entity": "minecraft:egg"
     },
