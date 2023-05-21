@@ -68,7 +68,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public ActionResult useOnBlock(ItemUsageContext context) {
-        if (this.stopsPlacement(context)) {
+        if (!this.allowsPlacement(context)) {
             return ActionResult.PASS;
         }
 
@@ -83,10 +83,10 @@ public class ItemExtender implements ItemAccess {
         return result.getResult();
     }
 
-    private boolean stopsPlacement(ItemUsageContext context) {
+    private boolean allowsPlacement(ItemUsageContext context) {
         return !context.ignoresPlacementComponent() && this.getComponent(ItemComponentTypes.CAN_PLACE_ON_FLUIDS)
             .map(CanPlaceOnFluidsItemComponent::allowOriginalPlacement)
-            .orElse(false);
+            .orElse(true);
     }
 
     /**
