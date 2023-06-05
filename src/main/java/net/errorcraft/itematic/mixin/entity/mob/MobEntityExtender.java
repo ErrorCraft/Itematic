@@ -19,6 +19,8 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
@@ -32,15 +34,14 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
     @Shadow
     public abstract void setBaby(boolean baby);
 
-    @Redirect(
+    @ModifyConstant(
         method = "interactWithItem",
-        at = @At(
-            value = "CONSTANT",
-            args = "classValue=net/minecraft/item/SpawnEggItem",
+        constant = @Constant(
+            classValue = SpawnEggItem.class,
             ordinal = 0
         )
     )
-    private boolean interactWithItemInstanceOfSpawnEggItemUseItemComponentCheck(Object reference, Class<SpawnEggItem> clazz, @Local ItemStack itemStack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
+    private static boolean interactWithItemInstanceOfSpawnEggItemUseItemComponentCheck(Object reference, Class<SpawnEggItem> clazz, @Local ItemStack itemStack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
         Optional<SpawnEggItemComponent> optionalSpawnEggItemComponent = itemStack.getComponent(ItemComponentTypes.SPAWN_EGG);
         optionalSpawnEggItemComponent.ifPresent(spawnEggItemComponent::set);
         return optionalSpawnEggItemComponent.isPresent();

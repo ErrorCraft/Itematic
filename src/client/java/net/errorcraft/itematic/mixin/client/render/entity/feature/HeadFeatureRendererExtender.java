@@ -11,20 +11,16 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.*;
 
 import java.util.Optional;
 
 @Mixin(HeadFeatureRenderer.class)
 public class HeadFeatureRendererExtender {
-    @Redirect(
+    @ModifyConstant(
         method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V",
-        at = @At(
-            value = "CONSTANT",
-            args = "classValue=net/minecraft/item/ArmorItem",
+        constant = @Constant(
+            classValue = ArmorItem.class,
             ordinal = 0
         )
     )

@@ -97,11 +97,10 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         armorItemComponent.set(optionalComponent.get());
     }
 
-    @Redirect(
+    @ModifyConstant(
         method = "renderArmor",
-        at = @At(
-            value = "CONSTANT",
-            args = "classValue=net/minecraft/item/DyeableArmorItem",
+        constant = @Constant(
+            classValue = DyeableArmorItem.class,
             ordinal = 0
         )
     )
