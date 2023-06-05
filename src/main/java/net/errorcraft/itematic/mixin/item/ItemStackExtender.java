@@ -23,6 +23,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -240,6 +241,17 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         }
     }
 
+    @Redirect(
+        method = "areItemsEqual",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private static boolean areItemsEqualIsOfUseRegistryEntryCheck(ItemStack instance, Item item, ItemStack left, ItemStack right) {
+        return instance.itemMatches(right.getRegistryEntry());
+    }
+
     @Inject(
         method = "hasGlint",
         at = @At("HEAD"),
@@ -303,6 +315,11 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     @Override
     public void damage(int amount, LivingEntity entity) {
         this.damage(amount, entity, e -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
+    }
+
+    @Override
+    public void damage(int amount, LivingEntity entity, Hand hand) {
+        this.damage(amount, entity, e -> e.sendToolBreakStatus(hand));
     }
 
     @Override

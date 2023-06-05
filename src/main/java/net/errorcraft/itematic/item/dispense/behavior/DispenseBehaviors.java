@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.dispense.behavior;
 
 import net.errorcraft.itematic.item.dispense.behavior.behaviors.EntityItemComponentDispenserBehavior;
+import net.errorcraft.itematic.item.dispense.behavior.behaviors.FireworkRocketDispenserBehavior;
 import net.errorcraft.itematic.item.dispense.behavior.behaviors.ProjectileItemComponentDispenserBehavior;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.minecraft.block.dispenser.DispenserBehavior;
@@ -14,6 +15,7 @@ public class DispenseBehaviors {
     public static final DispenserBehavior ENTITY = register(DispenseBehaviorKeys.ENTITY, new EntityItemComponentDispenserBehavior());
     public static final DispenserBehavior PROJECTILE = register(DispenseBehaviorKeys.PROJECTILE, new ProjectileItemComponentDispenserBehavior());
     public static final DispenserBehavior ARMOR = register(DispenseBehaviorKeys.ARMOR, ArmorItem.DISPENSER_BEHAVIOR);
+    public static final DispenserBehavior FIREWORK = register(DispenseBehaviorKeys.FIREWORK, new FireworkRocketDispenserBehavior());
 
     private DispenseBehaviors() {}
 

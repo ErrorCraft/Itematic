@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:unbreaking",
+    "minecraft:power",
+    "minecraft:punch",
+    "minecraft:flame",
+    "minecraft:infinity"
+  ]
+}

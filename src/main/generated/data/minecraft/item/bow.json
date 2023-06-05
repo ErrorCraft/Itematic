@@ -6,8 +6,28 @@
     "max_count": 1
   },
   "components": {
+    "minecraft:damageable": {
+      "durability": 384
+    },
+    "minecraft:enchantable": {
+      "enchantability": 1,
+      "enchantments": "minecraft:bow_enchanting"
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:bow_forging"
+    },
     "minecraft:fuel": {
       "ticks": 300
+    },
+    "minecraft:shooter": {
+      "ammunition": "minecraft:bow_ammunition",
+      "held_ammunition": "minecraft:bow_ammunition"
+    },
+    "minecraft:use_animation": {
+      "animation": "bow"
+    },
+    "minecraft:use_duration": {
+      "ticks": 72000
     }
   }
 }

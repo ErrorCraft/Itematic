@@ -19,6 +19,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -120,6 +121,28 @@ public class ItemExtender implements ItemAccess {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
+    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+        for (ItemComponent component : this.components) {
+            component.using(stack, world, user, remainingUseTicks);
+        }
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+        for (ItemComponent component : this.components) {
+            component.stopUsing(stack, world, user, remainingUseTicks);
+        }
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         for (ItemComponent component : this.components) {
             stack = component.finishUsing(world, user, stack);
@@ -177,6 +200,17 @@ public class ItemExtender implements ItemAccess {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
+    public boolean isUsedOnRelease(ItemStack stack) {
+        return this.components.get(ItemComponentTypes.SHOOTER)
+            .map(ShooterItemComponent::chargeable)
+            .orElse(false);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
         return this.getComponent(ItemComponentTypes.REPAIRABLE)
             .map(RepairableItemComponent::items)
@@ -205,6 +239,15 @@ public class ItemExtender implements ItemAccess {
             return 0;
         }
         return this.components.get(ItemComponentTypes.ENCHANTABLE).map(EnchantableItemComponent::enchantability).orElse(0);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public UseAction getUseAction(ItemStack stack) {
+        return this.components.get(ItemComponentTypes.USE_ANIMATION).map(UseAnimationItemComponent::animation).orElse(UseAction.NONE);
     }
 
     /**

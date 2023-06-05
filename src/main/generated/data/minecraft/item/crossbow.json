@@ -6,8 +6,29 @@
     "max_count": 1
   },
   "components": {
+    "minecraft:damageable": {
+      "durability": 465
+    },
+    "minecraft:enchantable": {
+      "enchantability": 1,
+      "enchantments": "minecraft:crossbow_enchanting"
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:crossbow_forging"
+    },
     "minecraft:fuel": {
       "ticks": 300
+    },
+    "minecraft:shooter": {
+      "ammunition": "minecraft:bow_ammunition",
+      "chargeable": true,
+      "held_ammunition": "minecraft:crossbow_ammunition"
+    },
+    "minecraft:use_animation": {
+      "animation": "crossbow"
+    },
+    "minecraft:use_duration": {
+      "ticks": 28
     }
   }
 }

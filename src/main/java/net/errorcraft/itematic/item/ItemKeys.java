@@ -224,6 +224,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> SCUTE = register("scute");
     public static final RegistryKey<Item> APPLE = register("apple");
     public static final RegistryKey<Item> BOW = register("bow");
+    public static final RegistryKey<Item> ARROW = register("arrow");
     public static final RegistryKey<Item> COAL = register("coal");
     public static final RegistryKey<Item> CHARCOAL = register("charcoal");
     public static final RegistryKey<Item> DIAMOND = register("diamond");
@@ -364,6 +365,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> POISONOUS_POTATO = register("poisonous_potato");
     public static final RegistryKey<Item> GOLDEN_CARROT = register("golden_carrot");
     public static final RegistryKey<Item> PUMPKIN_PIE = register("pumpkin_pie");
+    public static final RegistryKey<Item> FIREWORK_ROCKET = register("firework_rocket");
     public static final RegistryKey<Item> ENCHANTED_BOOK = register("enchanted_book");
     public static final RegistryKey<Item> RABBIT = register("rabbit");
     public static final RegistryKey<Item> COOKED_RABBIT = register("cooked_rabbit");
@@ -389,6 +391,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> CHORUS_FRUIT = register("chorus_fruit");
     public static final RegistryKey<Item> BEETROOT = register("beetroot");
     public static final RegistryKey<Item> BEETROOT_SOUP = register("beetroot_soup");
+    public static final RegistryKey<Item> SPECTRAL_ARROW = register("spectral_arrow");
+    public static final RegistryKey<Item> TIPPED_ARROW = register("tipped_arrow");
     public static final RegistryKey<Item> SHIELD = register("shield");
     public static final RegistryKey<Item> CROSSBOW = register("crossbow");
     public static final RegistryKey<Item> SUSPICIOUS_STEW = register("suspicious_stew");

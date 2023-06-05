@@ -15,6 +15,7 @@ import net.errorcraft.itematic.item.color.colors.GrassItemColor;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
+import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.minecraft.block.Block;
 import net.minecraft.block.dispenser.DispenserBehavior;
@@ -26,6 +27,7 @@ import net.minecraft.registry.*;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.biome.Biome;
@@ -1554,7 +1556,19 @@ public class ItemUtil {
         registerable.register(ItemKeys.BOW, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOW).build(), 1),
             ItemComponentSet.builder()
+                .with(new DamageableItemComponent(384))
+                .with(new ShooterItemComponent(ItemTagsUtil.BOW_AMMUNITION, ItemTagsUtil.BOW_AMMUNITION, false))
+                .with(new UseDurationItemComponent(72000))
+                .with(new UseAnimationItemComponent(UseAction.BOW))
+                .with(EnchantableItemComponent.enchants(1, EnchantmentTags.BOW_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.BOW_FORGING))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.ARROW, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARROW).build()),
+            ItemComponentSet.builder()
+                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.ARROW), 1))
                 .build()
         ));
         registerable.register(ItemKeys.COAL, create(
@@ -2640,6 +2654,13 @@ public class ItemUtil {
                 .with(new CompostableItemComponent(1.0f))
                 .build()
         ));
+        registerable.register(ItemKeys.FIREWORK_ROCKET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIREWORK_ROCKET).build()),
+            ItemComponentSet.builder()
+                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.FIREWORK_ROCKET), 3, CrossbowItemAccessor.getFireworkRocketSpeed()))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.FIREWORK)))
+                .build()
+        ));
         registerable.register(ItemKeys.ENCHANTED_BOOK, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_BOOK).build(), 1),
             ItemComponentSet.builder()
@@ -2808,16 +2829,35 @@ public class ItemUtil {
                 .with(FoodItemComponent.from(FoodComponents.BEETROOT_SOUP))
                 .build()
         ));
+        registerable.register(ItemKeys.SPECTRAL_ARROW, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPECTRAL_ARROW).build()),
+            ItemComponentSet.builder()
+                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.SPECTRAL_ARROW), 1))
+                .build()
+        ));
+        registerable.register(ItemKeys.TIPPED_ARROW, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TIPPED_ARROW).build()),
+            ItemComponentSet.builder()
+                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.ARROW), 1))
+                .build()
+        ));
         registerable.register(ItemKeys.SHIELD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHIELD).build(), 1),
             ItemComponentSet.builder()
                 .with(new EquipmentItemComponent(EquipmentSlot.OFFHAND, false))
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_SHIELD))
+                .with(new UseAnimationItemComponent(UseAction.BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.CROSSBOW, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CROSSBOW).build(), 1),
             ItemComponentSet.builder()
+                .with(new DamageableItemComponent(465))
+                .with(new ShooterItemComponent(ItemTagsUtil.CROSSBOW_AMMUNITION, ItemTagsUtil.BOW_AMMUNITION, true))
+                .with(new UseDurationItemComponent(28))
+                .with(new UseAnimationItemComponent(UseAction.CROSSBOW))
+                .with(EnchantableItemComponent.enchants(1, EnchantmentTags.CROSSBOW_ENCHANTING))
+                .with(ForgeableItemComponent.of(EnchantmentTags.CROSSBOW_FORGING))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
@@ -2888,7 +2928,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.HONEY_BOTTLE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEY_BOTTLE).build()),
             ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40))
+                .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40, UseAction.DRINK))
                 .build()
         ));
     }

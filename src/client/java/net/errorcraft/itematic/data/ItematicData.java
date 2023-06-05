@@ -143,6 +143,12 @@ public class ItematicData implements DataGeneratorEntrypoint {
             this.getOrCreateTagBuilder(EnchantmentTags.HOE_ENCHANTING)
                 .add(getAll(registry, EnchantmentTarget.DIGGER, false));
             this.forgingTag(registry, EnchantmentTags.HOE_FORGING, EnchantmentTags.HOE_ENCHANTING, EnchantmentTarget.DIGGER);
+            this.getOrCreateTagBuilder(EnchantmentTags.BOW_ENCHANTING)
+                .add(getAll(registry, EnchantmentTarget.BOW, false));
+            this.forgingTag(registry, EnchantmentTags.BOW_FORGING, EnchantmentTags.BOW_ENCHANTING, EnchantmentTarget.BOW);
+            this.getOrCreateTagBuilder(EnchantmentTags.CROSSBOW_ENCHANTING)
+                .add(getAll(registry, EnchantmentTarget.CROSSBOW, false));
+            this.forgingTag(registry, EnchantmentTags.CROSSBOW_FORGING, EnchantmentTags.CROSSBOW_ENCHANTING, EnchantmentTarget.CROSSBOW);
         }
 
         private FabricTagProvider<Enchantment>.FabricTagBuilder forgingTag(RegistryWrapper.Impl<Enchantment> registry, TagKey<Enchantment> tag, TagKey<Enchantment> enchantingTag, EnchantmentTarget enchantmentTarget) {
@@ -206,6 +212,11 @@ public class ItematicData implements DataGeneratorEntrypoint {
                 .forceAddTag(ItemTags.PLANKS);
             this.getOrCreateTagBuilder(ItemTagsUtil.FURNACE_MINECART_FUEL)
                 .add(ItemKeys.COAL, ItemKeys.CHARCOAL);
+            this.getOrCreateTagBuilder(ItemTagsUtil.BOW_AMMUNITION)
+                .forceAddTag(ItemTags.ARROWS);
+            this.getOrCreateTagBuilder(ItemTagsUtil.CROSSBOW_AMMUNITION)
+                .addTag(ItemTagsUtil.BOW_AMMUNITION)
+                .add(ItemKeys.FIREWORK_ROCKET);
         }
     }
 }

@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -23,6 +24,7 @@ public interface ItemStackAccess {
         return false;
     }
     default void damage(int amount, LivingEntity entity) {}
+    default void damage(int amount, LivingEntity entity, Hand hand) {}
     default <T extends ItemComponent> boolean hasComponent(ItemComponentType<T> type) {
         return false;
     }

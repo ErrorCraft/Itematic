@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:unbreaking",
+    "minecraft:multishot",
+    "minecraft:quick_charge",
+    "minecraft:piercing"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:bow_ammunition",
+    "minecraft:firework_rocket"
+  ]
+}

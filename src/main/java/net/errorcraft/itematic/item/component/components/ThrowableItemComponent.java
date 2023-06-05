@@ -31,7 +31,8 @@ public record ThrowableItemComponent(float speed, float ySpeedModifierAngle) imp
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         if (!world.isClient()) {
             stack.getComponent(ItemComponentTypes.PROJECTILE)
-                .ifPresent(c -> c.createEntity(world, user, stack, this.ySpeedModifierAngle, this.speed));
+                .map(c -> c.createEntity(world, user, stack, this.ySpeedModifierAngle, this.speed))
+                .ifPresent(world::spawnEntity);
         }
         return TypedActionResult.success(stack, world.isClient());
     }

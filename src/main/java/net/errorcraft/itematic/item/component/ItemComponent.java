@@ -36,6 +36,10 @@ public interface ItemComponent {
         return false;
     }
 
+    default void using(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {}
+
+    default void stopUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {}
+
     default ItemStack finishUsing(World world, LivingEntity user, ItemStack stack) {
         return stack;
     }

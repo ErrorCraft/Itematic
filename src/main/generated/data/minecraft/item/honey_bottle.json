@@ -10,6 +10,9 @@
       "nutrition": 6,
       "saturation_modifier": 0.1
     },
+    "minecraft:use_animation": {
+      "animation": "drink"
+    },
     "minecraft:use_duration": {
       "ticks": 40
     }

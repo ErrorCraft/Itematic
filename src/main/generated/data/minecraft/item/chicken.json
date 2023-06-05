@@ -20,6 +20,9 @@
       "nutrition": 2,
       "saturation_modifier": 0.3
     },
+    "minecraft:use_animation": {
+      "animation": "eat"
+    },
     "minecraft:use_duration": {
       "ticks": 32
     }

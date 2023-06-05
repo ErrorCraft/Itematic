@@ -14,6 +14,7 @@ import net.minecraft.item.FoodComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
@@ -53,13 +54,14 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
     }
 
     public static ItemComponent[] from(FoodComponent component) {
-        return from(component, component.isSnack() ? 16 : 32);
+        return from(component, component.isSnack() ? 16 : 32, UseAction.EAT);
     }
 
-    public static ItemComponent[] from(FoodComponent component, int useDuration) {
+    public static ItemComponent[] from(FoodComponent component, int useDuration, UseAction useAction) {
         return new ItemComponent[] {
             new UseDurationItemComponent(useDuration),
-            new FoodItemComponent(component.getHunger(), component.getSaturationModifier(), component.isAlwaysEdible(), getEffects(component.getStatusEffects()))
+            new FoodItemComponent(component.getHunger(), component.getSaturationModifier(), component.isAlwaysEdible(), getEffects(component.getStatusEffects())),
+            new UseAnimationItemComponent(useAction)
         };
     }
 

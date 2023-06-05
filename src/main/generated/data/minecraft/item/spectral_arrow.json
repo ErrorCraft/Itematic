@@ -1,0 +1,14 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.spectral_arrow"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:projectile": {
+      "damage": 1,
+      "entity": "minecraft:spectral_arrow"
+    }
+  }
+}

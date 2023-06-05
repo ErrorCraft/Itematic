@@ -10,6 +10,7 @@ public class DispenseBehaviorKeys {
     public static final RegistryKey<DispenserBehavior> ENTITY = of("entity");
     public static final RegistryKey<DispenserBehavior> PROJECTILE = of("projectile");
     public static final RegistryKey<DispenserBehavior> ARMOR = of("armor");
+    public static final RegistryKey<DispenserBehavior> FIREWORK = of("firework");
 
     private DispenseBehaviorKeys() {}
 

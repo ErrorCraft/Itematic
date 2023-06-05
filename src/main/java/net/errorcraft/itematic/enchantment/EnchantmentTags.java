@@ -18,6 +18,8 @@ public class EnchantmentTags {
     public static final TagKey<Enchantment> PICKAXE_ENCHANTING = of("pickaxe_enchanting");
     public static final TagKey<Enchantment> AXE_ENCHANTING = of("axe_enchanting");
     public static final TagKey<Enchantment> HOE_ENCHANTING = of("hoe_enchanting");
+    public static final TagKey<Enchantment> BOW_ENCHANTING = of("bow_enchanting");
+    public static final TagKey<Enchantment> CROSSBOW_ENCHANTING = of("crossbow_enchanting");
 
     public static final TagKey<Enchantment> BOOTS_FORGING = of("boots_forging");
     public static final TagKey<Enchantment> LEGGINGS_FORGING = of("leggings_forging");
@@ -28,6 +30,8 @@ public class EnchantmentTags {
     public static final TagKey<Enchantment> PICKAXE_FORGING = of("pickaxe_forging");
     public static final TagKey<Enchantment> AXE_FORGING = of("axe_forging");
     public static final TagKey<Enchantment> HOE_FORGING = of("hoe_forging");
+    public static final TagKey<Enchantment> BOW_FORGING = of("bow_forging");
+    public static final TagKey<Enchantment> CROSSBOW_FORGING = of("crossbow_forging");
 
     private EnchantmentTags() {}
 

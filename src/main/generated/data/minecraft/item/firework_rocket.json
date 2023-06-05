@@ -1,0 +1,18 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.firework_rocket"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:firework"
+    },
+    "minecraft:projectile": {
+      "charged_speed": 1.6,
+      "damage": 3,
+      "entity": "minecraft:firework_rocket"
+    }
+  }
+}
