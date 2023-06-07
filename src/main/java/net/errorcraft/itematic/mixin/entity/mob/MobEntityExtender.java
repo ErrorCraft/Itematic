@@ -41,7 +41,7 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
             ordinal = 0
         )
     )
-    private static boolean interactWithItemInstanceOfSpawnEggItemUseItemComponentCheck(Object reference, Class<SpawnEggItem> clazz, @Local ItemStack itemStack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
+    private boolean interactWithItemInstanceOfSpawnEggItemUseItemComponentCheck(Object reference, Class<SpawnEggItem> clazz, @Local ItemStack itemStack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
         Optional<SpawnEggItemComponent> optionalSpawnEggItemComponent = itemStack.getComponent(ItemComponentTypes.SPAWN_EGG);
         optionalSpawnEggItemComponent.ifPresent(spawnEggItemComponent::set);
         return optionalSpawnEggItemComponent.isPresent();

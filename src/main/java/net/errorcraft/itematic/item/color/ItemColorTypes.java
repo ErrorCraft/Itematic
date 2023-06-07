@@ -11,6 +11,7 @@ public class ItemColorTypes {
     public static final ItemColorType<GrassItemColor> GRASS = register(ItemColorTypeKeys.GRASS, new ItemColorType<>(GrassItemColor.CODEC));
     public static final ItemColorType<FoliageItemColor> FOLIAGE = register(ItemColorTypeKeys.FOLIAGE, new ItemColorType<>(FoliageItemColor.CODEC));
     public static final ItemColorType<ConstantItemColor> CONSTANT = register(ItemColorTypeKeys.CONSTANT, new ItemColorType<>(ConstantItemColor.CODEC));
+    public static final ItemColorType<PotionItemColor> POTION = register(ItemColorTypeKeys.POTION, new ItemColorType<>(PotionItemColor.CODEC));
 
     private ItemColorTypes() {}
 

@@ -8,10 +8,7 @@ import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.armor.ArmorMaterialKeys;
-import net.errorcraft.itematic.item.color.colors.ConstantItemColor;
-import net.errorcraft.itematic.item.color.colors.DyeableItemColor;
-import net.errorcraft.itematic.item.color.colors.FoliageItemColor;
-import net.errorcraft.itematic.item.color.colors.GrassItemColor;
+import net.errorcraft.itematic.item.color.colors.*;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
@@ -2839,6 +2836,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TIPPED_ARROW).build()),
             ItemComponentSet.builder()
                 .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.ARROW), 1))
+                .with(new TintedItemComponent(new PotionItemColor()))
                 .build()
         ));
         registerable.register(ItemKeys.SHIELD, create(

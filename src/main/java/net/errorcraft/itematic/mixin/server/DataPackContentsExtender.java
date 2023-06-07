@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(DataPackContents.class)
 public class DataPackContentsExtender {
@@ -33,5 +34,14 @@ public class DataPackContentsExtender {
         this.serverAdvancementLoader.setRegistryManager(dynamicRegistryManager);
         this.recipeManager.setRegistryManager(dynamicRegistryManager);
         RecipeSerializerUtil.setItemRegistry(dynamicRegistryManager.get(RegistryKeys.ITEM));
+    }
+
+    @Inject(
+        method = "method_40425",
+        at = @At("HEAD"),
+        remap = false
+    )
+    private static void method_40425ResetTemporaryRegistries(DataPackContents dataPackContents, Object void_, CallbackInfoReturnable<DataPackContents> info) {
+        RecipeSerializerUtil.setItemRegistry(null);
     }
 }

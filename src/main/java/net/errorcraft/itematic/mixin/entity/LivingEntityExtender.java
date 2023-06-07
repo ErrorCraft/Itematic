@@ -14,7 +14,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -60,6 +62,16 @@ public abstract class LivingEntityExtender implements LivingEntityAccess {
     @Overwrite
     public static EquipmentSlot getPreferredEquipmentSlot(ItemStack stack) {
         return stack.getComponent(ItemComponentTypes.EQUIPMENT).map(EquipmentItemComponent::slot).orElse(EquipmentSlot.MAINHAND);
+    }
+
+    @Inject(
+        method = "getProjectileType",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void getProjectileTypeUseItemComponent(ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
+        stack.getComponent(ItemComponentTypes.SHOOTER)
+            .ifPresent(component -> info.setReturnValue(this.getAmmunition(component)));
     }
 
     @Override

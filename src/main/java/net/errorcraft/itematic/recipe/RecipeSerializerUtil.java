@@ -1,8 +1,6 @@
 package net.errorcraft.itematic.recipe;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -28,11 +26,8 @@ public class RecipeSerializerUtil {
 
     public static RegistryEntry<Item> getItem(JsonObject json) {
         String id = JsonHelper.getString(json, ITEM_KEY);
-        RegistryEntry<Item> item = itemRegistry.getEntry(RegistryKey.of(RegistryKeys.ITEM, new Identifier(id))).orElseThrow(() -> new JsonSyntaxException("Unknown item '" + id + "'"));
-        if (item.matchesKey(ItemKeys.AIR)) {
-            throw new JsonSyntaxException("Invalid item: " + id);
-        }
-        return item;
+        RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, new Identifier(id));
+        return itemRegistry.entryOf(key);
     }
 
     public static RegistryEntry<Item> getResultItem(JsonObject json) {

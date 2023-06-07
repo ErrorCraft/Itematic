@@ -9,6 +9,11 @@
     "minecraft:projectile": {
       "damage": 1,
       "entity": "minecraft:arrow"
+    },
+    "minecraft:tinted": {
+      "tint": {
+        "type": "minecraft:potion"
+      }
     }
   }
 }

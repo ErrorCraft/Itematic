@@ -4,6 +4,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -39,5 +40,29 @@ public abstract class ArrowEntityExtender extends PersistentProjectileEntity {
     )
     private ItemStack asItemStackNewItemStackForTippedArrowUseRegistryEntry(ItemConvertible item) {
         return new ItemStack(this.getWorld().getItem(ItemKeys.TIPPED_ARROW));
+    }
+
+    @Redirect(
+        method = "initFromStack",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        )
+    )
+    private boolean initFromStackIsOfForTippedArrowUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.isOf(ItemKeys.TIPPED_ARROW);
+    }
+
+    @Redirect(
+        method = "initFromStack",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 1
+        )
+    )
+    private boolean initFromStackIsOfForArrowUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.isOf(ItemKeys.ARROW);
     }
 }

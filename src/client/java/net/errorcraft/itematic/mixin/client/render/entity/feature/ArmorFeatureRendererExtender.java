@@ -15,7 +15,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
@@ -46,11 +45,10 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         this.armorMaterialsAtlas = bakery.getAtlas(TexturedRenderLayersUtil.ARMOR_MATERIALS_ATLAS_TEXTURE);
     }
 
-    @Redirect(
+    @ModifyConstant(
         method = "renderArmor",
-        at = @At(
-            value = "CONSTANT",
-            args = "classValue=net/minecraft/item/ArmorItem",
+        constant = @Constant(
+            classValue = ArmorItem.class,
             ordinal = 0
         )
     )
@@ -116,7 +114,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         slice = @Slice(
             from = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;hasGlint()Z"
+                target = "Lnet/minecraft/client/render/entity/feature/ArmorFeatureRenderer;usesInnerModel(Lnet/minecraft/entity/EquipmentSlot;)Z"
             )
         ),
         ordinal = 0
@@ -140,16 +138,16 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         method = "renderArmor",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/render/entity/feature/ArmorFeatureRenderer;renderArmorParts(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/item/ArmorItem;ZLnet/minecraft/client/render/entity/model/BipedEntityModel;ZFFFLjava/lang/String;)V"
+            target = "Lnet/minecraft/client/render/entity/feature/ArmorFeatureRenderer;renderArmorParts(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/item/ArmorItem;Lnet/minecraft/client/render/entity/model/BipedEntityModel;ZFFFLjava/lang/String;)V"
         )
     )
-    private void renderArmorRenderArmorUseItemComponent(ArmorFeatureRenderer<T, M, A> instance, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItem item, boolean glint, A model, boolean secondTextureLayer, float red, float green, float blue, @Nullable String overlay, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
-        this.renderArmorParts(matrices, vertexConsumers, light, armorItemComponent.get(), glint, model, secondTextureLayer, red, green, blue, overlay);
+    private void renderArmorRenderArmorUseItemComponent(ArmorFeatureRenderer<T, M, A> instance, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItem item, A model, boolean secondTextureLayer, float red, float green, float blue, @Nullable String overlay, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
+        this.renderArmorParts(matrices, vertexConsumers, light, armorItemComponent.get(), model, secondTextureLayer, red, green, blue, overlay);
     }
 
-    private void renderArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItemComponent component, boolean glint, A model, boolean secondTextureLayer, float red, float green, float blue, @Nullable String overlay) {
+    private void renderArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItemComponent component, A model, boolean secondTextureLayer, float red, float green, float blue, @Nullable String overlay) {
         Sprite sprite = this.armorMaterialsAtlas.getSprite(getArmorTexture(component, secondTextureLayer, overlay));
-        VertexConsumer vertexConsumer = sprite.getTextureSpecificVertexConsumer(ItemRenderer.getArmorGlintConsumer(vertexConsumers, TexturedRenderLayersUtil.ARMOR_TRIMS_RENDER_LAYER, false, glint));
+        VertexConsumer vertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumers.getBuffer(TexturedRenderLayersUtil.ARMOR_TRIMS_RENDER_LAYER));
         model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, red, green, blue, 1.0f);
     }
 
