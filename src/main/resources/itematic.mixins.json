@@ -107,6 +107,7 @@
     "server.ServerAdvancementLoaderExtender",
     "server.ServerNetworkIoExtender$ChildHandlerExtender",
     "server.ServerPlayerInteractionManagerExtender",
+    "util.RarityExtender",
     "util.UseActionExtender",
     "world.ChunkRegionExtender",
     "world.ChunkSerializerExtender",

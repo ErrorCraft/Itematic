@@ -1,6 +1,7 @@
 {
   "base": {
     "display": {
+      "rarity": "uncommon",
       "translation_key": "item.minecraft.enchanted_book"
     },
     "max_count": 1

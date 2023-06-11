@@ -1,6 +1,7 @@
 {
   "base": {
     "display": {
+      "rarity": "uncommon",
       "translation_key": "item.minecraft.experience_bottle"
     },
     "max_count": 64

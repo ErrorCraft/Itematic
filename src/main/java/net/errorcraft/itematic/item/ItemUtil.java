@@ -26,6 +26,7 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.RaycastContext;
@@ -936,7 +937,7 @@ public class ItemUtil {
                 .build()
         ));
         registerable.register(ItemKeys.BARRIER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARRIER).build()),
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARRIER).rarity(Rarity.EPIC).build()),
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BARRIER)))
                 .build()
@@ -2195,15 +2196,16 @@ public class ItemUtil {
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_APPLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_APPLE).build()),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_APPLE).rarity(Rarity.RARE).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.GOLDEN_APPLE))
                 .build()
         ));
         registerable.register(ItemKeys.ENCHANTED_GOLDEN_APPLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_GOLDEN_APPLE).build()),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_GOLDEN_APPLE).rarity(Rarity.EPIC).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.ENCHANTED_GOLDEN_APPLE))
+                .with(new FoilItemComponent(true))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_SIGN, create(
@@ -2605,7 +2607,7 @@ public class ItemUtil {
                 .build()
         ));
         registerable.register(ItemKeys.EXPERIENCE_BOTTLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EXPERIENCE_BOTTLE).build()),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EXPERIENCE_BOTTLE).rarity(Rarity.UNCOMMON).build()),
             ItemComponentSet.builder()
                 .with(new ThrowableItemComponent(0.7f, -20.0f))
                 .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE)))
@@ -2662,7 +2664,7 @@ public class ItemUtil {
                 .build()
         ));
         registerable.register(ItemKeys.ENCHANTED_BOOK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_BOOK).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_BOOK).rarity(Rarity.UNCOMMON).build(), 1),
             ItemComponentSet.builder()
                 .with(new EnchantmentHolderItemComponent(EnchantedBookItem.STORED_ENCHANTMENTS_KEY))
                 .with(new FoilItemComponent(true))
@@ -2851,97 +2853,97 @@ public class ItemUtil {
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_13, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_13).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_13).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_13), ItemKeys.MUSIC_DISC_13, 178 * 20, 1))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_CAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CAT).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CAT).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CAT), ItemKeys.MUSIC_DISC_CAT, 185 * 20, 2))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_BLOCKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_BLOCKS).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_BLOCKS).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_BLOCKS), ItemKeys.MUSIC_DISC_BLOCKS, 345 * 20, 3))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_CHIRP, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CHIRP).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CHIRP).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CHIRP), ItemKeys.MUSIC_DISC_CHIRP, 185 * 20, 4))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_FAR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_FAR).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_FAR).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_FAR), ItemKeys.MUSIC_DISC_FAR, 174 * 20, 5))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_MALL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MALL).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MALL).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_MALL), ItemKeys.MUSIC_DISC_MALL, 197 * 20, 6))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_MELLOHI, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MELLOHI).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MELLOHI).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_MELLOHI), ItemKeys.MUSIC_DISC_MELLOHI, 96 * 20, 7))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_STAL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STAL).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STAL).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_STAL), ItemKeys.MUSIC_DISC_STAL, 150 * 20, 8))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_STRAD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STRAD).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STRAD).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_STRAD), ItemKeys.MUSIC_DISC_STRAD, 188 * 20, 9))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_WARD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WARD).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WARD).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_WARD), ItemKeys.MUSIC_DISC_WARD, 251 * 20, 10))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_11, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_11).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_11).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_11), ItemKeys.MUSIC_DISC_11, 71 * 20, 11))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_WAIT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WAIT).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WAIT).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_WAIT), ItemKeys.MUSIC_DISC_WAIT, 238 * 20, 12))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_OTHERSIDE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_OTHERSIDE).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_OTHERSIDE).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_OTHERSIDE), ItemKeys.MUSIC_DISC_OTHERSIDE, 195 * 20, 14))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_RELIC, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_RELIC).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_RELIC).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_RELIC), ItemKeys.MUSIC_DISC_RELIC, 218 * 20, 14))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_5, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_5).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_5).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_5), ItemKeys.MUSIC_DISC_5, 178 * 20, 15))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_PIGSTEP, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_PIGSTEP).build(), 1),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_PIGSTEP).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
                 .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_PIGSTEP), ItemKeys.MUSIC_DISC_PIGSTEP, 149 * 20, 13))
                 .build()

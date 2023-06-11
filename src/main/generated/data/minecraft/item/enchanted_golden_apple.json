@@ -1,11 +1,15 @@
 {
   "base": {
     "display": {
+      "rarity": "epic",
       "translation_key": "item.minecraft.enchanted_golden_apple"
     },
     "max_count": 64
   },
   "components": {
+    "minecraft:foil": {
+      "foil": true
+    },
     "minecraft:food": {
       "always_edible": true,
       "effects": [

@@ -1,6 +1,7 @@
 {
   "base": {
     "display": {
+      "rarity": "epic",
       "translation_key": "item.minecraft.music_disc_otherside"
     },
     "max_count": 1

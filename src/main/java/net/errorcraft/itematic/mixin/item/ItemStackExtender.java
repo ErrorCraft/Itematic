@@ -25,6 +25,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -152,6 +153,17 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     @Overwrite
     public int getMaxCount() {
         return this.item == null ? ItemBase.MAX_MAX_COUNT : this.item.getMaxCount();
+    }
+
+    @Inject(
+        method = "getRarity",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void getRarityCheckNullEntry(CallbackInfoReturnable<Rarity> info) {
+        if (this.entry == null) {
+            info.setReturnValue(Rarity.COMMON);
+        }
     }
 
     /**

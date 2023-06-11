@@ -16,10 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -44,6 +41,18 @@ public class ItemExtender implements ItemAccess {
     @Overwrite
     public final int getMaxCount() {
         return this.base.maxCount();
+    }
+
+    @Redirect(
+        method = "getRarity",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/item/Item;rarity:Lnet/minecraft/util/Rarity;",
+            opcode = Opcodes.GETFIELD
+        )
+    )
+    private Rarity getRarityUseItemBaseImplementation(Item instance) {
+        return this.base.display().rarity();
     }
 
     /**

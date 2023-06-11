@@ -74,6 +74,9 @@
       "net/minecraft/class_1799": [
         "net/errorcraft/itematic/access/item/ItemStackAccess"
       ],
+      "net/minecraft/class_1814": [
+        "net/minecraft/util/StringIdentifiable"
+      ],
       "net/minecraft/class_1838": [
         "net/errorcraft/itematic/access/item/ItemUsageContextAccess"
       ],
