@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.music_disc_blocks"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:record": {
+      "description_key": "item.minecraft.music_disc_blocks.desc",
+      "duration": 6900,
+      "output_signal": 3,
+      "sound_event": "minecraft:music_disc.blocks"
+    }
+  }
+}

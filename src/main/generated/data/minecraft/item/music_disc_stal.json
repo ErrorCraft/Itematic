@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.music_disc_stal"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:record": {
+      "description_key": "item.minecraft.music_disc_stal.desc",
+      "duration": 3000,
+      "output_signal": 8,
+      "sound_event": "minecraft:music_disc.stal"
+    }
+  }
+}

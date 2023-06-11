@@ -17,6 +17,7 @@
     "block.dispenser.ProjectileDispenserBehaviorExtender",
     "block.entity.AbstractFurnaceBlockEntityExtender",
     "block.entity.BlockEntityExtender",
+    "block.entity.JukeboxBlockEntityExtender",
     "block.entity.LockableContainerBlockEntitiesExtender",
     "block.entity.ShulkerBoxBlockEntityExtender",
     "block.entity.SingleItemBlockEntitiesExtender",

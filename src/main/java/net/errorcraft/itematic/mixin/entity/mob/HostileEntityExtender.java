@@ -9,7 +9,10 @@ import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,7 +36,7 @@ public class HostileEntityExtender extends PathAwareEntity {
             ordinal = 0
         )
     )
-    private boolean getProjectileTypeInstanceOfRangedWeaponItemUseItemComponentCheck(Object reference, Class<ArmorItem> clazz, @Local(ordinal = 0) ItemStack itemStack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
+    private boolean getProjectileTypeInstanceOfRangedWeaponItemUseItemComponentCheck(Object reference, Class<RangedWeaponItem> clazz, @Local(ordinal = 0) ItemStack itemStack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
         Optional<ShooterItemComponent> optionalComponent = itemStack.getComponent(ItemComponentTypes.SHOOTER);
         optionalComponent.ifPresent(shooterItemComponent::set);
         return optionalComponent.isPresent();

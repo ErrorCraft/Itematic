@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.music_disc_pigstep"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:record": {
+      "description_key": "item.minecraft.music_disc_pigstep.desc",
+      "duration": 2980,
+      "output_signal": 13,
+      "sound_event": "minecraft:music_disc.pigstep"
+    }
+  }
+}

@@ -2,12 +2,15 @@ package net.errorcraft.itematic.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.util.IdentifierUtil;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import net.minecraft.util.dynamic.Codecs;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,8 +40,15 @@ public record ItemBaseDisplay(String translationKey, Optional<List<Text>> toolti
             return new Builder(Util.createTranslationKey("block", name.getValue()));
         }
 
-        public Builder tooltip(List<Text> tooltip) {
-            this.tooltip = tooltip;
+        public Builder tooltip(RegistryKey<Item> name) {
+            return this.tooltip(Text.translatable(IdentifierUtil.createTranslationKey(name, "item", "desc")).formatted(Formatting.GRAY));
+        }
+
+        public Builder tooltip(Text... lines) {
+            if (this.tooltip == null) {
+                this.tooltip = new ArrayList<>();
+            }
+            this.tooltip.addAll(List.of(lines));
             return this;
         }
     }

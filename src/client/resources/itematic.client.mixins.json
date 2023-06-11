@@ -14,6 +14,7 @@
     "network.ClientPlayNetworkHandlerExtender",
     "option.HotbarStorageEntryExtender",
     "particle.CrackParticleExtender$SnowballFactoryExtender",
+    "render.WorldRendererExtender",
     "render.entity.FishingBobberEntityRendererExtender",
     "render.entity.feature.ArmorFeatureRendererExtender",
     "render.entity.feature.HeadFeatureRendererExtender",

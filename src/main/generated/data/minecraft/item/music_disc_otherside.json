@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.music_disc_otherside"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:record": {
+      "description_key": "item.minecraft.music_disc_otherside.desc",
+      "duration": 3900,
+      "output_signal": 14,
+      "sound_event": "minecraft:music_disc.otherside"
+    }
+  }
+}

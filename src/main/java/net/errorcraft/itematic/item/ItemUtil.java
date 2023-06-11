@@ -14,6 +14,7 @@ import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.minecraft.block.Block;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.client.color.world.FoliageColors;
@@ -22,6 +23,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.registry.*;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.UseAction;
@@ -43,6 +45,7 @@ public class ItemUtil {
         RegistryEntryLookup<Biome> biomes = registerable.getRegistryLookup(RegistryKeys.BIOME);
         RegistryEntryLookup<Block> blocks = registerable.getRegistryLookup(RegistryKeys.BLOCK);
         RegistryEntryLookup<DispenserBehavior> dispenseBehaviors = registerable.getRegistryLookup(ItematicRegistryKeys.DISPENSE_BEHAVIOR);
+        RegistryEntryLookup<SoundEvent> soundEvents = registerable.getRegistryLookup(RegistryKeys.SOUND_EVENT);
 
         registerable.register(ItemKeys.AIR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build())
@@ -2846,6 +2849,105 @@ public class ItemUtil {
                 .with(new RepairableItemComponent(ItemTagsUtil.REPAIRS_SHIELD))
                 .with(new UseAnimationItemComponent(UseAction.BLOCK))
                 .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_13, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_13).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_13), ItemKeys.MUSIC_DISC_13, 178 * 20, 1))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_CAT, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CAT).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CAT), ItemKeys.MUSIC_DISC_CAT, 185 * 20, 2))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_BLOCKS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_BLOCKS).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_BLOCKS), ItemKeys.MUSIC_DISC_BLOCKS, 345 * 20, 3))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_CHIRP, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CHIRP).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CHIRP), ItemKeys.MUSIC_DISC_CHIRP, 185 * 20, 4))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_FAR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_FAR).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_FAR), ItemKeys.MUSIC_DISC_FAR, 174 * 20, 5))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_MALL, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MALL).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_MALL), ItemKeys.MUSIC_DISC_MALL, 197 * 20, 6))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_MELLOHI, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MELLOHI).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_MELLOHI), ItemKeys.MUSIC_DISC_MELLOHI, 96 * 20, 7))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_STAL, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STAL).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_STAL), ItemKeys.MUSIC_DISC_STAL, 150 * 20, 8))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_STRAD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STRAD).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_STRAD), ItemKeys.MUSIC_DISC_STRAD, 188 * 20, 9))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_WARD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WARD).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_WARD), ItemKeys.MUSIC_DISC_WARD, 251 * 20, 10))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_11, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_11).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_11), ItemKeys.MUSIC_DISC_11, 71 * 20, 11))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_WAIT, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WAIT).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_WAIT), ItemKeys.MUSIC_DISC_WAIT, 238 * 20, 12))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_OTHERSIDE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_OTHERSIDE).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_OTHERSIDE), ItemKeys.MUSIC_DISC_OTHERSIDE, 195 * 20, 14))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_RELIC, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_RELIC).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_RELIC), ItemKeys.MUSIC_DISC_RELIC, 218 * 20, 14))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_5, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_5).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_5), ItemKeys.MUSIC_DISC_5, 178 * 20, 15))
+                .build()
+        ));
+        registerable.register(ItemKeys.MUSIC_DISC_PIGSTEP, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_PIGSTEP).build(), 1),
+            ItemComponentSet.builder()
+                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_PIGSTEP), ItemKeys.MUSIC_DISC_PIGSTEP, 149 * 20, 13))
+                .build()
+        ));
+        registerable.register(ItemKeys.DISC_FRAGMENT_5, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DISC_FRAGMENT_5).tooltip(ItemKeys.DISC_FRAGMENT_5).build())
         ));
         registerable.register(ItemKeys.CROSSBOW, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CROSSBOW).build(), 1),

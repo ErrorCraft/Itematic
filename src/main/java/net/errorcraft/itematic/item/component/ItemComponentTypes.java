@@ -33,6 +33,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<DispensableItemComponent> DISPENSABLE = register("dispensable", new ItemComponentType<>(DispensableItemComponent.CODEC));
     public static final ItemComponentType<ShooterItemComponent> SHOOTER = register("shooter", new ItemComponentType<>(ShooterItemComponent.CODEC));
     public static final ItemComponentType<UseAnimationItemComponent> USE_ANIMATION = register("use_animation", new ItemComponentType<>(UseAnimationItemComponent.CODEC));
+    public static final ItemComponentType<RecordItemComponent> RECORD = register("record", new ItemComponentType<>(RecordItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.music_disc_ward"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:record": {
+      "description_key": "item.minecraft.music_disc_ward.desc",
+      "duration": 5020,
+      "output_signal": 10,
+      "sound_event": "minecraft:music_disc.ward"
+    }
+  }
+}

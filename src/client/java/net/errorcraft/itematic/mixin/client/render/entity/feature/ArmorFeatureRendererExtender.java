@@ -102,7 +102,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
             ordinal = 0
         )
     )
-    private boolean renderArmorInstanceOfDyeableArmorItemUseItemComponentCheck(Object reference, Class<ArmorItem> clazz, @Local ItemStack itemStack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
+    private boolean renderArmorInstanceOfDyeableArmorItemUseItemComponentCheck(Object reference, Class<DyeableArmorItem> clazz, @Local ItemStack itemStack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
         Optional<TintedItemComponent> optionalComponent = itemStack.getComponent(ItemComponentTypes.TINTED);
         optionalComponent.ifPresent(tintedItemComponent::set);
         return optionalComponent.isPresent();

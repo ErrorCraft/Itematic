@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.music_disc_strad"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:record": {
+      "description_key": "item.minecraft.music_disc_strad.desc",
+      "duration": 3760,
+      "output_signal": 9,
+      "sound_event": "minecraft:music_disc.strad"
+    }
+  }
+}

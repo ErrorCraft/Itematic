@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.music_disc_wait"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:record": {
+      "description_key": "item.minecraft.music_disc_wait.desc",
+      "duration": 4760,
+      "output_signal": 12,
+      "sound_event": "minecraft:music_disc.wait"
+    }
+  }
+}

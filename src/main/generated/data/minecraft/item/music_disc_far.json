@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.music_disc_far"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:record": {
+      "description_key": "item.minecraft.music_disc_far.desc",
+      "duration": 3480,
+      "output_signal": 5,
+      "sound_event": "minecraft:music_disc.far"
+    }
+  }
+}

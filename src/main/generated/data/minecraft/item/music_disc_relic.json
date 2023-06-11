@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.music_disc_relic"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:record": {
+      "description_key": "item.minecraft.music_disc_relic.desc",
+      "duration": 4360,
+      "output_signal": 14,
+      "sound_event": "minecraft:music_disc.relic"
+    }
+  }
+}
