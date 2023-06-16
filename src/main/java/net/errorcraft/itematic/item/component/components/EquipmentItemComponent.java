@@ -5,10 +5,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
@@ -50,5 +53,13 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable) impl
             user.setStackInHand(hand, currentStack.copy());
         }
         return TypedActionResult.success(stack, world.isClient());
+    }
+
+    public static ItemComponent[] skull(RegistryEntry<Block> block) {
+        return new ItemComponent[] {
+            new BlockItemComponent(block),
+            new EquipmentItemComponent(EquipmentSlot.HEAD, false),
+            new FireworkShapeModifierItemComponent(FireworkRocketItem.Type.CREEPER)
+        };
     }
 }

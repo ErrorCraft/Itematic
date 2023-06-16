@@ -1925,8 +1925,11 @@ public class ItemUtil {
         registerable.register(ItemKeys.FEATHER, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FEATHER).build()),
             ItemComponentSet.builder()
-                .with(new TestItemComponent(true))
+                .with(new FireworkShapeModifierItemComponent(FireworkRocketItem.Type.BURST))
                 .build()
+        ));
+        registerable.register(ItemKeys.GUNPOWDER, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GUNPOWDER).build())
         ));
         registerable.register(ItemKeys.BREAD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BREAD).build()),
@@ -2362,6 +2365,9 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DRIED_KELP_BLOCK_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.PAPER, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PAPER).build())
+        ));
         registerable.register(ItemKeys.BOOK, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOOK).build()),
             ItemComponentSet.builder()
@@ -2381,6 +2387,9 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
+        ));
+        registerable.register(ItemKeys.GLOWSTONE_DUST, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOWSTONE_DUST).build())
         ));
         registerable.register(ItemKeys.COD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COD).build()),
@@ -2579,6 +2588,12 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BLAZE_ROD_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.GOLD_NUGGET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLD_NUGGET).build()),
+            ItemComponentSet.builder()
+                .with(new FireworkShapeModifierItemComponent(FireworkRocketItem.Type.STAR))
+                .build()
+        ));
         registerable.register(ItemKeys.SPIDER_EYE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPIDER_EYE).build()),
             ItemComponentSet.builder()
@@ -2612,6 +2627,12 @@ public class ItemUtil {
                 .with(new ThrowableItemComponent(0.7f, -20.0f))
                 .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE)))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                .build()
+        ));
+        registerable.register(ItemKeys.FIRE_CHARGE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIRE_CHARGE).build()),
+            ItemComponentSet.builder()
+                .with(new FireworkShapeModifierItemComponent(FireworkRocketItem.Type.LARGE_BALL))
                 .build()
         ));
         registerable.register(ItemKeys.CARROT, create(
@@ -2649,6 +2670,48 @@ public class ItemUtil {
                 .with(FoodItemComponent.from(FoodComponents.GOLDEN_CARROT))
                 .build()
         ));
+        registerable.register(ItemKeys.SKELETON_SKULL, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SKELETON_SKULL).rarity(Rarity.UNCOMMON).build()),
+            ItemComponentSet.builder()
+                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.SKELETON_SKULL)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WITHER_SKELETON_SKULL, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WITHER_SKELETON_SKULL).rarity(Rarity.UNCOMMON).build()),
+            ItemComponentSet.builder()
+                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.WITHER_SKELETON_SKULL)))
+                .build()
+        ));
+        registerable.register(ItemKeys.PLAYER_HEAD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PLAYER_HEAD).rarity(Rarity.UNCOMMON).build()),
+            ItemComponentSet.builder()
+                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.PLAYER_HEAD)))
+                .build()
+        ));
+        registerable.register(ItemKeys.ZOMBIE_HEAD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ZOMBIE_HEAD).rarity(Rarity.UNCOMMON).build()),
+            ItemComponentSet.builder()
+                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.ZOMBIE_HEAD)))
+                .build()
+        ));
+        registerable.register(ItemKeys.CREEPER_HEAD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CREEPER_HEAD).rarity(Rarity.UNCOMMON).build()),
+            ItemComponentSet.builder()
+                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.CREEPER_HEAD)))
+                .build()
+        ));
+        registerable.register(ItemKeys.DRAGON_HEAD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRAGON_HEAD).rarity(Rarity.UNCOMMON).build()),
+            ItemComponentSet.builder()
+                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.DRAGON_HEAD)))
+                .build()
+        ));
+        registerable.register(ItemKeys.PIGLIN_HEAD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PIGLIN_HEAD).rarity(Rarity.UNCOMMON).build()),
+            ItemComponentSet.builder()
+                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.PIGLIN_HEAD)))
+                .build()
+        ));
         registerable.register(ItemKeys.PUMPKIN_PIE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUMPKIN_PIE).build()),
             ItemComponentSet.builder()
@@ -2659,8 +2722,16 @@ public class ItemUtil {
         registerable.register(ItemKeys.FIREWORK_ROCKET, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIREWORK_ROCKET).build()),
             ItemComponentSet.builder()
+                .with(new FireworkItemComponent())
                 .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.FIREWORK_ROCKET), 3, CrossbowItemAccessor.getFireworkRocketSpeed()))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.FIREWORK)))
+                .build()
+        ));
+        registerable.register(ItemKeys.FIREWORK_STAR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIREWORK_STAR).build()),
+            ItemComponentSet.builder()
+                .with(new FireworkExplosionHolderItemComponent())
+                .with(new TintedItemComponent(new FireworkItemColor()))
                 .build()
         ));
         registerable.register(ItemKeys.ENCHANTED_BOOK, create(

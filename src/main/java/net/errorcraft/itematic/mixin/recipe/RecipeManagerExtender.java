@@ -2,15 +2,13 @@ package net.errorcraft.itematic.mixin.recipe;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
-import net.errorcraft.itematic.access.registry.DynamicRegistryManagerAccess;
+import net.errorcraft.itematic.access.recipe.RecipeManagerAccess;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
@@ -24,8 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 @Mixin(RecipeManager.class)
-public class RecipeManagerExtender implements DynamicRegistryManagerAccess {
-    private DynamicRegistryManager registryManager;
+public class RecipeManagerExtender implements RecipeManagerAccess {
     private Registry<Item> itemRegistry;
 
     @Inject(
@@ -37,7 +34,7 @@ public class RecipeManagerExtender implements DynamicRegistryManagerAccess {
         ),
         locals = LocalCapture.CAPTURE_FAILHARD
     )
-    private void applyInitializeRecipe(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo ci, Map<RecipeType<?>, ImmutableMap.Builder<Identifier, Recipe<?>>> map2, ImmutableMap.Builder<Identifier, Recipe<?>> builder, Iterator<Map.Entry<Identifier, JsonElement>> var6, Map.Entry<Identifier, JsonElement> entry, Identifier identifier, Recipe<?> recipe) {
+    private void applyInitializeRecipe(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info, Map<RecipeType<?>, ImmutableMap.Builder<Identifier, Recipe<?>>> map2, ImmutableMap.Builder<Identifier, Recipe<?>> builder, Iterator<Map.Entry<Identifier, JsonElement>> var6, Map.Entry<Identifier, JsonElement> entry, Identifier identifier, Recipe<?> recipe) {
         this.initRecipe(recipe);
     }
 
@@ -52,14 +49,8 @@ public class RecipeManagerExtender implements DynamicRegistryManagerAccess {
     }
 
     @Override
-    public DynamicRegistryManager getRegistryManager() {
-        return this.registryManager;
-    }
-
-    @Override
-    public void setRegistryManager(DynamicRegistryManager registryManager) {
-        this.registryManager = registryManager;
-        this.itemRegistry = registryManager.get(RegistryKeys.ITEM);
+    public void setItemRegistry(Registry<Item> itemRegistry) {
+        this.itemRegistry = itemRegistry;
     }
 
     private void initRecipe(Recipe<?> recipe) {

@@ -1,0 +1,20 @@
+{
+  "base": {
+    "display": {
+      "rarity": "uncommon",
+      "translation_key": "block.minecraft.piglin_head"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:piglin_head"
+    },
+    "minecraft:equipment": {
+      "slot": "head"
+    },
+    "minecraft:firework_shape_modifier": {
+      "shape": "creeper"
+    }
+  }
+}

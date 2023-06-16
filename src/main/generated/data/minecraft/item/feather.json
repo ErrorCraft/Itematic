@@ -6,8 +6,8 @@
     "max_count": 64
   },
   "components": {
-    "minecraft:test": {
-      "test_boolean": true
+    "minecraft:firework_shape_modifier": {
+      "shape": "burst"
     }
   }
 }

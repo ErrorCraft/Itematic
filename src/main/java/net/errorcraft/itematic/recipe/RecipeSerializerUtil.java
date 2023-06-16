@@ -34,11 +34,4 @@ public class RecipeSerializerUtil {
         Identifier id = new Identifier(JsonHelper.getString(json, RESULT_KEY));
         return itemRegistry.entryOf(RegistryKey.of(RegistryKeys.ITEM, id));
     }
-
-    public static int getRawId(RegistryEntry<Item> entry) {
-        if (entry == null) {
-            return 0;
-        }
-        return itemRegistry.getRawId(entry.value());
-    }
 }

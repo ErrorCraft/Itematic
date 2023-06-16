@@ -165,6 +165,13 @@ public class BlockKeys {
     public static final RegistryKey<Block> DARK_OAK_BUTTON = of("dark_oak_button");
     public static final RegistryKey<Block> MANGROVE_BUTTON = of("mangrove_button");
     public static final RegistryKey<Block> BAMBOO_BUTTON = of("bamboo_button");
+    public static final RegistryKey<Block> SKELETON_SKULL = of("skeleton_skull");
+    public static final RegistryKey<Block> WITHER_SKELETON_SKULL = of("wither_skeleton_skull");
+    public static final RegistryKey<Block> ZOMBIE_HEAD = of("zombie_head");
+    public static final RegistryKey<Block> PLAYER_HEAD = of("player_head");
+    public static final RegistryKey<Block> CREEPER_HEAD = of("creeper_head");
+    public static final RegistryKey<Block> DRAGON_HEAD = of("dragon_head");
+    public static final RegistryKey<Block> PIGLIN_HEAD = of("piglin_head");
     public static final RegistryKey<Block> OAK_PRESSURE_PLATE = of("oak_pressure_plate");
     public static final RegistryKey<Block> SPRUCE_PRESSURE_PLATE = of("spruce_pressure_plate");
     public static final RegistryKey<Block> BIRCH_PRESSURE_PLATE = of("birch_pressure_plate");

@@ -1,8 +1,10 @@
 package net.errorcraft.itematic.mixin.server;
 
 import net.errorcraft.itematic.recipe.RecipeSerializerUtil;
+import net.minecraft.item.Item;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.server.DataPackContents;
@@ -30,10 +32,11 @@ public class DataPackContentsExtender {
         method = "<init>",
         at = @At("TAIL")
     )
-    private void useDynamicRegistryManager(DynamicRegistryManager.Immutable dynamicRegistryManager, FeatureSet enabledFeatures, CommandManager.RegistrationEnvironment environment, int functionPermissionLevel, CallbackInfo ci) {
+    private void constructorStoreDynamicRegistryManager(DynamicRegistryManager.Immutable dynamicRegistryManager, FeatureSet enabledFeatures, CommandManager.RegistrationEnvironment environment, int functionPermissionLevel, CallbackInfo info) {
+        Registry<Item> itemRegistry = dynamicRegistryManager.get(RegistryKeys.ITEM);
         this.serverAdvancementLoader.setRegistryManager(dynamicRegistryManager);
-        this.recipeManager.setRegistryManager(dynamicRegistryManager);
-        RecipeSerializerUtil.setItemRegistry(dynamicRegistryManager.get(RegistryKeys.ITEM));
+        this.recipeManager.setItemRegistry(itemRegistry);
+        RecipeSerializerUtil.setItemRegistry(itemRegistry);
     }
 
     @Inject(

@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.firework_star"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:firework_explosion_holder": {},
+    "minecraft:tinted": {
+      "tint": {
+        "type": "minecraft:firework"
+      }
+    }
+  }
+}

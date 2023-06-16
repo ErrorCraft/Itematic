@@ -54,6 +54,13 @@ public class ItemStackUtil {
         return key.get().getValue();
     }
 
+    public static int getRawId(@Nullable RegistryEntry<Item> entry) {
+        if (entry == null) {
+            return -1;
+        }
+        return entry.getRawId();
+    }
+
     public static ItemStack ofNullable(@Nullable RegistryEntry<Item> entry, int count) {
         if (entry == null) {
             return ItemStack.EMPTY;

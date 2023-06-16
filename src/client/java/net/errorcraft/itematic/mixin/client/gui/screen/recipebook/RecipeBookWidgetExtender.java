@@ -1,25 +1,16 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.recipebook;
 
-import net.errorcraft.itematic.access.registry.DynamicRegistryManagerAccess;
+import net.errorcraft.itematic.access.client.gui.screen.recipebook.RecipeBookWidgetAccess;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
-import net.minecraft.recipe.RecipeMatcher;
-import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
-import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RecipeBookWidget.class)
-public class RecipeBookWidgetExtender implements DynamicRegistryManagerAccess {
-    @Shadow
-    @Final
-    private RecipeMatcher recipeFinder;
-
+public class RecipeBookWidgetExtender implements RecipeBookWidgetAccess {
     @Inject(
         method = "initialize",
         at = @At("TAIL")
@@ -27,16 +18,4 @@ public class RecipeBookWidgetExtender implements DynamicRegistryManagerAccess {
     private void initializeAllowRecipeSpecificInitialization(int parentWidth, int parentHeight, MinecraftClient client, boolean narrow, AbstractRecipeScreenHandler<?> craftingScreenHandler, CallbackInfo info) {
         this.initializeRecipeSpecific(client.world);
     }
-
-    @Override
-    public DynamicRegistryManager getRegistryManager() {
-        return this.recipeFinder.getRegistryManager();
-    }
-
-    @Override
-    public void setRegistryManager(DynamicRegistryManager registryManager) {
-        this.recipeFinder.setRegistryManager(registryManager);
-    }
-
-    protected void initializeRecipeSpecific(World world) {}
 }

@@ -42,7 +42,7 @@
         "net/errorcraft/itematic/access/advancement/AdvancementDisplayAccess"
       ],
       "net/minecraft/class_507": [
-        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/client/gui/screen/recipebook/RecipeBookWidgetAccess"
       ],
       "net/minecraft/class_763": [
         "net/errorcraft/itematic/access/client/render/item/ItemModelsAccess"
@@ -59,14 +59,14 @@
       "net/minecraft/class_1309": [
         "net/errorcraft/itematic/access/entity/LivingEntityAccess"
       ],
-      "net/minecraft/class_1662": [
-        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
-      ],
       "net/minecraft/class_1690": [
         "net/errorcraft/itematic/access/entity/vehicle/BoatEntityAccess"
       ],
       "net/minecraft/class_1730": [
         "net/errorcraft/itematic/access/PlayerAccess"
+      ],
+      "net/minecraft/class_1781\u0024class_1782": [
+        "net/minecraft/util/StringIdentifiable"
       ],
       "net/minecraft/class_1792": [
         "net/errorcraft/itematic/access/item/ItemAccess"
@@ -90,7 +90,7 @@
         "net/errorcraft/itematic/access/recipe/IngredientEntryAccess"
       ],
       "net/minecraft/class_1863": [
-        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/recipe/RecipeManagerAccess"
       ],
       "net/minecraft/class_1937": [
         "net/errorcraft/itematic/access/world/WorldAccess"
@@ -125,6 +125,9 @@
       "net/minecraft/class_5257": [
         "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
       ],
+      "net/minecraft/class_6880": [
+        "net/errorcraft/itematic/access/registry/entry/RegistryEntryAccess"
+      ],
       "net/minecraft/class_8129": [
         "net/errorcraft/itematic/access/predicate/TagPredicateAccess"
       ]
@@ -132,9 +135,9 @@
   },
 
   "depends": {
-    "fabricloader": ">=0.14.19",
+    "fabricloader": ">=0.14.21",
     "fabric-api": "*",
-    "minecraft": ">=1.20-alpha.23.18.a",
+    "minecraft": "~1.20.1",
     "java": ">=17"
   },
   "suggests": {

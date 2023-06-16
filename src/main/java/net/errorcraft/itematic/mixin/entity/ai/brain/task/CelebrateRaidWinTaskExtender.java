@@ -57,4 +57,15 @@ public class CelebrateRaidWinTaskExtender extends MultiTickTask<VillagerEntity> 
     private ItemStack createFireworkNewItemStackUseRegistryEntry(ItemConvertible item, int count) {
         return new ItemStack(this.world.getItem(ItemKeys.FIREWORK_ROCKET), count);
     }
+
+    @Redirect(
+        method = "createFirework",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private ItemStack createFireworkNewItemStackUseRegistryEntry(ItemConvertible item) {
+        return new ItemStack(this.world.getItem(ItemKeys.FIREWORK_STAR));
+    }
 }

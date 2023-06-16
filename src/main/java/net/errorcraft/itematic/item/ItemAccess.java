@@ -28,6 +28,10 @@ public class ItemAccess {
         return this.registry.getEntry(key);
     }
 
+    public Optional<RegistryEntry.Reference<Item>> getOptionalEntry(int id) {
+        return this.registry.getEntry(id);
+    }
+
     public Item get(int id) {
         return this.registry.get(id);
     }
