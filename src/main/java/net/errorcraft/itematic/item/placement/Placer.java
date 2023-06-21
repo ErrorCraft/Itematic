@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class Placer {
     protected final ItemStack stack;
@@ -14,7 +15,7 @@ public abstract class Placer {
     protected final BlockState blockState;
     protected final PlayerEntity player;
 
-    protected Placer(ItemStack stack, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player) {
+    protected Placer(ItemStack stack, World world, BlockPos blockPos, BlockState blockState, @Nullable PlayerEntity player) {
         this.stack = stack;
         this.world = world;
         this.blockPos = blockPos;

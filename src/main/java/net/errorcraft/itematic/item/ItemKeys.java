@@ -314,9 +314,17 @@ public class ItemKeys {
     public static final RegistryKey<Item> DARK_OAK_HANGING_SIGN = register("dark_oak_hanging_sign");
     public static final RegistryKey<Item> MANGROVE_HANGING_SIGN = register("mangrove_hanging_sign");
     public static final RegistryKey<Item> BAMBOO_HANGING_SIGN = register("bamboo_hanging_sign");
+    public static final RegistryKey<Item> BUCKET = register("bucket");
     public static final RegistryKey<Item> WATER_BUCKET = register("water_bucket");
     public static final RegistryKey<Item> LAVA_BUCKET = register("lava_bucket");
+    public static final RegistryKey<Item> POWDER_SNOW_BUCKET = register("powder_snow_bucket");
     public static final RegistryKey<Item> SNOWBALL = register("snowball");
+    public static final RegistryKey<Item> PUFFERFISH_BUCKET = register("pufferfish_bucket");
+    public static final RegistryKey<Item> SALMON_BUCKET = register("salmon_bucket");
+    public static final RegistryKey<Item> COD_BUCKET = register("cod_bucket");
+    public static final RegistryKey<Item> TROPICAL_FISH_BUCKET = register("tropical_fish_bucket");
+    public static final RegistryKey<Item> AXOLOTL_BUCKET = register("axolotl_bucket");
+    public static final RegistryKey<Item> TADPOLE_BUCKET = register("tadpole_bucket");
     public static final RegistryKey<Item> LEATHER = register("leather");
     public static final RegistryKey<Item> DRIED_KELP_BLOCK = register("dried_kelp_block");
     public static final RegistryKey<Item> PAPER = register("paper");

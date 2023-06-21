@@ -1,13 +1,14 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.water_bucket"
+      "translation_key": "item.minecraft.pufferfish_bucket"
     },
     "max_count": 1
   },
   "components": {
     "minecraft:bucket": {
-      "emptying_sound_event": "minecraft:item.bucket.empty",
+      "emptying_sound_event": "minecraft:item.bucket.empty_fish",
+      "entity": "minecraft:pufferfish",
       "fluid": "minecraft:water"
     },
     "minecraft:dispensable": {

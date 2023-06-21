@@ -6,6 +6,13 @@
     "max_count": 1
   },
   "components": {
+    "minecraft:bucket": {
+      "emptying_sound_event": "minecraft:item.bucket.empty_lava",
+      "fluid": "minecraft:lava"
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:bucket"
+    },
     "minecraft:fuel": {
       "ticks": 20000
     }

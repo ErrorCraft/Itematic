@@ -1,13 +1,14 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.water_bucket"
+      "translation_key": "item.minecraft.tadpole_bucket"
     },
     "max_count": 1
   },
   "components": {
     "minecraft:bucket": {
-      "emptying_sound_event": "minecraft:item.bucket.empty",
+      "emptying_sound_event": "minecraft:item.bucket.empty_tadpole",
+      "entity": "minecraft:tadpole",
       "fluid": "minecraft:water"
     },
     "minecraft:dispensable": {

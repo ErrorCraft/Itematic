@@ -1,14 +1,14 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.water_bucket"
+      "translation_key": "item.minecraft.powder_snow_bucket"
     },
     "max_count": 1
   },
   "components": {
     "minecraft:bucket": {
-      "emptying_sound_event": "minecraft:item.bucket.empty",
-      "fluid": "minecraft:water"
+      "block": "minecraft:powder_snow",
+      "emptying_sound_event": "minecraft:item.bucket.empty_powder_snow"
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:bucket"

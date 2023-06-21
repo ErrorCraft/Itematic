@@ -252,6 +252,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> FLETCHING_TABLE = of("fletching_table");
     public static final RegistryKey<Block> SMITHING_TABLE = of("smithing_table");
     public static final RegistryKey<Block> SWEET_BERRY_BUSH = of("sweet_berry_bush");
+    public static final RegistryKey<Block> POWDER_SNOW = of("powder_snow");
     public static final RegistryKey<Block> CAVE_VINES = of("cave_vines");
 
     private BlockKeys() {}

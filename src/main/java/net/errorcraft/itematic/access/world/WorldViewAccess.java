@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 
-public interface WorldAccess {
+public interface WorldViewAccess {
     default ItemAccess getItemAccess() {
         return null;
     }

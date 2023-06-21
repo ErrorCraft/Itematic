@@ -1,8 +1,7 @@
 package net.errorcraft.itematic.mixin.block;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.block.PowderSnowBlock;
-import net.minecraft.item.Item;
+import net.minecraft.block.BubbleColumnBlock;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldAccess;
@@ -10,19 +9,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(PowderSnowBlock.class)
-public class PowderSnowBlockExtender {
-    @Redirect(
-        method = "canWalkOnPowderSnow",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private static boolean canWalkOnPowderSnowIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.LEATHER_BOOTS);
-    }
-
+@Mixin(BubbleColumnBlock.class)
+public class BubbleColumnBlockExtender {
     @Redirect(
         method = "tryDrainFluid",
         at = @At(
@@ -31,6 +19,6 @@ public class PowderSnowBlockExtender {
         )
     )
     private ItemStack tryDrainFluidNewItemStackUseRegistryEntry(ItemConvertible item, WorldAccess world) {
-        return new ItemStack(world.getItem(ItemKeys.POWDER_SNOW_BUCKET));
+        return new ItemStack(world.getItem(ItemKeys.WATER_BUCKET));
     }
 }

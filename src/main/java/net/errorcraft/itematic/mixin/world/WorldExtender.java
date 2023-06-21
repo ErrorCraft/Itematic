@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world;
 
-import net.errorcraft.itematic.access.world.WorldAccess;
+import net.errorcraft.itematic.access.world.WorldViewAccess;
 import net.errorcraft.itematic.item.ItemAccess;
 import net.minecraft.item.Item;
 import net.minecraft.registry.DynamicRegistryManager;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Supplier;
 
 @Mixin(World.class)
-public class WorldExtender implements WorldAccess {
+public class WorldExtender implements WorldViewAccess {
     private ItemAccess itemAccess;
 
     @Inject(

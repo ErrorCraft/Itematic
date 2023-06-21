@@ -1,9 +1,14 @@
 package net.errorcraft.itematic.mixin.world;
 
+import net.errorcraft.itematic.access.world.WorldViewAccess;
 import net.errorcraft.itematic.block.entity.BlockEntityUtil;
+import net.errorcraft.itematic.item.ItemAccess;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkRegion;
@@ -17,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(ChunkRegion.class)
-public class ChunkRegionExtender {
+public class ChunkRegionExtender implements WorldViewAccess {
     @Shadow
     @Final
     private ServerWorld world;
@@ -32,5 +37,15 @@ public class ChunkRegionExtender {
     )
     private void passWorldForReadingNbt(BlockPos pos, CallbackInfoReturnable<BlockEntity> info, Chunk chunk, BlockEntity blockEntity, NbtCompound nbtCompound, BlockState blockState) {
         BlockEntityUtil.readNbt(blockEntity, this.world, nbtCompound);
+    }
+
+    @Override
+    public ItemAccess getItemAccess() {
+        return this.world.getItemAccess();
+    }
+
+    @Override
+    public RegistryEntry<Item> getItem(RegistryKey<Item> key) {
+        return this.world.getItem(key);
     }
 }

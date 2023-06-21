@@ -1,14 +1,13 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.water_bucket"
+      "translation_key": "item.minecraft.bucket"
     },
-    "max_count": 1
+    "max_count": 16
   },
   "components": {
     "minecraft:bucket": {
-      "emptying_sound_event": "minecraft:item.bucket.empty",
-      "fluid": "minecraft:water"
+      "fluid": "minecraft:empty"
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:bucket"

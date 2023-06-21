@@ -6,6 +6,7 @@ import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
+import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.armor.ArmorMaterialKeys;
 import net.errorcraft.itematic.item.color.colors.*;
@@ -20,6 +21,7 @@ import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
 import net.minecraft.registry.*;
 import net.minecraft.registry.tag.BlockTags;
@@ -47,6 +49,7 @@ public class ItemUtil {
         RegistryEntryLookup<Block> blocks = registerable.getRegistryLookup(RegistryKeys.BLOCK);
         RegistryEntryLookup<DispenserBehavior> dispenseBehaviors = registerable.getRegistryLookup(ItematicRegistryKeys.DISPENSE_BEHAVIOR);
         RegistryEntryLookup<SoundEvent> soundEvents = registerable.getRegistryLookup(RegistryKeys.SOUND_EVENT);
+        RegistryEntryLookup<Fluid> fluids = registerable.getRegistryLookup(RegistryKeys.FLUID);
 
         registerable.register(ItemKeys.AIR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build())
@@ -2337,13 +2340,33 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.BUCKET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUCKET).build(), 16),
+            ItemComponentSet.builder()
+                .with(BucketItemComponent.fluid(fluids.getOrThrow(FluidKeys.EMPTY)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                .build()
+        ));
         registerable.register(ItemKeys.WATER_BUCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build(), 1)
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build(), 1),
+            ItemComponentSet.builder()
+                .with(BucketItemComponent.fluid(fluids.getOrThrow(FluidKeys.WATER), soundEvents.getOrThrow(SoundEventKeys.ITEM_BUCKET_EMPTY)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                .build()
         ));
         registerable.register(ItemKeys.LAVA_BUCKET, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LAVA_BUCKET).build(), 1),
             ItemComponentSet.builder()
+                .with(BucketItemComponent.fluid(fluids.getOrThrow(FluidKeys.LAVA), soundEvents.getOrThrow(SoundEventKeys.ITEM_BUCKET_EMPTY_LAVA)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.LAVA_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.POWDER_SNOW_BUCKET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POWDER_SNOW_BUCKET).build(), 1),
+            ItemComponentSet.builder()
+                .with(BucketItemComponent.block(blocks.getOrThrow(BlockKeys.POWDER_SNOW), soundEvents.getOrThrow(SoundEventKeys.ITEM_BUCKET_EMPTY_POWDER_SNOW)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
                 .build()
         ));
         registerable.register(ItemKeys.SNOWBALL, create(
@@ -2352,6 +2375,48 @@ public class ItemUtil {
                 .with(new ThrowableItemComponent(1.5f, 0.0f))
                 .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.SNOWBALL)))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                .build()
+        ));
+        registerable.register(ItemKeys.PUFFERFISH_BUCKET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUFFERFISH_BUCKET).build(), 1),
+            ItemComponentSet.builder()
+                .with(BucketItemComponent.entity(fluids.getOrThrow(FluidKeys.WATER), entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), soundEvents.getOrThrow(SoundEventKeys.ITEM_BUCKET_EMPTY_FISH)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                .build()
+        ));
+        registerable.register(ItemKeys.SALMON_BUCKET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SALMON_BUCKET).build(), 1),
+            ItemComponentSet.builder()
+                .with(BucketItemComponent.entity(fluids.getOrThrow(FluidKeys.WATER), entityTypes.getOrThrow(EntityTypeKeys.SALMON), soundEvents.getOrThrow(SoundEventKeys.ITEM_BUCKET_EMPTY_FISH)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                .build()
+        ));
+        registerable.register(ItemKeys.COD_BUCKET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COD_BUCKET).build(), 1),
+            ItemComponentSet.builder()
+                .with(BucketItemComponent.entity(fluids.getOrThrow(FluidKeys.WATER), entityTypes.getOrThrow(EntityTypeKeys.COD), soundEvents.getOrThrow(SoundEventKeys.ITEM_BUCKET_EMPTY_FISH)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                .build()
+        ));
+        registerable.register(ItemKeys.TROPICAL_FISH_BUCKET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH_BUCKET).build(), 1),
+            ItemComponentSet.builder()
+                .with(BucketItemComponent.entity(fluids.getOrThrow(FluidKeys.WATER), entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), soundEvents.getOrThrow(SoundEventKeys.ITEM_BUCKET_EMPTY_FISH)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                .build()
+        ));
+        registerable.register(ItemKeys.AXOLOTL_BUCKET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.AXOLOTL_BUCKET).build(), 1),
+            ItemComponentSet.builder()
+                .with(BucketItemComponent.entity(fluids.getOrThrow(FluidKeys.WATER), entityTypes.getOrThrow(EntityTypeKeys.AXOLOTL), soundEvents.getOrThrow(SoundEventKeys.ITEM_BUCKET_EMPTY_AXOLOTL)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                .build()
+        ));
+        registerable.register(ItemKeys.TADPOLE_BUCKET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TADPOLE_BUCKET).build(), 1),
+            ItemComponentSet.builder()
+                .with(BucketItemComponent.entity(fluids.getOrThrow(FluidKeys.WATER), entityTypes.getOrThrow(EntityTypeKeys.TADPOLE), soundEvents.getOrThrow(SoundEventKeys.ITEM_BUCKET_EMPTY_TADPOLE)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER, create(

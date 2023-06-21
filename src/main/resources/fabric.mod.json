@@ -92,8 +92,8 @@
       "net/minecraft/class_1863": [
         "net/errorcraft/itematic/access/recipe/RecipeManagerAccess"
       ],
-      "net/minecraft/class_1937": [
-        "net/errorcraft/itematic/access/world/WorldAccess"
+      "net/minecraft/class_1936": [
+        "net/errorcraft/itematic/access/world/WorldViewAccess"
       ],
       "net/minecraft/class_2073": [
         "net/errorcraft/itematic/access/predicate/item/ItemPredicateAccess"
@@ -115,6 +115,9 @@
       ],
       "net/minecraft/class_2989": [
         "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+      ],
+      "net/minecraft/class_3611": [
+        "net/errorcraft/itematic/access/fluid/FluidAccess"
       ],
       "net/minecraft/class_3857": [
         "net/errorcraft/itematic/access/entity/projectile/thrown/ThrownItemEntityAccess"
