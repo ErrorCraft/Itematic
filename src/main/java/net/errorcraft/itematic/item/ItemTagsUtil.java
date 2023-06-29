@@ -26,6 +26,24 @@ public class ItemTagsUtil {
     public static final TagKey<Item> BOW_AMMUNITION = of("bow_ammunition");
     public static final TagKey<Item> CROSSBOW_AMMUNITION = of("crossbow_ammunition");
 
+    public static final TagKey<Item> HORSE_BREEDING_ITEMS = of("horse_breeding_items");
+    public static final TagKey<Item> HORSE_TEMPTING_ITEMS = of("horse_tempting_items");
+    public static final TagKey<Item> CAT_BREEDING_ITEMS = of("cat_breeding_items");
+    public static final TagKey<Item> CAT_TEMPTING_ITEMS = of("cat_tempting_items");
+    public static final TagKey<Item> OCELOT_BREEDING_ITEMS = of("ocelot_breeding_items");
+    public static final TagKey<Item> OCELOT_TEMPTING_ITEMS = of("ocelot_tempting_items");
+    public static final TagKey<Item> PIG_BREEDING_ITEMS = of("pig_breeding_items");
+    public static final TagKey<Item> PIG_TEMPTING_ITEMS = of("pig_tempting_items");
+    public static final TagKey<Item> RABBIT_BREEDING_ITEMS = of("rabbit_breeding_items");
+    public static final TagKey<Item> CHICKEN_BREEDING_ITEMS = of("chicken_breeding_items");
+    public static final TagKey<Item> CHICKEN_TEMPTING_ITEMS = of("chicken_tempting_items");
+    public static final TagKey<Item> PARROT_TAMING_ITEMS = of("parrot_taming_items");
+    public static final TagKey<Item> COW_TEMPTING_ITEMS = of("cow_tempting_items");
+    public static final TagKey<Item> SHEEP_TEMPTING_ITEMS = of("sheep_tempting_items");
+    public static final TagKey<Item> LLAMA_BREEDING_ITEMS = of("llama_breeding_items");
+    public static final TagKey<Item> VILLAGER_GATHERABLE_ITEMS = of("villager_gatherable_items");
+    public static final TagKey<Item> FARMER_VILLAGER_GATHERABLE_ITEMS = of("farmer_villager_gatherable_items");
+
     private ItemTagsUtil() {}
 
     private static TagKey<Item> of(String id) {

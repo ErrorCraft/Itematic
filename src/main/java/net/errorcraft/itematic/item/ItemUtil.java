@@ -14,6 +14,7 @@ import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
+import net.errorcraft.itematic.mixin.item.PotionItemAccessor;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.minecraft.block.Block;
@@ -1934,6 +1935,16 @@ public class ItemUtil {
         registerable.register(ItemKeys.GUNPOWDER, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GUNPOWDER).build())
         ));
+        registerable.register(ItemKeys.WHEAT_SEEDS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WHEAT_SEEDS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WHEAT)))
+                .with(new CompostableItemComponent(0.3f))
+                .build()
+        ));
+        registerable.register(ItemKeys.WHEAT, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WHEAT).build())
+        ));
         registerable.register(ItemKeys.BREAD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BREAD).build()),
             ItemComponentSet.builder()
@@ -2609,6 +2620,20 @@ public class ItemUtil {
                 .with(new CompostableItemComponent(0.3f))
                 .build()
         ));
+        registerable.register(ItemKeys.PUMPKIN_SEEDS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUMPKIN_SEEDS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.PUMPKIN_STEM)))
+                .with(new CompostableItemComponent(0.3f))
+                .build()
+        ));
+        registerable.register(ItemKeys.MELON_SEEDS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MELON_SEEDS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MELON_STEM)))
+                .with(new CompostableItemComponent(0.3f))
+                .build()
+        ));
         registerable.register(ItemKeys.BEEF, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEEF).build()),
             ItemComponentSet.builder()
@@ -2657,6 +2682,23 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLD_NUGGET).build()),
             ItemComponentSet.builder()
                 .with(new FireworkShapeModifierItemComponent(FireworkRocketItem.Type.STAR))
+                .build()
+        ));
+        registerable.register(ItemKeys.POTION, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POTION).build(), 1),
+            ItemComponentSet.builder()
+                .with(new UseDurationItemComponent(PotionItemAccessor.getMaxUseTime()))
+                .with(new PotionItemComponent())
+                .with(new UseAnimationItemComponent(UseAction.DRINK))
+                .with(ConsumableItemComponent.of(items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
+                .with(new TintedItemComponent(new PotionItemColor()))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.POTION)))
+                .build()
+        ));
+        registerable.register(ItemKeys.GLASS_BOTTLE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLASS_BOTTLE).build()),
+            ItemComponentSet.builder()
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BOTTLE)))
                 .build()
         ));
         registerable.register(ItemKeys.SPIDER_EYE, create(
@@ -2954,11 +2996,32 @@ public class ItemUtil {
                 .with(FoodItemComponent.from(FoodComponents.CHORUS_FRUIT))
                 .build()
         ));
+        registerable.register(ItemKeys.TORCHFLOWER_SEEDS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TORCHFLOWER_SEEDS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.TORCHFLOWER_CROP)))
+                .with(new CompostableItemComponent(0.3f))
+                .build()
+        ));
+        registerable.register(ItemKeys.PITCHER_POD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PITCHER_POD).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.PITCHER_CROP)))
+                .with(new CompostableItemComponent(0.3f))
+                .build()
+        ));
         registerable.register(ItemKeys.BEETROOT, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEETROOT).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.BEETROOT))
                 .with(new CompostableItemComponent(0.65f))
+                .build()
+        ));
+        registerable.register(ItemKeys.BEETROOT_SEEDS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEETROOT_SEEDS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BEETROOTS)))
+                .with(new CompostableItemComponent(0.3f))
                 .build()
         ));
         registerable.register(ItemKeys.BEETROOT_SOUP, create(
@@ -3164,9 +3227,9 @@ public class ItemUtil {
                 .build()
         ));
         registerable.register(ItemKeys.HONEY_BOTTLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEY_BOTTLE).build()),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEY_BOTTLE).build(), 16),
             ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40, UseAction.DRINK))
+                .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40, UseAction.DRINK, items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                 .build()
         ));
     }

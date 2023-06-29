@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.melon_seeds"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:melon_stem"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.3
+    }
+  }
+}

@@ -129,7 +129,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     )
     @NotNull
     private <T> Identifier getIdUseEntry(DefaultedRegistry<T> instance, T value) {
-        return ItemStackUtil.getId(this.entry);
+        return this.getKey().getValue();
     }
 
     @Redirect(
@@ -312,6 +312,14 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         if (this.entry == null) {
             info.cancel();
         }
+    }
+
+    @Override
+    public RegistryKey<Item> getKey() {
+        if (this.entry == null) {
+            return ItemKeys.AIR;
+        }
+        return this.entry.getKey().orElse(ItemKeys.AIR);
     }
 
     @Override

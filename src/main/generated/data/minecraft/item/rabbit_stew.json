@@ -6,6 +6,7 @@
     "max_count": 1
   },
   "components": {
+    "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 10,
       "saturation_modifier": 0.6

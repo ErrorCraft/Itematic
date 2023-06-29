@@ -156,7 +156,10 @@ public class ItemExtender implements ItemAccess {
         for (ItemComponent component : this.components) {
             stack = component.finishUsing(world, user, stack);
         }
-        return stack;
+        ItemStack resultStack = stack;
+        return this.components.get(ItemComponentTypes.CONSUMABLE)
+            .map(c -> c.consume(user, resultStack))
+            .orElse(stack);
     }
 
     /**

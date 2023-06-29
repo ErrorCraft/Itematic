@@ -17,6 +17,7 @@
     "render.entity.FishingBobberEntityRendererExtender",
     "render.entity.feature.ArmorFeatureRendererExtender",
     "render.entity.feature.HeadFeatureRendererExtender",
+    "render.feature.WitchHeldItemFeatureRendererExtender",
     "render.item.ItemModelsExtender",
     "render.item.ItemRendererExtender",
     "render.model.BakedModelManagerExtender",

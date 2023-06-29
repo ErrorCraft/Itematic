@@ -267,6 +267,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> MUSHROOM_STEW = register("mushroom_stew");
     public static final RegistryKey<Item> FEATHER = register("feather");
     public static final RegistryKey<Item> GUNPOWDER = register("gunpowder");
+    public static final RegistryKey<Item> WHEAT_SEEDS = register("wheat_seeds");
+    public static final RegistryKey<Item> WHEAT = register("wheat");
     public static final RegistryKey<Item> BREAD = register("bread");
     public static final RegistryKey<Item> LEATHER_HELMET = register("leather_helmet");
     public static final RegistryKey<Item> LEATHER_CHESTPLATE = register("leather_chestplate");
@@ -358,6 +360,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> COOKIE = register("cookie");
     public static final RegistryKey<Item> MELON_SLICE = register("melon_slice");
     public static final RegistryKey<Item> DRIED_KELP = register("dried_kelp");
+    public static final RegistryKey<Item> PUMPKIN_SEEDS = register("pumpkin_seeds");
+    public static final RegistryKey<Item> MELON_SEEDS = register("melon_seeds");
     public static final RegistryKey<Item> BEEF = register("beef");
     public static final RegistryKey<Item> COOKED_BEEF = register("cooked_beef");
     public static final RegistryKey<Item> CHICKEN = register("chicken");
@@ -366,6 +370,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> ENDER_PEARL = register("ender_pearl");
     public static final RegistryKey<Item> BLAZE_ROD = register("blaze_rod");
     public static final RegistryKey<Item> GOLD_NUGGET = register("gold_nugget");
+    public static final RegistryKey<Item> POTION = register("potion");
+    public static final RegistryKey<Item> GLASS_BOTTLE = register("glass_bottle");
     public static final RegistryKey<Item> SPIDER_EYE = register("spider_eye");
     public static final RegistryKey<Item> COW_SPAWN_EGG = register("cow_spawn_egg");
     public static final RegistryKey<Item> ENDERMAN_SPAWN_EGG = register("enderman_spawn_egg");
@@ -410,7 +416,10 @@ public class ItemKeys {
     public static final RegistryKey<Item> RED_BANNER = register("red_banner");
     public static final RegistryKey<Item> BLACK_BANNER = register("black_banner");
     public static final RegistryKey<Item> CHORUS_FRUIT = register("chorus_fruit");
+    public static final RegistryKey<Item> TORCHFLOWER_SEEDS = register("torchflower_seeds");
+    public static final RegistryKey<Item> PITCHER_POD = register("pitcher_pod");
     public static final RegistryKey<Item> BEETROOT = register("beetroot");
+    public static final RegistryKey<Item> BEETROOT_SEEDS = register("beetroot_seeds");
     public static final RegistryKey<Item> BEETROOT_SOUP = register("beetroot_soup");
     public static final RegistryKey<Item> SPECTRAL_ARROW = register("spectral_arrow");
     public static final RegistryKey<Item> TIPPED_ARROW = register("tipped_arrow");

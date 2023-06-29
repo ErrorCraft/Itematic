@@ -11,7 +11,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FoodComponent;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
@@ -54,14 +56,15 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
     }
 
     public static ItemComponent[] from(FoodComponent component) {
-        return from(component, component.isSnack() ? 16 : 32, UseAction.EAT);
+        return from(component, component.isSnack() ? 16 : 32, UseAction.EAT, null);
     }
 
-    public static ItemComponent[] from(FoodComponent component, int useDuration, UseAction useAction) {
+    public static ItemComponent[] from(FoodComponent component, int useDuration, UseAction useAction, RegistryEntry<Item> resultItem) {
         return new ItemComponent[] {
             new UseDurationItemComponent(useDuration),
             new FoodItemComponent(component.getHunger(), component.getSaturationModifier(), component.isAlwaysEdible(), getEffects(component.getStatusEffects())),
-            new UseAnimationItemComponent(useAction)
+            new UseAnimationItemComponent(useAction),
+            ConsumableItemComponent.of(resultItem)
         };
     }
 

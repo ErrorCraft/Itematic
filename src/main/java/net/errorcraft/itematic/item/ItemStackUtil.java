@@ -26,7 +26,6 @@ public class ItemStackUtil {
     private static final String ID_KEY = "id";
     private static final String COUNT_KEY = "Count";
     private static final String NBT_KEY = "tag";
-    private static final Identifier AIR = ItemKeys.AIR.getValue();
 
     public static ItemStack readFromNbt(NbtCompound nbt, DynamicRegistryManager registryManager) {
         Registry<Item> registry = registryManager.get(RegistryKeys.ITEM);
@@ -41,17 +40,6 @@ public class ItemStackUtil {
             itemStack.setNbt(nbt.getCompound(NBT_KEY));
         }
         return itemStack;
-    }
-
-    public static Identifier getId(@Nullable RegistryEntry<Item> entry) {
-        if (entry == null) {
-            return AIR;
-        }
-        Optional<RegistryKey<Item>> key = entry.getKey();
-        if (key.isEmpty()) {
-            return AIR;
-        }
-        return key.get().getValue();
     }
 
     public static int getRawId(@Nullable RegistryEntry<Item> entry) {

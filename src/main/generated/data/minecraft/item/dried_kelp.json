@@ -9,6 +9,7 @@
     "minecraft:compostable": {
       "level_increase_chance": 0.3
     },
+    "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 1,
       "saturation_modifier": 0.3

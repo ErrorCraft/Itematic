@@ -36,9 +36,18 @@ public abstract class LivingEntityExtender implements LivingEntityAccess {
             target = "Lnet/minecraft/item/ItemStack;isFood()Z"
         )
     )
-    private boolean assumeExistingItemComponent(ItemStack instance) {
+    private boolean eatFoodAssumeExistingItemComponent(ItemStack instance) {
         return true;
     }
+
+    @Redirect(
+        method = "eatFood",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;decrement(I)V"
+        )
+    )
+    private void eatFoodDoNotDecrementItemStack(ItemStack instance, int amount) {}
 
     /**
      * @author ErrorCraft

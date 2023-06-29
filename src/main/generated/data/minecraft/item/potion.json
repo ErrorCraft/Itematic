@@ -1,0 +1,28 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.potion"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:consumable": {
+      "result_item": "minecraft:glass_bottle"
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:potion"
+    },
+    "minecraft:potion": {},
+    "minecraft:tinted": {
+      "tint": {
+        "type": "minecraft:potion"
+      }
+    },
+    "minecraft:use_animation": {
+      "animation": "drink"
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  }
+}

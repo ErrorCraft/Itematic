@@ -107,6 +107,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> CHISELED_BOOKSHELF = of("chiseled_bookshelf");
     public static final RegistryKey<Block> CHEST = of("chest");
     public static final RegistryKey<Block> CRAFTING_TABLE = of("crafting_table");
+    public static final RegistryKey<Block> WHEAT = of("wheat");
     public static final RegistryKey<Block> LADDER = of("ladder");
     public static final RegistryKey<Block> SNOW = of("snow");
     public static final RegistryKey<Block> JUKEBOX = of("jukebox");
@@ -190,6 +191,9 @@ public class BlockKeys {
     public static final RegistryKey<Block> DARK_OAK_DOOR = of("dark_oak_door");
     public static final RegistryKey<Block> MANGROVE_DOOR = of("mangrove_door");
     public static final RegistryKey<Block> BAMBOO_DOOR = of("bamboo_door");
+    public static final RegistryKey<Block> TORCHFLOWER_CROP = of("torchflower_crop");
+    public static final RegistryKey<Block> PITCHER_CROP = of("pitcher_crop");
+    public static final RegistryKey<Block> BEETROOTS = of("beetroots");
     public static final RegistryKey<Block> OAK_TRAPDOOR = of("oak_trapdoor");
     public static final RegistryKey<Block> SPRUCE_TRAPDOOR = of("spruce_trapdoor");
     public static final RegistryKey<Block> BIRCH_TRAPDOOR = of("birch_trapdoor");
@@ -199,6 +203,8 @@ public class BlockKeys {
     public static final RegistryKey<Block> DARK_OAK_TRAPDOOR = of("dark_oak_trapdoor");
     public static final RegistryKey<Block> MANGROVE_TRAPDOOR = of("mangrove_trapdoor");
     public static final RegistryKey<Block> BAMBOO_TRAPDOOR = of("bamboo_trapdoor");
+    public static final RegistryKey<Block> PUMPKIN_STEM = of("pumpkin_stem");
+    public static final RegistryKey<Block> MELON_STEM = of("melon_stem");
     public static final RegistryKey<Block> OAK_FENCE_GATE = of("oak_fence_gate");
     public static final RegistryKey<Block> SPRUCE_FENCE_GATE = of("spruce_fence_gate");
     public static final RegistryKey<Block> BIRCH_FENCE_GATE = of("birch_fence_gate");

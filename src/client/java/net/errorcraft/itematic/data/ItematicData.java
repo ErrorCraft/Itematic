@@ -217,6 +217,69 @@ public class ItematicData implements DataGeneratorEntrypoint {
             this.getOrCreateTagBuilder(ItemTagsUtil.CROSSBOW_AMMUNITION)
                 .addTag(ItemTagsUtil.BOW_AMMUNITION)
                 .add(ItemKeys.FIREWORK_ROCKET);
+            this.getOrCreateTagBuilder(ItemTagsUtil.HORSE_BREEDING_ITEMS)
+                .add(ItemKeys.GOLDEN_CARROT)
+                .add(ItemKeys.GOLDEN_APPLE)
+                .add(ItemKeys.ENCHANTED_GOLDEN_APPLE);
+            this.getOrCreateTagBuilder(ItemTagsUtil.HORSE_TEMPTING_ITEMS)
+                .add(ItemKeys.WHEAT)
+                .add(ItemKeys.APPLE)
+                .addTag(ItemTagsUtil.HORSE_BREEDING_ITEMS);
+            this.getOrCreateTagBuilder(ItemTagsUtil.CAT_BREEDING_ITEMS)
+                .add(ItemKeys.COD)
+                .add(ItemKeys.SALMON);
+            this.getOrCreateTagBuilder(ItemTagsUtil.CAT_TEMPTING_ITEMS)
+                .addTag(ItemTagsUtil.CAT_BREEDING_ITEMS);
+            this.getOrCreateTagBuilder(ItemTagsUtil.OCELOT_BREEDING_ITEMS)
+                .add(ItemKeys.COD)
+                .add(ItemKeys.SALMON);
+            this.getOrCreateTagBuilder(ItemTagsUtil.OCELOT_TEMPTING_ITEMS)
+                .addTag(ItemTagsUtil.OCELOT_BREEDING_ITEMS);
+            this.getOrCreateTagBuilder(ItemTagsUtil.PIG_BREEDING_ITEMS)
+                .add(ItemKeys.CARROT)
+                .add(ItemKeys.POTATO)
+                .add(ItemKeys.BEETROOT);
+            this.getOrCreateTagBuilder(ItemTagsUtil.PIG_TEMPTING_ITEMS)
+                .addTag(ItemTagsUtil.PIG_BREEDING_ITEMS);
+            this.getOrCreateTagBuilder(ItemTagsUtil.RABBIT_BREEDING_ITEMS)
+                .add(ItemKeys.CARROT)
+                .add(ItemKeys.GOLDEN_CARROT);
+            this.getOrCreateTagBuilder(ItemTagsUtil.CHICKEN_BREEDING_ITEMS)
+                .add(ItemKeys.WHEAT_SEEDS)
+                .add(ItemKeys.MELON_SEEDS)
+                .add(ItemKeys.PUMPKIN_SEEDS)
+                .add(ItemKeys.BEETROOT_SEEDS)
+                .add(ItemKeys.TORCHFLOWER_SEEDS)
+                .add(ItemKeys.PITCHER_POD);
+            this.getOrCreateTagBuilder(ItemTagsUtil.CHICKEN_TEMPTING_ITEMS)
+                .addTag(ItemTagsUtil.CHICKEN_BREEDING_ITEMS);
+            this.getOrCreateTagBuilder(ItemTagsUtil.PARROT_TAMING_ITEMS)
+                .add(ItemKeys.WHEAT_SEEDS)
+                .add(ItemKeys.MELON_SEEDS)
+                .add(ItemKeys.PUMPKIN_SEEDS)
+                .add(ItemKeys.BEETROOT_SEEDS)
+                .add(ItemKeys.TORCHFLOWER_SEEDS)
+                .add(ItemKeys.PITCHER_POD);
+            this.getOrCreateTagBuilder(ItemTagsUtil.COW_TEMPTING_ITEMS)
+                .add(ItemKeys.WHEAT);
+            this.getOrCreateTagBuilder(ItemTagsUtil.SHEEP_TEMPTING_ITEMS)
+                .add(ItemKeys.WHEAT);
+            this.getOrCreateTagBuilder(ItemTagsUtil.LLAMA_BREEDING_ITEMS)
+                .add(ItemKeys.WHEAT);
+            this.getOrCreateTagBuilder(ItemTagsUtil.VILLAGER_GATHERABLE_ITEMS)
+                .add(ItemKeys.BREAD)
+                .add(ItemKeys.POTATO)
+                .add(ItemKeys.CARROT)
+                .add(ItemKeys.WHEAT)
+                .add(ItemKeys.WHEAT_SEEDS)
+                .add(ItemKeys.BEETROOT)
+                .add(ItemKeys.BEETROOT_SEEDS)
+                .add(ItemKeys.TORCHFLOWER_SEEDS)
+                .add(ItemKeys.PITCHER_POD);
+            this.getOrCreateTagBuilder(ItemTagsUtil.FARMER_VILLAGER_GATHERABLE_ITEMS)
+                .add(ItemKeys.WHEAT)
+                .add(ItemKeys.WHEAT_SEEDS)
+                .add(ItemKeys.BEETROOT_SEEDS);
         }
     }
 }

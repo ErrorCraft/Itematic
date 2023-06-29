@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.client;
 
-import net.errorcraft.itematic.item.ItemStackUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.recipebook.RecipeResultCollection;
 import net.minecraft.item.Item;
@@ -23,7 +22,7 @@ public class MinecraftClientExtender {
      */
     @Overwrite
     private static Stream<Identifier> method_1485(ItemStack stack) {
-        return Stream.of(ItemStackUtil.getId(stack.getRegistryEntry()));
+        return Stream.of(stack.getKey().getValue());
     }
 
     @Redirect(

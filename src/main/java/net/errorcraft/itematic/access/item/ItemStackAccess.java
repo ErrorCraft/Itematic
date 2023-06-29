@@ -16,6 +16,9 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public interface ItemStackAccess {
+    default RegistryKey<Item> getKey() {
+        return null;
+    }
     default Optional<NbtCompound> getOptionalNbt() { return Optional.empty(); }
     default boolean isOf(RegistryKey<Item> key) {
         return false;

@@ -59,6 +59,9 @@
       "net/minecraft/class_1309": [
         "net/errorcraft/itematic/access/entity/LivingEntityAccess"
       ],
+      "net/minecraft/class_1391": [
+        "net/errorcraft/itematic/access/entity/ai/goal/TemptGoalAccess"
+      ],
       "net/minecraft/class_1690": [
         "net/errorcraft/itematic/access/entity/vehicle/BoatEntityAccess"
       ],
@@ -98,6 +101,15 @@
       "net/minecraft/class_2073": [
         "net/errorcraft/itematic/access/predicate/item/ItemPredicateAccess"
       ],
+      "net/minecraft/class_2195": [
+        "net/errorcraft/itematic/access/block/StemBlockAccess"
+      ],
+      "net/minecraft/class_2302": [
+        "net/errorcraft/itematic/access/block/CropBlockAccess"
+      ],
+      "net/minecraft/class_2513": [
+        "net/errorcraft/itematic/access/block/StemBlockAccess"
+      ],
       "net/minecraft/class_2535": [
         "net/errorcraft/itematic/access/network/ClientConnectionAccess"
       ],
@@ -118,6 +130,9 @@
       ],
       "net/minecraft/class_3611": [
         "net/errorcraft/itematic/access/fluid/FluidAccess"
+      ],
+      "net/minecraft/class_3852": [
+        "net/errorcraft/itematic/access/village/VillagerProfessionAccess"
       ],
       "net/minecraft/class_3857": [
         "net/errorcraft/itematic/access/entity/projectile/thrown/ThrownItemEntityAccess"

@@ -7,6 +7,7 @@
     "max_count": 64
   },
   "components": {
+    "minecraft:consumable": {},
     "minecraft:food": {
       "always_edible": true,
       "effects": [

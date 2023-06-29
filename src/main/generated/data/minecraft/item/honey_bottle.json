@@ -3,9 +3,12 @@
     "display": {
       "translation_key": "item.minecraft.honey_bottle"
     },
-    "max_count": 64
+    "max_count": 16
   },
   "components": {
+    "minecraft:consumable": {
+      "result_item": "minecraft:glass_bottle"
+    },
     "minecraft:food": {
       "nutrition": 6,
       "saturation_modifier": 0.1

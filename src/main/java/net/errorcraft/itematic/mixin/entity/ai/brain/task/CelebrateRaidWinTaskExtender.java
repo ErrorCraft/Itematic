@@ -51,7 +51,8 @@ public class CelebrateRaidWinTaskExtender extends MultiTickTask<VillagerEntity> 
         method = "createFirework",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "net/minecraft/item/ItemStack",
+            ordinal = 0
         )
     )
     private ItemStack createFireworkNewItemStackUseRegistryEntry(ItemConvertible item, int count) {
@@ -62,7 +63,8 @@ public class CelebrateRaidWinTaskExtender extends MultiTickTask<VillagerEntity> 
         method = "createFirework",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "net/minecraft/item/ItemStack",
+            ordinal = 1
         )
     )
     private ItemStack createFireworkNewItemStackUseRegistryEntry(ItemConvertible item) {
