@@ -1,0 +1,26 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.lingering_potion"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:projectile"
+    },
+    "minecraft:potion_holder": {},
+    "minecraft:projectile": {
+      "entity": "minecraft:potion"
+    },
+    "minecraft:throwable": {
+      "speed": 0.5,
+      "y_speed_modifier_angle": -20.0
+    },
+    "minecraft:tinted": {
+      "tint": {
+        "type": "minecraft:potion"
+      }
+    }
+  }
+}

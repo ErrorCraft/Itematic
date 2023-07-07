@@ -36,4 +36,16 @@ public class TippedArrowRecipeExtender {
     private ItemStack craftNewItemStackUseRegistryEntry(ItemConvertible item, int count, @Local DynamicRegistryManager dynamicRegistryManager) {
         return new ItemStack(dynamicRegistryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.TIPPED_ARROW), count);
     }
+
+    @Redirect(
+        method = { "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z", "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/DynamicRegistryManager;)Lnet/minecraft/item/ItemStack;" },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        )
+    )
+    private boolean isOfForLingeringPotionUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.isOf(ItemKeys.LINGERING_POTION);
+    }
 }

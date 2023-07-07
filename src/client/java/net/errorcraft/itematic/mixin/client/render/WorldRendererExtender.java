@@ -1,11 +1,14 @@
 package net.errorcraft.itematic.mixin.client.render;
 
+import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.RecordItemComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.MusicDiscItem;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +30,24 @@ public class WorldRendererExtender {
     private MinecraftClient client;
 
     private RecordItemComponent recordItemComponent;
+
+    @Redirect(
+        method = "processWorldEvent",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack"
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "NEW",
+                target = "net/minecraft/particle/ItemStackParticleEffect",
+                ordinal = 1
+            )
+        )
+    )
+    private ItemStack processWorldEventNewItemStackForSplashPotionUseRegistryEntry(ItemConvertible item) {
+        return new ItemStack(this.world.getItem(ItemKeys.SPLASH_POTION));
+    }
 
     @Redirect(
         method = "processWorldEvent",

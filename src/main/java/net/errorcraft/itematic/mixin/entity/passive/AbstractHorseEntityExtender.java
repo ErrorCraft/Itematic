@@ -49,6 +49,25 @@ public class AbstractHorseEntityExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
+                target = "Lnet/minecraft/item/Items;SUGAR:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private boolean receiveFoodIsOfForSugarUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.isOf(ItemKeys.SUGAR);
+    }
+
+    @Redirect(
+        method = "receiveFood",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
                 target = "Lnet/minecraft/item/Items;APPLE:Lnet/minecraft/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )

@@ -2599,6 +2599,9 @@ public class ItemUtil {
                 .with(new DyeItemComponent(DyeColor.BLACK))
                 .build()
         ));
+        registerable.register(ItemKeys.SUGAR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SUGAR).build())
+        ));
         registerable.register(ItemKeys.COOKIE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKIE).build()),
             ItemComponentSet.builder()
@@ -2678,10 +2681,20 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BLAZE_ROD_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.GHAST_TEAR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GHAST_TEAR).build())
+        ));
         registerable.register(ItemKeys.GOLD_NUGGET, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLD_NUGGET).build()),
             ItemComponentSet.builder()
                 .with(new FireworkShapeModifierItemComponent(FireworkRocketItem.Type.STAR))
+                .build()
+        ));
+        registerable.register(ItemKeys.NETHER_WART, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_WART).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.NETHER_WART)))
+                .with(new CompostableItemComponent(0.65f))
                 .build()
         ));
         registerable.register(ItemKeys.POTION, create(
@@ -2689,6 +2702,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new UseDurationItemComponent(PotionItemAccessor.getMaxUseTime()))
                 .with(new PotionItemComponent())
+                .with(new PotionHolderItemComponent())
                 .with(new UseAnimationItemComponent(UseAction.DRINK))
                 .with(ConsumableItemComponent.of(items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                 .with(new TintedItemComponent(new PotionItemColor()))
@@ -2706,6 +2720,24 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.SPIDER_EYE))
                 .build()
+        ));
+        registerable.register(ItemKeys.FERMENTED_SPIDER_EYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FERMENTED_SPIDER_EYE).build())
+        ));
+        registerable.register(ItemKeys.BLAZE_POWDER, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLAZE_POWDER).build())
+        ));
+        registerable.register(ItemKeys.MAGMA_CREAM, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MAGMA_CREAM).build())
+        ));
+        registerable.register(ItemKeys.BREWING_STAND, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BREWING_STAND).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BREWING_STAND)))
+                .build()
+        ));
+        registerable.register(ItemKeys.GLISTERING_MELON_SLICE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLISTERING_MELON_SLICE).build())
         ));
         registerable.register(ItemKeys.COW_SPAWN_EGG, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COW_SPAWN_EGG).build()),
@@ -2865,6 +2897,9 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.RABBIT_STEW))
                 .build()
+        ));
+        registerable.register(ItemKeys.RABBIT_FOOT, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_FOOT).build())
         ));
         registerable.register(ItemKeys.MUTTON, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUTTON).build()),
@@ -3030,6 +3065,19 @@ public class ItemUtil {
                 .with(FoodItemComponent.from(FoodComponents.BEETROOT_SOUP))
                 .build()
         ));
+        registerable.register(ItemKeys.DRAGON_BREATH, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DRAGON_BREATH).rarity(Rarity.UNCOMMON).build())
+        ));
+        registerable.register(ItemKeys.SPLASH_POTION, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPLASH_POTION).build(), 1),
+            ItemComponentSet.builder()
+                .with(new PotionHolderItemComponent())
+                .with(new ThrowableItemComponent(0.5f, -20.0f))
+                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.POTION)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                .with(new TintedItemComponent(new PotionItemColor()))
+                .build()
+        ));
         registerable.register(ItemKeys.SPECTRAL_ARROW, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPECTRAL_ARROW).build()),
             ItemComponentSet.builder()
@@ -3040,6 +3088,16 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TIPPED_ARROW).build()),
             ItemComponentSet.builder()
                 .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.ARROW), 1))
+                .with(new TintedItemComponent(new PotionItemColor()))
+                .build()
+        ));
+        registerable.register(ItemKeys.LINGERING_POTION, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LINGERING_POTION).build(), 1),
+            ItemComponentSet.builder()
+                .with(new PotionHolderItemComponent())
+                .with(new ThrowableItemComponent(0.5f, -20.0f))
+                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.POTION)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .with(new TintedItemComponent(new PotionItemColor()))
                 .build()
         ));
@@ -3149,6 +3207,9 @@ public class ItemUtil {
         ));
         registerable.register(ItemKeys.DISC_FRAGMENT_5, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DISC_FRAGMENT_5).tooltip(ItemKeys.DISC_FRAGMENT_5).build())
+        ));
+        registerable.register(ItemKeys.PHANTOM_MEMBRANE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PHANTOM_MEMBRANE).build())
         ));
         registerable.register(ItemKeys.CROSSBOW, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CROSSBOW).build(), 1),

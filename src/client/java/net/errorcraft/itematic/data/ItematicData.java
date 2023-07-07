@@ -223,6 +223,7 @@ public class ItematicData implements DataGeneratorEntrypoint {
                 .add(ItemKeys.ENCHANTED_GOLDEN_APPLE);
             this.getOrCreateTagBuilder(ItemTagsUtil.HORSE_TEMPTING_ITEMS)
                 .add(ItemKeys.WHEAT)
+                .add(ItemKeys.SUGAR)
                 .add(ItemKeys.APPLE)
                 .addTag(ItemTagsUtil.HORSE_BREEDING_ITEMS);
             this.getOrCreateTagBuilder(ItemTagsUtil.CAT_BREEDING_ITEMS)

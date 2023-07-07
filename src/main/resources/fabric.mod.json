@@ -86,6 +86,9 @@
       "net/minecraft/class_1839": [
         "net/minecraft/util/StringIdentifiable"
       ],
+      "net/minecraft/class_1845": [
+        "net/errorcraft/itematic/access/recipe/BrewingRecipeRegistryAccess"
+      ],
       "net/minecraft/class_1856": [
         "net/errorcraft/itematic/access/recipe/IngredientAccess"
       ],

@@ -42,6 +42,24 @@ public abstract class FoxEntityExtender extends AnimalEntity {
         slice = @Slice(
             from = @At(
                 value = "CONSTANT",
+                args = "floatValue=0.4f"
+            )
+        )
+    )
+    private ItemStack initEquipmentNewItemStackForRabbitFootUseRegistryEntry(ItemConvertible item) {
+        return new ItemStack(this.getWorld().getItem(ItemKeys.RABBIT_FOOT));
+    }
+
+    @Redirect(
+        method = "initEquipment",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "CONSTANT",
                 args = "floatValue=0.6f"
             )
         )
