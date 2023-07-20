@@ -11,6 +11,7 @@
       "block": "minecraft:dragon_head"
     },
     "minecraft:equipment": {
+      "equip_sound": "minecraft:item.armor.equip_generic",
       "slot": "head"
     },
     "minecraft:firework_shape_modifier": {

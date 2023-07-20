@@ -25,7 +25,7 @@ public abstract class HungerManagerExtender {
         if (item == null) {
             return;
         }
-        Optional<FoodItemComponent> foodItemComponent = item.getComponents().get(ItemComponentTypes.FOOD);
+        Optional<FoodItemComponent> foodItemComponent = item.getComponent(ItemComponentTypes.FOOD);
         foodItemComponent.ifPresent(food -> add(food.nutrition(), food.saturationModifier()));
     }
 }

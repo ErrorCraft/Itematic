@@ -6,7 +6,9 @@
     "max_count": 1
   },
   "components": {
-    "minecraft:consumable": {},
+    "minecraft:consumable": {
+      "result_item": "minecraft:bowl"
+    },
     "minecraft:food": {
       "nutrition": 10,
       "saturation_modifier": 0.6

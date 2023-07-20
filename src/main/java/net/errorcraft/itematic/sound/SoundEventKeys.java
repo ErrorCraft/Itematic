@@ -6,6 +6,14 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 public class SoundEventKeys {
+    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_CHAIN = of("item.armor.equip_chain");
+    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_DIAMOND = of("item.armor.equip_diamond");
+    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_GENERIC = of("item.armor.equip_generic");
+    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_GOLD = of("item.armor.equip_gold");
+    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_IRON = of("item.armor.equip_iron");
+    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_LEATHER = of("item.armor.equip_leather");
+    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_NETHERITE = of("item.armor.equip_netherite");
+    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_TURTLE = of("item.armor.equip_turtle");
     public static final RegistryKey<SoundEvent> ITEM_BUCKET_EMPTY = of("item.bucket.empty");
     public static final RegistryKey<SoundEvent> ITEM_BUCKET_EMPTY_AXOLOTL = of("item.bucket.empty_axolotl");
     public static final RegistryKey<SoundEvent> ITEM_BUCKET_EMPTY_FISH = of("item.bucket.empty_fish");

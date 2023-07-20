@@ -18,5 +18,20 @@
     "minecraft:use_duration": {
       "ticks": 32
     }
-  }
+  },
+  "events": [
+    {
+      "actions": [
+        {
+          "action": "minecraft:teleport",
+          "distance": 16
+        }
+      ],
+      "context": {
+        "entity": "this",
+        "position": "this"
+      },
+      "event": "minecraft:consume_item"
+    }
+  ]
 }

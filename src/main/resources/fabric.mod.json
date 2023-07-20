@@ -101,6 +101,9 @@
       "net/minecraft/class_1936": [
         "net/errorcraft/itematic/access/world/WorldViewAccess"
       ],
+      "net/minecraft/class_1937": [
+        "net/errorcraft/itematic/access/world/WorldAccess"
+      ],
       "net/minecraft/class_2073": [
         "net/errorcraft/itematic/access/predicate/item/ItemPredicateAccess"
       ],

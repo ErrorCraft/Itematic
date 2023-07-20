@@ -14,6 +14,7 @@ public class DispenseBehaviorKeys {
     public static final RegistryKey<DispenserBehavior> BUCKET = of("bucket");
     public static final RegistryKey<DispenserBehavior> POTION = of("potion");
     public static final RegistryKey<DispenserBehavior> BOTTLE = of("bottle");
+    public static final RegistryKey<DispenserBehavior> FERTILIZE = of("fertilize");
 
     private DispenseBehaviorKeys() {}
 

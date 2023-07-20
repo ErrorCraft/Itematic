@@ -7,6 +7,7 @@
   },
   "components": {
     "minecraft:equipment": {
+      "equip_sound": "minecraft:item.armor.equip_generic",
       "slot": "offhand"
     },
     "minecraft:repairable": {

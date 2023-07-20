@@ -11,6 +11,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterials;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.minecraft.sound.SoundEvent;
 
 public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material) implements ItemComponent {
     public static final Codec<ArmorItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -27,11 +28,11 @@ public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material) implemen
         return CODEC;
     }
 
-    public static ItemComponent[] from(ArmorMaterials material, ArmorItem.Type type, RegistryEntry<ArmorMaterial> materialEntry) {
+    public static ItemComponent[] from(ArmorMaterials armorMaterial, ArmorItem.Type type, RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound) {
         return new ItemComponent[] {
-            new DamageableItemComponent(material.getDurability(type)),
-            new EquipmentItemComponent(type.getEquipmentSlot(), true),
-            new ArmorItemComponent(materialEntry)
+            new DamageableItemComponent(armorMaterial.getDurability(type)),
+            new EquipmentItemComponent(type.getEquipmentSlot(), true, equipSound),
+            new ArmorItemComponent(material)
         };
     }
 }

@@ -9,6 +9,10 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
+import net.errorcraft.itematic.item.event.ItemEvent;
+import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
@@ -22,11 +26,14 @@ import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -112,12 +119,23 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Inject(
-        method = "getRegistryEntry",
+        method = "usageTick",
         at = @At("HEAD"),
         cancellable = true
     )
-    private void getRegistryEntryUseField(CallbackInfoReturnable<RegistryEntry<Item>> info) {
-        info.setReturnValue(this.entry);
+    public void usageTickCheckNullEntry(World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
+        if (this.isEmpty()) {
+            info.cancel();
+        }
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses a registry entry on the item stack instead of an intrusive registry entry.
+     */
+    @Overwrite
+    public RegistryEntry<Item> getRegistryEntry() {
+        return this.entry;
     }
 
     @Redirect(
@@ -314,6 +332,35 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         }
     }
 
+    @Inject(
+        method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;setDamage(I)V",
+            shift = At.Shift.AFTER
+        )
+    )
+    private void invokeDamageToolEvent(int amount, Random random, ServerPlayerEntity player, CallbackInfoReturnable<Boolean> info) {
+        ActionContext.Builder builder = ActionContext.builder(player.getServerWorld(), (ItemStack)(Object) this)
+            .entityPosition(ActionContextParameter.THIS, player);
+        this.invokeEvent(ItemEvents.DAMAGE_ITEM, builder);
+    }
+
+    @Inject(
+        method = "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"
+        )
+    )
+    private <T extends LivingEntity> void invokeBreakToolEvent(int amount, T entity, Consumer<T> breakCallback, CallbackInfo info) {
+        if (entity.getWorld() instanceof ServerWorld serverWorld) {
+            ActionContext.Builder builder = ActionContext.builder(serverWorld, (ItemStack)(Object) this)
+                .entityPosition(ActionContextParameter.THIS, entity);
+            this.invokeEvent(ItemEvents.BREAK_ITEM, builder);
+        }
+    }
+
     @Override
     public RegistryKey<Item> getKey() {
         if (this.entry == null) {
@@ -356,6 +403,14 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
+    public void invokeEvent(ItemEvent event, ActionContext.Builder builder) {
+        if (this.entry == null) {
+            return;
+        }
+        this.entry.value().invokeEvent(event, builder);
+    }
+
+    @Override
     public boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
         if (this.entry == null) {
             return true;
@@ -369,5 +424,13 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             return false;
         }
         return this.entry.matches(predicate);
+    }
+
+    @Override
+    public boolean isNetworkSynced() {
+        if (this.isEmpty()) {
+            return false;
+        }
+        return this.item.isNetworkSynced();
     }
 }

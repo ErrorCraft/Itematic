@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.world.WorldViewAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.SweetBerryBushBlock;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.BlockView;
@@ -26,6 +27,17 @@ public class SweetBerryBushBlockExtender {
             return ItemStack.EMPTY;
         }
         return new ItemStack(access.getItem(ItemKeys.SWEET_BERRIES));
+    }
+
+    @Redirect(
+        method = "onUse",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean onUseIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.isOf(ItemKeys.BONE_MEAL);
     }
 
     @Redirect(

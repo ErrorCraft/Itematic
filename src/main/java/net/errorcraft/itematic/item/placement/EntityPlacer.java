@@ -2,6 +2,9 @@ package net.errorcraft.itematic.item.placement;
 
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BucketItemComponent;
+import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -100,6 +103,12 @@ public class EntityPlacer extends Placer {
         }
         this.stack.decrement(1);
         this.world.emitGameEvent(this.player, GameEvent.ENTITY_PLACE, this.blockPos);
+        if (this.world instanceof ServerWorld serverWorld) {
+            ActionContext.Builder builder = ActionContext.builder(serverWorld, this.stack)
+                .entityPosition(ActionContextParameter.THIS, this.player)
+                .position(ActionContextParameter.TARGET, offset.toCenterPos());
+            stack.invokeEvent(ItemEvents.SPAWN_ENTITY, builder);
+        }
     }
 
     private Entity createEntity(BlockPos offset) {

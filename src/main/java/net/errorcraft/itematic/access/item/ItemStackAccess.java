@@ -2,6 +2,8 @@ package net.errorcraft.itematic.access.item;
 
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
+import net.errorcraft.itematic.item.event.ItemEvent;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,7 +36,11 @@ public interface ItemStackAccess {
     default <T extends ItemComponent> Optional<T> getComponent(ItemComponentType<T> type) {
         return Optional.empty();
     }
+    default void invokeEvent(ItemEvent event, ActionContext.Builder builder) {}
     default boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
+        return false;
+    }
+    default boolean isNetworkSynced() {
         return false;
     }
 }

@@ -5,7 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.tool.MiningSpeedEntry;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -13,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.predicate.TagPredicate;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -37,8 +41,8 @@ public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds)
 
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
-        if (!world.isClient && state.getHardness(world, pos) != 0.0f) {
-            stack.damage(this.damage, miner);
+        if (!world.isClient() && state.getHardness(world, pos) != 0.0f) {
+            this.useTool(stack, world, pos, miner);
         }
         return true;
     }
@@ -50,6 +54,16 @@ public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds)
             }
         }
         return 1.0f;
+    }
+
+    private void useTool(ItemStack stack, World world, BlockPos pos, LivingEntity miner) {
+        if (world instanceof ServerWorld serverWorld) {
+            ActionContext.Builder builder = ActionContext.builder(serverWorld, stack)
+                .entityPosition(ActionContextParameter.THIS, miner)
+                .position(ActionContextParameter.TARGET, pos.toCenterPos());
+            stack.invokeEvent(ItemEvents.USE_TOOL, builder);
+        }
+        stack.damage(this.damage, miner);
     }
 
     public static Builder builder(int damage) {

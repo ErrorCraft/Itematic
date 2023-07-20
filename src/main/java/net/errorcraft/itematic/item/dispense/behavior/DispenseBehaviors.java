@@ -1,10 +1,7 @@
 package net.errorcraft.itematic.item.dispense.behavior;
 
 import net.errorcraft.itematic.block.dispenser.DispenserBehaviorUtil;
-import net.errorcraft.itematic.item.dispense.behavior.behaviors.BucketItemComponentDispenserBehavior;
-import net.errorcraft.itematic.item.dispense.behavior.behaviors.EntityItemComponentDispenserBehavior;
-import net.errorcraft.itematic.item.dispense.behavior.behaviors.FireworkRocketDispenserBehavior;
-import net.errorcraft.itematic.item.dispense.behavior.behaviors.ProjectileItemComponentDispenserBehavior;
+import net.errorcraft.itematic.item.dispense.behavior.behaviors.*;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
@@ -21,6 +18,7 @@ public class DispenseBehaviors {
     public static final DispenserBehavior BUCKET = register(DispenseBehaviorKeys.BUCKET, new BucketItemComponentDispenserBehavior());
     public static final DispenserBehavior POTION = register(DispenseBehaviorKeys.POTION, DispenserBehaviorUtil.POTION_DISPENSER_BEHAVIOR);
     public static final DispenserBehavior BOTTLE = register(DispenseBehaviorKeys.BOTTLE, DispenserBehaviorUtil.BOTTLE_DISPENSER_BEHAVIOR);
+    public static final DispenserBehavior FERTILIZE = register(DispenseBehaviorKeys.FERTILIZE, new FertilizeDispenserBehavior());
 
     private DispenseBehaviors() {}
 

@@ -1,0 +1,27 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.bone_meal"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:fertilize"
+    }
+  },
+  "events": [
+    {
+      "actions": [
+        {
+          "action": "minecraft:fertilize"
+        }
+      ],
+      "context": {
+        "entity": "this",
+        "position": "target"
+      },
+      "event": "minecraft:use_on_block"
+    }
+  ]
+}

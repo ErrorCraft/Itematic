@@ -1,12 +1,15 @@
 package net.errorcraft.itematic.mixin.block;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
+import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.CompostableItemComponent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ComposterBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
@@ -57,6 +60,28 @@ public class ComposterBlockExtender {
         return stack.getComponent(ItemComponentTypes.COMPOSTABLE).map(CompostableItemComponent::levelIncreaseChance).orElse(0.0f);
     }
 
+    @Redirect(
+        method = "emptyFullComposter",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack"
+        )
+    )
+    private static ItemStack emptyFullComposterNewItemStackUseRegistryEntry(ItemConvertible item, @Local World world) {
+        return new ItemStack(world.getItem(ItemKeys.BONE_MEAL));
+    }
+
+    @Redirect(
+        method = "getInventory",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack"
+        )
+    )
+    private static ItemStack getInventoryComposterNewItemStackUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
+        return new ItemStack(world.getItem(ItemKeys.BONE_MEAL));
+    }
+
     @Mixin(targets = "net/minecraft/block/ComposterBlock$ComposterInventory")
     public static class ComposterInventoryExtender {
         @Redirect(
@@ -69,6 +94,20 @@ public class ComposterBlockExtender {
         )
         private boolean containsKeyUseItemComponentCheck(Object2FloatMap<ItemConvertible> instance, Object o, int slot, ItemStack stack) {
             return stack.hasComponent(ItemComponentTypes.COMPOSTABLE);
+        }
+    }
+
+    @Mixin(targets = "net/minecraft/block/ComposterBlock$FullComposterInventory")
+    public static class FullComposterInventoryExtender {
+        @Redirect(
+            method = "canExtract",
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            )
+        )
+        private boolean canExtractIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
+            return instance.isOf(ItemKeys.BONE_MEAL);
         }
     }
 }

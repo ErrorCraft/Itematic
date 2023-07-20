@@ -2,6 +2,9 @@ package net.errorcraft.itematic.item.placement;
 
 import net.errorcraft.itematic.block.BlockStateUtil;
 import net.errorcraft.itematic.block.ShapeContextUtil;
+import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -64,6 +67,9 @@ public class BlockPlacer extends Placer {
         blockState.getBlock().onPlaced(this.world, this.blockPos, blockState, this.player, this.stack);
         if (this.player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.PLACED_BLOCK.trigger(serverPlayer, this.blockPos, this.stack);
+            ActionContext.Builder builder = ActionContext.builder(serverPlayer.getServerWorld(), this.stack)
+                .entityPosition(ActionContextParameter.THIS, serverPlayer);
+            this.stack.invokeEvent(ItemEvents.PLACED_BLOCK, builder);
         }
 
         BlockSoundGroup blockSoundGroup = blockState.getSoundGroup();

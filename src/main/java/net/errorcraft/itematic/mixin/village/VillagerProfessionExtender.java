@@ -14,7 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(VillagerProfession.class)
 public class VillagerProfessionExtender implements VillagerProfessionAccess {
-    @Shadow @Final public static VillagerProfession FARMER;
+    @Shadow
+    @Final
+    public static VillagerProfession FARMER;
+
     private TagKey<Item> gatherableItemsTag;
 
     @Inject(

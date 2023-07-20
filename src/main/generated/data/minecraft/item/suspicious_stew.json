@@ -6,7 +6,9 @@
     "max_count": 1
   },
   "components": {
-    "minecraft:consumable": {},
+    "minecraft:consumable": {
+      "result_item": "minecraft:bowl"
+    },
     "minecraft:food": {
       "always_edible": true,
       "nutrition": 6,

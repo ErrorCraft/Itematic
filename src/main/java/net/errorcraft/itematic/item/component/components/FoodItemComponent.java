@@ -56,7 +56,11 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
     }
 
     public static ItemComponent[] from(FoodComponent component) {
-        return from(component, component.isSnack() ? 16 : 32, UseAction.EAT, null);
+        return from(component, null);
+    }
+
+    public static ItemComponent[] from(FoodComponent component, RegistryEntry<Item> resultItem) {
+        return from(component, component.isSnack() ? 16 : 32, UseAction.EAT, resultItem);
     }
 
     public static ItemComponent[] from(FoodComponent component, int useDuration, UseAction useAction, RegistryEntry<Item> resultItem) {

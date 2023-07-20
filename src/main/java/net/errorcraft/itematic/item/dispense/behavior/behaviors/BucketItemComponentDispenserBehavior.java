@@ -25,7 +25,7 @@ public class BucketItemComponentDispenserBehavior extends ItemDispenserBehavior 
 
         Direction direction = pointer.getBlockState().get(DispenserBlock.FACING);
         BlockPos position = pointer.getPos().offset(direction);
-        BlockHitResult hitResult = new BlockHitResult(position.toCenterPos(), direction, position, false);
+        BlockHitResult hitResult = new BlockHitResult(position.toCenterPos(), direction, position, true);
         TypedActionResult<ItemStack> result = optionalItemComponent.get().place(pointer.getWorld(), null, Hand.MAIN_HAND, stack, hitResult);
         if (!result.getResult().isAccepted()) {
             return super.dispenseSilently(pointer, stack);

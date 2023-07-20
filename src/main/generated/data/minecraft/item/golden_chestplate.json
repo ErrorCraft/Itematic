@@ -20,6 +20,7 @@
       "enchantments": "minecraft:chestplate_enchanting"
     },
     "minecraft:equipment": {
+      "equip_sound": "minecraft:item.armor.equip_gold",
       "slot": "chest",
       "swappable": true
     },

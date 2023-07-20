@@ -28,6 +28,10 @@ public interface ItemComponent {
         return TypedActionResult.pass(context.getStack());
     }
 
+    default TypedActionResult<ItemStack> useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack) {
+        return TypedActionResult.pass(stack);
+    }
+
     default boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         return false;
     }

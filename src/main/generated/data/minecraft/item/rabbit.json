@@ -8,8 +8,8 @@
   "components": {
     "minecraft:consumable": {},
     "minecraft:food": {
-      "nutrition": 10,
-      "saturation_modifier": 0.6
+      "nutrition": 3,
+      "saturation_modifier": 0.3
     },
     "minecraft:use_animation": {
       "animation": "eat"

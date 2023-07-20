@@ -280,7 +280,8 @@ public class ItematicData implements DataGeneratorEntrypoint {
             this.getOrCreateTagBuilder(ItemTagsUtil.FARMER_VILLAGER_GATHERABLE_ITEMS)
                 .add(ItemKeys.WHEAT)
                 .add(ItemKeys.WHEAT_SEEDS)
-                .add(ItemKeys.BEETROOT_SEEDS);
+                .add(ItemKeys.BEETROOT_SEEDS)
+                .add(ItemKeys.BONE_MEAL);
         }
     }
 }

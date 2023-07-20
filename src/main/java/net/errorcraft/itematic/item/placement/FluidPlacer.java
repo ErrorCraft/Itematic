@@ -42,7 +42,7 @@ public class FluidPlacer extends Placer {
 
     public static FluidPlacer of(ItemStack stack, World world, BlockHitResult hitResult, PlayerEntity player, RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound) {
         BlockPos blockPos = hitResult.getBlockPos();
-        return new FluidPlacer(stack, world, blockPos, world.getBlockState(blockPos), player, fluid, emptyingSound, hitResult.getSide(), hitResult.isInsideBlock());
+        return new FluidPlacer(stack, world, blockPos, world.getBlockState(blockPos), player, fluid, emptyingSound, hitResult.getSide(), !hitResult.isInsideBlock());
     }
 
     @Override

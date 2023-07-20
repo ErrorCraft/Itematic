@@ -357,6 +357,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> GREEN_DYE = register("green_dye");
     public static final RegistryKey<Item> RED_DYE = register("red_dye");
     public static final RegistryKey<Item> BLACK_DYE = register("black_dye");
+    public static final RegistryKey<Item> BONE_MEAL = register("bone_meal");
     public static final RegistryKey<Item> SUGAR = register("sugar");
     public static final RegistryKey<Item> COOKIE = register("cookie");
     public static final RegistryKey<Item> MELON_SLICE = register("melon_slice");

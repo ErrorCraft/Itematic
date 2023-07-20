@@ -20,6 +20,7 @@
       "enchantments": "minecraft:helmet_enchanting"
     },
     "minecraft:equipment": {
+      "equip_sound": "minecraft:item.armor.equip_turtle",
       "slot": "head",
       "swappable": true
     },

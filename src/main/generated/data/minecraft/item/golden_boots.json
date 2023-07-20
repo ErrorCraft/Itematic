@@ -20,6 +20,7 @@
       "enchantments": "minecraft:boots_enchanting"
     },
     "minecraft:equipment": {
+      "equip_sound": "minecraft:item.armor.equip_gold",
       "slot": "feet",
       "swappable": true
     },
