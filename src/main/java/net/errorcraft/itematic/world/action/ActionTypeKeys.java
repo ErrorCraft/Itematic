@@ -9,6 +9,7 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> RUN_FUNCTION = of("run_function");
     public static final RegistryKey<ActionType<?>> TELEPORT = of("teleport");
     public static final RegistryKey<ActionType<?>> FERTILIZE = of("fertilize");
+    public static final RegistryKey<ActionType<?>> CLEAR_STATUS_EFFECTS = of("clear_status_effects");
 
     private ActionTypeKeys() {}
 

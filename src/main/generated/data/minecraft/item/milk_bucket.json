@@ -1,0 +1,33 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.milk_bucket"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:consumable": {
+      "result_item": "minecraft:bucket"
+    },
+    "minecraft:use_animation": {
+      "animation": "drink"
+    },
+    "minecraft:use_duration": {
+      "ticks": 32
+    }
+  },
+  "events": [
+    {
+      "actions": [
+        {
+          "action": "minecraft:clear_status_effects"
+        }
+      ],
+      "context": {
+        "entity": "this",
+        "position": "this"
+      },
+      "event": "minecraft:consume_item"
+    }
+  ]
+}

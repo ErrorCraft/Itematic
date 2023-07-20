@@ -321,6 +321,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> LAVA_BUCKET = register("lava_bucket");
     public static final RegistryKey<Item> POWDER_SNOW_BUCKET = register("powder_snow_bucket");
     public static final RegistryKey<Item> SNOWBALL = register("snowball");
+    public static final RegistryKey<Item> MILK_BUCKET = register("milk_bucket");
     public static final RegistryKey<Item> PUFFERFISH_BUCKET = register("pufferfish_bucket");
     public static final RegistryKey<Item> SALMON_BUCKET = register("salmon_bucket");
     public static final RegistryKey<Item> COD_BUCKET = register("cod_bucket");

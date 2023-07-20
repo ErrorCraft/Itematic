@@ -8,6 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Hand;
@@ -41,6 +42,9 @@ public interface ItemStackAccess {
         return false;
     }
     default boolean isNetworkSynced() {
+        return false;
+    }
+    default boolean mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return false;
     }
 }

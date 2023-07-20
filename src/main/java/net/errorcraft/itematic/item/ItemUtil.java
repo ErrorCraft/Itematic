@@ -16,10 +16,12 @@ import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
+import net.errorcraft.itematic.mixin.item.MilkBucketItemAccessor;
 import net.errorcraft.itematic.mixin.item.PotionItemAccessor;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.action.ActionSet;
+import net.errorcraft.itematic.world.action.actions.ClearStatusEffectsAction;
 import net.errorcraft.itematic.world.action.actions.FertilizeAction;
 import net.errorcraft.itematic.world.action.actions.TeleportAction;
 import net.minecraft.block.Block;
@@ -2392,6 +2394,17 @@ public class ItemUtil {
                 .with(new ThrowableItemComponent(1.5f, 0.0f))
                 .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.SNOWBALL)))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                .build()
+        ));
+        registerable.register(ItemKeys.MILK_BUCKET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MILK_BUCKET).build(), 1),
+            ItemComponentSet.builder()
+                .with(new UseDurationItemComponent(MilkBucketItemAccessor.getMaxUseTime()))
+                .with(new UseAnimationItemComponent(UseAction.DRINK))
+                .with(ConsumableItemComponent.of(items.getOrThrow(ItemKeys.BUCKET)))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.CONSUME_ITEM, ActionSet.simple(ClearStatusEffectsAction.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.PUFFERFISH_BUCKET, create(

@@ -417,6 +417,13 @@ public class ItemExtender implements ItemAccess {
         this.events.invokeEvent(event, builder);
     }
 
+    @Override
+    public boolean mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+        return this.getComponent(ItemComponentTypes.FOOD)
+            .map(c -> c.mayStartUsing(user))
+            .orElse(true);
+    }
+
     private boolean allowsPlacement(ItemUsageContext context) {
         return !context.ignoresPlacementComponent() && this.getComponent(ItemComponentTypes.CAN_PLACE_ON_FLUIDS)
             .map(CanPlaceOnFluidsItemComponent::allowOriginalPlacement)

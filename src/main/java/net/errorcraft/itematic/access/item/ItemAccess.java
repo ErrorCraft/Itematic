@@ -7,6 +7,10 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
+import net.minecraft.world.World;
 
 import java.util.Optional;
 
@@ -30,4 +34,7 @@ public interface ItemAccess {
     }
     default void setEvents(ItemEventMap events) {}
     default void invokeEvent(ItemEvent event, ActionContext.Builder builder) {}
+    default boolean mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+        return true;
+    }
 }

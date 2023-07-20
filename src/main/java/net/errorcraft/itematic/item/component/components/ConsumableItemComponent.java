@@ -19,6 +19,9 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.world.World;
 
 import java.util.Optional;
 
@@ -35,6 +38,14 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem) 
     @Override
     public Codec<? extends ItemComponent> getCodec() {
         return CODEC;
+    }
+
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+        if (stack.mayStartUsing(world, user, hand, stack)) {
+            return ItemUsage.consumeHeldItem(world, user, hand);
+        }
+        return TypedActionResult.pass(stack);
     }
 
     public ItemStack consume(LivingEntity user, ItemStack stack) {

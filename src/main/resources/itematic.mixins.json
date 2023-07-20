@@ -133,6 +133,7 @@
     "item.ItemGroupExtender$BuilderExtender",
     "item.ItemStackExtender",
     "item.ItemUsageContextExtender",
+    "item.MilkBucketItemAccessor",
     "item.PotionItemAccessor",
     "loot.context.LootContextTypesAccessor",
     "loot.entry.ItemEntryExtender",

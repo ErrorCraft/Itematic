@@ -428,9 +428,17 @@ public abstract class ItemStackExtender implements ItemStackAccess {
 
     @Override
     public boolean isNetworkSynced() {
-        if (this.isEmpty()) {
+        if (this.entry == null) {
             return false;
         }
-        return this.item.isNetworkSynced();
+        return this.entry.value().isNetworkSynced();
+    }
+
+    @Override
+    public boolean mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+        if (this.entry == null) {
+            return false;
+        }
+        return this.entry.value().mayStartUsing(world, user, hand, stack);
     }
 }

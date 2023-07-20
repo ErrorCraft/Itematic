@@ -14,8 +14,6 @@ import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -42,17 +40,12 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand, ItemStack stack) {
-        if (user.canConsume(this.alwaysEdible)) {
-            user.setCurrentHand(hand);
-            return TypedActionResult.consume(stack);
-        }
-        return TypedActionResult.pass(stack);
-    }
-
-    @Override
     public ItemStack finishUsing(World world, LivingEntity user, ItemStack stack) {
         return user.eatFood(world, stack);
+    }
+
+    public boolean mayStartUsing(PlayerEntity user) {
+        return user.canConsume(this.alwaysEdible);
     }
 
     public static ItemComponent[] from(FoodComponent component) {

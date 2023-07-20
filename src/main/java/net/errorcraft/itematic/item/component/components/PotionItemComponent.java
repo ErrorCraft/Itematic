@@ -8,10 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
 import net.minecraft.potion.PotionUtil;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
@@ -28,11 +25,6 @@ public record PotionItemComponent() implements ItemComponent {
     @Override
     public Codec<? extends ItemComponent> getCodec() {
         return CODEC;
-    }
-
-    @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand, ItemStack stack) {
-        return ItemUsage.consumeHeldItem(world, user, hand);
     }
 
     @Override

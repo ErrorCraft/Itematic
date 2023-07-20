@@ -4,12 +4,14 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.WanderingTraderEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(WanderingTraderEntity.class)
 public abstract class WanderingTraderEntityExtender extends MerchantEntity {
@@ -25,7 +27,36 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntity {
             ordinal = 0
         )
     )
-    private ItemStack initGoalsNewItemStackUseRegistryEntry(ItemConvertible item) {
+    private ItemStack initGoalsNewItemStackForPotionUseRegistryEntry(ItemConvertible item) {
         return new ItemStack(this.getWorld().getItem(ItemKeys.POTION));
+    }
+
+    @Redirect(
+        method = "initGoals",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;POTION:Lnet/minecraft/item/Item;"
+            )
+        )
+    )
+    private ItemStack initGoalsNewItemStackForMilkBucketUseRegistryEntry(ItemConvertible item) {
+        return new ItemStack(this.getWorld().getItem(ItemKeys.MILK_BUCKET));
+    }
+
+    @Redirect(
+        method = "getDrinkSound",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean getDrinkSoundIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.isOf(ItemKeys.MILK_BUCKET);
     }
 }
