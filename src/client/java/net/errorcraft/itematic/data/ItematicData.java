@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.data;
 
+import net.errorcraft.itematic.block.BlockKeys;
+import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.client.render.TexturedRenderLayersUtil;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.item.ItemKeys;
@@ -11,6 +13,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.minecraft.block.Block;
 import net.minecraft.client.texture.atlas.AtlasSource;
 import net.minecraft.client.texture.atlas.AtlasSourceManager;
 import net.minecraft.data.DataOutput;
@@ -41,6 +44,7 @@ public class ItematicData implements DataGeneratorEntrypoint {
         pack.addProvider(AtlasProvider::new);
         pack.addProvider(EnchantmentTagProvider::new);
         pack.addProvider(ItemTagProvider::new);
+        pack.addProvider(BlockTagProvider::new);
     }
 
     private static <T> void addAll(FabricDynamicRegistryProvider.Entries entries, RegistryWrapper.Impl<T> registry) {
@@ -282,6 +286,19 @@ public class ItematicData implements DataGeneratorEntrypoint {
                 .add(ItemKeys.WHEAT_SEEDS)
                 .add(ItemKeys.BEETROOT_SEEDS)
                 .add(ItemKeys.BONE_MEAL);
+        }
+    }
+
+    private static class BlockTagProvider extends FabricTagProvider<Block> {
+        public BlockTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, RegistryKeys.BLOCK, registriesFuture);
+        }
+
+        @Override
+        protected void configure(RegistryWrapper.WrapperLookup arg) {
+            this.getOrCreateTagBuilder(ItematicBlockTags.END_CRYSTAL_SPAWNABLE_ON)
+                .add(BlockKeys.BEDROCK)
+                .add(BlockKeys.OBSIDIAN);
         }
     }
 }

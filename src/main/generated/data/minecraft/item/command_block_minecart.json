@@ -1,0 +1,19 @@
+{
+  "base": {
+    "display": {
+      "rarity": "epic",
+      "translation_key": "item.minecraft.command_block_minecart"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:entity"
+    },
+    "minecraft:entity": {
+      "entity": {
+        "type": "minecraft:command_block_minecart"
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.armor_stand"
+    },
+    "max_count": 16
+  },
+  "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:entity"
+    },
+    "minecraft:entity": {
+      "entity": {
+        "type": "minecraft:armor_stand"
+      }
+    }
+  }
+}

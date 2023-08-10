@@ -6,6 +6,15 @@
     "max_count": 1
   },
   "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:entity"
+    },
+    "minecraft:entity": {
+      "entity": {
+        "type": "minecraft:boat",
+        "variant": "jungle"
+      }
+    },
     "minecraft:fuel": {
       "ticks": 1200
     }

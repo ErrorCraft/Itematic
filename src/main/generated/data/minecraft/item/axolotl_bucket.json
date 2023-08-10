@@ -8,7 +8,9 @@
   "components": {
     "minecraft:bucket": {
       "emptying_sound_event": "minecraft:item.bucket.empty_axolotl",
-      "entity": "minecraft:axolotl",
+      "entity": {
+        "type": "minecraft:axolotl"
+      },
       "fluid": "minecraft:water"
     },
     "minecraft:dispensable": {

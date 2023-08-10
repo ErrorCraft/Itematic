@@ -2,6 +2,8 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -36,10 +38,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional<RegistryEntry<EntityType<?>>> entity, Optional<RegistryEntry<Block>> block, Optional<RegistryEntry<SoundEvent>> emptyingSound) implements ItemComponent {
+public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional<EntityInitializer<?>> entity, Optional<RegistryEntry<Block>> block, Optional<RegistryEntry<SoundEvent>> emptyingSound) implements ItemComponent {
     public static final Codec<BucketItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.FLUID).optionalFieldOf("fluid").forGetter(BucketItemComponent::fluid),
-        RegistryFixedCodec.of(RegistryKeys.ENTITY_TYPE).optionalFieldOf("entity").forGetter(BucketItemComponent::entity),
+        EntityInitializer.CODEC.optionalFieldOf("entity").forGetter(BucketItemComponent::entity),
         RegistryFixedCodec.of(RegistryKeys.BLOCK).optionalFieldOf("block").forGetter(BucketItemComponent::block),
         RegistryFixedCodec.of(RegistryKeys.SOUND_EVENT).optionalFieldOf("emptying_sound_event").forGetter(BucketItemComponent::emptyingSound)
     ).apply(instance, BucketItemComponent::new));
@@ -120,7 +122,7 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
     }
 
     public static BucketItemComponent entity(RegistryEntry<Fluid> fluid, RegistryEntry<EntityType<?>> entity, RegistryEntry<SoundEvent> emptyingSound) {
-        return new BucketItemComponent(Optional.of(fluid), Optional.of(entity), Optional.empty(), Optional.of(emptyingSound));
+        return new BucketItemComponent(Optional.of(fluid), Optional.of(new SimpleEntityInitializer<>(entity.value())), Optional.empty(), Optional.of(emptyingSound));
     }
 
     public static BucketItemComponent block(RegistryEntry<Block> block, RegistryEntry<SoundEvent> emptyingSound) {

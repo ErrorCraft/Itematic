@@ -14,7 +14,10 @@
       "behavior": "minecraft:entity"
     },
     "minecraft:entity": {
-      "type": "minecraft:enderman"
+      "allow_item_data": true,
+      "entity": {
+        "type": "minecraft:enderman"
+      }
     },
     "minecraft:spawn_egg": {},
     "minecraft:tinted": {

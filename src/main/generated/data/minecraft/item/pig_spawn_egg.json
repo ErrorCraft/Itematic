@@ -14,7 +14,10 @@
       "behavior": "minecraft:entity"
     },
     "minecraft:entity": {
-      "type": "minecraft:pig"
+      "allow_item_data": true,
+      "entity": {
+        "type": "minecraft:pig"
+      }
     },
     "minecraft:spawn_egg": {},
     "minecraft:tinted": {

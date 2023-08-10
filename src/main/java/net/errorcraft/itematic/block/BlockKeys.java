@@ -27,6 +27,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> CHERRY_SAPLING = of("cherry_sapling");
     public static final RegistryKey<Block> DARK_OAK_SAPLING = of("dark_oak_sapling");
     public static final RegistryKey<Block> MANGROVE_PROPAGULE = of("mangrove_propagule");
+    public static final RegistryKey<Block> BEDROCK = of("bedrock");
     public static final RegistryKey<Block> SAND = of("sand");
     public static final RegistryKey<Block> COAL_BLOCK = of("coal_block");
     public static final RegistryKey<Block> OAK_LOG = of("oak_log");
@@ -105,6 +106,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> BAMBOO_MOSAIC_SLAB = of("bamboo_mosaic_slab");
     public static final RegistryKey<Block> BOOKSHELF = of("bookshelf");
     public static final RegistryKey<Block> CHISELED_BOOKSHELF = of("chiseled_bookshelf");
+    public static final RegistryKey<Block> OBSIDIAN = of("obsidian");
     public static final RegistryKey<Block> CHEST = of("chest");
     public static final RegistryKey<Block> CRAFTING_TABLE = of("crafting_table");
     public static final RegistryKey<Block> WHEAT = of("wheat");

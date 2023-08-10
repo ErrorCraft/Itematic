@@ -23,7 +23,7 @@ public record FertilizeAction() implements Action {
     @Override
     public boolean execute(ActionContext context) {
         ServerWorld world = context.world();
-        BlockPos pos = BlockPos.ofFloored(context.position());
+        BlockPos pos = context.blockPos();
         if (BoneMealItem.useOnFertilizable(context.stack(), world, pos)) {
             world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, pos, 0);
             return true;

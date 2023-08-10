@@ -1,0 +1,15 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.item_frame"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:entity": {
+      "entity": {
+        "type": "minecraft:item_frame"
+      }
+    }
+  }
+}

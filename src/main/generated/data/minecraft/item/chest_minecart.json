@@ -1,0 +1,18 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.chest_minecart"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:entity"
+    },
+    "minecraft:entity": {
+      "entity": {
+        "type": "minecraft:chest_minecart"
+      }
+    }
+  }
+}

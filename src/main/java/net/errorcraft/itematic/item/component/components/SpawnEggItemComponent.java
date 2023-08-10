@@ -1,15 +1,19 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
 import net.errorcraft.itematic.item.color.colors.IndexItemColor;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
+import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
@@ -35,7 +39,7 @@ public record SpawnEggItemComponent() implements ItemComponent {
         if (entityItemComponent.isEmpty()) {
             return Optional.empty();
         }
-        if (entityItemComponent.get().getEntityType(stack) != entityType) {
+        if (entityItemComponent.get().getEntityInitializer(stack).type() != entityType) {
             return Optional.empty();
         }
         MobEntity mobEntity = this.createEntity(entity, entityType, world);
@@ -56,12 +60,13 @@ public record SpawnEggItemComponent() implements ItemComponent {
         return Optional.of(mobEntity);
     }
 
-    public static ItemComponent[] from(RegistryEntry<EntityType<?>> entity, int primaryColor, int secondaryColor) {
+    public static ItemComponent[] from(RegistryEntry<EntityType<?>> entity, int primaryColor, int secondaryColor, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
         return new ItemComponent[] {
-            new EntityItemComponent(entity),
+            new EntityItemComponent(new SimpleEntityInitializer<>(entity.value()), true),
             new SpawnEggItemComponent(),
             new CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling.SOURCE_ONLY, true),
-            new TintedItemComponent(IndexItemColor.of(primaryColor, secondaryColor))
+            new TintedItemComponent(IndexItemColor.of(primaryColor, secondaryColor)),
+            new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ENTITY))
         };
     }
 

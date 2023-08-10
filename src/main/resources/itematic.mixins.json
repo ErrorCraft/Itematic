@@ -49,6 +49,8 @@
     "enchantment.EnchantmentHelperExtender",
     "entity.BucketableExtender",
     "entity.EntityExtender",
+    "entity.EntityTypeExtender",
+    "entity.EntityTypeExtender$BuilderExtender",
     "entity.EquipmentSlotExtender",
     "entity.ItemEntitiesExtender",
     "entity.LivingEntityExtender",

@@ -4,6 +4,7 @@ import net.errorcraft.itematic.loot.context.ItematicLootContextTypes;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameterSet;
@@ -12,6 +13,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +28,20 @@ public record ActionContext(ServerWorld world, Optional<Entity> target, Vec3d po
         return new Builder(world).stack(stack);
     }
 
+    public Optional<PlayerEntity> player() {
+        if (this.target.isEmpty()) {
+            return Optional.empty();
+        }
+        if (this.target.get() instanceof PlayerEntity playerEntity) {
+            return Optional.of(playerEntity);
+        }
+        return Optional.empty();
+    }
+
+    public BlockPos blockPos() {
+        return BlockPos.ofFloored(this.position);
+    }
+
     public LootContext lootContext() {
         LootContextParameterSet set = new LootContextParameterSet.Builder(this.world)
             .add(LootContextParameters.THIS_ENTITY, this.target.orElse(null))
@@ -33,6 +49,10 @@ public record ActionContext(ServerWorld world, Optional<Entity> target, Vec3d po
             .add(LootContextParameters.TOOL, this.stack)
             .build(ItematicLootContextTypes.ACTION);
         return new LootContext.Builder(set).build(null);
+    }
+
+    public static ActionContext of(ServerWorld world, @Nullable Entity target, BlockPos pos, Direction side, ItemStack stack) {
+        return new ActionContext(world, Optional.ofNullable(target), Vec3d.ofBottomCenter(pos), side, stack);
     }
 
     public static class Builder {

@@ -8,7 +8,9 @@
   "components": {
     "minecraft:bucket": {
       "emptying_sound_event": "minecraft:item.bucket.empty_fish",
-      "entity": "minecraft:pufferfish",
+      "entity": {
+        "type": "minecraft:pufferfish"
+      },
       "fluid": "minecraft:water"
     },
     "minecraft:dispensable": {

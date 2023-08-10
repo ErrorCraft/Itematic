@@ -1,0 +1,33 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.hoglin_spawn_egg"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:can_place_on_fluids": {
+      "allow_original_placement": true,
+      "handler": "source_only"
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:entity"
+    },
+    "minecraft:entity": {
+      "allow_item_data": true,
+      "entity": {
+        "type": "minecraft:hoglin"
+      }
+    },
+    "minecraft:spawn_egg": {},
+    "minecraft:tinted": {
+      "tint": {
+        "type": "minecraft:index",
+        "indices": [
+          13004373,
+          6251620
+        ]
+      }
+    }
+  }
+}
