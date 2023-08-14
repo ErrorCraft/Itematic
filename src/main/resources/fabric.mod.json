@@ -68,6 +68,9 @@
       "net/minecraft/class_1391": [
         "net/errorcraft/itematic/access/entity/ai/goal/TemptGoalAccess"
       ],
+      "net/minecraft/class_1688": [
+        "net/errorcraft/itematic/access/entity/vehicle/AbstractMinecartEntityAccess"
+      ],
       "net/minecraft/class_1690": [
         "net/errorcraft/itematic/access/entity/vehicle/BoatEntityAccess"
       ],
