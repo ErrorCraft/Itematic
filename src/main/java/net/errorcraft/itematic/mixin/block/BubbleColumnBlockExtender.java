@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.block;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.BubbleColumnBlock;
 import net.minecraft.item.ItemConvertible;
@@ -18,7 +19,7 @@ public class BubbleColumnBlockExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack tryDrainFluidNewItemStackUseRegistryEntry(ItemConvertible item, WorldAccess world) {
+    private ItemStack tryDrainFluidNewItemStackUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
         return new ItemStack(world.getItem(ItemKeys.WATER_BUCKET));
     }
 }

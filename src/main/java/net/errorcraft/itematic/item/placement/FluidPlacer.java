@@ -76,7 +76,7 @@ public class FluidPlacer extends Placer {
         if (!(this.blockState.getBlock() instanceof FluidDrainable fluidDrainable)) {
             return TypedActionResult.pass(this.stack);
         }
-        ItemStack drainedItemStack = fluidDrainable.tryDrainFluid(this.world, this.blockPos, this.blockState);
+        ItemStack drainedItemStack = fluidDrainable.tryDrainFluid(this.player, this.world, this.blockPos, this.blockState);
         if (drainedItemStack.isEmpty()) {
             return TypedActionResult.pass(this.stack);
         }
@@ -105,7 +105,7 @@ public class FluidPlacer extends Placer {
         }
         BlockState blockState = this.world.getBlockState(pos);
         boolean canPlace = blockState.canBucketPlace(fluid);
-        if (!blockState.isAir() && !canPlace && !(blockState.getBlock() instanceof FluidFillable fluidFillable && fluidFillable.canFillWithFluid(this.world, pos, blockState, fluid))) {
+        if (!blockState.isAir() && !canPlace && !(blockState.getBlock() instanceof FluidFillable fluidFillable && fluidFillable.canFillWithFluid(this.player, this.world, pos, blockState, fluid))) {
             return allowOffset && this.tryPlaceFluid(this.blockPos.offset(this.direction), false);
         }
         if (this.tryEvaporate(pos)) {

@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.block;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.PowderSnowBlock;
 import net.minecraft.item.Item;
@@ -30,7 +31,7 @@ public class PowderSnowBlockExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack tryDrainFluidNewItemStackUseRegistryEntry(ItemConvertible item, WorldAccess world) {
+    private ItemStack tryDrainFluidNewItemStackUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
         return new ItemStack(world.getItem(ItemKeys.POWDER_SNOW_BUCKET));
     }
 }

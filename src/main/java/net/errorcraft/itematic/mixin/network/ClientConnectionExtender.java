@@ -7,8 +7,8 @@ import net.errorcraft.itematic.access.network.ClientConnectionAccess;
 import net.errorcraft.itematic.util.EventUtil;
 import net.fabricmc.fabric.api.event.Event;
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.DecoderHandler;
-import net.minecraft.network.PacketEncoder;
+import net.minecraft.network.handler.DecoderHandler;
+import net.minecraft.network.handler.PacketEncoder;
 import net.minecraft.registry.DynamicRegistryManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,7 +33,7 @@ public class ClientConnectionExtender implements ClientConnectionAccess {
             method = "initChannel",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/network/ClientConnection;addHandlers(Lio/netty/channel/ChannelPipeline;Lnet/minecraft/network/NetworkSide;)V",
+                target = "Lnet/minecraft/network/ClientConnection;addHandlers(Lio/netty/channel/ChannelPipeline;Lnet/minecraft/network/NetworkSide;Lnet/minecraft/network/handler/PacketSizeLogger;)V",
                 shift = At.Shift.AFTER
             )
         )

@@ -11,17 +11,15 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
 import net.minecraft.recipe.BrewingRecipeRegistry;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Coerce;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,142 +46,78 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
         return ((ItemStack) t).hasComponent(ItemComponentTypes.POTION_HOLDER);
     }
 
-    @Redirect(
-        method = { "isItemRecipeIngredient", "hasItemRecipe" },
-        at = @At(
-            value = "INVOKE",
-            target = "Ljava/util/List;size()I",
-            ordinal = 0
-        )
-    )
-    private static int itemRecipesSizeUseRegistryKeyList(List<?> instance) {
-        return ITEM_RECIPES.size();
+    /**
+     * @author ErrorCraft
+     * @reason Uses item keys instead of direct items.
+     */
+    @Overwrite
+    public static boolean isItemRecipeIngredient(ItemStack stack) {
+        for (BrewingRecipe<RegistryKey<Item>> recipe : ITEM_RECIPES) {
+            if (stack.isOf(recipe.ingredient())) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    @Redirect(
-        method = { "isPotionRecipeIngredient", "isBrewable", "hasPotionRecipe" },
+    /**
+     * @author ErrorCraft
+     * @reason Uses item keys instead of direct items.
+     */
+    @Overwrite
+    public static boolean hasItemRecipe(ItemStack input, ItemStack ingredient) {
+        for (BrewingRecipe<RegistryKey<Item>> recipe : ITEM_RECIPES) {
+            if (input.isOf(recipe.input()) && ingredient.isOf(recipe.ingredient())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses item keys instead of direct items.
+     */
+    @Overwrite
+    public static boolean isPotionRecipeIngredient(ItemStack stack) {
+        for (BrewingRecipe<Potion> recipe : POTION_RECIPES) {
+            if (stack.isOf(recipe.ingredient())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Inject(
+        method = "hasPotionRecipe",
         at = @At(
-            value = "INVOKE",
-            target = "Ljava/util/List;size()I",
-            ordinal = 0
+            value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/potion/PotionUtil;getPotion(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/potion/Potion;"
         ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/recipe/BrewingRecipeRegistry;POTION_RECIPES:Ljava/util/List;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
+        cancellable = true
     )
-    private static int potionRecipesSizeUseRegistryKeyList(List<?> instance) {
-        return POTION_RECIPES.size();
+    private static void hasPotionRecipeUseItemKeys(ItemStack input, ItemStack ingredient, CallbackInfoReturnable<Boolean> info, @Local Potion potion) {
+        for (BrewingRecipe<Potion> recipe : POTION_RECIPES) {
+            if (recipe.input() == potion && ingredient.isOf(recipe.ingredient())) {
+                info.setReturnValue(true);
+                return;
+            }
+        }
+        info.setReturnValue(false);
     }
 
-    @Redirect(
-        method = { "isItemRecipeIngredient", "isPotionRecipeIngredient", "isBrewable", "hasItemRecipe", "hasPotionRecipe" },
-        at = @At(
-            value = "INVOKE",
-            target = "Ljava/util/List;get(I)Ljava/lang/Object;"
-        )
-    )
-    private static <E> E recipesGetReturnNull(List<E> instance, int i) {
-        return null;
-    }
-
-    @Redirect(
-        method = { "isItemRecipeIngredient", "isPotionRecipeIngredient", "hasItemRecipe", "hasPotionRecipe" },
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/recipe/BrewingRecipeRegistry$Recipe;ingredient:Lnet/minecraft/recipe/Ingredient;",
-            opcode = Opcodes.GETFIELD
-        )
-    )
-    private static Ingredient recipesGetIngredientReturnNull(@Coerce Object instance) {
-        return null;
-    }
-
-    @Redirect(
-        method = "hasItemRecipe",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/recipe/BrewingRecipeRegistry$Recipe;input:Ljava/lang/Object;",
-            opcode = Opcodes.GETFIELD
-        )
-    )
-    private static Object hasItemRecipeGetInputForceItemForComparison(@Coerce Object instance, @Local Item item) {
-        return item;
-    }
-
-    @Redirect(
-        method = "hasPotionRecipe",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/recipe/BrewingRecipeRegistry$Recipe;input:Ljava/lang/Object;",
-            opcode = Opcodes.GETFIELD
-        )
-    )
-    private static Object hasPotionRecipeGetInputForcePotionForComparison(@Coerce Object instance, @Local Potion potion) {
-        return potion;
-    }
-
-    @Redirect(
-        method = "isItemRecipeIngredient",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z",
-            ordinal = 0
-        )
-    )
-    private static boolean isItemRecipeIngredientTestUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack, @Local(ordinal = 0) int i) {
-        return itemStack.isOf(ITEM_RECIPES.get(i).ingredient());
-    }
-
-    @Redirect(
-        method = "hasItemRecipe",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z",
-            ordinal = 0
-        )
-    )
-    private static boolean hasItemRecipeTestUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack, @Local(ordinal = 0) ItemStack input, @Local(ordinal = 0) int i) {
-        BrewingRecipe<RegistryKey<Item>> recipe = ITEM_RECIPES.get(i);
-        return input.isOf(recipe.input()) && itemStack.isOf(recipe.ingredient());
-    }
-
-    @Redirect(
-        method = "isPotionRecipeIngredient",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
-        )
-    )
-    private static boolean isPotionRecipeIngredientTestUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack, @Local(ordinal = 0) int i) {
-        return itemStack.isOf(POTION_RECIPES.get(i).ingredient());
-    }
-
-    @Redirect(
-        method = "hasPotionRecipe",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
-        )
-    )
-    private static boolean hasPotionRecipeTestUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack, @Local Potion potion, @Local(ordinal = 0) int i) {
-        BrewingRecipe<Potion> recipe = POTION_RECIPES.get(i);
-        return recipe.input() == potion && itemStack.isOf(recipe.ingredient());
-    }
-
-    @Redirect(
-        method = "isBrewable",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/recipe/BrewingRecipeRegistry$Recipe;output:Ljava/lang/Object;",
-            opcode = Opcodes.GETFIELD
-        )
-    )
-    private static Object isBrewableGetOutputUseRegistryKeyList(@Coerce Object instance, @Local(ordinal = 0) int i) {
-        return POTION_RECIPES.get(i).output();
+    /**
+     * @author ErrorCraft
+     * @reason Uses item keys instead of direct items.
+     */
+    @Overwrite
+    public static boolean isBrewable(Potion potion) {
+        for (BrewingRecipe<Potion> recipe : POTION_RECIPES) {
+            if (recipe.output() == potion) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

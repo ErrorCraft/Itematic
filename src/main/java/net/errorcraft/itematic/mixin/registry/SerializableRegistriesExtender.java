@@ -29,8 +29,7 @@ public abstract class SerializableRegistriesExtender {
         method = "method_45958",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/google/common/collect/ImmutableMap$Builder;build()Lcom/google/common/collect/ImmutableMap;",
-            shift = At.Shift.BEFORE
+            target = "Lcom/google/common/collect/ImmutableMap$Builder;build()Lcom/google/common/collect/ImmutableMap;"
         ),
         locals = LocalCapture.CAPTURE_FAILHARD,
         remap = false

@@ -35,17 +35,17 @@
   "accessWidener": "itematic.accesswidener",
   "custom": {
     "loom:injected_interfaces": {
-      "net/minecraft/class_77": [
-        "net/errorcraft/itematic/access/loot/entry/ItemEntryAccess"
-      ],
-      "net/minecraft/class_185": [
-        "net/errorcraft/itematic/access/advancement/AdvancementDisplayAccess"
+      "net/minecraft/class_60": [
+        "net/errorcraft/itematic/access/loot/LootManagerAccess"
       ],
       "net/minecraft/class_507": [
         "net/errorcraft/itematic/access/client/gui/screen/recipebook/RecipeBookWidgetAccess"
       ],
       "net/minecraft/class_763": [
         "net/errorcraft/itematic/access/client/render/item/ItemModelsAccess"
+      ],
+      "net/minecraft/class_918": [
+        "net/errorcraft/itematic/access/client/render/item/ItemRendererAccess"
       ],
       "net/minecraft/class_1297": [
         "net/errorcraft/itematic/access/entity/EntityAccess"
@@ -110,9 +110,6 @@
       "net/minecraft/class_1937": [
         "net/errorcraft/itematic/access/world/WorldAccess"
       ],
-      "net/minecraft/class_2073": [
-        "net/errorcraft/itematic/access/predicate/item/ItemPredicateAccess"
-      ],
       "net/minecraft/class_2195": [
         "net/errorcraft/itematic/access/block/StemBlockAccess"
       ],
@@ -126,19 +123,19 @@
         "net/errorcraft/itematic/access/network/ClientConnectionAccess"
       ],
       "net/minecraft/class_2540": [
-        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/network/PacketByteBufAccess"
       ],
       "net/minecraft/class_2543": [
-        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/network/handler/DecoderHandlerAccess"
       ],
       "net/minecraft/class_2545": [
-        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/network/handler/PacketEncoderAccess"
       ],
       "net/minecraft/class_2586": [
         "net/errorcraft/itematic/access/block/entity/BlockEntityAccess"
       ],
       "net/minecraft/class_2989": [
-        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/server/ServerAdvancementLoaderAccess"
       ],
       "net/minecraft/class_3611": [
         "net/errorcraft/itematic/access/fluid/FluidAccess"
@@ -153,13 +150,10 @@
         "net/minecraft/util/StringIdentifiable"
       ],
       "net/minecraft/class_5257": [
-        "net/errorcraft/itematic/access/registry/DynamicRegistryManagerAccess"
+        "net/errorcraft/itematic/access/predicate/entity/AdvancementEntityPredicateDeserializerAccess"
       ],
       "net/minecraft/class_6880": [
         "net/errorcraft/itematic/access/registry/entry/RegistryEntryAccess"
-      ],
-      "net/minecraft/class_8129": [
-        "net/errorcraft/itematic/access/predicate/TagPredicateAccess"
       ]
     }
   },

@@ -3,8 +3,8 @@ package net.errorcraft.itematic.mixin.server;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
-import net.minecraft.network.DecoderHandler;
-import net.minecraft.network.PacketEncoder;
+import net.minecraft.network.handler.DecoderHandler;
+import net.minecraft.network.handler.PacketEncoder;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.server.ServerNetworkIo;
 import org.spongepowered.asm.mixin.Final;
@@ -25,7 +25,7 @@ public class ServerNetworkIoExtender {
             method = "initChannel",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/network/ClientConnection;addHandlers(Lio/netty/channel/ChannelPipeline;Lnet/minecraft/network/NetworkSide;)V",
+                target = "Lnet/minecraft/network/ClientConnection;addHandlers(Lio/netty/channel/ChannelPipeline;Lnet/minecraft/network/NetworkSide;Lnet/minecraft/network/handler/PacketSizeLogger;)V",
                 shift = At.Shift.AFTER
             )
         )

@@ -1,11 +1,13 @@
 package net.errorcraft.itematic.mixin.network;
 
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import io.netty.buffer.ByteBuf;
-import net.errorcraft.itematic.access.registry.DynamicRegistryManagerAccess;
+import net.errorcraft.itematic.access.network.PacketByteBufAccess;
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;
@@ -18,34 +20,48 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PacketByteBuf.class)
-public abstract class PacketByteBufExtender extends ByteBuf implements DynamicRegistryManagerAccess {
+public abstract class PacketByteBufExtender extends ByteBuf implements PacketByteBufAccess {
     @Shadow
     public abstract int readVarInt();
 
-    @Shadow
-    @Nullable
-    public abstract NbtCompound readNbt();
-
     private DynamicRegistryManager registryManager;
+
+    @Redirect(
+        method = "readItemStack",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/network/PacketByteBuf;readRegistryValue(Lnet/minecraft/util/collection/IndexedIterable;)Ljava/lang/Object;"
+        )
+    )
+    private <T> T returnNullForItemRegistryEntry(PacketByteBuf instance, IndexedIterable<T> registry) {
+        return null;
+    }
 
     @Inject(
         method = "readItemStack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/network/PacketByteBuf;readRegistryValue(Lnet/minecraft/util/collection/IndexedIterable;)Ljava/lang/Object;"
-        ),
-        cancellable = true
+            target = "Lnet/minecraft/network/PacketByteBuf;readByte()B"
+        )
     )
-    private void readItemStackUseRegistryEntry(CallbackInfoReturnable<ItemStack> info) {
+    private void storeItemRegistryEntry(CallbackInfoReturnable<ItemStack> info, @Share("entry") LocalRef<RegistryEntry<Item>> entry) {
         Registry<Item> registry = this.registryManager.get(RegistryKeys.ITEM);
-        RegistryEntry<Item> entry = this.readRegistryEntry(registry);
-        byte count = this.readByte();
-        ItemStack itemStack = ItemStackUtil.ofNullable(entry, count);
-        itemStack.setNbt(this.readNbt());
-        info.setReturnValue(itemStack);
+        entry.set(this.readRegistryEntry(registry));
+    }
+
+    @Redirect(
+        method = "readItemStack",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack"
+        )
+    )
+    private ItemStack readItemStackNewItemStackUseRegistryEntry(ItemConvertible item, int count, @Share("entry") LocalRef<RegistryEntry<Item>> entry) {
+        return ItemStackUtil.ofNullable(entry.get(), count);
     }
 
     @ModifyArg(
@@ -60,18 +76,13 @@ public abstract class PacketByteBufExtender extends ByteBuf implements DynamicRe
     }
 
     @Override
-    public DynamicRegistryManager getRegistryManager() {
-        return this.registryManager;
-    }
-
-    @Override
     public void setRegistryManager(DynamicRegistryManager registryManager) {
         this.registryManager = registryManager;
     }
 
     @Nullable
     private <T> RegistryEntry<T> readRegistryEntry(Registry<T> registry) {
-        int id = readVarInt();
+        int id = this.readVarInt();
         return registry.getEntry(id).orElse(null);
     }
 }

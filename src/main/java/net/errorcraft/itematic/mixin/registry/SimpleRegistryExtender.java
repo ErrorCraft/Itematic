@@ -13,14 +13,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(SimpleRegistry.class)
 public class SimpleRegistryExtender<T> {
     @Inject(
-        method = "set(ILnet/minecraft/registry/RegistryKey;Ljava/lang/Object;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/registry/entry/RegistryEntry$Reference;",
+        method = "method_46744",
         at = @At(
             value = "INVOKE",
             target = "Lit/unimi/dsi/fastutil/objects/ObjectList;set(ILjava/lang/Object;)Ljava/lang/Object;",
             remap = false
         )
     )
-    private void setSetRawId(int i, RegistryKey<T> registryKey, T object, Lifecycle lifecycle, CallbackInfoReturnable<RegistryEntry.Reference<T>> info, @Local RegistryEntry.Reference<T> reference) {
+    private void setRegistryEntryRawId(int i, RegistryKey<T> registryKey, T object, Lifecycle lifecycle, CallbackInfoReturnable<RegistryEntry.Reference<T>> info, @Local RegistryEntry.Reference<T> reference) {
         reference.setRawId(i);
     }
 }

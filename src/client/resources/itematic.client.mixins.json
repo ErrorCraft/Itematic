@@ -9,6 +9,7 @@
     "gui.screen.ingame.LoomScreenExtender",
     "gui.screen.recipebook.AbstractFurnaceRecipeBookScreenExtender",
     "gui.screen.recipebook.RecipeBookWidgetExtender",
+    "network.ClientConfigurationNetworkHandlerExtender",
     "network.ClientPlayerInteractionManagerExtender",
     "network.ClientPlayNetworkHandlerExtender",
     "option.HotbarStorageEntryExtender",

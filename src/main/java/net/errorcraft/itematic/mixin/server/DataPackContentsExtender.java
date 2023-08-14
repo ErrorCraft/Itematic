@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.server;
 
 import net.errorcraft.itematic.recipe.RecipeSerializerUtil;
 import net.minecraft.item.Item;
+import net.minecraft.loot.LootManager;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;
@@ -28,11 +29,14 @@ public class DataPackContentsExtender {
     @Final
     private RecipeManager recipeManager;
 
+    @Shadow @Final private LootManager lootManager;
+
     @Inject(
         method = "<init>",
         at = @At("TAIL")
     )
     private void constructorStoreDynamicRegistryManager(DynamicRegistryManager.Immutable dynamicRegistryManager, FeatureSet enabledFeatures, CommandManager.RegistrationEnvironment environment, int functionPermissionLevel, CallbackInfo info) {
+        this.lootManager.setRegistryManager(dynamicRegistryManager);
         Registry<Item> itemRegistry = dynamicRegistryManager.get(RegistryKeys.ITEM);
         this.serverAdvancementLoader.setRegistryManager(dynamicRegistryManager);
         this.recipeManager.setItemRegistry(itemRegistry);

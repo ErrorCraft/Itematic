@@ -25,6 +25,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -258,6 +259,17 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     @Overwrite
     public boolean itemMatches(RegistryEntry<Item> itemEntry) {
         return this.entry == itemEntry;
+    }
+
+    @Inject(
+        method = "itemMatches(Lnet/minecraft/registry/entry/RegistryEntryList;)Z",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void checkNullRegistryEntry(RegistryEntryList<Item> registryEntryList, CallbackInfoReturnable<Boolean> info) {
+        if (this.entry == null) {
+            info.setReturnValue(false);
+        }
     }
 
     @Inject(

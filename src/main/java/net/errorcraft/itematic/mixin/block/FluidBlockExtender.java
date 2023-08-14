@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.block;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.ItemConvertible;
@@ -24,7 +25,7 @@ public class FluidBlockExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack tryDrainFluidNewItemStackUseRegistryEntry(ItemConvertible item, WorldAccess world) {
+    private ItemStack tryDrainFluidNewItemStackUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
         return new ItemStack(world.getItem(this.fluid.getBucketItemKey()));
     }
 }
