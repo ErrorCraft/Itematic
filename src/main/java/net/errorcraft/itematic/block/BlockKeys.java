@@ -104,6 +104,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> MANGROVE_SLAB = of("mangrove_slab");
     public static final RegistryKey<Block> BAMBOO_SLAB = of("bamboo_slab");
     public static final RegistryKey<Block> BAMBOO_MOSAIC_SLAB = of("bamboo_mosaic_slab");
+    public static final RegistryKey<Block> BRICKS = of("bricks");
     public static final RegistryKey<Block> BOOKSHELF = of("bookshelf");
     public static final RegistryKey<Block> CHISELED_BOOKSHELF = of("chiseled_bookshelf");
     public static final RegistryKey<Block> OBSIDIAN = of("obsidian");
@@ -136,6 +137,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> MANGROVE_STAIRS = of("mangrove_stairs");
     public static final RegistryKey<Block> BAMBOO_STAIRS = of("bamboo_stairs");
     public static final RegistryKey<Block> BAMBOO_MOSAIC_STAIRS = of("bamboo_mosaic_stairs");
+    public static final RegistryKey<Block> COMMAND_BLOCK = of("command_block");
     public static final RegistryKey<Block> BARRIER = of("barrier");
     public static final RegistryKey<Block> WHITE_CARPET = of("white_carpet");
     public static final RegistryKey<Block> ORANGE_CARPET = of("orange_carpet");

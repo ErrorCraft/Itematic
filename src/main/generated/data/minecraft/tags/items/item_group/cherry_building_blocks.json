@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:cherry_log",
+    "minecraft:cherry_wood",
+    "minecraft:stripped_cherry_log",
+    "minecraft:stripped_cherry_wood",
+    "minecraft:cherry_planks",
+    "minecraft:cherry_stairs",
+    "minecraft:cherry_slab",
+    "minecraft:cherry_fence",
+    "minecraft:cherry_fence_gate",
+    "minecraft:cherry_door",
+    "minecraft:cherry_trapdoor",
+    "minecraft:cherry_pressure_plate",
+    "minecraft:cherry_button"
+  ]
+}

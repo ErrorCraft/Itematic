@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(SimpleRegistry.class)
 public class SimpleRegistryExtender<T> {
     @Inject(
-        method = "method_46744",
+        method = "set",
         at = @At(
             value = "INVOKE",
             target = "Lit/unimi/dsi/fastutil/objects/ObjectList;set(ILjava/lang/Object;)Ljava/lang/Object;",

@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.registry;
 
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.armor.ArmorMaterials;
+import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProviders;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.minecraft.registry.BuiltinRegistries;
 import net.minecraft.registry.RegistryBuilder;
@@ -23,7 +24,10 @@ public class BuiltinRegistriesExtender {
         method = "<clinit>",
         at = @At("TAIL")
     )
-    private static void initialiseItemRegistry(CallbackInfo info) {
-        REGISTRY_BUILDER.addRegistry(RegistryKeys.ITEM, ItemUtil::bootstrap).addRegistry(ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterials::bootstrap);
+    private static void initialiseCustomRegistries(CallbackInfo info) {
+        REGISTRY_BUILDER.addRegistry(RegistryKeys.ITEM, ItemUtil::bootstrap)
+            .addRegistry(ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterials::bootstrap)
+            .addRegistry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProviders::bootstrap)
+        ;
     }
 }

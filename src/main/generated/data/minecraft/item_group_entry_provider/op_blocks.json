@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "type": "stack",
+      "item": "minecraft:command_block",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:command_block_minecart",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:barrier",
+      "requires_permissions": true
+    }
+  ]
+}

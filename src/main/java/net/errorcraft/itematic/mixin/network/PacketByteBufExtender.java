@@ -64,6 +64,17 @@ public abstract class PacketByteBufExtender extends ByteBuf implements PacketByt
         return ItemStackUtil.ofNullable(entry.get(), count);
     }
 
+    @Redirect(
+        method = "writeItemStack",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
+        )
+    )
+    private Item getItemUseRegistryEntry(ItemStack instance) {
+        return instance.getRegistryEntry().value();
+    }
+
     @ModifyArg(
         method = "writeItemStack",
         at = @At(

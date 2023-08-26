@@ -38,6 +38,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -53,6 +54,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackExtender implements ItemStackAccess {
@@ -63,10 +65,6 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     @Shadow
     @Final
     private static String UNBREAKABLE_KEY;
-
-    @Shadow
-    @Final
-    private Item item;
 
     @Shadow
     private int count;
@@ -109,14 +107,36 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Redirect(
+        method = { "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V", "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V" },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/registry/entry/RegistryEntry;value()Ljava/lang/Object;"
+        )
+    )
+    private static <T> T constructorValueReturnNullToPreventUnboundRegistryEntryIssues(RegistryEntry<T> instance) {
+        return null;
+    }
+
+    @Redirect(
         method = "<init>(Lnet/minecraft/item/ItemConvertible;I)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemConvertible;asItem()Lnet/minecraft/item/Item;"
+        )
+    )
+    private Item constructorAsItemReturnNullToPreventNullPointerException(ItemConvertible instance) {
+        return null;
+    }
+
+    @Redirect(
+        method = { "<init>(Lnet/minecraft/item/ItemConvertible;I)V", "setNbt" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/Item;isDamageable()Z"
         )
     )
-    private boolean constructorIsNeverDamageable(Item instance) {
-        return false;
+    private boolean isDamageableUseItemStackVersion(Item instance) {
+        return this.isDamageable();
     }
 
     @Inject(
@@ -140,6 +160,18 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Redirect(
+        method = "getItem",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/item/ItemStack;item:Lnet/minecraft/item/Item;",
+            opcode = Opcodes.GETFIELD
+        )
+    )
+    private Item getItemGetItemFieldUseRegistryEntryToPreventNullPointerException(ItemStack instance) {
+        return this.entry.value();
+    }
+
+    @Redirect(
         method = "writeNbt",
         at = @At(
             value = "INVOKE",
@@ -158,10 +190,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack copyUseEntry(ItemConvertible item, int count) {
-        if (this.entry == null) {
-            return new ItemStack(item, count);
-        }
+    private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, int count) {
         return new ItemStack(this.entry, count);
     }
 
@@ -171,7 +200,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
      */
     @Overwrite
     public int getMaxCount() {
-        return this.item == null ? ItemBase.MAX_MAX_COUNT : this.item.getMaxCount();
+        return this.entry == null ? ItemBase.MAX_MAX_COUNT : this.entry.value().getMaxCount();
     }
 
     @Inject(
@@ -199,6 +228,18 @@ public abstract class ItemStackExtender implements ItemStackAccess {
 
     /**
      * @author ErrorCraft
+     * @reason Uses a null check instead of a default air item.
+     */
+    @Overwrite
+    public Stream<TagKey<Item>> streamTags() {
+        if (this.entry == null) {
+            return Stream.empty();
+        }
+        return this.entry.streamTags();
+    }
+
+    /**
+     * @author ErrorCraft
      * @reason Uses an item key check instead of a default air item.
      */
     @Overwrite
@@ -208,6 +249,9 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             return true;
         }
         if (this.isOf(ItemKeys.AIR)) {
+            return true;
+        }
+        if (this.entry == null || !this.entry.hasKeyAndValue()) {
             return true;
         }
         return this.count <= 0;
@@ -231,7 +275,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
      */
     @Overwrite
     public boolean isDamageable() {
-        if (this.entry == null) {
+        if (this.isEmpty()) {
             return false;
         }
         if (!this.entry.value().isDamageable()) {
@@ -284,13 +328,13 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Redirect(
-        method = "areItemsEqual",
+        method = { "areItemsEqual", "canCombine" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private static boolean areItemsEqualIsOfUseRegistryEntryCheck(ItemStack instance, Item item, ItemStack left, ItemStack right) {
+    private static boolean isOfUseRegistryEntryCheck(ItemStack instance, Item item, ItemStack left, ItemStack right) {
         return instance.itemMatches(right.getRegistryEntry());
     }
 
@@ -302,6 +346,20 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     public void hasGlintCheckNullEntry(CallbackInfoReturnable<Boolean> info) {
         if (this.entry == null) {
             info.setReturnValue(false);
+        }
+    }
+
+    @Inject(
+        method = "getName",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
+        ),
+        cancellable = true
+    )
+    private void getNameGetItemCheckNullEntry(CallbackInfoReturnable<Text> info) {
+        if (this.entry == null) {
+            info.setReturnValue(Text.empty());
         }
     }
 

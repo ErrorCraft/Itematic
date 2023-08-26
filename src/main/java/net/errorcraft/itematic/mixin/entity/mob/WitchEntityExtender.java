@@ -41,7 +41,7 @@ public abstract class WitchEntityExtender extends RaiderEntity {
     }
 
     @Redirect(
-        method = "attack",
+        method = "shootAt",
         at = @At(
             value = "NEW",
             target = "net/minecraft/item/ItemStack"

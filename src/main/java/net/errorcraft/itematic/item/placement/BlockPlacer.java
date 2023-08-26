@@ -30,18 +30,20 @@ import org.jetbrains.annotations.Nullable;
 public class BlockPlacer extends Placer {
     private final RegistryEntry<Block> block;
     private final ItemPlacementContext context;
+    private final boolean operatorOnly;
 
-    public BlockPlacer(ItemStack stack, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, RegistryEntry<Block> block, ItemPlacementContext context) {
+    public BlockPlacer(ItemStack stack, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, RegistryEntry<Block> block, ItemPlacementContext context, boolean operatorOnly) {
         super(stack, world, blockPos, blockState, player);
         this.block = block;
         this.context = context;
+        this.operatorOnly = operatorOnly;
     }
 
-    public static BlockPlacer of(ItemUsageContext context, RegistryEntry<Block> block) {
+    public static BlockPlacer of(ItemUsageContext context, RegistryEntry<Block> block, boolean operatorOnly) {
         ItemPlacementContext placementContext = new ItemPlacementContext(context);
         World world = placementContext.getWorld();
         BlockPos blockPos = placementContext.getBlockPos();
-        return new BlockPlacer(placementContext.getStack(), world, blockPos, world.getBlockState(blockPos), placementContext.getPlayer(), block, placementContext);
+        return new BlockPlacer(placementContext.getStack(), world, blockPos, world.getBlockState(blockPos), placementContext.getPlayer(), block, placementContext, operatorOnly);
     }
 
     @Override
@@ -82,6 +84,9 @@ public class BlockPlacer extends Placer {
 
     @Nullable
     private BlockState getPlacementState() {
+        if (this.operatorOnly && this.player != null && !this.player.isCreativeLevelTwoOp()) {
+            return null;
+        }
         BlockState blockState = this.block.value().getPlacementState(this.context);
         return this.canPlace(blockState) ? blockState : null;
     }

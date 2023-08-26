@@ -73,7 +73,7 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         }
         if (this.block.isPresent() && result.getResult() != ActionResult.FAIL) {
             ItemUsageContext context = new ItemUsageContext(world, user, hand, stack, blockHitResult);
-            BlockPlacer blockPlacer = BlockPlacer.of(context, this.block.get());
+            BlockPlacer blockPlacer = BlockPlacer.of(context, this.block.get(), false);
             result = place(blockPlacer, result);
         }
         if (this.entity.isPresent() && !world.isClient() && result.getResult() != ActionResult.FAIL) {

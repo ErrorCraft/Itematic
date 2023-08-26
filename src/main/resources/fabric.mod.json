@@ -77,6 +77,12 @@
       "net/minecraft/class_1730": [
         "net/errorcraft/itematic/access/PlayerAccess"
       ],
+      "net/minecraft/class_1761": [
+        "net/errorcraft/itematic/access/item/ItemGroupAccess"
+      ],
+      "net/minecraft/class_1761\u0024class_7705": [
+        "net/minecraft/util/StringIdentifiable"
+      ],
       "net/minecraft/class_1781\u0024class_1782": [
         "net/minecraft/util/StringIdentifiable"
       ],

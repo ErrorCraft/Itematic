@@ -1,0 +1,30 @@
+{
+  "entries": [
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/tools"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/buckets"
+    },
+    "minecraft:fishing_rod",
+    "minecraft:fire_charge",
+    "minecraft:bone_meal",
+    "minecraft:compass",
+    "minecraft:clock",
+    "minecraft:ender_pearl",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/boats"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/minecarts"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/music_discs"
+    }
+  ]
+}

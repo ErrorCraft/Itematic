@@ -1,0 +1,11 @@
+{
+  "entries": [
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/wooden_building_blocks"
+    },
+    "minecraft:stone",
+    "minecraft:cobblestone",
+    "minecraft:bricks"
+  ]
+}

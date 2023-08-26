@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
+import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -37,5 +38,6 @@ public abstract class SerializableRegistriesExtender {
     private static void addItemRegistryKey(CallbackInfoReturnable<Map<RegistryKey<? extends Registry<?>>, SerializableRegistries.Info<?>>> info, ImmutableMap.Builder<RegistryKey<? extends Registry<?>>, SerializableRegistries.Info<?>> builder) {
         add(builder, RegistryKeys.ITEM, ItemUtil.CODEC);
         add(builder, ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterial.CODEC);
+        add(builder, ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC);
     }
 }

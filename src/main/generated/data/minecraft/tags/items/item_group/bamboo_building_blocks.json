@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:bamboo_block",
+    "minecraft:stripped_bamboo_block",
+    "minecraft:bamboo_planks",
+    "minecraft:bamboo_mosaic",
+    "minecraft:bamboo_stairs",
+    "minecraft:bamboo_mosaic_stairs",
+    "minecraft:bamboo_slab",
+    "minecraft:bamboo_mosaic_slab",
+    "minecraft:bamboo_fence",
+    "minecraft:bamboo_fence_gate",
+    "minecraft:bamboo_door",
+    "minecraft:bamboo_trapdoor",
+    "minecraft:bamboo_pressure_plate",
+    "minecraft:bamboo_button"
+  ]
+}

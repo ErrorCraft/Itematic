@@ -1,0 +1,27 @@
+{
+  "entries": [
+    "minecraft:redstone",
+    "minecraft:oak_button",
+    "minecraft:oak_pressure_plate",
+    "minecraft:white_wool",
+    "minecraft:lectern",
+    "minecraft:daylight_detector",
+    "minecraft:chest",
+    "minecraft:barrel",
+    "minecraft:chiseled_bookshelf",
+    "minecraft:trapped_chest",
+    "minecraft:jukebox",
+    "minecraft:note_block",
+    "minecraft:composter",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/minecarts"
+    },
+    "minecraft:oak_chest_boat",
+    "minecraft:bamboo_chest_raft",
+    "minecraft:oak_door",
+    "minecraft:oak_fence_gate",
+    "minecraft:oak_trapdoor",
+    "minecraft:armor_stand"
+  ]
+}

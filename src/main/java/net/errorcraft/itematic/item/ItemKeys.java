@@ -104,6 +104,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> MANGROVE_SLAB = register("mangrove_slab");
     public static final RegistryKey<Item> BAMBOO_SLAB = register("bamboo_slab");
     public static final RegistryKey<Item> BAMBOO_MOSAIC_SLAB = register("bamboo_mosaic_slab");
+    public static final RegistryKey<Item> BRICKS = register("bricks");
     public static final RegistryKey<Item> BOOKSHELF = register("bookshelf");
     public static final RegistryKey<Item> CHISELED_BOOKSHELF = register("chiseled_bookshelf");
     public static final RegistryKey<Item> CHEST = register("chest");
@@ -132,6 +133,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> MANGROVE_STAIRS = register("mangrove_stairs");
     public static final RegistryKey<Item> BAMBOO_STAIRS = register("bamboo_stairs");
     public static final RegistryKey<Item> BAMBOO_MOSAIC_STAIRS = register("bamboo_mosaic_stairs");
+    public static final RegistryKey<Item> COMMAND_BLOCK = register("command_block");
     public static final RegistryKey<Item> BARRIER = register("barrier");
     public static final RegistryKey<Item> WHITE_CARPET = register("white_carpet");
     public static final RegistryKey<Item> ORANGE_CARPET = register("orange_carpet");
@@ -339,6 +341,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> PAPER = register("paper");
     public static final RegistryKey<Item> BOOK = register("book");
     public static final RegistryKey<Item> EGG = register("egg");
+    public static final RegistryKey<Item> COMPASS = register("compass");
     public static final RegistryKey<Item> FISHING_ROD = register("fishing_rod");
     public static final RegistryKey<Item> GLOWSTONE_DUST = register("glowstone_dust");
     public static final RegistryKey<Item> CLOCK = register("clock");

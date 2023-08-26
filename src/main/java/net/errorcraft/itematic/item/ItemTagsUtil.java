@@ -44,6 +44,38 @@ public class ItemTagsUtil {
     public static final TagKey<Item> VILLAGER_GATHERABLE_ITEMS = of("villager_gatherable_items");
     public static final TagKey<Item> FARMER_VILLAGER_GATHERABLE_ITEMS = of("farmer_villager_gatherable_items");
 
+    public static final TagKey<Item> OAK_BUILDING_BLOCKS = of("item_group/oak_building_blocks");
+    public static final TagKey<Item> SPRUCE_BUILDING_BLOCKS = of("item_group/spruce_building_blocks");
+    public static final TagKey<Item> BIRCH_BUILDING_BLOCKS = of("item_group/birch_building_blocks");
+    public static final TagKey<Item> JUNGLE_BUILDING_BLOCKS = of("item_group/jungle_building_blocks");
+    public static final TagKey<Item> ACACIA_BUILDING_BLOCKS = of("item_group/acacia_building_blocks");
+    public static final TagKey<Item> DARK_OAK_BUILDING_BLOCKS = of("item_group/dark_oak_building_blocks");
+    public static final TagKey<Item> MANGROVE_BUILDING_BLOCKS = of("item_group/mangrove_building_blocks");
+    public static final TagKey<Item> CHERRY_BUILDING_BLOCKS = of("item_group/cherry_building_blocks");
+    public static final TagKey<Item> BAMBOO_BUILDING_BLOCKS = of("item_group/bamboo_building_blocks");
+    public static final TagKey<Item> WOODEN_BUILDING_BLOCKS = of("item_group/wooden_building_blocks");
+    public static final TagKey<Item> WOOL = of("item_group/wool");
+    public static final TagKey<Item> WOOL_CARPETS = of("item_group/wool_carpets");
+    public static final TagKey<Item> BANNERS = of("item_group/banners");
+    public static final TagKey<Item> WOOD_BLOCKS = of("item_group/wood_blocks");
+    public static final TagKey<Item> LEAVES = of("item_group/leaves");
+    public static final TagKey<Item> SAPLINGS = of("item_group/saplings");
+    public static final TagKey<Item> PLANTS = of("item_group/plants");
+    public static final TagKey<Item> SEEDS = of("item_group/seeds");
+    public static final TagKey<Item> SIGNS = of("item_group/signs");
+    public static final TagKey<Item> HEADS = of("item_group/heads");
+    public static final TagKey<Item> MINECARTS = of("item_group/minecarts");
+    public static final TagKey<Item> TOOLS = of("item_group/tools");
+    public static final TagKey<Item> BUCKETS = of("item_group/buckets");
+    public static final TagKey<Item> BOATS = of("item_group/boats");
+    public static final TagKey<Item> MUSIC_DISCS = of("item_group/music_discs");
+    public static final TagKey<Item> SWORDS = of("item_group/swords");
+    public static final TagKey<Item> AXES = of("item_group/axes");
+    public static final TagKey<Item> ARMOR = of("item_group/armor");
+    public static final TagKey<Item> FOOD = of("item_group/food");
+    public static final TagKey<Item> DYES = of("item_group/dyes");
+    public static final TagKey<Item> BREWING_INGREDIENTS = of("item_group/brewing_ingredients");
+
     private ItemTagsUtil() {}
 
     private static TagKey<Item> of(String id) {

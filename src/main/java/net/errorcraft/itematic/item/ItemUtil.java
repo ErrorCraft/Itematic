@@ -754,6 +754,12 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.BRICKS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BRICKS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BRICKS)))
+                .build()
+        ));
         registerable.register(ItemKeys.BOOKSHELF, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BOOKSHELF).build()),
             ItemComponentSet.builder()
@@ -950,6 +956,12 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC_STAIRS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.COMMAND_BLOCK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COMMAND_BLOCK).rarity(Rarity.EPIC).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.COMMAND_BLOCK), true))
                 .build()
         ));
         registerable.register(ItemKeys.BARRIER, create(
@@ -2535,11 +2547,17 @@ public class ItemUtil {
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .build()
         ));
+        registerable.register(ItemKeys.COMPASS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COMPASS).build())
+        ));
         registerable.register(ItemKeys.FISHING_ROD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FISHING_ROD).build(), 1),
             ItemComponentSet.builder()
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
+        ));
+        registerable.register(ItemKeys.CLOCK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CLOCK).build())
         ));
         registerable.register(ItemKeys.GLOWSTONE_DUST, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOWSTONE_DUST).build())
@@ -3415,7 +3433,7 @@ public class ItemUtil {
         registerable.register(ItemKeys.ENCHANTED_BOOK, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_BOOK).rarity(Rarity.UNCOMMON).build(), 1),
             ItemComponentSet.builder()
-                .with(new EnchantmentHolderItemComponent(EnchantedBookItem.STORED_ENCHANTMENTS_KEY))
+                .with(EnchantmentHolderItemComponent.INSTANCE)
                 .with(new FoilItemComponent(true))
                 .build()
         ));

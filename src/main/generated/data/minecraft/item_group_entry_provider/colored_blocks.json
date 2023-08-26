@@ -1,0 +1,16 @@
+{
+  "entries": [
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/wool"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/wool_carpets"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/banners"
+    }
+  ]
+}

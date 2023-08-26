@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:glass_bottle",
+    "minecraft:nether_wart",
+    "minecraft:redstone",
+    "minecraft:glowstone_dust",
+    "minecraft:gunpowder",
+    "minecraft:dragon_breath",
+    "minecraft:fermented_spider_eye",
+    "minecraft:blaze_powder",
+    "minecraft:sugar",
+    "minecraft:rabbit_foot",
+    "minecraft:glistering_melon_slice",
+    "minecraft:spider_eye",
+    "minecraft:pufferfish",
+    "minecraft:magma_cream",
+    "minecraft:golden_carrot",
+    "minecraft:ghast_tear",
+    "minecraft:turtle_helmet",
+    "minecraft:phantom_membrane"
+  ]
+}

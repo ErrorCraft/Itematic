@@ -4,6 +4,7 @@ import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.color.ItemColorType;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.event.ItemEvent;
+import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.registry.Registry;
@@ -17,6 +18,7 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<DispenserBehavior>> DISPENSE_BEHAVIOR = RegistryKey.ofRegistry(new Identifier("dispense_behavior"));
     public static final RegistryKey<Registry<ItemEvent>> ITEM_EVENT = RegistryKey.ofRegistry(new Identifier("item_event"));
     public static final RegistryKey<Registry<ActionType<?>>> ACTION_TYPE = RegistryKey.ofRegistry(new Identifier("action_type"));
+    public static final RegistryKey<Registry<ItemGroupEntryProvider>> ITEM_GROUP_ENTRY_PROVIDER = RegistryKey.ofRegistry(new Identifier("item_group_entry_provider"));
 
     private ItematicRegistryKeys() {}
 }

@@ -20,10 +20,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record BlockItemComponent(RegistryEntry<Block> block) implements ItemComponent {
+public record BlockItemComponent(RegistryEntry<Block> block, boolean operatorOnly) implements ItemComponent {
     public static final Codec<BlockItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.BLOCK).fieldOf("block").forGetter(BlockItemComponent::block)
+        RegistryFixedCodec.of(RegistryKeys.BLOCK).fieldOf("block").forGetter(BlockItemComponent::block),
+        Codec.BOOL.optionalFieldOf("operator_only", false).forGetter(BlockItemComponent::operatorOnly)
     ).apply(instance, BlockItemComponent::new));
+
+    public BlockItemComponent(RegistryEntry<Block> block) {
+        this(block, false);
+    }
 
     @Override
     public ItemComponentType<?> getType() {
@@ -37,7 +42,7 @@ public record BlockItemComponent(RegistryEntry<Block> block) implements ItemComp
 
     @Override
     public TypedActionResult<ItemStack> useOnBlock(ItemUsageContext context) {
-        BlockPlacer placer = BlockPlacer.of(context, this.block);
+        BlockPlacer placer = BlockPlacer.of(context, this.block, this.operatorOnly);
         return placer.place();
     }
 

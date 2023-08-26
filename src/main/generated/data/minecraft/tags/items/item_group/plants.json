@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:azalea",
+    "minecraft:flowering_azalea",
+    "minecraft:grass",
+    "minecraft:fern",
+    "minecraft:dead_bush",
+    "minecraft:bamboo",
+    "minecraft:vine",
+    "minecraft:tall_grass",
+    "minecraft:large_fern"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "entries": [
+    "minecraft:crafting_table",
+    "minecraft:cartography_table",
+    "minecraft:fletching_table",
+    "minecraft:smithing_table",
+    "minecraft:loom",
+    "minecraft:composter",
+    "minecraft:note_block",
+    "minecraft:jukebox",
+    "minecraft:end_crystal",
+    "minecraft:brewing_stand",
+    "minecraft:ladder",
+    "minecraft:scaffolding",
+    "minecraft:armor_stand",
+    "minecraft:item_frame",
+    "minecraft:glow_item_frame",
+    "minecraft:painting",
+    "minecraft:bookshelf",
+    "minecraft:chiseled_bookshelf",
+    "minecraft:lectern",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/signs"
+    },
+    "minecraft:chest",
+    "minecraft:barrel",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/banners"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/heads"
+    }
+  ]
+}

@@ -1,0 +1,676 @@
+{
+  "entries": [
+    "minecraft:coal",
+    "minecraft:charcoal",
+    "minecraft:lapis_lazuli",
+    "minecraft:diamond",
+    "minecraft:gold_nugget",
+    "minecraft:iron_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:netherite_ingot",
+    "minecraft:stick",
+    "minecraft:wheat",
+    "minecraft:bone_meal",
+    "minecraft:feather",
+    "minecraft:snowball",
+    "minecraft:egg",
+    "minecraft:leather",
+    "minecraft:scute",
+    "minecraft:fire_charge",
+    "minecraft:blaze_rod",
+    "minecraft:ender_pearl",
+    "minecraft:disc_fragment_5",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/dyes"
+    },
+    "minecraft:bowl",
+    "minecraft:paper",
+    "minecraft:book",
+    "minecraft:firework_star",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/brewing_ingredients"
+    },
+    "minecraft:experience_bottle",
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:protection\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:protection\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:protection\",lvl:3s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:protection\",lvl:4s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:fire_protection\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:fire_protection\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:fire_protection\",lvl:3s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:fire_protection\",lvl:4s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:feather_falling\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:feather_falling\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:feather_falling\",lvl:3s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:feather_falling\",lvl:4s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:blast_protection\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:blast_protection\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:blast_protection\",lvl:3s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:blast_protection\",lvl:4s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:projectile_protection\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:projectile_protection\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:projectile_protection\",lvl:3s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:projectile_protection\",lvl:4s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:respiration\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:respiration\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:respiration\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:aqua_affinity\",lvl:1s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:thorns\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:thorns\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:thorns\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:depth_strider\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:depth_strider\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:depth_strider\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:frost_walker\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:frost_walker\",lvl:2s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:binding_curse\",lvl:1s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:soul_speed\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:soul_speed\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:soul_speed\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:swift_sneak\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:swift_sneak\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:swift_sneak\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:sharpness\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:sharpness\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:sharpness\",lvl:3s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:sharpness\",lvl:4s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:sharpness\",lvl:5s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:smite\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:smite\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:smite\",lvl:3s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:smite\",lvl:4s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:smite\",lvl:5s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:bane_of_arthropods\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:bane_of_arthropods\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:bane_of_arthropods\",lvl:3s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:bane_of_arthropods\",lvl:4s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:bane_of_arthropods\",lvl:5s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:knockback\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:knockback\",lvl:2s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:fire_aspect\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:fire_aspect\",lvl:2s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:looting\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:looting\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:looting\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:sweeping\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:sweeping\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:sweeping\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:efficiency\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:efficiency\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:efficiency\",lvl:3s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:efficiency\",lvl:4s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:efficiency\",lvl:5s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:silk_touch\",lvl:1s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:unbreaking\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:unbreaking\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:unbreaking\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:fortune\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:fortune\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:fortune\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:power\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:power\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:power\",lvl:3s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:power\",lvl:4s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:power\",lvl:5s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:punch\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:punch\",lvl:2s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:flame\",lvl:1s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:infinity\",lvl:1s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:luck_of_the_sea\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:luck_of_the_sea\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:luck_of_the_sea\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:lure\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:lure\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:lure\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:loyalty\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:loyalty\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:loyalty\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:impaling\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:impaling\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:impaling\",lvl:3s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:impaling\",lvl:4s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:impaling\",lvl:5s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:riptide\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:riptide\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:riptide\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:channeling\",lvl:1s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:multishot\",lvl:1s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:quick_charge\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:quick_charge\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:quick_charge\",lvl:3s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:piercing\",lvl:1s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:piercing\",lvl:2s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:piercing\",lvl:3s}]}",
+      "visibility": "search_tab_only"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:piercing\",lvl:4s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:mending\",lvl:1s}]}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:vanishing_curse\",lvl:1s}]}"
+    }
+  ]
+}

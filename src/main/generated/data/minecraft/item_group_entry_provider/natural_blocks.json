@@ -1,0 +1,30 @@
+{
+  "entries": [
+    "minecraft:grass_block",
+    "minecraft:sand",
+    "minecraft:snow",
+    "minecraft:stone",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/wood_blocks"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/leaves"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/saplings"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/plants"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/seeds"
+    },
+    "minecraft:lily_pad",
+    "minecraft:dried_kelp_block"
+  ]
+}

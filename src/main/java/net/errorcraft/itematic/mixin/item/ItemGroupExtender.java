@@ -1,34 +1,118 @@
 package net.errorcraft.itematic.mixin.item;
 
+import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import com.mojang.logging.LogUtils;
+import net.errorcraft.itematic.access.item.ItemGroupAccess;
+import net.errorcraft.itematic.item.ItemAccess;
+import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
+import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.StringIdentifiable;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-public class ItemGroupExtender {
-    @Mixin(ItemGroup.Builder.class)
-    public static class BuilderExtender {
-        @Shadow
-        @Final
-        private static ItemGroup.EntryCollector EMPTY_ENTRIES;
+import java.util.Locale;
 
-        @Shadow
-        private ItemGroup.Type type;
+@Mixin(ItemGroup.class)
+public class ItemGroupExtender implements ItemGroupAccess {
+    @Shadow
+    @Final
+    private ItemGroup.Type type;
 
-        @Shadow
-        private ItemGroup.EntryCollector entryCollector;
+    private RegistryKey<Item> iconKey;
+    private TagKey<ItemGroupEntryProvider> entryProviderTag;
+
+    @WrapWithCondition(
+        method = "updateEntries",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemGroup$EntryCollector;accept(Lnet/minecraft/item/ItemGroup$DisplayContext;Lnet/minecraft/item/ItemGroup$Entries;)V"
+        )
+    )
+    private boolean collectEntries(ItemGroup.EntryCollector instance, ItemGroup.DisplayContext context, ItemGroup.Entries entries) {
+        if (this.type != ItemGroup.Type.CATEGORY) {
+            return true;
+        }
+
+        context.lookup()
+            .getWrapperOrThrow(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER)
+            .getOptional(this.entryProviderTag)
+            .ifPresent(entryList -> collectEntries(entryList, context, entries));
+        return false;
+    }
+
+    @Override
+    public ItemStack icon(ItemAccess access) {
+        return new ItemStack(access.getEntry(this.iconKey));
+    }
+
+    @Override
+    public void setIconKey(RegistryKey<Item> iconKey) {
+        this.iconKey = iconKey;
+    }
+
+    @Override
+    public void setEntryProviderTag(TagKey<ItemGroupEntryProvider> entryProviderTag) {
+        this.entryProviderTag = entryProviderTag;
+    }
+
+    private static void collectEntries(RegistryEntryList.Named<ItemGroupEntryProvider> entryList, ItemGroup.DisplayContext context, ItemGroup.Entries entries) {
+        for (RegistryEntry<ItemGroupEntryProvider> entry : entryList) {
+            entry.value().collectEntries(context, entries);
+        }
+    }
+
+    @Mixin(ItemGroup.StackVisibility.class)
+    public static class StackVisibilityExtender implements StringIdentifiable {
+        private String name;
 
         @Inject(
-            method = "build",
-            at = @At("HEAD")
+            method = "<init>",
+            at = @At("TAIL")
         )
-        private void useEmptyEntries(CallbackInfoReturnable<ItemGroup> info) {
-            if (this.type == ItemGroup.Type.CATEGORY) {
-                this.entryCollector = EMPTY_ENTRIES;
-            }
+        private void initSetNameField(String string, int i, CallbackInfo info) {
+            this.name = string.toLowerCase(Locale.ROOT);
+        }
+
+        @Override
+        public String asString() {
+            return this.name;
+        }
+    }
+
+    @Mixin(targets = "net/minecraft/item/ItemGroup$EntriesImpl")
+    private static class EntriesImplExtender {
+        @Shadow
+        @Final
+        private ItemGroup group;
+
+        @Unique
+        private static final Logger LOGGER = LogUtils.getLogger();
+
+        @Inject(
+            method = "add",
+            at = @At(
+                value = "NEW",
+                target = "java/lang/IllegalStateException",
+                remap = false
+            ),
+            cancellable = true
+        )
+        private void logDuplicateEntryMessageAndCancelToPreventException(ItemStack stack, ItemGroup.StackVisibility visibility, CallbackInfo info) {
+            LOGGER.warn("Accidentally adding the same item stack twice " + stack.toHoverableText().getString() + " to a Creative Mode Tab: " + this.group.getDisplayName().getString());
+            info.cancel();
         }
     }
 }

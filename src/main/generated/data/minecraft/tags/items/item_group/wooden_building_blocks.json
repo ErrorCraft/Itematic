@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:item_group/oak_building_blocks",
+    "#minecraft:item_group/spruce_building_blocks",
+    "#minecraft:item_group/birch_building_blocks",
+    "#minecraft:item_group/jungle_building_blocks",
+    "#minecraft:item_group/acacia_building_blocks",
+    "#minecraft:item_group/dark_oak_building_blocks",
+    "#minecraft:item_group/mangrove_building_blocks",
+    "#minecraft:item_group/cherry_building_blocks",
+    "#minecraft:item_group/bamboo_building_blocks"
+  ]
+}

@@ -2,37 +2,39 @@ package net.errorcraft.itematic.mixin.client;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.recipebook.RecipeResultCollection;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.Recipe;
 import net.minecraft.registry.DefaultedRegistry;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.stream.Stream;
-
 @Mixin(MinecraftClient.class)
 public class MinecraftClientExtender {
+    @Redirect(
+        method = "method_1502",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/registry/DefaultedRegistry;getId(Ljava/lang/Object;)Lnet/minecraft/util/Identifier;"
+        ),
+        remap = false
+    )
+    @NotNull
+    private static <T> Identifier initializeSearchProvidersUseRegistryEntry(DefaultedRegistry<T> instance, T t, ItemStack stack) {
+        return stack.getKey().getValue();
+    }
+
     /**
      * @author ErrorCraft
      * @reason Uses a registry entry for data-driven items.
      */
-    @Overwrite
-    private static Stream<Identifier> method_1485(ItemStack stack) {
-        return Stream.of(stack.getKey().getValue());
-    }
-
-    @Redirect(
-        method = "method_1556",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/registry/DefaultedRegistry;getId(Ljava/lang/Object;)Lnet/minecraft/util/Identifier;"
-        )
-    )
-    private static <T> Identifier initializeSearchProvidersUseDynamicRegistry(DefaultedRegistry<Item> instance, T t, RecipeResultCollection resultCollection) {
-        return resultCollection.getRegistryManager().get(RegistryKeys.ITEM).getId((Item) t);
+    @Overwrite(remap = false)
+    private static Identifier method_1556(RecipeResultCollection resultCollection, Recipe<?> recipe) {
+        DynamicRegistryManager registryManager = resultCollection.getRegistryManager();
+        return recipe.getOutput(registryManager).getKey().getValue();
     }
 }

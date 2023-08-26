@@ -7,9 +7,7 @@
     "max_count": 1
   },
   "components": {
-    "minecraft:enchantment_holder": {
-      "enchantments_key": "StoredEnchantments"
-    },
+    "minecraft:enchantment_holder": {},
     "minecraft:foil": {
       "foil": true
     }
