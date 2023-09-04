@@ -808,7 +808,6 @@ public class ItematicData implements DataGeneratorEntrypoint {
                 .add(ItemGroupEntryProviderKeys.SPAWN_EGGS);
             this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.OP_BLOCKS)
                 .add(ItemGroupEntryProviderKeys.OP_BLOCKS);
-
         }
     }
 }

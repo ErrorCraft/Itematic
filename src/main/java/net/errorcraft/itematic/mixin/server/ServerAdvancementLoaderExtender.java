@@ -41,7 +41,7 @@ public class ServerAdvancementLoaderExtender implements ServerAdvancementLoaderA
         method = "method_20723",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/advancement/Advancement$Builder;fromJson(Lcom/google/gson/JsonObject;Lnet/minecraft/predicate/entity/AdvancementEntityPredicateDeserializer;)Lnet/minecraft/advancement/Advancement$Builder;"
+            target = "Lnet/minecraft/advancement/Advancement;fromJson(Lcom/google/gson/JsonObject;Lnet/minecraft/predicate/entity/AdvancementEntityPredicateDeserializer;)Lnet/minecraft/advancement/Advancement;"
         ),
         remap = false
     )

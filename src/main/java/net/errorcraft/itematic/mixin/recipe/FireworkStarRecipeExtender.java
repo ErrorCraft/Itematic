@@ -172,24 +172,13 @@ public class FireworkStarRecipeExtender {
     }
 
     @Redirect(
-        method = "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/DynamicRegistryManager;)Lnet/minecraft/item/ItemStack;",
+        method = { "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/DynamicRegistryManager;)Lnet/minecraft/item/ItemStack;", "getResult" },
         at = @At(
             value = "NEW",
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack craftNewItemStackUseRegistryEntry(ItemConvertible item, @Local DynamicRegistryManager dynamicRegistryManager) {
-        return new ItemStack(dynamicRegistryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.FIREWORK_STAR));
-    }
-
-    @Redirect(
-        method = "getOutput",
-        at = @At(
-            value = "NEW",
-            target = "net/minecraft/item/ItemStack"
-        )
-    )
-    private ItemStack getOutputNewItemStackUseRegistryEntry(ItemConvertible item, DynamicRegistryManager registryManager) {
+    private ItemStack newItemStackForFireworkStarUseRegistryEntry(ItemConvertible item, @Local DynamicRegistryManager registryManager) {
         return new ItemStack(registryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.FIREWORK_STAR));
     }
 }

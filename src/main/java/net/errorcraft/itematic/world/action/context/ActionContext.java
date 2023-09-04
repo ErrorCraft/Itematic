@@ -48,7 +48,7 @@ public record ActionContext(ServerWorld world, Optional<Entity> target, Vec3d po
             .add(LootContextParameters.ORIGIN, this.position)
             .add(LootContextParameters.TOOL, this.stack)
             .build(ItematicLootContextTypes.ACTION);
-        return new LootContext.Builder(set).build(null);
+        return new LootContext.Builder(set).build(Optional.empty());
     }
 
     public static ActionContext of(ServerWorld world, @Nullable Entity target, BlockPos pos, Direction side, ItemStack stack) {
@@ -76,7 +76,7 @@ public record ActionContext(ServerWorld world, Optional<Entity> target, Vec3d po
                 .add(LootContextParameters.ORIGIN, this.position(parameters.position()))
                 .add(LootContextParameters.TOOL, this.stack)
                 .build(ItematicLootContextTypes.ACTION);
-            return new LootContext.Builder(set).build(null);
+            return new LootContext.Builder(set).build(Optional.empty());
         }
 
         public Builder entity(ActionContextParameter parameter, Entity entity) {

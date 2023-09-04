@@ -27,6 +27,9 @@ public class TemptGoalExtender implements TemptGoalAccess {
         )
     )
     private boolean isTemptedByTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
+        if (this.foodTag == null) {
+            return false;
+        }
         return itemStack.isIn(this.foodTag);
     }
 }

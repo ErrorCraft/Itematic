@@ -2,12 +2,9 @@ package net.errorcraft.itematic.mixin.client.network;
 
 import net.errorcraft.itematic.mixin.item.ItemGroupsAccessor;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.item.Item;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,8 +27,7 @@ public class ClientPlayNetworkHandlerExtender {
         at = @At("HEAD")
     )
     private void setRecipeManagerItemRegistry(GameJoinS2CPacket packet, CallbackInfo info) {
-        Registry<Item> itemRegistry = this.combinedDynamicRegistries.get(RegistryKeys.ITEM);
-        this.recipeManager.setItemRegistry(itemRegistry);
+        this.recipeManager.setRegistryManager(this.combinedDynamicRegistries);
     }
 
     @Inject(

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.FireworkRocketRecipe;
@@ -73,18 +73,18 @@ public class FireworkRocketRecipeExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack craftNewItemStackUseRegistryEntry(ItemConvertible item, int count, RecipeInputInventory recipeInputInventory, DynamicRegistryManager dynamicRegistryManager) {
+    private ItemStack newItemStackForFireworkRocketUseRegistryEntry(ItemConvertible item, int count, @Local DynamicRegistryManager dynamicRegistryManager) {
         return new ItemStack(dynamicRegistryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.FIREWORK_ROCKET), count);
     }
 
     @Redirect(
-        method = "getOutput",
+        method = "getResult",
         at = @At(
             value = "NEW",
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getOutputNewItemStackUseRegistryEntry(ItemConvertible item, DynamicRegistryManager registryManager) {
+    private ItemStack newItemStackForFireworkRocketUseRegistryEntry(ItemConvertible item, DynamicRegistryManager registryManager) {
         return new ItemStack(registryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.FIREWORK_ROCKET));
     }
 }

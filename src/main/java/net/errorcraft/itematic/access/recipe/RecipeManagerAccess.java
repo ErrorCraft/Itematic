@@ -1,8 +1,7 @@
 package net.errorcraft.itematic.access.recipe;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.DynamicRegistryManager;
 
 public interface RecipeManagerAccess {
-    default void setItemRegistry(Registry<Item> registry) {}
+    default void setRegistryManager(DynamicRegistryManager registryManager) {}
 }

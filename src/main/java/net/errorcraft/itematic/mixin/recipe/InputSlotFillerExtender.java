@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.InputSlotFiller;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;
@@ -22,17 +23,17 @@ public class InputSlotFillerExtender<C extends Inventory> {
     private ItemAccess itemAccess;
 
     @Inject(
-        method = "fillInputSlots(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/recipe/Recipe;Z)V",
+        method = "fillInputSlots(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/recipe/RecipeEntry;Z)V",
         at = @At("HEAD")
     )
-    private void fillInputSlotsSetItemAccess(ServerPlayerEntity entity, @Nullable Recipe<C> recipe, boolean craftAll, CallbackInfo info) {
+    private void fillInputSlotsSetItemAccess(ServerPlayerEntity entity, @Nullable RecipeEntry<? extends Recipe<C>> recipe, boolean craftAll, CallbackInfo info) {
         if (this.itemAccess == null) {
             this.itemAccess = entity.getWorld().getItemAccess();
         }
     }
 
     @Redirect(
-        method = { "fillInputSlots(Lnet/minecraft/recipe/Recipe;Z)V", "acceptAlignedInput" },
+        method = { "fillInputSlots(Lnet/minecraft/recipe/RecipeEntry;Z)V", "acceptAlignedInput" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/recipe/RecipeMatcher;getStackFromId(I)Lnet/minecraft/item/ItemStack;"

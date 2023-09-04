@@ -3,7 +3,7 @@ package net.errorcraft.itematic.mixin.client;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.recipebook.RecipeResultCollection;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
@@ -33,8 +33,8 @@ public class MinecraftClientExtender {
      * @reason Uses a registry entry for data-driven items.
      */
     @Overwrite(remap = false)
-    private static Identifier method_1556(RecipeResultCollection resultCollection, Recipe<?> recipe) {
+    private static Identifier method_1556(RecipeResultCollection resultCollection, RecipeEntry<?> entry) {
         DynamicRegistryManager registryManager = resultCollection.getRegistryManager();
-        return recipe.getOutput(registryManager).getKey().getValue();
+        return entry.value().getResult(registryManager).getKey().getValue();
     }
 }

@@ -13,13 +13,13 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(SmithingTrimRecipe.class)
 public class SmithingTrimRecipeExtender {
     @Redirect(
-        method = "getOutput",
+        method = "getResult",
         at = @At(
             value = "NEW",
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getOutputUseDynamicRegistry(ItemConvertible item, DynamicRegistryManager registryManager) {
+    private ItemStack newItemStackForIronChestplateUseRegistryEntry(ItemConvertible item, DynamicRegistryManager registryManager) {
         return new ItemStack(registryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.IRON_CHESTPLATE));
     }
 }
