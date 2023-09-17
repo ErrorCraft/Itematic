@@ -158,12 +158,6 @@
       "net/minecraft/class_3959\u0024class_242": [
         "net/minecraft/util/StringIdentifiable"
       ],
-      "net/minecraft/class_3972": [
-        "net/errorcraft/itematic/access/recipe/CuttingRecipeAccess"
-      ],
-      "net/minecraft/class_3972\u0024class_3973": [
-        "net/errorcraft/itematic/access/recipe/CuttingRecipeSerializerAccess"
-      ],
       "net/minecraft/class_5257": [
         "net/errorcraft/itematic/access/predicate/entity/AdvancementEntityPredicateDeserializerAccess"
       ],

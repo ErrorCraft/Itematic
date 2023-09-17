@@ -16,17 +16,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
 public interface ItemStackAccess {
-    default RegistryKey<Item> getKey() {
+    default RegistryKey<Item> key() {
         return null;
     }
-    default Optional<NbtCompound> getOptionalNbt() { return Optional.empty(); }
-    default boolean isOf(RegistryKey<Item> key) {
-        return false;
+    default Optional<NbtCompound> nbt() {
+        return Optional.empty();
     }
-    default boolean itemKeyMatches(Predicate<RegistryKey<Item>> predicate) {
+    default boolean isOf(RegistryKey<Item> key) {
         return false;
     }
     default void damage(int amount, LivingEntity entity) {}

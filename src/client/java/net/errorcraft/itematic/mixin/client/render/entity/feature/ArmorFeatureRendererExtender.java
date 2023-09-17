@@ -3,7 +3,7 @@ package net.errorcraft.itematic.mixin.client.render.entity.feature;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.client.render.TexturedRenderLayersUtil;
+import net.errorcraft.itematic.client.render.ItematicTexturedRenderLayers;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ArmorItemComponent;
@@ -42,7 +42,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         at = @At("TAIL")
     )
     private void setArmorMaterialsAtlas(FeatureRendererContext<T, M> context, A innerModel, A outerModel, BakedModelManager bakery, CallbackInfo info) {
-        this.armorMaterialsAtlas = bakery.getAtlas(TexturedRenderLayersUtil.ARMOR_MATERIALS_ATLAS_TEXTURE);
+        this.armorMaterialsAtlas = bakery.getAtlas(ItematicTexturedRenderLayers.ARMOR_MATERIALS_ATLAS_TEXTURE);
     }
 
     @ModifyConstant(
@@ -147,7 +147,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
 
     private void renderArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItemComponent component, A model, boolean secondTextureLayer, float red, float green, float blue, @Nullable String overlay) {
         Sprite sprite = this.armorMaterialsAtlas.getSprite(getArmorTexture(component, secondTextureLayer, overlay));
-        VertexConsumer vertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumers.getBuffer(TexturedRenderLayersUtil.ARMOR_TRIMS_RENDER_LAYER));
+        VertexConsumer vertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumers.getBuffer(ItematicTexturedRenderLayers.ARMOR_TRIMS_RENDER_LAYER));
         model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, red, green, blue, 1.0f);
     }
 

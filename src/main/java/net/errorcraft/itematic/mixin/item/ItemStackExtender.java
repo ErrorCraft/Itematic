@@ -180,7 +180,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     )
     @NotNull
     private <T> Identifier getIdUseEntry(DefaultedRegistry<T> instance, T value) {
-        return this.getKey().getValue();
+        return this.key().getValue();
     }
 
     @Redirect(
@@ -432,7 +432,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
-    public RegistryKey<Item> getKey() {
+    public RegistryKey<Item> key() {
         if (this.entry == null) {
             return ItemKeys.AIR;
         }
@@ -440,7 +440,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
-    public Optional<NbtCompound> getOptionalNbt() {
+    public Optional<NbtCompound> nbt() {
         return Optional.ofNullable(this.nbt);
     }
 
@@ -486,14 +486,6 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             return true;
         }
         return this.entry.value().canMine(state, world, pos, miner);
-    }
-
-    @Override
-    public boolean itemKeyMatches(Predicate<RegistryKey<Item>> predicate) {
-        if (this.entry == null) {
-            return false;
-        }
-        return this.entry.matches(predicate);
     }
 
     @Override

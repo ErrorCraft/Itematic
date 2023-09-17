@@ -21,7 +21,7 @@ public class EntityItemComponentDispenserBehavior extends ItemDispenserBehavior 
             EntityPlacer entityPlacer = EntityPlacer.dispensed(pointer, stack, itemComponent);
             entityPlacer.place();
         } catch (Exception exception) {
-            LOGGER.error("Error while dispensing entity from dispenser at {}", pointer.getPos(), exception);
+            LOGGER.error("Error while dispensing entity from dispenser at {}", pointer.pos(), exception);
             return ItemStack.EMPTY;
         }
         return stack;

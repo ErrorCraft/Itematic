@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.render.model;
 
 import com.google.common.collect.ImmutableMap;
-import net.errorcraft.itematic.client.render.TexturedRenderLayersUtil;
+import net.errorcraft.itematic.client.render.ItematicTexturedRenderLayers;
 import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
@@ -21,7 +21,7 @@ public class BakedModelManagerExtender {
     static {
         LAYERS_TO_LOADERS = new ImmutableMap.Builder<Identifier, Identifier>()
             .putAll(LAYERS_TO_LOADERS)
-            .put(TexturedRenderLayersUtil.ARMOR_MATERIALS_ATLAS_TEXTURE, TexturedRenderLayersUtil.ARMOR_MATERIALS_ID)
+            .put(ItematicTexturedRenderLayers.ARMOR_MATERIALS_ATLAS_TEXTURE, ItematicTexturedRenderLayers.ARMOR_MATERIALS_ID)
             .build();
     }
 }

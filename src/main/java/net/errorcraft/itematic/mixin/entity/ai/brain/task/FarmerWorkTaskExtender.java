@@ -51,7 +51,7 @@ public class FarmerWorkTaskExtender {
         )
     )
     private int compostSeedsSizeUseRegistryKeys(List<Item> instance, Object o) {
-        return COMPOSTABLE_KEYS.indexOf(((ItemStack) o).getKey());
+        return COMPOSTABLE_KEYS.indexOf(((ItemStack) o).key());
     }
 
     @Redirect(

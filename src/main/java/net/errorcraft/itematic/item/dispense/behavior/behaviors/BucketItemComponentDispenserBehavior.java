@@ -4,7 +4,6 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BucketItemComponent;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
-import net.minecraft.block.entity.DispenserBlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -23,10 +22,10 @@ public class BucketItemComponentDispenserBehavior extends ItemDispenserBehavior 
             return super.dispenseSilently(pointer, stack);
         }
 
-        Direction direction = pointer.getBlockState().get(DispenserBlock.FACING);
-        BlockPos position = pointer.getPos().offset(direction);
+        Direction direction = pointer.state().get(DispenserBlock.FACING);
+        BlockPos position = pointer.pos().offset(direction);
         BlockHitResult hitResult = new BlockHitResult(position.toCenterPos(), direction, position, true);
-        TypedActionResult<ItemStack> result = optionalItemComponent.get().place(pointer.getWorld(), null, Hand.MAIN_HAND, stack, hitResult);
+        TypedActionResult<ItemStack> result = optionalItemComponent.get().place(pointer.world(), null, Hand.MAIN_HAND, stack, hitResult);
         if (!result.getResult().isAccepted()) {
             return super.dispenseSilently(pointer, stack);
         }
@@ -39,7 +38,7 @@ public class BucketItemComponentDispenserBehavior extends ItemDispenserBehavior 
         if (stack.isEmpty()) {
             return newStack;
         }
-        if (((DispenserBlockEntity)pointer.getBlockEntity()).addToFirstFreeSlot(newStack) < 0) {
+        if (pointer.blockEntity().addToFirstFreeSlot(newStack) < 0) {
             super.dispenseSilently(pointer, newStack);
         }
         return stack;

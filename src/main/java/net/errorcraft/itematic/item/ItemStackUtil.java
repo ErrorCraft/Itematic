@@ -21,7 +21,7 @@ public class ItemStackUtil {
     public static final Codec<ItemStack> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf(ItemStackUtil.ID_KEY).forGetter(ItemStack::getRegistryEntry),
         Codec.INT.fieldOf(ItemStackUtil.COUNT_KEY).forGetter(ItemStack::getCount),
-        NbtCompound.CODEC.optionalFieldOf(ItemStackUtil.NBT_KEY).forGetter(ItemStack::getOptionalNbt)
+        NbtCompound.CODEC.optionalFieldOf(ItemStackUtil.NBT_KEY).forGetter(ItemStack::nbt)
     ).apply(instance, ItemStackUtil::create));
     private static final String ID_KEY = "id";
     private static final String COUNT_KEY = "Count";

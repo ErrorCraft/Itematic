@@ -25,20 +25,8 @@ public class RecipeCodecsExtender {
             opcode = Opcodes.GETSTATIC
         )
     )
-    private static Codec<RegistryEntry<Item>> craftingResultItemUseRegistryEntryCodec() {
+    private static Codec<RegistryEntry<Item>> getCraftingResultItemUseRegistryEntryCodec() {
         return RecipeUtil.CRAFTING_RESULT_CODEC;
-    }
-
-    @ModifyArg(
-        method = "method_53718",
-        at = @At(
-            value = "INVOKE",
-            target = "Lcom/mojang/datafixers/Products$P2;apply(Lcom/mojang/datafixers/kinds/Applicative;Ljava/util/function/BiFunction;)Lcom/mojang/datafixers/kinds/App;",
-            remap = false
-        )
-    )
-    private static <T1, T2, R> BiFunction<RegistryEntry<Item>, Integer, ItemStack> applyUseItemStackConstructor(BiFunction<T1, T2, R> function) {
-        return ItemStack::new;
     }
 
     @ModifyArg(
@@ -50,7 +38,19 @@ public class RecipeCodecsExtender {
             remap = false
         )
     )
-    private static <O, A> Function<ItemStack, RegistryEntry<Item>> craftingResultItemUseRegistryEntryCodec(Function<O, A> getter) {
+    private static <O, A> Function<ItemStack, RegistryEntry<Item>> forGetterUseRegistryEntry(Function<O, A> getter) {
         return ItemStack::getRegistryEntry;
+    }
+
+    @ModifyArg(
+        method = "method_53718",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/mojang/datafixers/Products$P2;apply(Lcom/mojang/datafixers/kinds/Applicative;Ljava/util/function/BiFunction;)Lcom/mojang/datafixers/kinds/App;",
+            remap = false
+        )
+    )
+    private static <T1, T2, R> BiFunction<RegistryEntry<Item>, Integer, ItemStack> applyUseRegistryEntryItemStackConstructor(BiFunction<T1, T2, R> function) {
+        return ItemStack::new;
     }
 }

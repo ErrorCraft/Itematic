@@ -15,9 +15,9 @@ import java.util.Optional;
 public class FertilizeDispenserBehavior extends FallibleItemDispenserBehavior {
     @Override
     protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
-        Direction side = pointer.getBlockState().get(DispenserBlock.FACING);
-        BlockPos position = pointer.getPos().offset(side);
-        ActionContext context = new ActionContext(pointer.getWorld(), Optional.empty(), position.toCenterPos(), side, stack);
+        Direction side = pointer.state().get(DispenserBlock.FACING);
+        BlockPos position = pointer.pos().offset(side);
+        ActionContext context = new ActionContext(pointer.world(), Optional.empty(), position.toCenterPos(), side, stack);
         this.fertilize(context, position);
         return stack;
     }

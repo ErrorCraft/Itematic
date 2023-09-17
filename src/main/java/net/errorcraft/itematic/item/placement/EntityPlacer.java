@@ -56,7 +56,8 @@ public class EntityPlacer extends Placer {
     }
 
     public static EntityPlacer dispensed(BlockPointer pointer, ItemStack stack, EntityItemComponent entityItemComponent) {
-        return new EntityPlacer(stack, pointer.getWorld(), pointer.getPos(), pointer.getBlockState(), null, entityItemComponent.getEntityInitializer(stack), pointer.getBlockState().get(DispenserBlock.FACING), false, SpawnReason.DISPENSER, null, entityItemComponent.allowItemData());
+        BlockState state = pointer.state();
+        return new EntityPlacer(stack, pointer.world(), pointer.pos(), state, null, entityItemComponent.getEntityInitializer(stack), state.get(DispenserBlock.FACING), false, SpawnReason.DISPENSER, null, entityItemComponent.allowItemData());
     }
 
     public static EntityPlacer bucket(ItemStack stack, World world, BlockHitResult result, PlayerEntity player, EntityInitializer<?> initializer) {
