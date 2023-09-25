@@ -12,6 +12,7 @@
   },
   "events": [
     {
+      "event": "minecraft:use_on_block",
       "actions": [
         {
           "action": "minecraft:fertilize"
@@ -20,8 +21,7 @@
       "context": {
         "entity": "this",
         "position": "target"
-      },
-      "event": "minecraft:use_on_block"
+      }
     }
   ]
 }

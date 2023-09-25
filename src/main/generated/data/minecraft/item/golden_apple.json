@@ -14,17 +14,17 @@
         {
           "chance": 1.0,
           "effect": {
+            "id": "minecraft:regeneration",
             "amplifier": 1,
-            "duration": 100,
-            "id": "minecraft:regeneration"
+            "duration": 100
           }
         },
         {
           "chance": 1.0,
           "effect": {
+            "id": "minecraft:absorption",
             "amplifier": 0,
-            "duration": 2400,
-            "id": "minecraft:absorption"
+            "duration": 2400
           }
         }
       ],

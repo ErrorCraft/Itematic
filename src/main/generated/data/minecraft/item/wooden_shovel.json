@@ -28,8 +28,8 @@
         {
           "mining_speed": 2.0,
           "tag": {
-            "expected": true,
-            "id": "minecraft:mineable/shovel"
+            "id": "minecraft:mineable/shovel",
+            "expected": true
           }
         }
       ]

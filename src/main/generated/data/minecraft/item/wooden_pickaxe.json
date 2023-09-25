@@ -28,8 +28,8 @@
         {
           "mining_speed": 2.0,
           "tag": {
-            "expected": true,
-            "id": "minecraft:mineable/pickaxe"
+            "id": "minecraft:mineable/pickaxe",
+            "expected": true
           }
         }
       ]

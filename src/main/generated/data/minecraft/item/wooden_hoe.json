@@ -28,8 +28,8 @@
         {
           "mining_speed": 2.0,
           "tag": {
-            "expected": true,
-            "id": "minecraft:mineable/hoe"
+            "id": "minecraft:mineable/hoe",
+            "expected": true
           }
         }
       ]

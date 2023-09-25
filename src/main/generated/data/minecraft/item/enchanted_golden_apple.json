@@ -17,33 +17,33 @@
         {
           "chance": 1.0,
           "effect": {
+            "id": "minecraft:regeneration",
             "amplifier": 1,
-            "duration": 400,
-            "id": "minecraft:regeneration"
+            "duration": 400
           }
         },
         {
           "chance": 1.0,
           "effect": {
+            "id": "minecraft:resistance",
             "amplifier": 0,
-            "duration": 6000,
-            "id": "minecraft:resistance"
+            "duration": 6000
           }
         },
         {
           "chance": 1.0,
           "effect": {
+            "id": "minecraft:fire_resistance",
             "amplifier": 0,
-            "duration": 6000,
-            "id": "minecraft:fire_resistance"
+            "duration": 6000
           }
         },
         {
           "chance": 1.0,
           "effect": {
+            "id": "minecraft:absorption",
             "amplifier": 3,
-            "duration": 2400,
-            "id": "minecraft:absorption"
+            "duration": 2400
           }
         }
       ],

@@ -12,9 +12,9 @@
         {
           "chance": 1.0,
           "effect": {
+            "id": "minecraft:poison",
             "amplifier": 0,
-            "duration": 100,
-            "id": "minecraft:poison"
+            "duration": 100
           }
         }
       ],
