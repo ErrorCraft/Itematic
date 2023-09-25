@@ -6,6 +6,7 @@
   "mixins": [
     "BootstrapExtender",
     "block.AbstractBlockExtender",
+    "block.AbstractCauldronBlockExtender",
     "block.BambooSaplingBlockExtender",
     "block.BeehiveBlockExtender",
     "block.BeetrootsBlockExtender",
@@ -32,6 +33,7 @@
     "block.TorchflowerBlockExtender",
     "block.WaterloggableExtender",
     "block.WitherSkullBlockExtender",
+    "block.cauldron.CauldronBehaviorExtender",
     "block.dispenser.DispenserBehaviorExtender",
     "block.dispenser.DispenserBehaviorExtender$GlassBottleExtender",
     "block.dispenser.DispenserBehaviorExtender$PotionExtender",

@@ -127,6 +127,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> LILY_PAD = of("lily_pad");
     public static final RegistryKey<Block> NETHER_WART = of("nether_wart");
     public static final RegistryKey<Block> BREWING_STAND = of("brewing_stand");
+    public static final RegistryKey<Block> CAULDRON = of("cauldron");
     public static final RegistryKey<Block> OAK_STAIRS = of("oak_stairs");
     public static final RegistryKey<Block> SPRUCE_STAIRS = of("spruce_stairs");
     public static final RegistryKey<Block> BIRCH_STAIRS = of("birch_stairs");

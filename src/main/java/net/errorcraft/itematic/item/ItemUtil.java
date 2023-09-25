@@ -2840,6 +2840,12 @@ public class ItemUtil {
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BREWING_STAND)))
                 .build()
         ));
+        registerable.register(ItemKeys.CAULDRON, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CAULDRON).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CAULDRON)))
+                .build()
+        ));
         registerable.register(ItemKeys.GLISTERING_MELON_SLICE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLISTERING_MELON_SLICE).build())
         ));
