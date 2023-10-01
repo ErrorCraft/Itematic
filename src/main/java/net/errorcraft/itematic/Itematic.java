@@ -4,6 +4,7 @@ import net.errorcraft.itematic.item.color.ItemColorTypes;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.item.model.override.ModelOverrides;
 import net.errorcraft.itematic.loot.context.ItematicLootContextTypes;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.fabricmc.api.ModInitializer;
@@ -19,5 +20,6 @@ public class Itematic implements ModInitializer {
         ItemEvents.init();
         ActionTypes.init();
         ItematicLootContextTypes.init();
+        ModelOverrides.init();
     }
 }

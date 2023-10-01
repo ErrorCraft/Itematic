@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.passive.ParrotEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,6 +32,6 @@ public class ParrotEntityExtender {
         )
     )
     private boolean interactMobContainsUseItemTagCheck(Set<Item> instance, Object o) {
-        return ((ItemStack) o).isIn(ItemTagsUtil.PARROT_TAMING_ITEMS);
+        return ((ItemStack) o).isIn(ItematicItemTags.PARROT_TAMING_ITEMS);
     }
 }

@@ -5,7 +5,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
-public class ItemTagsUtil {
+public class ItematicItemTags {
     public static final TagKey<Item> REPAIRS_LEATHER_ARMOR = of("repairs_leather_armor");
     public static final TagKey<Item> REPAIRS_CHAINMAIL_ARMOR = of("repairs_chainmail_armor");
     public static final TagKey<Item> REPAIRS_IRON_ARMOR = of("repairs_iron_armor");
@@ -13,6 +13,7 @@ public class ItemTagsUtil {
     public static final TagKey<Item> REPAIRS_DIAMOND_ARMOR = of("repairs_diamond_armor");
     public static final TagKey<Item> REPAIRS_NETHERITE_ARMOR = of("repairs_netherite_armor");
     public static final TagKey<Item> REPAIRS_TURTLE_ARMOR = of("repairs_turtle_armor");
+    public static final TagKey<Item> REPAIRS_ELYTRA = of("repairs_elytra");
 
     public static final TagKey<Item> REPAIRS_WOODEN_TOOL = of("repairs_wooden_tool");
     public static final TagKey<Item> REPAIRS_STONE_TOOL = of("repairs_stone_tool");
@@ -76,7 +77,7 @@ public class ItemTagsUtil {
     public static final TagKey<Item> DYES = of("item_group/dyes");
     public static final TagKey<Item> BREWING_INGREDIENTS = of("item_group/brewing_ingredients");
 
-    private ItemTagsUtil() {}
+    private ItematicItemTags() {}
 
     private static TagKey<Item> of(String id) {
         return TagKey.of(RegistryKeys.ITEM, new Identifier(id));

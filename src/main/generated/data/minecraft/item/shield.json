@@ -6,6 +6,12 @@
     "max_count": 1
   },
   "components": {
+    "minecraft:damageable": {
+      "durability": 336
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:armor"
+    },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_generic",
       "slot": "offhand"
@@ -15,6 +21,9 @@
     },
     "minecraft:use_animation": {
       "animation": "block"
+    },
+    "minecraft:use_duration": {
+      "ticks": 72000
     }
   }
 }

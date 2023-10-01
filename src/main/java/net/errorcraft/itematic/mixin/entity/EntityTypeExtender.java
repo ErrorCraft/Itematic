@@ -22,7 +22,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,8 +32,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EntityType.class)
 @SuppressWarnings("unchecked")
 public abstract class EntityTypeExtender<T extends Entity> implements EntityTypeAccess {
-    @Shadow public abstract @Nullable T spawnFromItemStack(ServerWorld world, @Nullable ItemStack stack, @Nullable PlayerEntity player, BlockPos pos, SpawnReason spawnReason, boolean alignPosition, boolean invertY);
-
     private Codec<? extends EntityInitializer<?>> initializerCodec;
     private EntityInitializer<?> initializer;
     private Direction initializerSide;

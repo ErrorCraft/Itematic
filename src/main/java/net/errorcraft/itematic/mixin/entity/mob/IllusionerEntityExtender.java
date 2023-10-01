@@ -1,11 +1,15 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
+import net.errorcraft.itematic.entity.projectile.ItematicProjectileUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.IllusionerEntity;
 import net.minecraft.entity.mob.SpellcastingIllagerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,5 +30,16 @@ public abstract class IllusionerEntityExtender extends SpellcastingIllagerEntity
     )
     private ItemStack initializeNewItemStackUseRegistryEntry(ItemConvertible item) {
         return new ItemStack(this.getWorld().getItem(ItemKeys.BOW));
+    }
+
+    @Redirect(
+        method = "shootAt",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/projectile/ProjectileUtil;getHandPossiblyHolding(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/Item;)Lnet/minecraft/util/Hand;"
+        )
+    )
+    private Hand getHandPossiblyHoldingForBowUseRegistryKey(LivingEntity entity, Item item) {
+        return ItematicProjectileUtil.getHandPossiblyHolding(entity, ItemKeys.BOW);
     }
 }

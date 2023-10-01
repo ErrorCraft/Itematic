@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.item.ItemKeys;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.PiglinBrain;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,18 @@ public class PiglinBrainExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private static boolean isOfUseRegistryKeyCheck(ItemStack instance, Item item) {
+    private static boolean isOfForGoldNuggetUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.isOf(ItemKeys.GOLD_NUGGET);
+    }
+
+    @Redirect(
+        method = "isHoldingCrossbow",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/LivingEntity;isHolding(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private static boolean isHoldingForCrossbowUseRegistryKeyCheck(LivingEntity instance, Item item) {
+        return instance.isHolding(ItemKeys.CROSSBOW);
     }
 }

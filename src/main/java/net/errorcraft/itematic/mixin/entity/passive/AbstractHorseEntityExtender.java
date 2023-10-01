@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.item.Item;
@@ -24,7 +24,7 @@ public class AbstractHorseEntityExtender {
         )
     )
     private boolean isBreedingItemTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItemTagsUtil.HORSE_BREEDING_ITEMS);
+        return itemStack.isIn(ItematicItemTags.HORSE_BREEDING_ITEMS);
     }
 
     @Redirect(
@@ -142,7 +142,7 @@ public class AbstractHorseEntityExtender {
         )
     )
     private TemptGoal initCustomGoalsNewTemptGoalSetFoodTag(TemptGoal original) {
-        original.setFoodTag(ItemTagsUtil.HORSE_TEMPTING_ITEMS);
+        original.setFoodTag(ItematicItemTags.HORSE_TEMPTING_ITEMS);
         return original;
     }
 }

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.passive.OcelotEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
@@ -25,7 +25,7 @@ public class OcelotEntityExtender {
         )
     )
     private boolean isBreedingItemTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItemTagsUtil.OCELOT_BREEDING_ITEMS);
+        return itemStack.isIn(ItematicItemTags.OCELOT_BREEDING_ITEMS);
     }
 
     @Inject(
@@ -38,6 +38,6 @@ public class OcelotEntityExtender {
         )
     )
     private void initGoalsStoreTemptGoalFieldSetFoodTag(CallbackInfo info) {
-        this.temptGoal.setFoodTag(ItemTagsUtil.OCELOT_TEMPTING_ITEMS);
+        this.temptGoal.setFoodTag(ItematicItemTags.OCELOT_TEMPTING_ITEMS);
     }
 }

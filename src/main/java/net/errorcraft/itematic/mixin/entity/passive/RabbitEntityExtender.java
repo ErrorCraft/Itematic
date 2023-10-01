@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.passive.RabbitEntity;
 import net.minecraft.item.ItemStack;
@@ -19,7 +19,7 @@ public class RabbitEntityExtender {
         )
     )
     private TemptGoal initGoalsNewTemptGoalSetFoodTag(TemptGoal original) {
-        original.setFoodTag(ItemTagsUtil.RABBIT_BREEDING_ITEMS);
+        original.setFoodTag(ItematicItemTags.RABBIT_BREEDING_ITEMS);
         return original;
     }
 
@@ -29,6 +29,6 @@ public class RabbitEntityExtender {
      */
     @Overwrite
     private static boolean isTempting(ItemStack stack) {
-        return stack.isIn(ItemTagsUtil.RABBIT_BREEDING_ITEMS);
+        return stack.isIn(ItematicItemTags.RABBIT_BREEDING_ITEMS);
     }
 }

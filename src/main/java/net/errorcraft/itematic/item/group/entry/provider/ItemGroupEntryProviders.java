@@ -2,7 +2,7 @@ package net.errorcraft.itematic.item.group.entry.provider;
 
 import net.errorcraft.itematic.enchantment.EnchantmentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.entries.StackItemGroupEntry;
 import net.minecraft.enchantment.Enchantment;
@@ -31,26 +31,26 @@ public class ItemGroupEntryProviders {
         RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
 
         registerable.register(ItemGroupEntryProviderKeys.BUILDING_BLOCKS, ItemGroupEntryProvider.of(
-            ItemGroupEntry.tag(ItemTagsUtil.WOODEN_BUILDING_BLOCKS),
+            ItemGroupEntry.tag(ItematicItemTags.WOODEN_BUILDING_BLOCKS),
             ItemGroupEntry.simple(ItemKeys.STONE),
             ItemGroupEntry.simple(ItemKeys.COBBLESTONE),
             ItemGroupEntry.simple(ItemKeys.BRICKS)
         ));
         registerable.register(ItemGroupEntryProviderKeys.COLORED_BLOCKS, ItemGroupEntryProvider.of(
-            ItemGroupEntry.tag(ItemTagsUtil.WOOL),
-            ItemGroupEntry.tag(ItemTagsUtil.WOOL_CARPETS),
-            ItemGroupEntry.tag(ItemTagsUtil.BANNERS)
+            ItemGroupEntry.tag(ItematicItemTags.WOOL),
+            ItemGroupEntry.tag(ItematicItemTags.WOOL_CARPETS),
+            ItemGroupEntry.tag(ItematicItemTags.BANNERS)
         ));
         registerable.register(ItemGroupEntryProviderKeys.NATURAL_BLOCKS, ItemGroupEntryProvider.of(
             ItemGroupEntry.simple(ItemKeys.GRASS_BLOCK),
             ItemGroupEntry.simple(ItemKeys.SAND),
             ItemGroupEntry.simple(ItemKeys.SNOW),
             ItemGroupEntry.simple(ItemKeys.STONE),
-            ItemGroupEntry.tag(ItemTagsUtil.WOOD_BLOCKS),
-            ItemGroupEntry.tag(ItemTagsUtil.LEAVES),
-            ItemGroupEntry.tag(ItemTagsUtil.SAPLINGS),
-            ItemGroupEntry.tag(ItemTagsUtil.PLANTS),
-            ItemGroupEntry.tag(ItemTagsUtil.SEEDS),
+            ItemGroupEntry.tag(ItematicItemTags.WOOD_BLOCKS),
+            ItemGroupEntry.tag(ItematicItemTags.LEAVES),
+            ItemGroupEntry.tag(ItematicItemTags.SAPLINGS),
+            ItemGroupEntry.tag(ItematicItemTags.PLANTS),
+            ItemGroupEntry.tag(ItematicItemTags.SEEDS),
             ItemGroupEntry.simple(ItemKeys.LILY_PAD),
             ItemGroupEntry.simple(ItemKeys.DRIED_KELP_BLOCK)
         ));
@@ -75,11 +75,11 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(ItemKeys.BOOKSHELF),
             ItemGroupEntry.simple(ItemKeys.CHISELED_BOOKSHELF),
             ItemGroupEntry.simple(ItemKeys.LECTERN),
-            ItemGroupEntry.tag(ItemTagsUtil.SIGNS),
+            ItemGroupEntry.tag(ItematicItemTags.SIGNS),
             ItemGroupEntry.simple(ItemKeys.CHEST),
             ItemGroupEntry.simple(ItemKeys.BARREL),
-            ItemGroupEntry.tag(ItemTagsUtil.BANNERS),
-            ItemGroupEntry.tag(ItemTagsUtil.HEADS)
+            ItemGroupEntry.tag(ItematicItemTags.BANNERS),
+            ItemGroupEntry.tag(ItematicItemTags.HEADS)
         ));
         registerable.register(ItemGroupEntryProviderKeys.REDSTONE_BLOCKS, ItemGroupEntryProvider.of(
             ItemGroupEntry.simple(ItemKeys.REDSTONE),
@@ -96,7 +96,7 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(ItemKeys.NOTE_BLOCK),
             ItemGroupEntry.simple(ItemKeys.COMPOSTER),
             ItemGroupEntry.simple(ItemKeys.CAULDRON),
-            ItemGroupEntry.tag(ItemTagsUtil.MINECARTS),
+            ItemGroupEntry.tag(ItematicItemTags.MINECARTS),
             ItemGroupEntry.simple(ItemKeys.OAK_CHEST_BOAT),
             ItemGroupEntry.simple(ItemKeys.BAMBOO_CHEST_RAFT),
             ItemGroupEntry.simple(ItemKeys.OAK_DOOR),
@@ -105,23 +105,24 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(ItemKeys.ARMOR_STAND)
         ));
         registerable.register(ItemGroupEntryProviderKeys.TOOLS_AND_UTILITIES, ItemGroupEntryProvider.of(
-            ItemGroupEntry.tag(ItemTagsUtil.TOOLS),
-            ItemGroupEntry.tag(ItemTagsUtil.BUCKETS),
+            ItemGroupEntry.tag(ItematicItemTags.TOOLS),
+            ItemGroupEntry.tag(ItematicItemTags.BUCKETS),
             ItemGroupEntry.simple(ItemKeys.FISHING_ROD),
             ItemGroupEntry.simple(ItemKeys.FIRE_CHARGE),
             ItemGroupEntry.simple(ItemKeys.BONE_MEAL),
             ItemGroupEntry.simple(ItemKeys.COMPASS),
             ItemGroupEntry.simple(ItemKeys.CLOCK),
             ItemGroupEntry.simple(ItemKeys.ENDER_PEARL),
-            ItemGroupEntry.tag(ItemTagsUtil.BOATS),
-            ItemGroupEntry.tag(ItemTagsUtil.MINECARTS),
-            ItemGroupEntry.tag(ItemTagsUtil.MUSIC_DISCS)
+            ItemGroupEntry.simple(ItemKeys.ELYTRA),
+            ItemGroupEntry.tag(ItematicItemTags.BOATS),
+            ItemGroupEntry.tag(ItematicItemTags.MINECARTS),
+            ItemGroupEntry.tag(ItematicItemTags.MUSIC_DISCS)
         ));
         registerable.register(ItemGroupEntryProviderKeys.COMBAT, ItemGroupEntryProvider.builder()
-            .add(ItemTagsUtil.SWORDS)
-            .add(ItemTagsUtil.AXES)
+            .add(ItematicItemTags.SWORDS)
+            .add(ItematicItemTags.AXES)
             .add(ItemKeys.SHIELD)
-            .add(ItemTagsUtil.ARMOR)
+            .add(ItematicItemTags.ARMOR)
             .add(ItemKeys.END_CRYSTAL)
             .add(ItemKeys.SNOWBALL)
             .add(ItemKeys.EGG)
@@ -133,7 +134,7 @@ public class ItemGroupEntryProviders {
             .build()
         );
         registerable.register(ItemGroupEntryProviderKeys.FOOD_AND_DRINKS, ItemGroupEntryProvider.builder()
-            .add(ItemTagsUtil.FOOD)
+            .add(ItematicItemTags.FOOD)
             .add(ItemKeys.MILK_BUCKET)
             .add(ItemKeys.HONEY_BOTTLE)
             .add(potions(items.getOrThrow(ItemKeys.POTION)))
@@ -162,12 +163,12 @@ public class ItemGroupEntryProviders {
             .add(ItemKeys.BLAZE_ROD)
             .add(ItemKeys.ENDER_PEARL)
             .add(ItemKeys.DISC_FRAGMENT_5)
-            .add(ItemTagsUtil.DYES)
+            .add(ItematicItemTags.DYES)
             .add(ItemKeys.BOWL)
             .add(ItemKeys.PAPER)
             .add(ItemKeys.BOOK)
             .add(ItemKeys.FIREWORK_STAR)
-            .add(ItemTagsUtil.BREWING_INGREDIENTS)
+            .add(ItematicItemTags.BREWING_INGREDIENTS)
             .add(ItemKeys.EXPERIENCE_BOTTLE)
             .add(enchantedBooks(items, EnumSet.allOf(EnchantmentTarget.class)))
             .build()

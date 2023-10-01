@@ -258,4 +258,15 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             .map(ticks -> ticks <= 16)
             .orElse(false);
     }
+
+    @Redirect(
+        method = "tickFallFlying",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfForElytraUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.isOf(ItemKeys.ELYTRA);
+    }
 }

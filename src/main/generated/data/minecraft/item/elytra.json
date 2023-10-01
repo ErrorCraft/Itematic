@@ -1,0 +1,26 @@
+{
+  "base": {
+    "display": {
+      "rarity": "uncommon",
+      "translation_key": "item.minecraft.elytra"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:damageable": {
+      "durability": 432,
+      "preserve_item": true
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:armor"
+    },
+    "minecraft:equipment": {
+      "equip_sound": "minecraft:item.armor.equip_elytra",
+      "slot": "chest",
+      "swappable": true
+    },
+    "minecraft:repairable": {
+      "items": "minecraft:repairs_elytra"
+    }
+  }
+}

@@ -1,5 +1,8 @@
 package net.errorcraft.itematic.mixin.item;
 
+import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.mojang.datafixers.kinds.App;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -9,10 +12,12 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.minecraft.advancement.criterion.ItemDurabilityChangedCriterion;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
@@ -72,6 +77,9 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     @Shadow
     @Nullable
     private NbtCompound nbt;
+
+    @Shadow
+    public abstract int getDamage();
 
     @Shadow
     public abstract <T extends LivingEntity> void damage(int amount, T entity, Consumer<T> breakCallback);
@@ -414,6 +422,20 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         ActionContext.Builder builder = ActionContext.builder(player.getServerWorld(), (ItemStack)(Object) this)
             .entityPosition(ActionContextParameter.THIS, player);
         this.invokeEvent(ItemEvents.DAMAGE_ITEM, builder);
+    }
+
+    @WrapWithCondition(
+        method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/advancement/criterion/ItemDurabilityChangedCriterion;trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;I)V"
+        )
+    )
+    private boolean limitDamageApplied(ItemDurabilityChangedCriterion instance, ServerPlayerEntity player, ItemStack stack, int durability, @Local(argsOnly = true) LocalIntRef amount) {
+        this.getComponent(ItemComponentTypes.DAMAGEABLE)
+            .map(c -> Math.min(c.maximumDamage() - this.getDamage(), amount.get()))
+            .ifPresent(amount::set);
+        return amount.get() != 0;
     }
 
     @Inject(

@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier;
 public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_CHAIN = of("item.armor.equip_chain");
     public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_DIAMOND = of("item.armor.equip_diamond");
+    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_ELYTRA = of("item.armor.equip_elytra");
     public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_GENERIC = of("item.armor.equip_generic");
     public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_GOLD = of("item.armor.equip_gold");
     public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_IRON = of("item.armor.equip_iron");

@@ -7,6 +7,8 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.item.model.override.ModelOverride;
+import net.errorcraft.itematic.item.model.override.ModelOverrides;
 import net.errorcraft.itematic.mixin.registry.RegistriesAccessor;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -19,6 +21,7 @@ public class ItematicRegistries {
     public static final Registry<DispenserBehavior> DISPENSE_BEHAVIOR = RegistriesAccessor.create(ItematicRegistryKeys.DISPENSE_BEHAVIOR, r -> DispenseBehaviors.ITEM);
     public static final Registry<ItemEvent> ITEM_EVENT = RegistriesAccessor.create(ItematicRegistryKeys.ITEM_EVENT, r -> ItemEvents.USE);
     public static final Registry<ActionType<?>> ACTION_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.ACTION_TYPE, r -> ActionTypes.MODIFY_ITEM);
+    public static final Registry<ModelOverride> MODEL_OVERRIDE = RegistriesAccessor.create(ItematicRegistryKeys.MODEL_OVERRIDE, r -> ModelOverrides.LEFT_HANDED);
 
     private ItematicRegistries() {}
 }

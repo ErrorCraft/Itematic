@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.item.ItemStack;
@@ -26,7 +26,7 @@ public class CatEntityExtender {
         )
     )
     private boolean isBreedingItemTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItemTagsUtil.CAT_BREEDING_ITEMS);
+        return itemStack.isIn(ItematicItemTags.CAT_BREEDING_ITEMS);
     }
 
     @Inject(
@@ -39,6 +39,6 @@ public class CatEntityExtender {
         )
     )
     private void initGoalsStoreTemptGoalFieldSetFoodTag(CallbackInfo info) {
-        this.temptGoal.setFoodTag(ItemTagsUtil.CAT_TEMPTING_ITEMS);
+        this.temptGoal.setFoodTag(ItematicItemTags.CAT_TEMPTING_ITEMS);
     }
 }

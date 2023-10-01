@@ -1,20 +1,29 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.ItematicItemTags;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.goal.TemptGoal;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(PigEntity.class)
-public class PigEntityExtender {
+public abstract class PigEntityExtender extends AnimalEntity {
+    protected PigEntityExtender(EntityType<? extends AnimalEntity> entityType, World world) {
+        super(entityType, world);
+    }
+
     @Redirect(
         method = "initGoals",
         at = @At(
@@ -40,7 +49,7 @@ public class PigEntityExtender {
         )
     )
     private TemptGoal initGoalsNewTemptGoalSetFoodTag(TemptGoal original) {
-        original.setFoodTag(ItemTagsUtil.PIG_TEMPTING_ITEMS);
+        original.setFoodTag(ItematicItemTags.PIG_TEMPTING_ITEMS);
         return original;
     }
 
@@ -52,6 +61,17 @@ public class PigEntityExtender {
         )
     )
     private boolean isBreedingItemTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItemTagsUtil.PIG_BREEDING_ITEMS);
+        return itemStack.isIn(ItematicItemTags.PIG_BREEDING_ITEMS);
+    }
+
+    @Redirect(
+        method = "onStruckByLightning",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack"
+        )
+    )
+    private ItemStack newItemStackForGoldenSwordUseRegistryEntry(ItemConvertible item) {
+        return new ItemStack(this.getWorld().getItem(ItemKeys.GOLDEN_SWORD));
     }
 }

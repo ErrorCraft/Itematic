@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.village;
 
 import net.errorcraft.itematic.access.village.VillagerProfessionAccess;
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.item.Item;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.village.VillagerProfession;
@@ -25,7 +25,7 @@ public class VillagerProfessionExtender implements VillagerProfessionAccess {
         at = @At("TAIL")
     )
     private static void staticSetGatherableItemsTag(CallbackInfo info) {
-        ((VillagerProfessionExtender)(Object) FARMER).gatherableItemsTag = ItemTagsUtil.FARMER_VILLAGER_GATHERABLE_ITEMS;
+        ((VillagerProfessionExtender)(Object) FARMER).gatherableItemsTag = ItematicItemTags.FARMER_VILLAGER_GATHERABLE_ITEMS;
     }
 
     @Override

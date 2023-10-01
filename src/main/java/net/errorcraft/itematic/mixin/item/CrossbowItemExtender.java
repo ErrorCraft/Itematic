@@ -5,6 +5,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ProjectileItemComponent;
+import net.errorcraft.itematic.item.util.ShooterUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -13,7 +14,6 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -22,12 +22,11 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mixin(CrossbowItem.class)
 public abstract class CrossbowItemExtender {
-    private static DynamicRegistryManager registryManager;
-
     @Redirect(
         method = "loadProjectiles",
         at = @At(
@@ -59,20 +58,15 @@ public abstract class CrossbowItemExtender {
         return ((Item) reference).hasComponent(ItemComponentTypes.PROJECTILE);
     }
 
-    @Inject(
+    @Redirect(
         method = "shootAll",
-        at = @At("HEAD")
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/CrossbowItem;getProjectiles(Lnet/minecraft/item/ItemStack;)Ljava/util/List;"
+        )
     )
-    private static void shootAllStoreWorldField(World world, LivingEntity entity, Hand hand, ItemStack stack, float speed, float divergence, CallbackInfo ci) {
-        CrossbowItemExtender.registryManager = world.getRegistryManager();
-    }
-
-    @Inject(
-        method = "shootAll",
-        at = @At("RETURN")
-    )
-    private static void shootAllRemoveWorldField(World world, LivingEntity entity, Hand hand, ItemStack stack, float speed, float divergence, CallbackInfo ci) {
-        CrossbowItemExtender.registryManager = null;
+    private static List<ItemStack> getProjectilesUseDynamicRegistry(ItemStack crossbow, @Local World world) {
+        return ShooterUtil.getLoadedAmmunition(crossbow, world.getRegistryManager());
     }
 
     @Redirect(
@@ -83,7 +77,7 @@ public abstract class CrossbowItemExtender {
         )
     )
     private static ItemStack getProjectilesFromNbtUseDynamicRegistry(NbtCompound nbt) {
-        return ItemStackUtil.readFromNbt(nbt, registryManager);
+        return ItemStackUtil.readFromNbt(nbt, ShooterUtil.registryManager());
     }
 
     @Redirect(

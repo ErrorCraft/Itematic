@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.passive.CowEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +17,7 @@ public class CowEntityExtender {
         )
     )
     private TemptGoal initGoalsNewTemptGoalSetFoodTag(TemptGoal original) {
-        original.setFoodTag(ItemTagsUtil.COW_TEMPTING_ITEMS);
+        original.setFoodTag(ItematicItemTags.COW_TEMPTING_ITEMS);
         return original;
     }
 }

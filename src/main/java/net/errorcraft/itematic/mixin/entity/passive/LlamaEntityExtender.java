@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.passive.LlamaEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,7 +20,7 @@ public class LlamaEntityExtender {
         )
     )
     private boolean isBreedingItemTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItemTagsUtil.LLAMA_BREEDING_ITEMS);
+        return itemStack.isIn(ItematicItemTags.LLAMA_BREEDING_ITEMS);
     }
 
     @Redirect(

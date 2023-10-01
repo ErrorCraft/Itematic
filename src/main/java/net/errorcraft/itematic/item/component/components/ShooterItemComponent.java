@@ -6,6 +6,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.util.ShooterUtil;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -19,6 +20,8 @@ import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundCategory;
@@ -93,6 +96,23 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
 
     public boolean isAmmunition(ItemStack stack) {
         return stack.isIn(this.ammunition);
+    }
+
+    public float getPullProgress(ItemStack stack, int remainingUseTicks) {
+        int useTicks = stack.getMaxUseTime() - remainingUseTicks;
+        if (this.chargeable) {
+            float progress = (float)useTicks / getPullTime(stack);
+            return Math.min(progress, 1.0f);
+        }
+        return BowItem.getPullProgress(useTicks);
+    }
+
+    public boolean isCharged(ItemStack stack) {
+        return this.chargeable && CrossbowItem.isCharged(stack);
+    }
+
+    public boolean hasLoadedAmmunition(ItemStack stack, DynamicRegistryManager registryManager, RegistryKey<Item> key) {
+        return ShooterUtil.getLoadedAmmunition(stack, registryManager).stream().anyMatch(s -> s.isOf(key));
     }
 
     private void tryLoad(ItemStack stack, World world, LivingEntity user, float pullProgress) {
@@ -187,15 +207,6 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         }
     }
 
-    private float getPullProgress(ItemStack stack, int remainingUseTicks) {
-        int useTicks = stack.getMaxUseTime() - remainingUseTicks;
-        if (this.chargeable) {
-            float progress = (float)useTicks / getPullTime(stack);
-            return Math.min(progress, 1.0f);
-        }
-        return BowItem.getPullProgress(useTicks);
-    }
-
     private static int getPullTime(ItemStack stack) {
         int quickChargeLevel = EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack);
         return stack.getMaxUseTime() - 5 * quickChargeLevel + 3;
@@ -214,10 +225,6 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
             case 3 -> SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_3;
             default -> SoundEvents.ITEM_CROSSBOW_LOADING_START;
         };
-    }
-
-    private boolean isCharged(ItemStack stack) {
-        return this.chargeable && CrossbowItem.isCharged(stack);
     }
 
     private static void setStarted(ItemStack stack, boolean started) {

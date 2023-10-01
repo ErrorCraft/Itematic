@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.data.server.tag;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.item.Item;
@@ -18,92 +18,94 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup arg) {
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_LEATHER_ARMOR)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_LEATHER_ARMOR)
             .add(ItemKeys.LEATHER);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_CHAINMAIL_ARMOR)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)
             .add(ItemKeys.IRON_INGOT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_IRON_ARMOR)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_IRON_ARMOR)
             .add(ItemKeys.IRON_INGOT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_GOLDEN_ARMOR)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)
             .add(ItemKeys.GOLD_INGOT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_DIAMOND_ARMOR)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)
             .add(ItemKeys.DIAMOND);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_NETHERITE_ARMOR)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)
             .add(ItemKeys.NETHERITE_INGOT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_TURTLE_ARMOR)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_TURTLE_ARMOR)
             .add(ItemKeys.SCUTE);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_WOODEN_TOOL)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_ELYTRA)
+            .add(ItemKeys.PHANTOM_MEMBRANE);
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_WOODEN_TOOL)
             .forceAddTag(ItemTags.PLANKS);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_STONE_TOOL)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_STONE_TOOL)
             .forceAddTag(ItemTags.STONE_TOOL_MATERIALS);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_GOLDEN_TOOL)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_GOLDEN_TOOL)
             .add(ItemKeys.GOLD_INGOT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_IRON_TOOL)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_IRON_TOOL)
             .add(ItemKeys.IRON_INGOT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_DIAMOND_TOOL)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_DIAMOND_TOOL)
             .add(ItemKeys.DIAMOND);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_NETHERITE_TOOL)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_NETHERITE_TOOL)
             .add(ItemKeys.NETHERITE_INGOT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.REPAIRS_SHIELD)
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_SHIELD)
             .forceAddTag(ItemTags.PLANKS);
-        this.getOrCreateTagBuilder(ItemTagsUtil.FURNACE_MINECART_FUEL)
+        this.getOrCreateTagBuilder(ItematicItemTags.FURNACE_MINECART_FUEL)
             .add(ItemKeys.COAL, ItemKeys.CHARCOAL);
-        this.getOrCreateTagBuilder(ItemTagsUtil.BOW_AMMUNITION)
+        this.getOrCreateTagBuilder(ItematicItemTags.BOW_AMMUNITION)
             .forceAddTag(ItemTags.ARROWS);
-        this.getOrCreateTagBuilder(ItemTagsUtil.CROSSBOW_AMMUNITION)
-            .addTag(ItemTagsUtil.BOW_AMMUNITION)
+        this.getOrCreateTagBuilder(ItematicItemTags.CROSSBOW_AMMUNITION)
+            .addTag(ItematicItemTags.BOW_AMMUNITION)
             .add(ItemKeys.FIREWORK_ROCKET);
-        this.getOrCreateTagBuilder(ItemTagsUtil.HORSE_BREEDING_ITEMS)
+        this.getOrCreateTagBuilder(ItematicItemTags.HORSE_BREEDING_ITEMS)
             .add(ItemKeys.GOLDEN_CARROT)
             .add(ItemKeys.GOLDEN_APPLE)
             .add(ItemKeys.ENCHANTED_GOLDEN_APPLE);
-        this.getOrCreateTagBuilder(ItemTagsUtil.HORSE_TEMPTING_ITEMS)
+        this.getOrCreateTagBuilder(ItematicItemTags.HORSE_TEMPTING_ITEMS)
             .add(ItemKeys.WHEAT)
             .add(ItemKeys.SUGAR)
             .add(ItemKeys.APPLE)
-            .addTag(ItemTagsUtil.HORSE_BREEDING_ITEMS);
-        this.getOrCreateTagBuilder(ItemTagsUtil.CAT_BREEDING_ITEMS)
+            .addTag(ItematicItemTags.HORSE_BREEDING_ITEMS);
+        this.getOrCreateTagBuilder(ItematicItemTags.CAT_BREEDING_ITEMS)
             .add(ItemKeys.COD)
             .add(ItemKeys.SALMON);
-        this.getOrCreateTagBuilder(ItemTagsUtil.CAT_TEMPTING_ITEMS)
-            .addTag(ItemTagsUtil.CAT_BREEDING_ITEMS);
-        this.getOrCreateTagBuilder(ItemTagsUtil.OCELOT_BREEDING_ITEMS)
+        this.getOrCreateTagBuilder(ItematicItemTags.CAT_TEMPTING_ITEMS)
+            .addTag(ItematicItemTags.CAT_BREEDING_ITEMS);
+        this.getOrCreateTagBuilder(ItematicItemTags.OCELOT_BREEDING_ITEMS)
             .add(ItemKeys.COD)
             .add(ItemKeys.SALMON);
-        this.getOrCreateTagBuilder(ItemTagsUtil.OCELOT_TEMPTING_ITEMS)
-            .addTag(ItemTagsUtil.OCELOT_BREEDING_ITEMS);
-        this.getOrCreateTagBuilder(ItemTagsUtil.PIG_BREEDING_ITEMS)
+        this.getOrCreateTagBuilder(ItematicItemTags.OCELOT_TEMPTING_ITEMS)
+            .addTag(ItematicItemTags.OCELOT_BREEDING_ITEMS);
+        this.getOrCreateTagBuilder(ItematicItemTags.PIG_BREEDING_ITEMS)
             .add(ItemKeys.CARROT)
             .add(ItemKeys.POTATO)
             .add(ItemKeys.BEETROOT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.PIG_TEMPTING_ITEMS)
-            .addTag(ItemTagsUtil.PIG_BREEDING_ITEMS);
-        this.getOrCreateTagBuilder(ItemTagsUtil.RABBIT_BREEDING_ITEMS)
+        this.getOrCreateTagBuilder(ItematicItemTags.PIG_TEMPTING_ITEMS)
+            .addTag(ItematicItemTags.PIG_BREEDING_ITEMS);
+        this.getOrCreateTagBuilder(ItematicItemTags.RABBIT_BREEDING_ITEMS)
             .add(ItemKeys.CARROT)
             .add(ItemKeys.GOLDEN_CARROT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.CHICKEN_BREEDING_ITEMS)
+        this.getOrCreateTagBuilder(ItematicItemTags.CHICKEN_BREEDING_ITEMS)
             .add(ItemKeys.WHEAT_SEEDS)
             .add(ItemKeys.MELON_SEEDS)
             .add(ItemKeys.PUMPKIN_SEEDS)
             .add(ItemKeys.BEETROOT_SEEDS)
             .add(ItemKeys.TORCHFLOWER_SEEDS)
             .add(ItemKeys.PITCHER_POD);
-        this.getOrCreateTagBuilder(ItemTagsUtil.CHICKEN_TEMPTING_ITEMS)
-            .addTag(ItemTagsUtil.CHICKEN_BREEDING_ITEMS);
-        this.getOrCreateTagBuilder(ItemTagsUtil.PARROT_TAMING_ITEMS)
+        this.getOrCreateTagBuilder(ItematicItemTags.CHICKEN_TEMPTING_ITEMS)
+            .addTag(ItematicItemTags.CHICKEN_BREEDING_ITEMS);
+        this.getOrCreateTagBuilder(ItematicItemTags.PARROT_TAMING_ITEMS)
             .add(ItemKeys.WHEAT_SEEDS)
             .add(ItemKeys.MELON_SEEDS)
             .add(ItemKeys.PUMPKIN_SEEDS)
             .add(ItemKeys.BEETROOT_SEEDS)
             .add(ItemKeys.TORCHFLOWER_SEEDS)
             .add(ItemKeys.PITCHER_POD);
-        this.getOrCreateTagBuilder(ItemTagsUtil.COW_TEMPTING_ITEMS)
+        this.getOrCreateTagBuilder(ItematicItemTags.COW_TEMPTING_ITEMS)
             .add(ItemKeys.WHEAT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.SHEEP_TEMPTING_ITEMS)
+        this.getOrCreateTagBuilder(ItematicItemTags.SHEEP_TEMPTING_ITEMS)
             .add(ItemKeys.WHEAT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.LLAMA_BREEDING_ITEMS)
+        this.getOrCreateTagBuilder(ItematicItemTags.LLAMA_BREEDING_ITEMS)
             .add(ItemKeys.WHEAT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.VILLAGER_GATHERABLE_ITEMS)
+        this.getOrCreateTagBuilder(ItematicItemTags.VILLAGER_GATHERABLE_ITEMS)
             .add(ItemKeys.BREAD)
             .add(ItemKeys.POTATO)
             .add(ItemKeys.CARROT)
@@ -113,12 +115,12 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.BEETROOT_SEEDS)
             .add(ItemKeys.TORCHFLOWER_SEEDS)
             .add(ItemKeys.PITCHER_POD);
-        this.getOrCreateTagBuilder(ItemTagsUtil.FARMER_VILLAGER_GATHERABLE_ITEMS)
+        this.getOrCreateTagBuilder(ItematicItemTags.FARMER_VILLAGER_GATHERABLE_ITEMS)
             .add(ItemKeys.WHEAT)
             .add(ItemKeys.WHEAT_SEEDS)
             .add(ItemKeys.BEETROOT_SEEDS)
             .add(ItemKeys.BONE_MEAL);
-        this.getOrCreateTagBuilder(ItemTagsUtil.OAK_BUILDING_BLOCKS)
+        this.getOrCreateTagBuilder(ItematicItemTags.OAK_BUILDING_BLOCKS)
             .add(ItemKeys.OAK_LOG)
             .add(ItemKeys.OAK_WOOD)
             .add(ItemKeys.STRIPPED_OAK_LOG)
@@ -132,7 +134,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.OAK_TRAPDOOR)
             .add(ItemKeys.OAK_PRESSURE_PLATE)
             .add(ItemKeys.OAK_BUTTON);
-        this.getOrCreateTagBuilder(ItemTagsUtil.SPRUCE_BUILDING_BLOCKS)
+        this.getOrCreateTagBuilder(ItematicItemTags.SPRUCE_BUILDING_BLOCKS)
             .add(ItemKeys.SPRUCE_LOG)
             .add(ItemKeys.SPRUCE_WOOD)
             .add(ItemKeys.STRIPPED_SPRUCE_LOG)
@@ -146,7 +148,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.SPRUCE_TRAPDOOR)
             .add(ItemKeys.SPRUCE_PRESSURE_PLATE)
             .add(ItemKeys.SPRUCE_BUTTON);
-        this.getOrCreateTagBuilder(ItemTagsUtil.BIRCH_BUILDING_BLOCKS)
+        this.getOrCreateTagBuilder(ItematicItemTags.BIRCH_BUILDING_BLOCKS)
             .add(ItemKeys.BIRCH_LOG)
             .add(ItemKeys.BIRCH_WOOD)
             .add(ItemKeys.STRIPPED_BIRCH_LOG)
@@ -160,7 +162,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.BIRCH_TRAPDOOR)
             .add(ItemKeys.BIRCH_PRESSURE_PLATE)
             .add(ItemKeys.BIRCH_BUTTON);
-        this.getOrCreateTagBuilder(ItemTagsUtil.JUNGLE_BUILDING_BLOCKS)
+        this.getOrCreateTagBuilder(ItematicItemTags.JUNGLE_BUILDING_BLOCKS)
             .add(ItemKeys.JUNGLE_LOG)
             .add(ItemKeys.JUNGLE_WOOD)
             .add(ItemKeys.STRIPPED_JUNGLE_LOG)
@@ -174,7 +176,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.JUNGLE_TRAPDOOR)
             .add(ItemKeys.JUNGLE_PRESSURE_PLATE)
             .add(ItemKeys.JUNGLE_BUTTON);
-        this.getOrCreateTagBuilder(ItemTagsUtil.ACACIA_BUILDING_BLOCKS)
+        this.getOrCreateTagBuilder(ItematicItemTags.ACACIA_BUILDING_BLOCKS)
             .add(ItemKeys.ACACIA_LOG)
             .add(ItemKeys.ACACIA_WOOD)
             .add(ItemKeys.STRIPPED_ACACIA_LOG)
@@ -188,7 +190,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.ACACIA_TRAPDOOR)
             .add(ItemKeys.ACACIA_PRESSURE_PLATE)
             .add(ItemKeys.ACACIA_BUTTON);
-        this.getOrCreateTagBuilder(ItemTagsUtil.DARK_OAK_BUILDING_BLOCKS)
+        this.getOrCreateTagBuilder(ItematicItemTags.DARK_OAK_BUILDING_BLOCKS)
             .add(ItemKeys.DARK_OAK_LOG)
             .add(ItemKeys.DARK_OAK_WOOD)
             .add(ItemKeys.STRIPPED_DARK_OAK_LOG)
@@ -202,7 +204,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.DARK_OAK_TRAPDOOR)
             .add(ItemKeys.DARK_OAK_PRESSURE_PLATE)
             .add(ItemKeys.DARK_OAK_BUTTON);
-        this.getOrCreateTagBuilder(ItemTagsUtil.MANGROVE_BUILDING_BLOCKS)
+        this.getOrCreateTagBuilder(ItematicItemTags.MANGROVE_BUILDING_BLOCKS)
             .add(ItemKeys.MANGROVE_LOG)
             .add(ItemKeys.MANGROVE_WOOD)
             .add(ItemKeys.STRIPPED_MANGROVE_LOG)
@@ -216,7 +218,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MANGROVE_TRAPDOOR)
             .add(ItemKeys.MANGROVE_PRESSURE_PLATE)
             .add(ItemKeys.MANGROVE_BUTTON);
-        this.getOrCreateTagBuilder(ItemTagsUtil.CHERRY_BUILDING_BLOCKS)
+        this.getOrCreateTagBuilder(ItematicItemTags.CHERRY_BUILDING_BLOCKS)
             .add(ItemKeys.CHERRY_LOG)
             .add(ItemKeys.CHERRY_WOOD)
             .add(ItemKeys.STRIPPED_CHERRY_LOG)
@@ -230,7 +232,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.CHERRY_TRAPDOOR)
             .add(ItemKeys.CHERRY_PRESSURE_PLATE)
             .add(ItemKeys.CHERRY_BUTTON);
-        this.getOrCreateTagBuilder(ItemTagsUtil.BAMBOO_BUILDING_BLOCKS)
+        this.getOrCreateTagBuilder(ItematicItemTags.BAMBOO_BUILDING_BLOCKS)
             .add(ItemKeys.BAMBOO_BLOCK)
             .add(ItemKeys.STRIPPED_BAMBOO_BLOCK)
             .add(ItemKeys.BAMBOO_PLANKS)
@@ -245,17 +247,17 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.BAMBOO_TRAPDOOR)
             .add(ItemKeys.BAMBOO_PRESSURE_PLATE)
             .add(ItemKeys.BAMBOO_BUTTON);
-        this.getOrCreateTagBuilder(ItemTagsUtil.WOODEN_BUILDING_BLOCKS)
-            .addTag(ItemTagsUtil.OAK_BUILDING_BLOCKS)
-            .addTag(ItemTagsUtil.SPRUCE_BUILDING_BLOCKS)
-            .addTag(ItemTagsUtil.BIRCH_BUILDING_BLOCKS)
-            .addTag(ItemTagsUtil.JUNGLE_BUILDING_BLOCKS)
-            .addTag(ItemTagsUtil.ACACIA_BUILDING_BLOCKS)
-            .addTag(ItemTagsUtil.DARK_OAK_BUILDING_BLOCKS)
-            .addTag(ItemTagsUtil.MANGROVE_BUILDING_BLOCKS)
-            .addTag(ItemTagsUtil.CHERRY_BUILDING_BLOCKS)
-            .addTag(ItemTagsUtil.BAMBOO_BUILDING_BLOCKS);
-        this.getOrCreateTagBuilder(ItemTagsUtil.WOOL)
+        this.getOrCreateTagBuilder(ItematicItemTags.WOODEN_BUILDING_BLOCKS)
+            .addTag(ItematicItemTags.OAK_BUILDING_BLOCKS)
+            .addTag(ItematicItemTags.SPRUCE_BUILDING_BLOCKS)
+            .addTag(ItematicItemTags.BIRCH_BUILDING_BLOCKS)
+            .addTag(ItematicItemTags.JUNGLE_BUILDING_BLOCKS)
+            .addTag(ItematicItemTags.ACACIA_BUILDING_BLOCKS)
+            .addTag(ItematicItemTags.DARK_OAK_BUILDING_BLOCKS)
+            .addTag(ItematicItemTags.MANGROVE_BUILDING_BLOCKS)
+            .addTag(ItematicItemTags.CHERRY_BUILDING_BLOCKS)
+            .addTag(ItematicItemTags.BAMBOO_BUILDING_BLOCKS);
+        this.getOrCreateTagBuilder(ItematicItemTags.WOOL)
             .add(ItemKeys.WHITE_WOOL)
             .add(ItemKeys.LIGHT_GRAY_WOOL)
             .add(ItemKeys.GRAY_WOOL)
@@ -272,7 +274,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_WOOL)
             .add(ItemKeys.MAGENTA_WOOL)
             .add(ItemKeys.PINK_WOOL);
-        this.getOrCreateTagBuilder(ItemTagsUtil.WOOL_CARPETS)
+        this.getOrCreateTagBuilder(ItematicItemTags.WOOL_CARPETS)
             .add(ItemKeys.WHITE_CARPET)
             .add(ItemKeys.LIGHT_GRAY_CARPET)
             .add(ItemKeys.GRAY_CARPET)
@@ -289,7 +291,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_CARPET)
             .add(ItemKeys.MAGENTA_CARPET)
             .add(ItemKeys.PINK_CARPET);
-        this.getOrCreateTagBuilder(ItemTagsUtil.BANNERS)
+        this.getOrCreateTagBuilder(ItematicItemTags.BANNERS)
             .add(ItemKeys.WHITE_BANNER)
             .add(ItemKeys.LIGHT_GRAY_BANNER)
             .add(ItemKeys.GRAY_BANNER)
@@ -306,7 +308,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_BANNER)
             .add(ItemKeys.MAGENTA_BANNER)
             .add(ItemKeys.PINK_BANNER);
-        this.getOrCreateTagBuilder(ItemTagsUtil.WOOD_BLOCKS)
+        this.getOrCreateTagBuilder(ItematicItemTags.WOOD_BLOCKS)
             .add(ItemKeys.OAK_LOG)
             .add(ItemKeys.SPRUCE_LOG)
             .add(ItemKeys.BIRCH_LOG)
@@ -316,7 +318,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MANGROVE_LOG)
             .add(ItemKeys.MANGROVE_ROOTS)
             .add(ItemKeys.CHERRY_LOG);
-        this.getOrCreateTagBuilder(ItemTagsUtil.LEAVES)
+        this.getOrCreateTagBuilder(ItematicItemTags.LEAVES)
             .add(ItemKeys.OAK_LEAVES)
             .add(ItemKeys.SPRUCE_LEAVES)
             .add(ItemKeys.BIRCH_LEAVES)
@@ -324,7 +326,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.ACACIA_LEAVES)
             .add(ItemKeys.DARK_OAK_LEAVES)
             .add(ItemKeys.MANGROVE_LEAVES);
-        this.getOrCreateTagBuilder(ItemTagsUtil.SAPLINGS)
+        this.getOrCreateTagBuilder(ItematicItemTags.SAPLINGS)
             .add(ItemKeys.OAK_SAPLING)
             .add(ItemKeys.SPRUCE_SAPLING)
             .add(ItemKeys.BIRCH_SAPLING)
@@ -333,7 +335,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.DARK_OAK_SAPLING)
             .add(ItemKeys.MANGROVE_PROPAGULE)
             .add(ItemKeys.CHERRY_SAPLING);
-        this.getOrCreateTagBuilder(ItemTagsUtil.PLANTS)
+        this.getOrCreateTagBuilder(ItematicItemTags.PLANTS)
             .add(ItemKeys.AZALEA)
             .add(ItemKeys.FLOWERING_AZALEA)
             .add(ItemKeys.GRASS)
@@ -343,7 +345,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.VINE)
             .add(ItemKeys.TALL_GRASS)
             .add(ItemKeys.LARGE_FERN);
-        this.getOrCreateTagBuilder(ItemTagsUtil.SEEDS)
+        this.getOrCreateTagBuilder(ItematicItemTags.SEEDS)
             .add(ItemKeys.WHEAT_SEEDS)
             .add(ItemKeys.PUMPKIN_SEEDS)
             .add(ItemKeys.MELON_SEEDS)
@@ -353,7 +355,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.GLOW_BERRIES)
             .add(ItemKeys.SWEET_BERRIES)
             .add(ItemKeys.NETHER_WART);
-        this.getOrCreateTagBuilder(ItemTagsUtil.SIGNS)
+        this.getOrCreateTagBuilder(ItematicItemTags.SIGNS)
             .add(ItemKeys.OAK_SIGN)
             .add(ItemKeys.OAK_HANGING_SIGN)
             .add(ItemKeys.SPRUCE_SIGN)
@@ -372,7 +374,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.CHERRY_HANGING_SIGN)
             .add(ItemKeys.BAMBOO_SIGN)
             .add(ItemKeys.BAMBOO_HANGING_SIGN);
-        this.getOrCreateTagBuilder(ItemTagsUtil.HEADS)
+        this.getOrCreateTagBuilder(ItematicItemTags.HEADS)
             .add(ItemKeys.SKELETON_SKULL)
             .add(ItemKeys.WITHER_SKELETON_SKULL)
             .add(ItemKeys.PLAYER_HEAD)
@@ -380,13 +382,13 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.CREEPER_HEAD)
             .add(ItemKeys.PIGLIN_HEAD)
             .add(ItemKeys.DRAGON_HEAD);
-        this.getOrCreateTagBuilder(ItemTagsUtil.MINECARTS)
+        this.getOrCreateTagBuilder(ItematicItemTags.MINECARTS)
             .add(ItemKeys.MINECART)
             .add(ItemKeys.HOPPER_MINECART)
             .add(ItemKeys.CHEST_MINECART)
             .add(ItemKeys.FURNACE_MINECART)
             .add(ItemKeys.TNT_MINECART);
-        this.getOrCreateTagBuilder(ItemTagsUtil.TOOLS)
+        this.getOrCreateTagBuilder(ItematicItemTags.TOOLS)
             .add(ItemKeys.WOODEN_SHOVEL)
             .add(ItemKeys.WOODEN_PICKAXE)
             .add(ItemKeys.WOODEN_AXE)
@@ -411,7 +413,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.NETHERITE_PICKAXE)
             .add(ItemKeys.NETHERITE_AXE)
             .add(ItemKeys.NETHERITE_HOE);
-        this.getOrCreateTagBuilder(ItemTagsUtil.BUCKETS)
+        this.getOrCreateTagBuilder(ItematicItemTags.BUCKETS)
             .add(ItemKeys.BUCKET)
             .add(ItemKeys.WATER_BUCKET)
             .add(ItemKeys.COD_BUCKET)
@@ -423,7 +425,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.LAVA_BUCKET)
             .add(ItemKeys.POWDER_SNOW_BUCKET)
             .add(ItemKeys.MILK_BUCKET);
-        this.getOrCreateTagBuilder(ItemTagsUtil.BOATS)
+        this.getOrCreateTagBuilder(ItematicItemTags.BOATS)
             .add(ItemKeys.OAK_BOAT)
             .add(ItemKeys.OAK_CHEST_BOAT)
             .add(ItemKeys.SPRUCE_BOAT)
@@ -442,7 +444,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.CHERRY_CHEST_BOAT)
             .add(ItemKeys.BAMBOO_RAFT)
             .add(ItemKeys.BAMBOO_CHEST_RAFT);
-        this.getOrCreateTagBuilder(ItemTagsUtil.MUSIC_DISCS)
+        this.getOrCreateTagBuilder(ItematicItemTags.MUSIC_DISCS)
             .add(ItemKeys.MUSIC_DISC_13)
             .add(ItemKeys.MUSIC_DISC_CAT)
             .add(ItemKeys.MUSIC_DISC_BLOCKS)
@@ -459,21 +461,21 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MUSIC_DISC_RELIC)
             .add(ItemKeys.MUSIC_DISC_5)
             .add(ItemKeys.MUSIC_DISC_PIGSTEP);
-        this.getOrCreateTagBuilder(ItemTagsUtil.SWORDS)
+        this.getOrCreateTagBuilder(ItematicItemTags.SWORDS)
             .add(ItemKeys.WOODEN_SWORD)
             .add(ItemKeys.STONE_SWORD)
             .add(ItemKeys.IRON_SWORD)
             .add(ItemKeys.GOLDEN_SWORD)
             .add(ItemKeys.DIAMOND_SWORD)
             .add(ItemKeys.NETHERITE_SWORD);
-        this.getOrCreateTagBuilder(ItemTagsUtil.AXES)
+        this.getOrCreateTagBuilder(ItematicItemTags.AXES)
             .add(ItemKeys.WOODEN_AXE)
             .add(ItemKeys.STONE_AXE)
             .add(ItemKeys.IRON_AXE)
             .add(ItemKeys.GOLDEN_AXE)
             .add(ItemKeys.DIAMOND_AXE)
             .add(ItemKeys.NETHERITE_AXE);
-        this.getOrCreateTagBuilder(ItemTagsUtil.ARMOR)
+        this.getOrCreateTagBuilder(ItematicItemTags.ARMOR)
             .add(ItemKeys.LEATHER_HELMET)
             .add(ItemKeys.LEATHER_CHESTPLATE)
             .add(ItemKeys.LEATHER_LEGGINGS)
@@ -499,7 +501,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.NETHERITE_LEGGINGS)
             .add(ItemKeys.NETHERITE_BOOTS)
             .add(ItemKeys.TURTLE_HELMET);
-        this.getOrCreateTagBuilder(ItemTagsUtil.FOOD)
+        this.getOrCreateTagBuilder(ItematicItemTags.FOOD)
             .add(ItemKeys.APPLE)
             .add(ItemKeys.GOLDEN_APPLE)
             .add(ItemKeys.ENCHANTED_GOLDEN_APPLE)
@@ -538,7 +540,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MUSHROOM_STEW)
             .add(ItemKeys.BEETROOT_SOUP)
             .add(ItemKeys.RABBIT_STEW);
-        this.getOrCreateTagBuilder(ItemTagsUtil.DYES)
+        this.getOrCreateTagBuilder(ItematicItemTags.DYES)
             .add(ItemKeys.WHITE_DYE)
             .add(ItemKeys.LIGHT_GRAY_DYE)
             .add(ItemKeys.GRAY_DYE)
@@ -555,7 +557,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_DYE)
             .add(ItemKeys.MAGENTA_DYE)
             .add(ItemKeys.PINK_DYE);
-        this.getOrCreateTagBuilder(ItemTagsUtil.BREWING_INGREDIENTS)
+        this.getOrCreateTagBuilder(ItematicItemTags.BREWING_INGREDIENTS)
             .add(ItemKeys.GLASS_BOTTLE)
             .add(ItemKeys.NETHER_WART)
             .add(ItemKeys.REDSTONE)

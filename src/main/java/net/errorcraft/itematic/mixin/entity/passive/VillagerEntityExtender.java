@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.google.common.collect.ImmutableSet;
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,7 +26,7 @@ public abstract class VillagerEntityExtender {
         )
     )
     private boolean canGatherContainsUseItemTag(Set<Item> instance, Object o, ItemStack stack) {
-        return stack.isIn(ItemTagsUtil.VILLAGER_GATHERABLE_ITEMS);
+        return stack.isIn(ItematicItemTags.VILLAGER_GATHERABLE_ITEMS);
     }
 
     @Redirect(

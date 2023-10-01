@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -79,5 +80,38 @@ public abstract class PlayerEntityExtender extends LivingEntity {
         }
 
         return this.abilities.creativeMode ? new ItemStack(this.getWorld().getItem(ItemKeys.ARROW)) : ItemStack.EMPTY;
+    }
+
+    @Redirect(
+        method = "checkFallFlying",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfForElytraUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.isOf(ItemKeys.ELYTRA);
+    }
+
+    @Redirect(
+        method = "damageShield",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfForShieldUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.isOf(ItemKeys.SHIELD);
+    }
+
+    @ModifyArg(
+        method = "disableShield",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"
+        )
+    )
+    private Item setCooldownForShieldUseDynamicRegistry(Item item) {
+        return this.getWorld().getItem(ItemKeys.SHIELD).value();
     }
 }

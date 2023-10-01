@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.goal.TemptGoal;
@@ -41,7 +41,7 @@ public abstract class ChickenEntityExtender extends AnimalEntity {
         )
     )
     private boolean isBreedingItemTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItemTagsUtil.CHICKEN_BREEDING_ITEMS);
+        return itemStack.isIn(ItematicItemTags.CHICKEN_BREEDING_ITEMS);
     }
 
     @ModifyExpressionValue(
@@ -52,7 +52,7 @@ public abstract class ChickenEntityExtender extends AnimalEntity {
         )
     )
     private TemptGoal initGoalsNewTemptGoalSetFoodTag(TemptGoal original) {
-        original.setFoodTag(ItemTagsUtil.CHICKEN_TEMPTING_ITEMS);
+        original.setFoodTag(ItematicItemTags.CHICKEN_TEMPTING_ITEMS);
         return original;
     }
 }

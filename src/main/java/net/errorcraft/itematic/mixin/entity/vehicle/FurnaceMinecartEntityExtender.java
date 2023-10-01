@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.entity.vehicle;
 
 import net.errorcraft.itematic.access.entity.vehicle.AbstractMinecartEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItemTagsUtil;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,7 +22,7 @@ public class FurnaceMinecartEntityExtender implements AbstractMinecartEntityAcce
         )
     )
     private boolean interactTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItemTagsUtil.FURNACE_MINECART_FUEL);
+        return itemStack.isIn(ItematicItemTags.FURNACE_MINECART_FUEL);
     }
 
     @Override

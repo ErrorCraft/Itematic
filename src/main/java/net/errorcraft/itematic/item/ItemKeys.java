@@ -209,6 +209,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> FURNACE_MINECART = register("furnace_minecart");
     public static final RegistryKey<Item> TNT_MINECART = register("tnt_minecart");
     public static final RegistryKey<Item> HOPPER_MINECART = register("hopper_minecart");
+    public static final RegistryKey<Item> ELYTRA = register("elytra");
     public static final RegistryKey<Item> OAK_BOAT = register("oak_boat");
     public static final RegistryKey<Item> OAK_CHEST_BOAT = register("oak_chest_boat");
     public static final RegistryKey<Item> SPRUCE_BOAT = register("spruce_boat");

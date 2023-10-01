@@ -14,6 +14,7 @@
     "minecraft:compass",
     "minecraft:clock",
     "minecraft:ender_pearl",
+    "minecraft:elytra",
     {
       "type": "tag",
       "tag": "minecraft:item_group/boats"
