@@ -42,7 +42,7 @@ public record ProjectileItemComponent(RegistryEntry<EntityType<?>> entity, int d
         return CODEC;
     }
 
-    public Entity createEntity(World world, LivingEntity user, ItemStack stack, float ySpeedModifierAngle, float speed) {
+    public Entity createEntity(World world, LivingEntity user, ItemStack stack, float angleOffset, float speed) {
         Entity entity = this.entity.value().create(world);
         if (entity == null) {
             return null;
@@ -53,7 +53,7 @@ public record ProjectileItemComponent(RegistryEntry<EntityType<?>> entity, int d
         }
         if (entity instanceof ProjectileEntity projectileEntity) {
             projectileEntity.setOwner(user);
-            projectileEntity.setVelocity(user, user.getPitch(), user.getYaw(), ySpeedModifierAngle, speed, 1.0f);
+            projectileEntity.setVelocity(user, user.getPitch(), user.getYaw(), angleOffset, speed, 1.0f);
         }
         return entity;
     }

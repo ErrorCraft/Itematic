@@ -13,8 +13,8 @@
       "entity": "minecraft:snowball"
     },
     "minecraft:throwable": {
-      "speed": 1.5,
-      "y_speed_modifier_angle": 0.0
+      "angle_offset": 0.0,
+      "speed": 1.5
     }
   }
 }

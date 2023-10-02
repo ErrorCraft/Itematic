@@ -14,8 +14,8 @@
       "entity": "minecraft:experience_bottle"
     },
     "minecraft:throwable": {
-      "speed": 0.7,
-      "y_speed_modifier_angle": -20.0
+      "angle_offset": -20.0,
+      "speed": 0.7
     }
   }
 }

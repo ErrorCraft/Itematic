@@ -14,8 +14,8 @@
       "entity": "minecraft:potion"
     },
     "minecraft:throwable": {
-      "speed": 0.5,
-      "y_speed_modifier_angle": -20.0
+      "angle_offset": -20.0,
+      "speed": 0.5
     },
     "minecraft:tinted": {
       "tint": {

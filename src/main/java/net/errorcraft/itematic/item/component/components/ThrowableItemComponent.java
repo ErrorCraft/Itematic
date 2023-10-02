@@ -11,10 +11,10 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-public record ThrowableItemComponent(float speed, float ySpeedModifierAngle) implements ItemComponent {
+public record ThrowableItemComponent(float speed, float angleOffset) implements ItemComponent {
     public static final Codec<ThrowableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.FLOAT.fieldOf("speed").forGetter(ThrowableItemComponent::speed),
-        Codec.FLOAT.fieldOf("y_speed_modifier_angle").forGetter(ThrowableItemComponent::ySpeedModifierAngle)
+        Codec.FLOAT.fieldOf("angle_offset").forGetter(ThrowableItemComponent::angleOffset)
     ).apply(instance, ThrowableItemComponent::new));
 
     @Override
@@ -31,7 +31,7 @@ public record ThrowableItemComponent(float speed, float ySpeedModifierAngle) imp
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         if (!world.isClient()) {
             stack.getComponent(ItemComponentTypes.PROJECTILE)
-                .map(c -> c.createEntity(world, user, stack, this.ySpeedModifierAngle, this.speed))
+                .map(c -> c.createEntity(world, user, stack, this.angleOffset, this.speed))
                 .ifPresent(world::spawnEntity);
         }
         return TypedActionResult.success(stack, world.isClient());
