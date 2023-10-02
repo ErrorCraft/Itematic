@@ -2,6 +2,7 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.AbstractDecorationEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
@@ -18,7 +19,7 @@ public record DecorationEntityInitializer<T extends AbstractDecorationEntity>(En
     @Override
     public T create(ActionContext context) {
         Direction side = context.side();
-        return this.create(context.world(), context.player().orElse(null), context.blockPos(), side, context.stack());
+        return this.create(context.world(), context.player(ActionContextParameter.THIS).orElse(null), context.blockPos(ActionContextParameter.TARGET), side, context.stack());
     }
 
     private T create(ServerWorld world, PlayerEntity player, BlockPos pos, Direction facing, ItemStack stack) {

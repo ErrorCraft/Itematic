@@ -21,13 +21,10 @@
       "event": "minecraft:consume_item",
       "actions": [
         {
-          "action": "minecraft:clear_status_effects"
+          "action": "minecraft:clear_status_effects",
+          "entity": "this"
         }
-      ],
-      "context": {
-        "entity": "this",
-        "position": "this"
-      }
+      ]
     }
   ]
 }

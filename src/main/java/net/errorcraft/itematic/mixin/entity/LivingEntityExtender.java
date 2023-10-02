@@ -7,6 +7,7 @@ import net.errorcraft.itematic.item.component.components.FoodItemComponent;
 import net.errorcraft.itematic.item.component.components.UseDurationItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -18,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,6 +43,9 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Shadow
     public abstract boolean isHolding(Predicate<ItemStack> predicate);
+
+    @Shadow
+    public abstract Hand getActiveHand();
 
     @Redirect(
         method = "eatFood",
@@ -70,11 +75,11 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             shift = At.Shift.AFTER
         )
     )
-    private void eatFoodInvokeEatItemEvent(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
+    private void invokeEatItemEvent(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext.Builder builder = ActionContext.builder(serverWorld, stack)
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, this.getActiveHand())
                 .entityPosition(ActionContextParameter.THIS, this);
-            stack.invokeEvent(ItemEvents.EAT_ITEM, builder);
+            stack.invokeEvent(ItemEvents.EAT_ITEM, context);
         }
     }
 
@@ -125,10 +130,10 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/player/PlayerEntity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"
         )
     )
-    private void onEquipStackPlaySoundInvokeEquipItemEvent(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo info) {
-        ActionContext.Builder builder = ActionContext.builder((ServerWorld) this.getWorld(), newStack)
+    private void invokeEquipItemEvent(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo info) {
+        ActionContext context = MutableActionContext.stackUsage((ServerWorld) this.getWorld(), newStack)
             .entityPosition(ActionContextParameter.THIS, this);
-        newStack.invokeEvent(ItemEvents.EQUIP_ITEM, builder);
+        newStack.invokeEvent(ItemEvents.EQUIP_ITEM, context);
     }
 
     @Inject(

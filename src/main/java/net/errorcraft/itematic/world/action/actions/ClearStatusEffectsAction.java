@@ -1,15 +1,21 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
-public record ClearStatusEffectsAction() implements Action {
-    public static final ClearStatusEffectsAction INSTANCE = new ClearStatusEffectsAction();
-    public static final Codec<ClearStatusEffectsAction> CODEC = Codec.unit(INSTANCE);
+import java.util.Optional;
+
+public record ClearStatusEffectsAction(ActionContextParameter entity) implements Action {
+    public static final Codec<ClearStatusEffectsAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        ActionContextParameter.CODEC.fieldOf("entity").forGetter(ClearStatusEffectsAction::entity)
+    ).apply(instance, ClearStatusEffectsAction::new));
 
     @Override
     public ActionType<?> type() {
@@ -18,10 +24,11 @@ public record ClearStatusEffectsAction() implements Action {
 
     @Override
     public boolean execute(ActionContext context) {
-        if (context.target().isEmpty()) {
+        Optional<Entity> optionalEntity = context.entity(this.entity);
+        if (optionalEntity.isEmpty()) {
             return false;
         }
-        if (context.target().get() instanceof LivingEntity target) {
+        if (optionalEntity.get() instanceof LivingEntity target) {
             target.clearStatusEffects();
             return true;
         }

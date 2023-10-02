@@ -33,7 +33,7 @@ public interface ItemAccess {
         return null;
     }
     default void setEvents(ItemEventMap events) {}
-    default void invokeEvent(ItemEvent event, ActionContext.Builder builder) {}
+    default void invokeEvent(ItemEvent event, ActionContext context) {}
     default boolean mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return true;
     }

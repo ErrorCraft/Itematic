@@ -17,11 +17,7 @@
         {
           "action": "minecraft:fertilize"
         }
-      ],
-      "context": {
-        "entity": "this",
-        "position": "target"
-      }
+      ]
     }
   ]
 }

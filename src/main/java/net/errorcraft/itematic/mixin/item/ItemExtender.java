@@ -12,6 +12,7 @@ import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.util.ActionResultUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
@@ -78,9 +79,9 @@ public class ItemExtender implements ItemAccess {
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext.Builder builder = ActionContext.builder(serverWorld, result.getValue())
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, result.getValue(), hand)
                 .entityPosition(ActionContextParameter.THIS, user);
-            result.getValue().invokeEvent(ItemEvents.USE, builder);
+            result.getValue().invokeEvent(ItemEvents.USE, context);
         }
         return result;
     }
@@ -105,11 +106,11 @@ public class ItemExtender implements ItemAccess {
         }
 
         if (context.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext.Builder builder = ActionContext.builder(serverWorld, result.getValue())
+            ActionContext actionContext = MutableActionContext.stackUsage(serverWorld, result.getValue(), context.getHand())
                 .entityPosition(ActionContextParameter.THIS, context.getPlayer())
                 .position(ActionContextParameter.TARGET, context.getBlockPos())
                 .side(context.getSide());
-            result.getValue().invokeEvent(ItemEvents.USE_ON_BLOCK, builder);
+            result.getValue().invokeEvent(ItemEvents.USE_ON_BLOCK, actionContext);
         }
         return result.getResult();
     }
@@ -130,10 +131,10 @@ public class ItemExtender implements ItemAccess {
         }
 
         if (user.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext.Builder builder = ActionContext.builder(serverWorld, result.getValue())
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, result.getValue(), hand)
                 .entityPosition(ActionContextParameter.THIS, user)
                 .entityPosition(ActionContextParameter.TARGET, entity);
-            result.getValue().invokeEvent(ItemEvents.USE_ON_ENTITY, builder);
+            result.getValue().invokeEvent(ItemEvents.USE_ON_ENTITY, context);
         }
         return result.getResult();
     }
@@ -150,10 +151,10 @@ public class ItemExtender implements ItemAccess {
         }
 
         if (attacker.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext.Builder builder = ActionContext.builder(serverWorld, stack)
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack)
                 .entityPosition(ActionContextParameter.THIS, attacker)
                 .entityPosition(ActionContextParameter.TARGET, target);
-            stack.invokeEvent(ItemEvents.HIT_ENTITY, builder);
+            stack.invokeEvent(ItemEvents.HIT_ENTITY, context);
         }
         return result;
     }
@@ -170,10 +171,10 @@ public class ItemExtender implements ItemAccess {
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext.Builder builder = ActionContext.builder(serverWorld, stack)
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack)
                 .entityPosition(ActionContextParameter.THIS, miner)
                 .position(ActionContextParameter.TARGET, pos.toCenterPos());
-            stack.invokeEvent(ItemEvents.BROKE_BLOCK, builder);
+            stack.invokeEvent(ItemEvents.BROKE_BLOCK, context);
         }
         return result;
     }
@@ -200,9 +201,9 @@ public class ItemExtender implements ItemAccess {
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext.Builder builder = ActionContext.builder(serverWorld, stack)
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, user.getActiveHand())
                 .entityPosition(ActionContextParameter.THIS, user);
-            stack.invokeEvent(ItemEvents.STOPPED_USING, builder);
+            stack.invokeEvent(ItemEvents.STOPPED_USING, context);
         }
     }
 
@@ -217,9 +218,9 @@ public class ItemExtender implements ItemAccess {
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext.Builder builder = ActionContext.builder(serverWorld, stack)
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, user.getActiveHand())
                 .entityPosition(ActionContextParameter.THIS, user);
-            stack.invokeEvent(ItemEvents.FINISHED_USING, builder);
+            stack.invokeEvent(ItemEvents.FINISHED_USING, context);
         }
         ItemStack resultStack = stack;
         return this.getComponent(ItemComponentTypes.CONSUMABLE)
@@ -413,8 +414,8 @@ public class ItemExtender implements ItemAccess {
     }
 
     @Override
-    public void invokeEvent(ItemEvent event, ActionContext.Builder builder) {
-        this.events.invokeEvent(event, builder);
+    public void invokeEvent(ItemEvent event, ActionContext context) {
+        this.events.invokeEvent(event, context);
     }
 
     @Override

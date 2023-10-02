@@ -16,6 +16,7 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.advancement.criterion.ItemDurabilityChangedCriterion;
 import net.minecraft.block.BlockState;
@@ -419,9 +420,9 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         )
     )
     private void invokeDamageToolEvent(int amount, Random random, ServerPlayerEntity player, CallbackInfoReturnable<Boolean> info) {
-        ActionContext.Builder builder = ActionContext.builder(player.getServerWorld(), (ItemStack)(Object) this)
+        ActionContext context = MutableActionContext.stackUsage(player.getServerWorld(), (ItemStack)(Object) this)
             .entityPosition(ActionContextParameter.THIS, player);
-        this.invokeEvent(ItemEvents.DAMAGE_ITEM, builder);
+        this.invokeEvent(ItemEvents.DAMAGE_ITEM, context);
     }
 
     @WrapWithCondition(
@@ -447,9 +448,9 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     )
     private <T extends LivingEntity> void invokeBreakToolEvent(int amount, T entity, Consumer<T> breakCallback, CallbackInfo info) {
         if (entity.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext.Builder builder = ActionContext.builder(serverWorld, (ItemStack)(Object) this)
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, (ItemStack)(Object) this)
                 .entityPosition(ActionContextParameter.THIS, entity);
-            this.invokeEvent(ItemEvents.BREAK_ITEM, builder);
+            this.invokeEvent(ItemEvents.BREAK_ITEM, context);
         }
     }
 
@@ -495,11 +496,11 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
-    public void invokeEvent(ItemEvent event, ActionContext.Builder builder) {
+    public void invokeEvent(ItemEvent event, ActionContext context) {
         if (this.entry == null) {
             return;
         }
-        this.entry.value().invokeEvent(event, builder);
+        this.entry.value().invokeEvent(event, context);
     }
 
     @Override

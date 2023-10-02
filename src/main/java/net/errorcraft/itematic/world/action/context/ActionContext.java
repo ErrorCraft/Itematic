@@ -9,127 +9,83 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.function.CommandFunctionManager;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public record ActionContext(ServerWorld world, Optional<Entity> target, Vec3d position, Direction side, ItemStack stack) {
-    public static Builder builder(ServerWorld world) {
-        return new Builder(world);
+public class ActionContext {
+    private final ServerWorld world;
+    protected final Map<ActionContextParameter, Entity> entities = new HashMap<>();
+    protected final Map<ActionContextParameter, Vec3d> positions = new HashMap<>();
+    protected Direction side = Direction.UP;
+    protected ItemStack stack = ItemStack.EMPTY;
+    protected Hand hand = null;
+
+    public ActionContext(ServerWorld world) {
+        this.world = world;
     }
 
-    public static Builder builder(ServerWorld world, ItemStack stack) {
-        return new Builder(world).stack(stack);
-    }
-
-    public Optional<PlayerEntity> player() {
-        if (this.target.isEmpty()) {
-            return Optional.empty();
-        }
-        if (this.target.get() instanceof PlayerEntity playerEntity) {
-            return Optional.of(playerEntity);
-        }
-        return Optional.empty();
-    }
-
-    public BlockPos blockPos() {
-        return BlockPos.ofFloored(this.position);
-    }
-
-    public LootContext lootContext() {
+    public LootContext createLootContext(ActionContextParameters parameters) {
         LootContextParameterSet set = new LootContextParameterSet.Builder(this.world)
-            .add(LootContextParameters.THIS_ENTITY, this.target.orElse(null))
-            .add(LootContextParameters.ORIGIN, this.position)
+            .add(LootContextParameters.THIS_ENTITY, this.entities.get(parameters.entity()))
+            .add(LootContextParameters.ORIGIN, this.position(parameters.position()))
             .add(LootContextParameters.TOOL, this.stack)
             .build(ItematicLootContextTypes.ACTION);
         return new LootContext.Builder(set).build(Optional.empty());
     }
 
-    public static ActionContext of(ServerWorld world, @Nullable Entity target, BlockPos pos, Direction side, ItemStack stack) {
-        return new ActionContext(world, Optional.ofNullable(target), Vec3d.ofBottomCenter(pos), side, stack);
+    public ServerCommandSource createCommandSource(ActionContextParameters parameters, CommandFunctionManager functionManager) {
+        return functionManager.getScheduledCommandSource()
+            .withEntity(this.entities.get(parameters.entity()))
+            .withPosition(this.positions.get(parameters.position()));
     }
 
-    public static class Builder {
-        private final ServerWorld world;
-        private final Map<ActionContextParameter, Entity> entities = new HashMap<>();
-        private final Map<ActionContextParameter, Vec3d> positions = new HashMap<>();
-        private Direction side = Direction.UP;
-        private ItemStack stack = ItemStack.EMPTY;
+    public ServerWorld world() {
+        return this.world;
+    }
 
-        private Builder(ServerWorld world) {
-            this.world = world;
-        }
+    public Optional<Entity> entity(ActionContextParameter parameter) {
+        return Optional.ofNullable(this.entities.get(parameter));
+    }
 
-        public ActionContext build(ActionContextParameters parameters) {
-            return new ActionContext(this.world, this.entity(parameters.entity()), this.position(parameters.position()), this.side, this.stack);
-        }
-
-        public LootContext createLootContext(ActionContextParameters parameters) {
-            LootContextParameterSet set = new LootContextParameterSet.Builder(this.world)
-                .add(LootContextParameters.THIS_ENTITY, this.entities.get(parameters.entity()))
-                .add(LootContextParameters.ORIGIN, this.position(parameters.position()))
-                .add(LootContextParameters.TOOL, this.stack)
-                .build(ItematicLootContextTypes.ACTION);
-            return new LootContext.Builder(set).build(Optional.empty());
-        }
-
-        public Builder entity(ActionContextParameter parameter, Entity entity) {
-            this.entities.put(parameter, entity);
-            return this;
-        }
-
-        public Builder entityPosition(ActionContextParameter parameter, Entity entity) {
-            this.entities.put(parameter, entity);
-            if (entity != null) {
-                this.positions.put(parameter, entity.getPos());
+    public Optional<PlayerEntity> player(ActionContextParameter parameter) {
+        return this.entity(parameter).map(entity -> {
+            if (entity instanceof PlayerEntity player) {
+                return player;
             }
-            return this;
-        }
+            return null;
+        });
+    }
 
-        public Builder position(ActionContextParameter parameter, BlockPos position) {
-            return this.position(parameter, position.toCenterPos());
+    public Vec3d position(ActionContextParameter parameter) {
+        Vec3d position = this.positions.get(parameter);
+        if (position == null) {
+            return this.world.getSpawnPos().toCenterPos();
         }
+        return position;
+    }
 
-        public Builder position(ActionContextParameter parameter, Vec3d position) {
-            if (position == null) {
-                throw new IllegalArgumentException("Position was null");
-            }
-            this.positions.put(parameter, position);
-            return this;
-        }
+    public BlockPos blockPos(ActionContextParameter parameter) {
+        return BlockPos.ofFloored(this.position(parameter));
+    }
 
-        public Builder side(Direction side) {
-            if (side == null) {
-                throw new IllegalArgumentException("Side was null");
-            }
-            this.side = side;
-            return this;
-        }
+    public Direction side() {
+        return this.side;
+    }
 
-        public Builder stack(ItemStack stack) {
-            if (stack == null) {
-                throw new IllegalArgumentException("Item stack was null");
-            }
-            this.stack = stack;
-            return this;
-        }
+    public ItemStack stack() {
+        return this.stack;
+    }
 
-        private Optional<Entity> entity(ActionContextParameter parameter) {
-            return Optional.ofNullable(this.entities.get(parameter));
-        }
-
-        private Vec3d position(ActionContextParameter parameter) {
-            Vec3d position = this.positions.get(parameter);
-            if (position == null) {
-                return this.world.getSpawnPos().toCenterPos();
-            }
-            return position;
-        }
+    public Optional<Hand> hand() {
+        return Optional.ofNullable(this.hand);
     }
 }

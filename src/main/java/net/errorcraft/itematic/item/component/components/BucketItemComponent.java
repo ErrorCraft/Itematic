@@ -77,7 +77,7 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
             result = place(blockPlacer, result);
         }
         if (this.entity.isPresent() && !world.isClient() && result.getResult() != ActionResult.FAIL) {
-            EntityPlacer entityPlacer = EntityPlacer.bucket(stack, world, blockHitResult, user, this.entity.get());
+            EntityPlacer entityPlacer = EntityPlacer.bucket(stack, world, blockHitResult, user, this.entity.get(), hand);
             result = place(entityPlacer, result);
         }
 

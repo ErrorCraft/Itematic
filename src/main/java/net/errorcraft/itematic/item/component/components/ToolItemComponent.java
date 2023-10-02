@@ -8,6 +8,7 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.tool.MiningSpeedEntry;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -17,6 +18,7 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.predicate.TagPredicate;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -58,10 +60,10 @@ public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds)
 
     private void useTool(ItemStack stack, World world, BlockPos pos, LivingEntity miner) {
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext.Builder builder = ActionContext.builder(serverWorld, stack)
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, Hand.MAIN_HAND)
                 .entityPosition(ActionContextParameter.THIS, miner)
                 .position(ActionContextParameter.TARGET, pos.toCenterPos());
-            stack.invokeEvent(ItemEvents.USE_TOOL, builder);
+            stack.invokeEvent(ItemEvents.USE_TOOL, context);
         }
         stack.damage(this.damage, miner);
     }

@@ -29,12 +29,11 @@ public class ItemEventMap {
         return new Builder();
     }
 
-    public void invokeEvent(ItemEvent event, ActionContext.Builder builder) {
+    public void invokeEvent(ItemEvent event, ActionContext context) {
         for (ActionSet set : this.events.get(event)) {
-            set.execute(builder);
+            set.execute(context);
         }
     }
-
 
     public static class Builder {
         private final Multimap<ItemEvent, ActionSet> events = MultimapBuilder.treeKeys(Comparator.comparingInt(ItematicRegistries.ITEM_EVENT::getRawId)).arrayListValues().build();

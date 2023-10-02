@@ -25,13 +25,10 @@
       "actions": [
         {
           "action": "minecraft:teleport",
-          "distance": 16
+          "distance": 16,
+          "entity": "this"
         }
-      ],
-      "context": {
-        "entity": "this",
-        "position": "this"
-      }
+      ]
     }
   ]
 }

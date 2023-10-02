@@ -24,7 +24,9 @@ import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.action.ActionSet;
 import net.errorcraft.itematic.world.action.actions.ClearStatusEffectsAction;
 import net.errorcraft.itematic.world.action.actions.FertilizeAction;
+import net.errorcraft.itematic.world.action.actions.StartUsingItemAction;
 import net.errorcraft.itematic.world.action.actions.TeleportAction;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.client.color.world.FoliageColors;
@@ -2483,7 +2485,7 @@ public class ItemUtil {
                 .with(ConsumableItemComponent.of(items.getOrThrow(ItemKeys.BUCKET)))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.CONSUME_ITEM, ActionSet.simple(ClearStatusEffectsAction.INSTANCE))
+                .add(ItemEvents.CONSUME_ITEM, ActionSet.simple(new ClearStatusEffectsAction(ActionContextParameter.THIS)))
                 .build()
         ));
         registerable.register(ItemKeys.PUFFERFISH_BUCKET, create(
@@ -2709,7 +2711,7 @@ public class ItemUtil {
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.FERTILIZE)))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionSet.targetPosition(FertilizeAction.INSTANCE))
+                .add(ItemEvents.USE_ON_BLOCK, ActionSet.simple(FertilizeAction.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.SUGAR, create(
@@ -3621,7 +3623,7 @@ public class ItemUtil {
                 .with(FoodItemComponent.from(FoodComponents.CHORUS_FRUIT))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.CONSUME_ITEM, ActionSet.simple(new TeleportAction(16)))
+                .add(ItemEvents.CONSUME_ITEM, ActionSet.simple(new TeleportAction(16, ActionContextParameter.THIS)))
                 .build()
         ));
         registerable.register(ItemKeys.TORCHFLOWER_SEEDS, create(
@@ -3697,12 +3699,14 @@ public class ItemUtil {
         registerable.register(ItemKeys.SHIELD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHIELD).build(), 1),
             ItemComponentSet.builder()
-                .with(new UseDurationItemComponent(72000))
                 .with(new DamageableItemComponent(336))
                 .with(new EquipmentItemComponent(EquipmentSlot.OFFHAND, false, soundEvents.getOrThrow(SoundEventKeys.ITEM_ARMOR_EQUIP_GENERIC)))
                 .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_SHIELD))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new UseAnimationItemComponent(UseAction.BLOCK))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE, ActionSet.simple(StartUsingItemAction.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_13, create(

@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.entity.vehicle.ChestBoatEntity;
@@ -23,7 +24,7 @@ public record ChestBoatEntityInitializer(BoatEntity.Type variant) implements Ent
 
     @Override
     public ChestBoatEntity create(ActionContext context) {
-        return this.create(context.world(), context.blockPos());
+        return this.create(context.world(), context.blockPos(ActionContextParameter.TARGET));
     }
 
     private ChestBoatEntity create(World world, BlockPos pos) {

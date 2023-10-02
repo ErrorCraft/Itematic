@@ -6,6 +6,8 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -16,9 +18,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.event.GameEvent;
 
-public record TeleportAction(int distance) implements Action {
+import java.util.Optional;
+
+public record TeleportAction(int distance, ActionContextParameter entity) implements Action {
     public static final Codec<TeleportAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("distance").forGetter(TeleportAction::distance)
+        Codec.INT.fieldOf("distance").forGetter(TeleportAction::distance),
+        ActionContextParameter.CODEC.fieldOf("entity").forGetter(TeleportAction::entity)
     ).apply(instance, TeleportAction::new));
     private static final int MAX_TELEPORT_ATTEMPTS = 16;
 
@@ -29,10 +34,11 @@ public record TeleportAction(int distance) implements Action {
 
     @Override
     public boolean execute(ActionContext context) {
-        if (context.target().isEmpty()) {
+        Optional<Entity> entity = context.entity(this.entity);
+        if (entity.isEmpty()) {
             return false;
         }
-        if (context.target().get() instanceof LivingEntity target) {
+        if (entity.get() instanceof LivingEntity target) {
             return this.teleport(target, context.world());
         }
         return false;

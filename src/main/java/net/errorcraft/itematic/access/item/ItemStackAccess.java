@@ -35,7 +35,7 @@ public interface ItemStackAccess {
     default <T extends ItemComponent> Optional<T> getComponent(ItemComponentType<T> type) {
         return Optional.empty();
     }
-    default void invokeEvent(ItemEvent event, ActionContext.Builder builder) {}
+    default void invokeEvent(ItemEvent event, ActionContext context) {}
     default boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
         return false;
     }

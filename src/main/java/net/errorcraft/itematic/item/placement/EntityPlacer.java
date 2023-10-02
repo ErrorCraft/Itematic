@@ -6,6 +6,7 @@ import net.errorcraft.itematic.item.component.components.BucketItemComponent;
 import net.errorcraft.itematic.item.component.components.EntityItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -19,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPointer;
@@ -38,8 +40,9 @@ public class EntityPlacer extends Placer {
     private final SpawnReason spawnReason;
     private final BiConsumer<Entity, ItemStack> spawnCallback;
     private final boolean allowItemData;
+    private final Hand hand;
 
-    public EntityPlacer(ItemStack stack, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, EntityInitializer<?> initializer, Direction direction, boolean mayModifyBlock, SpawnReason spawnReason, BiConsumer<Entity, ItemStack> spawnCallback, boolean allowItemData) {
+    public EntityPlacer(ItemStack stack, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, EntityInitializer<?> initializer, Direction direction, boolean mayModifyBlock, SpawnReason spawnReason, BiConsumer<Entity, ItemStack> spawnCallback, boolean allowItemData, Hand hand) {
         super(stack, world, blockPos, blockState, player);
         this.initializer = initializer;
         this.direction = direction;
@@ -47,22 +50,23 @@ public class EntityPlacer extends Placer {
         this.spawnReason = spawnReason;
         this.spawnCallback = spawnCallback;
         this.allowItemData = allowItemData;
+        this.hand = hand;
     }
 
     public static EntityPlacer spawned(ItemUsageContext context, ItemStack stack, EntityItemComponent entityItemComponent) {
         World world = context.getWorld();
         BlockPos blockPos = context.getBlockPos();
-        return new EntityPlacer(context.getStack(), world, blockPos, world.getBlockState(blockPos), context.getPlayer(), entityItemComponent.getEntityInitializer(stack), context.getSide(), true, SpawnReason.SPAWN_EGG, null, entityItemComponent.allowItemData());
+        return new EntityPlacer(context.getStack(), world, blockPos, world.getBlockState(blockPos), context.getPlayer(), entityItemComponent.getEntityInitializer(stack), context.getSide(), true, SpawnReason.SPAWN_EGG, null, entityItemComponent.allowItemData(), context.getHand());
     }
 
     public static EntityPlacer dispensed(BlockPointer pointer, ItemStack stack, EntityItemComponent entityItemComponent) {
         BlockState state = pointer.state();
-        return new EntityPlacer(stack, pointer.world(), pointer.pos(), state, null, entityItemComponent.getEntityInitializer(stack), state.get(DispenserBlock.FACING), false, SpawnReason.DISPENSER, null, entityItemComponent.allowItemData());
+        return new EntityPlacer(stack, pointer.world(), pointer.pos(), state, null, entityItemComponent.getEntityInitializer(stack), state.get(DispenserBlock.FACING), false, SpawnReason.DISPENSER, null, entityItemComponent.allowItemData(), null);
     }
 
-    public static EntityPlacer bucket(ItemStack stack, World world, BlockHitResult result, PlayerEntity player, EntityInitializer<?> initializer) {
+    public static EntityPlacer bucket(ItemStack stack, World world, BlockHitResult result, PlayerEntity player, EntityInitializer<?> initializer, Hand hand) {
         BlockPos blockPos = result.getBlockPos();
-        return new EntityPlacer(stack, world, blockPos, world.getBlockState(blockPos), player, initializer, result.getSide(), false, SpawnReason.BUCKET, BucketItemComponent::initializeBucketEntity, true);
+        return new EntityPlacer(stack, world, blockPos, world.getBlockState(blockPos), player, initializer, result.getSide(), false, SpawnReason.BUCKET, BucketItemComponent::initializeBucketEntity, true, hand);
     }
 
     @Override
@@ -97,8 +101,15 @@ public class EntityPlacer extends Placer {
     }
 
     private void placeEntity() {
+        if (!(this.world instanceof ServerWorld serverWorld)) {
+            return;
+        }
         BlockPos offset = this.blockState.getCollisionShape(this.world, this.blockPos).isEmpty() ? this.blockPos : this.blockPos.offset(this.direction);
-        Entity entity = this.createEntity(offset);
+        MutableActionContext context = MutableActionContext.stackUsage(serverWorld, this.stack, this.hand)
+            .entityPosition(ActionContextParameter.THIS, this.player)
+            .position(ActionContextParameter.TARGET, offset)
+            .side(this.direction);
+        Entity entity = this.createEntity(offset, context);
         if (entity == null) {
             return;
         }
@@ -107,15 +118,10 @@ public class EntityPlacer extends Placer {
         }
         this.stack.decrement(1);
         this.world.emitGameEvent(this.player, GameEvent.ENTITY_PLACE, entity.getBlockPos());
-        if (this.world instanceof ServerWorld serverWorld) {
-            ActionContext.Builder builder = ActionContext.builder(serverWorld, this.stack)
-                .entityPosition(ActionContextParameter.THIS, this.player)
-                .position(ActionContextParameter.TARGET, offset.toCenterPos());
-            stack.invokeEvent(ItemEvents.SPAWN_ENTITY, builder);
-        }
+        this.stack.invokeEvent(ItemEvents.SPAWN_ENTITY, context.entity(ActionContextParameter.TARGET, entity));
     }
 
-    private Entity createEntity(BlockPos offset) {
+    private Entity createEntity(BlockPos offset, ActionContext context) {
         if (this.world.isClient()) {
             return null;
         }
@@ -125,7 +131,6 @@ public class EntityPlacer extends Placer {
             this.initializer.type().setInitializer(null, null);
             return entity;
         }
-        ActionContext context = ActionContext.of((ServerWorld) this.world, this.player, offset, this.direction, this.stack);
         Entity entity = this.initializer.create(context);
         if (entity != null) {
             ((ServerWorld) this.world).spawnEntityAndPassengers(entity);

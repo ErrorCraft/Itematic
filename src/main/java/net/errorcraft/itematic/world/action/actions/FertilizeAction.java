@@ -5,6 +5,7 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.item.BoneMealItem;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +24,7 @@ public record FertilizeAction() implements Action {
     @Override
     public boolean execute(ActionContext context) {
         ServerWorld world = context.world();
-        BlockPos pos = context.blockPos();
+        BlockPos pos = context.blockPos(ActionContextParameter.TARGET);
         if (BoneMealItem.useOnFertilizable(context.stack(), world, pos)) {
             world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, pos, 0);
             return true;

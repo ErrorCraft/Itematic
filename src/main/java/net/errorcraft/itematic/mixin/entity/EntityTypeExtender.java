@@ -8,6 +8,8 @@ import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.EntityInitializerCodecCreator;
 import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.MutableActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -312,7 +314,10 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     )
     private void createEntityInitializerContext(ServerWorld world, ItemStack stack, @Nullable PlayerEntity player, BlockPos pos, SpawnReason spawnReason, boolean alignPosition, boolean invertY, CallbackInfoReturnable<@Nullable T> info) {
         if (this.initializer != null) {
-            this.initializerContext = ActionContext.of(world, player, pos, this.initializerSide, stack);
+            this.initializerContext = MutableActionContext.stackUsage(world, stack)
+                .entityPosition(ActionContextParameter.THIS, player)
+                .position(ActionContextParameter.TARGET, pos)
+                .side(this.initializerSide);
         }
     }
 

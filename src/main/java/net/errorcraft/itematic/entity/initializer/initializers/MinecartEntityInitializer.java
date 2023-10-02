@@ -3,6 +3,7 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.enums.RailShape;
@@ -17,7 +18,7 @@ import net.minecraft.world.World;
 public record MinecartEntityInitializer<T extends AbstractMinecartEntity>(EntityType<T> type, Creator<T> creator) implements EntityInitializer<T> {
     @Override
     public T create(ActionContext context) {
-        return this.create(context.world(), context.blockPos(), context.stack());
+        return this.create(context.world(), context.blockPos(ActionContextParameter.TARGET), context.stack());
     }
 
     public static <U extends AbstractMinecartEntity> Codec<EntityInitializer<U>> createCodec(EntityType<U> type, Creator<U> creator) {

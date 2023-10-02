@@ -2,6 +2,8 @@ package net.errorcraft.itematic.item.dispense.behavior.behaviors;
 
 import net.errorcraft.itematic.world.action.actions.FertilizeAction;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.MutableActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.FallibleItemDispenserBehavior;
 import net.minecraft.item.ItemStack;
@@ -10,14 +12,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldEvents;
 
-import java.util.Optional;
-
 public class FertilizeDispenserBehavior extends FallibleItemDispenserBehavior {
     @Override
     protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
         Direction side = pointer.state().get(DispenserBlock.FACING);
         BlockPos position = pointer.pos().offset(side);
-        ActionContext context = new ActionContext(pointer.world(), Optional.empty(), position.toCenterPos(), side, stack);
+        ActionContext context = MutableActionContext.stackUsage(pointer.world(), stack)
+            .position(ActionContextParameter.THIS, position)
+            .side(side);
         this.fertilize(context, position);
         return stack;
     }
