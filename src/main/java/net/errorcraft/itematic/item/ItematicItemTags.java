@@ -73,6 +73,7 @@ public class ItematicItemTags {
     public static final TagKey<Item> SWORDS = of("item_group/swords");
     public static final TagKey<Item> AXES = of("item_group/axes");
     public static final TagKey<Item> ARMOR = of("item_group/armor");
+    public static final TagKey<Item> HORSE_ARMOR = of("item_group/horse_armor");
     public static final TagKey<Item> FOOD = of("item_group/food");
     public static final TagKey<Item> DYES = of("item_group/dyes");
     public static final TagKey<Item> BREWING_INGREDIENTS = of("item_group/brewing_ingredients");

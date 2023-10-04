@@ -15,6 +15,7 @@
     "minecraft:clock",
     "minecraft:ender_pearl",
     "minecraft:elytra",
+    "minecraft:saddle",
     {
       "type": "tag",
       "tag": "minecraft:item_group/boats"

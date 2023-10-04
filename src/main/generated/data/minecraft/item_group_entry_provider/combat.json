@@ -13,6 +13,10 @@
       "type": "tag",
       "tag": "minecraft:item_group/armor"
     },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/horse_armor"
+    },
     "minecraft:end_crystal",
     "minecraft:snowball",
     "minecraft:egg",

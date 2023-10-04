@@ -501,6 +501,11 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.NETHERITE_LEGGINGS)
             .add(ItemKeys.NETHERITE_BOOTS)
             .add(ItemKeys.TURTLE_HELMET);
+        this.getOrCreateTagBuilder(ItematicItemTags.HORSE_ARMOR)
+            .add(ItemKeys.LEATHER_HORSE_ARMOR)
+            .add(ItemKeys.IRON_HORSE_ARMOR)
+            .add(ItemKeys.GOLDEN_HORSE_ARMOR)
+            .add(ItemKeys.DIAMOND_HORSE_ARMOR);
         this.getOrCreateTagBuilder(ItematicItemTags.FOOD)
             .add(ItemKeys.APPLE)
             .add(ItemKeys.GOLDEN_APPLE)

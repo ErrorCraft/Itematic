@@ -147,7 +147,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
 
     private void renderArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItemComponent component, A model, boolean secondTextureLayer, float red, float green, float blue, @Nullable String overlay) {
         Sprite sprite = this.armorMaterialsAtlas.getSprite(getArmorTexture(component, secondTextureLayer, overlay));
-        VertexConsumer vertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumers.getBuffer(ItematicTexturedRenderLayers.ARMOR_TRIMS_RENDER_LAYER));
+        VertexConsumer vertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumers.getBuffer(ItematicTexturedRenderLayers.ARMOR_MATERIAL_RENDER_LAYER));
         model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, red, green, blue, 1.0f);
     }
 

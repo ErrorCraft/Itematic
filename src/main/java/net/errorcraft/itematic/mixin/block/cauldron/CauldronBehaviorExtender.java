@@ -366,6 +366,25 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
+                target = "Lnet/minecraft/item/Items;LEATHER_HORSE_ARMOR:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object leatherHorseArmorUseRegistryKey(Object key) {
+        return ItemKeys.LEATHER_HORSE_ARMOR;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
                 target = "Lnet/minecraft/item/Items;WHITE_BANNER:Lnet/minecraft/item/Item;"
             )
         ),

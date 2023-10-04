@@ -1,0 +1,14 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.saddle"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:saddle"
+    },
+    "minecraft:saddle": {}
+  }
+}

@@ -114,6 +114,7 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(ItemKeys.CLOCK),
             ItemGroupEntry.simple(ItemKeys.ENDER_PEARL),
             ItemGroupEntry.simple(ItemKeys.ELYTRA),
+            ItemGroupEntry.simple(ItemKeys.SADDLE),
             ItemGroupEntry.tag(ItematicItemTags.BOATS),
             ItemGroupEntry.tag(ItematicItemTags.MINECARTS),
             ItemGroupEntry.tag(ItematicItemTags.MUSIC_DISCS)
@@ -123,6 +124,7 @@ public class ItemGroupEntryProviders {
             .add(ItematicItemTags.AXES)
             .add(ItemKeys.SHIELD)
             .add(ItematicItemTags.ARMOR)
+            .add(ItematicItemTags.HORSE_ARMOR)
             .add(ItemKeys.END_CRYSTAL)
             .add(ItemKeys.SNOWBALL)
             .add(ItemKeys.EGG)

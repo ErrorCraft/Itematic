@@ -1456,6 +1456,13 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.SADDLE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SADDLE).build(), 1),
+            ItemComponentSet.builder()
+                .with(SaddleItemComponent.INSTANCE)
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.SADDLE)))
+                .build()
+        ));
         registerable.register(ItemKeys.MINECART, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MINECART).build(), 1),
             ItemComponentSet.builder()
@@ -2044,7 +2051,7 @@ public class ItemUtil {
                 .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
-                .with(new TintedItemComponent(new DyeableItemColor()))
+                .with(new TintedItemComponent(DyeableItemColor.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER_CHESTPLATE, create(
@@ -2056,7 +2063,7 @@ public class ItemUtil {
                 .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
-                .with(new TintedItemComponent(new DyeableItemColor()))
+                .with(new TintedItemComponent(DyeableItemColor.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER_LEGGINGS, create(
@@ -2068,7 +2075,7 @@ public class ItemUtil {
                 .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
-                .with(new TintedItemComponent(new DyeableItemColor()))
+                .with(new TintedItemComponent(DyeableItemColor.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER_BOOTS, create(
@@ -2080,7 +2087,7 @@ public class ItemUtil {
                 .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
-                .with(new TintedItemComponent(new DyeableItemColor()))
+                .with(new TintedItemComponent(DyeableItemColor.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.CHAINMAIL_HELMET, create(
@@ -3479,6 +3486,36 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARMOR_STAND).build(), 16),
             ItemComponentSet.builder()
                 .with(EntityItemComponent.from(new ArmorStandEntityInitializer(), dispenseBehaviors))
+                .build()
+        ));
+        registerable.register(ItemKeys.IRON_HORSE_ARMOR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HORSE_ARMOR).build(), 1),
+            ItemComponentSet.builder()
+                .with(new HorseArmorItemComponent(armorMaterials.getOrThrow(ArmorMaterialKeys.IRON)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
+                .build()
+        ));
+        registerable.register(ItemKeys.GOLDEN_HORSE_ARMOR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HORSE_ARMOR).build(), 1),
+            ItemComponentSet.builder()
+                .with(new HorseArmorItemComponent(armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
+                .build()
+        ));
+        registerable.register(ItemKeys.DIAMOND_HORSE_ARMOR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HORSE_ARMOR).build(), 1),
+            ItemComponentSet.builder()
+                .with(new HorseArmorItemComponent(armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
+                .build()
+        ));
+        registerable.register(ItemKeys.LEATHER_HORSE_ARMOR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_HORSE_ARMOR).build(), 1),
+            ItemComponentSet.builder()
+                .with(new HorseArmorItemComponent(armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
+                .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
+                .with(new TintedItemComponent(DyeableItemColor.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.COMMAND_BLOCK_MINECART, create(

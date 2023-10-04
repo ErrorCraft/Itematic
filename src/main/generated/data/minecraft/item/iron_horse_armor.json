@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.iron_horse_armor"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:horse_armor"
+    },
+    "minecraft:horse_armor": {
+      "material": "minecraft:iron"
+    }
+  }
+}

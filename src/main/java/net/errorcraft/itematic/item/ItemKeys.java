@@ -204,6 +204,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> DARK_OAK_FENCE_GATE = register("dark_oak_fence_gate");
     public static final RegistryKey<Item> MANGROVE_FENCE_GATE = register("mangrove_fence_gate");
     public static final RegistryKey<Item> BAMBOO_FENCE_GATE = register("bamboo_fence_gate");
+    public static final RegistryKey<Item> SADDLE = register("saddle");
     public static final RegistryKey<Item> MINECART = register("minecart");
     public static final RegistryKey<Item> CHEST_MINECART = register("chest_minecart");
     public static final RegistryKey<Item> FURNACE_MINECART = register("furnace_minecart");
@@ -496,6 +497,10 @@ public class ItemKeys {
     public static final RegistryKey<Item> RABBIT_STEW = register("rabbit_stew");
     public static final RegistryKey<Item> RABBIT_FOOT = register("rabbit_foot");
     public static final RegistryKey<Item> ARMOR_STAND = register("armor_stand");
+    public static final RegistryKey<Item> IRON_HORSE_ARMOR = register("iron_horse_armor");
+    public static final RegistryKey<Item> GOLDEN_HORSE_ARMOR = register("golden_horse_armor");
+    public static final RegistryKey<Item> DIAMOND_HORSE_ARMOR = register("diamond_horse_armor");
+    public static final RegistryKey<Item> LEATHER_HORSE_ARMOR = register("leather_horse_armor");
     public static final RegistryKey<Item> COMMAND_BLOCK_MINECART = register("command_block_minecart");
     public static final RegistryKey<Item> MUTTON = register("mutton");
     public static final RegistryKey<Item> COOKED_MUTTON = register("cooked_mutton");

@@ -40,6 +40,8 @@ public class ItemComponentTypes {
     public static final ItemComponentType<ConsumableItemComponent> CONSUMABLE = register("consumable", new ItemComponentType<>(ConsumableItemComponent.CODEC));
     public static final ItemComponentType<PotionItemComponent> POTION = register("potion", new ItemComponentType<>(PotionItemComponent.CODEC));
     public static final ItemComponentType<PotionHolderItemComponent> POTION_HOLDER = register("potion_holder", new ItemComponentType<>(PotionHolderItemComponent.CODEC));
+    public static final ItemComponentType<SaddleItemComponent> SADDLE = register("saddle", new ItemComponentType<>(SaddleItemComponent.CODEC));
+    public static final ItemComponentType<HorseArmorItemComponent> HORSE_ARMOR = register("horse_armor", new ItemComponentType<>(HorseArmorItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

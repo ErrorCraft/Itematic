@@ -4,6 +4,11 @@
       "type": "minecraft:directory",
       "prefix": "models/armor/",
       "source": "models/armor"
+    },
+    {
+      "type": "minecraft:directory",
+      "prefix": "entity/horse/armor/",
+      "source": "entity/horse/armor"
     }
   ]
 }

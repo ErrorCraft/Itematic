@@ -8,7 +8,8 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.item.ItemStack;
 
 public record DyeableItemColor() implements ItemColor {
-    public static final Codec<DyeableItemColor> CODEC = Codec.unit(new DyeableItemColor());
+    public static final DyeableItemColor INSTANCE = new DyeableItemColor();
+    public static final Codec<DyeableItemColor> CODEC = Codec.unit(INSTANCE);
 
     @Override
     public int getColor(ItemStack stack, int tintIndex) {

@@ -16,4 +16,8 @@ public record ArmorMaterial(Identifier assetId) {
     public Identifier getLeggingsTextureId() {
         return this.assetId.withPath(path -> "models/armor/" + path + "_layer_2");
     }
+
+    public Identifier getHorseTextureId() {
+        return this.assetId.withPath(path -> "entity/horse/armor/horse_armor_" + path);
+    }
 }

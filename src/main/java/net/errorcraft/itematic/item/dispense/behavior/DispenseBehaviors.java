@@ -19,6 +19,8 @@ public class DispenseBehaviors {
     public static final DispenserBehavior POTION = register(DispenseBehaviorKeys.POTION, DispenserBehaviorUtil.POTION_DISPENSER_BEHAVIOR);
     public static final DispenserBehavior BOTTLE = register(DispenseBehaviorKeys.BOTTLE, DispenserBehaviorUtil.BOTTLE_DISPENSER_BEHAVIOR);
     public static final DispenserBehavior FERTILIZE = register(DispenseBehaviorKeys.FERTILIZE, new FertilizeDispenserBehavior());
+    public static final DispenserBehavior SADDLE = register(DispenseBehaviorKeys.SADDLE, new SaddleItemComponentDispenserBehavior());
+    public static final DispenserBehavior HORSE_ARMOR = register(DispenseBehaviorKeys.HORSE_ARMOR, DispenserBehaviorUtil.HORSE_ARMOR_DISPENSER_BEHAVIOR);
 
     private DispenseBehaviors() {}
 

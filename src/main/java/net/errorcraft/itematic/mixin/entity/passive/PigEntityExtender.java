@@ -4,11 +4,13 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
@@ -73,5 +75,27 @@ public abstract class PigEntityExtender extends AnimalEntity {
     )
     private ItemStack newItemStackForGoldenSwordUseRegistryEntry(ItemConvertible item) {
         return new ItemStack(this.getWorld().getItem(ItemKeys.GOLDEN_SWORD));
+    }
+
+    @Redirect(
+        method = "interactMob",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfForSaddleUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.isOf(ItemKeys.SADDLE);
+    }
+
+    @Redirect(
+        method = "dropInventory",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/passive/PigEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+        )
+    )
+    private ItemEntity dropItemForSaddleUseRegistryKey(PigEntity instance, ItemConvertible itemConvertible) {
+        return this.dropItem(ItemKeys.SADDLE);
     }
 }
