@@ -22,10 +22,7 @@ import net.errorcraft.itematic.mixin.item.PotionItemAccessor;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.action.ActionSet;
-import net.errorcraft.itematic.world.action.actions.ClearStatusEffectsAction;
-import net.errorcraft.itematic.world.action.actions.FertilizeAction;
-import net.errorcraft.itematic.world.action.actions.StartUsingItemAction;
-import net.errorcraft.itematic.world.action.actions.TeleportAction;
+import net.errorcraft.itematic.world.action.actions.*;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.dispenser.DispenserBehavior;
@@ -80,6 +77,18 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.GRASS_BLOCK)))
                 .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .build()
+        ));
+        registerable.register(ItemKeys.CRIMSON_NYLIUM, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_NYLIUM).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_NYLIUM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_NYLIUM, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_NYLIUM).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_NYLIUM)))
                 .build()
         ));
         registerable.register(ItemKeys.COBBLESTONE, create(
@@ -149,6 +158,18 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_PLANKS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.CRIMSON_PLANKS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_PLANKS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_PLANKS)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_PLANKS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_PLANKS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_PLANKS)))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO_MOSAIC, create(
@@ -290,6 +311,18 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.CRIMSON_STEM, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_STEM).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_STEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_STEM, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_STEM).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_STEM)))
+                .build()
+        ));
         registerable.register(ItemKeys.BAMBOO_BLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_BLOCK).build()),
             ItemComponentSet.builder()
@@ -353,6 +386,18 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.STRIPPED_CRIMSON_STEM, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_CRIMSON_STEM).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_CRIMSON_STEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.STRIPPED_WARPED_STEM, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_WARPED_STEM).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_WARPED_STEM)))
+                .build()
+        ));
         registerable.register(ItemKeys.STRIPPED_OAK_WOOD, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_OAK_WOOD).build()),
             ItemComponentSet.builder()
@@ -407,6 +452,18 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_MANGROVE_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.STRIPPED_CRIMSON_HYPHAE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_CRIMSON_HYPHAE).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_CRIMSON_HYPHAE)))
+                .build()
+        ));
+        registerable.register(ItemKeys.STRIPPED_WARPED_HYPHAE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_WARPED_HYPHAE).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.STRIPPED_WARPED_HYPHAE)))
                 .build()
         ));
         registerable.register(ItemKeys.STRIPPED_BAMBOO_BLOCK, create(
@@ -470,6 +527,18 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MANGROVE_WOOD)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.CRIMSON_HYPHAE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_HYPHAE).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_HYPHAE)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_HYPHAE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_HYPHAE).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_HYPHAE)))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_LEAVES, create(
@@ -679,6 +748,34 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.CRIMSON_FUNGUS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_FUNGUS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_FUNGUS)))
+                .with(new CompostableItemComponent(0.65f))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_FUNGUS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_FUNGUS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_FUNGUS)))
+                .with(new CompostableItemComponent(0.65f))
+                .build()
+        ));
+        registerable.register(ItemKeys.CRIMSON_ROOTS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_ROOTS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_ROOTS)))
+                .with(new CompostableItemComponent(0.65f))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_ROOTS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_ROOTS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_ROOTS)))
+                .with(new CompostableItemComponent(0.65f))
+                .build()
+        ));
         registerable.register(ItemKeys.BAMBOO, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO).build()),
             ItemComponentSet.builder()
@@ -754,6 +851,18 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC_SLAB)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.CRIMSON_SLAB, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_SLAB).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_SLAB)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_SLAB, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_SLAB).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_SLAB)))
                 .build()
         ));
         registerable.register(ItemKeys.BRICKS, create(
@@ -873,6 +982,18 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.CRIMSON_FENCE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_FENCE).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_FENCE)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_FENCE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_FENCE).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_FENCE)))
+                .build()
+        ));
         registerable.register(ItemKeys.VINE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.VINE).build()),
             ItemComponentSet.builder()
@@ -958,6 +1079,18 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC_STAIRS)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.CRIMSON_STAIRS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_STAIRS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_STAIRS)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_STAIRS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_STAIRS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_STAIRS)))
                 .build()
         ));
         registerable.register(ItemKeys.COMMAND_BLOCK, create(
@@ -1100,6 +1233,20 @@ public class ItemUtil {
                 .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
+        registerable.register(ItemKeys.NETHER_WART_BLOCK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHER_WART_BLOCK).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.NETHER_WART_BLOCK)))
+                .with(new CompostableItemComponent(0.85f))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_WART_BLOCK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_WART_BLOCK).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_WART_BLOCK)))
+                .with(new CompostableItemComponent(0.85f))
+                .build()
+        ));
         registerable.register(ItemKeys.SCAFFOLDING, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SCAFFOLDING).build()),
             ItemComponentSet.builder()
@@ -1204,6 +1351,18 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.CRIMSON_BUTTON, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_BUTTON).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_BUTTON)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_BUTTON, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_BUTTON).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_BUTTON)))
+                .build()
+        ));
         registerable.register(ItemKeys.OAK_PRESSURE_PLATE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_PRESSURE_PLATE).build()),
             ItemComponentSet.builder()
@@ -1265,6 +1424,18 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_PRESSURE_PLATE)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.CRIMSON_PRESSURE_PLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_PRESSURE_PLATE).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_PRESSURE_PLATE)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_PRESSURE_PLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_PRESSURE_PLATE).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_PRESSURE_PLATE)))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_DOOR, create(
@@ -1330,6 +1501,18 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.CRIMSON_DOOR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_DOOR).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_DOOR)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_DOOR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_DOOR).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_DOOR)))
+                .build()
+        ));
         registerable.register(ItemKeys.OAK_TRAPDOOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_TRAPDOOR).build()),
             ItemComponentSet.builder()
@@ -1391,6 +1574,18 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_TRAPDOOR)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.CRIMSON_TRAPDOOR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_TRAPDOOR).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_TRAPDOOR)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_TRAPDOOR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_TRAPDOOR).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_TRAPDOOR)))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_FENCE_GATE, create(
@@ -1456,6 +1651,18 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.CRIMSON_FENCE_GATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_FENCE_GATE).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_FENCE_GATE)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_FENCE_GATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_FENCE_GATE).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_FENCE_GATE)))
+                .build()
+        ));
         registerable.register(ItemKeys.SADDLE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SADDLE).build(), 1),
             ItemComponentSet.builder()
@@ -1491,6 +1698,28 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HOPPER_MINECART).build(), 1),
             ItemComponentSet.builder()
                 .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.HOPPER_MINECART, HopperMinecartEntity::new), dispenseBehaviors))
+                .build()
+        ));
+        registerable.register(ItemKeys.CARROT_ON_A_STICK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CARROT_ON_A_STICK).build(), 1),
+            ItemComponentSet.builder()
+                .with(new DamageableItemComponent(25))
+                .with(ForgeableItemComponent.of(EnchantmentTags.STEERING_FORGING))
+                .with(new SteeringItemComponent(entityTypes.getOrThrow(EntityTypeKeys.PIG), 7))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.BREAK_ITEM, ActionSet.simple(new ExchangeItemAction(items.getOrThrow(ItemKeys.FISHING_ROD))))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_FUNGUS_ON_A_STICK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WARPED_FUNGUS_ON_A_STICK).build(), 1),
+            ItemComponentSet.builder()
+                .with(new DamageableItemComponent(100))
+                .with(ForgeableItemComponent.of(EnchantmentTags.STEERING_FORGING))
+                .with(new SteeringItemComponent(entityTypes.getOrThrow(EntityTypeKeys.STRIDER), 1))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.BREAK_ITEM, ActionSet.simple(new ExchangeItemAction(items.getOrThrow(ItemKeys.FISHING_ROD))))
                 .build()
         ));
         registerable.register(ItemKeys.ELYTRA, create(
@@ -2384,6 +2613,18 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.CRIMSON_SIGN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_SIGN).build(), 16),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_SIGN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_SIGN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_SIGN).build(), 16),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_SIGN)))
+                .build()
+        ));
         registerable.register(ItemKeys.OAK_HANGING_SIGN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_HANGING_SIGN).build(), 16),
             ItemComponentSet.builder()
@@ -2445,6 +2686,18 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BAMBOO_HANGING_SIGN)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.CRIMSON_HANGING_SIGN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_HANGING_SIGN).build(), 16),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CRIMSON_HANGING_SIGN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARPED_HANGING_SIGN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_HANGING_SIGN).build(), 16),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_HANGING_SIGN)))
                 .build()
         ));
         registerable.register(ItemKeys.BUCKET, create(

@@ -47,6 +47,12 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Shadow
     public abstract Hand getActiveHand();
 
+    @Shadow
+    public abstract ItemStack getMainHandStack();
+
+    @Shadow
+    public abstract ItemStack getOffHandStack();
+
     @Redirect(
         method = "eatFood",
         at = @At(
@@ -273,5 +279,16 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     )
     private boolean isOfForElytraUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.isOf(ItemKeys.ELYTRA);
+    }
+
+    @Override
+    public Hand getHoldingHand(ItemStack stack) {
+        if (this.getMainHandStack() == stack) {
+            return Hand.MAIN_HAND;
+        }
+        if (this.getOffHandStack() == stack) {
+            return Hand.OFF_HAND;
+        }
+        return null;
     }
 }

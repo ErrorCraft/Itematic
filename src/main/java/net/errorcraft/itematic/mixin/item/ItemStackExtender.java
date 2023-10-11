@@ -446,10 +446,12 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"
         )
     )
+    @SuppressWarnings("ConstantConditions")
     private <T extends LivingEntity> void invokeBreakToolEvent(int amount, T entity, Consumer<T> breakCallback, CallbackInfo info) {
         if (entity.getWorld() instanceof ServerWorld serverWorld) {
             ActionContext context = MutableActionContext.stackUsage(serverWorld, (ItemStack)(Object) this)
-                .entityPosition(ActionContextParameter.THIS, entity);
+                .entityPosition(ActionContextParameter.THIS, entity)
+                .hand(entity.getHoldingHand((ItemStack)(Object) this));
             this.invokeEvent(ItemEvents.BREAK_ITEM, context);
         }
     }

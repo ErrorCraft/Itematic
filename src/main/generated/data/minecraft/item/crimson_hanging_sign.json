@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.crimson_hanging_sign"
+    },
+    "max_count": 16
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:crimson_hanging_sign"
+    }
+  }
+}

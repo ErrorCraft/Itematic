@@ -1,13 +1,20 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.StriderEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,5 +46,50 @@ public abstract class StriderEntityExtender extends AnimalEntity {
     )
     private ItemEntity dropItemForSaddleUseRegistryKey(StriderEntity instance, ItemConvertible itemConvertible) {
         return this.dropItem(ItemKeys.SADDLE);
+    }
+
+    @Redirect(
+        method = "getControllingPassenger",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/player/PlayerEntity;isHolding(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isHoldingForWarpedFungusOnAStickUseRegistryKeyCheck(PlayerEntity instance, Item item) {
+        return instance.isHolding(ItemKeys.WARPED_FUNGUS_ON_A_STICK);
+    }
+
+    @Redirect(
+        method = "initialize",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack"
+        )
+    )
+    private ItemStack newItemStackForWarpedFungusOnAStickUseCreateStack(ItemConvertible item, @Local ServerWorldAccess world) {
+        return world.createStack(ItemKeys.WARPED_FUNGUS_ON_A_STICK);
+    }
+
+    @Redirect(
+        method = "isBreedingItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
+        )
+    )
+    private boolean isBreedingItemTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
+        return itemStack.isIn(ItematicItemTags.STRIDER_BREEDING_ITEMS);
+    }
+
+    @ModifyExpressionValue(
+        method = "initGoals",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/entity/ai/goal/TemptGoal"
+        )
+    )
+    private TemptGoal initCustomGoalsNewTemptGoalSetFoodTag(TemptGoal original) {
+        original.setFoodTag(ItematicItemTags.STRIDER_TEMPTING_ITEMS);
+        return original;
     }
 }

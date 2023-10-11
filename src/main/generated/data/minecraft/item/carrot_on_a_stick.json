@@ -1,0 +1,31 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.carrot_on_a_stick"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:damageable": {
+      "durability": 25
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:steering_forging"
+    },
+    "minecraft:steering": {
+      "damage": 7,
+      "target": "minecraft:pig"
+    }
+  },
+  "events": [
+    {
+      "event": "minecraft:break_item",
+      "actions": [
+        {
+          "action": "minecraft:exchange_item",
+          "item": "minecraft:fishing_rod"
+        }
+      ]
+    }
+  ]
+}

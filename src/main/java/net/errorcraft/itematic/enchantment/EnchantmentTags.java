@@ -32,6 +32,7 @@ public class EnchantmentTags {
     public static final TagKey<Enchantment> HOE_FORGING = of("hoe_forging");
     public static final TagKey<Enchantment> BOW_FORGING = of("bow_forging");
     public static final TagKey<Enchantment> CROSSBOW_FORGING = of("crossbow_forging");
+    public static final TagKey<Enchantment> STEERING_FORGING = of("steering_forging");
 
     private EnchantmentTags() {}
 

@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.data.server.tag;
 
+import net.errorcraft.itematic.enchantment.EnchantmentKeys;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
@@ -70,6 +71,10 @@ public class EnchantmentTagProvider extends FabricTagProvider<Enchantment> {
         this.getOrCreateTagBuilder(EnchantmentTags.CROSSBOW_ENCHANTING)
             .add(getAll(registry, EnchantmentTarget.CROSSBOW, false));
         this.forgingTag(registry, EnchantmentTags.CROSSBOW_FORGING, EnchantmentTags.CROSSBOW_ENCHANTING, EnchantmentTarget.CROSSBOW);
+        this.getOrCreateTagBuilder(EnchantmentTags.STEERING_FORGING)
+            .add(EnchantmentKeys.VANISHING_CURSE)
+            .add(EnchantmentKeys.MENDING)
+            .add(EnchantmentKeys.UNBREAKING);
     }
 
     private FabricTagProvider<Enchantment>.FabricTagBuilder forgingTag(RegistryWrapper.Impl<Enchantment> registry, TagKey<Enchantment> tag, TagKey<Enchantment> enchantingTag, EnchantmentTarget enchantmentTarget) {

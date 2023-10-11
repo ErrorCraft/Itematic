@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -97,5 +98,16 @@ public abstract class PigEntityExtender extends AnimalEntity {
     )
     private ItemEntity dropItemForSaddleUseRegistryKey(PigEntity instance, ItemConvertible itemConvertible) {
         return this.dropItem(ItemKeys.SADDLE);
+    }
+
+    @Redirect(
+        method = "getControllingPassenger",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/player/PlayerEntity;isHolding(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isHoldingForCarrotOnAStickUseRegistryKeyCheck(PlayerEntity instance, Item item) {
+        return instance.isHolding(ItemKeys.CARROT_ON_A_STICK);
     }
 }

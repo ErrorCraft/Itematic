@@ -6,11 +6,11 @@ import net.errorcraft.itematic.util.IdentifierUtil;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextCodecs;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.Util;
-import net.minecraft.util.dynamic.Codecs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public record ItemBaseDisplay(String translationKey, Rarity rarity, Optional<Lis
     public static final Codec<ItemBaseDisplay> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.STRING.fieldOf("translation_key").forGetter(ItemBaseDisplay::translationKey),
         StringIdentifiable.createCodec(Rarity::values).optionalFieldOf("rarity", Rarity.COMMON).forGetter(ItemBaseDisplay::rarity),
-        Codecs.TEXT.listOf().optionalFieldOf("tooltip").forGetter(ItemBaseDisplay::tooltip)
+        TextCodecs.CODEC.listOf().optionalFieldOf("tooltip").forGetter(ItemBaseDisplay::tooltip)
     ).apply(instance, ItemBaseDisplay::new));
 
     public static class Builder {

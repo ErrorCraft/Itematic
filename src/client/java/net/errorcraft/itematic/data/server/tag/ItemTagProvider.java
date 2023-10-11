@@ -79,7 +79,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.POTATO)
             .add(ItemKeys.BEETROOT);
         this.getOrCreateTagBuilder(ItematicItemTags.PIG_TEMPTING_ITEMS)
-            .addTag(ItematicItemTags.PIG_BREEDING_ITEMS);
+            .addTag(ItematicItemTags.PIG_BREEDING_ITEMS)
+            .add(ItemKeys.CARROT_ON_A_STICK);
         this.getOrCreateTagBuilder(ItematicItemTags.RABBIT_BREEDING_ITEMS)
             .add(ItemKeys.CARROT)
             .add(ItemKeys.GOLDEN_CARROT);
@@ -105,6 +106,13 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WHEAT);
         this.getOrCreateTagBuilder(ItematicItemTags.LLAMA_BREEDING_ITEMS)
             .add(ItemKeys.WHEAT);
+        this.getOrCreateTagBuilder(ItematicItemTags.STRIDER_BREEDING_ITEMS)
+            .add(ItemKeys.WARPED_FUNGUS);
+        this.getOrCreateTagBuilder(ItematicItemTags.STRIDER_TEMPTING_ITEMS)
+            .addTag(ItematicItemTags.STRIDER_BREEDING_ITEMS)
+            .add(ItemKeys.WARPED_FUNGUS_ON_A_STICK);
+        this.getOrCreateTagBuilder(ItematicItemTags.HOGLIN_BREEDING_ITEMS)
+            .add(ItemKeys.CRIMSON_FUNGUS);
         this.getOrCreateTagBuilder(ItematicItemTags.VILLAGER_GATHERABLE_ITEMS)
             .add(ItemKeys.BREAD)
             .add(ItemKeys.POTATO)

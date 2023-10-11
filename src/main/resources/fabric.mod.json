@@ -113,9 +113,6 @@
       "net/minecraft/class_1863": [
         "net/errorcraft/itematic/access/recipe/RecipeManagerAccess"
       ],
-      "net/minecraft/class_1936": [
-        "net/errorcraft/itematic/access/world/WorldViewAccess"
-      ],
       "net/minecraft/class_1937": [
         "net/errorcraft/itematic/access/world/WorldAccess"
       ],
@@ -160,6 +157,9 @@
       ],
       "net/minecraft/class_4073": [
         "net/errorcraft/itematic/access/client/render/entity/feature/HorseArmorFeatureRendererAccess"
+      ],
+      "net/minecraft/class_4538": [
+        "net/errorcraft/itematic/access/world/WorldViewAccess"
       ],
       "net/minecraft/class_5257": [
         "net/errorcraft/itematic/access/predicate/entity/AdvancementEntityPredicateDeserializerAccess"

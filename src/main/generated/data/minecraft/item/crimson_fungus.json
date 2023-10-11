@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.crimson_fungus"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:crimson_fungus"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.65
+    }
+  }
+}

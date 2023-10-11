@@ -42,6 +42,9 @@ public class ItematicItemTags {
     public static final TagKey<Item> COW_TEMPTING_ITEMS = of("cow_tempting_items");
     public static final TagKey<Item> SHEEP_TEMPTING_ITEMS = of("sheep_tempting_items");
     public static final TagKey<Item> LLAMA_BREEDING_ITEMS = of("llama_breeding_items");
+    public static final TagKey<Item> STRIDER_BREEDING_ITEMS = of("strider_breeding_items");
+    public static final TagKey<Item> STRIDER_TEMPTING_ITEMS = of("strider_tempting_items");
+    public static final TagKey<Item> HOGLIN_BREEDING_ITEMS = of("hoglin_breeding_items");
     public static final TagKey<Item> VILLAGER_GATHERABLE_ITEMS = of("villager_gatherable_items");
     public static final TagKey<Item> FARMER_VILLAGER_GATHERABLE_ITEMS = of("farmer_villager_gatherable_items");
 

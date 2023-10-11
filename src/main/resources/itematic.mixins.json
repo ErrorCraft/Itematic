@@ -74,6 +74,7 @@
     "entity.mob.AbstractSkeletonEntityExtender",
     "entity.mob.CreeperEntityExtender",
     "entity.mob.DrownedEntityExtender",
+    "entity.mob.HoglinEntityExtender",
     "entity.mob.HostileEntityExtender",
     "entity.mob.IllusionerEntityExtender",
     "entity.mob.MobEntityExtender",

@@ -9,15 +9,12 @@ public interface EntityAccess {
     default ItemEntity dropItem(RegistryKey<Item> key) {
         return this.dropItem(key, 0);
     }
-
     default ItemEntity dropItem(RegistryKey<Item> key, int yOffset) {
         return null;
     }
-
     default ItemEntity dropItem(RegistryEntry<Item> entry) {
         return this.dropItem(entry, 0);
     }
-
     default ItemEntity dropItem(RegistryEntry<Item> entry, int yOffset) {
         return null;
     }
