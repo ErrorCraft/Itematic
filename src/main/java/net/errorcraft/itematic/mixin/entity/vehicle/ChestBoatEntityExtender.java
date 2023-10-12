@@ -10,13 +10,13 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(ChestBoatEntity.class)
-public class ChestBoatEntityExtender extends BoatEntity {
+public abstract class ChestBoatEntityExtender extends BoatEntityExtender {
     public ChestBoatEntityExtender(EntityType<? extends BoatEntity> entityType, World world) {
         super(entityType, world);
     }
 
     @Override
-    public RegistryKey<Item> asItemKey() {
+    protected RegistryKey<Item> asItemKey() {
         return switch (this.getVariant()) {
             default -> ItemKeys.OAK_CHEST_BOAT;
             case SPRUCE -> ItemKeys.SPRUCE_CHEST_BOAT;

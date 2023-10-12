@@ -1,24 +1,19 @@
 package net.errorcraft.itematic.mixin.entity.vehicle;
 
-import net.errorcraft.itematic.access.entity.vehicle.AbstractMinecartEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(AbstractMinecartEntity.class)
-public abstract class AbstractMinecartEntityExtender extends Entity implements AbstractMinecartEntityAccess {
+public abstract class AbstractMinecartEntityExtender extends Entity {
     @Shadow
     public abstract AbstractMinecartEntity.Type getMinecartType();
 
@@ -32,20 +27,7 @@ public abstract class AbstractMinecartEntityExtender extends Entity implements A
      */
     @Overwrite
     public ItemStack getPickBlockStack() {
-        RegistryEntry<Item> entry = this.getWorld().getItem(this.asPickBlockItemKey());
-        return new ItemStack(entry);
-    }
-
-    @Redirect(
-        method = "dropItems",
-        at = @At(
-            value = "NEW",
-            target = "net/minecraft/item/ItemStack"
-        )
-    )
-    private ItemStack dropItemsNewItemStackUseRegistryEntry(ItemConvertible item) {
-        RegistryEntry<Item> entry = this.getWorld().getItem(this.asItemKey());
-        return new ItemStack(entry);
+        return this.getWorld().createStack(this.asPickBlockItemKey());
     }
 
     private RegistryKey<Item> asPickBlockItemKey() {

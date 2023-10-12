@@ -2,8 +2,8 @@ package net.errorcraft.itematic.mixin.client.render.item;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.errorcraft.itematic.access.client.render.item.ItemModelsAccess;
+import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.client.render.item.ItemModels;
-import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registry;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class ItemModelsExtender implements ItemModelsAccess {
     @Shadow
     @Final
-    private Int2ObjectMap<BakedModel> models;
+    public Int2ObjectMap<ModelIdentifier> modelIds;
 
     @Shadow
     public abstract void putModel(Item item, ModelIdentifier modelId);
@@ -41,8 +41,12 @@ public abstract class ItemModelsExtender implements ItemModelsAccess {
     @Override
     public void reloadModelIds(Registry<Item> registry) {
         this.registry = registry;
-        this.models.clear();
+        this.modelIds.clear();
+        Identifier airKey = ItemKeys.AIR.getValue();
         for (Identifier id : registry.getIds()) {
+            if (id.equals(airKey)) {
+                continue;
+            }
             this.putModel(registry.get(id), new ModelIdentifier(id, "inventory"));
         }
     }

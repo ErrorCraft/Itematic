@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "MinecraftClientExtender",
+    "color.block.BlockColorsExtender",
     "gui.screen.ingame.CartographyTableScreenExtender",
     "gui.screen.ingame.CreativeInventoryScreenExtender",
     "gui.screen.ingame.LoomScreenExtender",

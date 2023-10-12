@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.mixin.client.render.model;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.item.Item;
 import net.minecraft.registry.DefaultedRegistry;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.Set;
 
 @Mixin(ModelLoader.class)
-public class ModelLoaderExtender {
+public abstract class ModelLoaderExtender {
     @Redirect(
         method = "<init>",
         at = @At(
@@ -21,11 +21,11 @@ public class ModelLoaderExtender {
             target = "Lnet/minecraft/registry/DefaultedRegistry;getIds()Ljava/util/Set;"
         )
     )
-    private Set<Identifier> constructorGetIdsUseDynamicRegistry(DefaultedRegistry<Item> instance) {
-        World world = MinecraftClient.getInstance().world;
-        if (world == null) {
+    private Set<Identifier> getIdsUseDynamicRegistry(DefaultedRegistry<Item> instance, BlockColors blockColors) {
+        Registry<Item> items = blockColors.itemRegistry();
+        if (items == null) {
             return Set.of();
         }
-        return world.getItemAccess().getIds();
+        return items.getIds();
     }
 }

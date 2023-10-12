@@ -137,6 +137,7 @@
     "entity.vehicle.FurnaceMinecartEntityExtender",
     "entity.vehicle.HopperMinecartEntityExtender",
     "entity.vehicle.TntMinecartEntityExtender",
+    "entity.vehicle.VehicleEntityExtender",
     "entity.vehicle.VehicleInventoryExtender",
     "fluid.EmptyFluidExtender",
     "fluid.LavaFluidExtender",

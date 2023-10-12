@@ -10,12 +10,16 @@ import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.Registry;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.Collections;
+import java.util.Iterator;
 
 @Mixin(ItemRenderer.class)
 public class ItemRendererExtender implements ItemRendererAccess {
@@ -24,13 +28,24 @@ public class ItemRendererExtender implements ItemRendererAccess {
     private ItemModels models;
 
     @Redirect(
+        method = "<init>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/registry/DefaultedRegistry;iterator()Ljava/util/Iterator;"
+        )
+    )
+    private Iterator<Item> doNotRegisterItems(DefaultedRegistry<Item> instance) {
+        return Collections.emptyIterator();
+    }
+
+    @Redirect(
         method = "usesDynamicDisplay",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private static boolean usesDynamicDisplayIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
+    private static boolean isOfForClockUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.isOf(ItemKeys.CLOCK);
     }
 
@@ -48,6 +63,7 @@ public class ItemRendererExtender implements ItemRendererAccess {
             .orElse(ItemColor.DEFAULT_COLOR);
     }
 
+    @Override
     public void reloadModelIds(Registry<Item> registry) {
         this.models.reloadModelIds(registry);
     }

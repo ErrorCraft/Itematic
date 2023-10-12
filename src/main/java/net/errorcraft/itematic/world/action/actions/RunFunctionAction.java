@@ -28,7 +28,7 @@ public record RunFunctionAction(Identifier function, ActionContextParameters con
     @Override
     public boolean execute(ActionContext context) {
         CommandFunctionManager functionManager = context.world().getServer().getCommandFunctionManager();
-        Optional<CommandFunction> function = functionManager.getFunction(this.function);
+        Optional<CommandFunction<ServerCommandSource>> function = functionManager.getFunction(this.function);
         if (function.isEmpty()) {
             return false;
         }

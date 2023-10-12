@@ -7,10 +7,8 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 public class ItemAccess {
@@ -42,9 +40,5 @@ public class ItemAccess {
 
     public Iterable<RegistryEntry<Item>> iterateEntries(TagKey<Item> tag) {
         return this.registry.iterateEntries(tag);
-    }
-
-    public Set<Identifier> getIds() {
-        return this.registry.getIds();
     }
 }
