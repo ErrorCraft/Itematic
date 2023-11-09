@@ -28,7 +28,7 @@ public class AbstractFurnaceBlockEntityExtender {
         cancellable = true
     )
     public void getFuelTimeUseItemComponent(ItemStack fuel, CallbackInfoReturnable<Integer> info) {
-        info.setReturnValue(fuel.getComponent(ItemComponentTypes.FUEL).map(FuelItemComponent::ticks).orElse(0));
+        info.setReturnValue(fuel.itematic$getComponent(ItemComponentTypes.FUEL).map(FuelItemComponent::ticks).orElse(0));
     }
 
     @Inject(
@@ -37,7 +37,7 @@ public class AbstractFurnaceBlockEntityExtender {
         cancellable = true
     )
     private static void canUseAsFuelUseItemComponentCheck(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
-        info.setReturnValue(stack.hasComponent(ItemComponentTypes.FUEL));
+        info.setReturnValue(stack.itematic$hasComponent(ItemComponentTypes.FUEL));
     }
 
     @Redirect(
@@ -55,8 +55,8 @@ public class AbstractFurnaceBlockEntityExtender {
             )
         )
     )
-    private static boolean craftRecipeIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BUCKET);
+    private static boolean isOfForBucketUseRegistryKeyCheckStatic(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.BUCKET);
     }
 
     @Redirect(
@@ -66,7 +66,7 @@ public class AbstractFurnaceBlockEntityExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private static ItemStack craftRecipeNewItemStackUseRegistryEntry(ItemConvertible item, DynamicRegistryManager registryManager) {
+    private static ItemStack newItemStackForWaterBucketUseRegistryEntry(ItemConvertible item, DynamicRegistryManager registryManager) {
         return new ItemStack(registryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.WATER_BUCKET));
     }
 
@@ -78,10 +78,9 @@ public class AbstractFurnaceBlockEntityExtender {
             ordinal = 0
         )
     )
-    private boolean canExtractIsOfForWaterBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.WATER_BUCKET);
+    private boolean isOfForWaterBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.WATER_BUCKET);
     }
-
     @Redirect(
         method = "canExtract",
         at = @At(
@@ -97,8 +96,8 @@ public class AbstractFurnaceBlockEntityExtender {
             )
         )
     )
-    private boolean canExtractIsOfForBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BUCKET);
+    private boolean isOfForBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.BUCKET);
     }
 
     @Redirect(
@@ -116,22 +115,7 @@ public class AbstractFurnaceBlockEntityExtender {
         ),
         allow = 2
     )
-    private boolean isValidIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BUCKET);
+    private boolean isValidIsOfForBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.BUCKET);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -18,6 +18,6 @@ public class ShieldDecorationRecipeExtender {
         )
     )
     private boolean paperUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.SHIELD);
+        return instance.itematic$isOf(ItemKeys.SHIELD);
     }
 }

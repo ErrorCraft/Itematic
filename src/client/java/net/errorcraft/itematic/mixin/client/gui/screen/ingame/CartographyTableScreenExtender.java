@@ -28,6 +28,6 @@ public class CartographyTableScreenExtender {
         )
     )
     private boolean drawBackgroundIsOfForPaperUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.PAPER);
+        return instance.itematic$isOf(ItemKeys.PAPER);
     }
 }

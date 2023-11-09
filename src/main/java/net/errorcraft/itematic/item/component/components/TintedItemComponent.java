@@ -13,12 +13,12 @@ public record TintedItemComponent(ItemColor tint) implements ItemComponent {
     ).apply(instance, TintedItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.TINTED;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 }

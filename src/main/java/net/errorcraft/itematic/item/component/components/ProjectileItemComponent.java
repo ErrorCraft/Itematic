@@ -33,12 +33,12 @@ public record ProjectileItemComponent(RegistryEntry<EntityType<?>> entity, int d
     }
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.PROJECTILE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 

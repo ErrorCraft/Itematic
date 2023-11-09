@@ -37,6 +37,6 @@ public abstract class PaintingEntityExtender extends AbstractDecorationEntity {
         )
     )
     private ItemStack getPickBlockStackNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.PAINTING));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.PAINTING));
     }
 }

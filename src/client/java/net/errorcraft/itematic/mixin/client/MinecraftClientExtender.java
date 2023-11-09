@@ -25,7 +25,7 @@ public class MinecraftClientExtender {
     )
     @NotNull
     private static <T> Identifier initializeSearchProvidersUseRegistryEntry(DefaultedRegistry<T> instance, T t, ItemStack stack) {
-        return stack.key().getValue();
+        return stack.itematic$key().getValue();
     }
 
     /**
@@ -35,6 +35,6 @@ public class MinecraftClientExtender {
     @Overwrite
     private static Identifier method_53861(RecipeResultCollection resultCollection, RecipeEntry<?> entry) {
         DynamicRegistryManager registryManager = resultCollection.getRegistryManager();
-        return entry.value().getResult(registryManager).key().getValue();
+        return entry.value().getResult(registryManager).itematic$key().getValue();
     }
 }

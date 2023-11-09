@@ -10,13 +10,13 @@ import org.jetbrains.annotations.Nullable;
 public class BrokenModelOverride implements ModelOverride {
     @Override
     public float apply(ItemStack stack, @Nullable World world, @Nullable LivingEntity target, int seed) {
-        return stack.getComponent(ItemComponentTypes.DAMAGEABLE)
+        return stack.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
             .map(c -> c.isUsable(stack) ? 0.0f : 1.0f)
             .orElse(0.0f);
     }
 
     @Override
     public boolean isApplicable(ItemStack stack) {
-        return stack.hasComponent(ItemComponentTypes.DAMAGEABLE);
+        return stack.itematic$hasComponent(ItemComponentTypes.DAMAGEABLE);
     }
 }

@@ -13,6 +13,12 @@ public class ActionTypes {
     public static final ActionType<ClearStatusEffectsAction> CLEAR_STATUS_EFFECTS = register(ActionTypeKeys.CLEAR_STATUS_EFFECTS, new ActionType<>(ClearStatusEffectsAction.CODEC));
     public static final ActionType<StartUsingItemAction> START_USING_ITEM = register(ActionTypeKeys.START_USING_ITEM, new ActionType<>(StartUsingItemAction.CODEC));
     public static final ActionType<ExchangeItemAction> EXCHANGE_ITEM = register(ActionTypeKeys.EXCHANGE_ITEM, new ActionType<>(ExchangeItemAction.CODEC));
+    public static final ActionType<ModifyBlockStateAction> MODIFY_BLOCK_STATE = register(ActionTypeKeys.MODIFY_BLOCK_STATE, new ActionType<>(ModifyBlockStateAction.CODEC));
+    public static final ActionType<SequenceAction> SEQUENCE = register(ActionTypeKeys.SEQUENCE, new ActionType<>(SequenceAction.CODEC));
+    public static final ActionType<FirstToPassAction> FIRST_TO_PASS = register(ActionTypeKeys.FIRST_TO_PASS, new ActionType<>(FirstToPassAction.CODEC));
+    public static final ActionType<PlaceBlockAction> PLACE_BLOCK = register(ActionTypeKeys.PLACE_BLOCK, new ActionType<>(PlaceBlockAction.CODEC));
+    public static final ActionType<DamageItemAction> DAMAGE_ITEM = register(ActionTypeKeys.DAMAGE_ITEM, new ActionType<>(DamageItemAction.CODEC));
+    public static final ActionType<PrimeTntAction> PRIME_TNT = register(ActionTypeKeys.PRIME_TNT, new ActionType<>(PrimeTntAction.CODEC));
 
     private ActionTypes() {}
 

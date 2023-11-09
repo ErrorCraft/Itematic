@@ -19,12 +19,12 @@ public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material) implemen
     ).apply(instance, ArmorItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.ARMOR;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 

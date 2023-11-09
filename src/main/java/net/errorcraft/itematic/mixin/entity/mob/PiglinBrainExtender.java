@@ -19,7 +19,7 @@ public class PiglinBrainExtender {
         )
     )
     private static boolean isOfForGoldNuggetUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.GOLD_NUGGET);
+        return instance.itematic$isOf(ItemKeys.GOLD_NUGGET);
     }
 
     @Redirect(
@@ -30,6 +30,6 @@ public class PiglinBrainExtender {
         )
     )
     private static boolean isHoldingForCrossbowUseRegistryKeyCheck(LivingEntity instance, Item item) {
-        return instance.isHolding(ItemKeys.CROSSBOW);
+        return instance.itematic$isHolding(ItemKeys.CROSSBOW);
     }
 }

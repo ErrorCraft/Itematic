@@ -25,6 +25,6 @@ public abstract class ArmorStandEntityExtender extends LivingEntity {
         )
     )
     private ItemStack getPickBlockStackNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.ARMOR_STAND));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.ARMOR_STAND));
     }
 }

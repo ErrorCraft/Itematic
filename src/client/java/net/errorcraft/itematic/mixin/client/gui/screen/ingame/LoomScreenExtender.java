@@ -27,6 +27,6 @@ public abstract class LoomScreenExtender extends HandledScreen<LoomScreenHandler
     )
     @SuppressWarnings("ConstantConditions")
     private ItemStack drawBannerNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.client.world.getItem(ItemKeys.GRAY_BANNER));
+        return this.client.world.itematic$createStack(ItemKeys.GRAY_BANNER);
     }
 }

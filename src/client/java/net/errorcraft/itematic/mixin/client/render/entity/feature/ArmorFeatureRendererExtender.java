@@ -53,7 +53,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         )
     )
     private boolean renderArmorInstanceOfArmorItemUseItemComponentCheck(Object reference, Class<ArmorItem> clazz, @Local ItemStack itemStack, @Share("equipmentItemComponent") LocalRef<EquipmentItemComponent> equipmentItemComponent) {
-        Optional<EquipmentItemComponent> optionalComponent = itemStack.getComponent(ItemComponentTypes.EQUIPMENT);
+        Optional<EquipmentItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.EQUIPMENT);
         optionalComponent.ifPresent(equipmentItemComponent::set);
         return optionalComponent.isPresent();
     }
@@ -87,7 +87,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         cancellable = true
     )
     private void renderArmorStoreArmorItemComponent(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo info, @Local ItemStack itemStack, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
-        Optional<ArmorItemComponent> optionalComponent = itemStack.getComponent(ItemComponentTypes.ARMOR);
+        Optional<ArmorItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.ARMOR);
         if (optionalComponent.isEmpty()) {
             info.cancel();
             return;
@@ -103,7 +103,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         )
     )
     private boolean renderArmorInstanceOfDyeableArmorItemUseItemComponentCheck(Object reference, Class<DyeableArmorItem> clazz, @Local ItemStack itemStack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
-        Optional<TintedItemComponent> optionalComponent = itemStack.getComponent(ItemComponentTypes.TINTED);
+        Optional<TintedItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.TINTED);
         optionalComponent.ifPresent(tintedItemComponent::set);
         return optionalComponent.isPresent();
     }

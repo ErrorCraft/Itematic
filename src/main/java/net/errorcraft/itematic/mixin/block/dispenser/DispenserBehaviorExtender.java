@@ -81,7 +81,7 @@ public interface DispenserBehaviorExtender {
             )
         )
         private ItemStack newItemStackForHoneyBottleUseDynamicRegistry(ItemConvertible item, @Local ServerWorld serverWorld) {
-            return new ItemStack(serverWorld.getItem(ItemKeys.HONEY_BOTTLE));
+            return new ItemStack(serverWorld.itematic$getItem(ItemKeys.HONEY_BOTTLE));
         }
 
         @Redirect(
@@ -100,7 +100,7 @@ public interface DispenserBehaviorExtender {
             )
         )
         private ItemStack newItemStackForPotionUseDynamicRegistry(ItemConvertible item, @Local ServerWorld serverWorld) {
-            return new ItemStack(serverWorld.getItem(ItemKeys.POTION));
+            return new ItemStack(serverWorld.itematic$getItem(ItemKeys.POTION));
         }
     }
 
@@ -115,7 +115,7 @@ public interface DispenserBehaviorExtender {
             )
         )
         private ItemStack newItemStackUseDynamicRegistry(ItemConvertible item, @Local ServerWorld serverWorld) {
-            return new ItemStack(serverWorld.getItem(ItemKeys.GLASS_BOTTLE));
+            return new ItemStack(serverWorld.itematic$getItem(ItemKeys.GLASS_BOTTLE));
         }
     }
 }

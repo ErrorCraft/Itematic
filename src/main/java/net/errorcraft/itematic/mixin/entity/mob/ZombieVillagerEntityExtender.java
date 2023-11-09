@@ -17,7 +17,7 @@ public class ZombieVillagerEntityExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean interactMobIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.GOLDEN_APPLE);
+    private boolean isOfForGoldenAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.GOLDEN_APPLE);
     }
 }

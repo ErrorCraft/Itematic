@@ -13,11 +13,9 @@
   "events": [
     {
       "event": "minecraft:use_on_block",
-      "actions": [
-        {
-          "action": "minecraft:fertilize"
-        }
-      ]
+      "action": {
+        "type": "minecraft:fertilize"
+      }
     }
   ]
 }

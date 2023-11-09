@@ -29,7 +29,7 @@ public abstract class IllusionerEntityExtender extends SpellcastingIllagerEntity
         )
     )
     private ItemStack initializeNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.BOW));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.BOW));
     }
 
     @Redirect(

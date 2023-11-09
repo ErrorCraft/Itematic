@@ -25,6 +25,6 @@ public abstract class ItemFrameEntityExtender extends AbstractDecorationEntity {
         )
     )
     private ItemStack getAsItemStackNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.ITEM_FRAME));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.ITEM_FRAME));
     }
 }

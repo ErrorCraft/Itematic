@@ -37,7 +37,7 @@ public class HostileEntityExtender extends PathAwareEntity {
         )
     )
     private boolean getProjectileTypeInstanceOfRangedWeaponItemUseItemComponentCheck(Object reference, Class<RangedWeaponItem> clazz, @Local(ordinal = 0) ItemStack itemStack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
-        Optional<ShooterItemComponent> optionalComponent = itemStack.getComponent(ItemComponentTypes.SHOOTER);
+        Optional<ShooterItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.SHOOTER);
         optionalComponent.ifPresent(shooterItemComponent::set);
         return optionalComponent.isPresent();
     }
@@ -72,7 +72,7 @@ public class HostileEntityExtender extends PathAwareEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getProjectileTypeNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.ARROW));
+    private ItemStack newItemStackForArrowUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.ARROW);
     }
 }

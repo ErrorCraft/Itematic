@@ -25,8 +25,8 @@ public abstract class PillagerEntityExtender extends IllagerEntity {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean isRaidCaptainIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.WHITE_BANNER);
+    private boolean isOfForWhiteBannerUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.WHITE_BANNER);
     }
 
     @Redirect(
@@ -37,7 +37,7 @@ public abstract class PillagerEntityExtender extends IllagerEntity {
         )
     )
     private boolean isHoldingForCrossbowUseRegistryKeyCheck(PillagerEntity instance, Item item) {
-        return instance.isHolding(ItemKeys.CROSSBOW);
+        return instance.itematic$isHolding(ItemKeys.CROSSBOW);
     }
 
     @Redirect(
@@ -48,7 +48,7 @@ public abstract class PillagerEntityExtender extends IllagerEntity {
         )
     )
     private ItemStack newItemStackForCrossbowUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.CROSSBOW));
+        return this.getWorld().itematic$createStack(ItemKeys.CROSSBOW);
     }
 
     @Redirect(
@@ -59,6 +59,6 @@ public abstract class PillagerEntityExtender extends IllagerEntity {
         )
     )
     private boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.CROSSBOW);
+        return instance.itematic$isOf(ItemKeys.CROSSBOW);
     }
 }

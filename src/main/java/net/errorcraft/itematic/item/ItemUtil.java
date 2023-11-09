@@ -3,6 +3,7 @@ package net.errorcraft.itematic.item;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
+import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
@@ -21,10 +22,13 @@ import net.errorcraft.itematic.mixin.item.MilkBucketItemAccessor;
 import net.errorcraft.itematic.mixin.item.PotionItemAccessor;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
-import net.errorcraft.itematic.world.action.ActionSet;
+import net.errorcraft.itematic.world.action.ActionEntry;
+import net.errorcraft.itematic.world.action.ActionRequirements;
 import net.errorcraft.itematic.world.action.actions.*;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.entity.EntityType;
@@ -34,9 +38,15 @@ import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
+import net.minecraft.loot.condition.AllOfLootCondition;
+import net.minecraft.loot.condition.InvertedLootCondition;
+import net.minecraft.loot.condition.LocationCheckLootCondition;
+import net.minecraft.predicate.BlockPredicate;
+import net.minecraft.predicate.StatePredicate;
+import net.minecraft.predicate.entity.LocationPredicate;
 import net.minecraft.registry.*;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
@@ -48,9 +58,9 @@ import net.minecraft.world.biome.BiomeKeys;
 
 public class ItemUtil {
     public static final Codec<Item> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
-        ItemBase.CODEC.fieldOf("base").forGetter(Item::itemBase),
-        ItemComponentSet.CODEC.fieldOf("components").forGetter(Item::components),
-        ItemEventMap.CODEC.optionalFieldOf("events", ItemEventMap.EMPTY).forGetter(Item::events)
+        ItemBase.CODEC.fieldOf("base").forGetter(Item::itematic$itemBase),
+        ItemComponentSet.CODEC.fieldOf("components").forGetter(Item::itematic$components),
+        ItemEventMap.CODEC.optionalFieldOf("events", ItemEventMap.EMPTY).forGetter(Item::itematic$events)
     ).apply(instance, ItemUtil::create));
 
     public static void bootstrap(Registerable<Item> registerable) {
@@ -1708,7 +1718,7 @@ public class ItemUtil {
                 .with(new SteeringItemComponent(entityTypes.getOrThrow(EntityTypeKeys.PIG), 7))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.BREAK_ITEM, ActionSet.simple(new ExchangeItemAction(items.getOrThrow(ItemKeys.FISHING_ROD))))
+                .add(ItemEvents.BREAK_ITEM, ActionEntry.simple(new ExchangeItemAction(items.getOrThrow(ItemKeys.FISHING_ROD), false)))
                 .build()
         ));
         registerable.register(ItemKeys.WARPED_FUNGUS_ON_A_STICK, create(
@@ -1719,7 +1729,7 @@ public class ItemUtil {
                 .with(new SteeringItemComponent(entityTypes.getOrThrow(EntityTypeKeys.STRIDER), 1))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.BREAK_ITEM, ActionSet.simple(new ExchangeItemAction(items.getOrThrow(ItemKeys.FISHING_ROD))))
+                .add(ItemEvents.BREAK_ITEM, ActionEntry.simple(new ExchangeItemAction(items.getOrThrow(ItemKeys.FISHING_ROD), false)))
                 .build()
         ));
         registerable.register(ItemKeys.ELYTRA, create(
@@ -1870,6 +1880,57 @@ public class ItemUtil {
         registerable.register(ItemKeys.SCUTE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SCUTE).build())
         ));
+        registerable.register(ItemKeys.FLINT_AND_STEEL, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLINT_AND_STEEL).build(), 1),
+            ItemComponentSet.builder()
+                .with(new DamageableItemComponent(64))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.USE_ON_BLOCK)))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.simple(
+                    FirstToPassAction.of(
+                        ActionEntry.passing(
+                            ActionRequirements.of(
+                                ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                                AllOfLootCondition.builder(
+                                    LocationCheckLootCondition.builder(
+                                        LocationPredicate.Builder.create()
+                                            .block(BlockPredicate.Builder.create()
+                                                .state(StatePredicate.Builder.create()
+                                                    .exactMatch(Properties.LIT, false)))),
+                                        InvertedLootCondition.builder(
+                                            LocationCheckLootCondition.builder(
+                                                LocationPredicate.Builder.create()
+                                                    .block(BlockPredicate.Builder.create()
+                                                        .state(StatePredicate.Builder.create()
+                                                            .exactMatch(Properties.WATERLOGGED, true))))))
+                                    .build()
+                            ),
+                            ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
+                                .property(Properties.LIT, true)
+                                .build(),
+                            new DamageItemAction(1)
+                        ),
+                        ActionEntry.passing(
+                            ActionRequirements.of(
+                                ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                                AllOfLootCondition.builder(
+                                        LocationCheckLootCondition.builder(
+                                            LocationPredicate.Builder.create()
+                                                .block(BlockPredicate.Builder.create()
+                                                    .blocks(Blocks.TNT))))
+                                    .build()
+                            ),
+                            new PrimeTntAction(ActionContextParameter.TARGET),
+                            new DamageItemAction(1)
+                        ),
+                        ActionEntry.passing(
+                            new PlaceBlockAction(blocks.getOrThrow(BlockKeys.FIRE), ActionContextParameter.TARGET, false),
+                            new DamageItemAction(1)
+                        )
+                    )))
+                .build()
+        ));
         registerable.register(ItemKeys.APPLE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.APPLE).build()),
             ItemComponentSet.builder()
@@ -1925,306 +1986,186 @@ public class ItemUtil {
         registerable.register(ItemKeys.WOODEN_SWORD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_SWORD).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.WOOD, 2))
-                .with(new WeaponItemComponent(1))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.WOOD, EnchantmentTags.SWORD_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.SWORD_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                .with(DamageableItemComponent.sword(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.WOODEN_SHOVEL, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_SHOVEL).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.WOOD, 1, BlockTags.SHOVEL_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.WOOD, EnchantmentTags.SHOVEL_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.SHOVEL_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                .with(DamageableItemComponent.shovel(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.WOODEN_PICKAXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_PICKAXE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.WOOD, 1, BlockTags.PICKAXE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.WOOD, EnchantmentTags.PICKAXE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.PICKAXE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                .with(DamageableItemComponent.pickaxe(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.WOODEN_AXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_AXE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.WOOD, 1, BlockTags.AXE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.WOOD, EnchantmentTags.AXE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.AXE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                .with(DamageableItemComponent.axe(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.WOODEN_HOE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_HOE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.WOOD, 1, BlockTags.HOE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.WOOD, EnchantmentTags.HOE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HOE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                .with(DamageableItemComponent.hoe(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                 .build()
         ));
         registerable.register(ItemKeys.STONE_SWORD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_SWORD).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.STONE, 2))
-                .with(new WeaponItemComponent(1))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.STONE, EnchantmentTags.SWORD_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.SWORD_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_STONE_TOOL))
+                .with(DamageableItemComponent.sword(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.STONE_SHOVEL, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_SHOVEL).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.STONE, 1, BlockTags.SHOVEL_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.STONE, EnchantmentTags.SHOVEL_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.SHOVEL_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_STONE_TOOL))
+                .with(DamageableItemComponent.shovel(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.STONE_PICKAXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_PICKAXE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.STONE, 1, BlockTags.PICKAXE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.STONE, EnchantmentTags.PICKAXE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.PICKAXE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_STONE_TOOL))
+                .with(DamageableItemComponent.pickaxe(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.STONE_AXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_AXE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.STONE, 1, BlockTags.AXE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.STONE, EnchantmentTags.AXE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.AXE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_STONE_TOOL))
+                .with(DamageableItemComponent.axe(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.STONE_HOE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_HOE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.STONE, 1, BlockTags.HOE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.STONE, EnchantmentTags.HOE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HOE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_STONE_TOOL))
+                .with(DamageableItemComponent.hoe(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_SWORD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_SWORD).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.GOLD, 2))
-                .with(new WeaponItemComponent(1))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.GOLD, EnchantmentTags.SWORD_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.SWORD_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                .with(DamageableItemComponent.sword(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_SHOVEL, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_SHOVEL).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.GOLD, 1, BlockTags.SHOVEL_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.GOLD, EnchantmentTags.SHOVEL_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.SHOVEL_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                .with(DamageableItemComponent.shovel(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_PICKAXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_PICKAXE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.GOLD, 1, BlockTags.PICKAXE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.GOLD, EnchantmentTags.PICKAXE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.PICKAXE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                .with(DamageableItemComponent.pickaxe(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_AXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_AXE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.GOLD, 1, BlockTags.AXE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.GOLD, EnchantmentTags.AXE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.AXE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                .with(DamageableItemComponent.axe(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_HOE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HOE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.GOLD, 1, BlockTags.HOE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.GOLD, EnchantmentTags.HOE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HOE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                .with(DamageableItemComponent.hoe(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.IRON_SWORD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_SWORD).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.IRON, 2))
-                .with(new WeaponItemComponent(1))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.IRON, EnchantmentTags.SWORD_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.SWORD_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_IRON_TOOL))
+                .with(DamageableItemComponent.sword(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.IRON_SHOVEL, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_SHOVEL).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.IRON, 1, BlockTags.SHOVEL_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.IRON, EnchantmentTags.SHOVEL_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.SHOVEL_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_IRON_TOOL))
+                .with(DamageableItemComponent.shovel(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.IRON_PICKAXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_PICKAXE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.IRON, 1, BlockTags.PICKAXE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.IRON, EnchantmentTags.PICKAXE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.PICKAXE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_IRON_TOOL))
+                .with(DamageableItemComponent.pickaxe(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.IRON_AXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_AXE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.IRON, 1, BlockTags.AXE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.IRON, EnchantmentTags.AXE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.AXE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_IRON_TOOL))
+                .with(DamageableItemComponent.axe(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.IRON_HOE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HOE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.IRON, 1, BlockTags.HOE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.IRON, EnchantmentTags.HOE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HOE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_IRON_TOOL))
+                .with(DamageableItemComponent.hoe(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.DIAMOND_SWORD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_SWORD).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.DIAMOND, 2))
-                .with(new WeaponItemComponent(1))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.DIAMOND, EnchantmentTags.SWORD_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.SWORD_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                .with(DamageableItemComponent.sword(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.DIAMOND_SHOVEL, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_SHOVEL).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.DIAMOND, 1, BlockTags.SHOVEL_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.DIAMOND, EnchantmentTags.SHOVEL_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.SHOVEL_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                .with(DamageableItemComponent.shovel(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.DIAMOND_PICKAXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_PICKAXE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.DIAMOND, 1, BlockTags.PICKAXE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.DIAMOND, EnchantmentTags.PICKAXE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.PICKAXE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                .with(DamageableItemComponent.pickaxe(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.DIAMOND_AXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_AXE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.DIAMOND, 1, BlockTags.AXE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.DIAMOND, EnchantmentTags.AXE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.AXE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                .with(DamageableItemComponent.axe(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.DIAMOND_HOE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HOE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.DIAMOND, 1, BlockTags.HOE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.DIAMOND, EnchantmentTags.HOE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HOE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                .with(DamageableItemComponent.hoe(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_SWORD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SWORD).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.NETHERITE, 2))
-                .with(new WeaponItemComponent(1))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.NETHERITE, EnchantmentTags.SWORD_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.SWORD_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                .with(DamageableItemComponent.sword(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_SHOVEL, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SHOVEL).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.NETHERITE, 1, BlockTags.SHOVEL_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.NETHERITE, EnchantmentTags.SHOVEL_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.SHOVEL_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                .with(DamageableItemComponent.shovel(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_PICKAXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_PICKAXE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.NETHERITE, 1, BlockTags.PICKAXE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.NETHERITE, EnchantmentTags.PICKAXE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.PICKAXE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                .with(DamageableItemComponent.pickaxe(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_AXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_AXE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.NETHERITE, 1, BlockTags.AXE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.NETHERITE, EnchantmentTags.AXE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.AXE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                .with(DamageableItemComponent.axe(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_HOE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HOE).build(), 1),
             ItemComponentSet.builder()
-                .with(ToolItemComponent.from(ToolMaterials.NETHERITE, 1, BlockTags.HOE_MINEABLE))
-                .with(new WeaponItemComponent(2))
-                .with(EnchantableItemComponent.enchants(ToolMaterials.NETHERITE, EnchantmentTags.HOE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HOE_FORGING))
-                .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                .with(DamageableItemComponent.hoe(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                 .build()
         ));
         registerable.register(ItemKeys.STICK, create(
@@ -2745,7 +2686,7 @@ public class ItemUtil {
                 .with(ConsumableItemComponent.of(items.getOrThrow(ItemKeys.BUCKET)))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.CONSUME_ITEM, ActionSet.simple(new ClearStatusEffectsAction(ActionContextParameter.THIS)))
+                .add(ItemEvents.CONSUME_ITEM, ActionEntry.simple(new ClearStatusEffectsAction(ActionContextParameter.THIS)))
                 .build()
         ));
         registerable.register(ItemKeys.PUFFERFISH_BUCKET, create(
@@ -2971,7 +2912,7 @@ public class ItemUtil {
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.FERTILIZE)))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionSet.simple(FertilizeAction.INSTANCE))
+                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.simple(FertilizeAction.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.SUGAR, create(
@@ -2982,6 +2923,17 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.COOKIE))
                 .with(new CompostableItemComponent(0.85f))
+                .build()
+        ));
+        registerable.register(ItemKeys.SHEARS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHEARS).build(), 1),
+            ItemComponentSet.builder()
+                .with(new DamageableItemComponent(238))
+                .with(ToolItemComponent.builder(1)
+                    .miningSpeed(15.0f, ItematicBlockTags.SHEARS_SUPER_EFFICIENT, true)
+                    .miningSpeed(5.0f, ItematicBlockTags.SHEARS_SLIGHTLY_EFFICIENT, true)
+                    .miningSpeed(2.0f, ItematicBlockTags.SHEARS_EFFICIENT, true)
+                    .build())
                 .build()
         ));
         registerable.register(ItemKeys.MELON_SLICE, create(
@@ -3913,7 +3865,7 @@ public class ItemUtil {
                 .with(FoodItemComponent.from(FoodComponents.CHORUS_FRUIT))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.CONSUME_ITEM, ActionSet.simple(new TeleportAction(16, ActionContextParameter.THIS)))
+                .add(ItemEvents.CONSUME_ITEM, ActionEntry.simple(new TeleportAction(16, ActionContextParameter.THIS)))
                 .build()
         ));
         registerable.register(ItemKeys.TORCHFLOWER_SEEDS, create(
@@ -3996,7 +3948,7 @@ public class ItemUtil {
                 .with(new UseAnimationItemComponent(UseAction.BLOCK))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.USE, ActionSet.simple(StartUsingItemAction.INSTANCE))
+                .add(ItemEvents.USE, ActionEntry.simple(StartUsingItemAction.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_13, create(
@@ -4200,9 +4152,9 @@ public class ItemUtil {
 
     private static Item create(ItemBase base, ItemComponentSet components, ItemEventMap events) {
         Item item = new Item(new Item.Settings());
-        item.setItemBase(base);
-        item.setComponents(components);
-        item.setEvents(events);
+        item.itematic$setItemBase(base);
+        item.itematic$setComponents(components);
+        item.itematic$setEvents(events);
         return item;
     }
 }

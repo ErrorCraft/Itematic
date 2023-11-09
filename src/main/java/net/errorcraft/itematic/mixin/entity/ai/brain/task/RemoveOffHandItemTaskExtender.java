@@ -18,6 +18,6 @@ public class RemoveOffHandItemTaskExtender {
         )
     )
     private static boolean isOfForShieldUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.SHIELD);
+        return instance.itematic$isOf(ItemKeys.SHIELD);
     }
 }

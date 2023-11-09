@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.serialisation;
+package net.errorcraft.itematic.serialization;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;

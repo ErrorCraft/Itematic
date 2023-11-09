@@ -19,6 +19,6 @@ public class NetherWartBlockExtender {
         )
     )
     private ItemStack newItemStackUseCreateStack(ItemConvertible item, WorldView world) {
-        return world.createStack(ItemKeys.NETHER_WART);
+        return world.itematic$createStack(ItemKeys.NETHER_WART);
     }
 }

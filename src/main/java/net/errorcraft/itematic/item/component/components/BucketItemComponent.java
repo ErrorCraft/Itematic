@@ -5,6 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
 import net.errorcraft.itematic.fluid.FluidKeys;
+import net.errorcraft.itematic.inventory.StackReferenceUtil;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -20,6 +22,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.ItemUsageContext;
@@ -29,7 +32,6 @@ import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.RaycastContext;
@@ -47,48 +49,42 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
     ).apply(instance, BucketItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.BUCKET;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, this.getFluidHandling());
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
-            return TypedActionResult.pass(stack);
+            return ActionResult.PASS;
         }
-        return this.place(world, user, hand, stack, blockHitResult);
+        return this.place(world, user, hand, stack, resultStackConsumer, blockHitResult);
     }
 
-    public TypedActionResult<ItemStack> place(World world, @Nullable PlayerEntity user, Hand hand, ItemStack stack, BlockHitResult blockHitResult) {
-        TypedActionResult<ItemStack> result = TypedActionResult.pass(stack);
+    public ActionResult place(World world, @Nullable PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer, BlockHitResult blockHitResult) {
+        StackReference stackReference = StackReferenceUtil.of(stack);
+        ActionResult result = ActionResult.PASS;
         if (this.fluid.isPresent()) {
-            FluidPlacer fluidPlacer = FluidPlacer.of(stack, world, blockHitResult, user, this.fluid.get(), this.emptyingSound.orElse(null));
+            FluidPlacer fluidPlacer = FluidPlacer.of(stack, stackReference::set, world, blockHitResult, user, this.fluid.get(), this.emptyingSound.orElse(null));
             result = place(fluidPlacer, result);
         }
-        if (this.block.isPresent() && result.getResult() != ActionResult.FAIL) {
+        if (this.block.isPresent() && result != ActionResult.FAIL) {
             ItemUsageContext context = new ItemUsageContext(world, user, hand, stack, blockHitResult);
-            BlockPlacer blockPlacer = BlockPlacer.of(context, this.block.get(), false);
+            BlockPlacer blockPlacer = BlockPlacer.of(context, stackReference::set, this.block.get(), false, true);
             result = place(blockPlacer, result);
         }
-        if (this.entity.isPresent() && !world.isClient() && result.getResult() != ActionResult.FAIL) {
-            EntityPlacer entityPlacer = EntityPlacer.bucket(stack, world, blockHitResult, user, this.entity.get(), hand);
+        if (this.entity.isPresent() && !world.isClient() && result != ActionResult.FAIL) {
+            EntityPlacer entityPlacer = EntityPlacer.bucket(stack, stackReference::set, world, blockHitResult, user, this.entity.get(), hand);
             result = place(entityPlacer, result);
         }
-
-        if (user == null) {
-            return result;
-        }
-        ActionResult actionResult = result.getResult();
-        if (!actionResult.isAccepted()) {
-            return result;
-        }
-        return new TypedActionResult<>(actionResult, ItemUsage.exchangeStack(stack, user, result.getValue()));
+        resultStackConsumer.set(getResultStack(user, stack, stackReference.get()));
+        return result;
     }
 
     private RaycastContext.FluidHandling getFluidHandling() {
@@ -101,9 +97,16 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         return RaycastContext.FluidHandling.NONE;
     }
 
-    private static TypedActionResult<ItemStack> place(Placer placer, TypedActionResult<ItemStack> currentResult) {
-        TypedActionResult<ItemStack> result = placer.place();
-        return ActionResultUtil.max(result, currentResult.getResult());
+    private static ActionResult place(Placer placer, ActionResult currentResult) {
+        ActionResult result = placer.place();
+        return ActionResultUtil.max(currentResult, result);
+    }
+
+    private static ItemStack getResultStack(@Nullable PlayerEntity player, ItemStack currentStack, ItemStack newStack) {
+        if (player == null) {
+            return newStack;
+        }
+        return ItemUsage.exchangeStack(currentStack, player, newStack);
     }
 
     public static void initializeBucketEntity(Entity entity, ItemStack stack) {

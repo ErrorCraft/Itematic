@@ -13,20 +13,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 @Mixin(CartographyTableScreenHandler.class)
 public class CartographyTableScreenHandlerExtender {
     @Redirect(
-        method = "method_17382",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 0
-        ),
-        remap = false
-    )
-    private boolean method_17382IsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.PAPER);
-    }
-
-    @Redirect(
-        method = "quickMove",
+        method = { "method_17382", "quickMove" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
@@ -40,8 +27,8 @@ public class CartographyTableScreenHandlerExtender {
             )
         )
     )
-    private boolean quickMoveIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.PAPER);
+    private boolean isOfForPaperUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.PAPER);
     }
 
     @Mixin(targets = "net/minecraft/screen/CartographyTableScreenHandler$4")
@@ -54,8 +41,8 @@ public class CartographyTableScreenHandlerExtender {
                 ordinal = 0
             )
         )
-        private boolean canInsertIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.isOf(ItemKeys.PAPER);
+        private boolean isOfForPaperUseRegistryKeyCheck(ItemStack instance, Item item) {
+            return instance.itematic$isOf(ItemKeys.PAPER);
         }
     }
 }

@@ -27,6 +27,6 @@ public class ServerPlayerInteractionManagerExtender {
         )
     )
     private boolean tryBreakBlockCanMineUseItemStackVersion(Item instance, BlockState state, World world, BlockPos pos, PlayerEntity miner) {
-        return this.player.getMainHandStack().canMine(state, world, pos, miner);
+        return this.player.getMainHandStack().itematic$canMine(state, world, pos, miner);
     }
 }

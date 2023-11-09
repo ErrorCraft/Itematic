@@ -14,13 +14,13 @@ public class FireworkModelOverride implements ModelOverride {
         if (world == null) {
             return 0.0f;
         }
-        return stack.getComponent(ItemComponentTypes.SHOOTER)
+        return stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
             .map(c -> c.isCharged(stack) && c.hasLoadedAmmunition(stack, world.getRegistryManager(), ItemKeys.FIREWORK_ROCKET) ? 1.0f : 0.0f)
             .orElse(0.0f);
     }
 
     @Override
     public boolean isApplicable(ItemStack stack) {
-        return stack.hasComponent(ItemComponentTypes.SHOOTER);
+        return stack.itematic$hasComponent(ItemComponentTypes.SHOOTER);
     }
 }

@@ -16,13 +16,13 @@ public class PullModelOverride implements ClampedModelOverride {
         if (target.getActiveItem() != stack) {
             return 0.0f;
         }
-        return stack.getComponent(ItemComponentTypes.SHOOTER)
+        return stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
             .map(c -> c.getPullProgress(stack, target.getItemUseTimeLeft()))
             .orElse(0.0f);
     }
 
     @Override
     public boolean isApplicable(ItemStack stack) {
-        return stack.hasComponent(ItemComponentTypes.SHOOTER);
+        return stack.itematic$hasComponent(ItemComponentTypes.SHOOTER);
     }
 }

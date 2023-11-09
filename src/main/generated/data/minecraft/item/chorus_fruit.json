@@ -22,13 +22,11 @@
   "events": [
     {
       "event": "minecraft:consume_item",
-      "actions": [
-        {
-          "action": "minecraft:teleport",
-          "distance": 16,
-          "entity": "this"
-        }
-      ]
+      "action": {
+        "type": "minecraft:teleport",
+        "distance": 16,
+        "entity": "this"
+      }
     }
   ]
 }

@@ -18,7 +18,7 @@ public class HorseScreenHandlerExtender {
             )
         )
         private boolean isOfForSaddleUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.isOf(ItemKeys.SADDLE);
+            return instance.itematic$isOf(ItemKeys.SADDLE);
         }
     }
 }

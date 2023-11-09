@@ -20,6 +20,6 @@ public class CaveVinesImplementationsExtender {
         )
     )
     private ItemStack newItemStackUseCreateStack(ItemConvertible item, WorldView world) {
-        return world.createStack(ItemKeys.GLOW_BERRIES);
+        return world.itematic$createStack(ItemKeys.GLOW_BERRIES);
     }
 }

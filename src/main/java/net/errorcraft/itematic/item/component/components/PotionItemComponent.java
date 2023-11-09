@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -18,22 +19,21 @@ public record PotionItemComponent() implements ItemComponent {
     public static final Codec<PotionItemComponent> CODEC = Codec.unit(new PotionItemComponent());
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.POTION;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 
     @Override
-    public ItemStack finishUsing(World world, LivingEntity user, ItemStack stack) {
+    public void finishUsing(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (!world.isClient()) {
             this.applyEffects(user, stack);
         }
         user.emitGameEvent(GameEvent.DRINK);
-        return stack;
     }
 
     private void applyEffects(LivingEntity target, ItemStack stack) {

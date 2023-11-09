@@ -23,12 +23,12 @@ public abstract class EntityExtender implements EntityAccess {
 
     @Override
     public ItemEntity dropItem(RegistryKey<Item> key) {
-        return this.dropItem(this.world.getItem(key), 0);
+        return this.dropItem(this.world.itematic$getItem(key), 0);
     }
 
     @Override
     public ItemEntity dropItem(RegistryKey<Item> key, int yOffset) {
-        return this.dropItem(this.world.getItem(key), yOffset);
+        return this.dropItem(this.world.itematic$getItem(key), yOffset);
     }
 
     @Override

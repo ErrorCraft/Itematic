@@ -19,7 +19,7 @@ import java.util.Optional;
 public class SaddleItemComponentDispenserBehavior extends ItemDispenserBehavior {
     @Override
     protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
-        Optional<SaddleItemComponent> optionalComponent = stack.getComponent(ItemComponentTypes.SADDLE);
+        Optional<SaddleItemComponent> optionalComponent = stack.itematic$getComponent(ItemComponentTypes.SADDLE);
         if (optionalComponent.isEmpty()) {
             return super.dispenseSilently(pointer, stack);
         }

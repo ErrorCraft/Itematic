@@ -18,12 +18,12 @@ public record EnchantmentHolderItemComponent() implements ItemComponent {
     public static final Codec<EnchantmentHolderItemComponent> CODEC = Codec.unit(INSTANCE);
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.ENCHANTMENT_HOLDER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 

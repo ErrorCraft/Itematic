@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.item;
 
 import net.errorcraft.itematic.access.item.ItemAccess;
+import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemBase;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
@@ -16,8 +17,10 @@ import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
@@ -30,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -69,21 +73,23 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        TypedActionResult<ItemStack> result = TypedActionResult.pass(user.getStackInHand(hand));
+        ItemStack stack = user.getStackInHand(hand);
+        StackReference stackReference = StackReferenceUtil.of(stack);
+        ActionResult result = ActionResult.PASS;
         for (ItemComponent component : this.components) {
-            TypedActionResult<ItemStack> newResult = component.use(world, user, hand, result.getValue());
-            if (newResult.getResult() == ActionResult.FAIL) {
-                return newResult;
+            ActionResult newResult = component.use(world, user, hand, stack, stackReference::set);
+            if (newResult == ActionResult.FAIL) {
+                return TypedActionResult.fail(stackReference.get());
             }
-            result = ActionResultUtil.max(newResult, result.getResult());
+            result = ActionResultUtil.max(result, newResult);
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, result.getValue(), hand)
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, hand)
                 .entityPosition(ActionContextParameter.THIS, user);
-            result.getValue().invokeEvent(ItemEvents.USE, context);
+            this.itematic$invokeEvent(ItemEvents.USE, context);
         }
-        return result;
+        return new TypedActionResult<>(result, stackReference.get());
     }
 
     /**
@@ -96,23 +102,27 @@ public class ItemExtender implements ItemAccess {
             return ActionResult.PASS;
         }
 
-        TypedActionResult<ItemStack> result = TypedActionResult.pass(context.getStack());
+        ItemStack stack = context.getStack();
+        StackReference stackReference = StackReferenceUtil.of(stack);
+        ActionResult result = ActionResult.PASS;
         for (ItemComponent component : this.components) {
-            TypedActionResult<ItemStack> newResult = component.useOnBlock(context);
-            if (newResult.getResult() == ActionResult.FAIL) {
-                return newResult.getResult();
+            ActionResult newResult = component.useOnBlock(context, stackReference::set);
+            if (newResult == ActionResult.FAIL) {
+                return newResult;
             }
-            result = ActionResultUtil.max(newResult, result.getResult());
+            result = ActionResultUtil.max(result, newResult);
         }
 
         if (context.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext actionContext = MutableActionContext.stackUsage(serverWorld, result.getValue(), context.getHand())
+            ActionContext actionContext = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, context.getHand())
                 .entityPosition(ActionContextParameter.THIS, context.getPlayer())
                 .position(ActionContextParameter.TARGET, context.getBlockPos())
                 .side(context.getSide());
-            result.getValue().invokeEvent(ItemEvents.USE_ON_BLOCK, actionContext);
+            this.itematic$invokeEvent(ItemEvents.USE_ON_BLOCK, actionContext);
         }
-        return result.getResult();
+
+        tryUpdateItemStack(context.getPlayer(), context.getHand(), stack, stackReference);
+        return result;
     }
 
     /**
@@ -121,22 +131,25 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-        TypedActionResult<ItemStack> result = TypedActionResult.pass(stack);
+        StackReference stackReference = StackReferenceUtil.of(stack);
+        ActionResult result = ActionResult.PASS;
         for (ItemComponent component : this.components) {
-            TypedActionResult<ItemStack> newResult = component.useOnEntity(user, entity, hand, stack);
-            if (newResult.getResult() == ActionResult.FAIL) {
-                return newResult.getResult();
+            ActionResult newResult = component.useOnEntity(user, entity, hand, stack, stackReference::set);
+            if (newResult == ActionResult.FAIL) {
+                return newResult;
             }
-            result = ActionResultUtil.max(newResult, result.getResult());
+            result = ActionResultUtil.max(result, newResult);
         }
 
         if (user.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, result.getValue(), hand)
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, hand)
                 .entityPosition(ActionContextParameter.THIS, user)
                 .entityPosition(ActionContextParameter.TARGET, entity);
-            result.getValue().invokeEvent(ItemEvents.USE_ON_ENTITY, context);
+            this.itematic$invokeEvent(ItemEvents.USE_ON_ENTITY, context);
         }
-        return result.getResult();
+
+        tryUpdateItemStack(user, hand, stack, stackReference);
+        return result;
     }
 
     /**
@@ -146,16 +159,19 @@ public class ItemExtender implements ItemAccess {
     @Overwrite
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         boolean result = false;
+        StackReference stackReference = StackReferenceUtil.of(stack);
         for (ItemComponent component : this.components) {
-            result |= component.postHit(stack, target, attacker);
+            result |= component.postHit(stack, target, attacker, stackReference::set);
         }
 
         if (attacker.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack)
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, EquipmentSlot.MAINHAND)
                 .entityPosition(ActionContextParameter.THIS, attacker)
                 .entityPosition(ActionContextParameter.TARGET, target);
-            stack.invokeEvent(ItemEvents.HIT_ENTITY, context);
+            this.itematic$invokeEvent(ItemEvents.HIT_ENTITY, context);
         }
+
+        tryUpdateItemStack(attacker, Hand.MAIN_HAND, stack, stackReference);
         return result;
     }
 
@@ -166,16 +182,19 @@ public class ItemExtender implements ItemAccess {
     @Overwrite
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
         boolean result = false;
+        StackReference stackReference = StackReferenceUtil.of(stack);
         for (ItemComponent component : this.components) {
-            result |= component.postMine(stack, world, state, pos, miner);
+            result |= component.postMine(stack, world, state, pos, miner, stackReference::set);
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack)
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, EquipmentSlot.MAINHAND)
                 .entityPosition(ActionContextParameter.THIS, miner)
                 .position(ActionContextParameter.TARGET, pos.toCenterPos());
-            stack.invokeEvent(ItemEvents.BROKE_BLOCK, context);
+            this.itematic$invokeEvent(ItemEvents.BROKE_BLOCK, context);
         }
+
+        tryUpdateItemStack(miner, Hand.MAIN_HAND, stack, stackReference);
         return result;
     }
 
@@ -196,15 +215,18 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+        StackReference stackReference = StackReferenceUtil.of(stack);
         for (ItemComponent component : this.components) {
-            component.stopUsing(stack, world, user, remainingUseTicks);
+            component.stopUsing(stack, world, user, remainingUseTicks, stackReference::set);
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, user.getActiveHand())
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, user.getActiveHand())
                 .entityPosition(ActionContextParameter.THIS, user);
-            stack.invokeEvent(ItemEvents.STOPPED_USING, context);
+            this.itematic$invokeEvent(ItemEvents.STOPPED_USING, context);
         }
+
+        tryUpdateItemStack(user, Hand.MAIN_HAND, stack, stackReference);
     }
 
     /**
@@ -213,19 +235,20 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
+        StackReference stackReference = StackReferenceUtil.of(stack);
         for (ItemComponent component : this.components) {
-            stack = component.finishUsing(world, user, stack);
+            component.finishUsing(world, user, stack, stackReference::set);
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, user.getActiveHand())
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, user.getActiveHand())
                 .entityPosition(ActionContextParameter.THIS, user);
-            stack.invokeEvent(ItemEvents.FINISHED_USING, context);
+            this.itematic$invokeEvent(ItemEvents.FINISHED_USING, context);
         }
-        ItemStack resultStack = stack;
-        return this.getComponent(ItemComponentTypes.CONSUMABLE)
-            .map(c -> c.consume(user, resultStack))
-            .orElse(stack);
+
+        this.itematic$getComponent(ItemComponentTypes.CONSUMABLE)
+            .ifPresent(c -> c.consume(user, stack, stackReference::set, user.getActiveHand()));
+        return stackReference.get();
     }
 
     /**
@@ -246,7 +269,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public boolean isFood() {
-        return this.hasComponent(ItemComponentTypes.FOOD);
+        return this.itematic$hasComponent(ItemComponentTypes.FOOD);
     }
 
     /**
@@ -255,7 +278,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public boolean isDamageable() {
-        return this.hasComponent(ItemComponentTypes.DAMAGEABLE);
+        return this.itematic$hasComponent(ItemComponentTypes.DAMAGEABLE);
     }
 
     /**
@@ -264,7 +287,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public boolean isEnchantable(ItemStack stack) {
-        return stack.getCount() == 1 && this.hasComponent(ItemComponentTypes.ENCHANTABLE);
+        return stack.getCount() == 1 && this.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
     }
 
     /**
@@ -273,7 +296,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public boolean isUsedOnRelease(ItemStack stack) {
-        return this.getComponent(ItemComponentTypes.SHOOTER)
+        return this.itematic$getComponent(ItemComponentTypes.SHOOTER)
             .map(ShooterItemComponent::chargeable)
             .orElse(false);
     }
@@ -284,7 +307,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return this.getComponent(ItemComponentTypes.REPAIRABLE)
+        return this.itematic$getComponent(ItemComponentTypes.REPAIRABLE)
             .map(RepairableItemComponent::items)
             .map(ingredient::isIn)
             .orElse(false);
@@ -296,7 +319,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public boolean hasGlint(ItemStack stack) {
-        return this.getComponent(ItemComponentTypes.FOIL)
+        return this.itematic$getComponent(ItemComponentTypes.FOIL)
             .map(FoilItemComponent::foil)
             .orElseGet(stack::hasEnchantments);
     }
@@ -307,7 +330,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public int getEnchantability() {
-        return this.getComponent(ItemComponentTypes.ENCHANTABLE).map(EnchantableItemComponent::enchantability).orElse(0);
+        return this.itematic$getComponent(ItemComponentTypes.ENCHANTABLE).map(EnchantableItemComponent::enchantability).orElse(0);
     }
 
     /**
@@ -316,7 +339,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public UseAction getUseAction(ItemStack stack) {
-        return this.getComponent(ItemComponentTypes.USE_ANIMATION).map(UseAnimationItemComponent::animation).orElse(UseAction.NONE);
+        return this.itematic$getComponent(ItemComponentTypes.USE_ANIMATION).map(UseAnimationItemComponent::animation).orElse(UseAction.NONE);
     }
 
     /**
@@ -325,7 +348,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public int getMaxUseTime(ItemStack stack) {
-        return this.getComponent(ItemComponentTypes.USE_DURATION).map(UseDurationItemComponent::ticks).orElse(0);
+        return this.itematic$getComponent(ItemComponentTypes.USE_DURATION).map(UseDurationItemComponent::ticks).orElse(0);
     }
 
     @Redirect(
@@ -346,7 +369,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public final int getMaxDamage() {
-        return this.getComponent(ItemComponentTypes.DAMAGEABLE).map(DamageableItemComponent::durability).orElse(0);
+        return this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE).map(DamageableItemComponent::durability).orElse(0);
     }
 
     /**
@@ -355,7 +378,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public float getMiningSpeedMultiplier(ItemStack stack, BlockState state) {
-        return this.getComponent(ItemComponentTypes.TOOL).map(component -> component.getMiningSpeed(state)).orElse(1.0f);
+        return this.itematic$getComponent(ItemComponentTypes.TOOL).map(component -> component.getMiningSpeed(state)).orElse(1.0f);
     }
 
     /**
@@ -368,27 +391,27 @@ public class ItemExtender implements ItemAccess {
     }
 
     @Override
-    public ItemBase itemBase() {
+    public ItemBase itematic$itemBase() {
         return this.base;
     }
 
     @Override
-    public void setItemBase(ItemBase base) {
+    public void itematic$setItemBase(ItemBase base) {
         this.base = base;
     }
 
     @Override
-    public ItemComponentSet components() {
+    public ItemComponentSet itematic$components() {
         return this.components;
     }
 
     @Override
-    public void setComponents(ItemComponentSet components) {
+    public void itematic$setComponents(ItemComponentSet components) {
         this.components = components;
     }
 
     @Override
-    public <T extends ItemComponent> boolean hasComponent(ItemComponentType<T> type) {
+    public <T extends ItemComponent> boolean itematic$hasComponent(ItemComponentType<T> type) {
         if (this.components == null) {
             return false;
         }
@@ -396,7 +419,7 @@ public class ItemExtender implements ItemAccess {
     }
 
     @Override
-    public <T extends ItemComponent> Optional<T> getComponent(ItemComponentType<T> type) {
+    public <T extends ItemComponent> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
         if (this.components == null) {
             return Optional.empty();
         }
@@ -404,30 +427,43 @@ public class ItemExtender implements ItemAccess {
     }
 
     @Override
-    public ItemEventMap events() {
+    public ItemEventMap itematic$events() {
         return this.events;
     }
 
     @Override
-    public void setEvents(ItemEventMap events) {
+    public void itematic$setEvents(ItemEventMap events) {
         this.events = events;
     }
 
     @Override
-    public void invokeEvent(ItemEvent event, ActionContext context) {
-        this.events.invokeEvent(event, context);
+    public boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
+        return this.events.invokeEvent(event, context);
     }
 
     @Override
-    public boolean mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
-        return this.getComponent(ItemComponentTypes.FOOD)
+    public boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+        return this.itematic$getComponent(ItemComponentTypes.FOOD)
             .map(c -> c.mayStartUsing(user))
             .orElse(true);
     }
 
+    @Unique
     private boolean allowsPlacement(ItemUsageContext context) {
-        return !context.ignoresPlacementComponent() && this.getComponent(ItemComponentTypes.CAN_PLACE_ON_FLUIDS)
+        return !context.ignoresPlacementComponent() && this.itematic$getComponent(ItemComponentTypes.CAN_PLACE_ON_FLUIDS)
             .map(CanPlaceOnFluidsItemComponent::allowOriginalPlacement)
             .orElse(true);
+    }
+
+    @Unique
+    private static void tryUpdateItemStack(LivingEntity target, Hand hand, ItemStack stack, StackReference stackReference) {
+        if (target == null) {
+            return;
+        }
+        ItemStack newStack = stackReference.get();
+        if (stack == newStack) {
+            return;
+        }
+        target.setStackInHand(hand, newStack);
     }
 }

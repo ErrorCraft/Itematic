@@ -25,6 +25,6 @@ public abstract class PufferfishEntityExtender extends FishEntity {
         )
     )
     private ItemStack getBucketItemNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.PUFFERFISH_BUCKET));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.PUFFERFISH_BUCKET));
     }
 }

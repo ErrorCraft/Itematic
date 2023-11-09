@@ -10,13 +10,13 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(ExperienceBottleEntity.class)
-public abstract class ExperienceBottleEntityExtender extends ThrownItemEntity {
+public abstract class ExperienceBottleEntityExtender extends ThrownItemEntityExtender {
     public ExperienceBottleEntityExtender(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
     }
 
     @Override
-    public RegistryKey<Item> getDefaultItemKey() {
+    protected RegistryKey<Item> getDefaultItemKey() {
         return ItemKeys.EXPERIENCE_BOTTLE;
     }
 }

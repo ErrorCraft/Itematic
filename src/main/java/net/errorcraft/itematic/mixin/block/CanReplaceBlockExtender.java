@@ -22,6 +22,6 @@ public class CanReplaceBlockExtender extends Block {
         )
     )
     private boolean isOfUseItemKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemUtil.keyFromBlock(this));
+        return instance.itematic$isOf(ItemUtil.keyFromBlock(this));
     }
 }

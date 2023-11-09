@@ -23,6 +23,6 @@ public abstract class AbstractBlockExtender {
         )
     )
     private boolean isOfUseItemKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemUtil.keyFromBlock(this.asBlock()));
+        return instance.itematic$isOf(ItemUtil.keyFromBlock(this.asBlock()));
     }
 }

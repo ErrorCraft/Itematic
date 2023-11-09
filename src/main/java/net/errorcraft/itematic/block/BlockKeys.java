@@ -72,6 +72,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> DARK_OAK_LEAVES = of("dark_oak_leaves");
     public static final RegistryKey<Block> MANGROVE_LEAVES = of("mangrove_leaves");
     public static final RegistryKey<Block> NOTE_BLOCK = of("note_block");
+    public static final RegistryKey<Block> COBWEB = of("cobweb");
     public static final RegistryKey<Block> GRASS = of("grass");
     public static final RegistryKey<Block> FERN = of("fern");
     public static final RegistryKey<Block> DEAD_BUSH = of("dead_bush");
@@ -95,6 +96,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> BOOKSHELF = of("bookshelf");
     public static final RegistryKey<Block> CHISELED_BOOKSHELF = of("chiseled_bookshelf");
     public static final RegistryKey<Block> OBSIDIAN = of("obsidian");
+    public static final RegistryKey<Block> FIRE = of("fire");
     public static final RegistryKey<Block> OAK_STAIRS = of("oak_stairs");
     public static final RegistryKey<Block> CHEST = of("chest");
     public static final RegistryKey<Block> REDSTONE_WIRE = of("redstone_wire");
@@ -146,6 +148,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> PUMPKIN_STEM = of("pumpkin_stem");
     public static final RegistryKey<Block> MELON_STEM = of("melon_stem");
     public static final RegistryKey<Block> VINE = of("vine");
+    public static final RegistryKey<Block> GLOW_LICHEN = of("glow_lichen");
     public static final RegistryKey<Block> OAK_FENCE_GATE = of("oak_fence_gate");
     public static final RegistryKey<Block> LILY_PAD = of("lily_pad");
     public static final RegistryKey<Block> NETHER_WART = of("nether_wart");

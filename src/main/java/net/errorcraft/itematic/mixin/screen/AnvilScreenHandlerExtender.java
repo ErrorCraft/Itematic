@@ -44,7 +44,7 @@ public class AnvilScreenHandlerExtender {
         )
     )
     private boolean updateResultIsOfHoldsEnchantmentsUseComponentCheck(ItemStack instance, Item item) {
-        return instance.hasComponent(ItemComponentTypes.ENCHANTMENT_HOLDER);
+        return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTMENT_HOLDER);
     }
 
     @Redirect(
@@ -56,6 +56,6 @@ public class AnvilScreenHandlerExtender {
         )
     )
     private boolean updateResultIsOfIsEnchantmentHolderUseComponentCheck(ItemStack instance, Item item) {
-        return instance.hasComponent(ItemComponentTypes.ENCHANTMENT_HOLDER);
+        return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTMENT_HOLDER);
     }
 }

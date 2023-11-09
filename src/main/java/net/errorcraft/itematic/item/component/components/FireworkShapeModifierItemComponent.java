@@ -14,12 +14,12 @@ public record FireworkShapeModifierItemComponent(FireworkRocketItem.Type shape) 
     ).apply(instance, FireworkShapeModifierItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.FIREWORK_SHAPE_MODIFIER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 }

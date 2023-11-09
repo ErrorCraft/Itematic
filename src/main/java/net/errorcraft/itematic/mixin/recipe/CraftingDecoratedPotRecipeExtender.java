@@ -18,6 +18,6 @@ public class CraftingDecoratedPotRecipeExtender {
         )
     )
     private boolean isOfUseItemKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.AIR);
+        return instance.itematic$isOf(ItemKeys.AIR);
     }
 }

@@ -22,7 +22,7 @@ public class SweetBerryBushBlockExtender {
         )
     )
     private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemConvertible item, WorldView world) {
-        return world.createStack(ItemKeys.SWEET_BERRIES);
+        return world.itematic$createStack(ItemKeys.SWEET_BERRIES);
     }
 
     @Redirect(
@@ -33,7 +33,7 @@ public class SweetBerryBushBlockExtender {
         )
     )
     private boolean isOfForBoneMealUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BONE_MEAL);
+        return instance.itematic$isOf(ItemKeys.BONE_MEAL);
     }
 
     @Redirect(
@@ -44,6 +44,6 @@ public class SweetBerryBushBlockExtender {
         )
     )
     private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemConvertible item, int count, @Local World world) {
-        return world.createStack(ItemKeys.SWEET_BERRIES);
+        return world.itematic$createStack(ItemKeys.SWEET_BERRIES);
     }
 }

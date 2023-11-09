@@ -28,8 +28,8 @@ public class AbstractSkeletonEntityExtender extends HostileEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack initEquipmentNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.BOW));
+    private ItemStack newItemStackForBowUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.BOW);
     }
 
     @Redirect(
@@ -51,6 +51,6 @@ public class AbstractSkeletonEntityExtender extends HostileEntity {
         )
     )
     private boolean isOfForBowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BOW);
+        return instance.itematic$isOf(ItemKeys.BOW);
     }
 }

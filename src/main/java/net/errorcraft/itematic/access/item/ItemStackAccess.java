@@ -5,7 +5,6 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,31 +17,32 @@ import net.minecraft.world.World;
 import java.util.Optional;
 
 public interface ItemStackAccess {
-    default RegistryKey<Item> key() {
+    default RegistryKey<Item> itematic$key() {
         return null;
     }
-    default Optional<NbtCompound> nbt() {
+    default Optional<NbtCompound> itematic$nbt() {
         return Optional.empty();
     }
-    default boolean isOf(RegistryKey<Item> key) {
+    default boolean itematic$isOf(RegistryKey<Item> key) {
         return false;
     }
-    default void damage(int amount, LivingEntity entity) {}
-    default void damage(int amount, LivingEntity entity, Hand hand) {}
-    default <T extends ItemComponent> boolean hasComponent(ItemComponentType<T> type) {
+    default void itematic$damage(int amount, ActionContext context) {}
+    default <T extends ItemComponent> boolean itematic$hasComponent(ItemComponentType<T> type) {
         return false;
     }
-    default <T extends ItemComponent> Optional<T> getComponent(ItemComponentType<T> type) {
+    default <T extends ItemComponent> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
         return Optional.empty();
     }
-    default void invokeEvent(ItemEvent event, ActionContext context) {}
-    default boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
+    default boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
         return false;
     }
-    default boolean isNetworkSynced() {
+    default boolean itematic$canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
         return false;
     }
-    default boolean mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    default boolean itematic$isNetworkSynced() {
+        return false;
+    }
+    default boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return false;
     }
 }

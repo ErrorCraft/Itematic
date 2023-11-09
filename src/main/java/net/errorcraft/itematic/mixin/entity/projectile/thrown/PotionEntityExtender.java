@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PotionEntity.class)
-public abstract class PotionEntityExtender extends ThrownItemEntity {
+public abstract class PotionEntityExtender extends ThrownItemEntityExtender {
     public PotionEntityExtender(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -25,12 +25,12 @@ public abstract class PotionEntityExtender extends ThrownItemEntity {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean isLingeringIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.LINGERING_POTION);
+    private boolean isOfForLingeringPotionUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.LINGERING_POTION);
     }
 
     @Override
-    public RegistryKey<Item> getDefaultItemKey() {
+    protected RegistryKey<Item> getDefaultItemKey() {
         return ItemKeys.SPLASH_POTION;
     }
 }

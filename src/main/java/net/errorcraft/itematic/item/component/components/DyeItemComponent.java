@@ -13,12 +13,12 @@ public record DyeItemComponent(DyeColor color) implements ItemComponent {
     ).apply(instance, DyeItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.DYE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 }

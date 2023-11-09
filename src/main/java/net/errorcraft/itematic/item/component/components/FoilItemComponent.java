@@ -12,12 +12,12 @@ public record FoilItemComponent(boolean foil) implements ItemComponent {
     ).apply(instance, FoilItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.FOIL;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 }

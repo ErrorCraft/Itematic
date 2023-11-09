@@ -10,13 +10,13 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(EnderPearlEntity.class)
-public abstract class EnderPearlEntityExtender extends ThrownItemEntity {
+public abstract class EnderPearlEntityExtender extends ThrownItemEntityExtender {
     public EnderPearlEntityExtender(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
     }
 
     @Override
-    public RegistryKey<Item> getDefaultItemKey() {
+    protected RegistryKey<Item> getDefaultItemKey() {
         return ItemKeys.ENDER_PEARL;
     }
 }

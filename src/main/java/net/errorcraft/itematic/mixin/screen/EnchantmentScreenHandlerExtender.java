@@ -30,7 +30,7 @@ public class EnchantmentScreenHandlerExtender {
         )
     )
     private void runStoreItemComponentVariable(ItemStack itemStack, int i, PlayerEntity playerEntity, int j, ItemStack itemStack2, World world, BlockPos pos, CallbackInfo info, @Share("enchantableItemComponent") LocalRef<Optional<EnchantableItemComponent>> enchantableItemComponent) {
-        enchantableItemComponent.set(itemStack.getComponent(ItemComponentTypes.ENCHANTABLE));
+        enchantableItemComponent.set(itemStack.itematic$getComponent(ItemComponentTypes.ENCHANTABLE));
     }
 
     @Redirect(
@@ -41,7 +41,7 @@ public class EnchantmentScreenHandlerExtender {
         ),
         remap = false
     )
-    private boolean runIsOfUseRegistryEntryCheck(ItemStack instance, Item item, @Share("enchantableItemComponent") LocalRef<Optional<EnchantableItemComponent>> enchantableItemComponent) {
+    private boolean isOfForBookUseRegistryEntryCheck(ItemStack instance, Item item, @Share("enchantableItemComponent") LocalRef<Optional<EnchantableItemComponent>> enchantableItemComponent) {
         return enchantableItemComponent.get().flatMap(EnchantableItemComponent::transformsInto).isPresent();
     }
 
@@ -52,7 +52,7 @@ public class EnchantmentScreenHandlerExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack runNewItemStackUseRegistryEntry(ItemConvertible item, ItemStack stack, int v, PlayerEntity player, int b, ItemStack stack2, World world, @Share("enchantableItemComponent") LocalRef<Optional<EnchantableItemComponent>> enchantableItemComponent) {
+    private ItemStack newItemStackForEnchantedBookUseRegistryEntry(ItemConvertible item, ItemStack stack, int v, PlayerEntity player, int b, ItemStack stack2, World world, @Share("enchantableItemComponent") LocalRef<Optional<EnchantableItemComponent>> enchantableItemComponent) {
         return enchantableItemComponent.get()
             .flatMap(EnchantableItemComponent::transformsInto)
             .map(ItemStack::new)
@@ -66,8 +66,8 @@ public class EnchantmentScreenHandlerExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean generateEnchantmentsIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BOOK);
+    private boolean isOfForBookUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.BOOK);
     }
 
     @Redirect(
@@ -77,8 +77,8 @@ public class EnchantmentScreenHandlerExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean quickMoveIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.LAPIS_LAZULI);
+    private boolean isOfForLapisLazuliUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.LAPIS_LAZULI);
     }
 
     @Mixin(targets = "net/minecraft/screen/EnchantmentScreenHandler$3")
@@ -90,8 +90,8 @@ public class EnchantmentScreenHandlerExtender {
                 target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
             )
         )
-        private boolean canInsertIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.isOf(ItemKeys.LAPIS_LAZULI);
+        private boolean isOfForLapisLazuliUseRegistryKeyCheck(ItemStack instance, Item item) {
+            return instance.itematic$isOf(ItemKeys.LAPIS_LAZULI);
         }
     }
 }

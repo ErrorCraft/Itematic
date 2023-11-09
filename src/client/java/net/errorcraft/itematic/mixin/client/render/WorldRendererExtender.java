@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -29,6 +30,7 @@ public class WorldRendererExtender {
     @Final
     private MinecraftClient client;
 
+    @Unique
     private RecordItemComponent recordItemComponent;
 
     @Redirect(
@@ -45,8 +47,8 @@ public class WorldRendererExtender {
             )
         )
     )
-    private ItemStack processWorldEventNewItemStackForSplashPotionUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.world.getItem(ItemKeys.SPLASH_POTION));
+    private ItemStack newItemStackForSplashPotionUseRegistryEntry(ItemConvertible item) {
+        return this.world.itematic$createStack(ItemKeys.SPLASH_POTION);
     }
 
     @Redirect(
@@ -57,7 +59,7 @@ public class WorldRendererExtender {
         )
     )
     private Item processWorldEventByRawIdUseDynamicRegistry(int id) {
-        return this.world.getItemAccess().get(id);
+        return this.world.itematic$getItemAccess().get(id);
     }
 
     @ModifyConstant(
@@ -68,7 +70,7 @@ public class WorldRendererExtender {
         )
     )
     private boolean processWorldEventInstanceOfMusicDiscItemUseItemComponentCheck(Object reference, Class<MusicDiscItem> clazz) {
-        Optional<RecordItemComponent> optionalComponent = ((Item) reference).getComponent(ItemComponentTypes.RECORD);
+        Optional<RecordItemComponent> optionalComponent = ((Item) reference).itematic$getComponent(ItemComponentTypes.RECORD);
         optionalComponent.ifPresent(component -> this.recordItemComponent = component);
         return optionalComponent.isPresent();
     }

@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -17,9 +18,9 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -34,22 +35,22 @@ public record FireworkItemComponent() implements ItemComponent {
     private static final String EXPLOSION_INDENTATION = "  ";
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.FIREWORK;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (!user.isFallFlying()) {
-            return TypedActionResult.pass(user.getStackInHand(hand));
+            return ActionResult.PASS;
         }
         if (world.isClient()) {
-            return TypedActionResult.success(user.getStackInHand(hand));
+            return ActionResult.SUCCESS;
         }
         FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(world, stack, user);
         world.spawnEntity(fireworkRocketEntity);
@@ -57,20 +58,20 @@ public record FireworkItemComponent() implements ItemComponent {
             stack.decrement(1);
         }
         user.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
-        return TypedActionResult.consume(user.getStackInHand(hand));
+        return ActionResult.CONSUME;
     }
 
     @Override
-    public TypedActionResult<ItemStack> useOnBlock(ItemUsageContext context) {
+    public ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         World world = context.getWorld();
         ItemStack stack = context.getStack();
         if (world.isClient()) {
-            return TypedActionResult.success(stack);
+            return ActionResult.SUCCESS;
         }
         FireworkRocketEntity entity = createFireworkEntity(world, stack, context);
         world.spawnEntity(entity);
         stack.decrement(1);
-        return TypedActionResult.consume(stack);
+        return ActionResult.CONSUME;
     }
 
     @Override

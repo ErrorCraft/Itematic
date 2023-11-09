@@ -14,12 +14,12 @@ public record UseAnimationItemComponent(UseAction animation) implements ItemComp
     ).apply(instance, UseAnimationItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.USE_ANIMATION;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 }

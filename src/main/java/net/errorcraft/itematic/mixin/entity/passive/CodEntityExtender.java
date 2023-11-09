@@ -25,6 +25,6 @@ public abstract class CodEntityExtender extends SchoolingFishEntity {
         )
     )
     private ItemStack getBucketItemNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.COD_BUCKET));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.COD_BUCKET));
     }
 }

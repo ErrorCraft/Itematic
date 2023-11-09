@@ -25,7 +25,7 @@ public class FireworkRocketRecipeExtender {
         )
     )
     private boolean paperUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isOf(ItemKeys.PAPER);
+        return itemStack.itematic$isOf(ItemKeys.PAPER);
     }
 
     @Redirect(
@@ -44,7 +44,7 @@ public class FireworkRocketRecipeExtender {
         )
     )
     private boolean durationModifierUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isOf(ItemKeys.GUNPOWDER);
+        return itemStack.itematic$isOf(ItemKeys.GUNPOWDER);
     }
 
     @Redirect(
@@ -63,7 +63,7 @@ public class FireworkRocketRecipeExtender {
         )
     )
     private boolean fireworkStarUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isOf(ItemKeys.FIREWORK_STAR);
+        return itemStack.itematic$isOf(ItemKeys.FIREWORK_STAR);
     }
 
     @Redirect(

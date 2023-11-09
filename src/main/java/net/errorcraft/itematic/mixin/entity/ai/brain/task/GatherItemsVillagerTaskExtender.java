@@ -18,6 +18,6 @@ public class GatherItemsVillagerTaskExtender {
         )
     )
     private Item keepRunningGetWheatUseDynamicRegistry(ServerWorld serverWorld) {
-        return serverWorld.getItem(ItemKeys.WHEAT).value();
+        return serverWorld.itematic$getItem(ItemKeys.WHEAT).value();
     }
 }

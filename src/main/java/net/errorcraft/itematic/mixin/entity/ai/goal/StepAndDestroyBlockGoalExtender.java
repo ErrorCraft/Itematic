@@ -20,6 +20,6 @@ public class StepAndDestroyBlockGoalExtender {
         )
     )
     private ItemStack tickNewItemStackUseRegistryEntry(ItemConvertible item, @Local World world) {
-        return new ItemStack(world.getItem(ItemKeys.EGG));
+        return new ItemStack(world.itematic$getItem(ItemKeys.EGG));
     }
 }

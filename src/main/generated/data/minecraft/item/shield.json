@@ -26,11 +26,9 @@
   "events": [
     {
       "event": "minecraft:use",
-      "actions": [
-        {
-          "action": "minecraft:start_using_item"
-        }
-      ]
+      "action": {
+        "type": "minecraft:start_using_item"
+      }
     }
   ]
 }

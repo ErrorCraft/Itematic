@@ -25,8 +25,8 @@ public abstract class AxolotlEntityExtender extends AnimalEntity {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean eatIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.TROPICAL_FISH_BUCKET);
+    private boolean isOfForTropicalFishBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.TROPICAL_FISH_BUCKET);
     }
 
     @Redirect(
@@ -36,8 +36,8 @@ public abstract class AxolotlEntityExtender extends AnimalEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack eatNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.WATER_BUCKET));
+    private ItemStack newItemStackForWaterBucketUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.WATER_BUCKET);
     }
 
     @Redirect(
@@ -47,7 +47,7 @@ public abstract class AxolotlEntityExtender extends AnimalEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getBucketItemNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.AXOLOTL_BUCKET));
+    private ItemStack newItemStackForAxolotlBucketUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.AXOLOTL_BUCKET);
     }
 }

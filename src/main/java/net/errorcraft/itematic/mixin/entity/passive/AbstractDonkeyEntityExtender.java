@@ -20,8 +20,8 @@ public class AbstractDonkeyEntityExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean interactMobIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.CHEST);
+    private boolean isOfForChestUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.CHEST);
     }
 
     @Mixin(targets = "net/minecraft/entity/passive/AbstractDonkeyEntity$1")
@@ -37,8 +37,8 @@ public class AbstractDonkeyEntityExtender {
                 target = "net/minecraft/item/ItemStack"
             )
         )
-        private ItemStack getNewItemStackUseRegistryEntry(ItemConvertible item) {
-            return new ItemStack(this.field_27867.getWorld().getItem(ItemKeys.CHEST));
+        private ItemStack newItemStackForChestUseRegistryEntry(ItemConvertible item) {
+            return this.field_27867.getWorld().itematic$createStack(ItemKeys.CHEST);
         }
 
         @Redirect(
@@ -48,8 +48,8 @@ public class AbstractDonkeyEntityExtender {
                 target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
             )
         )
-        private boolean setIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.isOf(ItemKeys.CHEST);
+        private boolean isOfForChestUseRegistryKeyCheck(ItemStack instance, Item item) {
+            return instance.itematic$isOf(ItemKeys.CHEST);
         }
     }
 }

@@ -10,13 +10,13 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(EggEntity.class)
-public abstract class EggEntityExtender extends ThrownItemEntity {
+public abstract class EggEntityExtender extends ThrownItemEntityExtender {
     public EggEntityExtender(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
     }
 
     @Override
-    public RegistryKey<Item> getDefaultItemKey() {
+    protected RegistryKey<Item> getDefaultItemKey() {
         return ItemKeys.EGG;
     }
 }

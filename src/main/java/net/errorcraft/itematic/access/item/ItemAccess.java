@@ -15,26 +15,28 @@ import net.minecraft.world.World;
 import java.util.Optional;
 
 public interface ItemAccess {
-    default ItemBase itemBase() {
+    default ItemBase itematic$itemBase() {
         return null;
     }
-    default void setItemBase(ItemBase base) {}
-    default ItemComponentSet components() {
+    default void itematic$setItemBase(ItemBase base) {}
+    default ItemComponentSet itematic$components() {
         return null;
     }
-    default void setComponents(ItemComponentSet components) {}
-    default <T extends ItemComponent> boolean hasComponent(ItemComponentType<T> type) {
+    default void itematic$setComponents(ItemComponentSet components) {}
+    default <T extends ItemComponent> boolean itematic$hasComponent(ItemComponentType<T> type) {
         return false;
     }
-    default <T extends ItemComponent> Optional<T> getComponent(ItemComponentType<T> type) {
+    default <T extends ItemComponent> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
         return Optional.empty();
     }
-    default ItemEventMap events() {
+    default ItemEventMap itematic$events() {
         return null;
     }
-    default void setEvents(ItemEventMap events) {}
-    default void invokeEvent(ItemEvent event, ActionContext context) {}
-    default boolean mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    default void itematic$setEvents(ItemEventMap events) {}
+    default boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
+        return false;
+    }
+    default boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return true;
     }
 }

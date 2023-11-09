@@ -27,7 +27,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static boolean instanceOfDyeableItemUseItemComponentCheck(Object reference, Class<DyeableItem> clazz, @Local ItemStack stack, @Share("dyeableItemComponent") LocalRef<DyeableItemComponent> dyeableItemComponent) {
-        Optional<DyeableItemComponent> optionalComponent = stack.getComponent(ItemComponentTypes.DYEABLE);
+        Optional<DyeableItemComponent> optionalComponent = stack.itematic$getComponent(ItemComponentTypes.DYEABLE);
         optionalComponent.ifPresent(dyeableItemComponent::set);
         return optionalComponent.isPresent();
     }
@@ -56,7 +56,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForGlassBottleUseRegistryEntry(ItemConvertible item, @Local World world) {
-        return new ItemStack(world.getItem(ItemKeys.GLASS_BOTTLE));
+        return world.itematic$createStack(ItemKeys.GLASS_BOTTLE);
     }
 
     @Redirect(
@@ -67,7 +67,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForPotionUseRegistryEntry(ItemConvertible item, @Local World world) {
-        return new ItemStack(world.getItem(ItemKeys.POTION));
+        return world.itematic$createStack(ItemKeys.POTION);
     }
 
     @Redirect(
@@ -78,7 +78,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForWaterBucketUseRegistryEntry(ItemConvertible item, @Local World world) {
-        return new ItemStack(world.getItem(ItemKeys.WATER_BUCKET));
+        return world.itematic$createStack(ItemKeys.WATER_BUCKET);
     }
 
     @Redirect(
@@ -89,7 +89,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForLavaBucketUseRegistryEntry(ItemConvertible item, @Local World world) {
-        return new ItemStack(world.getItem(ItemKeys.LAVA_BUCKET));
+        return world.itematic$createStack(ItemKeys.LAVA_BUCKET);
     }
 
     @Redirect(
@@ -100,7 +100,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForPowderSnowBucketUseRegistryEntry(ItemConvertible item, @Local World world) {
-        return new ItemStack(world.getItem(ItemKeys.POWDER_SNOW_BUCKET));
+        return world.itematic$createStack(ItemKeys.POWDER_SNOW_BUCKET);
     }
 
     @Redirect(
@@ -111,7 +111,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForBucketUseRegistryEntry(ItemConvertible item, @Local World world) {
-        return new ItemStack(world.getItem(ItemKeys.BUCKET));
+        return world.itematic$createStack(ItemKeys.BUCKET);
     }
 
     @ModifyArg(

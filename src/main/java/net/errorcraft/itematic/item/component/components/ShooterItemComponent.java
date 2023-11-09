@@ -3,11 +3,15 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.util.ShooterUtil;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.MutableActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -24,11 +28,12 @@ import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 import java.util.Optional;
@@ -44,29 +49,27 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
     private static final String LOADED_KEY = "loaded";
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.SHOOTER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (this.isCharged(stack)) {
             CrossbowItem.shootAll(world, user, hand, stack, getSpeed(stack), 1.0f);
             CrossbowItem.setCharged(stack, false);
-            return TypedActionResult.consume(stack);
+            return ActionResult.CONSUME;
         }
-
-        if (!user.getAmmunition(this).isEmpty()) {
+        if (!user.itematic$getAmmunition(this).isEmpty()) {
             user.setCurrentHand(hand);
-            return TypedActionResult.consume(stack);
+            return ActionResult.CONSUME;
         }
-
-        return TypedActionResult.pass(stack);
+        return ActionResult.PASS;
     }
 
     @Override
@@ -78,7 +81,7 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
     }
 
     @Override
-    public void stopUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+    public void stopUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
         float pullProgress = this.getPullProgress(stack, remainingUseTicks);
         if (this.chargeable) {
             this.charge(stack, world, user, pullProgress);
@@ -87,7 +90,7 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         if (!(user instanceof PlayerEntity player)) {
             return;
         }
-        this.shoot(stack, world, player, pullProgress);
+        this.shoot(stack, world, player, pullProgress, resultStackConsumer);
     }
 
     public boolean isHeldAmmunition(ItemStack stack) {
@@ -112,7 +115,7 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
     }
 
     public boolean hasLoadedAmmunition(ItemStack stack, DynamicRegistryManager registryManager, RegistryKey<Item> key) {
-        return ShooterUtil.getLoadedAmmunition(stack, registryManager).stream().anyMatch(s -> s.isOf(key));
+        return ShooterUtil.getLoadedAmmunition(stack, registryManager).stream().anyMatch(s -> s.itematic$isOf(key));
     }
 
     private void tryLoad(ItemStack stack, World world, LivingEntity user, float pullProgress) {
@@ -144,17 +147,17 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         }
     }
 
-    private void shoot(ItemStack stack, World world, PlayerEntity player, float pullProgress) {
+    private void shoot(ItemStack stack, World world, PlayerEntity player, float pullProgress, ItemStackConsumer resultStackConsumer) {
         if (pullProgress < 0.1f) {
             return;
         }
-        ItemStack ammunition = player.getAmmunition(this);
+        ItemStack ammunition = player.itematic$getAmmunition(this);
         if (ammunition.isEmpty()) {
             return;
         }
-        boolean disallowPickup = EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0 && ammunition.isOf(ItemKeys.ARROW);
+        boolean disallowPickup = EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0 && ammunition.itematic$isOf(ItemKeys.ARROW);
         if (!world.isClient()) {
-            this.createProjectile(stack, ammunition, world, player, pullProgress, disallowPickup);
+            this.createProjectile(stack, ammunition, (ServerWorld) world, player, pullProgress, disallowPickup, resultStackConsumer);
         }
         world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + pullProgress * 0.5f);
         if (player.getAbilities().creativeMode || disallowPickup) {
@@ -166,8 +169,8 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         }
     }
 
-    private void createProjectile(ItemStack stack, ItemStack ammunition, World world, PlayerEntity player, float pullProgress, boolean disallowPickup) {
-        Optional<Entity> optionalEntity = ammunition.getComponent(ItemComponentTypes.PROJECTILE)
+    private void createProjectile(ItemStack stack, ItemStack ammunition, ServerWorld world, PlayerEntity player, float pullProgress, boolean disallowPickup, ItemStackConsumer resultStackConsumer) {
+        Optional<Entity> optionalEntity = ammunition.itematic$getComponent(ItemComponentTypes.PROJECTILE)
             .map(c -> c.createEntity(world, player, ammunition, 0.0f, pullProgress * 3.0f));
 
         if (optionalEntity.isEmpty()) {
@@ -181,7 +184,9 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         if (entity instanceof PersistentProjectileEntity persistentProjectileEntity) {
             this.initProjectile(persistentProjectileEntity, stack, pullProgress);
 
-            stack.damage(1, player, player.getActiveHand());
+            ActionContext context = MutableActionContext.stackUsage(world, stack, resultStackConsumer, player.getActiveHand())
+                .entityPosition(ActionContextParameter.THIS, player);
+            stack.itematic$damage(1, context);
             if (disallowPickup) {
                 persistentProjectileEntity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
             }
@@ -213,7 +218,7 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
     }
 
     private static float getSpeed(ItemStack stack) {
-        return stack.getComponent(ItemComponentTypes.PROJECTILE)
+        return stack.itematic$getComponent(ItemComponentTypes.PROJECTILE)
             .map(ProjectileItemComponent::chargedSpeed)
             .orElse(CrossbowItemAccessor.getDefaultSpeed());
     }

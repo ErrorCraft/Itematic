@@ -19,13 +19,13 @@ public class PullingModelOverride implements ModelOverride {
         if (target.getActiveItem() != stack) {
             return 0.0f;
         }
-        return stack.getComponent(ItemComponentTypes.SHOOTER)
+        return stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
             .map(c -> c.isCharged(stack) ? 0.0f : 1.0f)
             .orElse(0.0f);
     }
 
     @Override
     public boolean isApplicable(ItemStack stack) {
-        return stack.hasComponent(ItemComponentTypes.SHOOTER);
+        return stack.itematic$hasComponent(ItemComponentTypes.SHOOTER);
     }
 }

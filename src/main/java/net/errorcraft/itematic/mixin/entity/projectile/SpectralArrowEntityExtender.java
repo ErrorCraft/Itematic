@@ -25,6 +25,6 @@ public abstract class SpectralArrowEntityExtender extends PersistentProjectileEn
         )
     )
     private ItemStack asItemStackNewItemStackForSpectralArrowUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.SPECTRAL_ARROW));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.SPECTRAL_ARROW));
     }
 }

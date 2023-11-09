@@ -22,6 +22,6 @@ public abstract class BlockExtender {
     )
     private ItemStack newItemStackUseCreateStack(ItemConvertible item, WorldView world) {
         RegistryKey<Item> key = ItemUtil.keyFromBlock((Block)(Object) this);
-        return world.createStack(key);
+        return world.itematic$createStack(key);
     }
 }

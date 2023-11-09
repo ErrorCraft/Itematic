@@ -20,6 +20,6 @@ public interface BucketableExtender {
         )
     )
     private static Item tryBucketGetWaterBucketUseDynamicRegistry(PlayerEntity player) {
-        return player.getWorld().getItem(ItemKeys.WATER_BUCKET).value();
+        return player.getWorld().itematic$getItem(ItemKeys.WATER_BUCKET).value();
     }
 }

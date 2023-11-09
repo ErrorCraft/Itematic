@@ -17,7 +17,7 @@ public class PacketEncoderExtender implements PacketEncoderAccess {
         at = @At("STORE")
     )
     private PacketByteBuf encodeUseDynamicRegistryManager(PacketByteBuf packetByteBuf) {
-        packetByteBuf.setRegistryManager(this.registryManager);
+        packetByteBuf.itematic$setRegistryManager(this.registryManager);
         return packetByteBuf;
     }
 

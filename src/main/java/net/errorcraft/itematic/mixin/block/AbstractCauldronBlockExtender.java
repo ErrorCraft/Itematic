@@ -17,6 +17,6 @@ public abstract class AbstractCauldronBlockExtender {
         )
     )
     private Object useRegistryKey(Object key, @Local ItemStack stack) {
-        return stack.key();
+        return stack.itematic$key();
     }
 }

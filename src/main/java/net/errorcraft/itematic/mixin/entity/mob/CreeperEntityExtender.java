@@ -26,8 +26,8 @@ public class CreeperEntityExtender extends HostileEntity {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean interactMobIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.FIRE_CHARGE);
+    private boolean isOfForFireChargeUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.FIRE_CHARGE);
     }
 
     @Redirect(

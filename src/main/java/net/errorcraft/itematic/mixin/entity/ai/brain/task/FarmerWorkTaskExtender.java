@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Mixin(FarmerWorkTask.class)
 public class FarmerWorkTaskExtender {
+    @Unique
     private static final List<RegistryKey<Item>> COMPOSTABLE_KEYS = List.of(ItemKeys.WHEAT_SEEDS, ItemKeys.BEETROOT_SEEDS);
 
     @Redirect(
@@ -28,8 +30,8 @@ public class FarmerWorkTaskExtender {
             ordinal = 0
         )
     )
-    private Item craftAndDropBreadGetBreadUseDynamicRegistry(@Local VillagerEntity entity) {
-        return entity.getWorld().getItem(ItemKeys.BREAD).value();
+    private Item getBreadUseDynamicRegistry(@Local VillagerEntity entity) {
+        return entity.getWorld().itematic$getItem(ItemKeys.BREAD).value();
     }
 
     @Redirect(
@@ -39,8 +41,8 @@ public class FarmerWorkTaskExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack craftAndDropBreadNewItemStackUseRegistryEntry(ItemConvertible item, int count, VillagerEntity entity) {
-        return new ItemStack(entity.getWorld().getItem(ItemKeys.BREAD), count);
+    private ItemStack newItemStackForBreadUseRegistryEntry(ItemConvertible item, int count, VillagerEntity entity) {
+        return entity.getWorld().itematic$createStack(ItemKeys.BREAD, count);
     }
 
     @Redirect(
@@ -51,7 +53,7 @@ public class FarmerWorkTaskExtender {
         )
     )
     private int compostSeedsSizeUseRegistryKeys(List<Item> instance, Object o) {
-        return COMPOSTABLE_KEYS.indexOf(((ItemStack) o).key());
+        return COMPOSTABLE_KEYS.indexOf(((ItemStack) o).itematic$key());
     }
 
     @Redirect(
@@ -62,7 +64,7 @@ public class FarmerWorkTaskExtender {
             opcode = Opcodes.GETSTATIC
         )
     )
-    private Item craftAndDropBreadGetWheatUseDynamicRegistry(@Local VillagerEntity entity) {
-        return entity.getWorld().getItem(ItemKeys.WHEAT).value();
+    private Item getWheatUseDynamicRegistry(@Local VillagerEntity entity) {
+        return entity.getWorld().itematic$getItem(ItemKeys.WHEAT).value();
     }
 }

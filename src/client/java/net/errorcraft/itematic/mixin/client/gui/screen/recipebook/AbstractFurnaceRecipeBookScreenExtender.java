@@ -18,9 +18,9 @@ public class AbstractFurnaceRecipeBookScreenExtender extends RecipeBookWidget {
 
     @Override
     public void initializeRecipeSpecific(World world) {
-        this.fuels = Ingredient.ofStacks(world.getItemAccess()
+        this.fuels = Ingredient.ofStacks(world.itematic$getItemAccess()
             .streamEntries()
-            .filter(reference -> reference.value().hasComponent(ItemComponentTypes.FUEL))
+            .filter(reference -> reference.value().itematic$hasComponent(ItemComponentTypes.FUEL))
             .map(ItemStack::new)
         );
     }

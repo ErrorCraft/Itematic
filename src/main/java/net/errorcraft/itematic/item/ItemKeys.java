@@ -267,6 +267,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> BAMBOO_CHEST_RAFT = register("bamboo_chest_raft");
     public static final RegistryKey<Item> TURTLE_HELMET = register("turtle_helmet");
     public static final RegistryKey<Item> SCUTE = register("scute");
+    public static final RegistryKey<Item> FLINT_AND_STEEL = register("flint_and_steel");
     public static final RegistryKey<Item> APPLE = register("apple");
     public static final RegistryKey<Item> BOW = register("bow");
     public static final RegistryKey<Item> ARROW = register("arrow");
@@ -412,6 +413,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> BONE_MEAL = register("bone_meal");
     public static final RegistryKey<Item> SUGAR = register("sugar");
     public static final RegistryKey<Item> COOKIE = register("cookie");
+    public static final RegistryKey<Item> SHEARS = register("shears");
     public static final RegistryKey<Item> MELON_SLICE = register("melon_slice");
     public static final RegistryKey<Item> DRIED_KELP = register("dried_kelp");
     public static final RegistryKey<Item> PUMPKIN_SEEDS = register("pumpkin_seeds");

@@ -28,7 +28,7 @@ public class InputSlotFillerExtender<C extends Inventory> {
     )
     private void fillInputSlotsSetItemAccess(ServerPlayerEntity entity, @Nullable RecipeEntry<? extends Recipe<C>> recipe, boolean craftAll, CallbackInfo info) {
         if (this.itemAccess == null) {
-            this.itemAccess = entity.getWorld().getItemAccess();
+            this.itemAccess = entity.getWorld().itematic$getItemAccess();
         }
     }
 

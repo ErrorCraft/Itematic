@@ -12,16 +12,14 @@ import net.minecraft.inventory.EnderChestInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.RangedWeaponItem;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
@@ -61,12 +59,12 @@ public abstract class PlayerEntityExtender extends LivingEntity {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean updateTurtleHelmetIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.TURTLE_HELMET);
+    private boolean isOfForTurtleHelmetUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.TURTLE_HELMET);
     }
 
     @Override
-    public ItemStack getAmmunition(ShooterItemComponent itemComponent) {
+    public ItemStack itematic$getAmmunition(ShooterItemComponent itemComponent) {
         ItemStack heldStack = RangedWeaponItem.getHeldProjectile(this, itemComponent::isHeldAmmunition);
         if (!heldStack.isEmpty()) {
             return heldStack;
@@ -79,7 +77,7 @@ public abstract class PlayerEntityExtender extends LivingEntity {
             }
         }
 
-        return this.abilities.creativeMode ? new ItemStack(this.getWorld().getItem(ItemKeys.ARROW)) : ItemStack.EMPTY;
+        return this.abilities.creativeMode ? this.getWorld().itematic$createStack(ItemKeys.ARROW) : ItemStack.EMPTY;
     }
 
     @Redirect(
@@ -90,7 +88,7 @@ public abstract class PlayerEntityExtender extends LivingEntity {
         )
     )
     private boolean isOfForElytraUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.ELYTRA);
+        return instance.itematic$isOf(ItemKeys.ELYTRA);
     }
 
     @Redirect(
@@ -101,7 +99,7 @@ public abstract class PlayerEntityExtender extends LivingEntity {
         )
     )
     private boolean isOfForShieldUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.SHIELD);
+        return instance.itematic$isOf(ItemKeys.SHIELD);
     }
 
     @ModifyArg(
@@ -112,6 +110,22 @@ public abstract class PlayerEntityExtender extends LivingEntity {
         )
     )
     private Item setCooldownForShieldUseDynamicRegistry(Item item) {
-        return this.getWorld().getItem(ItemKeys.SHIELD).value();
+        return this.getWorld().itematic$getItem(ItemKeys.SHIELD).value();
     }
+
+    @Redirect(
+        method = "attack",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/player/PlayerEntity;setStackInHand(Lnet/minecraft/util/Hand;Lnet/minecraft/item/ItemStack;)V",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/item/ItemStack;postHit(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/player/PlayerEntity;)V"
+            )
+        )
+    )
+    private void neverSetEmptyStack(PlayerEntity instance, Hand hand, ItemStack stack) {}
 }

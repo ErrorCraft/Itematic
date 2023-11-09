@@ -27,8 +27,8 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntity {
             ordinal = 0
         )
     )
-    private ItemStack initGoalsNewItemStackForPotionUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.POTION));
+    private ItemStack newItemStackForPotionUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.POTION);
     }
 
     @Redirect(
@@ -45,8 +45,8 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntity {
             )
         )
     )
-    private ItemStack initGoalsNewItemStackForMilkBucketUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.MILK_BUCKET));
+    private ItemStack newItemStackForMilkBucketUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.MILK_BUCKET);
     }
 
     @Redirect(
@@ -56,7 +56,7 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntity {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean getDrinkSoundIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.MILK_BUCKET);
+    private boolean isOfForMilkBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.MILK_BUCKET);
     }
 }

@@ -21,7 +21,7 @@ public class EndCityGeneratorExtender {
             )
         )
         private static ItemStack newItemStackForElytraUseRegistryEntry(ItemConvertible item, @Local ServerWorldAccess world) {
-            return new ItemStack(world.getItem(ItemKeys.ELYTRA));
+            return new ItemStack(world.itematic$getItem(ItemKeys.ELYTRA));
         }
     }
 }

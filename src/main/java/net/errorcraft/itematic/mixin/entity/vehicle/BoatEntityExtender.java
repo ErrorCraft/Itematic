@@ -31,7 +31,7 @@ public abstract class BoatEntityExtender extends VehicleEntityExtender {
         )
     )
     private ItemStack getPickBlockStateNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return this.getWorld().createStack(this.asItemKey());
+        return this.getWorld().itematic$createStack(this.asItemKey());
     }
 
     @Redirect(
@@ -42,7 +42,7 @@ public abstract class BoatEntityExtender extends VehicleEntityExtender {
         )
     )
     private ItemEntity fallDropItemUseRegistryEntry(BoatEntity instance, ItemConvertible itemConvertible) {
-        return this.dropItem(this.getWorld().getItem(ItemKeys.STICK));
+        return this.dropItem(this.getWorld().itematic$getItem(ItemKeys.STICK));
     }
 
     @Override

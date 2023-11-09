@@ -46,7 +46,7 @@ public class ItemRendererExtender implements ItemRendererAccess {
         )
     )
     private static boolean isOfForClockUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.CLOCK);
+        return instance.itematic$isOf(ItemKeys.CLOCK);
     }
 
     @Redirect(
@@ -57,7 +57,7 @@ public class ItemRendererExtender implements ItemRendererAccess {
         )
     )
     private int renderBakedItemQuadsGetColorUseItemComponent(ItemColors instance, ItemStack item, int tintIndex) {
-        return item.getComponent(ItemComponentTypes.TINTED)
+        return item.itematic$getComponent(ItemComponentTypes.TINTED)
             .map(TintedItemComponent::tint)
             .map(c -> c.getColor(item, tintIndex))
             .orElse(ItemColor.DEFAULT_COLOR);

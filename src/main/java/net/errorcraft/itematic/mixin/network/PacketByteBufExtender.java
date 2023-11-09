@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import io.netty.buffer.ByteBuf;
 import net.errorcraft.itematic.access.network.PacketByteBufAccess;
-import net.errorcraft.itematic.item.ItemStackUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -17,6 +16,7 @@ import net.minecraft.util.collection.IndexedIterable;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -28,6 +28,7 @@ public abstract class PacketByteBufExtender extends ByteBuf implements PacketByt
     @Shadow
     public abstract int readVarInt();
 
+    @Unique
     private DynamicRegistryManager registryManager;
 
     @Redirect(
@@ -48,9 +49,9 @@ public abstract class PacketByteBufExtender extends ByteBuf implements PacketByt
             target = "Lnet/minecraft/network/PacketByteBuf;readByte()B"
         )
     )
-    private void storeItemRegistryEntry(CallbackInfoReturnable<ItemStack> info, @Share("entry") LocalRef<RegistryEntry<Item>> entry) {
+    private void storeItemRegistryEntry(CallbackInfoReturnable<ItemStack> info, @Share("entry") LocalRef<RegistryEntry<Item>> entryRef) {
         Registry<Item> registry = this.registryManager.get(RegistryKeys.ITEM);
-        entry.set(this.readRegistryEntry(registry));
+        entryRef.set(this.readRegistryEntry(registry));
     }
 
     @Redirect(
@@ -60,8 +61,12 @@ public abstract class PacketByteBufExtender extends ByteBuf implements PacketByt
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack readItemStackNewItemStackUseRegistryEntry(ItemConvertible item, int count, @Share("entry") LocalRef<RegistryEntry<Item>> entry) {
-        return ItemStackUtil.ofNullable(entry.get(), count);
+    private ItemStack readItemStackNewItemStackUseRegistryEntry(ItemConvertible item, int count, @Share("entry") LocalRef<RegistryEntry<Item>> entryRef) {
+        RegistryEntry<Item> entry = entryRef.get();
+        if (entry == null) {
+            return ItemStack.EMPTY;
+        }
+        return new ItemStack(entry, count);
     }
 
     @Redirect(
@@ -87,10 +92,11 @@ public abstract class PacketByteBufExtender extends ByteBuf implements PacketByt
     }
 
     @Override
-    public void setRegistryManager(DynamicRegistryManager registryManager) {
+    public void itematic$setRegistryManager(DynamicRegistryManager registryManager) {
         this.registryManager = registryManager;
     }
 
+    @Unique
     @Nullable
     private <T> RegistryEntry<T> readRegistryEntry(Registry<T> registry) {
         int id = this.readVarInt();

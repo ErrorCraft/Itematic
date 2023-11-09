@@ -7,6 +7,10 @@ import net.minecraft.util.Identifier;
 
 public class ItematicBlockTags {
     public static final TagKey<Block> END_CRYSTAL_SPAWNABLE_ON = of("end_crystal_spawnable_on");
+    public static final TagKey<Block> SWORD_SUPER_EFFICIENT = of("sword_super_efficient");
+    public static final TagKey<Block> SHEARS_EFFICIENT = of("shears_efficient");
+    public static final TagKey<Block> SHEARS_SLIGHTLY_EFFICIENT = of("shears_slightly_efficient");
+    public static final TagKey<Block> SHEARS_SUPER_EFFICIENT = of("shears_super_efficient");
 
     private ItematicBlockTags() {}
 

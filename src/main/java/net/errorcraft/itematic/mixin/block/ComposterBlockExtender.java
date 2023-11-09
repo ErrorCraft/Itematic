@@ -33,7 +33,7 @@ public class ComposterBlockExtender {
         )
     )
     private boolean containsKeyUseItemComponentCheck(Object2FloatMap<ItemConvertible> instance, Object o, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand) {
-        return player.getStackInHand(hand).hasComponent(ItemComponentTypes.COMPOSTABLE);
+        return player.getStackInHand(hand).itematic$hasComponent(ItemComponentTypes.COMPOSTABLE);
     }
 
     @Redirect(
@@ -45,7 +45,7 @@ public class ComposterBlockExtender {
         )
     )
     private static boolean containsKeyUseItemComponentCheck(Object2FloatMap<ItemConvertible> instance, Object o, Entity user, BlockState state, ServerWorld world, ItemStack stack) {
-        return stack.hasComponent(ItemComponentTypes.COMPOSTABLE);
+        return stack.itematic$hasComponent(ItemComponentTypes.COMPOSTABLE);
     }
 
     @Redirect(
@@ -57,7 +57,7 @@ public class ComposterBlockExtender {
         )
     )
     private static float getFloatUseItemComponent(Object2FloatMap<ItemConvertible> instance, Object o, @Nullable Entity user, BlockState state, WorldAccess world, BlockPos pos, ItemStack stack) {
-        return stack.getComponent(ItemComponentTypes.COMPOSTABLE).map(CompostableItemComponent::levelIncreaseChance).orElse(0.0f);
+        return stack.itematic$getComponent(ItemComponentTypes.COMPOSTABLE).map(CompostableItemComponent::levelIncreaseChance).orElse(0.0f);
     }
 
     @Redirect(
@@ -67,8 +67,8 @@ public class ComposterBlockExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private static ItemStack emptyFullComposterNewItemStackUseRegistryEntry(ItemConvertible item, @Local World world) {
-        return new ItemStack(world.getItem(ItemKeys.BONE_MEAL));
+    private static ItemStack newItemStackForBoneMealUseRegistryEntry(ItemConvertible item, @Local World world) {
+        return world.itematic$createStack(ItemKeys.BONE_MEAL);
     }
 
     @Redirect(
@@ -78,8 +78,8 @@ public class ComposterBlockExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private static ItemStack getInventoryComposterNewItemStackUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
-        return new ItemStack(world.getItem(ItemKeys.BONE_MEAL));
+    private static ItemStack newItemStackForBoneMealUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
+        return world.itematic$createStack(ItemKeys.BONE_MEAL);
     }
 
     @Mixin(targets = "net/minecraft/block/ComposterBlock$ComposterInventory")
@@ -93,7 +93,7 @@ public class ComposterBlockExtender {
             )
         )
         private boolean containsKeyUseItemComponentCheck(Object2FloatMap<ItemConvertible> instance, Object o, int slot, ItemStack stack) {
-            return stack.hasComponent(ItemComponentTypes.COMPOSTABLE);
+            return stack.itematic$hasComponent(ItemComponentTypes.COMPOSTABLE);
         }
     }
 
@@ -106,8 +106,8 @@ public class ComposterBlockExtender {
                 target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
             )
         )
-        private boolean canExtractIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.isOf(ItemKeys.BONE_MEAL);
+        private boolean isOfForBoneMealUseRegistryKeyCheck(ItemStack instance, Item item) {
+            return instance.itematic$isOf(ItemKeys.BONE_MEAL);
         }
     }
 }

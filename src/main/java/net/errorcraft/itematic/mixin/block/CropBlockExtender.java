@@ -19,6 +19,6 @@ public class CropBlockExtender implements CropBlockAccess {
         )
     )
     private ItemStack newItemStackUseCreateStack(ItemConvertible item, WorldView world) {
-        return world.createStack(this.getSeedsItemKey());
+        return world.itematic$createStack(this.getSeedsItemKey());
     }
 }

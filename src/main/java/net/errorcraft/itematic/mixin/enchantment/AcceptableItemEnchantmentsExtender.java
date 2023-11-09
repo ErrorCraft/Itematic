@@ -21,7 +21,7 @@ public class AcceptableItemEnchantmentsExtender {
         cancellable = true
     )
     public void isAcceptableItemUseItemComponent(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
-        Optional<ForgeableItemComponent> component = stack.getComponent(ItemComponentTypes.FORGEABLE);
+        Optional<ForgeableItemComponent> component = stack.itematic$getComponent(ItemComponentTypes.FORGEABLE);
         if (component.isEmpty()) {
             info.setReturnValue(false);
             return;

@@ -26,6 +26,6 @@ public class FluidBlockExtender {
         )
     )
     private ItemStack tryDrainFluidNewItemStackUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
-        return new ItemStack(world.getItem(this.fluid.getBucketItemKey()));
+        return new ItemStack(world.itematic$getItem(this.fluid.getBucketItemKey()));
     }
 }

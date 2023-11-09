@@ -17,7 +17,7 @@ public class FishingBobberEntityRendererExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean renderIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.FISHING_ROD);
+    private boolean isOfForFishingRodUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.FISHING_ROD);
     }
 }

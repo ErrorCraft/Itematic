@@ -32,6 +32,6 @@ public class LlamaEntityExtender {
         )
     )
     private boolean receiveFoodIsOfForWheatUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.WHEAT);
+        return instance.itematic$isOf(ItemKeys.WHEAT);
     }
 }

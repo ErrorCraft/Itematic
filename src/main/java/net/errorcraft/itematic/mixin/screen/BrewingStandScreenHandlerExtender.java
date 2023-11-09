@@ -22,7 +22,7 @@ public class BrewingStandScreenHandlerExtender {
             )
         )
         private static boolean matchesIsOfUseItemComponentCheck(ItemStack instance, Item item) {
-            return instance.hasComponent(ItemComponentTypes.POTION_HOLDER);
+            return instance.itematic$hasComponent(ItemComponentTypes.POTION_HOLDER);
         }
 
         @Redirect(
@@ -64,7 +64,7 @@ public class BrewingStandScreenHandlerExtender {
             )
         )
         private static boolean matchesIsOfForGlassBottleUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.isOf(ItemKeys.GLASS_BOTTLE);
+            return instance.itematic$isOf(ItemKeys.GLASS_BOTTLE);
         }
     }
 
@@ -78,8 +78,8 @@ public class BrewingStandScreenHandlerExtender {
                 ordinal = 0
             )
         )
-        private static boolean matchesIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.isOf(ItemKeys.BLAZE_POWDER);
+        private static boolean isOfForBlazePowderUseRegistryKeyCheck(ItemStack instance, Item item) {
+            return instance.itematic$isOf(ItemKeys.BLAZE_POWDER);
         }
     }
 }

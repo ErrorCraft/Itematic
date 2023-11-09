@@ -7,15 +7,20 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 
 public interface WorldViewAccess {
-    default ItemAccess getItemAccess() {
+    default ItemAccess itematic$getItemAccess() {
         return null;
     }
-    default RegistryEntry<Item> getItem(RegistryKey<Item> key) {
+    default RegistryEntry<Item> itematic$getItem(RegistryKey<Item> key) {
         return null;
     }
-    default ItemStack createStack(RegistryKey<Item> key) {
-        return this.getItemAccess().getOptionalEntry(key)
+    default ItemStack itematic$createStack(RegistryKey<Item> key) {
+        return this.itematic$getItemAccess().getOptionalEntry(key)
             .map(ItemStack::new)
+            .orElse(ItemStack.EMPTY);
+    }
+    default ItemStack itematic$createStack(RegistryKey<Item> key, int count) {
+        return this.itematic$getItemAccess().getOptionalEntry(key)
+            .map(entry -> new ItemStack(entry, count))
             .orElse(ItemStack.EMPTY);
     }
 }

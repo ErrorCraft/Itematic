@@ -21,7 +21,7 @@ public class CrossbowAttackGoalExtender {
         )
     )
     private boolean isHoldingForCrossbowUseRegistryKeyCheck(HostileEntity instance, Item item) {
-        return instance.isHolding(ItemKeys.CROSSBOW);
+        return instance.itematic$isHolding(ItemKeys.CROSSBOW);
     }
 
     @Redirect(

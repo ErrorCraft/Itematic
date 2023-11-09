@@ -1,16 +1,15 @@
 package net.errorcraft.itematic.util;
 
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.TypedActionResult;
 
 public class ActionResultUtil {
     private ActionResultUtil() {}
 
-    public static <T> TypedActionResult<T> max(TypedActionResult<T> newResult, ActionResult currentResult) {
-        if (getPoints(newResult.getResult()) >= getPoints(currentResult)) {
-            return newResult;
+    public static ActionResult max(ActionResult left, ActionResult right) {
+        if (getPoints(left) >= getPoints(right)) {
+            return left;
         }
-        return new TypedActionResult<>(currentResult, newResult.getValue());
+        return right;
     }
 
     public static int getPoints(ActionResult actionResult) {

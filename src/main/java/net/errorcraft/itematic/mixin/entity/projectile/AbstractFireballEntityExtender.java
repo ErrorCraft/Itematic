@@ -25,8 +25,8 @@ public class AbstractFireballEntityExtender extends ExplosiveProjectileEntity {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean setItemIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.FIRE_CHARGE);
+    private boolean isOfForFireChargeUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.FIRE_CHARGE);
     }
 
     @Redirect(
@@ -36,7 +36,7 @@ public class AbstractFireballEntityExtender extends ExplosiveProjectileEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getStackNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.FIRE_CHARGE));
+    private ItemStack newItemStackForFireChargeUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.FIRE_CHARGE);
     }
 }

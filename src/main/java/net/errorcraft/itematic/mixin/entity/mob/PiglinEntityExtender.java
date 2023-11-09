@@ -27,7 +27,7 @@ public abstract class PiglinEntityExtender extends AbstractPiglinEntity {
         )
     )
     private ItemStack newItemStackForPiglinHeadUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.PIGLIN_HEAD));
+        return this.getWorld().itematic$createStack(ItemKeys.PIGLIN_HEAD);
     }
 
     @Redirect(
@@ -39,7 +39,7 @@ public abstract class PiglinEntityExtender extends AbstractPiglinEntity {
         )
     )
     private ItemStack newItemStackForCrossbowUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.CROSSBOW));
+        return this.getWorld().itematic$createStack(ItemKeys.CROSSBOW);
     }
 
     @Redirect(
@@ -56,7 +56,7 @@ public abstract class PiglinEntityExtender extends AbstractPiglinEntity {
         )
     )
     private ItemStack newItemStackForGoldenSwordUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.GOLDEN_SWORD));
+        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
     }
 
     @Redirect(
@@ -67,7 +67,7 @@ public abstract class PiglinEntityExtender extends AbstractPiglinEntity {
         )
     )
     private boolean isHoldingForCrossbowUseRegistryKeyCheck(PiglinEntity instance, Item item) {
-        return instance.isHolding(ItemKeys.CROSSBOW);
+        return instance.itematic$isHolding(ItemKeys.CROSSBOW);
     }
 
     @Redirect(
@@ -78,6 +78,6 @@ public abstract class PiglinEntityExtender extends AbstractPiglinEntity {
         )
     )
     private boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.CROSSBOW);
+        return instance.itematic$isOf(ItemKeys.CROSSBOW);
     }
 }

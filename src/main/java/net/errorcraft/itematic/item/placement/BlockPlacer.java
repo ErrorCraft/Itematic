@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.placement;
 
 import net.errorcraft.itematic.block.BlockStateUtil;
 import net.errorcraft.itematic.block.ShapeContextUtil;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.MutableActionContext;
@@ -22,7 +23,7 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Property;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -32,36 +33,42 @@ public class BlockPlacer extends Placer {
     private final RegistryEntry<Block> block;
     private final ItemPlacementContext context;
     private final boolean operatorOnly;
+    private final boolean decrementStack;
 
-    public BlockPlacer(ItemStack stack, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, RegistryEntry<Block> block, ItemPlacementContext context, boolean operatorOnly) {
-        super(stack, world, blockPos, blockState, player);
+    public BlockPlacer(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, RegistryEntry<Block> block, ItemPlacementContext context, boolean operatorOnly, boolean decrementStack) {
+        super(stack, resultStackConsumer, world, blockPos, blockState, player);
         this.block = block;
         this.context = context;
         this.operatorOnly = operatorOnly;
+        this.decrementStack = decrementStack;
     }
 
-    public static BlockPlacer of(ItemUsageContext context, RegistryEntry<Block> block, boolean operatorOnly) {
+    public static BlockPlacer of(ActionContext context, ActionContextParameter position, RegistryEntry<Block> block, boolean operatorOnly, boolean decrementStack) {
+        return of(context.createItemUsageContext(position), context.resultStackConsumer(), block, operatorOnly, decrementStack);
+    }
+
+    public static BlockPlacer of(ItemUsageContext context, ItemStackConsumer resultStackConsumer, RegistryEntry<Block> block, boolean operatorOnly, boolean decrementStack) {
         ItemPlacementContext placementContext = new ItemPlacementContext(context);
         World world = placementContext.getWorld();
         BlockPos blockPos = placementContext.getBlockPos();
-        return new BlockPlacer(placementContext.getStack(), world, blockPos, world.getBlockState(blockPos), placementContext.getPlayer(), block, placementContext, operatorOnly);
+        return new BlockPlacer(placementContext.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), placementContext.getPlayer(), block, placementContext, operatorOnly, decrementStack);
     }
 
     @Override
-    public TypedActionResult<ItemStack> place() {
+    public ActionResult place() {
         if (!this.context.canPlace()) {
-            return TypedActionResult.pass(this.stack);
+            return ActionResult.PASS;
         }
         BlockState blockState = this.getPlacementState();
         if (blockState == null) {
-            return TypedActionResult.pass(this.stack);
+            return ActionResult.PASS;
         }
         if (!this.world.setBlockState(this.blockPos, blockState, Block.field_31022)) {
-            return TypedActionResult.pass(this.stack);
+            return ActionResult.PASS;
         }
 
         this.placed(blockState);
-        return TypedActionResult.success(this.stack, this.world.isClient());
+        return ActionResult.success(this.world.isClient());
     }
 
     private void placed(BlockState blockState) {
@@ -70,16 +77,17 @@ public class BlockPlacer extends Placer {
         blockState.getBlock().onPlaced(this.world, this.blockPos, blockState, this.player, this.stack);
         if (this.player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.PLACED_BLOCK.trigger(serverPlayer, this.blockPos, this.stack);
-            ActionContext context = MutableActionContext.stackUsage(serverPlayer.getServerWorld(), this.stack, this.context.getHand())
-                .entityPosition(ActionContextParameter.THIS, serverPlayer);
-            this.stack.invokeEvent(ItemEvents.PLACED_BLOCK, context);
+            ActionContext context = MutableActionContext.stackUsage(serverPlayer.getServerWorld(), this.stack, this.resultStackConsumer, this.context.getHand())
+                .entityPosition(ActionContextParameter.THIS, serverPlayer)
+                .position(ActionContextParameter.TARGET, this.blockPos);
+            this.stack.itematic$invokeEvent(ItemEvents.PLACED_BLOCK, context);
         }
 
         BlockSoundGroup blockSoundGroup = blockState.getSoundGroup();
         this.world.playSound(this.player, this.blockPos, blockSoundGroup.getPlaceSound(), SoundCategory.BLOCKS, (blockSoundGroup.getVolume() + 1.0F) / 2.0F, blockSoundGroup.getPitch() * 0.8F);
         this.world.emitGameEvent(GameEvent.BLOCK_PLACE, this.blockPos, GameEvent.Emitter.of(this.player, blockState));
-        if (this.player == null || !this.player.getAbilities().creativeMode) {
-            this.stack.decrement(1);
+        if (this.decrementStack) {
+            this.tryDecrementStack();
         }
     }
 

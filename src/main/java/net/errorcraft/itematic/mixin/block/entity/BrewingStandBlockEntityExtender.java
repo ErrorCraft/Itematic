@@ -24,7 +24,7 @@ public class BrewingStandBlockEntityExtender {
         )
     )
     private boolean isValidIsOfForBlazePowderUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BLAZE_POWDER);
+        return instance.itematic$isOf(ItemKeys.BLAZE_POWDER);
     }
 
     @Redirect(
@@ -43,7 +43,7 @@ public class BrewingStandBlockEntityExtender {
         )
     )
     private boolean isValidIsOfUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.hasComponent(ItemComponentTypes.POTION_HOLDER);
+        return instance.itematic$hasComponent(ItemComponentTypes.POTION_HOLDER);
     }
 
     @Redirect(
@@ -85,7 +85,7 @@ public class BrewingStandBlockEntityExtender {
         )
     )
     private boolean isValidIsOfForGlassBottleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.GLASS_BOTTLE);
+        return instance.itematic$isOf(ItemKeys.GLASS_BOTTLE);
     }
 
     @Redirect(
@@ -96,7 +96,7 @@ public class BrewingStandBlockEntityExtender {
         )
     )
     private static ItemStack craftCraftUseDynamicRegistryManager(ItemStack ingredient, ItemStack input, World world) {
-        return BrewingRecipeRegistryUtil.INSTANCE.craft(ingredient, input, world);
+        return BrewingRecipeRegistryUtil.INSTANCE.itematic$craft(ingredient, input, world);
     }
 
     @Redirect(
@@ -107,7 +107,7 @@ public class BrewingStandBlockEntityExtender {
             ordinal = 0
         )
     )
-    private static boolean tickIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BLAZE_POWDER);
+    private static boolean isOfForBlazePowderUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.BLAZE_POWDER);
     }
 }

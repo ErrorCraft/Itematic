@@ -1,19 +1,18 @@
 package net.errorcraft.itematic.access.entity;
 
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Hand;
+import net.minecraft.world.World;
 
 public interface LivingEntityAccess {
-    default boolean isHolding(RegistryKey<Item> key) {
+    default boolean itematic$isHolding(RegistryKey<Item> key) {
         return false;
     }
-    default ItemStack getAmmunition(ShooterItemComponent itemComponent) {
+    default ItemStack itematic$getAmmunition(ShooterItemComponent itemComponent) {
         return ItemStack.EMPTY;
     }
-    default Hand getHoldingHand(ItemStack stack) {
-        return null;
-    }
+    default void itematic$eatFood(World world, ItemStack stack, ItemStackConsumer resultStackConsumer) {}
 }

@@ -36,7 +36,7 @@ public abstract class CrossbowItemExtender {
     )
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     private static ItemStack loadProjectilesGetProjectileTypeUseItemComponent(LivingEntity instance, ItemStack stack) {
-        return instance.getAmmunition(stack.getComponent(ItemComponentTypes.SHOOTER).get());
+        return instance.itematic$getAmmunition(stack.itematic$getComponent(ItemComponentTypes.SHOOTER).get());
     }
 
     @Redirect(
@@ -46,8 +46,8 @@ public abstract class CrossbowItemExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private static ItemStack loadProjectilesNewItemStackUseRegistryEntry(ItemConvertible item, LivingEntity shooter) {
-        return new ItemStack(shooter.getWorld().getItem(ItemKeys.ARROW));
+    private static ItemStack newItemStackForArrowUseRegistryEntry(ItemConvertible item, LivingEntity shooter) {
+        return shooter.getWorld().itematic$createStack(ItemKeys.ARROW);
     }
 
     @ModifyConstant(
@@ -55,7 +55,7 @@ public abstract class CrossbowItemExtender {
         constant = @Constant(classValue = ArrowItem.class)
     )
     private static boolean loadProjectileInstanceOfArrowItemUseItemComponentCheck(Object reference, Class<ArrowItem> clazz) {
-        return ((Item) reference).hasComponent(ItemComponentTypes.PROJECTILE);
+        return ((Item) reference).itematic$hasComponent(ItemComponentTypes.PROJECTILE);
     }
 
     @Redirect(
@@ -87,8 +87,8 @@ public abstract class CrossbowItemExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private static boolean shootIsOfUseItemComponent(ItemStack instance, Item item) {
-        return instance.getComponent(ItemComponentTypes.PROJECTILE)
+    private static boolean isOfForFireworkRocketUseItemComponentCheck(ItemStack instance, Item item) {
+        return instance.itematic$getComponent(ItemComponentTypes.PROJECTILE)
             .map(ProjectileItemComponent::entity)
             .map(RegistryEntry::value)
             .map(e -> e == EntityType.FIREWORK_ROCKET)
@@ -103,7 +103,7 @@ public abstract class CrossbowItemExtender {
         )
     )
     private static PersistentProjectileEntity createArrowCreateArrowUseItemComponent(ArrowItem instance, World world, ItemStack projectile, LivingEntity shooter) {
-        Optional<ProjectileItemComponent> component = projectile.getComponent(ItemComponentTypes.PROJECTILE);
+        Optional<ProjectileItemComponent> component = projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE);
         if (component.isEmpty()) {
             return null;
         }
@@ -158,7 +158,7 @@ public abstract class CrossbowItemExtender {
         )
     )
     private static int shootDamageModifyDamageAmount(int amount, @Local(ordinal = 1) ItemStack projectile) {
-        return projectile.getComponent(ItemComponentTypes.PROJECTILE)
+        return projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE)
             .map(ProjectileItemComponent::damage)
             .orElse(0);
     }

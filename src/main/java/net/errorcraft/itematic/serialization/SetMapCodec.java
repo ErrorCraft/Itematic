@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.serialisation;
+package net.errorcraft.itematic.serialization;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;

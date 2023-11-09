@@ -31,10 +31,13 @@ public record StartUsingItemAction() implements Action {
         if (!(entity.get() instanceof PlayerEntity player)) {
             return false;
         }
-        Optional<Hand> hand = context.hand();
-        if (hand.isEmpty()) {
+        if (player.isUsingItem()) {
             return false;
         }
-        return ItemUsage.consumeHeldItem(context.world(), player, hand.get()).getResult().isAccepted();
+        Hand hand = context.hand();
+        if (hand == null) {
+            return false;
+        }
+        return ItemUsage.consumeHeldItem(context.world(), player, hand).getResult().isAccepted();
     }
 }

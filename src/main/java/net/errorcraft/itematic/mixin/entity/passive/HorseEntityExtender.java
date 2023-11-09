@@ -18,7 +18,7 @@ public class HorseEntityExtender {
      */
     @Overwrite
     public boolean isHorseArmor(ItemStack item) {
-        return item.hasComponent(ItemComponentTypes.HORSE_ARMOR);
+        return item.itematic$hasComponent(ItemComponentTypes.HORSE_ARMOR);
     }
 
     @Redirect(

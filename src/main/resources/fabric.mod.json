@@ -149,9 +149,6 @@
       "net/minecraft/class_3852": [
         "net/errorcraft/itematic/access/village/VillagerProfessionAccess"
       ],
-      "net/minecraft/class_3857": [
-        "net/errorcraft/itematic/access/entity/projectile/thrown/ThrownItemEntityAccess"
-      ],
       "net/minecraft/class_3959\u0024class_242": [
         "net/minecraft/util/StringIdentifiable"
       ],

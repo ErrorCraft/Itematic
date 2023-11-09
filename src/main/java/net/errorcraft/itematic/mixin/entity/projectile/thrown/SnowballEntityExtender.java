@@ -10,13 +10,13 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(SnowballEntity.class)
-public abstract class SnowballEntityExtender extends ThrownItemEntity {
+public abstract class SnowballEntityExtender extends ThrownItemEntityExtender {
     public SnowballEntityExtender(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
     }
 
     @Override
-    public RegistryKey<Item> getDefaultItemKey() {
+    protected RegistryKey<Item> getDefaultItemKey() {
         return ItemKeys.SNOWBALL;
     }
 }

@@ -23,7 +23,7 @@ public class TagEntryExtender {
         )
     )
     private Iterable<RegistryEntry<Item>> generateLootUseDynamicRegistry(DefaultedRegistry<Item> instance, TagKey<Item> tagKey, Consumer<ItemStack> lootConsumer, LootContext context) {
-        return context.getWorld().getItemAccess().iterateEntries(tagKey);
+        return context.getWorld().itematic$getItemAccess().iterateEntries(tagKey);
     }
 
     @Redirect(
@@ -34,6 +34,6 @@ public class TagEntryExtender {
         )
     )
     private Iterable<RegistryEntry<Item>> growUseDynamicRegistry(DefaultedRegistry<Item> instance, TagKey<Item> tagKey, LootContext context) {
-        return context.getWorld().getItemAccess().iterateEntries(tagKey);
+        return context.getWorld().itematic$getItemAccess().iterateEntries(tagKey);
     }
 }

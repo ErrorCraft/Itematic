@@ -22,8 +22,8 @@ public class TippedArrowRecipeExtender {
             ordinal = 1
         )
     )
-    private boolean matchesIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.ARROW);
+    private boolean isOfForArrowUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.ARROW);
     }
 
     @Redirect(
@@ -33,7 +33,7 @@ public class TippedArrowRecipeExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack craftNewItemStackUseRegistryEntry(ItemConvertible item, int count, @Local DynamicRegistryManager dynamicRegistryManager) {
+    private ItemStack newItemStackForTippedArrowUseRegistryEntry(ItemConvertible item, int count, @Local DynamicRegistryManager dynamicRegistryManager) {
         return new ItemStack(dynamicRegistryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.TIPPED_ARROW), count);
     }
 
@@ -46,6 +46,6 @@ public class TippedArrowRecipeExtender {
         )
     )
     private boolean isOfForLingeringPotionUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.LINGERING_POTION);
+        return instance.itematic$isOf(ItemKeys.LINGERING_POTION);
     }
 }

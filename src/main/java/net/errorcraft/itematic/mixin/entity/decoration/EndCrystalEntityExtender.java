@@ -25,6 +25,6 @@ public abstract class EndCrystalEntityExtender extends Entity {
         )
     )
     private ItemStack getPickBlockStackNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.END_CRYSTAL));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.END_CRYSTAL));
     }
 }

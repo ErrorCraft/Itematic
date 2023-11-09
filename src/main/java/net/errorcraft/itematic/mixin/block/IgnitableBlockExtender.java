@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin({ CandleCakeBlock.class, TntBlock.class })
-public class OnUseFireChargeBlockExtender {
+public class IgnitableBlockExtender {
     @Redirect(
         method = "onUse",
         at = @At(
@@ -28,7 +28,26 @@ public class OnUseFireChargeBlockExtender {
             )
         )
     )
-    private boolean onUseIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.FIRE_CHARGE);
+    private boolean isOfForFireChargeUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.FIRE_CHARGE);
+    }
+
+    @Redirect(
+        method = "onUse",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;FLINT_AND_STEEL:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private boolean isOfForFlintAndSteelUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.FLINT_AND_STEEL);
     }
 }

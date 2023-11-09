@@ -20,7 +20,23 @@
       "items": "minecraft:repairs_iron_tool"
     },
     "minecraft:tool": {
-      "damage": 2
+      "damage": 2,
+      "mining_speeds": [
+        {
+          "mining_speed": 15.0,
+          "tag": {
+            "id": "minecraft:sword_super_efficient",
+            "expected": true
+          }
+        },
+        {
+          "mining_speed": 1.5,
+          "tag": {
+            "id": "minecraft:sword_efficient",
+            "expected": true
+          }
+        }
+      ]
     },
     "minecraft:weapon": {
       "damage": 1

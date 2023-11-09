@@ -18,6 +18,6 @@ public class PlayerEntityRendererExtender {
         )
     )
     private static boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.CROSSBOW);
+        return instance.itematic$isOf(ItemKeys.CROSSBOW);
     }
 }

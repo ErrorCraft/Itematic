@@ -34,7 +34,7 @@ public abstract class StriderEntityExtender extends AnimalEntity {
         )
     )
     private boolean isOfForSaddleUseRegistryKey(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.SADDLE);
+        return instance.itematic$isOf(ItemKeys.SADDLE);
     }
 
     @Redirect(
@@ -56,7 +56,7 @@ public abstract class StriderEntityExtender extends AnimalEntity {
         )
     )
     private boolean isHoldingForWarpedFungusOnAStickUseRegistryKeyCheck(PlayerEntity instance, Item item) {
-        return instance.isHolding(ItemKeys.WARPED_FUNGUS_ON_A_STICK);
+        return instance.itematic$isHolding(ItemKeys.WARPED_FUNGUS_ON_A_STICK);
     }
 
     @Redirect(
@@ -67,7 +67,7 @@ public abstract class StriderEntityExtender extends AnimalEntity {
         )
     )
     private ItemStack newItemStackForWarpedFungusOnAStickUseCreateStack(ItemConvertible item, @Local ServerWorldAccess world) {
-        return world.createStack(ItemKeys.WARPED_FUNGUS_ON_A_STICK);
+        return world.itematic$createStack(ItemKeys.WARPED_FUNGUS_ON_A_STICK);
     }
 
     @Redirect(

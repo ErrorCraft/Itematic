@@ -30,7 +30,7 @@ public abstract class ChickenEntityExtender extends AnimalEntity {
         )
     )
     private ItemEntity tickMovementDropItemUseRegistryEntry(ChickenEntity instance, ItemConvertible itemConvertible) {
-        return this.dropItem(this.getWorld().getItem(ItemKeys.EGG));
+        return this.dropItem(this.getWorld().itematic$getItem(ItemKeys.EGG));
     }
 
     @Redirect(

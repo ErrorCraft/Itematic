@@ -27,7 +27,7 @@ public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
         )
     )
     private Item tickGetHandPosOffsetModifyItem(Item item) {
-        return this.getWorld().getItem(ItemKeys.FIREWORK_ROCKET).value();
+        return this.getWorld().itematic$getItem(ItemKeys.FIREWORK_ROCKET).value();
     }
 
     @Redirect(
@@ -38,6 +38,6 @@ public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
         )
     )
     private ItemStack getStackNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.FIREWORK_ROCKET));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.FIREWORK_ROCKET));
     }
 }

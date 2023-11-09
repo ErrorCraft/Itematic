@@ -12,6 +12,12 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> CLEAR_STATUS_EFFECTS = of("clear_status_effects");
     public static final RegistryKey<ActionType<?>> START_USING_ITEM = of("start_using_item");
     public static final RegistryKey<ActionType<?>> EXCHANGE_ITEM = of("exchange_item");
+    public static final RegistryKey<ActionType<?>> MODIFY_BLOCK_STATE = of("modify_block_state");
+    public static final RegistryKey<ActionType<?>> SEQUENCE = of("sequence");
+    public static final RegistryKey<ActionType<?>> FIRST_TO_PASS = of("first_to_pass");
+    public static final RegistryKey<ActionType<?>> PLACE_BLOCK = of("place_block");
+    public static final RegistryKey<ActionType<?>> DAMAGE_ITEM = of("damage_item");
+    public static final RegistryKey<ActionType<?>> PRIME_TNT = of("prime_tnt");
 
     private ActionTypeKeys() {}
 

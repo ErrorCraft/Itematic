@@ -25,6 +25,6 @@ public abstract class SalmonEntityExtender extends SchoolingFishEntity {
         )
     )
     private ItemStack getBucketItemNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.SALMON_BUCKET));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.SALMON_BUCKET));
     }
 }

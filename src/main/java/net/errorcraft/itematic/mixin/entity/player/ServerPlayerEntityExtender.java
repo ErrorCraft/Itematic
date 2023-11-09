@@ -29,6 +29,6 @@ public class ServerPlayerEntityExtender {
         )
     )
     private boolean playerTickIsNetworkSyncedUseItemStackVersion(Item instance, @Local ItemStack stack) {
-        return stack.isNetworkSynced();
+        return stack.itematic$isNetworkSynced();
     }
 }

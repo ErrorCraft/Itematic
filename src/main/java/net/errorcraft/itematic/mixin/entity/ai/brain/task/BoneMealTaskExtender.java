@@ -21,8 +21,8 @@ public class BoneMealTaskExtender {
             opcode = Opcodes.GETSTATIC
         )
     )
-    private Item shouldRunGetBoneMealUseDynamicRegistry(ServerWorld world) {
-        return world.getItem(ItemKeys.BONE_MEAL).value();
+    private Item getBoneMealUseDynamicRegistry(ServerWorld world) {
+        return world.itematic$getItem(ItemKeys.BONE_MEAL).value();
     }
 
     @Redirect(
@@ -32,8 +32,8 @@ public class BoneMealTaskExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack runNewItemStackUseRegistryEntry(ItemConvertible item, ServerWorld world) {
-        return new ItemStack(world.getItem(ItemKeys.BONE_MEAL));
+    private ItemStack newItemStackForBoneMealUseRegistryEntry(ItemConvertible item, ServerWorld world) {
+        return world.itematic$createStack(ItemKeys.BONE_MEAL);
     }
 
     @Redirect(
@@ -43,7 +43,7 @@ public class BoneMealTaskExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean keepRunningIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BONE_MEAL);
+    private boolean isOfForBoneMealUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.BONE_MEAL);
     }
 }

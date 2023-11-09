@@ -17,7 +17,7 @@ public class FillPlayerHeadLootFunctionExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean processIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.PLAYER_HEAD);
+    private boolean isOfForPlayerHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.PLAYER_HEAD);
     }
 }

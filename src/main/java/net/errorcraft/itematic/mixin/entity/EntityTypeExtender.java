@@ -8,19 +8,11 @@ import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.EntityInitializerCodecCreator;
 import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.*;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,10 +26,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EntityType.class)
 @SuppressWarnings("unchecked")
 public abstract class EntityTypeExtender<T extends Entity> implements EntityTypeAccess {
+    @Unique
     private Codec<? extends EntityInitializer<?>> initializerCodec;
+    @Unique
     private EntityInitializer<?> initializer;
-    private Direction initializerSide;
-    private ActionContext initializerContext;
+    @Unique
+    private ActionContext actionContext;
 
     @ModifyArg(
         method = "<clinit>",
@@ -54,7 +48,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setBoatEntityInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(BoatEntityInitializer.CODEC);
+        type.itematic$initializerCodec(BoatEntityInitializer.CODEC);
         return type;
     }
 
@@ -73,7 +67,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setChestBoatEntityInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(ChestBoatEntityInitializer.CODEC);
+        type.itematic$initializerCodec(ChestBoatEntityInitializer.CODEC);
         return type;
     }
 
@@ -92,7 +86,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setMinecartInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(minecartInitializerCodecCreator(MinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator(MinecartEntity::new));
         return type;
     }
 
@@ -111,7 +105,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setChestMinecartInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(minecartInitializerCodecCreator(ChestMinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator(ChestMinecartEntity::new));
         return type;
     }
 
@@ -130,7 +124,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setFurnaceMinecartInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(minecartInitializerCodecCreator(FurnaceMinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator(FurnaceMinecartEntity::new));
         return type;
     }
 
@@ -149,7 +143,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setTntMinecartInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(minecartInitializerCodecCreator(TntMinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator(TntMinecartEntity::new));
         return type;
     }
 
@@ -168,7 +162,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setSpawnerMinecartInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(minecartInitializerCodecCreator(SpawnerMinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator(SpawnerMinecartEntity::new));
         return type;
     }
 
@@ -187,7 +181,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setHopperMinecartInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(minecartInitializerCodecCreator(HopperMinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator(HopperMinecartEntity::new));
         return type;
     }
 
@@ -206,7 +200,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setCommandBlockMinecartInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(minecartInitializerCodecCreator(CommandBlockMinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator(CommandBlockMinecartEntity::new));
         return type;
     }
 
@@ -225,7 +219,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setEndCrystalInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(EndCrystalEntityInitializer.CODEC);
+        type.itematic$initializerCodec(EndCrystalEntityInitializer.CODEC);
         return type;
     }
 
@@ -244,7 +238,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setArmorStandInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(ArmorStandEntityInitializer.CODEC);
+        type.itematic$initializerCodec(ArmorStandEntityInitializer.CODEC);
         return type;
     }
 
@@ -263,7 +257,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setPaintingInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(entityType -> Codec.unit(DecorationEntityInitializer.createPainting(entityType)));
+        type.itematic$initializerCodec(entityType -> Codec.unit(DecorationEntityInitializer.createPainting(entityType)));
         return type;
     }
 
@@ -282,7 +276,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setItemFrameInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(decorationInitializerCodecCreator(ItemFrameEntity::new));
+        type.itematic$initializerCodec(decorationInitializerCodecCreator(ItemFrameEntity::new));
         return type;
     }
 
@@ -301,24 +295,8 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setGlowItemFrameInitializerCodec(EntityType.Builder<?> type) {
-        type.initializerCodec(decorationInitializerCodecCreator(GlowItemFrameEntity::new));
+        type.itematic$initializerCodec(decorationInitializerCodecCreator(GlowItemFrameEntity::new));
         return type;
-    }
-
-    @Inject(
-        method = "spawnFromItemStack",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getNbt()Lnet/minecraft/nbt/NbtCompound;"
-        )
-    )
-    private void createEntityInitializerContext(ServerWorld world, ItemStack stack, @Nullable PlayerEntity player, BlockPos pos, SpawnReason spawnReason, boolean alignPosition, boolean invertY, CallbackInfoReturnable<@Nullable T> info) {
-        if (this.initializer != null) {
-            this.initializerContext = MutableActionContext.stackUsage(world, stack)
-                .entityPosition(ActionContextParameter.THIS, player)
-                .position(ActionContextParameter.TARGET, pos)
-                .side(this.initializerSide);
-        }
     }
 
     @Inject(
@@ -335,24 +313,24 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         }
         EntityInitializer<?> initializer = this.initializer; // Copy to a local and set the field to null, so we don't get a StackOverflowError
         this.initializer = null;
-        info.setReturnValue((T) initializer.create(this.initializerContext));
-        this.initializerContext = null;
+        info.setReturnValue((T) initializer.create(this.actionContext));
+        this.actionContext = null;
     }
 
     @Override
-    public Codec<? extends EntityInitializer<?>> initializerCodec() {
+    public Codec<? extends EntityInitializer<?>> itematic$initializerCodec() {
         return this.initializerCodec;
     }
 
     @Override
-    public void setInitializerCodec(Codec<? extends EntityInitializer<?>> initializerCodec) {
+    public void itematic$setInitializerCodec(Codec<? extends EntityInitializer<?>> initializerCodec) {
         this.initializerCodec = initializerCodec;
     }
 
     @Override
-    public void setInitializer(EntityInitializer<?> initializer, Direction initializerSide) {
+    public void itematic$setInitializer(EntityInitializer<?> initializer, ActionContext actionContext) {
         this.initializer = initializer;
-        this.initializerSide = initializerSide;
+        this.actionContext = actionContext;
     }
 
     @Unique
@@ -367,6 +345,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
 
     @Mixin(EntityType.Builder.class)
     public static class BuilderExtender<T extends Entity> implements EntityTypeBuilderAccess<T> {
+        @Unique
         private EntityInitializerCodecCreator<T> creator;
 
         @ModifyReturnValue(
@@ -374,17 +353,17 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             at = @At("TAIL")
         )
         private EntityType<T> buildSetInitializerCodec(EntityType<T> original) {
-            original.setInitializerCodec(this.creator == null ? SimpleEntityInitializer.createCodec(original) : this.creator.create(original));
+            original.itematic$setInitializerCodec(this.creator == null ? SimpleEntityInitializer.createCodec(original) : this.creator.create(original));
             return original;
         }
 
         @Override
-        public void initializerCodec(Codec<EntityInitializer<T>> codec) {
+        public void itematic$initializerCodec(Codec<EntityInitializer<T>> codec) {
             this.creator = type -> codec;
         }
 
         @Override
-        public void initializerCodec(EntityInitializerCodecCreator<T> creator) {
+        public void itematic$initializerCodec(EntityInitializerCodecCreator<T> creator) {
             this.creator = creator;
         }
     }

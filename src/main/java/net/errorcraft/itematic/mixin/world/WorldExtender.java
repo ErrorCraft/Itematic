@@ -40,12 +40,12 @@ public abstract class WorldExtender implements WorldViewAccess, WorldAccess {
     }
 
     @Override
-    public ItemAccess getItemAccess() {
+    public ItemAccess itematic$getItemAccess() {
         return this.itemAccess;
     }
 
     @Override
-    public RegistryEntry<Item> getItem(RegistryKey<Item> key) {
+    public RegistryEntry<Item> itematic$getItem(RegistryKey<Item> key) {
         return this.itemAccess.getEntry(key);
     }
 

@@ -20,8 +20,8 @@ public class PowderSnowBlockExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private static boolean canWalkOnPowderSnowIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.LEATHER_BOOTS);
+    private static boolean isOfForLeatherBootsUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.LEATHER_BOOTS);
     }
 
     @Redirect(
@@ -31,7 +31,7 @@ public class PowderSnowBlockExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack tryDrainFluidNewItemStackUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
-        return new ItemStack(world.getItem(ItemKeys.POWDER_SNOW_BUCKET));
+    private ItemStack newItemStackForPowderSnowBucketUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
+        return world.itematic$createStack(ItemKeys.POWDER_SNOW_BUCKET);
     }
 }

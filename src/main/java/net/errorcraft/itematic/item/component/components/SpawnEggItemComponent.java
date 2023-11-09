@@ -25,17 +25,17 @@ public record SpawnEggItemComponent() implements ItemComponent {
     public static final Codec<SpawnEggItemComponent> CODEC = Codec.unit(new SpawnEggItemComponent());
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.SPAWN_EGG;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 
     public Optional<MobEntity> spawnBaby(PlayerEntity user, MobEntity entity, EntityType<? extends MobEntity> entityType, ServerWorld world, Vec3d pos, ItemStack stack) {
-        Optional<EntityItemComponent> entityItemComponent = stack.getComponent(ItemComponentTypes.ENTITY);
+        Optional<EntityItemComponent> entityItemComponent = stack.itematic$getComponent(ItemComponentTypes.ENTITY);
         if (entityItemComponent.isEmpty()) {
             return Optional.empty();
         }

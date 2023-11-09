@@ -17,7 +17,7 @@ public class WitherSkullBlockExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private static boolean canDispenseIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.WITHER_SKELETON_SKULL);
+    private static boolean isOfForWitherSkeletonSkullUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.WITHER_SKELETON_SKULL);
     }
 }

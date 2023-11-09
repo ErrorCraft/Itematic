@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.access.registry.entry;
 
 public interface RegistryEntryAccess {
-    default int getRawId() {
+    default int itematic$rawId() {
         return -1;
     }
-    default void setRawId(int id) {}
+    default void itematic$setRawId(int id) {}
 }

@@ -43,8 +43,8 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
             ordinal = 0
         )
     )
-    private boolean receiveFoodIsOfForWheatUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.WHEAT);
+    private boolean isOfForWheatUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.WHEAT);
     }
 
     @Redirect(
@@ -62,8 +62,8 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
             )
         )
     )
-    private boolean receiveFoodIsOfForSugarUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.SUGAR);
+    private boolean isOfForSugarUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.SUGAR);
     }
 
     @Redirect(
@@ -81,8 +81,8 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
             )
         )
     )
-    private boolean receiveFoodIsOfForAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.APPLE);
+    private boolean isOfForAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.APPLE);
     }
 
     @Redirect(
@@ -100,8 +100,8 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
             )
         )
     )
-    private boolean receiveFoodIsOfForGoldenCarrotUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.GOLDEN_CARROT);
+    private boolean isOfForGoldenCarrotUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.GOLDEN_CARROT);
     }
 
     @Redirect(
@@ -119,8 +119,8 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
             )
         )
     )
-    private boolean receiveFoodIsOfForGoldenAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.GOLDEN_APPLE);
+    private boolean isOfForGoldenAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.GOLDEN_APPLE);
     }
 
     @Redirect(
@@ -138,8 +138,8 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
             )
         )
     )
-    private boolean receiveFoodIsOfForEnchantedGoldenAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.ENCHANTED_GOLDEN_APPLE);
+    private boolean isOfForEnchantedGoldenAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.ENCHANTED_GOLDEN_APPLE);
     }
 
     @ModifyExpressionValue(
@@ -162,7 +162,7 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
         )
     )
     private ItemStack newItemStackForSaddleUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.SADDLE));
+        return this.getWorld().itematic$createStack(ItemKeys.SADDLE);
     }
 
     @Redirect(
@@ -173,7 +173,7 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
         )
     )
     private boolean isOfForSaddleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.SADDLE);
+        return instance.itematic$isOf(ItemKeys.SADDLE);
     }
 
     @Redirect(
@@ -184,6 +184,6 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
         )
     )
     private static boolean staticIsOfForSaddleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.SADDLE);
+        return instance.itematic$isOf(ItemKeys.SADDLE);
     }
 }

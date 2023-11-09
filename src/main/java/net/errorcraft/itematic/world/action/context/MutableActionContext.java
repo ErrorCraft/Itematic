@@ -1,7 +1,9 @@
 package net.errorcraft.itematic.world.action.context;
 
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
@@ -55,18 +57,31 @@ public class MutableActionContext extends ActionContext {
         return this;
     }
 
-    public MutableActionContext hand(Hand hand) {
-        this.hand = hand;
+    public MutableActionContext resultStackConsumer(ItemStackConsumer resultStackConsumer) {
+        this.resultStackConsumer = resultStackConsumer;
         return this;
     }
 
-    public static MutableActionContext stackUsage(ServerWorld world, ItemStack stack) {
-        return stackUsage(world, stack, null);
+    public MutableActionContext slot(EquipmentSlot slot) {
+        this.slot = slot;
+        return this;
     }
 
-    public static MutableActionContext stackUsage(ServerWorld world, ItemStack stack, Hand hand) {
+    public static MutableActionContext stackUsage(ServerWorld world, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         return new MutableActionContext(world)
             .stack(stack)
-            .hand(hand);
+            .resultStackConsumer(resultStackConsumer);
+    }
+
+    public static MutableActionContext stackUsage(ServerWorld world, ItemStack stack, ItemStackConsumer resultStackConsumer, EquipmentSlot slot) {
+        return stackUsage(world, stack, resultStackConsumer)
+            .slot(slot);
+    }
+
+    public static MutableActionContext stackUsage(ServerWorld world, ItemStack stack, ItemStackConsumer resultStackConsumer, Hand hand) {
+        if (hand == null) {
+            return stackUsage(world, stack, resultStackConsumer);
+        }
+        return stackUsage(world, stack, resultStackConsumer, hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
     }
 }

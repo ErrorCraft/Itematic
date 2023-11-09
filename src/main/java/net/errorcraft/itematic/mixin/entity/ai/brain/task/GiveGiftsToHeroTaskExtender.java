@@ -29,6 +29,6 @@ public class GiveGiftsToHeroTaskExtender {
         )
     )
     private ItemStack getGiftsNewItemStackForWheatSeedsUseRegistryEntry(ItemConvertible item, VillagerEntity villager) {
-        return new ItemStack(villager.getWorld().getItem(ItemKeys.WHEAT_SEEDS));
+        return new ItemStack(villager.getWorld().itematic$getItem(ItemKeys.WHEAT_SEEDS));
     }
 }

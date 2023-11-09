@@ -35,8 +35,8 @@ public abstract class MilkableEntitiesExtender extends AnimalEntity {
             )
         )
     )
-    private boolean interactMobIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BUCKET);
+    private boolean isOfForBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.BUCKET);
     }
 
     @Redirect(
@@ -46,7 +46,7 @@ public abstract class MilkableEntitiesExtender extends AnimalEntity {
             target = "Lnet/minecraft/item/Item;getDefaultStack()Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack interactMobGetDefaultStackUseRegistryEntry(Item instance) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.MILK_BUCKET));
+    private ItemStack getDefaultStackForMilkBucketUseRegistryEntry(Item instance) {
+        return this.getWorld().itematic$createStack(ItemKeys.MILK_BUCKET);
     }
 }

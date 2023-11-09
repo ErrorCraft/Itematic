@@ -19,12 +19,12 @@ public record FireworkExplosionHolderItemComponent() implements ItemComponent {
     public static final Codec<FireworkExplosionHolderItemComponent> CODEC = Codec.unit(new FireworkExplosionHolderItemComponent());
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.FIREWORK_EXPLOSION_HOLDER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 

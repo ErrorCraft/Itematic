@@ -17,12 +17,12 @@ public record ForgeableItemComponent(Optional<TagKey<Enchantment>> enchantments)
     ).apply(instance, ForgeableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.FORGEABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 

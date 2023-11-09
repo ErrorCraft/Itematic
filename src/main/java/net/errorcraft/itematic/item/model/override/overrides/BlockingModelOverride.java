@@ -24,6 +24,6 @@ public class BlockingModelOverride implements ModelOverride {
 
     @Override
     public boolean isApplicable(ItemStack stack) {
-        return stack.isOf(ItemKeys.SHIELD);
+        return stack.itematic$isOf(ItemKeys.SHIELD);
     }
 }

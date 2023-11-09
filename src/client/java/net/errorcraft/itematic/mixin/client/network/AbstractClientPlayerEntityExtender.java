@@ -18,6 +18,6 @@ public class AbstractClientPlayerEntityExtender {
         )
     )
     private boolean isOfForBowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BOW);
+        return instance.itematic$isOf(ItemKeys.BOW);
     }
 }

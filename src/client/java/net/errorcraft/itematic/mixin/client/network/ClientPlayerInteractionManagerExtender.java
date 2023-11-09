@@ -28,6 +28,6 @@ public class ClientPlayerInteractionManagerExtender {
     )
     @SuppressWarnings("ConstantConditions")
     private boolean breakBlockCanMineUseItemStackVersion(Item instance, BlockState state, World world, BlockPos pos, PlayerEntity miner) {
-        return this.client.player.getMainHandStack().canMine(state, world, pos, miner);
+        return this.client.player.getMainHandStack().itematic$canMine(state, world, pos, miner);
     }
 }

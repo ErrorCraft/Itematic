@@ -20,6 +20,6 @@ public interface CaveVinesExtender {
         )
     )
     private static ItemStack pickBerriesNewItemStackUseRegistryEntry(ItemConvertible item, int count, @Local World world) {
-        return new ItemStack(world.getItem(ItemKeys.GLOW_BERRIES), count);
+        return new ItemStack(world.itematic$getItem(ItemKeys.GLOW_BERRIES), count);
     }
 }

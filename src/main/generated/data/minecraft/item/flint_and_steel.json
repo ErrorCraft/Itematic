@@ -1,0 +1,134 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.flint_and_steel"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:damageable": {
+      "durability": 64
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:use_on_block"
+    }
+  },
+  "events": [
+    {
+      "event": "minecraft:use_on_block",
+      "action": {
+        "type": "minecraft:first_to_pass",
+        "entries": [
+          {
+            "action": {
+              "type": "minecraft:sequence",
+              "action_must_pass": true,
+              "entries": [
+                {
+                  "type": "minecraft:modify_block_state",
+                  "position": "target",
+                  "properties": {
+                    "lit": "true"
+                  }
+                },
+                {
+                  "type": "minecraft:damage_item",
+                  "amount": 1
+                }
+              ]
+            },
+            "requirements": {
+              "conditions": {
+                "condition": "minecraft:all_of",
+                "terms": [
+                  {
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                      "block": {
+                        "state": {
+                          "lit": "false"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "condition": "minecraft:inverted",
+                    "term": {
+                      "condition": "minecraft:location_check",
+                      "predicate": {
+                        "block": {
+                          "state": {
+                            "waterlogged": "true"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "context": {
+                "entity": "this",
+                "position": "target"
+              }
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:sequence",
+              "action_must_pass": true,
+              "entries": [
+                {
+                  "type": "minecraft:prime_tnt",
+                  "position": "target"
+                },
+                {
+                  "type": "minecraft:damage_item",
+                  "amount": 1
+                }
+              ]
+            },
+            "requirements": {
+              "conditions": {
+                "condition": "minecraft:all_of",
+                "terms": [
+                  {
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                      "block": {
+                        "blocks": [
+                          "minecraft:tnt"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "context": {
+                "entity": "this",
+                "position": "target"
+              }
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:sequence",
+              "action_must_pass": true,
+              "entries": [
+                {
+                  "type": "minecraft:place_block",
+                  "block": "minecraft:fire",
+                  "decrement_count": false,
+                  "position": "target"
+                },
+                {
+                  "type": "minecraft:damage_item",
+                  "amount": 1
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

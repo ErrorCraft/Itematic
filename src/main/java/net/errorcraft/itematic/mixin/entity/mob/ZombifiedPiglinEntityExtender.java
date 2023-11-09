@@ -25,6 +25,6 @@ public class ZombifiedPiglinEntityExtender extends ZombieEntity {
         )
     )
     private ItemStack newItemStackForGoldenSwordUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.GOLDEN_SWORD));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.GOLDEN_SWORD));
     }
 }

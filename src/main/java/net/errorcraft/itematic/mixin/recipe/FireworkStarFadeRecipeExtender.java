@@ -27,7 +27,7 @@ public class FireworkStarFadeRecipeExtender {
         )
     )
     private boolean fireworkStarUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isOf(ItemKeys.FIREWORK_STAR);
+        return itemStack.itematic$isOf(ItemKeys.FIREWORK_STAR);
     }
 
     @ModifyConstant(
@@ -35,7 +35,7 @@ public class FireworkStarFadeRecipeExtender {
         constant = @Constant(classValue = DyeItem.class)
     )
     private boolean matchesInstanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local ItemStack itemStack) {
-        return itemStack.hasComponent(ItemComponentTypes.DYE);
+        return itemStack.itematic$hasComponent(ItemComponentTypes.DYE);
     }
 
     @ModifyConstant(
@@ -46,7 +46,7 @@ public class FireworkStarFadeRecipeExtender {
         )
     )
     private boolean craftInstanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack ingredient, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
-        Optional<DyeItemComponent> optionalComponent = ingredient.getComponent(ItemComponentTypes.DYE);
+        Optional<DyeItemComponent> optionalComponent = ingredient.itematic$getComponent(ItemComponentTypes.DYE);
         optionalComponent.ifPresent(dyeItemComponent::set);
         return optionalComponent.isPresent();
     }

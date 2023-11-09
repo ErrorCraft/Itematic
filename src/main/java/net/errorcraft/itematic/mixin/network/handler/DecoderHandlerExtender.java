@@ -17,7 +17,7 @@ public class DecoderHandlerExtender implements DecoderHandlerAccess {
         at = @At("STORE")
     )
     private PacketByteBuf decodeUseDynamicRegistryManager(PacketByteBuf packetByteBuf) {
-        packetByteBuf.setRegistryManager(this.registryManager);
+        packetByteBuf.itematic$setRegistryManager(this.registryManager);
         return packetByteBuf;
     }
 

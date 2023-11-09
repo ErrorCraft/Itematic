@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -12,13 +13,12 @@ import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolMaterial;
 import net.minecraft.predicate.TagPredicate;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -32,19 +32,19 @@ public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds)
     ).apply(instance, ToolItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.TOOL;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 
     @Override
-    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
+    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner, ItemStackConsumer resultStackConsumer) {
         if (!world.isClient() && state.getHardness(world, pos) != 0.0f) {
-            this.useTool(stack, world, pos, miner);
+            this.useTool(stack, world, pos, miner, resultStackConsumer);
         }
         return true;
     }
@@ -58,29 +58,19 @@ public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds)
         return 1.0f;
     }
 
-    private void useTool(ItemStack stack, World world, BlockPos pos, LivingEntity miner) {
-        if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, Hand.MAIN_HAND)
-                .entityPosition(ActionContextParameter.THIS, miner)
-                .position(ActionContextParameter.TARGET, pos.toCenterPos());
-            stack.invokeEvent(ItemEvents.USE_TOOL, context);
+    private void useTool(ItemStack stack, World world, BlockPos pos, LivingEntity miner, ItemStackConsumer resultStackConsumer) {
+        if (!(world instanceof ServerWorld serverWorld)) {
+            return;
         }
-        stack.damage(this.damage, miner);
+        ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, resultStackConsumer, EquipmentSlot.MAINHAND)
+            .entityPosition(ActionContextParameter.THIS, miner)
+            .position(ActionContextParameter.TARGET, pos.toCenterPos());
+        stack.itematic$invokeEvent(ItemEvents.USE_TOOL, context);
+        stack.itematic$damage(this.damage, context);
     }
 
     public static Builder builder(int damage) {
         return new Builder(damage);
-    }
-
-    public static ItemComponent[] from(ToolMaterial material, int damage) {
-        return from(material, damage, null);
-    }
-
-    public static ItemComponent[] from(ToolMaterial material, int damage, TagKey<Block> tag) {
-        return new ItemComponent[] {
-            new DamageableItemComponent(material.getDurability()),
-            ToolItemComponent.builder(damage).miningSpeed(material.getMiningSpeedMultiplier(), tag, true).build()
-        };
     }
 
     public static class Builder {

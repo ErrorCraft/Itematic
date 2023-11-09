@@ -40,12 +40,12 @@ public class ChunkRegionExtender implements WorldViewAccess {
     }
 
     @Override
-    public ItemAccess getItemAccess() {
-        return this.world.getItemAccess();
+    public ItemAccess itematic$getItemAccess() {
+        return this.world.itematic$getItemAccess();
     }
 
     @Override
-    public RegistryEntry<Item> getItem(RegistryKey<Item> key) {
-        return this.world.getItem(key);
+    public RegistryEntry<Item> itematic$getItem(RegistryKey<Item> key) {
+        return this.world.itematic$getItem(key);
     }
 }

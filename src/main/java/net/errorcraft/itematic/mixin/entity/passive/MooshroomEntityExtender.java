@@ -28,8 +28,8 @@ public abstract class MooshroomEntityExtender extends AnimalEntity {
             ordinal = 0
         )
     )
-    private boolean interactMobIsOfUseRegistryEntryCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BOWL);
+    private boolean isOfForBowlUseRegistryEntryCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.BOWL);
     }
 
     @Redirect(
@@ -40,8 +40,8 @@ public abstract class MooshroomEntityExtender extends AnimalEntity {
             ordinal = 0
         )
     )
-    private ItemStack interactMobNewItemStackForSuspiciousStewUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.SUSPICIOUS_STEW));
+    private ItemStack newItemStackForSuspiciousStewUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.SUSPICIOUS_STEW);
     }
 
     @Redirect(
@@ -59,7 +59,26 @@ public abstract class MooshroomEntityExtender extends AnimalEntity {
             )
         )
     )
-    private ItemStack interactMobNewItemStackForMushroomStewUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.MUSHROOM_STEW));
+    private ItemStack newItemStackForMushroomStewUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.MUSHROOM_STEW);
+    }
+
+    @Redirect(
+        method = "interactMob",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;SHEARS:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private boolean isOfForShearsUseRegistryEntryCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.SHEARS);
     }
 }

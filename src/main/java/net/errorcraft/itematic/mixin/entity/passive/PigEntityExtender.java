@@ -75,7 +75,7 @@ public abstract class PigEntityExtender extends AnimalEntity {
         )
     )
     private ItemStack newItemStackForGoldenSwordUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.GOLDEN_SWORD));
+        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
     }
 
     @Redirect(
@@ -86,7 +86,7 @@ public abstract class PigEntityExtender extends AnimalEntity {
         )
     )
     private boolean isOfForSaddleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.SADDLE);
+        return instance.itematic$isOf(ItemKeys.SADDLE);
     }
 
     @Redirect(
@@ -108,6 +108,6 @@ public abstract class PigEntityExtender extends AnimalEntity {
         )
     )
     private boolean isHoldingForCarrotOnAStickUseRegistryKeyCheck(PlayerEntity instance, Item item) {
-        return instance.isHolding(ItemKeys.CARROT_ON_A_STICK);
+        return instance.itematic$isHolding(ItemKeys.CARROT_ON_A_STICK);
     }
 }

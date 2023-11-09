@@ -24,12 +24,12 @@ public record EnchantableItemComponent(int enchantability, Optional<TagKey<Encha
     ).apply(instance, EnchantableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.ENCHANTABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 

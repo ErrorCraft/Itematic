@@ -25,7 +25,7 @@ public class EnchantmentHelperExtender {
         )
     )
     private static boolean isOfUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.hasComponent(ItemComponentTypes.ENCHANTMENT_HOLDER);
+        return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTMENT_HOLDER);
     }
 
     @Redirect(
@@ -36,7 +36,7 @@ public class EnchantmentHelperExtender {
         )
     )
     private static Iterator<Enchantment> getPossibleEntriesUseEnchantmentTag(Registry<Enchantment> instance, int power, ItemStack stack) {
-        return stack.getComponent(ItemComponentTypes.ENCHANTABLE)
+        return stack.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
             .flatMap(EnchantableItemComponent::enchantments)
             .map(key -> instance.getOrCreateEntryList(key).stream().map(RegistryEntry::value).iterator())
             .orElse(instance.iterator());

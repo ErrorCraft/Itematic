@@ -22,8 +22,8 @@ public class SuspiciousStewRecipeExtender {
             ordinal = 2
         )
     )
-    private boolean matchesIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BOWL);
+    private boolean isOfForBowlUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.BOWL);
     }
 
     @Redirect(
@@ -33,7 +33,7 @@ public class SuspiciousStewRecipeExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack craftNewItemStackUseRegistryEntry(ItemConvertible item, int count, @Local DynamicRegistryManager dynamicRegistryManager) {
+    private ItemStack newItemStackForSuspiciousStewUseRegistryEntry(ItemConvertible item, int count, @Local DynamicRegistryManager dynamicRegistryManager) {
         return new ItemStack(dynamicRegistryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.SUSPICIOUS_STEW), count);
     }
 }

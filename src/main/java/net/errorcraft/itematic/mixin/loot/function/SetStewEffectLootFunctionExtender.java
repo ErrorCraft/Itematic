@@ -17,7 +17,7 @@ public class SetStewEffectLootFunctionExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean processIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.SUSPICIOUS_STEW);
+    private boolean isOfForSuspiciousStewUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.SUSPICIOUS_STEW);
     }
 }

@@ -56,7 +56,7 @@ public class CelebrateRaidWinTaskExtender extends MultiTickTask<VillagerEntity> 
         )
     )
     private ItemStack createFireworkNewItemStackUseRegistryEntry(ItemConvertible item, int count) {
-        return new ItemStack(this.world.getItem(ItemKeys.FIREWORK_ROCKET), count);
+        return new ItemStack(this.world.itematic$getItem(ItemKeys.FIREWORK_ROCKET), count);
     }
 
     @Redirect(
@@ -68,6 +68,6 @@ public class CelebrateRaidWinTaskExtender extends MultiTickTask<VillagerEntity> 
         )
     )
     private ItemStack createFireworkNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.world.getItem(ItemKeys.FIREWORK_STAR));
+        return new ItemStack(this.world.itematic$getItem(ItemKeys.FIREWORK_STAR));
     }
 }

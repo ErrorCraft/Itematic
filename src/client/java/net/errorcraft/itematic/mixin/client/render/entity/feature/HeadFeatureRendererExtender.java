@@ -25,7 +25,7 @@ public class HeadFeatureRendererExtender {
         )
     )
     private boolean renderInstanceOfArmorItemUseItemComponentCheck(Object reference, Class<ArmorItem> clazz, @Local ItemStack itemStack, @Share("equipmentItemComponent") LocalRef<EquipmentItemComponent> equipmentItemComponent) {
-        Optional<EquipmentItemComponent> optionalComponent = itemStack.getComponent(ItemComponentTypes.EQUIPMENT);
+        Optional<EquipmentItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.EQUIPMENT);
         optionalComponent.ifPresent(equipmentItemComponent::set);
         return optionalComponent.isPresent();
     }

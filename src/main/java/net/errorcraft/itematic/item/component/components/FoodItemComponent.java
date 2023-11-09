@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.effect.StatusEffectInstanceUtil;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -30,18 +31,18 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
     ).apply(instance, FoodItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.FOOD;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 
     @Override
-    public ItemStack finishUsing(World world, LivingEntity user, ItemStack stack) {
-        return user.eatFood(world, stack);
+    public void finishUsing(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+        user.itematic$eatFood(world, stack, resultStackConsumer);
     }
 
     public boolean mayStartUsing(PlayerEntity user) {

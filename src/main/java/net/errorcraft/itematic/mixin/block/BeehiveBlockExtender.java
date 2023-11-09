@@ -25,13 +25,32 @@ public class BeehiveBlockExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
+                target = "Lnet/minecraft/item/Items;SHEARS:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.SHEARS);
+    }
+
+    @Redirect(
+        method = "onUse",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
                 target = "Lnet/minecraft/item/Items;GLASS_BOTTLE:Lnet/minecraft/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private boolean onUseIsOfForGlassBottleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.GLASS_BOTTLE);
+    private boolean isOfForGlassBottleUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.GLASS_BOTTLE);
     }
 
     @Redirect(
@@ -41,7 +60,7 @@ public class BeehiveBlockExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack onUseNewItemStackUseRegistryEntry(ItemConvertible item, @Local World world) {
-        return new ItemStack(world.getItem(ItemKeys.HONEY_BOTTLE));
+    private ItemStack newItemStackForHoneyBottleUseRegistryEntry(ItemConvertible item, @Local World world) {
+        return world.itematic$createStack(ItemKeys.HONEY_BOTTLE);
     }
 }

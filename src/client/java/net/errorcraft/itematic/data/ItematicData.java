@@ -17,7 +17,6 @@ public class ItematicData implements DataGeneratorEntrypoint {
     public void addJsonKeySortOrders(JsonKeySortOrderCallback callback) {
         callback.add("id", 0);
         callback.add("event", 0);
-        callback.add("action", 0);
     }
 
     @Override

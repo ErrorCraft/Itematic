@@ -27,7 +27,7 @@ public abstract class AbstractMinecartEntityExtender extends Entity {
      */
     @Overwrite
     public ItemStack getPickBlockStack() {
-        return this.getWorld().createStack(this.asPickBlockItemKey());
+        return this.getWorld().itematic$createStack(this.asPickBlockItemKey());
     }
 
     private RegistryKey<Item> asPickBlockItemKey() {

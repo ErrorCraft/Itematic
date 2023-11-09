@@ -12,12 +12,12 @@ public record CompostableItemComponent(float levelIncreaseChance) implements Ite
     ).apply(instance, CompostableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.COMPOSTABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 }

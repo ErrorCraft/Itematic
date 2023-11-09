@@ -29,7 +29,7 @@ public abstract class FoxEntityExtender extends AnimalEntity {
         )
     )
     private ItemStack initEquipmentNewItemStackForEggUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.EGG));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.EGG));
     }
 
     @Redirect(
@@ -47,7 +47,7 @@ public abstract class FoxEntityExtender extends AnimalEntity {
         )
     )
     private ItemStack initEquipmentNewItemStackForRabbitFootUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.RABBIT_FOOT));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.RABBIT_FOOT));
     }
 
     @Redirect(
@@ -65,7 +65,7 @@ public abstract class FoxEntityExtender extends AnimalEntity {
         )
     )
     private ItemStack initEquipmentNewItemStackForWheatUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.WHEAT));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.WHEAT));
     }
 
     @Redirect(
@@ -83,7 +83,7 @@ public abstract class FoxEntityExtender extends AnimalEntity {
         )
     )
     private ItemStack initEquipmentNewItemStackForLeatherUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.LEATHER));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.LEATHER));
     }
 
     @Redirect(
@@ -101,7 +101,7 @@ public abstract class FoxEntityExtender extends AnimalEntity {
         )
     )
     private ItemStack initEquipmentNewItemStackForFeatherUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.FEATHER));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.FEATHER));
     }
 
     @Mixin(FoxEntity.EatBerriesGoal.class)
@@ -119,7 +119,7 @@ public abstract class FoxEntityExtender extends AnimalEntity {
             )
         )
         private ItemStack pickSweetBerriesNewItemStackUseRegistryEntry(ItemConvertible item) {
-            return new ItemStack(this.field_17975.getWorld().getItem(ItemKeys.SWEET_BERRIES));
+            return new ItemStack(this.field_17975.getWorld().itematic$getItem(ItemKeys.SWEET_BERRIES));
         }
 
         @Redirect(
@@ -131,7 +131,7 @@ public abstract class FoxEntityExtender extends AnimalEntity {
             )
         )
         private ItemStack pickSweetBerriesNewItemStackUseRegistryEntry(ItemConvertible item, int count) {
-            return new ItemStack(this.field_17975.getWorld().getItem(ItemKeys.SWEET_BERRIES), count);
+            return new ItemStack(this.field_17975.getWorld().itematic$getItem(ItemKeys.SWEET_BERRIES), count);
         }
     }
 }

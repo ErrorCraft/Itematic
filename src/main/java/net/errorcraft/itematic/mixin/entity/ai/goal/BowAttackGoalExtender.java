@@ -21,7 +21,7 @@ public class BowAttackGoalExtender {
         )
     )
     private boolean isHoldingForBowUseRegistryKeyCheck(HostileEntity instance, Item item) {
-        return instance.isHolding(ItemKeys.BOW);
+        return instance.itematic$isHolding(ItemKeys.BOW);
     }
 
     @Redirect(

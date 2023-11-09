@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 public class ProjectileItemComponentDispenserBehavior extends ProjectileDispenserBehavior {
     @Override
     protected ProjectileEntity createProjectile(World world, Position position, ItemStack stack) {
-        Entity entity = stack.getComponent(ItemComponentTypes.PROJECTILE)
+        Entity entity = stack.itematic$getComponent(ItemComponentTypes.PROJECTILE)
             .map(ProjectileItemComponent::entity)
             .map(RegistryEntry::value)
             .map(e -> e.create(world))

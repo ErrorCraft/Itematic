@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -23,8 +24,8 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -42,27 +43,27 @@ public record RecordItemComponent(RegistryEntry<SoundEvent> soundEvent, String d
     ).apply(instance, RecordItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.RECORD;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 
     @Override
-    public TypedActionResult<ItemStack> useOnBlock(ItemUsageContext context) {
+    public ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         World world = context.getWorld();
         BlockPos pos = context.getBlockPos();
         BlockState blockState = world.getBlockState(pos);
         ItemStack stack = context.getStack();
         if (!blockState.isOf(Blocks.JUKEBOX) || blockState.get(JukeboxBlock.HAS_RECORD)) {
-            return TypedActionResult.pass(stack);
+            return ActionResult.PASS;
         }
 
         if (world.isClient()) {
-            return TypedActionResult.success(stack);
+            return ActionResult.SUCCESS;
         }
 
         PlayerEntity player = context.getPlayer();
@@ -74,7 +75,7 @@ public record RecordItemComponent(RegistryEntry<SoundEvent> soundEvent, String d
         if (player != null) {
             player.incrementStat(Stats.PLAY_RECORD);
         }
-        return TypedActionResult.consume(stack);
+        return ActionResult.CONSUME;
     }
 
     @Override

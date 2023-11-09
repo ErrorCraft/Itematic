@@ -21,7 +21,7 @@ public class CrackParticleExtender {
             )
         )
         private ItemStack createParticleNewItemStackUseRegistryEntry(ItemConvertible item, @Local ClientWorld clientWorld) {
-            return new ItemStack(clientWorld.getItem(ItemKeys.SNOWBALL));
+            return clientWorld.itematic$createStack(ItemKeys.SNOWBALL);
         }
     }
 }

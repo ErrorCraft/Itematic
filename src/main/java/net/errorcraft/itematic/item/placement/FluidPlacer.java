@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.placement;
 
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -19,7 +20,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -32,34 +33,34 @@ public class FluidPlacer extends Placer {
     private final Direction direction;
     private final boolean allowOffset;
 
-    protected FluidPlacer(ItemStack stack, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound, Direction direction, boolean allowOffset) {
-        super(stack, world, blockPos, blockState, player);
+    protected FluidPlacer(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound, Direction direction, boolean allowOffset) {
+        super(stack, resultStackConsumer, world, blockPos, blockState, player);
         this.fluid = fluid;
         this.emptyingSound = emptyingSound;
         this.direction = direction;
         this.allowOffset = allowOffset;
     }
 
-    public static FluidPlacer of(ItemStack stack, World world, BlockHitResult hitResult, PlayerEntity player, RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound) {
+    public static FluidPlacer of(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockHitResult hitResult, PlayerEntity player, RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound) {
         BlockPos blockPos = hitResult.getBlockPos();
-        return new FluidPlacer(stack, world, blockPos, world.getBlockState(blockPos), player, fluid, emptyingSound, hitResult.getSide(), !hitResult.isInsideBlock());
+        return new FluidPlacer(stack, resultStackConsumer, world, blockPos, world.getBlockState(blockPos), player, fluid, emptyingSound, hitResult.getSide(), !hitResult.isInsideBlock());
     }
 
     @Override
-    public TypedActionResult<ItemStack> place() {
+    public ActionResult place() {
         BlockPos offset = this.blockPos.offset(this.direction);
         if (this.player != null && (!this.world.canPlayerModifyAt(this.player, this.blockPos) || !this.player.canPlaceOn(offset, this.direction, this.stack))) {
-            return TypedActionResult.pass(this.stack);
+            return ActionResult.PASS;
         }
         if (this.fluid.matchesKey(FluidKeys.EMPTY)) {
             return this.tryDrainFluid();
         }
         BlockPos actualBlockPos = this.getActualPosition(offset);
         if (!this.tryPlaceFluid(actualBlockPos, this.allowOffset)) {
-            return TypedActionResult.pass(this.stack);
+            return ActionResult.PASS;
         }
-        ItemStack resultStack = new ItemStack(this.world.getItem(ItemKeys.BUCKET));
-        return TypedActionResult.success(resultStack, this.world.isClient());
+        this.resultStackConsumer.set(this.world.itematic$createStack(ItemKeys.BUCKET));
+        return ActionResult.success(this.world.isClient());
     }
 
     private BlockPos getActualPosition(BlockPos offset) {
@@ -72,17 +73,18 @@ public class FluidPlacer extends Placer {
         return offset;
     }
 
-    private TypedActionResult<ItemStack> tryDrainFluid() {
+    private ActionResult tryDrainFluid() {
         if (!(this.blockState.getBlock() instanceof FluidDrainable fluidDrainable)) {
-            return TypedActionResult.pass(this.stack);
+            return ActionResult.PASS;
         }
         ItemStack drainedItemStack = fluidDrainable.tryDrainFluid(this.player, this.world, this.blockPos, this.blockState);
         if (drainedItemStack.isEmpty()) {
-            return TypedActionResult.pass(this.stack);
+            return ActionResult.PASS;
         }
         this.applyPlayerEffects(fluidDrainable, drainedItemStack);
         this.world.emitGameEvent(this.player, GameEvent.FLUID_PICKUP, this.blockPos);
-        return TypedActionResult.success(drainedItemStack, this.world.isClient());
+        this.resultStackConsumer.set(drainedItemStack);
+        return ActionResult.success(this.world.isClient());
     }
 
     private void applyPlayerEffects(FluidDrainable fluidDrainable, ItemStack drainedItemStack) {

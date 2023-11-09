@@ -16,6 +16,6 @@ public interface EquipmentExtender {
     @Overwrite
     @Nullable
     static Equipment fromStack(ItemStack stack) {
-        return stack.getComponent(ItemComponentTypes.EQUIPMENT).orElse(null);
+        return stack.itematic$getComponent(ItemComponentTypes.EQUIPMENT).orElse(null);
     }
 }

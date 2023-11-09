@@ -18,7 +18,7 @@ public class DispenserBlockExtender {
      */
     @Overwrite
     public DispenserBehavior getBehaviorForItem(ItemStack stack) {
-        return stack.getComponent(ItemComponentTypes.DISPENSABLE)
+        return stack.itematic$getComponent(ItemComponentTypes.DISPENSABLE)
             .map(DispensableItemComponent::behavior)
             .map(RegistryEntry::value)
             .orElse(DispenseBehaviors.ITEM);

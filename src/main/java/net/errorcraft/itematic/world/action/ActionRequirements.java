@@ -19,4 +19,8 @@ public record ActionRequirements(ActionContextParameters context, LootCondition 
         lootContext.markActive(LootContext.predicate(this.conditions));
         return this.conditions.test(lootContext);
     }
+
+    public static ActionRequirements of(ActionContextParameters context, LootCondition conditions) {
+        return new ActionRequirements(context, conditions);
+    }
 }

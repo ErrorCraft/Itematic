@@ -37,7 +37,7 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
     )
     @SuppressWarnings("ConstantConditions")
     private void setSelectedTabStorePaperRegistryEntry(ItemGroup group, CallbackInfo info, @Share("paper") LocalRef<RegistryEntry<Item>> paper) {
-        paper.set(this.client.world.getItem(ItemKeys.PAPER));
+        paper.set(this.client.world.itematic$getItem(ItemKeys.PAPER));
     }
 
     @Redirect(
@@ -60,7 +60,7 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
     )
     @SuppressWarnings("ConstantConditions")
     private ItemStack renderTabIconUseDynamicRegistry(ItemGroup instance, DrawContext context) {
-        return instance.icon(this.client.world.getItemAccess());
+        return instance.icon(this.client.world.itematic$getItemAccess());
     }
 
     @Inject(

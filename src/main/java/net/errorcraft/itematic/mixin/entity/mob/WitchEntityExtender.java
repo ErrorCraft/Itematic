@@ -25,8 +25,8 @@ public abstract class WitchEntityExtender extends RaiderEntity {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean tickMovementIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.POTION);
+    private boolean isOfForPotionUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.POTION);
     }
 
     @Redirect(
@@ -36,8 +36,8 @@ public abstract class WitchEntityExtender extends RaiderEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack tickMovementNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.POTION));
+    private ItemStack newItemStackForPotionUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.POTION);
     }
 
     @Redirect(
@@ -47,7 +47,7 @@ public abstract class WitchEntityExtender extends RaiderEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack attackNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.SPLASH_POTION));
+    private ItemStack newItemStackForSplashPotionUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.SPLASH_POTION);
     }
 }

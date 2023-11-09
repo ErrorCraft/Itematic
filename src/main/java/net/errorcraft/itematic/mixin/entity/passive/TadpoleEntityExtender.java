@@ -25,6 +25,6 @@ public abstract class TadpoleEntityExtender extends FishEntity {
         )
     )
     private ItemStack getBucketItemNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.TADPOLE_BUCKET));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.TADPOLE_BUCKET));
     }
 }

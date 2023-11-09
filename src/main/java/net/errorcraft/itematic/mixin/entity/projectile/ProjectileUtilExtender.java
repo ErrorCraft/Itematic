@@ -26,7 +26,7 @@ public class ProjectileUtilExtender {
         )
     )
     private static PersistentProjectileEntity createArrowProjectileCreateArrowUseItemComponent(ArrowItem instance, World world, ItemStack projectile, LivingEntity shooter) {
-        Optional<Entity> optional = projectile.getComponent(ItemComponentTypes.PROJECTILE)
+        Optional<Entity> optional = projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE)
             .map(c -> c.createEntity(world, shooter, projectile, 1.0f, 1.0f));
         if (optional.isEmpty()) {
             return new ArrowEntity(world, shooter);

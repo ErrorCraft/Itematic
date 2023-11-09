@@ -28,7 +28,7 @@ public class BuiltinModelItemRendererExtender {
         )
     )
     private boolean instanceOfBlockItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, @Local ItemStack itemStack, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
-        Optional<BlockItemComponent> optionalComponent = itemStack.getComponent(ItemComponentTypes.BLOCK);
+        Optional<BlockItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.BLOCK);
         optionalComponent.ifPresent(blockItemComponent::set);
         return optionalComponent.isPresent();
     }
@@ -78,6 +78,6 @@ public class BuiltinModelItemRendererExtender {
         )
     )
     private boolean isOfForShieldUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.SHIELD);
+        return instance.itematic$isOf(ItemKeys.SHIELD);
     }
 }

@@ -25,6 +25,6 @@ public abstract class TropicalFishEntityExtender extends SchoolingFishEntity {
         )
     )
     private ItemStack getBucketItemNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.TROPICAL_FISH_BUCKET));
+        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.TROPICAL_FISH_BUCKET));
     }
 }

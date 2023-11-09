@@ -9,6 +9,6 @@ public class ItematicProjectileUtil {
     private ItematicProjectileUtil() {}
 
     public static Hand getHandPossiblyHolding(LivingEntity entity, RegistryKey<Item> key) {
-        return entity.getMainHandStack().isOf(key) ? Hand.MAIN_HAND : Hand.OFF_HAND;
+        return entity.getMainHandStack().itematic$isOf(key) ? Hand.MAIN_HAND : Hand.OFF_HAND;
     }
 }

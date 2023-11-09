@@ -3,25 +3,22 @@ package net.errorcraft.itematic.mixin.item;
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
-import com.mojang.datafixers.kinds.App;
+import com.mojang.datafixers.util.Function3;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.item.ItemBase;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.advancement.criterion.ItemDurabilityChangedCriterion;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -30,11 +27,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -45,20 +44,19 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -80,23 +78,51 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     private NbtCompound nbt;
 
     @Shadow
+    public abstract boolean damage(int amount, Random random, @Nullable ServerPlayerEntity player);
+
+    @Shadow
     public abstract int getDamage();
 
     @Shadow
-    public abstract <T extends LivingEntity> void damage(int amount, T entity, Consumer<T> breakCallback);
+    public abstract void setDamage(int damage);
 
+    @Shadow
+    public abstract void decrement(int amount);
+
+    @Unique
+    private final Set<ItemEvent> activeEvents = new HashSet<>();
+
+    @Unique
     private RegistryEntry<Item> entry;
 
+    @Unique
+    private ActionContext context;
+
     @Redirect(
-        method = "<clinit>",
+        method = "method_28376",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
+            target = "Lnet/minecraft/registry/DefaultedRegistry;getCodec()Lcom/mojang/serialization/Codec;"
+        )
+    )
+    private static Codec<RegistryEntry<Item>> codecUseRegistryFixedCodec(DefaultedRegistry<Item> instance) {
+        return RegistryFixedCodec.of(RegistryKeys.ITEM);
+    }
+
+    @ModifyArg(
+        method = "method_28376",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/mojang/datafixers/Products$P3;apply(Lcom/mojang/datafixers/kinds/Applicative;Lcom/mojang/datafixers/util/Function3;)Lcom/mojang/datafixers/kinds/App;",
             remap = false
         )
     )
-    private static Codec<ItemStack> useCustomItemStackCodec(Function<RecordCodecBuilder.Instance<ItemStack>, ? extends App<RecordCodecBuilder.Mu<ItemStack>, ItemStack>> builder) {
-        return ItemStackUtil.CODEC;
+    private static <T1, T2, T3, R> Function3<? super RegistryEntry<Item>, Integer, Optional<NbtCompound>, ? extends ItemStack> codecApplyUseItemStackConstructor(final Function3<T1, T2, T3, R> function) {
+        return (entry, count, nbt) -> {
+            ItemStack stack = new ItemStack(entry, count);
+            nbt.ifPresent(stack::setNbt);
+            return stack;
+        };
     }
 
     @Inject(
@@ -189,7 +215,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     )
     @NotNull
     private <T> Identifier getIdUseEntry(DefaultedRegistry<T> instance, T value) {
-        return this.key().getValue();
+        return this.itematic$key().getValue();
     }
 
     @Redirect(
@@ -257,7 +283,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         if ((Object)this == EMPTY) {
             return true;
         }
-        if (this.isOf(ItemKeys.AIR)) {
+        if (this.itematic$isOf(ItemKeys.AIR)) {
             return true;
         }
         if (this.entry == null || !this.entry.hasKeyAndValue()) {
@@ -420,9 +446,10 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         )
     )
     private void invokeDamageToolEvent(int amount, Random random, ServerPlayerEntity player, CallbackInfoReturnable<Boolean> info) {
-        ActionContext context = MutableActionContext.stackUsage(player.getServerWorld(), (ItemStack)(Object) this)
-            .entityPosition(ActionContextParameter.THIS, player);
-        this.invokeEvent(ItemEvents.DAMAGE_ITEM, context);
+        if (this.context == null) {
+            return;
+        }
+        this.itematic$invokeEvent(ItemEvents.DAMAGE_ITEM, this.context);
     }
 
     @WrapWithCondition(
@@ -433,7 +460,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         )
     )
     private boolean limitDamageApplied(ItemDurabilityChangedCriterion instance, ServerPlayerEntity player, ItemStack stack, int durability, @Local(argsOnly = true) LocalIntRef amount) {
-        this.getComponent(ItemComponentTypes.DAMAGEABLE)
+        this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
             .map(c -> Math.min(c.maximumDamage() - this.getDamage(), amount.get()))
             .ifPresent(amount::set);
         return amount.get() != 0;
@@ -448,16 +475,14 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     )
     @SuppressWarnings("ConstantConditions")
     private <T extends LivingEntity> void invokeBreakToolEvent(int amount, T entity, Consumer<T> breakCallback, CallbackInfo info) {
-        if (entity.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, (ItemStack)(Object) this)
-                .entityPosition(ActionContextParameter.THIS, entity)
-                .hand(entity.getHoldingHand((ItemStack)(Object) this));
-            this.invokeEvent(ItemEvents.BREAK_ITEM, context);
+        if (this.context == null) {
+            return;
         }
+        this.itematic$invokeEvent(ItemEvents.BREAK_ITEM, this.context);
     }
 
     @Override
-    public RegistryKey<Item> key() {
+    public RegistryKey<Item> itematic$key() {
         if (this.entry == null) {
             return ItemKeys.AIR;
         }
@@ -465,48 +490,54 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
-    public Optional<NbtCompound> nbt() {
+    public Optional<NbtCompound> itematic$nbt() {
         return Optional.ofNullable(this.nbt);
     }
 
     @Override
-    public boolean isOf(RegistryKey<Item> key) {
+    public boolean itematic$isOf(RegistryKey<Item> key) {
         return this.entry != null && this.entry.matchesKey(key);
     }
 
     @Override
-    public void damage(int amount, LivingEntity entity) {
-        this.damage(amount, entity, e -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
+    public void itematic$damage(int amount, ActionContext context) {
+        this.context = context;
+        Entity entity = context.entity(ActionContextParameter.THIS).orElse(null);
+        if (this.damage(amount, context.world().getRandom(), entity instanceof ServerPlayerEntity player ? player : null)) {
+            this.onItemBroken(entity, context);
+        }
+        this.context = null;
     }
 
     @Override
-    public void damage(int amount, LivingEntity entity, Hand hand) {
-        this.damage(amount, entity, e -> e.sendToolBreakStatus(hand));
+    public <T extends ItemComponent> boolean itematic$hasComponent(ItemComponentType<T> type) {
+        return this.entry != null && this.entry.value().itematic$hasComponent(type);
     }
 
     @Override
-    public <T extends ItemComponent> boolean hasComponent(ItemComponentType<T> type) {
-        return this.entry != null && this.entry.value().hasComponent(type);
-    }
-
-    @Override
-    public <T extends ItemComponent> Optional<T> getComponent(ItemComponentType<T> type) {
+    public <T extends ItemComponent> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
         if (this.entry == null) {
             return Optional.empty();
         }
-        return this.entry.value().getComponent(type);
+        return this.entry.value().itematic$getComponent(type);
     }
 
     @Override
-    public void invokeEvent(ItemEvent event, ActionContext context) {
+    public boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
         if (this.entry == null) {
-            return;
+            return false;
         }
-        this.entry.value().invokeEvent(event, context);
+        if (this.activeEvents.contains(event)) {
+            return false;
+        }
+        this.activeEvents.add(event);
+        boolean result = this.entry.value().itematic$invokeEvent(event, context);
+        this.activeEvents.remove(event);
+        return result;
     }
 
     @Override
-    public boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
+    public boolean itematic$canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
         if (this.entry == null) {
             return true;
         }
@@ -514,7 +545,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
-    public boolean isNetworkSynced() {
+    public boolean itematic$isNetworkSynced() {
         if (this.entry == null) {
             return false;
         }
@@ -522,10 +553,23 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
-    public boolean mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    public boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         if (this.entry == null) {
             return false;
         }
-        return this.entry.value().mayStartUsing(world, user, hand, stack);
+        return this.entry.value().itematic$mayStartUsing(world, user, hand, stack);
+    }
+
+    @Unique
+    private void onItemBroken(Entity entity, ActionContext context) {
+        if (entity instanceof LivingEntity livingEntity) {
+            context.slot().ifPresent(livingEntity::sendEquipmentBreakStatus);
+        }
+        this.decrement(1);
+        this.itematic$invokeEvent(ItemEvents.BREAK_ITEM, context);
+        if (entity instanceof PlayerEntity player && this.entry != null) {
+            player.incrementStat(Stats.BROKEN.getOrCreateStat(this.entry.value()));
+        }
+        this.setDamage(0);
     }
 }

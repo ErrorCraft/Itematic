@@ -16,12 +16,12 @@ public record DyeableItemComponent(int defaultColor) implements ItemComponent, D
     ).apply(instance, DyeableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.DYEABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 

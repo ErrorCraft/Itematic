@@ -25,8 +25,8 @@ public class ZombieEntityExtender extends HostileEntity {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean canPickupItemIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.EGG);
+    private boolean isOfForEggUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.EGG);
     }
 
     @Redirect(
@@ -36,7 +36,7 @@ public class ZombieEntityExtender extends HostileEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getSkullNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.ZOMBIE_HEAD));
+    private ItemStack newItemStackForZombieHeadUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.ZOMBIE_HEAD);
     }
 }

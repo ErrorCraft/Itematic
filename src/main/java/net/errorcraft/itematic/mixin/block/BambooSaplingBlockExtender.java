@@ -19,6 +19,6 @@ public class BambooSaplingBlockExtender {
         )
     )
     private ItemStack newItemStackUseCreateStack(ItemConvertible item, WorldView world) {
-        return world.createStack(ItemKeys.BAMBOO);
+        return world.itematic$createStack(ItemKeys.BAMBOO);
     }
 }

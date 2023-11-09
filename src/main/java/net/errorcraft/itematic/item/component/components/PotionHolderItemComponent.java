@@ -17,12 +17,12 @@ public record PotionHolderItemComponent() implements ItemComponent {
     public static final Codec<PotionHolderItemComponent> CODEC = Codec.unit(new PotionHolderItemComponent());
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.POTION_HOLDER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 

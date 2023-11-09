@@ -16,12 +16,12 @@ public record HorseArmorItemComponent(RegistryEntry<ArmorMaterial> material) imp
     ).apply(instance, HorseArmorItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.HORSE_ARMOR;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 }

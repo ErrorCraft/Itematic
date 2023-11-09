@@ -21,6 +21,6 @@ public class SimpleRegistryExtender<T> {
         )
     )
     private void setRegistryEntryRawId(int i, RegistryKey<T> registryKey, T object, Lifecycle lifecycle, CallbackInfoReturnable<RegistryEntry.Reference<T>> info, @Local RegistryEntry.Reference<T> reference) {
-        reference.setRawId(i);
+        reference.itematic$setRawId(i);
     }
 }

@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -16,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.ActionResult;
 
 import java.util.Optional;
 
@@ -31,12 +32,12 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
     }
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.ENTITY;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 
@@ -52,12 +53,12 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
     }
 
     @Override
-    public TypedActionResult<ItemStack> useOnBlock(ItemUsageContext context) {
+    public ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         ItemStack stack = context.getStack();
         if (context.getWorld().isClient()) {
-            return TypedActionResult.success(stack);
+            return ActionResult.SUCCESS;
         }
-        EntityPlacer placer = EntityPlacer.spawned(context, stack, this);
+        EntityPlacer placer = EntityPlacer.spawned(context, stack, resultStackConsumer, this);
         return placer.place();
     }
 

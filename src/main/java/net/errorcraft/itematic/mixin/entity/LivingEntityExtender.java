@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.entity;
 
 import net.errorcraft.itematic.access.entity.LivingEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.FoodItemComponent;
 import net.errorcraft.itematic.item.component.components.UseDurationItemComponent;
@@ -26,7 +27,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
@@ -48,10 +48,10 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public abstract Hand getActiveHand();
 
     @Shadow
-    public abstract ItemStack getMainHandStack();
+    public abstract ItemStack eatFood(World world, ItemStack stack);
 
     @Shadow
-    public abstract ItemStack getOffHandStack();
+    public abstract void equipStack(EquipmentSlot var1, ItemStack var2);
 
     @Redirect(
         method = "eatFood",
@@ -73,22 +73,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     )
     private void eatFoodDoNotDecrementItemStack(ItemStack instance, int amount) {}
 
-    @Inject(
-        method = "eatFood",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;emitGameEvent(Lnet/minecraft/world/event/GameEvent;)V",
-            shift = At.Shift.AFTER
-        )
-    )
-    private void invokeEatItemEvent(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
-        if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, this.getActiveHand())
-                .entityPosition(ActionContextParameter.THIS, this);
-            stack.invokeEvent(ItemEvents.EAT_ITEM, context);
-        }
-    }
-
     /**
      * @author ErrorCraft
      * @reason Uses the ItemComponent implementation for data-driven items.
@@ -98,7 +82,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         if (world.isClient()) {
             return;
         }
-        Optional<FoodItemComponent> component = stack.getComponent(ItemComponentTypes.FOOD);
+        Optional<FoodItemComponent> component = stack.itematic$getComponent(ItemComponentTypes.FOOD);
         if (component.isEmpty()) {
             return;
         }
@@ -115,7 +99,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private static Equipment getPreferredEquipmentSlotFromStackUseItemComponent(ItemStack stack) {
-        return stack.getComponent(ItemComponentTypes.EQUIPMENT).orElse(null);
+        return stack.itematic$getComponent(ItemComponentTypes.EQUIPMENT).orElse(null);
     }
 
     @Redirect(
@@ -126,20 +110,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private Equipment onEquipStackFromStackUseItemComponent(ItemStack stack) {
-        return stack.getComponent(ItemComponentTypes.EQUIPMENT).orElse(null);
-    }
-
-    @Inject(
-        method = "onEquipStack",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/player/PlayerEntity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"
-        )
-    )
-    private void invokeEquipItemEvent(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo info) {
-        ActionContext context = MutableActionContext.stackUsage((ServerWorld) this.getWorld(), newStack)
-            .entityPosition(ActionContextParameter.THIS, this);
-        newStack.invokeEvent(ItemEvents.EQUIP_ITEM, context);
+        return stack.itematic$getComponent(ItemComponentTypes.EQUIPMENT).orElse(null);
     }
 
     @Inject(
@@ -148,13 +119,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void getProjectileTypeUseItemComponent(ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
-        stack.getComponent(ItemComponentTypes.SHOOTER)
-            .ifPresent(component -> info.setReturnValue(this.getAmmunition(component)));
-    }
-
-    @Override
-    public boolean isHolding(RegistryKey<Item> key) {
-        return this.isHolding(stack -> stack.isOf(key));
+        stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
+            .ifPresent(component -> info.setReturnValue(this.itematic$getAmmunition(component)));
     }
 
     @Redirect(
@@ -173,7 +139,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean getAttackDistanceScalingFactorIsOfForSkeletonSkullUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.SKELETON_SKULL);
+        return instance.itematic$isOf(ItemKeys.SKELETON_SKULL);
     }
 
     @Redirect(
@@ -192,7 +158,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean getAttackDistanceScalingFactorIsOfForZombieHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.ZOMBIE_HEAD);
+        return instance.itematic$isOf(ItemKeys.ZOMBIE_HEAD);
     }
 
     @Redirect(
@@ -211,7 +177,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean getAttackDistanceScalingFactorIsOfForCreeperHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.CREEPER_HEAD);
+        return instance.itematic$isOf(ItemKeys.CREEPER_HEAD);
     }
 
     @Redirect(
@@ -234,7 +200,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean getAttackDistanceScalingFactorIsOfForPiglinHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.PIGLIN_HEAD);
+        return instance.itematic$isOf(ItemKeys.PIGLIN_HEAD);
     }
 
     @Redirect(
@@ -244,8 +210,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean getVisibilityBoundingBoxIsOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.DRAGON_HEAD);
+    private boolean isOfForDragonHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.DRAGON_HEAD);
     }
 
     @Redirect(
@@ -264,7 +230,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         at = @At(value = "LOAD")
     )
     private boolean shouldSpawnConsumptionEffectsUseItemComponent(boolean value) {
-        return this.activeItemStack.getComponent(ItemComponentTypes.USE_DURATION)
+        return this.activeItemStack.itematic$getComponent(ItemComponentTypes.USE_DURATION)
             .map(UseDurationItemComponent::ticks)
             .map(ticks -> ticks <= 16)
             .orElse(false);
@@ -278,17 +244,21 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean isOfForElytraUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.ELYTRA);
+        return instance.itematic$isOf(ItemKeys.ELYTRA);
     }
 
     @Override
-    public Hand getHoldingHand(ItemStack stack) {
-        if (this.getMainHandStack() == stack) {
-            return Hand.MAIN_HAND;
+    public boolean itematic$isHolding(RegistryKey<Item> key) {
+        return this.isHolding(stack -> stack.itematic$isOf(key));
+    }
+
+    @Override
+    public void itematic$eatFood(World world, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+        this.eatFood(world, stack);
+        if (world instanceof ServerWorld serverWorld) {
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, resultStackConsumer, this.getActiveHand())
+                .entityPosition(ActionContextParameter.THIS, this);
+            stack.itematic$invokeEvent(ItemEvents.EAT_ITEM, context);
         }
-        if (this.getOffHandStack() == stack) {
-            return Hand.OFF_HAND;
-        }
-        return null;
     }
 }

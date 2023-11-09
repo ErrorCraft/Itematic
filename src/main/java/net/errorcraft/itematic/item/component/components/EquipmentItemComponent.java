@@ -2,12 +2,16 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.sound.SoundEventKeys;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.MutableActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Equipment;
@@ -15,8 +19,9 @@ import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.stat.Stats;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.TypedActionResult;
@@ -30,34 +35,31 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
     ).apply(instance, EquipmentItemComponent::new));
 
     @Override
-    public ItemComponentType<?> getType() {
+    public ItemComponentType<?> type() {
         return ItemComponentTypes.EQUIPMENT;
     }
 
     @Override
-    public Codec<? extends ItemComponent> getCodec() {
+    public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (!this.swappable) {
-            return TypedActionResult.pass(stack);
+            return ActionResult.PASS;
         }
-        ItemStack currentStack = user.getEquippedStack(this.slot);
-        if (EnchantmentHelper.hasBindingCurse(currentStack) || ItemStack.areEqual(stack, currentStack)) {
-            return TypedActionResult.pass(stack);
+        TypedActionResult<ItemStack> result = this.equipAndSwap(stack.getItem(), world, user, hand);
+        resultStackConsumer.set(result.getValue());
+        if (world instanceof ServerWorld serverWorld) {
+            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, resultStackConsumer, hand)
+                .entityPosition(ActionContextParameter.THIS, user);
+            stack.itematic$invokeEvent(ItemEvents.EQUIP_ITEM, context);
         }
-        user.equipStack(this.slot, stack.copy());
-        if (!world.isClient()) {
-            user.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+        if (result.getResult() == ActionResult.FAIL) {
+            return ActionResult.PASS;
         }
-        if (currentStack.isEmpty()) {
-            stack.setCount(0);
-        } else {
-            user.setStackInHand(hand, currentStack.copy());
-        }
-        return TypedActionResult.success(stack, world.isClient());
+        return result.getResult();
     }
 
     @Override

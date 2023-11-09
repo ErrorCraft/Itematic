@@ -37,7 +37,7 @@ public class HorseArmorFeatureRendererExtender implements HorseArmorFeatureRende
         )
     )
     private boolean instanceOfHorseArmorItemUseItemComponentCheck(Object reference, Class<HorseArmorItem> clazz, @Local ItemStack itemStack, @Share("horseArmorItemComponent") LocalRef<HorseArmorItemComponent> horseArmorItemComponent) {
-        Optional<HorseArmorItemComponent> optionalComponent = itemStack.getComponent(ItemComponentTypes.HORSE_ARMOR);
+        Optional<HorseArmorItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.HORSE_ARMOR);
         optionalComponent.ifPresent(horseArmorItemComponent::set);
         return optionalComponent.isPresent();
     }
@@ -96,7 +96,7 @@ public class HorseArmorFeatureRendererExtender implements HorseArmorFeatureRende
         )
     )
     private boolean instanceOfDyeableHorseArmorItemItemUseItemComponentCheck(Object reference, Class<DyeableHorseArmorItem> clazz, @Local ItemStack itemStack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
-        Optional<TintedItemComponent> optionalComponent = itemStack.getComponent(ItemComponentTypes.TINTED);
+        Optional<TintedItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.TINTED);
         optionalComponent.ifPresent(tintedItemComponent::set);
         return optionalComponent.isPresent();
     }

@@ -14,7 +14,7 @@ public class ElytraItemExtender {
      */
     @Overwrite
     public static boolean isUsable(ItemStack stack) {
-        return stack.getComponent(ItemComponentTypes.DAMAGEABLE)
+        return stack.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
             .map(c -> c.isUsable(stack))
             .orElse(false);
     }

@@ -29,6 +29,6 @@ public class StemBlockExtender implements StemBlockAccess {
         )
     )
     private ItemStack newItemStackUseCreateStack(ItemConvertible item, WorldView world) {
-        return world.createStack(this.pickBlockKey);
+        return world.itematic$createStack(this.pickBlockKey);
     }
 }

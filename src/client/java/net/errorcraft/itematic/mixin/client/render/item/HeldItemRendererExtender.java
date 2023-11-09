@@ -29,7 +29,7 @@ public class HeldItemRendererExtender {
         )
     )
     private static boolean isOfForBowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.BOW);
+        return instance.itematic$isOf(ItemKeys.BOW);
     }
 
     @Redirect(
@@ -46,6 +46,6 @@ public class HeldItemRendererExtender {
         )
     )
     private static boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.CROSSBOW);
+        return instance.itematic$isOf(ItemKeys.CROSSBOW);
     }
 }

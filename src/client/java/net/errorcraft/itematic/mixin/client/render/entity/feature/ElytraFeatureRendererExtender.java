@@ -18,6 +18,6 @@ public class ElytraFeatureRendererExtender {
         )
     )
     private boolean isOfForElytraUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.ELYTRA);
+        return instance.itematic$isOf(ItemKeys.ELYTRA);
     }
 }

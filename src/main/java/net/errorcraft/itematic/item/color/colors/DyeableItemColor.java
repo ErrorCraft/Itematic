@@ -16,7 +16,7 @@ public record DyeableItemColor() implements ItemColor {
         if (tintIndex > 0) {
             return DEFAULT_COLOR;
         }
-        return stack.getComponent(ItemComponentTypes.DYEABLE)
+        return stack.itematic$getComponent(ItemComponentTypes.DYEABLE)
             .map(c -> c.getColor(stack))
             .orElse(DEFAULT_COLOR);
     }

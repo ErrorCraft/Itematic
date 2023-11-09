@@ -26,8 +26,8 @@ public abstract class ArrowEntityExtender extends PersistentProjectileEntity {
             ordinal = 0
         )
     )
-    private ItemStack asItemStackNewItemStackForArrowUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.ARROW));
+    private ItemStack newItemStackForArrowUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.ARROW);
     }
 
     @Redirect(
@@ -38,8 +38,8 @@ public abstract class ArrowEntityExtender extends PersistentProjectileEntity {
             ordinal = 1
         )
     )
-    private ItemStack asItemStackNewItemStackForTippedArrowUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().getItem(ItemKeys.TIPPED_ARROW));
+    private ItemStack newItemStackForTippedArrowUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.TIPPED_ARROW);
     }
 
     @Redirect(
@@ -50,8 +50,8 @@ public abstract class ArrowEntityExtender extends PersistentProjectileEntity {
             ordinal = 0
         )
     )
-    private boolean initFromStackIsOfForTippedArrowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.TIPPED_ARROW);
+    private boolean isOfForTippedArrowUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.TIPPED_ARROW);
     }
 
     @Redirect(
@@ -62,7 +62,7 @@ public abstract class ArrowEntityExtender extends PersistentProjectileEntity {
             ordinal = 1
         )
     )
-    private boolean initFromStackIsOfForArrowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.isOf(ItemKeys.ARROW);
+    private boolean isOfForArrowUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.ARROW);
     }
 }

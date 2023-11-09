@@ -19,12 +19,10 @@
   "events": [
     {
       "event": "minecraft:consume_item",
-      "actions": [
-        {
-          "action": "minecraft:clear_status_effects",
-          "entity": "this"
-        }
-      ]
+      "action": {
+        "type": "minecraft:clear_status_effects",
+        "entity": "this"
+      }
     }
   ]
 }

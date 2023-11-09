@@ -20,6 +20,6 @@ public class BubbleColumnBlockExtender {
         )
     )
     private ItemStack tryDrainFluidNewItemStackUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
-        return new ItemStack(world.getItem(ItemKeys.WATER_BUCKET));
+        return new ItemStack(world.itematic$getItem(ItemKeys.WATER_BUCKET));
     }
 }
