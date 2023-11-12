@@ -25,17 +25,13 @@ public class ProjectileUtilExtender {
             target = "Lnet/minecraft/item/ArrowItem;createArrow(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/projectile/PersistentProjectileEntity;"
         )
     )
-    private static PersistentProjectileEntity createArrowProjectileCreateArrowUseItemComponent(ArrowItem instance, World world, ItemStack projectile, LivingEntity shooter) {
-        Optional<Entity> optional = projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE)
+    private static PersistentProjectileEntity createProjectileUseItemComponent(ArrowItem instance, World world, ItemStack projectile, LivingEntity shooter) {
+        Optional<Entity> optionalEntity = projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE)
             .map(c -> c.createEntity(world, shooter, projectile, 1.0f, 1.0f));
-        if (optional.isEmpty()) {
-            return new ArrowEntity(world, shooter);
-        }
-
-        if (optional.get() instanceof PersistentProjectileEntity persistentProjectileEntity) {
+        if (optionalEntity.orElse(null) instanceof PersistentProjectileEntity persistentProjectileEntity) {
             return persistentProjectileEntity;
         }
-        return new ArrowEntity(world, shooter);
+        return new ArrowEntity(world, shooter, projectile.copyWithCount(1));
     }
 
     @Redirect(
@@ -45,7 +41,7 @@ public class ProjectileUtilExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private static boolean createArrowProjectileIsOfAlwaysReturnTrue(ItemStack instance, Item item) {
+    private static boolean isOfAlwaysReturnTrue(ItemStack instance, Item item) {
         return true;
     }
 }

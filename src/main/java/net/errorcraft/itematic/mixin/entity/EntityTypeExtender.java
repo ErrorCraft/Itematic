@@ -12,6 +12,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.SpectralArrowEntity;
+import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -296,6 +299,82 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     )
     private static EntityType.Builder<?> setGlowItemFrameInitializerCodec(EntityType.Builder<?> type) {
         type.itematic$initializerCodec(decorationInitializerCodecCreator(GlowItemFrameEntity::new));
+        return type;
+    }
+
+    @ModifyArg(
+        method = "<clinit>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "CONSTANT",
+                args = "stringValue=arrow"
+            )
+        )
+    )
+    private static EntityType.Builder<?> setArrowInitializerCodec(EntityType.Builder<?> type) {
+        type.itematic$initializerCodec(entityType -> PersistentProjectileEntityInitializer.createCodec(entityType, ArrowEntity::new, ArrowEntity::new));
+        return type;
+    }
+
+    @ModifyArg(
+        method = "<clinit>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "CONSTANT",
+                args = "stringValue=spectral_arrow"
+            )
+        )
+    )
+    private static EntityType.Builder<?> setSpectralArrowInitializerCodec(EntityType.Builder<?> type) {
+        type.itematic$initializerCodec(entityType -> PersistentProjectileEntityInitializer.createCodec(entityType, SpectralArrowEntity::new, SpectralArrowEntity::new));
+        return type;
+    }
+
+    @ModifyArg(
+        method = "<clinit>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "CONSTANT",
+                args = "stringValue=trident"
+            )
+        )
+    )
+    private static EntityType.Builder<?> setTridentInitializerCodec(EntityType.Builder<?> type) {
+        type.itematic$initializerCodec(entityType -> PersistentProjectileEntityInitializer.createCodec(entityType, TridentEntity::new, (world, x, y, z, stack) -> null));
+        return type;
+    }
+
+    @ModifyArg(
+        method = "<clinit>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "CONSTANT",
+                args = "stringValue=trident"
+            )
+        )
+    )
+    private static EntityType.Builder<?> setFireworkRocketInitializerCodec(EntityType.Builder<?> type) {
+        type.itematic$initializerCodec(FireworkRocketEntityInitializer.CODEC);
         return type;
     }
 

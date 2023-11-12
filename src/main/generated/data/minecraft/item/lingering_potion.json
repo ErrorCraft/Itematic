@@ -11,7 +11,9 @@
     },
     "minecraft:potion_holder": {},
     "minecraft:projectile": {
-      "entity": "minecraft:potion"
+      "entity": {
+        "type": "minecraft:potion"
+      }
     },
     "minecraft:throwable": {
       "angle_offset": -20.0,

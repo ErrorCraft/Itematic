@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.world.action.context;
 
 import net.errorcraft.itematic.item.ItemStackConsumer;
+import net.errorcraft.itematic.util.PositionUtil;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
@@ -9,6 +10,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Position;
 import net.minecraft.util.math.Vec3d;
 
 public class MutableActionContext extends ActionContext {
@@ -31,6 +33,10 @@ public class MutableActionContext extends ActionContext {
 
     public MutableActionContext position(ActionContextParameter parameter, BlockPos position) {
         return this.position(parameter, Vec3d.ofBottomCenter(position));
+    }
+
+    public MutableActionContext position(ActionContextParameter parameter, Position position) {
+        return this.position(parameter, PositionUtil.vec3d(position));
     }
 
     public MutableActionContext position(ActionContextParameter parameter, Vec3d position) {

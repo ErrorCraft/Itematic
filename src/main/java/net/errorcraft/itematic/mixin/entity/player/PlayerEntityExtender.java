@@ -49,7 +49,7 @@ public abstract class PlayerEntityExtender extends LivingEntity {
         )
     )
     private void setPlayer(World world, BlockPos pos, float yaw, GameProfile gameProfile, CallbackInfo info) {
-        this.enderChestInventory.setPlayer((PlayerEntity)(Object) this);
+        this.enderChestInventory.itematic$setPlayer((PlayerEntity)(Object) this);
     }
 
     @Redirect(

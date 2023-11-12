@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin({ AbstractFurnaceBlockEntity.class, BarrelBlockEntity.class, BrewingStandBlockEntity.class, ChestBlockEntity.class, DispenserBlockEntity.class, HopperBlockEntity.class })
+@Mixin({ AbstractFurnaceBlockEntity.class, BarrelBlockEntity.class, BrewingStandBlockEntity.class, ChestBlockEntity.class, DispenserBlockEntity.class, HopperBlockEntity.class, CrafterBlockEntity.class })
 public abstract class LockableContainerBlockEntitiesExtender extends LockableContainerBlockEntity {
     protected LockableContainerBlockEntitiesExtender(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);

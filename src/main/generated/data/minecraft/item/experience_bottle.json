@@ -11,7 +11,9 @@
       "behavior": "minecraft:projectile"
     },
     "minecraft:projectile": {
-      "entity": "minecraft:experience_bottle"
+      "entity": {
+        "type": "minecraft:experience_bottle"
+      }
     },
     "minecraft:throwable": {
       "angle_offset": -20.0,

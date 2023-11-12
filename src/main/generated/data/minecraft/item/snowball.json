@@ -10,7 +10,9 @@
       "behavior": "minecraft:projectile"
     },
     "minecraft:projectile": {
-      "entity": "minecraft:snowball"
+      "entity": {
+        "type": "minecraft:snowball"
+      }
     },
     "minecraft:throwable": {
       "angle_offset": 0.0,

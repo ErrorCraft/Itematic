@@ -2,10 +2,7 @@ package net.errorcraft.itematic.mixin.block.entity;
 
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.JukeboxBlockEntity;
-import net.minecraft.block.entity.LecternBlockEntity;
+import net.minecraft.block.entity.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
@@ -13,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin({ JukeboxBlockEntity.class, LecternBlockEntity.class })
+@Mixin({ JukeboxBlockEntity.class, LecternBlockEntity.class, DecoratedPotBlockEntity.class })
 public abstract class SingleItemBlockEntitiesExtender extends BlockEntity {
     public SingleItemBlockEntitiesExtender(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -27,6 +24,6 @@ public abstract class SingleItemBlockEntitiesExtender extends BlockEntity {
         )
     )
     private ItemStack readNbtUseDynamicRegistry(NbtCompound nbt) {
-        return ItemStackUtil.readFromNbt(nbt, this.getRegistryManager());
+        return ItemStackUtil.fromNbt(nbt, this.getRegistryManager());
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceReloader;
 import net.minecraft.util.profiler.Profiler;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -19,6 +20,7 @@ import java.util.concurrent.Executor;
 
 @Mixin(LootManager.class)
 public class LootManagerExtender implements LootManagerAccess {
+    @Unique
     private DynamicRegistryManager.Immutable registryManager;
 
     @Inject(
@@ -38,7 +40,7 @@ public class LootManagerExtender implements LootManagerAccess {
     }
 
     @Override
-    public void setRegistryManager(DynamicRegistryManager.Immutable registryManager) {
+    public void itematic$setRegistryManager(DynamicRegistryManager.Immutable registryManager) {
         this.registryManager = registryManager;
     }
 }

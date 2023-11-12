@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface IngredientEntryAccess {
-    default Collection<ItemStack> getStacks(Registry<Item> registry) {
+    default Collection<ItemStack> itematic$getStacks(Registry<Item> registry) {
         return List.of();
     }
 }

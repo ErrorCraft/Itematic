@@ -3,8 +3,8 @@ package net.errorcraft.itematic.mixin.item;
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
-import com.mojang.datafixers.util.Function3;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.item.ItemBase;
 import net.errorcraft.itematic.item.ItemKeys;
@@ -38,6 +38,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -56,7 +57,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -89,6 +92,14 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     @Shadow
     public abstract void decrement(int amount);
 
+    @Shadow
+    private static String method_55061() {
+        return null;
+    }
+
+    @Unique
+    private static Codec<RegistryEntry<Item>> ITEM_ENTRY_CODEC;
+
     @Unique
     private final Set<ItemEvent> activeEvents = new HashSet<>();
 
@@ -98,31 +109,83 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     @Unique
     private ActionContext context;
 
+    @Inject(
+        method = "<clinit>",
+        at = @At("HEAD")
+    )
+    private static void initializeItemEntryCodec(CallbackInfo info) {
+        ITEM_ENTRY_CODEC = Codecs.validate(RegistryFixedCodec.of(RegistryKeys.ITEM), entry -> entry.matchesKey(ItemKeys.AIR) ? DataResult.error(ItemStackExtender::method_55061) : DataResult.success(entry));
+    }
+
     @Redirect(
-        method = "method_28376",
+        method = { "method_28376", "method_55067" },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/registry/DefaultedRegistry;createEntryCodec()Lcom/mojang/serialization/Codec;"
+        )
+    )
+    private static Codec<RegistryEntry<Item>> createEntryCodecUseRegistryFixedCodec(DefaultedRegistry<Item> instance) {
+        return RegistryFixedCodec.of(RegistryKeys.ITEM);
+    }
+
+    @Redirect(
+        method = "method_55063",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/registry/DefaultedRegistry;getCodec()Lcom/mojang/serialization/Codec;"
         )
     )
-    private static Codec<RegistryEntry<Item>> codecUseRegistryFixedCodec(DefaultedRegistry<Item> instance) {
+    private static Codec<RegistryEntry<Item>> getCodecUseRegistryFixedCodec(DefaultedRegistry<Item> instance) {
         return RegistryFixedCodec.of(RegistryKeys.ITEM);
     }
 
+    @Redirect(
+        method = "method_55066",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/item/ItemStack;ITEM_CODEC:Lcom/mojang/serialization/Codec;",
+            opcode = Opcodes.GETSTATIC
+        )
+    )
+    private static Codec<RegistryEntry<Item>> getItemCodecUseRegistryEntryCodec() {
+        return ITEM_ENTRY_CODEC;
+    }
+
     @ModifyArg(
-        method = "method_28376",
+        method = { "method_55063", "method_55066" },
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/datafixers/Products$P3;apply(Lcom/mojang/datafixers/kinds/Applicative;Lcom/mojang/datafixers/util/Function3;)Lcom/mojang/datafixers/kinds/App;",
+            target = "Lcom/mojang/serialization/MapCodec;forGetter(Ljava/util/function/Function;)Lcom/mojang/serialization/codecs/RecordCodecBuilder;",
+            ordinal = 0,
             remap = false
         )
     )
-    private static <T1, T2, T3, R> Function3<? super RegistryEntry<Item>, Integer, Optional<NbtCompound>, ? extends ItemStack> codecApplyUseItemStackConstructor(final Function3<T1, T2, T3, R> function) {
-        return (entry, count, nbt) -> {
-            ItemStack stack = new ItemStack(entry, count);
-            nbt.ifPresent(stack::setNbt);
-            return stack;
-        };
+    private static Function<ItemStack, RegistryEntry<Item>> forGetterUseRegistryEntry(Function<ItemStack, Item> getter) {
+        return ItemStack::getRegistryEntry;
+    }
+
+    @ModifyArg(
+        method = { "method_55063", "method_55066" },
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/mojang/datafixers/Products$P2;apply(Lcom/mojang/datafixers/kinds/Applicative;Ljava/util/function/BiFunction;)Lcom/mojang/datafixers/kinds/App;",
+            remap = false
+        )
+    )
+    private static BiFunction<RegistryEntry<Item>, Integer, ItemStack> applyUseRegistryEntryItemStackConstructor(BiFunction<Item, Integer, ItemStack> function) {
+        return ItemStack::new;
+    }
+
+    @Redirect(
+        method = "<clinit>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/mojang/serialization/Codec;xmap(Ljava/util/function/Function;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
+            remap = false
+        )
+    )
+    private static Codec<ItemStack> ingredientEntryCodecUseRegistryEntryVersion(Codec<Item> instance, Function<? super Item, ? extends ItemStack> to, Function<? super ItemStack, ? extends Item> from) {
+        return ITEM_ENTRY_CODEC.xmap(ItemStack::new, ItemStack::getRegistryEntry);
     }
 
     @Inject(
@@ -501,6 +564,9 @@ public abstract class ItemStackExtender implements ItemStackAccess {
 
     @Override
     public void itematic$damage(int amount, ActionContext context) {
+        if (context.player(ActionContextParameter.THIS).map(PlayerEntity::isCreative).orElse(false)) {
+            return;
+        }
         this.context = context;
         Entity entity = context.entity(ActionContextParameter.THIS).orElse(null);
         if (this.damage(amount, context.world().getRandom(), entity instanceof ServerPlayerEntity player ? player : null)) {

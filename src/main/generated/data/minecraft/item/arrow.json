@@ -6,9 +6,14 @@
     "max_count": 64
   },
   "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:projectile"
+    },
     "minecraft:projectile": {
       "damage": 1,
-      "entity": "minecraft:arrow"
+      "entity": {
+        "type": "minecraft:arrow"
+      }
     }
   }
 }

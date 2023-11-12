@@ -119,7 +119,7 @@ public class FluidPlacer extends Placer {
         if (!this.world.isClient() && canPlace && !blockState.isLiquid()) {
             this.world.breakBlock(pos, true);
         }
-        if (this.world.setBlockState(pos, fluid.getDefaultState().getBlockState(), Block.field_31022) || blockState.getFluidState().isStill()) {
+        if (this.world.setBlockState(pos, fluid.getDefaultState().getBlockState(), Block.NOTIFY_ALL_AND_REDRAW) || blockState.getFluidState().isStill()) {
             this.playEmptyingSound(pos);
             return true;
         }

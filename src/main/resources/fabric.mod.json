@@ -75,7 +75,7 @@
         "net/errorcraft/itematic/access/entity/ai/goal/TemptGoalAccess"
       ],
       "net/minecraft/class_1730": [
-        "net/errorcraft/itematic/access/PlayerAccess"
+        "net/errorcraft/itematic/access/inventory/EnderChestInventoryAccess"
       ],
       "net/minecraft/class_1761": [
         "net/errorcraft/itematic/access/item/ItemGroupAccess"
@@ -157,9 +157,6 @@
       ],
       "net/minecraft/class_4538": [
         "net/errorcraft/itematic/access/world/WorldViewAccess"
-      ],
-      "net/minecraft/class_5257": [
-        "net/errorcraft/itematic/access/predicate/entity/AdvancementEntityPredicateDeserializerAccess"
       ],
       "net/minecraft/class_6880": [
         "net/errorcraft/itematic/access/registry/entry/RegistryEntryAccess"

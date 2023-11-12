@@ -10,7 +10,9 @@
       "ticks": 20
     },
     "minecraft:projectile": {
-      "entity": "minecraft:ender_pearl"
+      "entity": {
+        "type": "minecraft:ender_pearl"
+      }
     },
     "minecraft:throwable": {
       "angle_offset": 0.0,

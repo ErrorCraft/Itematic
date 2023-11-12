@@ -63,7 +63,7 @@ public class BlockPlacer extends Placer {
         if (blockState == null) {
             return ActionResult.PASS;
         }
-        if (!this.world.setBlockState(this.blockPos, blockState, Block.field_31022)) {
+        if (!this.world.setBlockState(this.blockPos, blockState, Block.NOTIFY_ALL_AND_REDRAW)) {
             return ActionResult.PASS;
         }
 

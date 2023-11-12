@@ -22,7 +22,7 @@ public class HotbarStorageEntryExtender {
     private ItemStack readNbtListUseDynamicRegistry(NbtCompound nbt) {
         ClientWorld world = MinecraftClient.getInstance().world;
         if (world != null) {
-            return ItemStackUtil.readFromNbt(nbt, world.getRegistryManager());
+            return ItemStackUtil.fromNbt(nbt, world.getRegistryManager());
         }
         return ItemStack.EMPTY;
     }

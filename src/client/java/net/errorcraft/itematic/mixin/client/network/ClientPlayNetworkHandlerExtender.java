@@ -27,7 +27,7 @@ public class ClientPlayNetworkHandlerExtender {
         at = @At("HEAD")
     )
     private void setRecipeManagerItemRegistry(GameJoinS2CPacket packet, CallbackInfo info) {
-        this.recipeManager.setRegistryManager(this.combinedDynamicRegistries);
+        this.recipeManager.itematic$setRegistryManager(this.combinedDynamicRegistries);
     }
 
     @Inject(

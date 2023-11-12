@@ -1,9 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
-import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.recipe.IngredientAccess;
 import net.errorcraft.itematic.access.recipe.IngredientEntryAccess;
-import net.errorcraft.itematic.recipe.RecipeUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
@@ -11,12 +9,9 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import org.jetbrains.annotations.Nullable;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,8 +28,8 @@ public class IngredientExtender implements IngredientAccess {
     private ItemStack[] matchingStacks;
 
     @Override
-    public void initMatchingStacks(Registry<Item> registry) {
-        this.matchingStacks = Arrays.stream(this.entries).flatMap(entry -> entry.getStacks(registry).stream()).distinct().toArray(ItemStack[]::new);
+    public void itematic$initMatchingStacks(Registry<Item> registry) {
+        this.matchingStacks = Arrays.stream(this.entries).flatMap(entry -> entry.itematic$getStacks(registry).stream()).distinct().toArray(ItemStack[]::new);
     }
 
     @Mixin(targets = "net/minecraft/recipe/Ingredient$TagEntry")
@@ -44,7 +39,7 @@ public class IngredientExtender implements IngredientAccess {
         private TagKey<Item> tag;
 
         @Override
-        public Collection<ItemStack> getStacks(Registry<Item> registry) {
+        public Collection<ItemStack> itematic$getStacks(Registry<Item> registry) {
             ArrayList<ItemStack> itemStacks = new ArrayList<>();
             for (RegistryEntry<Item> entry : registry.iterateEntries(this.tag)) {
                 itemStacks.add(new ItemStack(entry));
@@ -58,20 +53,8 @@ public class IngredientExtender implements IngredientAccess {
         @Shadow
         public abstract Collection<ItemStack> getStacks();
 
-        @Redirect(
-            method = "method_53729",
-            at = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/recipe/RecipeCodecs;INGREDIENT:Lcom/mojang/serialization/Codec;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-        private static Codec<ItemStack> ingredientGetRegistryEntryCodec() {
-            return RecipeUtil.INGREDIENT_CODEC;
-        }
-
         @Override
-        public Collection<ItemStack> getStacks(Registry<Item> registry) {
+        public Collection<ItemStack> itematic$getStacks(Registry<Item> registry) {
             return this.getStacks();
         }
     }

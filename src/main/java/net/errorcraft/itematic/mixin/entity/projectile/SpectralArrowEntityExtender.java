@@ -1,30 +1,30 @@
 package net.errorcraft.itematic.mixin.entity.projectile;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(SpectralArrowEntity.class)
 public abstract class SpectralArrowEntityExtender extends PersistentProjectileEntity {
-    protected SpectralArrowEntityExtender(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
-        super(entityType, world);
+    protected SpectralArrowEntityExtender(EntityType<? extends PersistentProjectileEntity> type, World world, ItemStack stack) {
+        super(type, world, stack);
     }
 
-    @Redirect(
-        method = "asItemStack",
+    @ModifyArg(
+        method = "<init>(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/World;)V",
         at = @At(
-            value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;<init>(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;)V"
         )
     )
-    private ItemStack asItemStackNewItemStackForSpectralArrowUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.SPECTRAL_ARROW));
+    private static ItemStack newSpectralArrowEntityDefaultStackUseDynamicRegistry(ItemStack stack, @Local World world) {
+        return world.itematic$createStack(ItemKeys.SPECTRAL_ARROW);
     }
 }

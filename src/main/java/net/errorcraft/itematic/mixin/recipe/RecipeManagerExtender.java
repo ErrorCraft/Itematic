@@ -49,7 +49,7 @@ public class RecipeManagerExtender implements RecipeManagerAccess {
         at = @At("TAIL")
     )
     private void resetTempRegistryManager(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
-        tempRegistryManager = this.registryManager;
+        tempRegistryManager = null;
     }
 
     @ModifyArg(
@@ -87,14 +87,15 @@ public class RecipeManagerExtender implements RecipeManagerAccess {
     }
 
     @Override
-    public void setRegistryManager(DynamicRegistryManager registryManager) {
+    public void itematic$setRegistryManager(DynamicRegistryManager registryManager) {
         this.registryManager = registryManager;
         this.itemRegistry = registryManager.get(RegistryKeys.ITEM);
     }
 
+    @Unique
     private void initRecipe(Recipe<?> recipe) {
         for (Ingredient ingredient : recipe.getIngredients()) {
-            ingredient.initMatchingStacks(this.itemRegistry);
+            ingredient.itematic$initMatchingStacks(this.itemRegistry);
         }
     }
 }

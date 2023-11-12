@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.item;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -14,7 +15,6 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,9 +34,10 @@ public abstract class CrossbowItemExtender {
             target = "Lnet/minecraft/entity/LivingEntity;getProjectileType(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
-    private static ItemStack loadProjectilesGetProjectileTypeUseItemComponent(LivingEntity instance, ItemStack stack) {
-        return instance.itematic$getAmmunition(stack.itematic$getComponent(ItemComponentTypes.SHOOTER).get());
+    private static ItemStack getProjectileTypeUseItemComponent(LivingEntity instance, ItemStack stack) {
+        return stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
+            .map(instance::itematic$getAmmunition)
+            .orElse(ItemStack.EMPTY);
     }
 
     @Redirect(
@@ -54,7 +55,7 @@ public abstract class CrossbowItemExtender {
         method = "loadProjectile",
         constant = @Constant(classValue = ArrowItem.class)
     )
-    private static boolean loadProjectileInstanceOfArrowItemUseItemComponentCheck(Object reference, Class<ArrowItem> clazz) {
+    private static boolean instanceOfArrowItemUseItemComponentCheck(Object reference, Class<ArrowItem> clazz) {
         return ((Item) reference).itematic$hasComponent(ItemComponentTypes.PROJECTILE);
     }
 
@@ -76,8 +77,8 @@ public abstract class CrossbowItemExtender {
             target = "Lnet/minecraft/item/ItemStack;fromNbt(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack getProjectilesFromNbtUseDynamicRegistry(NbtCompound nbt) {
-        return ItemStackUtil.readFromNbt(nbt, ShooterUtil.registryManager());
+    private static ItemStack projectilesFromNbtUseDynamicRegistry(NbtCompound nbt) {
+        return ItemStackUtil.fromNbt(nbt, ShooterUtil.registryManager());
     }
 
     @Redirect(
@@ -90,7 +91,7 @@ public abstract class CrossbowItemExtender {
     private static boolean isOfForFireworkRocketUseItemComponentCheck(ItemStack instance, Item item) {
         return instance.itematic$getComponent(ItemComponentTypes.PROJECTILE)
             .map(ProjectileItemComponent::entity)
-            .map(RegistryEntry::value)
+            .map(EntityInitializer::type)
             .map(e -> e == EntityType.FIREWORK_ROCKET)
             .orElse(false);
     }
@@ -102,7 +103,7 @@ public abstract class CrossbowItemExtender {
             target = "Lnet/minecraft/item/ArrowItem;createArrow(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/projectile/PersistentProjectileEntity;"
         )
     )
-    private static PersistentProjectileEntity createArrowCreateArrowUseItemComponent(ArrowItem instance, World world, ItemStack projectile, LivingEntity shooter) {
+    private static PersistentProjectileEntity createArrowUseItemComponent(ArrowItem instance, World world, ItemStack projectile, LivingEntity shooter) {
         Optional<ProjectileItemComponent> component = projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE);
         if (component.isEmpty()) {
             return null;
@@ -129,7 +130,7 @@ public abstract class CrossbowItemExtender {
         ),
         cancellable = true
     )
-    private static void createArrowCreateArrowCheckNullEntity(World world, LivingEntity entity, ItemStack crossbow, ItemStack arrow, CallbackInfoReturnable<PersistentProjectileEntity> info, @Local PersistentProjectileEntity persistentProjectileEntity) {
+    private static void createArrowCheckNullEntity(World world, LivingEntity entity, ItemStack crossbow, ItemStack arrow, CallbackInfoReturnable<PersistentProjectileEntity> info, @Local PersistentProjectileEntity persistentProjectileEntity) {
         if (persistentProjectileEntity == null) {
             info.setReturnValue(null);
         }
@@ -144,7 +145,7 @@ public abstract class CrossbowItemExtender {
         ),
         cancellable = true
     )
-    private static void shootCreateArrowCheckNullEntity(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence, float simulated, CallbackInfo info, @Local ProjectileEntity projectileEntity) {
+    private static void createArrowCheckNullEntity(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence, float simulated, CallbackInfo info, @Local ProjectileEntity projectileEntity) {
         if (projectileEntity == null) {
             info.cancel();
         }
@@ -157,7 +158,7 @@ public abstract class CrossbowItemExtender {
             target = "Lnet/minecraft/item/ItemStack;damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V"
         )
     )
-    private static int shootDamageModifyDamageAmount(int amount, @Local(ordinal = 1) ItemStack projectile) {
+    private static int damageUseItemComponentDamageAmount(int amount, @Local(ordinal = 1) ItemStack projectile) {
         return projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE)
             .map(ProjectileItemComponent::damage)
             .orElse(0);

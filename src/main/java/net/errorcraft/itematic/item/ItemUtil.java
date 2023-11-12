@@ -35,6 +35,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
@@ -1953,7 +1955,8 @@ public class ItemUtil {
         registerable.register(ItemKeys.ARROW, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARROW).build()),
             ItemComponentSet.builder()
-                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.ARROW), 1))
+                .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .build()
         ));
         registerable.register(ItemKeys.COAL, create(
@@ -2674,7 +2677,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNOWBALL).build(), 16),
             ItemComponentSet.builder()
                 .with(new ThrowableItemComponent(1.5f, 0.0f))
-                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.SNOWBALL)))
+                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.SNOWBALL)))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .build()
         ));
@@ -2755,7 +2758,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EGG).build(), 16),
             ItemComponentSet.builder()
                 .with(new ThrowableItemComponent(1.5f, 0.0f))
-                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.EGG)))
+                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.EGG)))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .build()
         ));
@@ -2998,7 +3001,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDER_PEARL).build(), 16),
             ItemComponentSet.builder()
                 .with(new ThrowableItemComponent(1.5f, 0.0f))
-                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.ENDER_PEARL)))
+                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.ENDER_PEARL)))
                 .with(new CooldownItemComponent(20))
                 .build()
         ));
@@ -3538,7 +3541,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EXPERIENCE_BOTTLE).rarity(Rarity.UNCOMMON).build()),
             ItemComponentSet.builder()
                 .with(new ThrowableItemComponent(0.7f, -20.0f))
-                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE)))
+                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE)))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .build()
         ));
@@ -3648,7 +3651,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIREWORK_ROCKET).build()),
             ItemComponentSet.builder()
                 .with(new FireworkItemComponent())
-                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.FIREWORK_ROCKET), 3, CrossbowItemAccessor.getFireworkRocketSpeed()))
+                .with(new ProjectileItemComponent(FireworkRocketEntityInitializer.INSTANCE, 3, CrossbowItemAccessor.getFireworkRocketSpeed()))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.FIREWORK)))
                 .build()
         ));
@@ -3910,7 +3913,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new PotionHolderItemComponent())
                 .with(new ThrowableItemComponent(0.5f, -20.0f))
-                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.POTION)))
+                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.POTION)))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .with(new TintedItemComponent(new PotionItemColor()))
                 .build()
@@ -3918,13 +3921,15 @@ public class ItemUtil {
         registerable.register(ItemKeys.SPECTRAL_ARROW, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPECTRAL_ARROW).build()),
             ItemComponentSet.builder()
-                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.SPECTRAL_ARROW), 1))
+                .with(ProjectileItemComponent.persistentProjectile(EntityType.SPECTRAL_ARROW, SpectralArrowEntity::new, SpectralArrowEntity::new))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .build()
         ));
         registerable.register(ItemKeys.TIPPED_ARROW, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TIPPED_ARROW).build()),
             ItemComponentSet.builder()
-                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.ARROW), 1))
+                .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .with(new TintedItemComponent(new PotionItemColor()))
                 .build()
         ));
@@ -3933,7 +3938,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new PotionHolderItemComponent())
                 .with(new ThrowableItemComponent(0.5f, -20.0f))
-                .with(new ProjectileItemComponent(entityTypes.getOrThrow(EntityTypeKeys.POTION)))
+                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.POTION)))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                 .with(new TintedItemComponent(new PotionItemColor()))
                 .build()

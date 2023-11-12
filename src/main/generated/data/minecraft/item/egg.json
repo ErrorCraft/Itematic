@@ -10,7 +10,9 @@
       "behavior": "minecraft:projectile"
     },
     "minecraft:projectile": {
-      "entity": "minecraft:egg"
+      "entity": {
+        "type": "minecraft:egg"
+      }
     },
     "minecraft:throwable": {
       "angle_offset": 0.0,

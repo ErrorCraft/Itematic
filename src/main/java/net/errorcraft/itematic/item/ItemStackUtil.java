@@ -11,7 +11,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import org.jetbrains.annotations.Nullable;
 
 public class ItemStackUtil {
-    public static ItemStack readFromNbt(NbtCompound nbt, DynamicRegistryManager registryManager) {
+    public static ItemStack fromNbt(NbtCompound nbt, DynamicRegistryManager registryManager) {
         RegistryOps<NbtElement> ops = RegistryOps.of(NbtOps.INSTANCE, registryManager);
         return ItemStack.CODEC.parse(ops, nbt).result().orElse(ItemStack.EMPTY);
     }

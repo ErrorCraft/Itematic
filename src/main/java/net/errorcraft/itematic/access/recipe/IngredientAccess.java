@@ -4,5 +4,5 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registry;
 
 public interface IngredientAccess {
-    default void initMatchingStacks(Registry<Item> registry) {}
+    default void itematic$initMatchingStacks(Registry<Item> registry) {}
 }

@@ -17,10 +17,10 @@ public class SlotUtil {
 
     public static void readFromNbt(NbtCompound nbt, DynamicRegistryManager registryManager, BiConsumer<Integer, ItemStack> slotSetter) {
         int slot = nbt.getByte(SLOT_KEY) & 0xFF;
-        ItemStack itemStack = ItemStackUtil.readFromNbt(nbt, registryManager);
-        if (itemStack.isEmpty()) {
+        ItemStack stack = ItemStackUtil.fromNbt(nbt, registryManager);
+        if (stack.isEmpty()) {
             return;
         }
-        slotSetter.accept(slot, itemStack);
+        slotSetter.accept(slot, stack);
     }
 }

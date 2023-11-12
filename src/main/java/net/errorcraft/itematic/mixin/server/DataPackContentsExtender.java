@@ -33,8 +33,8 @@ public class DataPackContentsExtender {
         at = @At("TAIL")
     )
     private void setDynamicRegistryManagers(DynamicRegistryManager.Immutable dynamicRegistryManager, FeatureSet enabledFeatures, CommandManager.RegistrationEnvironment environment, int functionPermissionLevel, CallbackInfo info) {
-        this.lootManager.setRegistryManager(dynamicRegistryManager);
-        this.serverAdvancementLoader.setRegistryManager(dynamicRegistryManager);
-        this.recipeManager.setRegistryManager(dynamicRegistryManager);
+        this.lootManager.itematic$setRegistryManager(dynamicRegistryManager);
+        this.serverAdvancementLoader.itematic$setRegistryManager(dynamicRegistryManager);
+        this.recipeManager.itematic$setRegistryManager(dynamicRegistryManager);
     }
 }
