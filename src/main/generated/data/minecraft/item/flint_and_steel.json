@@ -121,6 +121,9 @@
                   "position": "target"
                 },
                 {
+                  "type": "minecraft:swing_hand"
+                },
+                {
                   "type": "minecraft:damage_item",
                   "amount": 1
                 }

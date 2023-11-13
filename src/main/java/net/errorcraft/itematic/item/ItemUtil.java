@@ -1929,6 +1929,7 @@ public class ItemUtil {
                         ),
                         ActionEntry.passing(
                             new PlaceBlockAction(blocks.getOrThrow(BlockKeys.FIRE), ActionContextParameter.TARGET, false),
+                            SwingHandAction.INSTANCE,
                             new DamageItemAction(1)
                         )
                     )))

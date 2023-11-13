@@ -19,6 +19,7 @@ public class ActionTypes {
     public static final ActionType<PlaceBlockAction> PLACE_BLOCK = register(ActionTypeKeys.PLACE_BLOCK, new ActionType<>(PlaceBlockAction.CODEC));
     public static final ActionType<DamageItemAction> DAMAGE_ITEM = register(ActionTypeKeys.DAMAGE_ITEM, new ActionType<>(DamageItemAction.CODEC));
     public static final ActionType<PrimeTntAction> PRIME_TNT = register(ActionTypeKeys.PRIME_TNT, new ActionType<>(PrimeTntAction.CODEC));
+    public static final ActionType<SwingHandAction> SWING_HAND = register(ActionTypeKeys.SWING_HAND, new ActionType<>(SwingHandAction.CODEC));
 
     private ActionTypes() {}
 
