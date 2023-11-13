@@ -34,9 +34,8 @@ public class MultiMapCodec<K, V> implements Codec<Multimap<K, V>> {
                 for (Pair<K, V> pair : u.getFirst()) {
                     v.put(pair.getFirst(), pair.getSecond());
                 }
-                return v;
-            }, DataResult.success(map))
-            .map(multimap -> Pair.of(multimap, input));
+                return Pair.of(v, u.getSecond());
+            }, DataResult.success(map));
     }
 
     @Override

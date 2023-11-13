@@ -53,6 +53,7 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.biome.Biome;
@@ -62,7 +63,7 @@ public class ItemUtil {
     public static final Codec<Item> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
         ItemBase.CODEC.fieldOf("base").forGetter(Item::itematic$itemBase),
         ItemComponentSet.CODEC.fieldOf("components").forGetter(Item::itematic$components),
-        ItemEventMap.CODEC.optionalFieldOf("events", ItemEventMap.EMPTY).forGetter(Item::itematic$events)
+        Codecs.createStrictOptionalFieldCodec(ItemEventMap.CODEC, "events", ItemEventMap.EMPTY).forGetter(Item::itematic$events)
     ).apply(instance, ItemUtil::create));
 
     public static void bootstrap(Registerable<Item> registerable) {
