@@ -18,6 +18,7 @@ public class DispenseBehaviorKeys {
     public static final RegistryKey<DispenserBehavior> SADDLE = of("saddle");
     public static final RegistryKey<DispenserBehavior> HORSE_ARMOR = of("horse_armor");
     public static final RegistryKey<DispenserBehavior> USE_ON_BLOCK = of("use_on_block");
+    public static final RegistryKey<DispenserBehavior> WAX_BLOCK = of("wax_block");
 
     private DispenseBehaviorKeys() {}
 

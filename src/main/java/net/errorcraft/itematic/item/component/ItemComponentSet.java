@@ -10,11 +10,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ItemComponentSet implements Iterable<ItemComponent> {
+    public static final ItemComponentSet EMPTY = new ItemComponentSet();
     public static final MapCodec<ItemComponentSet> CODEC = SetMapCodec.ofRegistry(ItematicRegistries.ITEM_COMPONENT_TYPE, ItemComponentType::codec, ItemComponent::codec, ItemComponent::type).xmap(ItemComponentSet::new, v -> v.values);
     private final Set<ItemComponent> values;
     private final HashMap<ItemComponentType<?>, ItemComponent> map;
 
-    public ItemComponentSet() {
+    private ItemComponentSet() {
         this(new HashSet<>(), new HashMap<>());
     }
 

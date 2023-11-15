@@ -2,9 +2,17 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.action.actions.ModifySignAction;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.MutableActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 
 public record DyeItemComponent(DyeColor color) implements ItemComponent {
@@ -20,5 +28,21 @@ public record DyeItemComponent(DyeColor color) implements ItemComponent {
     @Override
     public Codec<? extends ItemComponent> codec() {
         return CODEC;
+    }
+
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+        if (!(context.getWorld() instanceof ServerWorld world)) {
+            return ActionResult.SUCCESS;
+        }
+        ActionContext actionContext = MutableActionContext.stackUsage(world, context.getStack(), resultStackConsumer)
+            .entityPosition(ActionContextParameter.THIS, context.getPlayer())
+            .position(ActionContextParameter.TARGET, context.getBlockPos());
+        ModifySignAction action = ModifySignAction.dye(ActionContextParameter.TARGET, this.color);
+        if (action.execute(actionContext)) {
+            context.getStack().decrement(1);
+            return ActionResult.CONSUME;
+        }
+        return ActionResult.PASS;
     }
 }

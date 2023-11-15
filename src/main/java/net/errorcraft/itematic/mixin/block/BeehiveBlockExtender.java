@@ -63,4 +63,15 @@ public class BeehiveBlockExtender {
     private ItemStack newItemStackForHoneyBottleUseRegistryEntry(ItemConvertible item, @Local World world) {
         return world.itematic$createStack(ItemKeys.HONEY_BOTTLE);
     }
+
+    @Redirect(
+        method = "dropHoneycomb",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack"
+        )
+    )
+    private static ItemStack newItemStackForHoneycombUseRegistryEntry(ItemConvertible item, int count, @Local World world) {
+        return world.itematic$createStack(ItemKeys.HONEYCOMB);
+    }
 }

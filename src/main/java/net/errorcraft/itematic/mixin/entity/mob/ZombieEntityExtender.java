@@ -39,4 +39,15 @@ public class ZombieEntityExtender extends HostileEntity {
     private ItemStack newItemStackForZombieHeadUseRegistryEntry(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.ZOMBIE_HEAD);
     }
+
+    @Redirect(
+        method = "canGather",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfForGlowInkSacUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.GLOW_INK_SAC);
+    }
 }

@@ -24,6 +24,7 @@ import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionRequirements;
+import net.errorcraft.itematic.world.action.Actions;
 import net.errorcraft.itematic.world.action.actions.*;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
@@ -2815,6 +2816,20 @@ public class ItemUtil {
                 .with(FoodItemComponent.from(FoodComponents.COOKED_SALMON))
                 .build()
         ));
+        registerable.register(ItemKeys.INK_SAC, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.INK_SAC).build()),
+            ItemComponentSet.EMPTY,
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(false))
+                .build()
+        ));
+        registerable.register(ItemKeys.GLOW_INK_SAC, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOW_INK_SAC).build()),
+            ItemComponentSet.EMPTY,
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(true))
+                .build()
+        ));
         registerable.register(ItemKeys.WHITE_DYE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WHITE_DYE).build()),
             ItemComponentSet.builder()
@@ -4136,6 +4151,23 @@ public class ItemUtil {
                 .with(new CompostableItemComponent(0.3f))
                 .build()
         ));
+        registerable.register(ItemKeys.HONEYCOMB, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEYCOMB).build()),
+            ItemComponentSet.builder()
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.WAX_BLOCK)))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.simple(
+                    FirstToPassAction.of(
+                        Actions.waxSign(true),
+                        ActionEntry.passing(
+                            new WaxBlockAction(ActionContextParameter.TARGET),
+                            DecrementItemAction.of(1),
+                            SwingHandAction.INSTANCE
+                        )
+                    )))
+                .build()
+        ));
         registerable.register(ItemKeys.HONEY_BOTTLE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEY_BOTTLE).build(), 16),
             ItemComponentSet.builder()
@@ -4150,7 +4182,7 @@ public class ItemUtil {
     }
 
     private static Item create(ItemBase base) {
-        return create(base, new ItemComponentSet());
+        return create(base, ItemComponentSet.EMPTY);
     }
 
     private static Item create(ItemBase base, ItemComponentSet components) {

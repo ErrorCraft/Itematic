@@ -19,6 +19,9 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> DAMAGE_ITEM = of("damage_item");
     public static final RegistryKey<ActionType<?>> PRIME_TNT = of("prime_tnt");
     public static final RegistryKey<ActionType<?>> SWING_HAND = of("swing_hand");
+    public static final RegistryKey<ActionType<?>> MODIFY_SIGN = of("modify_sign");
+    public static final RegistryKey<ActionType<?>> WAX_BLOCK = of("wax_block");
+    public static final RegistryKey<ActionType<?>> DECREMENT_ITEM = of("decrement_item");
 
     private ActionTypeKeys() {}
 

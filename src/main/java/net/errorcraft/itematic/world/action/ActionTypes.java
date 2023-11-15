@@ -20,6 +20,9 @@ public class ActionTypes {
     public static final ActionType<DamageItemAction> DAMAGE_ITEM = register(ActionTypeKeys.DAMAGE_ITEM, new ActionType<>(DamageItemAction.CODEC));
     public static final ActionType<PrimeTntAction> PRIME_TNT = register(ActionTypeKeys.PRIME_TNT, new ActionType<>(PrimeTntAction.CODEC));
     public static final ActionType<SwingHandAction> SWING_HAND = register(ActionTypeKeys.SWING_HAND, new ActionType<>(SwingHandAction.CODEC));
+    public static final ActionType<ModifySignAction> MODIFY_SIGN = register(ActionTypeKeys.MODIFY_SIGN, new ActionType<>(ModifySignAction.CODEC));
+    public static final ActionType<WaxBlockAction> WAX_BLOCK = register(ActionTypeKeys.WAX_BLOCK, new ActionType<>(WaxBlockAction.CODEC));
+    public static final ActionType<DecrementItemAction> DECREMENT_ITEM = register(ActionTypeKeys.DECREMENT_ITEM, new ActionType<>(DecrementItemAction.CODEC));
 
     private ActionTypes() {}
 

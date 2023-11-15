@@ -1,0 +1,51 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.ink_sac"
+    },
+    "max_count": 64
+  },
+  "components": {},
+  "events": [
+    {
+      "event": "minecraft:use_on_block",
+      "action": {
+        "type": "minecraft:sequence",
+        "action_must_pass": true,
+        "entries": [
+          {
+            "type": "minecraft:modify_sign",
+            "glow": false,
+            "position": "target"
+          },
+          {
+            "type": "minecraft:decrement_item",
+            "amount": 1
+          },
+          {
+            "type": "minecraft:swing_hand"
+          }
+        ]
+      },
+      "requirements": {
+        "conditions": {
+          "condition": "minecraft:all_of",
+          "terms": [
+            {
+              "condition": "minecraft:location_check",
+              "predicate": {
+                "block": {
+                  "tag": "minecraft:signs"
+                }
+              }
+            }
+          ]
+        },
+        "context": {
+          "entity": "this",
+          "position": "target"
+        }
+      }
+    }
+  ]
+}

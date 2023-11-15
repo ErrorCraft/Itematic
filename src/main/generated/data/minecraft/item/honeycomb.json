@@ -1,0 +1,81 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.honeycomb"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:wax_block"
+    }
+  },
+  "events": [
+    {
+      "event": "minecraft:use_on_block",
+      "action": {
+        "type": "minecraft:first_to_pass",
+        "entries": [
+          {
+            "action": {
+              "type": "minecraft:sequence",
+              "action_must_pass": true,
+              "entries": [
+                {
+                  "type": "minecraft:modify_sign",
+                  "position": "target",
+                  "wax": true
+                },
+                {
+                  "type": "minecraft:decrement_item",
+                  "amount": 1
+                },
+                {
+                  "type": "minecraft:swing_hand"
+                }
+              ]
+            },
+            "requirements": {
+              "conditions": {
+                "condition": "minecraft:all_of",
+                "terms": [
+                  {
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                      "block": {
+                        "tag": "minecraft:signs"
+                      }
+                    }
+                  }
+                ]
+              },
+              "context": {
+                "entity": "this",
+                "position": "target"
+              }
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:sequence",
+              "action_must_pass": true,
+              "entries": [
+                {
+                  "type": "minecraft:wax_block",
+                  "position": "target"
+                },
+                {
+                  "type": "minecraft:decrement_item",
+                  "amount": 1
+                },
+                {
+                  "type": "minecraft:swing_hand"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

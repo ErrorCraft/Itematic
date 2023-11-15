@@ -394,6 +394,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> PUFFERFISH = register("pufferfish");
     public static final RegistryKey<Item> COOKED_COD = register("cooked_cod");
     public static final RegistryKey<Item> COOKED_SALMON = register("cooked_salmon");
+    public static final RegistryKey<Item> INK_SAC = register("ink_sac");
+    public static final RegistryKey<Item> GLOW_INK_SAC = register("glow_ink_sac");
     public static final RegistryKey<Item> WHITE_DYE = register("white_dye");
     public static final RegistryKey<Item> ORANGE_DYE = register("orange_dye");
     public static final RegistryKey<Item> MAGENTA_DYE = register("magenta_dye");
@@ -603,6 +605,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> SMITHING_TABLE = register("smithing_table");
     public static final RegistryKey<Item> SWEET_BERRIES = register("sweet_berries");
     public static final RegistryKey<Item> GLOW_BERRIES = register("glow_berries");
+    public static final RegistryKey<Item> HONEYCOMB = register("honeycomb");
     public static final RegistryKey<Item> HONEY_BOTTLE = register("honey_bottle");
 
 
