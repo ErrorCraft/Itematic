@@ -18,6 +18,8 @@ public class ModelOverrides {
     public static final ModelOverride FIREWORK = register(ModelOverrideKeys.FIREWORK, new FireworkModelOverride());
     public static final ModelOverride BROKEN = register(ModelOverrideKeys.BROKEN, new BrokenModelOverride());
     public static final ModelOverride BLOCKING = register(ModelOverrideKeys.BLOCKING, new BlockingModelOverride());
+    public static final ModelOverride TIME = register(ModelOverrideKeys.TIME, new TimeModelOverride());
+    public static final ModelOverride ANGLE = register(ModelOverrideKeys.ANGLE, new AngleModelOverride());
 
     private ModelOverrides() {}
 

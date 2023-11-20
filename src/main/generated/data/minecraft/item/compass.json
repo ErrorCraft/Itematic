@@ -5,5 +5,49 @@
     },
     "max_count": 64
   },
-  "components": {}
+  "components": {
+    "minecraft:pointable": {
+      "lodestone_translation_key": "item.minecraft.lodestone_compass",
+      "points_to": "minecraft:spawn_location"
+    }
+  },
+  "events": [
+    {
+      "event": "minecraft:use_on_block",
+      "action": {
+        "type": "minecraft:sequence",
+        "action_must_pass": true,
+        "entries": [
+          {
+            "type": "minecraft:set_item_pointer_location",
+            "position": "target"
+          },
+          {
+            "type": "minecraft:swing_hand"
+          }
+        ]
+      },
+      "requirements": {
+        "conditions": {
+          "condition": "minecraft:all_of",
+          "terms": [
+            {
+              "condition": "minecraft:location_check",
+              "predicate": {
+                "block": {
+                  "blocks": [
+                    "minecraft:lodestone"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "context": {
+          "entity": "this",
+          "position": "target"
+        }
+      }
+    }
+  ]
 }

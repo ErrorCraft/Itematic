@@ -17,10 +17,12 @@ import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
+import net.minecraft.item.CompassItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
@@ -256,6 +258,17 @@ public class ItemExtender implements ItemAccess {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        for (ItemComponent component : this.components) {
+            component.inventoryTick(stack, world, entity, slot, selected);
+        }
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         this.base.display().tooltip().ifPresent(tooltip::addAll);
         for (ItemComponent component : this.components) {
@@ -321,7 +334,12 @@ public class ItemExtender implements ItemAccess {
     public boolean hasGlint(ItemStack stack) {
         return this.itematic$getComponent(ItemComponentTypes.FOIL)
             .map(FoilItemComponent::foil)
-            .orElseGet(stack::hasEnchantments);
+            .orElseGet(() -> {
+                if (this.itematic$hasComponent(ItemComponentTypes.POINTABLE) && CompassItem.hasLodestone(stack)) {
+                    return true;
+                }
+                return stack.hasEnchantments();
+            });
     }
 
     /**
@@ -387,8 +405,21 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public String getTranslationKey() {
-        return this.base.display().translationKey();
+        return this.itematic$getComponent(ItemComponentTypes.POINTABLE)
+            .flatMap(PointableItemComponent::lodestoneTranslationKey)
+            .orElse(this.base.display().translationKey());
     }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public String getTranslationKey(ItemStack stack) {
+        return this.itematic$getComponent(ItemComponentTypes.POINTABLE)
+            .flatMap(c -> c.lodestoneTranslationKey(stack))
+            .orElseGet(this::getTranslationKey);
+    };
 
     @Override
     public ItemBase itematic$itemBase() {

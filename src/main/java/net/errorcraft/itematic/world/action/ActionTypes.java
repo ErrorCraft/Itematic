@@ -23,6 +23,7 @@ public class ActionTypes {
     public static final ActionType<ModifySignAction> MODIFY_SIGN = register(ActionTypeKeys.MODIFY_SIGN, new ActionType<>(ModifySignAction.CODEC));
     public static final ActionType<WaxBlockAction> WAX_BLOCK = register(ActionTypeKeys.WAX_BLOCK, new ActionType<>(WaxBlockAction.CODEC));
     public static final ActionType<DecrementItemAction> DECREMENT_ITEM = register(ActionTypeKeys.DECREMENT_ITEM, new ActionType<>(DecrementItemAction.CODEC));
+    public static final ActionType<SetItemPointerLocationAction> SET_ITEM_POINTER_LOCATION = register(ActionTypeKeys.SET_ITEM_POINTER_LOCATION, new ActionType<>(SetItemPointerLocationAction.CODEC));
 
     private ActionTypes() {}
 

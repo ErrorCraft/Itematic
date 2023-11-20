@@ -17,6 +17,8 @@ import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.item.pointer.Pointer;
+import net.errorcraft.itematic.item.pointer.PointerKeys;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.item.MilkBucketItemAccessor;
 import net.errorcraft.itematic.mixin.item.PotionItemAccessor;
@@ -50,10 +52,7 @@ import net.minecraft.predicate.entity.LocationPredicate;
 import net.minecraft.registry.*;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
-import net.minecraft.util.UseAction;
+import net.minecraft.util.*;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.RaycastContext;
@@ -76,6 +75,7 @@ public class ItemUtil {
         RegistryEntryLookup<DispenserBehavior> dispenseBehaviors = registerable.getRegistryLookup(ItematicRegistryKeys.DISPENSE_BEHAVIOR);
         RegistryEntryLookup<SoundEvent> soundEvents = registerable.getRegistryLookup(RegistryKeys.SOUND_EVENT);
         RegistryEntryLookup<Fluid> fluids = registerable.getRegistryLookup(RegistryKeys.FLUID);
+        RegistryEntryLookup<Pointer> pointers = registerable.getRegistryLookup(ItematicRegistryKeys.POINTER);
 
         registerable.register(ItemKeys.AIR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build())
@@ -2766,7 +2766,31 @@ public class ItemUtil {
                 .build()
         ));
         registerable.register(ItemKeys.COMPASS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COMPASS).build())
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COMPASS).build()),
+            ItemComponentSet.builder()
+                .with(PointableItemComponent.of(pointers.getOrThrow(PointerKeys.SPAWN_LOCATION), Util.createTranslationKey("item", new Identifier("lodestone_compass"))))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.passing(
+                    ActionRequirements.of(
+                        ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                        AllOfLootCondition.builder(
+                            LocationCheckLootCondition.builder(
+                                LocationPredicate.Builder.create()
+                                    .block(BlockPredicate.Builder.create()
+                                        .blocks(Blocks.LODESTONE))))
+                            .build()
+                    ),
+                    SetItemPointerLocationAction.of(ActionContextParameter.TARGET),
+                    SwingHandAction.INSTANCE
+                ))
+                .build()
+        ));
+        registerable.register(ItemKeys.RECOVERY_COMPASS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RECOVERY_COMPASS).build()),
+            ItemComponentSet.builder()
+                .with(PointableItemComponent.of(pointers.getOrThrow(PointerKeys.LAST_DEATH)))
+                .build()
         ));
         registerable.register(ItemKeys.FISHING_ROD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FISHING_ROD).build(), 1),

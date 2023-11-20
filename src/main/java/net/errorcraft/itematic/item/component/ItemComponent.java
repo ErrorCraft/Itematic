@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -46,6 +47,8 @@ public interface ItemComponent {
     default void stopUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {}
 
     default void finishUsing(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {}
+
+    default void inventoryTick(ItemStack stack, World world, Entity holder, int slot, boolean selected) {}
 
     default void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {}
 }

@@ -385,6 +385,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> BOOK = register("book");
     public static final RegistryKey<Item> EGG = register("egg");
     public static final RegistryKey<Item> COMPASS = register("compass");
+    public static final RegistryKey<Item> RECOVERY_COMPASS = register("recovery_compass");
     public static final RegistryKey<Item> FISHING_ROD = register("fishing_rod");
     public static final RegistryKey<Item> GLOWSTONE_DUST = register("glowstone_dust");
     public static final RegistryKey<Item> CLOCK = register("clock");

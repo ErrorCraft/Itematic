@@ -6,6 +6,7 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.item.model.override.ModelOverride;
+import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.registry.Registry;
@@ -21,6 +22,7 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<ActionType<?>>> ACTION_TYPE = RegistryKey.ofRegistry(new Identifier("action_type"));
     public static final RegistryKey<Registry<ItemGroupEntryProvider>> ITEM_GROUP_ENTRY_PROVIDER = RegistryKey.ofRegistry(new Identifier("item_group_entry_provider"));
     public static final RegistryKey<Registry<ModelOverride>> MODEL_OVERRIDE = RegistryKey.ofRegistry(new Identifier("model_override"));
+    public static final RegistryKey<Registry<Pointer>> POINTER = RegistryKey.ofRegistry(new Identifier("pointer"));
 
     private ItematicRegistryKeys() {}
 }

@@ -43,6 +43,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<SaddleItemComponent> SADDLE = register("saddle", new ItemComponentType<>(SaddleItemComponent.CODEC));
     public static final ItemComponentType<HorseArmorItemComponent> HORSE_ARMOR = register("horse_armor", new ItemComponentType<>(HorseArmorItemComponent.CODEC));
     public static final ItemComponentType<SteeringItemComponent> STEERING = register("steering", new ItemComponentType<>(SteeringItemComponent.CODEC));
+    public static final ItemComponentType<PointableItemComponent> POINTABLE = register("pointable", new ItemComponentType<>(PointableItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

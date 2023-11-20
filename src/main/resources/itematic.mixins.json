@@ -146,6 +146,7 @@
     "fluid.LavaFluidExtender",
     "fluid.WaterFluidExtender",
     "inventory.EnderChestInventoryExtender",
+    "item.CompassItemAccessor",
     "item.CrossbowItemAccessor",
     "item.CrossbowItemExtender",
     "item.ElytraItemExtender",

@@ -22,6 +22,7 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> MODIFY_SIGN = of("modify_sign");
     public static final RegistryKey<ActionType<?>> WAX_BLOCK = of("wax_block");
     public static final RegistryKey<ActionType<?>> DECREMENT_ITEM = of("decrement_item");
+    public static final RegistryKey<ActionType<?>> SET_ITEM_POINTER_LOCATION = of("set_item_pointer_location");
 
     private ActionTypeKeys() {}
 
