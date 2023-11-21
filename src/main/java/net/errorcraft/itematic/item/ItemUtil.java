@@ -611,10 +611,10 @@ public class ItemUtil {
                 .with(new TintedItemComponent(new ConstantItemColor(FoliageColors.getMangroveColor())))
                 .build()
         ));
-        registerable.register(ItemKeys.GRASS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRASS).build()),
+        registerable.register(ItemKeys.SHORT_GRASS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SHORT_GRASS).build()),
             ItemComponentSet.builder()
-                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.GRASS)))
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.SHORT_GRASS)))
                 .with(new CompostableItemComponent(0.3f))
                 .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()

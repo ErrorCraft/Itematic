@@ -84,7 +84,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_LEAVES = register("acacia_leaves");
     public static final RegistryKey<Item> DARK_OAK_LEAVES = register("dark_oak_leaves");
     public static final RegistryKey<Item> MANGROVE_LEAVES = register("mangrove_leaves");
-    public static final RegistryKey<Item> GRASS = register("grass");
+    public static final RegistryKey<Item> SHORT_GRASS = register("short_grass");
     public static final RegistryKey<Item> FERN = register("fern");
     public static final RegistryKey<Item> AZALEA = register("azalea");
     public static final RegistryKey<Item> FLOWERING_AZALEA = register("flowering_azalea");

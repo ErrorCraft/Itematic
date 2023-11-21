@@ -346,7 +346,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
         this.getOrCreateTagBuilder(ItematicItemTags.PLANTS)
             .add(ItemKeys.AZALEA)
             .add(ItemKeys.FLOWERING_AZALEA)
-            .add(ItemKeys.GRASS)
+            .add(ItemKeys.SHORT_GRASS)
             .add(ItemKeys.FERN)
             .add(ItemKeys.DEAD_BUSH)
             .add(ItemKeys.BAMBOO)

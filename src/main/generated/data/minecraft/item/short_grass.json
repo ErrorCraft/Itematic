@@ -1,13 +1,13 @@
 {
   "base": {
     "display": {
-      "translation_key": "block.minecraft.grass"
+      "translation_key": "block.minecraft.short_grass"
     },
     "max_count": 64
   },
   "components": {
     "minecraft:block": {
-      "block": "minecraft:grass"
+      "block": "minecraft:short_grass"
     },
     "minecraft:compostable": {
       "level_increase_chance": 0.3

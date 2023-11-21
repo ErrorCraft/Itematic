@@ -73,7 +73,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> MANGROVE_LEAVES = of("mangrove_leaves");
     public static final RegistryKey<Block> NOTE_BLOCK = of("note_block");
     public static final RegistryKey<Block> COBWEB = of("cobweb");
-    public static final RegistryKey<Block> GRASS = of("grass");
+    public static final RegistryKey<Block> SHORT_GRASS = of("short_grass");
     public static final RegistryKey<Block> FERN = of("fern");
     public static final RegistryKey<Block> DEAD_BUSH = of("dead_bush");
     public static final RegistryKey<Block> WHITE_WOOL = of("white_wool");
