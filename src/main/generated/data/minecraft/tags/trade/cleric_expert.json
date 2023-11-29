@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:buy_scute",
+    "minecraft:buy_glass_bottle",
+    "minecraft:sell_ender_pearl"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "gives": {
+    "item": "minecraft:white_wool"
+  },
+  "max_uses": 16,
+  "price_multiplier": 0.05,
+  "trade_experience": 5,
+  "wants": [
+    {
+      "item": "minecraft:emerald"
+    }
+  ]
+}

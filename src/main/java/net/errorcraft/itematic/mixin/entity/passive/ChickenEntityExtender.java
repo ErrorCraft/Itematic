@@ -29,8 +29,8 @@ public abstract class ChickenEntityExtender extends AnimalEntity {
             target = "Lnet/minecraft/entity/passive/ChickenEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity tickMovementDropItemUseRegistryEntry(ChickenEntity instance, ItemConvertible itemConvertible) {
-        return this.dropItem(this.getWorld().itematic$getItem(ItemKeys.EGG));
+    private ItemEntity dropItemForEggUseRegistryKey(ChickenEntity instance, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(ItemKeys.EGG);
     }
 
     @Redirect(
@@ -40,7 +40,7 @@ public abstract class ChickenEntityExtender extends AnimalEntity {
             target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
         )
     )
-    private boolean isBreedingItemTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
+    private boolean testForBreedingItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
         return itemStack.isIn(ItematicItemTags.CHICKEN_BREEDING_ITEMS);
     }
 
@@ -51,7 +51,7 @@ public abstract class ChickenEntityExtender extends AnimalEntity {
             target = "net/minecraft/entity/ai/goal/TemptGoal"
         )
     )
-    private TemptGoal initGoalsNewTemptGoalSetFoodTag(TemptGoal original) {
+    private TemptGoal newTemptGoalSetFoodTag(TemptGoal original) {
         original.setFoodTag(ItematicItemTags.CHICKEN_TEMPTING_ITEMS);
         return original;
     }

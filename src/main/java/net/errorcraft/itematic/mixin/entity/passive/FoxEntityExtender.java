@@ -25,11 +25,23 @@ public abstract class FoxEntityExtender extends AnimalEntity {
         at = @At(
             value = "NEW",
             target = "net/minecraft/item/ItemStack",
+            ordinal = 0
+        )
+    )
+    private ItemStack newItemStackForEmeraldUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.EMERALD);
+    }
+
+    @Redirect(
+        method = "initEquipment",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack",
             ordinal = 1
         )
     )
-    private ItemStack initEquipmentNewItemStackForEggUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.EGG));
+    private ItemStack newItemStackForEggUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.EGG);
     }
 
     @Redirect(
@@ -46,8 +58,8 @@ public abstract class FoxEntityExtender extends AnimalEntity {
             )
         )
     )
-    private ItemStack initEquipmentNewItemStackForRabbitFootUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.RABBIT_FOOT));
+    private ItemStack newItemStackForRabbitFootUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.RABBIT_FOOT);
     }
 
     @Redirect(
@@ -64,8 +76,8 @@ public abstract class FoxEntityExtender extends AnimalEntity {
             )
         )
     )
-    private ItemStack initEquipmentNewItemStackForWheatUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.WHEAT));
+    private ItemStack newItemStackForWheatUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.WHEAT);
     }
 
     @Redirect(
@@ -82,8 +94,8 @@ public abstract class FoxEntityExtender extends AnimalEntity {
             )
         )
     )
-    private ItemStack initEquipmentNewItemStackForLeatherUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.LEATHER));
+    private ItemStack newItemStackForLeatherUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.LEATHER);
     }
 
     @Redirect(
@@ -100,8 +112,8 @@ public abstract class FoxEntityExtender extends AnimalEntity {
             )
         )
     )
-    private ItemStack initEquipmentNewItemStackForFeatherUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.FEATHER));
+    private ItemStack newItemStackForFeatherUseRegistryEntry(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.FEATHER);
     }
 
     @Mixin(FoxEntity.EatBerriesGoal.class)
@@ -118,7 +130,7 @@ public abstract class FoxEntityExtender extends AnimalEntity {
                 ordinal = 0
             )
         )
-        private ItemStack pickSweetBerriesNewItemStackUseRegistryEntry(ItemConvertible item) {
+        private ItemStack newItemStackForSweetBerriesUseRegistryEntry(ItemConvertible item) {
             return new ItemStack(this.field_17975.getWorld().itematic$getItem(ItemKeys.SWEET_BERRIES));
         }
 
@@ -130,7 +142,7 @@ public abstract class FoxEntityExtender extends AnimalEntity {
                 ordinal = 1
             )
         )
-        private ItemStack pickSweetBerriesNewItemStackUseRegistryEntry(ItemConvertible item, int count) {
+        private ItemStack newItemStackForSweetBerriesUseRegistryEntry(ItemConvertible item, int count) {
             return new ItemStack(this.field_17975.getWorld().itematic$getItem(ItemKeys.SWEET_BERRIES), count);
         }
     }

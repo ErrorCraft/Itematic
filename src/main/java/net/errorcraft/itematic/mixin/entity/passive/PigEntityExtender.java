@@ -41,7 +41,7 @@ public abstract class PigEntityExtender extends AnimalEntity {
             )
         )
     )
-    private void initGoalsDoNotAddCarrotOnAStickGoalSelector(GoalSelector instance, int priority, Goal goal) {}
+    private void doNotAddCarrotOnAStickGoalSelector(GoalSelector instance, int priority, Goal goal) {}
 
     @ModifyExpressionValue(
         method = "initGoals",
@@ -51,7 +51,7 @@ public abstract class PigEntityExtender extends AnimalEntity {
             ordinal = 1
         )
     )
-    private TemptGoal initGoalsNewTemptGoalSetFoodTag(TemptGoal original) {
+    private TemptGoal newTemptGoalSetFoodTag(TemptGoal original) {
         original.setFoodTag(ItematicItemTags.PIG_TEMPTING_ITEMS);
         return original;
     }
@@ -63,7 +63,7 @@ public abstract class PigEntityExtender extends AnimalEntity {
             target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
         )
     )
-    private boolean isBreedingItemTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
+    private boolean testForBreedingItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
         return itemStack.isIn(ItematicItemTags.PIG_BREEDING_ITEMS);
     }
 
@@ -97,7 +97,7 @@ public abstract class PigEntityExtender extends AnimalEntity {
         )
     )
     private ItemEntity dropItemForSaddleUseRegistryKey(PigEntity instance, ItemConvertible itemConvertible) {
-        return this.dropItem(ItemKeys.SADDLE);
+        return this.itematic$dropItem(ItemKeys.SADDLE);
     }
 
     @Redirect(

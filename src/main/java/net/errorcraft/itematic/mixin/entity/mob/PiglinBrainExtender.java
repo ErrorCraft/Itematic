@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(PiglinBrain.class)
 public class PiglinBrainExtender {
     @Redirect(
-        method = { "loot", "canGather" },
+        method = { "loot", "canGather", "acceptsForBarter" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"

@@ -1,0 +1,14 @@
+{
+  "base": {
+    "display": {
+      "rarity": "rare",
+      "translation_key": "block.minecraft.beacon"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:beacon"
+    }
+  }
+}

@@ -52,8 +52,8 @@ public class FarmerWorkTaskExtender {
             target = "Ljava/util/List;indexOf(Ljava/lang/Object;)I"
         )
     )
-    private int compostSeedsSizeUseRegistryKeys(List<Item> instance, Object o) {
-        return COMPOSTABLE_KEYS.indexOf(((ItemStack) o).itematic$key());
+    private int compostSeedsSizeUseRegistryKeys(List<Item> instance, Object o, @Local ItemStack stack) {
+        return COMPOSTABLE_KEYS.indexOf(stack.itematic$key());
     }
 
     @Redirect(

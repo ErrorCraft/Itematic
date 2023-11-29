@@ -1,0 +1,14 @@
+{
+  "gives": {
+    "item": "minecraft:ender_pearl"
+  },
+  "max_uses": 12,
+  "price_multiplier": 0.05,
+  "trade_experience": 15,
+  "wants": [
+    {
+      "count": 5,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

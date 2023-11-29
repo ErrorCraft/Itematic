@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:buy_coal_cheaper",
+    "minecraft:sell_cooked_porkchop",
+    "minecraft:sell_cooked_chicken"
+  ]
+}

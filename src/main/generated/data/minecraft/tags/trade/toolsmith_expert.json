@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:buy_diamond_more_experience",
+    "minecraft:sell_enchanted_diamond_axe",
+    "minecraft:sell_enchanted_diamond_shovel"
+  ]
+}

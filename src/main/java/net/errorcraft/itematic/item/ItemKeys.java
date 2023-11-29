@@ -156,6 +156,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> CRIMSON_STAIRS = register("crimson_stairs");
     public static final RegistryKey<Item> WARPED_STAIRS = register("warped_stairs");
     public static final RegistryKey<Item> COMMAND_BLOCK = register("command_block");
+    public static final RegistryKey<Item> BEACON = register("beacon");
     public static final RegistryKey<Item> BARRIER = register("barrier");
     public static final RegistryKey<Item> WHITE_CARPET = register("white_carpet");
     public static final RegistryKey<Item> ORANGE_CARPET = register("orange_carpet");
@@ -274,6 +275,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> COAL = register("coal");
     public static final RegistryKey<Item> CHARCOAL = register("charcoal");
     public static final RegistryKey<Item> DIAMOND = register("diamond");
+    public static final RegistryKey<Item> EMERALD = register("emerald");
     public static final RegistryKey<Item> LAPIS_LAZULI = register("lapis_lazuli");
     public static final RegistryKey<Item> IRON_INGOT = register("iron_ingot");
     public static final RegistryKey<Item> GOLD_INGOT = register("gold_ingot");

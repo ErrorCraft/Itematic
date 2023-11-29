@@ -45,7 +45,7 @@ public abstract class StriderEntityExtender extends AnimalEntity {
         )
     )
     private ItemEntity dropItemForSaddleUseRegistryKey(StriderEntity instance, ItemConvertible itemConvertible) {
-        return this.dropItem(ItemKeys.SADDLE);
+        return this.itematic$dropItem(ItemKeys.SADDLE);
     }
 
     @Redirect(
@@ -77,7 +77,7 @@ public abstract class StriderEntityExtender extends AnimalEntity {
             target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
         )
     )
-    private boolean isBreedingItemTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
+    private boolean testForBreedingItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
         return itemStack.isIn(ItematicItemTags.STRIDER_BREEDING_ITEMS);
     }
 
@@ -88,7 +88,7 @@ public abstract class StriderEntityExtender extends AnimalEntity {
             target = "net/minecraft/entity/ai/goal/TemptGoal"
         )
     )
-    private TemptGoal initCustomGoalsNewTemptGoalSetFoodTag(TemptGoal original) {
+    private TemptGoal newTemptGoalSetFoodTag(TemptGoal original) {
         original.setFoodTag(ItematicItemTags.STRIDER_TEMPTING_ITEMS);
         return original;
     }

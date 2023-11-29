@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -26,10 +27,11 @@ public abstract class VehicleEntityExtender extends Entity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack dropItemsNewItemStackUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackUseRegistryEntry(ItemConvertible item) {
         return this.getWorld().itematic$createStack(this.asItemKey());
     }
 
+    @Unique
     protected RegistryKey<Item> asItemKey() {
         return ItemKeys.MINECART;
     }

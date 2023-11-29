@@ -158,6 +158,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> BIRCH_STAIRS = of("birch_stairs");
     public static final RegistryKey<Block> JUNGLE_STAIRS = of("jungle_stairs");
     public static final RegistryKey<Block> COMMAND_BLOCK = of("command_block");
+    public static final RegistryKey<Block> BEACON = of("beacon");
     public static final RegistryKey<Block> CARROTS = of("carrots");
     public static final RegistryKey<Block> POTATOES = of("potatoes");
     public static final RegistryKey<Block> OAK_BUTTON = of("oak_button");

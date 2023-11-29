@@ -1113,6 +1113,12 @@ public class ItemUtil {
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.COMMAND_BLOCK), true))
                 .build()
         ));
+        registerable.register(ItemKeys.BEACON, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BEACON).rarity(Rarity.RARE).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BEACON)))
+                .build()
+        ));
         registerable.register(ItemKeys.BARRIER, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARRIER).rarity(Rarity.EPIC).build()),
             ItemComponentSet.builder()
@@ -1976,6 +1982,9 @@ public class ItemUtil {
         ));
         registerable.register(ItemKeys.DIAMOND, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND).build())
+        ));
+        registerable.register(ItemKeys.EMERALD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EMERALD).build())
         ));
         registerable.register(ItemKeys.LAPIS_LAZULI, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LAPIS_LAZULI).build())

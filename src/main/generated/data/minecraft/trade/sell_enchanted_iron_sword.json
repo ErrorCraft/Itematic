@@ -1,0 +1,25 @@
+{
+  "gives": {
+    "item": "minecraft:iron_sword",
+    "item_modifier": {
+      "function": "minecraft:enchant_with_levels",
+      "levels": {
+        "type": "minecraft:uniform",
+        "max": 20.0,
+        "min": 5.0
+      },
+      "treasure": false
+    }
+  },
+  "max_uses": 3,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "count": {
+        "max": 22,
+        "min": 7
+      },
+      "item": "minecraft:emerald"
+    }
+  ]
+}

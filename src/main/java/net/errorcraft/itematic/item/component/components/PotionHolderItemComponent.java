@@ -28,6 +28,6 @@ public record PotionHolderItemComponent() implements ItemComponent {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        PotionUtil.buildTooltip(stack, tooltip, 1.0f);
+        PotionUtil.buildTooltip(stack, tooltip, 1.0f, world == null ? 20.0f : world.getTickManager().getTickRate());
     }
 }

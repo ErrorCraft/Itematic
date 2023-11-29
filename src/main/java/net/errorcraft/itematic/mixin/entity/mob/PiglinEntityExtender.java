@@ -80,4 +80,15 @@ public abstract class PiglinEntityExtender extends AbstractPiglinEntity {
     private boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.CROSSBOW);
     }
+
+    @Redirect(
+        method = "equipToOffHand",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfForGoldIngotUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.GOLD_INGOT);
+    }
 }

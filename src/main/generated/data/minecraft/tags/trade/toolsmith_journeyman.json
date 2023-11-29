@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:sell_enchanted_iron_axe",
+    "minecraft:sell_enchanted_iron_shovel",
+    "minecraft:sell_enchanted_iron_pickaxe",
+    "minecraft:sell_diamond_hoe"
+  ]
+}

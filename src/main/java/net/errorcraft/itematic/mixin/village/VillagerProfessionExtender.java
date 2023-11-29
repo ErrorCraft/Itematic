@@ -5,9 +5,11 @@ import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.item.Item;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.village.VillagerProfession;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -18,6 +20,7 @@ public class VillagerProfessionExtender implements VillagerProfessionAccess {
     @Final
     public static VillagerProfession FARMER;
 
+    @Unique
     private TagKey<Item> gatherableItemsTag;
 
     @Inject(
@@ -29,7 +32,7 @@ public class VillagerProfessionExtender implements VillagerProfessionAccess {
     }
 
     @Override
-    public TagKey<Item> gatherableItemsTag() {
+    public @Nullable TagKey<Item> itematic$gatherableItemsTag() {
         return this.gatherableItemsTag;
     }
 }

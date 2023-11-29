@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:buy_lava_bucket",
+    "minecraft:buy_diamond",
+    "minecraft:sell_chainmail_helmet",
+    "minecraft:sell_chainmail_chestplate",
+    "minecraft:sell_shield"
+  ]
+}

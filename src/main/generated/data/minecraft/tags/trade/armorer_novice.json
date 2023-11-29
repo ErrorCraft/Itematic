@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:buy_coal_cheaper",
+    "minecraft:sell_iron_leggings",
+    "minecraft:sell_iron_boots",
+    "minecraft:sell_iron_helmet",
+    "minecraft:sell_iron_chestplate"
+  ]
+}

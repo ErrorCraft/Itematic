@@ -1,0 +1,13 @@
+{
+  "gives": {
+    "count": 2,
+    "item": "minecraft:lily_pad"
+  },
+  "max_uses": 5,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "item": "minecraft:emerald"
+    }
+  ]
+}

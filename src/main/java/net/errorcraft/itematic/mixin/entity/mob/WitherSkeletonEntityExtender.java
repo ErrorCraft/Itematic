@@ -24,7 +24,7 @@ public abstract class WitherSkeletonEntityExtender extends AbstractSkeletonEntit
             target = "Lnet/minecraft/entity/mob/WitherSkeletonEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity dropEquipmentDropItemUseRegistryKey(WitherSkeletonEntity instance, ItemConvertible itemConvertible) {
-        return this.dropItem(ItemKeys.WITHER_SKELETON_SKULL);
+    private ItemEntity dropItemForWitherSkeletonSkullUseRegistryKey(WitherSkeletonEntity instance, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(ItemKeys.WITHER_SKELETON_SKULL);
     }
 }

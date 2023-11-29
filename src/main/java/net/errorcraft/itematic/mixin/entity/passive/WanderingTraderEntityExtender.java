@@ -1,20 +1,36 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
+import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.village.trade.Trade;
+import net.errorcraft.itematic.village.trade.TradeTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.WanderingTraderEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(WanderingTraderEntity.class)
-public abstract class WanderingTraderEntityExtender extends MerchantEntity {
+public abstract class WanderingTraderEntityExtender extends MerchantEntityExtender {
+    @Unique
+    private static final Object2IntMap<TagKey<Trade>> TRADE_TO_AMOUNT = Util.make(new Object2IntArrayMap<>(), trades -> {
+        trades.put(TradeTags.WANDERING_TRADER_REGULAR, 5);
+        trades.put(TradeTags.WANDERING_TRADER_SPECIAL, 1);
+    });
+
     public WanderingTraderEntityExtender(EntityType<? extends MerchantEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -58,5 +74,13 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntity {
     )
     private boolean isOfForMilkBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.MILK_BUCKET);
+    }
+
+    @Override
+    protected void fillRecipes(LootContext context) {
+        Registry<Trade> trades = context.getWorld().getRegistryManager().get(ItematicRegistryKeys.TRADE);
+        for (TagKey<Trade> trade : TRADE_TO_AMOUNT.keySet()) {
+            this.fillRecipesFromPool(trades.getOrCreateEntryList(trade), TRADE_TO_AMOUNT.getInt(trade), context);
+        }
     }
 }

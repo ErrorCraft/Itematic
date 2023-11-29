@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:buy_nether_wart",
+    "minecraft:sell_experience_bottle"
+  ]
+}

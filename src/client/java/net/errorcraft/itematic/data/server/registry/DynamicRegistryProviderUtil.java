@@ -3,7 +3,6 @@ package net.errorcraft.itematic.data.server.registry;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.registry.RegistryWrapper;
 
-@SuppressWarnings("UnstableApiUsage")
 public class DynamicRegistryProviderUtil {
     private DynamicRegistryProviderUtil() {}
 

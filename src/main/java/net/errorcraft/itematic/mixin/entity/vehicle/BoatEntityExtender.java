@@ -30,7 +30,7 @@ public abstract class BoatEntityExtender extends VehicleEntityExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getPickBlockStateNewItemStackUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackUseRegistryEntry(ItemConvertible item) {
         return this.getWorld().itematic$createStack(this.asItemKey());
     }
 
@@ -41,8 +41,8 @@ public abstract class BoatEntityExtender extends VehicleEntityExtender {
             target = "Lnet/minecraft/entity/vehicle/BoatEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity fallDropItemUseRegistryEntry(BoatEntity instance, ItemConvertible itemConvertible) {
-        return this.dropItem(this.getWorld().itematic$getItem(ItemKeys.STICK));
+    private ItemEntity dropItemForStickUseRegistryKey(BoatEntity instance, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(ItemKeys.STICK);
     }
 
     @Override

@@ -24,7 +24,7 @@ public abstract class SkeletonEntityExtender extends AbstractSkeletonEntity {
             target = "Lnet/minecraft/entity/mob/SkeletonEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity dropEquipmentDropItemUseRegistryKey(SkeletonEntity instance, ItemConvertible itemConvertible) {
-        return this.dropItem(ItemKeys.SKELETON_SKULL);
+    private ItemEntity dropItemForSkeletonSkullUseRegistryKey(SkeletonEntity instance, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(ItemKeys.SKELETON_SKULL);
     }
 }

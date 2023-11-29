@@ -1,0 +1,14 @@
+{
+  "gives": {
+    "item": "minecraft:diamond_hoe"
+  },
+  "max_uses": 3,
+  "price_multiplier": 0.05,
+  "trade_experience": 10,
+  "wants": [
+    {
+      "count": 4,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

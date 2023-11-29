@@ -22,17 +22,17 @@ public abstract class EntityExtender implements EntityAccess {
     public abstract ItemEntity dropStack(ItemStack stack, float yOffset);
 
     @Override
-    public ItemEntity dropItem(RegistryKey<Item> key) {
-        return this.dropItem(this.world.itematic$getItem(key), 0);
+    public ItemEntity itematic$dropItem(RegistryKey<Item> key) {
+        return this.itematic$dropItem(this.world.itematic$getItem(key), 0);
     }
 
     @Override
-    public ItemEntity dropItem(RegistryKey<Item> key, int yOffset) {
-        return this.dropItem(this.world.itematic$getItem(key), yOffset);
+    public ItemEntity itematic$dropItem(RegistryKey<Item> key, int yOffset) {
+        return this.itematic$dropItem(this.world.itematic$getItem(key), yOffset);
     }
 
     @Override
-    public ItemEntity dropItem(RegistryEntry<Item> entry, int yOffset) {
+    public ItemEntity itematic$dropItem(RegistryEntry<Item> entry, int yOffset) {
         return this.dropStack(new ItemStack(entry), yOffset);
     }
 }

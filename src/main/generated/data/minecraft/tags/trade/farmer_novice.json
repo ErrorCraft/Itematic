@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:buy_wheat",
+    "minecraft:buy_potato",
+    "minecraft:buy_carrot",
+    "minecraft:buy_beetroot",
+    "minecraft:sell_bread"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:buy_stick",
+    "minecraft:sell_arrow"
+  ]
+}

@@ -10,6 +10,10 @@ public class ItematicLootContextTypes {
             .require(LootContextParameters.ORIGIN)
             .allow(LootContextParameters.TOOL)
     );
+    public static final LootContextType TRADE = LootContextTypesAccessor.register("trade", builder ->
+        builder.require(LootContextParameters.THIS_ENTITY)
+            .require(LootContextParameters.ORIGIN)
+    );
 
     private ItematicLootContextTypes() {}
 

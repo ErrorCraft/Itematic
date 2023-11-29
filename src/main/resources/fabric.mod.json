@@ -113,6 +113,9 @@
       "net/minecraft/class_1863": [
         "net/errorcraft/itematic/access/recipe/RecipeManagerAccess"
       ],
+      "net/minecraft/class_1914": [
+        "net/errorcraft/itematic/access/village/TradeOfferAccess"
+      ],
       "net/minecraft/class_1937": [
         "net/errorcraft/itematic/access/world/WorldAccess"
       ],
@@ -145,6 +148,9 @@
       ],
       "net/minecraft/class_3611": [
         "net/errorcraft/itematic/access/fluid/FluidAccess"
+      ],
+      "net/minecraft/class_3850": [
+        "net/errorcraft/itematic/access/village/VillagerDataAccess"
       ],
       "net/minecraft/class_3852": [
         "net/errorcraft/itematic/access/village/VillagerProfessionAccess"

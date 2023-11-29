@@ -1,0 +1,27 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:buy_brown_dye",
+    "minecraft:buy_purple_dye",
+    "minecraft:buy_blue_dye",
+    "minecraft:buy_green_dye",
+    "minecraft:buy_magenta_dye",
+    "minecraft:buy_cyan_dye",
+    "minecraft:sell_white_banner",
+    "minecraft:sell_blue_banner",
+    "minecraft:sell_light_blue_banner",
+    "minecraft:sell_red_banner",
+    "minecraft:sell_pink_banner",
+    "minecraft:sell_green_banner",
+    "minecraft:sell_lime_banner",
+    "minecraft:sell_gray_banner",
+    "minecraft:sell_black_banner",
+    "minecraft:sell_purple_banner",
+    "minecraft:sell_magenta_banner",
+    "minecraft:sell_cyan_banner",
+    "minecraft:sell_brown_banner",
+    "minecraft:sell_yellow_banner",
+    "minecraft:sell_orange_banner",
+    "minecraft:sell_light_gray_banner"
+  ]
+}

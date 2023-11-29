@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:buy_gold_ingot",
+    "minecraft:sell_lapis_lazuli"
+  ]
+}

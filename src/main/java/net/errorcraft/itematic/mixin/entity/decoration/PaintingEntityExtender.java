@@ -25,8 +25,8 @@ public abstract class PaintingEntityExtender extends AbstractDecorationEntity {
             target = "Lnet/minecraft/entity/decoration/painting/PaintingEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity onBreakDropItemUseRegistryKey(PaintingEntity instance, ItemConvertible itemConvertible) {
-        return this.dropItem(ItemKeys.PAINTING);
+    private ItemEntity dropItemForPaintingUseRegistryKey(PaintingEntity instance, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(ItemKeys.PAINTING);
     }
 
     @Redirect(
@@ -36,7 +36,7 @@ public abstract class PaintingEntityExtender extends AbstractDecorationEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getPickBlockStackNewItemStackUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForPaintingUseRegistryEntry(ItemConvertible item) {
         return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.PAINTING));
     }
 }

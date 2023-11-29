@@ -1,0 +1,26 @@
+{
+  "gives": {
+    "item": "minecraft:iron_shovel",
+    "item_modifier": {
+      "function": "minecraft:enchant_with_levels",
+      "levels": {
+        "type": "minecraft:uniform",
+        "max": 20.0,
+        "min": 5.0
+      },
+      "treasure": false
+    }
+  },
+  "max_uses": 3,
+  "price_multiplier": 0.2,
+  "trade_experience": 10,
+  "wants": [
+    {
+      "count": {
+        "max": 22,
+        "min": 7
+      },
+      "item": "minecraft:emerald"
+    }
+  ]
+}

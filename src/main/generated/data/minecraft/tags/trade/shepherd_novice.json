@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:buy_white_wool",
+    "minecraft:buy_brown_wool",
+    "minecraft:buy_black_wool",
+    "minecraft:buy_gray_wool",
+    "minecraft:sell_shears"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:sell_night_vision_suspicious_stew",
+    "minecraft:sell_jump_boost_suspicious_stew",
+    "minecraft:sell_weakness_suspicious_stew",
+    "minecraft:sell_blindness_suspicious_stew",
+    "minecraft:sell_poison_suspicious_stew",
+    "minecraft:sell_saturation_suspicious_stew"
+  ]
+}

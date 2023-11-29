@@ -6,6 +6,7 @@ import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.village.trade.Trade;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryLoader;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,6 +29,7 @@ public class RegistryLoaderExtender {
             .add(new RegistryLoader.Entry<>(RegistryKeys.ITEM, ItemUtil.CODEC))
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterial.CODEC))
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
+            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.TRADE, Trade.CODEC))
             .build();
     }
 }

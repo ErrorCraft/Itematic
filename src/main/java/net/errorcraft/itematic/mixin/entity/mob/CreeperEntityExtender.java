@@ -37,7 +37,7 @@ public class CreeperEntityExtender extends HostileEntity {
             target = "Lnet/minecraft/entity/mob/CreeperEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity dropEquipmentDropItemUseRegistryKey(CreeperEntity instance, ItemConvertible itemConvertible) {
-        return this.dropItem(ItemKeys.CREEPER_HEAD);
+    private ItemEntity dropItemForCreeperHeadUseRegistryKey(CreeperEntity instance, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(ItemKeys.CREEPER_HEAD);
     }
 }
