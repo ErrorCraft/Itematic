@@ -24,6 +24,10 @@ public class ActionTypes {
     public static final ActionType<WaxBlockAction> WAX_BLOCK = register(ActionTypeKeys.WAX_BLOCK, new ActionType<>(WaxBlockAction.CODEC));
     public static final ActionType<DecrementItemAction> DECREMENT_ITEM = register(ActionTypeKeys.DECREMENT_ITEM, new ActionType<>(DecrementItemAction.CODEC));
     public static final ActionType<SetItemPointerLocationAction> SET_ITEM_POINTER_LOCATION = register(ActionTypeKeys.SET_ITEM_POINTER_LOCATION, new ActionType<>(SetItemPointerLocationAction.CODEC));
+    public static final ActionType<LightEndPortalAction> LIGHT_END_PORTAL = register(ActionTypeKeys.LIGHT_END_PORTAL, new ActionType<>(LightEndPortalAction.CODEC));
+    public static final ActionType<PlaySoundAction> PLAY_SOUND = register(ActionTypeKeys.PLAY_SOUND, new ActionType<>(PlaySoundAction.CODEC));
+    public static final ActionType<DisplayParticleAction> DISPLAY_PARTICLE = register(ActionTypeKeys.DISPLAY_PARTICLE, new ActionType<>(DisplayParticleAction.CODEC));
+    public static final ActionType<PassingSequenceAction> PASSING_SEQUENCE = register(ActionTypeKeys.PASSING_SEQUENCE, new ActionType<>(PassingSequenceAction.CODEC));
 
     private ActionTypes() {}
 

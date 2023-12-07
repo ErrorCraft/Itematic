@@ -50,7 +50,7 @@ public abstract class WorldExtender implements WorldViewAccess, WorldAccess {
     }
 
     @Override
-    public void playSound(@Nullable PlayerEntity except, Vec3d pos, SoundEvent sound, SoundCategory category, float volume, float pitch) {
+    public void itematic$playSound(@Nullable PlayerEntity except, Vec3d pos, SoundEvent sound, SoundCategory category, float volume, float pitch) {
         this.playSound(except, pos.getX(), pos.getY(), pos.getZ(), sound, category, volume, pitch);
     }
 }

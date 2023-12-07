@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class ItematicCodecs {
     private ItematicCodecs() {}
@@ -18,6 +19,11 @@ public class ItematicCodecs {
                 S s = elementToAlternativeMapper.apply(t);
                 return s == null ? Either.left(t) : Either.right(s);
             });
+    }
+
+    public static <T> Codec<T> alternatively(Codec<T> elementCodec, Codec<T> alternativeCodec, Predicate<T> elementPredicate) {
+        return Codecs.either(elementCodec, alternativeCodec)
+            .xmap(either -> either.map(t -> t, t -> t), t -> elementPredicate.test(t) ? Either.left(t) : Either.right(t));
     }
 
     public static <T> Codec<List<T>> countRangeList(Codec<List<T>> codec, int minCount, int maxCount) {

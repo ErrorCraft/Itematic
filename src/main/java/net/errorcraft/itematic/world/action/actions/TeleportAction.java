@@ -64,7 +64,7 @@ public record TeleportAction(int distance, ActionContextParameter entity) implem
     private void teleported(LivingEntity target, ServerWorld world, Vec3d position) {
         world.emitGameEvent(GameEvent.TELEPORT, position, GameEvent.Emitter.of(target));
         SoundEvent soundEvent = getSoundEvent(target);
-        world.playSound(null, position, soundEvent, SoundCategory.PLAYERS, 1.0f, 1.0f);
+        world.itematic$playSound(null, position, soundEvent, SoundCategory.PLAYERS, 1.0f, 1.0f);
         target.playSound(soundEvent, 1.0f, 1.0f);
     }
 

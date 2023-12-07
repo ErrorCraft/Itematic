@@ -23,6 +23,10 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> WAX_BLOCK = of("wax_block");
     public static final RegistryKey<ActionType<?>> DECREMENT_ITEM = of("decrement_item");
     public static final RegistryKey<ActionType<?>> SET_ITEM_POINTER_LOCATION = of("set_item_pointer_location");
+    public static final RegistryKey<ActionType<?>> LIGHT_END_PORTAL = of("light_end_portal");
+    public static final RegistryKey<ActionType<?>> PLAY_SOUND = of("play_sound");
+    public static final RegistryKey<ActionType<?>> DISPLAY_PARTICLE = of("display_particle");
+    public static final RegistryKey<ActionType<?>> PASSING_SEQUENCE = of("passing_sequence");
 
     private ActionTypeKeys() {}
 

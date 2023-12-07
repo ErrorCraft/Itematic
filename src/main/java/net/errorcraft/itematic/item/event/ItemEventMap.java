@@ -32,7 +32,7 @@ public class ItemEventMap {
     public boolean invokeEvent(ItemEvent event, ActionContext context) {
         boolean result = false;
         for (ActionEntry entry : this.events.get(event)) {
-            result |= entry.execute(context);
+            result |= entry.execute(context).orElse(false);
         }
         return result;
     }

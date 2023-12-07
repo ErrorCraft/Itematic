@@ -10,7 +10,7 @@ import net.minecraft.util.dynamic.Codecs;
 public interface Action {
     Codec<Action> ELEMENT_CODEC = ItematicRegistries.ACTION_TYPE.getCodec().dispatch("type", Action::type, ActionType::codec);
     Codec<Action> CODEC = Codecs.createLazy(() -> ItematicCodecs.alternatively(ELEMENT_CODEC, SequenceAction.INLINE_CODEC, action -> {
-        if (action instanceof SequenceAction sequenceAction && sequenceAction.isSimple()) {
+        if (action instanceof SequenceAction sequenceAction) {
             return sequenceAction;
         }
         return null;

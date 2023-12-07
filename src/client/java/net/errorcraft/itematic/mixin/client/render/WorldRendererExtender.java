@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.MusicDiscItem;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -99,6 +100,26 @@ public class WorldRendererExtender {
     )
     private SoundEvent processWorldEventGetSoundUseItemComponent(MusicDiscItem instance) {
         return this.recordItemComponent.soundEvent().value();
+    }
+
+    @Redirect(
+        method = "processWorldEvent",
+        at = @At(
+            value = "NEW",
+            target = "net/minecraft/item/ItemStack",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/particle/ParticleTypes;ITEM:Lnet/minecraft/particle/ParticleType;",
+                opcode = Opcodes.GETSTATIC,
+                ordinal = 0
+            )
+        )
+    )
+    private ItemStack newItemStackForEnderEyeUseRegistryEntry(ItemConvertible item) {
+        return this.world.itematic$createStack(ItemKeys.ENDER_EYE);
     }
 
     @Redirect(

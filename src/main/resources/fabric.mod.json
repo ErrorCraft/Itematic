@@ -146,6 +146,9 @@
       "net/minecraft/class_2989": [
         "net/errorcraft/itematic/access/server/ServerAdvancementLoaderAccess"
       ],
+      "net/minecraft/class_3419": [
+        "net/minecraft/util/StringIdentifiable"
+      ],
       "net/minecraft/class_3611": [
         "net/errorcraft/itematic/access/fluid/FluidAccess"
       ],
@@ -171,7 +174,7 @@
   },
 
   "depends": {
-    "fabricloader": ">=0.14.21",
+    "fabricloader": ">=0.15.0",
     "fabric-api": "*",
     "minecraft": "~1.20.1",
     "java": ">=17"

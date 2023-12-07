@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.action;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.world.action.actions.SequenceAction;
+import net.errorcraft.itematic.world.action.actions.PassingSequenceAction;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 
 import java.util.Optional;
@@ -13,12 +13,11 @@ public record ActionEntry(Action action, Optional<ActionRequirements> requiremen
         ActionRequirements.CODEC.optionalFieldOf("requirements").forGetter(ActionEntry::requirements)
     ).apply(instance, ActionEntry::new));
 
-    public boolean execute(ActionContext context) {
+    public Optional<Boolean> execute(ActionContext context) {
         if (!this.test(context)) {
-            return false;
+            return Optional.empty();
         }
-        this.action.execute(context);
-        return true;
+        return Optional.of(this.action.execute(context));
     }
 
     private boolean test(ActionContext context) {
@@ -35,10 +34,10 @@ public record ActionEntry(Action action, Optional<ActionRequirements> requiremen
     }
 
     public static ActionEntry passing(Action... actions) {
-        return simple(SequenceAction.passing(actions));
+        return simple(PassingSequenceAction.of(actions));
     }
 
     public static ActionEntry passing(ActionRequirements requirements, Action... actions) {
-        return simple(requirements, SequenceAction.passing(actions));
+        return simple(requirements, PassingSequenceAction.of(actions));
     }
 }

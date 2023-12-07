@@ -10,17 +10,20 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Property;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public record ModifyBlockStateAction(ActionContextParameter position, Map<String, String> properties) implements Action {
+public record ModifyBlockStateAction(ActionContextParameter position, Map<String, String> properties, boolean pushEntitiesUpwards) implements Action {
     public static final Codec<ModifyBlockStateAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(ModifyBlockStateAction::position),
-        Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("properties").forGetter(ModifyBlockStateAction::properties)
+        Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("properties").forGetter(ModifyBlockStateAction::properties),
+        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "push_entities_upwards", false).forGetter(ModifyBlockStateAction::pushEntitiesUpwards)
     ).apply(instance, ModifyBlockStateAction::new));
 
     @Override
@@ -30,23 +33,26 @@ public record ModifyBlockStateAction(ActionContextParameter position, Map<String
 
     @Override
     public boolean execute(ActionContext context) {
+        ServerWorld world = context.world();
         BlockPos pos = context.blockPos(this.position);
-        BlockState state = context.world().getBlockState(pos);
+        BlockState state = world.getBlockState(pos);
+        BlockState newState = state;
         StateManager<Block, BlockState> stateManager = state.getBlock().getStateManager();
-
-        boolean applied = false;
         for (String key : this.properties.keySet()) {
             Property<?> property = stateManager.getProperty(key);
             if (property == null) {
                 continue;
             }
-            state = BlockStateUtil.with(state, property, this.properties.get(key));
-            applied = true;
+            newState = BlockStateUtil.with(newState, property, this.properties.get(key));
         }
-        if (applied) {
-            context.world().setBlockState(pos, state);
+        if (state == newState) {
+            return false;
         }
-        return applied;
+        if (this.pushEntitiesUpwards) {
+            Block.pushEntitiesUpBeforeBlockChange(state, newState, world, pos);
+        }
+        world.setBlockState(pos, state);
+        return true;
     }
 
     public static Builder builder(ActionContextParameter position) {
@@ -56,17 +62,23 @@ public record ModifyBlockStateAction(ActionContextParameter position, Map<String
     public static final class Builder {
         private final ActionContextParameter position;
         private final Map<String, String> properties = new HashMap<>();
+        private boolean pushEntitiesUpwards = false;
 
         private Builder(ActionContextParameter position) {
             this.position = position;
         }
 
         public ModifyBlockStateAction build() {
-            return new ModifyBlockStateAction(this.position, this.properties);
+            return new ModifyBlockStateAction(this.position, this.properties, this.pushEntitiesUpwards);
         }
 
         public <T extends Comparable<T>> Builder property(Property<T> property, T value) {
             this.properties.put(property.getName(), property.name(value));
+            return this;
+        }
+
+        public Builder pushEntitiesUpwards() {
+            this.pushEntitiesUpwards = true;
             return this;
         }
     }

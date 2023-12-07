@@ -441,6 +441,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> MAGMA_CREAM = register("magma_cream");
     public static final RegistryKey<Item> BREWING_STAND = register("brewing_stand");
     public static final RegistryKey<Item> CAULDRON = register("cauldron");
+    public static final RegistryKey<Item> ENDER_EYE = register("ender_eye");
     public static final RegistryKey<Item> GLISTERING_MELON_SLICE = register("glistering_melon_slice");
     public static final RegistryKey<Item> ALLAY_SPAWN_EGG = register("allay_spawn_egg");
     public static final RegistryKey<Item> AXOLOTL_SPAWN_EGG = register("axolotl_spawn_egg");

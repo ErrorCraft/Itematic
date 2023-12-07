@@ -9,6 +9,7 @@ import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 
 import java.util.List;
+import java.util.Optional;
 
 public record FirstToPassAction(List<ActionEntry> entries) implements Action {
     public static final Codec<FirstToPassAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -23,8 +24,9 @@ public record FirstToPassAction(List<ActionEntry> entries) implements Action {
     @Override
     public boolean execute(ActionContext context) {
         for (ActionEntry entry : this.entries) {
-            if (entry.execute(context)) {
-                return true;
+            Optional<Boolean> result = entry.execute(context);
+            if (result.isPresent()) {
+                return result.get();
             }
         }
         return false;

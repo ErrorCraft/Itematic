@@ -46,15 +46,18 @@ import net.minecraft.item.*;
 import net.minecraft.loot.condition.AllOfLootCondition;
 import net.minecraft.loot.condition.InvertedLootCondition;
 import net.minecraft.loot.condition.LocationCheckLootCondition;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.BlockPredicate;
 import net.minecraft.predicate.StatePredicate;
 import net.minecraft.predicate.entity.LocationPredicate;
 import net.minecraft.registry.*;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.*;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
@@ -3120,6 +3123,42 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CAULDRON).build()),
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CAULDRON)))
+                .build()
+        ));
+        registerable.register(ItemKeys.ENDER_EYE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDER_EYE).build()),
+            ItemComponentSet.builder()
+                .with(new ThrowableItemComponent(0.0f, 0.0f))
+                .with(ProjectileItemComponent.of(EyeOfEnderEntityInitializer.INSTANCE, 0))
+                .with(PreventUseWhenUsedOnTargetItemComponent.forBlock())
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.simple(
+                    ActionRequirements.of(
+                        ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                        LocationCheckLootCondition.builder(
+                            LocationPredicate.Builder.create()
+                                .block(BlockPredicate.Builder.create()
+                                    .blocks(Blocks.END_PORTAL_FRAME)
+                                    .state(StatePredicate.Builder.create()
+                                        .exactMatch(Properties.EYE, false))))
+                            .build()
+                    ),
+                    PassingSequenceAction.builder()
+                        .add(ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
+                            .property(Properties.EYE, true)
+                            .pushEntitiesUpwards()
+                            .build())
+                        .add(DecrementItemAction.of(1))
+                        .add(SwingHandAction.INSTANCE)
+                        .add(new PlaySoundAction(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.BLOCK_END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS, 1.0f, 1.0f))
+                        .add(new DisplayParticleAction(ActionContextParameter.TARGET, ParticleTypes.SMOKE, 16, new Vec3d(0.0d, 0.8125d, 0.0d), new Vec3d(0.09375d, 0.0d, 0.09375d), 0.0d))
+                        .addOptional(LightEndPortalAction.of(ActionContextParameter.TARGET))
+                        .build()
+                ))
+                .add(ItemEvents.THROW_PROJECTILE, ActionEntry.simple(
+                    new PlaySoundAction(ActionContextParameter.THIS, soundEvents.getOrThrow(SoundEventKeys.ENTITY_ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL, 1.0f, 1.2f)
+                ))
                 .build()
         ));
         registerable.register(ItemKeys.GLISTERING_MELON_SLICE, create(

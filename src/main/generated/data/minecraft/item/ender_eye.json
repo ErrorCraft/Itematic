@@ -1,0 +1,111 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.ender_eye"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:prevent_use_when_used_on_target": {
+      "block": true
+    },
+    "minecraft:projectile": {
+      "entity": {
+        "type": "minecraft:eye_of_ender"
+      }
+    },
+    "minecraft:throwable": {
+      "angle_offset": 0.0,
+      "speed": 0.0
+    }
+  },
+  "events": [
+    {
+      "event": "minecraft:use_on_block",
+      "action": {
+        "type": "minecraft:passing_sequence",
+        "entries": [
+          {
+            "type": "minecraft:modify_block_state",
+            "position": "target",
+            "properties": {
+              "eye": "true"
+            },
+            "push_entities_upwards": true
+          },
+          {
+            "type": "minecraft:decrement_item",
+            "amount": 1
+          },
+          {
+            "type": "minecraft:swing_hand"
+          },
+          {
+            "type": "minecraft:play_sound",
+            "category": "block",
+            "pitch": 1.0,
+            "position": "target",
+            "sound": "minecraft:block.end_portal_frame.fill",
+            "volume": 1.0
+          },
+          {
+            "type": "minecraft:display_particle",
+            "count": 16,
+            "delta": [
+              0.09375,
+              0.0,
+              0.09375
+            ],
+            "offset": [
+              0.0,
+              0.8125,
+              0.0
+            ],
+            "particle": {
+              "type": "minecraft:smoke"
+            },
+            "position": "target",
+            "speed": 0.0
+          },
+          {
+            "action": {
+              "type": "minecraft:light_end_portal",
+              "position": "target"
+            },
+            "optional": true
+          }
+        ]
+      },
+      "requirements": {
+        "conditions": {
+          "condition": "minecraft:location_check",
+          "predicate": {
+            "block": {
+              "blocks": [
+                "minecraft:end_portal_frame"
+              ],
+              "state": {
+                "eye": "false"
+              }
+            }
+          }
+        },
+        "context": {
+          "entity": "this",
+          "position": "target"
+        }
+      }
+    },
+    {
+      "event": "minecraft:throw_projectile",
+      "action": {
+        "type": "minecraft:play_sound",
+        "category": "neutral",
+        "pitch": 1.2,
+        "position": "this",
+        "sound": "minecraft:entity.ender_eye.launch",
+        "volume": 1.0
+      }
+    }
+  ]
+}

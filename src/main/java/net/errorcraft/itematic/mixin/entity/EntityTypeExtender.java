@@ -378,6 +378,25 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         return type;
     }
 
+    @ModifyArg(
+        method = "<clinit>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "CONSTANT",
+                args = "stringValue=eye_of_ender"
+            )
+        )
+    )
+    private static EntityType.Builder<?> setEyeOfEnderInitializerCodec(EntityType.Builder<?> type) {
+        type.itematic$initializerCodec(EyeOfEnderEntityInitializer.CODEC);
+        return type;
+    }
+
     @Inject(
         method = "create(Lnet/minecraft/world/World;)Lnet/minecraft/entity/Entity;",
         at = @At(

@@ -32,10 +32,12 @@ public record DamageItemAction(int amount, boolean ignoreGameMode) implements Ac
         if (stack.isEmpty()) {
             return false;
         }
-        if (this.preventDamage(context)) {
+        if (!stack.isDamageable()) {
             return false;
         }
-        stack.itematic$damage(this.amount, context);
+        if (!this.preventDamage(context)) {
+            stack.itematic$damage(this.amount, context);
+        }
         return true;
     }
 

@@ -21,6 +21,7 @@ public class ItemEvents {
     public static final ItemEvent USE_WEAPON = register(ItemEventKeys.USE_WEAPON);
     public static final ItemEvent EQUIP_ITEM = register(ItemEventKeys.EQUIP_ITEM);
     public static final ItemEvent CONSUME_ITEM = register(ItemEventKeys.CONSUME_ITEM);
+    public static final ItemEvent THROW_PROJECTILE = register(ItemEventKeys.THROW_PROJECTILE);
 
     private ItemEvents() {}
 

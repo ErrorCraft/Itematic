@@ -10,8 +10,7 @@
     {
       "event": "minecraft:use_on_block",
       "action": {
-        "type": "minecraft:sequence",
-        "action_must_pass": true,
+        "type": "minecraft:passing_sequence",
         "entries": [
           {
             "type": "minecraft:modify_sign",

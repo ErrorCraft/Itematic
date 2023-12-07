@@ -9,16 +9,11 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 
 import java.util.List;
 
-public record SequenceAction(List<Action> entries, boolean actionMustPass) implements Action {
+public record SequenceAction(List<Action> entries) implements Action {
     public static final Codec<SequenceAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Action.CODEC.listOf().fieldOf("entries").forGetter(SequenceAction::entries),
-        Codec.BOOL.optionalFieldOf("action_must_pass", false).forGetter(SequenceAction::actionMustPass)
+        Action.CODEC.listOf().fieldOf("entries").forGetter(SequenceAction::entries)
     ).apply(instance, SequenceAction::new));
     public static final Codec<SequenceAction> INLINE_CODEC = Action.CODEC.listOf().xmap(SequenceAction::new, SequenceAction::entries);
-
-    public SequenceAction(List<Action> entries) {
-        this(entries, false);
-    }
 
     @Override
     public ActionType<?> type() {
@@ -27,23 +22,14 @@ public record SequenceAction(List<Action> entries, boolean actionMustPass) imple
 
     @Override
     public boolean execute(ActionContext context) {
+        boolean result = false;
         for (Action entry : this.entries) {
-            if (!entry.execute(context) && this.actionMustPass) {
-                return false;
-            }
+            result |= entry.execute(context);
         }
-        return true;
-    }
-
-    public boolean isSimple() {
-        return !this.actionMustPass;
+        return result;
     }
 
     public static SequenceAction of(Action... actions) {
         return new SequenceAction(List.of(actions));
-    }
-
-    public static SequenceAction passing(Action... actions) {
-        return new SequenceAction(List.of(actions), true);
     }
 }

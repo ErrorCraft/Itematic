@@ -6,8 +6,13 @@ import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.MutableActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -30,10 +35,16 @@ public record ThrowableItemComponent(float speed, float angleOffset) implements 
 
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        if (!world.isClient()) {
+        if (world instanceof ServerWorld serverWorld) {
             stack.itematic$getComponent(ItemComponentTypes.PROJECTILE)
                 .map(c -> c.createEntity(world, user, stack, this.angleOffset, this.speed))
-                .ifPresent(world::spawnEntity);
+                .ifPresent(projectile -> {
+                    world.spawnEntity(projectile);
+                    ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, resultStackConsumer)
+                        .entityPosition(ActionContextParameter.THIS, user)
+                        .entityPosition(ActionContextParameter.TARGET, projectile);
+                    stack.itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, context);
+                });
         }
         return ActionResult.success(world.isClient());
     }

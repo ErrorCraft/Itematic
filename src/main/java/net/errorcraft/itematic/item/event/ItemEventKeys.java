@@ -21,6 +21,7 @@ public class ItemEventKeys {
     public static final RegistryKey<ItemEvent> USE_WEAPON = of("use_weapon");
     public static final RegistryKey<ItemEvent> EQUIP_ITEM = of("equip_item");
     public static final RegistryKey<ItemEvent> CONSUME_ITEM = of("consume_item");
+    public static final RegistryKey<ItemEvent> THROW_PROJECTILE = of("throw_projectile");
 
     private ItemEventKeys() {}
 
