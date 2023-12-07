@@ -119,14 +119,8 @@
       "net/minecraft/class_1937": [
         "net/errorcraft/itematic/access/world/WorldAccess"
       ],
-      "net/minecraft/class_2195": [
-        "net/errorcraft/itematic/access/block/StemBlockAccess"
-      ],
       "net/minecraft/class_2302": [
         "net/errorcraft/itematic/access/block/CropBlockAccess"
-      ],
-      "net/minecraft/class_2513": [
-        "net/errorcraft/itematic/access/block/StemBlockAccess"
       ],
       "net/minecraft/class_2535": [
         "net/errorcraft/itematic/access/network/ClientConnectionAccess"
