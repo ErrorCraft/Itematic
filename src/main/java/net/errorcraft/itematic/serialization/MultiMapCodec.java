@@ -22,8 +22,8 @@ public class MultiMapCodec<K, V> implements Codec<Multimap<K, V>> {
         this.keyComparator = keyComparator;
     }
 
-    public static <K, V> MultiMapCodec<K, V> ofRegistry(Registry<K> registry, String key, Codec<V> valueCodec) {
-        return new MultiMapCodec<>(registry.getCodec().fieldOf(key).codec(), valueCodec, Comparator.comparingInt(registry::getRawId));
+    public static <K, V> MultiMapCodec<K, V> ofRegistry(Registry<K> registry, String key, Codec<V> valueCodec, String valueKey) {
+        return new MultiMapCodec<>(registry.getCodec().fieldOf(key).codec(), valueCodec.fieldOf(valueKey).codec(), Comparator.comparingInt(registry::getRawId));
     }
 
     @Override

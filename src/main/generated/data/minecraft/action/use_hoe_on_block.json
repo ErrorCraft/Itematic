@@ -1,0 +1,40 @@
+{
+  "action": {
+    "type": "minecraft:sequence",
+    "entries": [
+      {
+        "action": {
+          "type": "minecraft:sequence",
+          "entries": [
+            "minecraft:till_dirt",
+            "minecraft:till_coarse_dirt",
+            "minecraft:till_rooted_dirt"
+          ],
+          "handler": "minecraft:first_to_pass_requirements"
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:damage_item",
+          "amount": 1
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:swing_hand"
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:play_sound",
+          "category": "block",
+          "pitch": 1.0,
+          "position": "target",
+          "sound": "minecraft:item.hoe.till",
+          "volume": 1.0
+        }
+      }
+    ],
+    "handler": "minecraft:passing"
+  }
+}

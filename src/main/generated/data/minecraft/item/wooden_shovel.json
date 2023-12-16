@@ -37,5 +37,11 @@
     "minecraft:weapon": {
       "damage": 2
     }
-  }
+  },
+  "events": [
+    {
+      "event": "minecraft:use_on_block",
+      "entry": "minecraft:use_shovel_on_block"
+    }
+  ]
 }

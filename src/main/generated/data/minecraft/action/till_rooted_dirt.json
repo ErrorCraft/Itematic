@@ -1,0 +1,40 @@
+{
+  "action": {
+    "type": "minecraft:sequence",
+    "entries": [
+      {
+        "action": {
+          "type": "minecraft:set_block_state",
+          "position": "target",
+          "state": {
+            "Name": "minecraft:dirt"
+          }
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:drop_item_from_block",
+          "item": "minecraft:hanging_roots",
+          "position": "target"
+        }
+      }
+    ],
+    "handler": "minecraft:passing"
+  },
+  "requirements": {
+    "conditions": {
+      "condition": "minecraft:location_check",
+      "predicate": {
+        "block": {
+          "blocks": [
+            "minecraft:rooted_dirt"
+          ]
+        }
+      }
+    },
+    "context": {
+      "entity": "this",
+      "position": "target"
+    }
+  }
+}

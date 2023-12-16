@@ -1,0 +1,195 @@
+{
+  "action": {
+    "type": "minecraft:sequence",
+    "entries": [
+      {
+        "action": {
+          "type": "minecraft:modify_block_state",
+          "position": "target",
+          "properties": {
+            "lit": "false"
+          }
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:play_sound",
+          "category": "block",
+          "pitch": {
+            "max": 3.4,
+            "min": 1.8
+          },
+          "position": "target",
+          "sound": "minecraft:block.fire.extinguish",
+          "volume": 0.5
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:sequence",
+          "entries": [
+            {
+              "action": [
+                {
+                  "action": {
+                    "type": "minecraft:display_particle",
+                    "count": 20,
+                    "delta": [
+                      0.0,
+                      0.07,
+                      0.0
+                    ],
+                    "force": true,
+                    "offset": [
+                      {
+                        "max": 0.3333333333333333,
+                        "min": -0.3333333333333333
+                      },
+                      {
+                        "max": 1.0,
+                        "min": -1.0
+                      },
+                      {
+                        "max": 0.3333333333333333,
+                        "min": -0.3333333333333333
+                      }
+                    ],
+                    "particle": {
+                      "type": "minecraft:campfire_signal_smoke"
+                    },
+                    "position": "target",
+                    "speed": 0.0
+                  }
+                },
+                {
+                  "action": {
+                    "type": "minecraft:display_particle",
+                    "count": 20,
+                    "delta": [
+                      0.0,
+                      0.005,
+                      0.0
+                    ],
+                    "offset": [
+                      {
+                        "max": 0.25,
+                        "min": -0.25
+                      },
+                      0.4,
+                      {
+                        "max": 0.25,
+                        "min": -0.25
+                      }
+                    ],
+                    "particle": {
+                      "type": "minecraft:campfire_signal_smoke"
+                    },
+                    "position": "target",
+                    "speed": 0.0
+                  }
+                }
+              ],
+              "requirements": {
+                "conditions": {
+                  "condition": "minecraft:location_check",
+                  "predicate": {
+                    "block": {
+                      "state": {
+                        "signal_fire": "true"
+                      }
+                    }
+                  }
+                },
+                "context": {
+                  "entity": "this",
+                  "position": "target"
+                }
+              }
+            },
+            {
+              "action": [
+                {
+                  "action": {
+                    "type": "minecraft:display_particle",
+                    "count": 20,
+                    "delta": [
+                      0.0,
+                      0.07,
+                      0.0
+                    ],
+                    "force": true,
+                    "offset": [
+                      {
+                        "max": 0.3333333333333333,
+                        "min": -0.3333333333333333
+                      },
+                      {
+                        "max": 1.0,
+                        "min": -1.0
+                      },
+                      {
+                        "max": 0.3333333333333333,
+                        "min": -0.3333333333333333
+                      }
+                    ],
+                    "particle": {
+                      "type": "minecraft:campfire_cosy_smoke"
+                    },
+                    "position": "target",
+                    "speed": 0.0
+                  }
+                },
+                {
+                  "action": {
+                    "type": "minecraft:display_particle",
+                    "count": 20,
+                    "delta": [
+                      0.0,
+                      0.005,
+                      0.0
+                    ],
+                    "offset": [
+                      {
+                        "max": 0.25,
+                        "min": -0.25
+                      },
+                      0.4,
+                      {
+                        "max": 0.25,
+                        "min": -0.25
+                      }
+                    ],
+                    "particle": {
+                      "type": "minecraft:campfire_cosy_smoke"
+                    },
+                    "position": "target",
+                    "speed": 0.0
+                  }
+                }
+              ]
+            }
+          ],
+          "handler": "minecraft:first_to_pass_requirements"
+        }
+      }
+    ],
+    "handler": "minecraft:passing"
+  },
+  "requirements": {
+    "conditions": {
+      "condition": "minecraft:location_check",
+      "predicate": {
+        "block": {
+          "state": {
+            "lit": "true"
+          },
+          "tag": "minecraft:campfires"
+        }
+      }
+    },
+    "context": {
+      "entity": "this",
+      "position": "target"
+    }
+  }
+}

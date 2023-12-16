@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.world.action.context;
 
 import net.errorcraft.itematic.item.ItemStackConsumer;
+import net.errorcraft.itematic.loot.context.ItematicLootContextParameters;
 import net.errorcraft.itematic.loot.context.ItematicLootContextTypes;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
@@ -43,6 +44,7 @@ public class ActionContext {
             .add(LootContextParameters.THIS_ENTITY, this.entities.get(parameters.entity()))
             .add(LootContextParameters.ORIGIN, this.position(parameters.position()))
             .add(LootContextParameters.TOOL, this.stack)
+            .add(ItematicLootContextParameters.SIDE, this.side)
             .build(ItematicLootContextTypes.ACTION);
         return new LootContext.Builder(set).build(Optional.empty());
     }

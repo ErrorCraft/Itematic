@@ -51,7 +51,7 @@ public record ModifyBlockStateAction(ActionContextParameter position, Map<String
         if (this.pushEntitiesUpwards) {
             Block.pushEntitiesUpBeforeBlockChange(state, newState, world, pos);
         }
-        world.setBlockState(pos, state);
+        world.setBlockState(pos, newState);
         return true;
     }
 

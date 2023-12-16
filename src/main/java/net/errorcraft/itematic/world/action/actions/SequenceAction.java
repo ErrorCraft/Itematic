@@ -1,19 +1,17 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.registry.RecursionValidator;
 import net.errorcraft.itematic.world.action.Action;
+import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
+import net.minecraft.registry.entry.RegistryEntry;
 
-import java.util.List;
-
-public record SequenceAction(List<Action> entries) implements Action {
-    public static final Codec<SequenceAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Action.CODEC.listOf().fieldOf("entries").forGetter(SequenceAction::entries)
-    ).apply(instance, SequenceAction::new));
-    public static final Codec<SequenceAction> INLINE_CODEC = Action.CODEC.listOf().xmap(SequenceAction::new, SequenceAction::entries);
+public record SequenceAction(SequenceHandler handler) implements Action {
+    public static final Codec<SequenceAction> CODEC = SequenceHandler.CODEC.xmap(SequenceAction::new, SequenceAction::handler).codec();
 
     @Override
     public ActionType<?> type() {
@@ -22,14 +20,26 @@ public record SequenceAction(List<Action> entries) implements Action {
 
     @Override
     public boolean execute(ActionContext context) {
-        boolean result = false;
-        for (Action entry : this.entries) {
-            result |= entry.execute(context);
-        }
-        return result;
+        return this.handler.handle(context);
     }
 
-    public static SequenceAction of(Action... actions) {
-        return new SequenceAction(List.of(actions));
+    public static SequenceAction of(SequenceHandler.Builder<?, ?> builder) {
+        return new SequenceAction(builder.build());
+    }
+
+    public void validate(RecursionValidator validator) {
+        for (RegistryEntry<ActionEntry> entry : this.handler.iterateEntries()) {
+            validateEntry(validator, entry);
+        }
+    }
+
+    private static void validateEntry(RecursionValidator validator, RegistryEntry<ActionEntry> entry) {
+        if (!(entry instanceof RegistryEntry.Reference<ActionEntry> referenceEntry)) {
+            return;
+        }
+        validator.add(referenceEntry);
+        if (referenceEntry.value().action() instanceof SequenceAction action) {
+            action.validate(validator);
+        }
     }
 }

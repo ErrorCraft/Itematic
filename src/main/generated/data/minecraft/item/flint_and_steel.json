@@ -16,118 +16,133 @@
   "events": [
     {
       "event": "minecraft:use_on_block",
-      "action": {
-        "type": "minecraft:first_to_pass",
-        "entries": [
-          {
-            "action": {
-              "type": "minecraft:passing_sequence",
-              "entries": [
-                {
-                  "type": "minecraft:modify_block_state",
-                  "position": "target",
-                  "properties": {
-                    "lit": "true"
-                  }
-                },
-                {
-                  "type": "minecraft:damage_item",
-                  "amount": 1
-                }
-              ]
-            },
-            "requirements": {
-              "conditions": {
-                "condition": "minecraft:all_of",
-                "terms": [
+      "entry": {
+        "action": {
+          "type": "minecraft:sequence",
+          "entries": [
+            {
+              "action": {
+                "type": "minecraft:sequence",
+                "entries": [
                   {
-                    "condition": "minecraft:location_check",
-                    "predicate": {
-                      "block": {
-                        "state": {
-                          "lit": "false"
-                        }
+                    "action": {
+                      "type": "minecraft:modify_block_state",
+                      "position": "target",
+                      "properties": {
+                        "lit": "true"
                       }
                     }
                   },
                   {
-                    "condition": "minecraft:inverted",
-                    "term": {
+                    "action": {
+                      "type": "minecraft:damage_item",
+                      "amount": 1
+                    }
+                  }
+                ],
+                "handler": "minecraft:passing"
+              },
+              "requirements": {
+                "conditions": {
+                  "condition": "minecraft:all_of",
+                  "terms": [
+                    {
                       "condition": "minecraft:location_check",
                       "predicate": {
                         "block": {
                           "state": {
-                            "waterlogged": "true"
+                            "lit": "false"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "condition": "minecraft:inverted",
+                      "term": {
+                        "condition": "minecraft:location_check",
+                        "predicate": {
+                          "block": {
+                            "state": {
+                              "waterlogged": "true"
+                            }
                           }
                         }
                       }
                     }
-                  }
-                ]
-              },
-              "context": {
-                "entity": "this",
-                "position": "target"
-              }
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:passing_sequence",
-              "entries": [
-                {
-                  "type": "minecraft:prime_tnt",
-                  "position": "target"
+                  ]
                 },
-                {
-                  "type": "minecraft:damage_item",
-                  "amount": 1
+                "context": {
+                  "entity": "this",
+                  "position": "target"
                 }
-              ]
+              }
             },
-            "requirements": {
-              "conditions": {
-                "condition": "minecraft:all_of",
-                "terms": [
+            {
+              "action": {
+                "type": "minecraft:sequence",
+                "entries": [
                   {
-                    "condition": "minecraft:location_check",
-                    "predicate": {
-                      "block": {
-                        "blocks": [
-                          "minecraft:tnt"
-                        ]
-                      }
+                    "action": {
+                      "type": "minecraft:prime_tnt",
+                      "position": "target"
+                    }
+                  },
+                  {
+                    "action": {
+                      "type": "minecraft:damage_item",
+                      "amount": 1
                     }
                   }
-                ]
+                ],
+                "handler": "minecraft:passing"
               },
-              "context": {
-                "entity": "this",
-                "position": "target"
+              "requirements": {
+                "conditions": {
+                  "condition": "minecraft:location_check",
+                  "predicate": {
+                    "block": {
+                      "blocks": [
+                        "minecraft:tnt"
+                      ]
+                    }
+                  }
+                },
+                "context": {
+                  "entity": "this",
+                  "position": "target"
+                }
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:sequence",
+                "entries": [
+                  {
+                    "action": {
+                      "type": "minecraft:place_block",
+                      "block": "minecraft:fire",
+                      "decrement_count": false,
+                      "position": "target"
+                    }
+                  },
+                  {
+                    "action": {
+                      "type": "minecraft:swing_hand"
+                    }
+                  },
+                  {
+                    "action": {
+                      "type": "minecraft:damage_item",
+                      "amount": 1
+                    }
+                  }
+                ],
+                "handler": "minecraft:passing"
               }
             }
-          },
-          {
-            "action": {
-              "type": "minecraft:passing_sequence",
-              "entries": [
-                {
-                  "type": "minecraft:place_block",
-                  "block": "minecraft:fire",
-                  "decrement_count": false,
-                  "position": "target"
-                },
-                {
-                  "type": "minecraft:swing_hand"
-                },
-                {
-                  "type": "minecraft:damage_item",
-                  "amount": 1
-                }
-              ]
-            }
-          }
-        ]
+          ],
+          "handler": "minecraft:first_to_pass_requirements"
+        }
       }
     }
   ]

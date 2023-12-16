@@ -1,10 +1,7 @@
 package net.errorcraft.itematic.data;
 
 import net.errorcraft.itematic.data.client.AtlasProvider;
-import net.errorcraft.itematic.data.server.registry.ArmorMaterialProvider;
-import net.errorcraft.itematic.data.server.registry.ItemGroupEntryProviderProvider;
-import net.errorcraft.itematic.data.server.registry.ItemProvider;
-import net.errorcraft.itematic.data.server.registry.TradeProvider;
+import net.errorcraft.itematic.data.server.registry.*;
 import net.errorcraft.itematic.data.server.tag.*;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -30,5 +27,6 @@ public class ItematicData implements DataGeneratorEntrypoint {
         pack.addProvider(ItemGroupEntryProviderTagProvider::new);
         pack.addProvider(TradeProvider::new);
         pack.addProvider(TradeTagProvider::new);
+        pack.addProvider(ActionProvider::new);
     }
 }

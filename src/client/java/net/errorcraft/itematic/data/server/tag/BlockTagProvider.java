@@ -18,6 +18,8 @@ public class BlockTagProvider extends FabricTagProvider<Block> {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup arg) {
+        RegistryWrapper.Impl<Block> registry = arg.getWrapperOrThrow(RegistryKeys.BLOCK);
+
         this.getOrCreateTagBuilder(ItematicBlockTags.END_CRYSTAL_SPAWNABLE_ON)
             .add(BlockKeys.BEDROCK)
             .add(BlockKeys.OBSIDIAN);
@@ -31,5 +33,20 @@ public class BlockTagProvider extends FabricTagProvider<Block> {
         this.getOrCreateTagBuilder(ItematicBlockTags.SHEARS_SUPER_EFFICIENT)
             .add(BlockKeys.COBWEB)
             .forceAddTag(BlockTags.LEAVES);
+        this.getOrCreateTagBuilder(ItematicBlockTags.TILLABLE_INTO_FARMLAND)
+            .add(BlockKeys.GRASS_BLOCK)
+            .add(BlockKeys.DIRT)
+            .add(BlockKeys.DIRT_PATH);
+        this.getOrCreateTagBuilder(ItematicBlockTags.AIR)
+            .add(BlockKeys.AIR)
+            .add(BlockKeys.CAVE_AIR)
+            .add(BlockKeys.VOID_AIR);
+        this.getOrCreateTagBuilder(ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)
+            .add(BlockKeys.GRASS_BLOCK)
+            .add(BlockKeys.DIRT)
+            .add(BlockKeys.PODZOL)
+            .add(BlockKeys.COARSE_DIRT)
+            .add(BlockKeys.MYCELIUM)
+            .add(BlockKeys.ROOTED_DIRT);
     }
 }

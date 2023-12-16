@@ -20,10 +20,12 @@
   "events": [
     {
       "event": "minecraft:break_item",
-      "action": {
-        "type": "minecraft:exchange_item",
-        "decrement_count": false,
-        "item": "minecraft:fishing_rod"
+      "entry": {
+        "action": {
+          "type": "minecraft:exchange_item",
+          "decrement_count": false,
+          "item": "minecraft:fishing_rod"
+        }
       }
     }
   ]

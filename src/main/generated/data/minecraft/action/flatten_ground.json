@@ -1,0 +1,64 @@
+{
+  "action": {
+    "type": "minecraft:sequence",
+    "entries": [
+      {
+        "action": {
+          "type": "minecraft:set_block_state",
+          "position": "target",
+          "state": {
+            "Name": "minecraft:dirt_path"
+          }
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:play_sound",
+          "category": "block",
+          "pitch": 1.0,
+          "position": "target",
+          "sound": "minecraft:item.shovel.flatten",
+          "volume": 1.0
+        }
+      }
+    ],
+    "handler": "minecraft:passing"
+  },
+  "requirements": {
+    "conditions": {
+      "condition": "minecraft:all_of",
+      "terms": [
+        {
+          "condition": "minecraft:location_check",
+          "predicate": {
+            "block": {
+              "tag": "minecraft:flattenable_into_dirt_path"
+            }
+          }
+        },
+        {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "minecraft:side_check",
+            "sides": [
+              "down"
+            ]
+          }
+        },
+        {
+          "condition": "minecraft:location_check",
+          "offsetY": 1,
+          "predicate": {
+            "block": {
+              "tag": "minecraft:air"
+            }
+          }
+        }
+      ]
+    },
+    "context": {
+      "entity": "this",
+      "position": "target"
+    }
+  }
+}

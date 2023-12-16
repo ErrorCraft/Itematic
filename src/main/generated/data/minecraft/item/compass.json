@@ -14,37 +14,39 @@
   "events": [
     {
       "event": "minecraft:use_on_block",
-      "action": {
-        "type": "minecraft:passing_sequence",
-        "entries": [
-          {
-            "type": "minecraft:set_item_pointer_location",
-            "position": "target"
-          },
-          {
-            "type": "minecraft:swing_hand"
-          }
-        ]
-      },
-      "requirements": {
-        "conditions": {
-          "condition": "minecraft:all_of",
-          "terms": [
+      "entry": {
+        "action": {
+          "type": "minecraft:sequence",
+          "entries": [
             {
-              "condition": "minecraft:location_check",
-              "predicate": {
-                "block": {
-                  "blocks": [
-                    "minecraft:lodestone"
-                  ]
-                }
+              "action": {
+                "type": "minecraft:set_item_pointer_location",
+                "position": "target"
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:swing_hand"
               }
             }
-          ]
+          ],
+          "handler": "minecraft:passing"
         },
-        "context": {
-          "entity": "this",
-          "position": "target"
+        "requirements": {
+          "conditions": {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": [
+                  "minecraft:lodestone"
+                ]
+              }
+            }
+          },
+          "context": {
+            "entity": "this",
+            "position": "target"
+          }
         }
       }
     }

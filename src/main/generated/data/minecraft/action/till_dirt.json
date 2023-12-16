@@ -1,0 +1,49 @@
+{
+  "action": {
+    "type": "minecraft:set_block_state",
+    "position": "target",
+    "state": {
+      "Name": "minecraft:farmland",
+      "Properties": {
+        "moisture": "0"
+      }
+    }
+  },
+  "requirements": {
+    "conditions": {
+      "condition": "minecraft:all_of",
+      "terms": [
+        {
+          "condition": "minecraft:location_check",
+          "predicate": {
+            "block": {
+              "tag": "minecraft:tillable_into_farmland"
+            }
+          }
+        },
+        {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "minecraft:side_check",
+            "sides": [
+              "down"
+            ]
+          }
+        },
+        {
+          "condition": "minecraft:location_check",
+          "offsetY": 1,
+          "predicate": {
+            "block": {
+              "tag": "minecraft:air"
+            }
+          }
+        }
+      ]
+    },
+    "context": {
+      "entity": "this",
+      "position": "target"
+    }
+  }
+}

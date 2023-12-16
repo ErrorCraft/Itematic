@@ -8,7 +8,9 @@ import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.item.model.override.ModelOverride;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.village.trade.Trade;
+import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionType;
+import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -25,6 +27,8 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<ModelOverride>> MODEL_OVERRIDE = RegistryKey.ofRegistry(new Identifier("model_override"));
     public static final RegistryKey<Registry<Pointer>> POINTER = RegistryKey.ofRegistry(new Identifier("pointer"));
     public static final RegistryKey<Registry<Trade>> TRADE = RegistryKey.ofRegistry(new Identifier("trade"));
+    public static final RegistryKey<Registry<ActionEntry>> ACTION = RegistryKey.ofRegistry(new Identifier("action"));
+    public static final RegistryKey<Registry<SequenceHandlerType<?>>> SEQUENCE_HANDLER_TYPE = RegistryKey.ofRegistry(new Identifier("sequence_handler_type"));
 
     private ItematicRegistryKeys() {}
 }

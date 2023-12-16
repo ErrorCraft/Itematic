@@ -109,6 +109,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> WARPED_FUNGUS = register("warped_fungus");
     public static final RegistryKey<Item> CRIMSON_ROOTS = register("crimson_roots");
     public static final RegistryKey<Item> WARPED_ROOTS = register("warped_roots");
+    public static final RegistryKey<Item> HANGING_ROOTS = register("hanging_roots");
     public static final RegistryKey<Item> BAMBOO = register("bamboo");
     public static final RegistryKey<Item> OAK_SLAB = register("oak_slab");
     public static final RegistryKey<Item> SPRUCE_SLAB = register("spruce_slab");

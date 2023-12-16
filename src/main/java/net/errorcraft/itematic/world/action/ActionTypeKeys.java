@@ -27,6 +27,8 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> PLAY_SOUND = of("play_sound");
     public static final RegistryKey<ActionType<?>> DISPLAY_PARTICLE = of("display_particle");
     public static final RegistryKey<ActionType<?>> PASSING_SEQUENCE = of("passing_sequence");
+    public static final RegistryKey<ActionType<?>> SET_BLOCK_STATE = of("set_block_state");
+    public static final RegistryKey<ActionType<?>> DROP_ITEM_FROM_BLOCK = of("drop_item_from_block");
 
     private ActionTypeKeys() {}
 

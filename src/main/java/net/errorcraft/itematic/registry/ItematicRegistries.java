@@ -14,6 +14,8 @@ import net.errorcraft.itematic.item.pointer.Pointers;
 import net.errorcraft.itematic.mixin.registry.RegistriesAccessor;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
+import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
+import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.registry.Registry;
 
@@ -25,6 +27,7 @@ public class ItematicRegistries {
     public static final Registry<ActionType<?>> ACTION_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.ACTION_TYPE, r -> ActionTypes.MODIFY_ITEM);
     public static final Registry<ModelOverride> MODEL_OVERRIDE = RegistriesAccessor.create(ItematicRegistryKeys.MODEL_OVERRIDE, r -> ModelOverrides.LEFT_HANDED);
     public static final Registry<Pointer> POINTER = RegistriesAccessor.create(ItematicRegistryKeys.POINTER, r -> Pointers.SPAWN_LOCATION);
+    public static final Registry<SequenceHandlerType<?>> SEQUENCE_HANDLER_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.SEQUENCE_HANDLER_TYPE, r -> SequenceHandlerTypes.UNCHECKED);
 
     private ItematicRegistries() {}
 }

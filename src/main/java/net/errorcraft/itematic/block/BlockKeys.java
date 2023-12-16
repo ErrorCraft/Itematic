@@ -6,8 +6,12 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 public class BlockKeys {
+    public static final RegistryKey<Block> AIR = of("air");
     public static final RegistryKey<Block> STONE = of("stone");
     public static final RegistryKey<Block> GRASS_BLOCK = of("grass_block");
+    public static final RegistryKey<Block> DIRT = of("dirt");
+    public static final RegistryKey<Block> COARSE_DIRT = of("coarse_dirt");
+    public static final RegistryKey<Block> PODZOL = of("podzol");
     public static final RegistryKey<Block> COBBLESTONE = of("cobblestone");
     public static final RegistryKey<Block> OAK_PLANKS = of("oak_planks");
     public static final RegistryKey<Block> SPRUCE_PLANKS = of("spruce_planks");
@@ -102,6 +106,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> REDSTONE_WIRE = of("redstone_wire");
     public static final RegistryKey<Block> CRAFTING_TABLE = of("crafting_table");
     public static final RegistryKey<Block> WHEAT = of("wheat");
+    public static final RegistryKey<Block> FARMLAND = of("farmland");
     public static final RegistryKey<Block> OAK_SIGN = of("oak_sign");
     public static final RegistryKey<Block> SPRUCE_SIGN = of("spruce_sign");
     public static final RegistryKey<Block> BIRCH_SIGN = of("birch_sign");
@@ -150,6 +155,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> VINE = of("vine");
     public static final RegistryKey<Block> GLOW_LICHEN = of("glow_lichen");
     public static final RegistryKey<Block> OAK_FENCE_GATE = of("oak_fence_gate");
+    public static final RegistryKey<Block> MYCELIUM = of("mycelium");
     public static final RegistryKey<Block> LILY_PAD = of("lily_pad");
     public static final RegistryKey<Block> NETHER_WART = of("nether_wart");
     public static final RegistryKey<Block> BREWING_STAND = of("brewing_stand");
@@ -258,9 +264,12 @@ public class BlockKeys {
     public static final RegistryKey<Block> TORCHFLOWER_CROP = of("torchflower_crop");
     public static final RegistryKey<Block> PITCHER_CROP = of("pitcher_crop");
     public static final RegistryKey<Block> BEETROOTS = of("beetroots");
+    public static final RegistryKey<Block> DIRT_PATH = of("dirt_path");
     public static final RegistryKey<Block> NETHER_WART_BLOCK = of("nether_wart_block");
     public static final RegistryKey<Block> DRIED_KELP_BLOCK = of("dried_kelp_block");
     public static final RegistryKey<Block> BAMBOO = of("bamboo");
+    public static final RegistryKey<Block> VOID_AIR = of("void_air");
+    public static final RegistryKey<Block> CAVE_AIR = of("cave_air");
     public static final RegistryKey<Block> SCAFFOLDING = of("scaffolding");
     public static final RegistryKey<Block> LOOM = of("loom");
     public static final RegistryKey<Block> BARREL = of("barrel");
@@ -309,6 +318,8 @@ public class BlockKeys {
     public static final RegistryKey<Block> CAVE_VINES = of("cave_vines");
     public static final RegistryKey<Block> AZALEA = of("azalea");
     public static final RegistryKey<Block> FLOWERING_AZALEA = of("flowering_azalea");
+    public static final RegistryKey<Block> HANGING_ROOTS = of("hanging_roots");
+    public static final RegistryKey<Block> ROOTED_DIRT = of("rooted_dirt");
 
     private BlockKeys() {}
 

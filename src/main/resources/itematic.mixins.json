@@ -170,6 +170,8 @@
     "item.PotionItemAccessor",
     "loot.LootDataTypeExtender",
     "loot.LootManagerExtender",
+    "loot.condition.LootConditionTypesAccessor",
+    "loot.context.LootContextParametersAccessor",
     "loot.context.LootContextTypesAccessor",
     "loot.entry.ItemEntryExtender",
     "loot.entry.TagEntryExtender",

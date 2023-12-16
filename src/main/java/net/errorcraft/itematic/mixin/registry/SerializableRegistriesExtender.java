@@ -7,6 +7,7 @@ import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
+import net.errorcraft.itematic.world.action.ActionEntry;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -41,5 +42,6 @@ public abstract class SerializableRegistriesExtender {
         add(builder, ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterial.CODEC);
         add(builder, ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC);
         add(builder, ItematicRegistryKeys.TRADE, Trade.CODEC);
+        add(builder, ItematicRegistryKeys.ACTION, ActionEntry.CODEC);
     }
 }

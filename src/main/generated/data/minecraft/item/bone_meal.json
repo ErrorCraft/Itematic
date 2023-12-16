@@ -13,8 +13,10 @@
   "events": [
     {
       "event": "minecraft:use_on_block",
-      "action": {
-        "type": "minecraft:fertilize"
+      "entry": {
+        "action": {
+          "type": "minecraft:fertilize"
+        }
       }
     }
   ]

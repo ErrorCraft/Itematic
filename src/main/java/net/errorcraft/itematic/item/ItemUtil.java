@@ -24,12 +24,15 @@ import net.errorcraft.itematic.mixin.item.MilkBucketItemAccessor;
 import net.errorcraft.itematic.mixin.item.PotionItemAccessor;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
+import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionRequirements;
 import net.errorcraft.itematic.world.action.Actions;
 import net.errorcraft.itematic.world.action.actions.*;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
+import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
+import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.dispenser.DispenserBehavior;
@@ -57,7 +60,6 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.*;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
@@ -79,6 +81,7 @@ public class ItemUtil {
         RegistryEntryLookup<SoundEvent> soundEvents = registerable.getRegistryLookup(RegistryKeys.SOUND_EVENT);
         RegistryEntryLookup<Fluid> fluids = registerable.getRegistryLookup(RegistryKeys.FLUID);
         RegistryEntryLookup<Pointer> pointers = registerable.getRegistryLookup(ItematicRegistryKeys.POINTER);
+        RegistryEntryLookup<ActionEntry> actions = registerable.getRegistryLookup(ItematicRegistryKeys.ACTION);
 
         registerable.register(ItemKeys.AIR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build())
@@ -791,6 +794,13 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WARPED_ROOTS)))
                 .with(new CompostableItemComponent(0.65f))
+                .build()
+        ));
+        registerable.register(ItemKeys.HANGING_ROOTS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HANGING_ROOTS).build()),
+            ItemComponentSet.builder()
+                .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.HANGING_ROOTS)))
+                .with(new CompostableItemComponent(0.3f))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO, create(
@@ -1731,7 +1741,7 @@ public class ItemUtil {
                 .with(new SteeringItemComponent(entityTypes.getOrThrow(EntityTypeKeys.PIG), 7))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.BREAK_ITEM, ActionEntry.simple(new ExchangeItemAction(items.getOrThrow(ItemKeys.FISHING_ROD), false)))
+                .add(ItemEvents.BREAK_ITEM, ActionEntry.of(new ExchangeItemAction(items.getOrThrow(ItemKeys.FISHING_ROD), false)))
                 .build()
         ));
         registerable.register(ItemKeys.WARPED_FUNGUS_ON_A_STICK, create(
@@ -1742,7 +1752,7 @@ public class ItemUtil {
                 .with(new SteeringItemComponent(entityTypes.getOrThrow(EntityTypeKeys.STRIDER), 1))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.BREAK_ITEM, ActionEntry.simple(new ExchangeItemAction(items.getOrThrow(ItemKeys.FISHING_ROD), false)))
+                .add(ItemEvents.BREAK_ITEM, ActionEntry.of(new ExchangeItemAction(items.getOrThrow(ItemKeys.FISHING_ROD), false)))
                 .build()
         ));
         registerable.register(ItemKeys.ELYTRA, create(
@@ -1900,9 +1910,9 @@ public class ItemUtil {
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.USE_ON_BLOCK)))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.simple(
-                    FirstToPassAction.of(
-                        ActionEntry.passing(
+                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                    FirstToPassRequirementsSequenceHandler.builder()
+                        .add(
                             ActionRequirements.of(
                                 ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
                                 AllOfLootCondition.builder(
@@ -1911,38 +1921,39 @@ public class ItemUtil {
                                             .block(BlockPredicate.Builder.create()
                                                 .state(StatePredicate.Builder.create()
                                                     .exactMatch(Properties.LIT, false)))),
-                                        InvertedLootCondition.builder(
-                                            LocationCheckLootCondition.builder(
-                                                LocationPredicate.Builder.create()
-                                                    .block(BlockPredicate.Builder.create()
-                                                        .state(StatePredicate.Builder.create()
-                                                            .exactMatch(Properties.WATERLOGGED, true))))))
-                                    .build()
-                            ),
-                            ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
-                                .property(Properties.LIT, true)
-                                .build(),
-                            new DamageItemAction(1)
-                        ),
-                        ActionEntry.passing(
-                            ActionRequirements.of(
-                                ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                                AllOfLootCondition.builder(
+                                    InvertedLootCondition.builder(
                                         LocationCheckLootCondition.builder(
                                             LocationPredicate.Builder.create()
                                                 .block(BlockPredicate.Builder.create()
-                                                    .blocks(Blocks.TNT))))
+                                                    .state(StatePredicate.Builder.create()
+                                                        .exactMatch(Properties.WATERLOGGED, true))))))
                                     .build()
                             ),
-                            new PrimeTntAction(ActionContextParameter.TARGET),
-                            new DamageItemAction(1)
-                        ),
-                        ActionEntry.passing(
-                            new PlaceBlockAction(blocks.getOrThrow(BlockKeys.FIRE), ActionContextParameter.TARGET, false),
-                            SwingHandAction.INSTANCE,
-                            new DamageItemAction(1)
+                            PassingSequenceHandler.builder()
+                                .add(ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
+                                    .property(Properties.LIT, true)
+                                    .build())
+                                .add(DamageItemAction.of(1))
                         )
-                    )))
+                        .add(
+                            ActionRequirements.of(
+                                ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                                LocationCheckLootCondition.builder(
+                                    LocationPredicate.Builder.create()
+                                        .block(BlockPredicate.Builder.create()
+                                            .blocks(Blocks.TNT)))
+                                    .build()
+                            ),
+                            PassingSequenceHandler.builder()
+                                .add(new PrimeTntAction(ActionContextParameter.TARGET))
+                                .add(DamageItemAction.of(1))
+                        )
+                        .add(PassingSequenceHandler.builder()
+                            .add(new PlaceBlockAction(blocks.getOrThrow(BlockKeys.FIRE), ActionContextParameter.TARGET, false))
+                            .add(SwingHandAction.INSTANCE)
+                            .add(DamageItemAction.of(1))
+                        )
+                ))
                 .build()
         ));
         registerable.register(ItemKeys.APPLE, create(
@@ -2013,6 +2024,9 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.shovel(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.WOODEN_PICKAXE, create(
@@ -2034,6 +2048,9 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.hoe(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.STONE_SWORD, create(
@@ -2046,6 +2063,9 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_SHOVEL).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.shovel(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.STONE_PICKAXE, create(
@@ -2064,6 +2084,9 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_HOE).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.hoe(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_SWORD, create(
@@ -2076,6 +2099,9 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_SHOVEL).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.shovel(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_PICKAXE, create(
@@ -2094,6 +2120,9 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HOE).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.hoe(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.IRON_SWORD, create(
@@ -2106,6 +2135,9 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_SHOVEL).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.shovel(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.IRON_PICKAXE, create(
@@ -2124,6 +2156,9 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HOE).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.hoe(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.DIAMOND_SWORD, create(
@@ -2136,6 +2171,9 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_SHOVEL).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.shovel(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.DIAMOND_PICKAXE, create(
@@ -2154,6 +2192,9 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HOE).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.hoe(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_SWORD, create(
@@ -2166,6 +2207,9 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SHOVEL).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.shovel(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_PICKAXE, create(
@@ -2184,6 +2228,9 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HOE).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.hoe(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
                 .build()
         ));
         registerable.register(ItemKeys.STICK, create(
@@ -2704,7 +2751,7 @@ public class ItemUtil {
                 .with(ConsumableItemComponent.of(items.getOrThrow(ItemKeys.BUCKET)))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.CONSUME_ITEM, ActionEntry.simple(new ClearStatusEffectsAction(ActionContextParameter.THIS)))
+                .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(new ClearStatusEffectsAction(ActionContextParameter.THIS)))
                 .build()
         ));
         registerable.register(ItemKeys.PUFFERFISH_BUCKET, create(
@@ -2783,18 +2830,18 @@ public class ItemUtil {
                 .with(PointableItemComponent.of(pointers.getOrThrow(PointerKeys.SPAWN_LOCATION), Util.createTranslationKey("item", new Identifier("lodestone_compass"))))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.passing(
+                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                     ActionRequirements.of(
                         ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                        AllOfLootCondition.builder(
-                            LocationCheckLootCondition.builder(
-                                LocationPredicate.Builder.create()
-                                    .block(BlockPredicate.Builder.create()
-                                        .blocks(Blocks.LODESTONE))))
+                        LocationCheckLootCondition.builder(
+                            LocationPredicate.Builder.create()
+                                .block(BlockPredicate.Builder.create()
+                                    .blocks(Blocks.LODESTONE)))
                             .build()
                     ),
-                    SetItemPointerLocationAction.of(ActionContextParameter.TARGET),
-                    SwingHandAction.INSTANCE
+                    PassingSequenceHandler.builder()
+                        .add(SetItemPointerLocationAction.of(ActionContextParameter.TARGET))
+                        .add(SwingHandAction.INSTANCE)
                 ))
                 .build()
         ));
@@ -2968,7 +3015,7 @@ public class ItemUtil {
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.FERTILIZE)))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.simple(FertilizeAction.INSTANCE))
+                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(FertilizeAction.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.SUGAR, create(
@@ -3133,7 +3180,7 @@ public class ItemUtil {
                 .with(PreventUseWhenUsedOnTargetItemComponent.forBlock())
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.simple(
+                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                     ActionRequirements.of(
                         ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
                         LocationCheckLootCondition.builder(
@@ -3144,20 +3191,25 @@ public class ItemUtil {
                                         .exactMatch(Properties.EYE, false))))
                             .build()
                     ),
-                    PassingSequenceAction.builder()
+                    PassingSequenceHandler.builder()
                         .add(ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
                             .property(Properties.EYE, true)
                             .pushEntitiesUpwards()
                             .build())
                         .add(DecrementItemAction.of(1))
                         .add(SwingHandAction.INSTANCE)
-                        .add(new PlaySoundAction(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.BLOCK_END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS, 1.0f, 1.0f))
-                        .add(new DisplayParticleAction(ActionContextParameter.TARGET, ParticleTypes.SMOKE, 16, new Vec3d(0.0d, 0.8125d, 0.0d), new Vec3d(0.09375d, 0.0d, 0.09375d), 0.0d))
+                        .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.BLOCK_END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS))
+                        .add(DisplayParticleAction.builder(ActionContextParameter.TARGET, ParticleTypes.SMOKE)
+                            .count(16)
+                            .offset(Vec3dProvider.of(
+                                -0.1875d, 0.1875d,
+                                0.8125d, 0.8125d,
+                                -0.1875d, 0.1875d))
+                            .build())
                         .addOptional(LightEndPortalAction.of(ActionContextParameter.TARGET))
-                        .build()
                 ))
-                .add(ItemEvents.THROW_PROJECTILE, ActionEntry.simple(
-                    new PlaySoundAction(ActionContextParameter.THIS, soundEvents.getOrThrow(SoundEventKeys.ENTITY_ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL, 1.0f, 1.2f)
+                .add(ItemEvents.THROW_PROJECTILE, ActionEntry.of(
+                    PlaySoundAction.of(ActionContextParameter.THIS, soundEvents.getOrThrow(SoundEventKeys.ENTITY_ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL, 1.0f, 1.2f)
                 ))
                 .build()
         ));
@@ -3957,7 +4009,7 @@ public class ItemUtil {
                 .with(FoodItemComponent.from(FoodComponents.CHORUS_FRUIT))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.CONSUME_ITEM, ActionEntry.simple(new TeleportAction(16, ActionContextParameter.THIS)))
+                .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(new TeleportAction(16, ActionContextParameter.THIS)))
                 .build()
         ));
         registerable.register(ItemKeys.TORCHFLOWER_SEEDS, create(
@@ -4042,7 +4094,7 @@ public class ItemUtil {
                 .with(new UseAnimationItemComponent(UseAction.BLOCK))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.USE, ActionEntry.simple(StartUsingItemAction.INSTANCE))
+                .add(ItemEvents.USE, ActionEntry.of(StartUsingItemAction.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_13, create(
@@ -4229,15 +4281,13 @@ public class ItemUtil {
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.WAX_BLOCK)))
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.simple(
-                    FirstToPassAction.of(
-                        Actions.waxSign(true),
-                        ActionEntry.passing(
-                            new WaxBlockAction(ActionContextParameter.TARGET),
-                            DecrementItemAction.of(1),
-                            SwingHandAction.INSTANCE
-                        )
-                    )))
+                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                    FirstToPassRequirementsSequenceHandler.builder()
+                        .add(Actions.waxSign(true))
+                        .add(PassingSequenceHandler.builder()
+                            .add(new WaxBlockAction(ActionContextParameter.TARGET))
+                            .add(DecrementItemAction.of(1))
+                            .add(SwingHandAction.INSTANCE))))
                 .build()
         ));
         registerable.register(ItemKeys.HONEY_BOTTLE, create(

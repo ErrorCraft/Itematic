@@ -1,12 +1,11 @@
 package net.errorcraft.itematic.village.trade;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.village.TradeOffersAccessor;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.util.Range;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
@@ -17,13 +16,11 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperience, float priceMultiplier) {
     public static final Codec<Trade> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -104,10 +101,10 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         }
     }
 
-    public record Entry(RegistryEntry<Item> item, CountProvider count, Optional<LootFunction> itemModifier) {
+    public record Entry(RegistryEntry<Item> item, Range.IntegerRange count, Optional<LootFunction> itemModifier) {
         public static final Codec<Entry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(Entry::item),
-            Codecs.createStrictOptionalFieldCodec(CountProvider.CODEC, "count", CountProvider.of(1)).forGetter(Entry::count),
+            Codecs.createStrictOptionalFieldCodec(Range.INT_CODEC, "count", Range.IntegerRange.of(1)).forGetter(Entry::count),
             Codecs.createStrictOptionalFieldCodec(LootFunctionTypes.CODEC, "item_modifier").forGetter(Entry::itemModifier)
         ).apply(instance, Entry::new));
 
@@ -124,7 +121,7 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         }
 
         public static Entry of(RegistryEntry<Item> item, int count, LootFunction itemModifier) {
-            return new Entry(item, CountProvider.of(count), Optional.ofNullable(itemModifier));
+            return new Entry(item, Range.IntegerRange.of(count), Optional.ofNullable(itemModifier));
         }
 
         public static Entry ofEmerald(RegistryEntryLookup<Item> items) {
@@ -136,40 +133,7 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         }
 
         public static Entry ofEmerald(RegistryEntryLookup<Item> items, int min, int max) {
-            return new Entry(items.getOrThrow(ItemKeys.EMERALD), CountProvider.of(min, max), Optional.empty());
-        }
-    }
-
-    public record CountProvider(int min, int max) {
-        public static final Codec<CountProvider> INLINE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.INT.fieldOf("min").forGetter(CountProvider::min),
-            Codec.INT.fieldOf("max").forGetter(CountProvider::max)
-        ).apply(instance, CountProvider::new));
-        public static final Codec<CountProvider> CODEC = Codecs.validate(Codecs.either(Codec.INT, INLINE_CODEC).xmap(either -> either.map(CountProvider::of, Function.identity()), c -> {
-            if (c.min == c.max) {
-                return Either.left(c.min);
-            }
-            return Either.right(c);
-        }), c -> {
-            if (c.max < c.min) {
-                return DataResult.error(() -> "Max must be at least min: " + c);
-            }
-            return DataResult.success(c);
-        });
-
-        public int get(Random random) {
-            if (this.min == this.max) {
-                return this.min;
-            }
-            return random.nextInt(this.max - this.min + 1) + this.min;
-        }
-
-        public static CountProvider of(int value) {
-            return new CountProvider(value, value);
-        }
-
-        public static CountProvider of(int min, int max) {
-            return new CountProvider(min, max);
+            return new Entry(items.getOrThrow(ItemKeys.EMERALD), Range.IntegerRange.of(min, max), Optional.empty());
         }
     }
 }

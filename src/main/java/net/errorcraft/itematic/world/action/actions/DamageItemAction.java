@@ -41,6 +41,10 @@ public record DamageItemAction(int amount, boolean ignoreGameMode) implements Ac
         return true;
     }
 
+    public static DamageItemAction of(int amount) {
+        return new DamageItemAction(amount);
+    }
+
     private boolean preventDamage(ActionContext context) {
         return context.entity(ActionContextParameter.THIS).orElse(null) instanceof PlayerEntity player
             && player.isCreative()

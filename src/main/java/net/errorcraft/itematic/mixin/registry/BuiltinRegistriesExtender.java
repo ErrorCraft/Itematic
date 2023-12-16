@@ -5,6 +5,7 @@ import net.errorcraft.itematic.item.armor.ArmorMaterials;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProviders;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trades;
+import net.errorcraft.itematic.world.action.Actions;
 import net.minecraft.registry.BuiltinRegistries;
 import net.minecraft.registry.RegistryBuilder;
 import net.minecraft.registry.RegistryKeys;
@@ -29,6 +30,7 @@ public class BuiltinRegistriesExtender {
         REGISTRY_BUILDER.addRegistry(RegistryKeys.ITEM, ItemUtil::bootstrap)
             .addRegistry(ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterials::bootstrap)
             .addRegistry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProviders::bootstrap)
-            .addRegistry(ItematicRegistryKeys.TRADE, Trades::bootstrap);
+            .addRegistry(ItematicRegistryKeys.TRADE, Trades::bootstrap)
+            .addRegistry(ItematicRegistryKeys.ACTION, Actions::bootstrap);
     }
 }

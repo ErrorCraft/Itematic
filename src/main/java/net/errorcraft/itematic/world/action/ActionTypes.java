@@ -15,7 +15,6 @@ public class ActionTypes {
     public static final ActionType<ExchangeItemAction> EXCHANGE_ITEM = register(ActionTypeKeys.EXCHANGE_ITEM, new ActionType<>(ExchangeItemAction.CODEC));
     public static final ActionType<ModifyBlockStateAction> MODIFY_BLOCK_STATE = register(ActionTypeKeys.MODIFY_BLOCK_STATE, new ActionType<>(ModifyBlockStateAction.CODEC));
     public static final ActionType<SequenceAction> SEQUENCE = register(ActionTypeKeys.SEQUENCE, new ActionType<>(SequenceAction.CODEC));
-    public static final ActionType<FirstToPassAction> FIRST_TO_PASS = register(ActionTypeKeys.FIRST_TO_PASS, new ActionType<>(FirstToPassAction.CODEC));
     public static final ActionType<PlaceBlockAction> PLACE_BLOCK = register(ActionTypeKeys.PLACE_BLOCK, new ActionType<>(PlaceBlockAction.CODEC));
     public static final ActionType<DamageItemAction> DAMAGE_ITEM = register(ActionTypeKeys.DAMAGE_ITEM, new ActionType<>(DamageItemAction.CODEC));
     public static final ActionType<PrimeTntAction> PRIME_TNT = register(ActionTypeKeys.PRIME_TNT, new ActionType<>(PrimeTntAction.CODEC));
@@ -27,7 +26,8 @@ public class ActionTypes {
     public static final ActionType<LightEndPortalAction> LIGHT_END_PORTAL = register(ActionTypeKeys.LIGHT_END_PORTAL, new ActionType<>(LightEndPortalAction.CODEC));
     public static final ActionType<PlaySoundAction> PLAY_SOUND = register(ActionTypeKeys.PLAY_SOUND, new ActionType<>(PlaySoundAction.CODEC));
     public static final ActionType<DisplayParticleAction> DISPLAY_PARTICLE = register(ActionTypeKeys.DISPLAY_PARTICLE, new ActionType<>(DisplayParticleAction.CODEC));
-    public static final ActionType<PassingSequenceAction> PASSING_SEQUENCE = register(ActionTypeKeys.PASSING_SEQUENCE, new ActionType<>(PassingSequenceAction.CODEC));
+    public static final ActionType<SetBlockStateAction> SET_BLOCK_STATE = register(ActionTypeKeys.SET_BLOCK_STATE, new ActionType<>(SetBlockStateAction.CODEC));
+    public static final ActionType<DropItemFromBlockAction> DROP_ITEM_FROM_BLOCK = register(ActionTypeKeys.DROP_ITEM_FROM_BLOCK, new ActionType<>(DropItemFromBlockAction.CODEC));
 
     private ActionTypes() {}
 

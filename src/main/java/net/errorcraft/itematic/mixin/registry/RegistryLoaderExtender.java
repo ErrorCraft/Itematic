@@ -2,17 +2,23 @@ package net.errorcraft.itematic.mixin.registry;
 
 import com.google.common.collect.ImmutableList;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.datafixers.util.Pair;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
+import net.errorcraft.itematic.registry.ActionValidator;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryLoader;
+import net.errorcraft.itematic.world.action.ActionEntry;
+import net.minecraft.registry.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
+import java.util.Map;
 
 @Mixin(RegistryLoader.class)
 public class RegistryLoaderExtender {
@@ -30,6 +36,23 @@ public class RegistryLoaderExtender {
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterial.CODEC))
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.TRADE, Trade.CODEC))
+            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
             .build();
+    }
+
+    @Inject(
+        method = "method_45128",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/registry/Registry;freeze()Lnet/minecraft/registry/Registry;",
+            shift = At.Shift.AFTER
+        )
+    )
+    @SuppressWarnings("unchecked")
+    private static void postValidateRegistry(Map<RegistryKey<?>, Exception> map, Pair<MutableRegistry<?>, ?> loader, CallbackInfo info, @Local Registry<?> registry) {
+        if (ItematicRegistryKeys.ACTION.equals(registry.getKey())) {
+            ActionValidator validator = new ActionValidator((Registry<ActionEntry>) registry);
+            validator.validate(map);
+        }
     }
 }

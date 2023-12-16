@@ -13,66 +13,78 @@
   "events": [
     {
       "event": "minecraft:use_on_block",
-      "action": {
-        "type": "minecraft:first_to_pass",
-        "entries": [
-          {
-            "action": {
-              "type": "minecraft:passing_sequence",
-              "entries": [
-                {
-                  "type": "minecraft:modify_sign",
-                  "position": "target",
-                  "wax": true
-                },
-                {
-                  "type": "minecraft:decrement_item",
-                  "amount": 1
-                },
-                {
-                  "type": "minecraft:swing_hand"
-                }
-              ]
-            },
-            "requirements": {
-              "conditions": {
-                "condition": "minecraft:all_of",
-                "terms": [
+      "entry": {
+        "action": {
+          "type": "minecraft:sequence",
+          "entries": [
+            {
+              "action": {
+                "type": "minecraft:sequence",
+                "entries": [
                   {
-                    "condition": "minecraft:location_check",
-                    "predicate": {
-                      "block": {
-                        "tag": "minecraft:signs"
-                      }
+                    "action": {
+                      "type": "minecraft:modify_sign",
+                      "position": "target",
+                      "wax": true
+                    }
+                  },
+                  {
+                    "action": {
+                      "type": "minecraft:decrement_item",
+                      "amount": 1
+                    }
+                  },
+                  {
+                    "action": {
+                      "type": "minecraft:swing_hand"
                     }
                   }
-                ]
+                ],
+                "handler": "minecraft:passing"
               },
-              "context": {
-                "entity": "this",
-                "position": "target"
+              "requirements": {
+                "conditions": {
+                  "condition": "minecraft:location_check",
+                  "predicate": {
+                    "block": {
+                      "tag": "minecraft:signs"
+                    }
+                  }
+                },
+                "context": {
+                  "entity": "this",
+                  "position": "target"
+                }
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:sequence",
+                "entries": [
+                  {
+                    "action": {
+                      "type": "minecraft:wax_block",
+                      "position": "target"
+                    }
+                  },
+                  {
+                    "action": {
+                      "type": "minecraft:decrement_item",
+                      "amount": 1
+                    }
+                  },
+                  {
+                    "action": {
+                      "type": "minecraft:swing_hand"
+                    }
+                  }
+                ],
+                "handler": "minecraft:passing"
               }
             }
-          },
-          {
-            "action": {
-              "type": "minecraft:passing_sequence",
-              "entries": [
-                {
-                  "type": "minecraft:wax_block",
-                  "position": "target"
-                },
-                {
-                  "type": "minecraft:decrement_item",
-                  "amount": 1
-                },
-                {
-                  "type": "minecraft:swing_hand"
-                }
-              ]
-            }
-          }
-        ]
+          ],
+          "handler": "minecraft:first_to_pass_requirements"
+        }
       }
     }
   ]
