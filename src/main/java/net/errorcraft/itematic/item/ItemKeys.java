@@ -550,6 +550,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> GOLDEN_HORSE_ARMOR = register("golden_horse_armor");
     public static final RegistryKey<Item> DIAMOND_HORSE_ARMOR = register("diamond_horse_armor");
     public static final RegistryKey<Item> LEATHER_HORSE_ARMOR = register("leather_horse_armor");
+    public static final RegistryKey<Item> LEAD = register("lead");
+    public static final RegistryKey<Item> NAME_TAG = register("name_tag");
     public static final RegistryKey<Item> COMMAND_BLOCK_MINECART = register("command_block_minecart");
     public static final RegistryKey<Item> MUTTON = register("mutton");
     public static final RegistryKey<Item> COOKED_MUTTON = register("cooked_mutton");

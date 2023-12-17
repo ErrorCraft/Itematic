@@ -14,7 +14,6 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> EXCHANGE_ITEM = of("exchange_item");
     public static final RegistryKey<ActionType<?>> MODIFY_BLOCK_STATE = of("modify_block_state");
     public static final RegistryKey<ActionType<?>> SEQUENCE = of("sequence");
-    public static final RegistryKey<ActionType<?>> FIRST_TO_PASS = of("first_to_pass");
     public static final RegistryKey<ActionType<?>> PLACE_BLOCK = of("place_block");
     public static final RegistryKey<ActionType<?>> DAMAGE_ITEM = of("damage_item");
     public static final RegistryKey<ActionType<?>> PRIME_TNT = of("prime_tnt");
@@ -26,9 +25,10 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> LIGHT_END_PORTAL = of("light_end_portal");
     public static final RegistryKey<ActionType<?>> PLAY_SOUND = of("play_sound");
     public static final RegistryKey<ActionType<?>> DISPLAY_PARTICLE = of("display_particle");
-    public static final RegistryKey<ActionType<?>> PASSING_SEQUENCE = of("passing_sequence");
     public static final RegistryKey<ActionType<?>> SET_BLOCK_STATE = of("set_block_state");
     public static final RegistryKey<ActionType<?>> DROP_ITEM_FROM_BLOCK = of("drop_item_from_block");
+    public static final RegistryKey<ActionType<?>> ATTACH_LEASHED_ENTITIES_ON_BLOCK = of("attach_leashed_entities_on_block");
+    public static final RegistryKey<ActionType<?>> SET_ENTITY_NAME_FROM_ITEM = of("set_entity_name_from_item");
 
     private ActionTypeKeys() {}
 

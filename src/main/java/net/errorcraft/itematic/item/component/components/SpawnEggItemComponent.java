@@ -46,7 +46,7 @@ public record SpawnEggItemComponent() implements ItemComponent {
         if (mobEntity == null) {
             return Optional.empty();
         }
-        if (!mobEntity.trySetBaby(true)) {
+        if (!mobEntity.itematic$trySetBaby(true)) {
             return Optional.empty();
         }
         mobEntity.refreshPositionAfterTeleport(pos);

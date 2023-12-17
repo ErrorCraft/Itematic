@@ -1950,8 +1950,8 @@ public class ItemUtil {
                         )
                         .add(PassingSequenceHandler.builder()
                             .add(new PlaceBlockAction(blocks.getOrThrow(BlockKeys.FIRE), ActionContextParameter.TARGET, false))
-                            .add(SwingHandAction.INSTANCE)
                             .add(DamageItemAction.of(1))
+                            .add(SwingHandAction.INSTANCE)
                         )
                 ))
                 .build()
@@ -3865,6 +3865,29 @@ public class ItemUtil {
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
                 .with(new TintedItemComponent(DyeableItemColor.INSTANCE))
+                .build()
+        ));
+        registerable.register(ItemKeys.LEAD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEAD).build()),
+            ItemComponentSet.EMPTY,
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                    PassingSequenceHandler.builder()
+                        .add(AttachLeashedEntitiesOnBlockAction.INSTANCE)
+                        .add(SwingHandAction.INSTANCE)
+                ))
+                .build()
+        ));
+        registerable.register(ItemKeys.NAME_TAG, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NAME_TAG).build()),
+            ItemComponentSet.EMPTY,
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_ENTITY, ActionEntry.of(
+                    PassingSequenceHandler.builder()
+                        .add(SetEntityNameFromItemAction.of(ActionContextParameter.TARGET))
+                        .add(DecrementItemAction.of(1))
+                        .add(SwingHandAction.INSTANCE)
+                ))
                 .build()
         ));
         registerable.register(ItemKeys.COMMAND_BLOCK_MINECART, create(

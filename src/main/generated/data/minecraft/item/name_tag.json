@@ -1,0 +1,39 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.name_tag"
+    },
+    "max_count": 64
+  },
+  "components": {},
+  "events": [
+    {
+      "event": "minecraft:use_on_entity",
+      "entry": {
+        "action": {
+          "type": "minecraft:sequence",
+          "entries": [
+            {
+              "action": {
+                "type": "minecraft:set_entity_name_from_item",
+                "entity": "target"
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:decrement_item",
+                "amount": 1
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:swing_hand"
+              }
+            }
+          ],
+          "handler": "minecraft:passing"
+        }
+      }
+    }
+  ]
+}

@@ -8,10 +8,12 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.SpawnEggItemComponent;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.server.world.ServerWorld;
@@ -79,8 +81,31 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
         return this.getWorld().itematic$getItem(ItemKeys.SHIELD).value();
     }
 
+    @Redirect(
+        method = "interactWithItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        )
+    )
+    private boolean isOfForLeadUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.LEAD);
+    }
+
+    @Redirect(
+        method = { "detachLeash", "readLeashNbt" },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/mob/MobEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+        )
+    )
+    private ItemEntity dropItemForLeadUseRegistryKey(MobEntity instance, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(ItemKeys.LEAD);
+    }
+
     @Override
-    public boolean trySetBaby(boolean baby) {
+    public boolean itematic$trySetBaby(boolean baby) {
         this.setBaby(baby);
         return this.isBaby() == baby;
     }

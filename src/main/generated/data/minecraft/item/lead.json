@@ -1,0 +1,32 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.lead"
+    },
+    "max_count": 64
+  },
+  "components": {},
+  "events": [
+    {
+      "event": "minecraft:use_on_block",
+      "entry": {
+        "action": {
+          "type": "minecraft:sequence",
+          "entries": [
+            {
+              "action": {
+                "type": "minecraft:attach_leashed_entities_on_block"
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:swing_hand"
+              }
+            }
+          ],
+          "handler": "minecraft:passing"
+        }
+      }
+    }
+  ]
+}

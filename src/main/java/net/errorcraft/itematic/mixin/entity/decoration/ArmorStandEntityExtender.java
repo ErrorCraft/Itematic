@@ -4,6 +4,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -25,6 +26,17 @@ public abstract class ArmorStandEntityExtender extends LivingEntity {
         )
     )
     private ItemStack getPickBlockStackNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.ARMOR_STAND));
+        return this.getWorld().itematic$createStack(ItemKeys.ARMOR_STAND);
+    }
+
+    @Redirect(
+        method = "interactAt",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfForNameTagUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.NAME_TAG);
     }
 }

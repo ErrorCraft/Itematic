@@ -28,6 +28,8 @@ public class ActionTypes {
     public static final ActionType<DisplayParticleAction> DISPLAY_PARTICLE = register(ActionTypeKeys.DISPLAY_PARTICLE, new ActionType<>(DisplayParticleAction.CODEC));
     public static final ActionType<SetBlockStateAction> SET_BLOCK_STATE = register(ActionTypeKeys.SET_BLOCK_STATE, new ActionType<>(SetBlockStateAction.CODEC));
     public static final ActionType<DropItemFromBlockAction> DROP_ITEM_FROM_BLOCK = register(ActionTypeKeys.DROP_ITEM_FROM_BLOCK, new ActionType<>(DropItemFromBlockAction.CODEC));
+    public static final ActionType<AttachLeashedEntitiesOnBlockAction> ATTACH_LEASHED_ENTITIES_ON_BLOCK = register(ActionTypeKeys.ATTACH_LEASHED_ENTITIES_ON_BLOCK, new ActionType<>(AttachLeashedEntitiesOnBlockAction.CODEC));
+    public static final ActionType<SetEntityNameFromItemAction> SET_ENTITY_NAME_FROM_ITEM = register(ActionTypeKeys.SET_ENTITY_NAME_FROM_ITEM, new ActionType<>(SetEntityNameFromItemAction.CODEC));
 
     private ActionTypes() {}
 
