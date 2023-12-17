@@ -27,6 +27,10 @@ public record SequenceAction(SequenceHandler handler) implements Action {
         return new SequenceAction(builder.build());
     }
 
+    public static SequenceAction of(SequenceHandler handler) {
+        return new SequenceAction(handler);
+    }
+
     public void validate(RecursionValidator validator) {
         for (RegistryEntry<ActionEntry> entry : this.handler.iterateEntries()) {
             validateEntry(validator, entry);

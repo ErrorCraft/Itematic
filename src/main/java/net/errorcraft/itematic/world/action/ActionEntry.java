@@ -6,8 +6,10 @@ import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.world.action.actions.SequenceAction;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
+import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.entry.RegistryElementCodec;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Optional;
@@ -18,6 +20,7 @@ public record ActionEntry(Action action, Optional<ActionRequirements> requiremen
         Codecs.createStrictOptionalFieldCodec(ActionRequirements.CODEC, "requirements").forGetter(ActionEntry::requirements)
     ).apply(instance, ActionEntry::new));
     public static final Codec<RegistryEntry<ActionEntry>> REGISTRY_CODEC = RegistryElementCodec.of(ItematicRegistryKeys.ACTION, CODEC);
+    public static final Codec<RegistryEntryList<ActionEntry>> REGISTRY_ENTRY_LIST_CODEC = RegistryCodecs.entryList(ItematicRegistryKeys.ACTION, CODEC);
 
     public Optional<Boolean> execute(ActionContext context) {
         if (!this.test(context)) {

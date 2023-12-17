@@ -24,6 +24,12 @@ public interface SequenceHandler {
         default S add(ActionRequirements requirements, Builder<?, ?> builder) {
             return this.add(requirements, SequenceAction.of(builder));
         }
+        default S add(SequenceHandler handler) {
+            return this.add(SequenceAction.of(handler));
+        }
+        default S add(ActionRequirements requirements, SequenceHandler handler) {
+            return this.add(requirements, SequenceAction.of(handler));
+        }
         default S add(Action action) {
             return this.add(ActionEntry.of(action));
         }

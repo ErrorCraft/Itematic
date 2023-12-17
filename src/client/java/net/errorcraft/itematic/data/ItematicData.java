@@ -28,5 +28,6 @@ public class ItematicData implements DataGeneratorEntrypoint {
         pack.addProvider(TradeProvider::new);
         pack.addProvider(TradeTagProvider::new);
         pack.addProvider(ActionProvider::new);
+        pack.addProvider(ActionTagProvider::new);
     }
 }

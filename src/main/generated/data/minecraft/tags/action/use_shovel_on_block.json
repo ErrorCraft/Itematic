@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:flatten_ground",
+    "minecraft:extinguish_campfire"
+  ]
+}

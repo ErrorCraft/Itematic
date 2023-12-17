@@ -5,10 +5,7 @@
       {
         "action": {
           "type": "minecraft:sequence",
-          "entries": [
-            "minecraft:flatten_ground",
-            "minecraft:extinguish_campfire"
-          ],
+          "entries": "#minecraft:use_shovel_on_block",
           "handler": "minecraft:first_to_pass_requirements"
         }
       },

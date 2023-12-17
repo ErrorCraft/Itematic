@@ -58,10 +58,7 @@ public class Actions {
 
         registerable.register(USE_HOE_ON_BLOCK, ActionEntry.of(
             PassingSequenceHandler.builder()
-                .add(FirstToPassRequirementsSequenceHandler.builder()
-                    .add(actions.getOrThrow(TILL_DIRT))
-                    .add(actions.getOrThrow(TILL_COARSE_DIRT))
-                    .add(actions.getOrThrow(TILL_ROOTED_DIRT)))
+                .add(FirstToPassRequirementsSequenceHandler.tag(actions.getOrThrow(ActionTags.USE_HOE_ON_BLOCK)))
                 .add(DamageItemAction.of(1))
                 .add(SwingHandAction.INSTANCE)
                 .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.ITEM_HOE_TILL), SoundCategory.BLOCKS))
@@ -88,9 +85,7 @@ public class Actions {
                 ).build()
             ),
             PassingSequenceHandler.builder()
-                .add(FirstToPassRequirementsSequenceHandler.builder()
-                    .add(actions.getOrThrow(FLATTEN_GROUND))
-                    .add(actions.getOrThrow(EXTINGUISH_CAMPFIRE)))
+                .add(FirstToPassRequirementsSequenceHandler.tag(actions.getOrThrow(ActionTags.USE_SHOVEL_ON_BLOCK)))
                 .add(DamageItemAction.of(1))
                 .add(SwingHandAction.INSTANCE)
         ));
@@ -119,20 +114,20 @@ public class Actions {
                     .volume(0.5f)
                     .pitch(1.8f, 3.4f)
                     .build())
-                .add(
-                    FirstToPassRequirementsSequenceHandler.builder()
-                        .add(
-                            ActionRequirements.of(
-                                ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                                LocationCheckLootCondition.builder(
-                                    LocationPredicate.Builder.create()
-                                        .block(BlockPredicate.Builder.create()
-                                            .state(StatePredicate.Builder.create()
-                                                .exactMatch(Properties.SIGNAL_FIRE, true))))
-                                    .build()
-                            ),
-                            campfireParticles(true))
-                        .add(campfireParticles(false))
+                .add(FirstToPassRequirementsSequenceHandler.builder()
+                    .add(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                            LocationCheckLootCondition.builder(
+                                LocationPredicate.Builder.create()
+                                    .block(BlockPredicate.Builder.create()
+                                        .state(StatePredicate.Builder.create()
+                                            .exactMatch(Properties.SIGNAL_FIRE, true))))
+                                .build()
+                        ),
+                        campfireParticles(true)
+                    )
+                    .add(campfireParticles(false))
                 )
         ));
     }

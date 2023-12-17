@@ -7,13 +7,14 @@ import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record FirstToPassRequirementsSequenceHandler(List<RegistryEntry<ActionEntry>> entries) implements SequenceHandler {
-    public static final Codec<FirstToPassRequirementsSequenceHandler> CODEC = ActionEntry.REGISTRY_CODEC.listOf().xmap(FirstToPassRequirementsSequenceHandler::new, FirstToPassRequirementsSequenceHandler::entries);
+public record FirstToPassRequirementsSequenceHandler(RegistryEntryList<ActionEntry> entries) implements SequenceHandler {
+    public static final Codec<FirstToPassRequirementsSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(FirstToPassRequirementsSequenceHandler::new, FirstToPassRequirementsSequenceHandler::entries);
 
     @Override
     public SequenceHandlerType<?> type() {
@@ -40,12 +41,16 @@ public record FirstToPassRequirementsSequenceHandler(List<RegistryEntry<ActionEn
         return new Builder();
     }
 
+    public static FirstToPassRequirementsSequenceHandler tag(RegistryEntryList.Named<ActionEntry> tag) {
+        return new FirstToPassRequirementsSequenceHandler(tag);
+    }
+
     public static class Builder implements SequenceHandler.Builder<FirstToPassRequirementsSequenceHandler, Builder> {
         private final List<RegistryEntry<ActionEntry>> entries = new ArrayList<>();
 
         @Override
         public FirstToPassRequirementsSequenceHandler build() {
-            return new FirstToPassRequirementsSequenceHandler(this.entries);
+            return new FirstToPassRequirementsSequenceHandler(RegistryEntryList.of(this.entries));
         }
 
         @Override

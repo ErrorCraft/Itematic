@@ -5,11 +5,7 @@
       {
         "action": {
           "type": "minecraft:sequence",
-          "entries": [
-            "minecraft:till_dirt",
-            "minecraft:till_coarse_dirt",
-            "minecraft:till_rooted_dirt"
-          ],
+          "entries": "#minecraft:use_hoe_on_block",
           "handler": "minecraft:first_to_pass_requirements"
         }
       },

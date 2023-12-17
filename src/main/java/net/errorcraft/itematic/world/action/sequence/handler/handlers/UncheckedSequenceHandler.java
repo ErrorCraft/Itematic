@@ -7,12 +7,13 @@ import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public record UncheckedSequenceHandler(List<RegistryEntry<ActionEntry>> entries) implements SequenceHandler {
-    public static final Codec<UncheckedSequenceHandler> CODEC = ActionEntry.REGISTRY_CODEC.listOf().xmap(UncheckedSequenceHandler::new, UncheckedSequenceHandler::entries);
+public record UncheckedSequenceHandler(RegistryEntryList<ActionEntry> entries) implements SequenceHandler {
+    public static final Codec<UncheckedSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(UncheckedSequenceHandler::new, UncheckedSequenceHandler::entries);
 
     @Override
     public SequenceHandlerType<?> type() {
@@ -37,12 +38,16 @@ public record UncheckedSequenceHandler(List<RegistryEntry<ActionEntry>> entries)
         return new Builder();
     }
 
+    public static UncheckedSequenceHandler tag(RegistryEntryList.Named<ActionEntry> tag) {
+        return new UncheckedSequenceHandler(tag);
+    }
+
     public static class Builder implements SequenceHandler.Builder<UncheckedSequenceHandler, Builder> {
         private final List<RegistryEntry<ActionEntry>> entries = new ArrayList<>();
 
         @Override
         public UncheckedSequenceHandler build() {
-            return new UncheckedSequenceHandler(this.entries);
+            return new UncheckedSequenceHandler(RegistryEntryList.of(this.entries));
         }
 
         @Override
