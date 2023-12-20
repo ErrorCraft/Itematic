@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.spire_armor_trim_smithing_template"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:smithing_template": {
+      "template": "minecraft:spire_pattern"
+    }
+  }
+}

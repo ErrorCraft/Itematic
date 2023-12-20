@@ -45,6 +45,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<SteeringItemComponent> STEERING = register("steering", new ItemComponentType<>(SteeringItemComponent.CODEC));
     public static final ItemComponentType<PointableItemComponent> POINTABLE = register("pointable", new ItemComponentType<>(PointableItemComponent.CODEC));
     public static final ItemComponentType<PreventUseWhenUsedOnTargetItemComponent> PREVENT_USE_WHEN_USED_ON_TARGET = register("prevent_use_when_used_on_target", new ItemComponentType<>(PreventUseWhenUsedOnTargetItemComponent.CODEC));
+    public static final ItemComponentType<SmithingTemplateItemComponent> SMITHING_TEMPLATE = register("smithing_template", new ItemComponentType<>(SmithingTemplateItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

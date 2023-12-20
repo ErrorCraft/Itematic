@@ -7,6 +7,7 @@ import com.mojang.datafixers.util.Pair;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
+import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.registry.ActionValidator;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
@@ -37,6 +38,7 @@ public class RegistryLoaderExtender {
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.TRADE, Trade.CODEC))
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
+            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.SMITHING_TEMPLATE, SmithingTemplate.CODEC))
             .build();
     }
 

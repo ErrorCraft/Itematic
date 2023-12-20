@@ -278,7 +278,10 @@ public class ItemKeys {
     public static final RegistryKey<Item> DIAMOND = register("diamond");
     public static final RegistryKey<Item> EMERALD = register("emerald");
     public static final RegistryKey<Item> LAPIS_LAZULI = register("lapis_lazuli");
+    public static final RegistryKey<Item> QUARTZ = register("quartz");
+    public static final RegistryKey<Item> AMETHYST_SHARD = register("amethyst_shard");
     public static final RegistryKey<Item> IRON_INGOT = register("iron_ingot");
+    public static final RegistryKey<Item> COPPER_INGOT = register("copper_ingot");
     public static final RegistryKey<Item> GOLD_INGOT = register("gold_ingot");
     public static final RegistryKey<Item> NETHERITE_INGOT = register("netherite_ingot");
     public static final RegistryKey<Item> WOODEN_SWORD = register("wooden_sword");
@@ -614,6 +617,23 @@ public class ItemKeys {
     public static final RegistryKey<Item> GLOW_BERRIES = register("glow_berries");
     public static final RegistryKey<Item> HONEYCOMB = register("honeycomb");
     public static final RegistryKey<Item> HONEY_BOTTLE = register("honey_bottle");
+    public static final RegistryKey<Item> NETHERITE_UPGRADE_SMITHING_TEMPLATE = register("netherite_upgrade_smithing_template");
+    public static final RegistryKey<Item> SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE = register("sentry_armor_trim_smithing_template");
+    public static final RegistryKey<Item> DUNE_ARMOR_TRIM_SMITHING_TEMPLATE = register("dune_armor_trim_smithing_template");
+    public static final RegistryKey<Item> COAST_ARMOR_TRIM_SMITHING_TEMPLATE = register("coast_armor_trim_smithing_template");
+    public static final RegistryKey<Item> WILD_ARMOR_TRIM_SMITHING_TEMPLATE = register("wild_armor_trim_smithing_template");
+    public static final RegistryKey<Item> WARD_ARMOR_TRIM_SMITHING_TEMPLATE = register("ward_armor_trim_smithing_template");
+    public static final RegistryKey<Item> EYE_ARMOR_TRIM_SMITHING_TEMPLATE = register("eye_armor_trim_smithing_template");
+    public static final RegistryKey<Item> VEX_ARMOR_TRIM_SMITHING_TEMPLATE = register("vex_armor_trim_smithing_template");
+    public static final RegistryKey<Item> TIDE_ARMOR_TRIM_SMITHING_TEMPLATE = register("tide_armor_trim_smithing_template");
+    public static final RegistryKey<Item> SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE = register("snout_armor_trim_smithing_template");
+    public static final RegistryKey<Item> RIB_ARMOR_TRIM_SMITHING_TEMPLATE = register("rib_armor_trim_smithing_template");
+    public static final RegistryKey<Item> SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE = register("spire_armor_trim_smithing_template");
+    public static final RegistryKey<Item> WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE = register("wayfinder_armor_trim_smithing_template");
+    public static final RegistryKey<Item> SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE = register("shaper_armor_trim_smithing_template");
+    public static final RegistryKey<Item> SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = register("silence_armor_trim_smithing_template");
+    public static final RegistryKey<Item> RAISER_ARMOR_TRIM_SMITHING_TEMPLATE = register("raiser_armor_trim_smithing_template");
+    public static final RegistryKey<Item> HOST_ARMOR_TRIM_SMITHING_TEMPLATE = register("host_armor_trim_smithing_template");
 
 
     private static RegistryKey<Item> register(String name) {

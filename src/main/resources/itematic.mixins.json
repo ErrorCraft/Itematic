@@ -170,6 +170,7 @@
     "item.ItemUsageExtender",
     "item.MilkBucketItemAccessor",
     "item.PotionItemAccessor",
+    "item.SmithingTemplateItemAccessor",
     "loot.LootDataTypeExtender",
     "loot.LootManagerExtender",
     "loot.condition.LootConditionTypesAccessor",

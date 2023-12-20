@@ -9,6 +9,7 @@
     "gui.screen.ingame.CartographyTableScreenExtender",
     "gui.screen.ingame.CreativeInventoryScreenExtender",
     "gui.screen.ingame.LoomScreenExtender",
+    "gui.screen.ingame.SmithingScreenExtender",
     "gui.screen.recipebook.AbstractFurnaceRecipeBookScreenExtender",
     "gui.screen.recipebook.RecipeBookWidgetExtender",
     "network.AbstractClientPlayerEntityExtender",

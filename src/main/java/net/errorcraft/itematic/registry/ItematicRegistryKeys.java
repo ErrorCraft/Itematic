@@ -7,6 +7,8 @@ import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.item.model.override.ModelOverride;
 import net.errorcraft.itematic.item.pointer.Pointer;
+import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
+import net.errorcraft.itematic.item.smithing.template.SmithingTemplateType;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -29,6 +31,8 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<Trade>> TRADE = RegistryKey.ofRegistry(new Identifier("trade"));
     public static final RegistryKey<Registry<ActionEntry>> ACTION = RegistryKey.ofRegistry(new Identifier("action"));
     public static final RegistryKey<Registry<SequenceHandlerType<?>>> SEQUENCE_HANDLER_TYPE = RegistryKey.ofRegistry(new Identifier("sequence_handler_type"));
+    public static final RegistryKey<Registry<SmithingTemplateType<?>>> SMITHING_TEMPLATE_TYPE = RegistryKey.ofRegistry(new Identifier("smithing_template_type"));
+    public static final RegistryKey<Registry<SmithingTemplate>> SMITHING_TEMPLATE = RegistryKey.ofRegistry(new Identifier("smithing_template"));
 
     private ItematicRegistryKeys() {}
 }

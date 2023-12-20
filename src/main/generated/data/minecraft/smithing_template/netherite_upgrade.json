@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:item_upgrade",
+  "item": "minecraft:netherite_ingot",
+  "translation_key_id": "minecraft:netherite_upgrade"
+}

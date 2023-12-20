@@ -19,6 +19,8 @@ import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.pointer.PointerKeys;
+import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
+import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.item.MilkBucketItemAccessor;
 import net.errorcraft.itematic.mixin.item.PotionItemAccessor;
@@ -82,6 +84,7 @@ public class ItemUtil {
         RegistryEntryLookup<Fluid> fluids = registerable.getRegistryLookup(RegistryKeys.FLUID);
         RegistryEntryLookup<Pointer> pointers = registerable.getRegistryLookup(ItematicRegistryKeys.POINTER);
         RegistryEntryLookup<ActionEntry> actions = registerable.getRegistryLookup(ItematicRegistryKeys.ACTION);
+        RegistryEntryLookup<SmithingTemplate> smithingTemplates = registerable.getRegistryLookup(ItematicRegistryKeys.SMITHING_TEMPLATE);
 
         registerable.register(ItemKeys.AIR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build())
@@ -2003,8 +2006,17 @@ public class ItemUtil {
         registerable.register(ItemKeys.LAPIS_LAZULI, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LAPIS_LAZULI).build())
         ));
+        registerable.register(ItemKeys.QUARTZ, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.QUARTZ).build())
+        ));
+        registerable.register(ItemKeys.AMETHYST_SHARD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.AMETHYST_SHARD).build())
+        ));
         registerable.register(ItemKeys.IRON_INGOT, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_INGOT).build())
+        ));
+        registerable.register(ItemKeys.COPPER_INGOT, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COPPER_INGOT).build())
         ));
         registerable.register(ItemKeys.GOLD_INGOT, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLD_INGOT).build())
@@ -4317,6 +4329,108 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEY_BOTTLE).build(), 16),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40, UseAction.DRINK, items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
+                .build()
+        ));
+        registerable.register(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.NETHERITE_UPGRADE)))
+                .build()
+        ));
+        registerable.register(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.SENTRY_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.DUNE_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.COAST_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.WILD_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.WARD_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.EYE_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.VEX_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.TIDE_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.SNOUT_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.RIB_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.SPIRE_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.WAYFINDER_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.SHAPER_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.SILENCE_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.RAISER_PATTERN)))
+                .build()
+        ));
+        registerable.register(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+            ItemComponentSet.builder()
+                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.HOST_PATTERN)))
                 .build()
         ));
     }
