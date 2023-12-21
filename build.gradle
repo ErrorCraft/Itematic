@@ -43,11 +43,30 @@ tasks.withType(JavaCompile).configureEach {
 
 loom {
 	splitEnvironmentSourceSets()
+}
 
+sourceSets {
+	main {
+		resources {
+			srcDirs += [
+				'src/main/generated'
+			]
+		}
+	}
+	datagen {
+		compileClasspath += client.compileClasspath
+		runtimeClasspath += client.runtimeClasspath
+		compileClasspath += client.output
+		runtimeClasspath += client.output
+	}
+}
+
+loom {
 	mods {
 		itematic {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
+			sourceSet sourceSets.datagen
 		}
 	}
 
@@ -60,19 +79,10 @@ loom {
 			vmArg "-Dfabric-api.datagen.modid=itematic"
 
 			runDir "build/datagen"
+			source sourceSets.datagen
 		}
 	}
 	accessWidenerPath = file("src/main/resources/itematic.accesswidener")
-}
-
-sourceSets {
-	main {
-		resources {
-			srcDirs += [
-					'src/main/generated'
-			]
-		}
-	}
 }
 
 java {
