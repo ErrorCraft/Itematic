@@ -59,6 +59,12 @@ sourceSets {
 		compileClasspath += client.output
 		runtimeClasspath += client.output
 	}
+	gametest {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+		compileClasspath += main.output
+		runtimeClasspath += main.output
+	}
 }
 
 loom {
@@ -67,6 +73,9 @@ loom {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 			sourceSet sourceSets.datagen
+		}
+		"itematic-gametest" {
+			sourceSet sourceSets.gametest
 		}
 	}
 
@@ -80,6 +89,15 @@ loom {
 
 			runDir "build/datagen"
 			source sourceSets.datagen
+		}
+		gametest {
+			inherit server
+			name "GameTest"
+			vmArg "-Dfabric-api.gametest"
+			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
+
+			runDir "build/gametest"
+			source sourceSets.gametest
 		}
 	}
 	accessWidenerPath = file("src/main/resources/itematic.accesswidener")
