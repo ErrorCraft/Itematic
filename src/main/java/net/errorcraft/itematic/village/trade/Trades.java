@@ -335,7 +335,7 @@ public class Trades {
         registerable.register(BUY_GOLD_INGOT, buy(items, items.getOrThrow(ItemKeys.GOLD_INGOT), 3, 12, 10));
         registerable.register(SELL_LAPIS_LAZULI, sell(items, items.getOrThrow(ItemKeys.LAPIS_LAZULI), 1, 12, 5, 1));
         registerable.register(BUY_RABBIT_FOOT, buy(items, items.getOrThrow(ItemKeys.RABBIT_FOOT), 2, 12, 20));
-        registerable.register(BUY_SCUTE, buy(items, items.getOrThrow(ItemKeys.SCUTE), 4, 12, 30));
+        registerable.register(BUY_SCUTE, buy(items, items.getOrThrow(ItemKeys.TURTLE_SCUTE), 4, 12, 30));
         registerable.register(BUY_GLASS_BOTTLE, buy(items, items.getOrThrow(ItemKeys.GLASS_BOTTLE), 9, 12, 30));
         registerable.register(SELL_ENDER_PEARL, sell(items, items.getOrThrow(ItemKeys.ENDER_PEARL), 1, 12, 15, 5));
         registerable.register(BUY_NETHER_WART, buy(items, items.getOrThrow(ItemKeys.NETHER_WART), 22, 12, 30));
@@ -441,7 +441,7 @@ public class Trades {
     private static Trade sellSuspiciousStew(RegistryEntryLookup<Item> items, RegistryEntry<StatusEffect> statusEffect, int duration) {
         return Trade.builder(
             Trade.Entry.of(items.getOrThrow(ItemKeys.SUSPICIOUS_STEW), 1, SetStewEffectLootFunction.builder()
-                .withEffect(statusEffect.value(), ConstantLootNumberProvider.create(duration))
+                .withEffect(statusEffect, ConstantLootNumberProvider.create(duration))
                 .build()))
             .wants(Trade.Entry.ofEmerald(items))
             .tradeExperience(15)

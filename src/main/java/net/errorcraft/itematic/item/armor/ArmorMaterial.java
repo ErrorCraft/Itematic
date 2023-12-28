@@ -9,15 +9,11 @@ public record ArmorMaterial(Identifier assetId) {
         Identifier.CODEC.fieldOf("asset_id").forGetter(ArmorMaterial::assetId)
     ).apply(instance, ArmorMaterial::new));
     
-    public Identifier getTextureId() {
+    public Identifier textureId() {
         return this.assetId.withPath(path -> "models/armor/" + path + "_layer_1");
     }
 
-    public Identifier getLeggingsTextureId() {
+    public Identifier leggingsTextureId() {
         return this.assetId.withPath(path -> "models/armor/" + path + "_layer_2");
-    }
-
-    public Identifier getHorseTextureId() {
-        return this.assetId.withPath(path -> "entity/horse/armor/horse_armor_" + path);
     }
 }

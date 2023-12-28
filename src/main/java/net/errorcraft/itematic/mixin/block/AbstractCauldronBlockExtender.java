@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(AbstractCauldronBlock.class)
 public abstract class AbstractCauldronBlockExtender {
     @ModifyArg(
-        method = "onUse",
+        method = "onUseWithItem",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"

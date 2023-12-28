@@ -14,11 +14,11 @@ public class HorseEntityRendererExtender {
         method = "<init>",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/client/render/entity/feature/HorseArmorFeatureRenderer"
+            target = "(Lnet/minecraft/client/render/entity/feature/FeatureRendererContext;Lnet/minecraft/client/render/entity/model/EntityModelLoader;)Lnet/minecraft/client/render/entity/feature/HorseArmorFeatureRenderer;"
         )
     )
     private HorseArmorFeatureRenderer setArmorMaterialsAtlas(HorseArmorFeatureRenderer original, @Local EntityRendererFactory.Context context) {
-        original.setArmorMaterialsAtlas(context.getModelManager());
+        original.itematic$setArmorMaterialsAtlas(context.getModelManager());
         return original;
     }
 }

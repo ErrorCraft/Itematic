@@ -12,6 +12,7 @@ import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
 import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -33,7 +34,7 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
         new BrewingRecipe<>(ItemKeys.SPLASH_POTION, ItemKeys.DRAGON_BREATH, ItemKeys.LINGERING_POTION)
     );
     @Unique
-    private static final List<BrewingRecipe<Potion>> POTION_RECIPES = new ArrayList<>();
+    private static final List<BrewingRecipe<RegistryEntry<Potion>>> POTION_RECIPES = new ArrayList<>();
 
     @Redirect(
         method = "hasRecipe",
@@ -80,7 +81,7 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
      */
     @Overwrite
     public static boolean isPotionRecipeIngredient(ItemStack stack) {
-        for (BrewingRecipe<Potion> recipe : POTION_RECIPES) {
+        for (BrewingRecipe<RegistryEntry<Potion>> recipe : POTION_RECIPES) {
             if (stack.itematic$isOf(recipe.ingredient())) {
                 return true;
             }
@@ -92,12 +93,12 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
         method = "hasPotionRecipe",
         at = @At(
             value = "INVOKE_ASSIGN",
-            target = "Lnet/minecraft/potion/PotionUtil;getPotion(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/potion/Potion;"
+            target = "Lnet/minecraft/potion/PotionUtil;getPotion(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/registry/entry/RegistryEntry;"
         ),
         cancellable = true
     )
-    private static void hasPotionRecipeUseItemKeys(ItemStack input, ItemStack ingredient, CallbackInfoReturnable<Boolean> info, @Local Potion potion) {
-        for (BrewingRecipe<Potion> recipe : POTION_RECIPES) {
+    private static void hasPotionRecipeUseItemKeys(ItemStack input, ItemStack ingredient, CallbackInfoReturnable<Boolean> info, @Local RegistryEntry<Potion> potion) {
+        for (BrewingRecipe<RegistryEntry<Potion>> recipe : POTION_RECIPES) {
             if (recipe.input() == potion && ingredient.itematic$isOf(recipe.ingredient())) {
                 info.setReturnValue(true);
                 return;
@@ -111,8 +112,8 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
      * @reason Uses item keys instead of direct items.
      */
     @Overwrite
-    public static boolean isBrewable(Potion potion) {
-        for (BrewingRecipe<Potion> recipe : POTION_RECIPES) {
+    public static boolean isBrewable(RegistryEntry<Potion> potion) {
+        for (BrewingRecipe<RegistryEntry<Potion>> recipe : POTION_RECIPES) {
             if (recipe.output() == potion) {
                 return true;
             }
@@ -192,13 +193,13 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
         if (input.isEmpty()) {
             return input;
         }
-        Potion potion = PotionUtil.getPotion(input);
+        RegistryEntry<Potion> potion = PotionUtil.getPotion(input);
         for (BrewingRecipe<RegistryKey<Item>> recipe : ITEM_RECIPES) {
             if (input.itematic$isOf(recipe.input()) && ingredient.itematic$isOf(recipe.ingredient())) {
                 return PotionUtil.setPotion(world.itematic$createStack(recipe.output()), potion);
             }
         }
-        for (BrewingRecipe<Potion> recipe : POTION_RECIPES) {
+        for (BrewingRecipe<RegistryEntry<Potion>> recipe : POTION_RECIPES) {
             if (recipe.input() == potion && ingredient.itematic$isOf(recipe.ingredient())) {
                 return PotionUtil.setPotion(new ItemStack(input.getRegistryEntry()), recipe.output());
             }
@@ -207,27 +208,27 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
     }
 
     @Unique
-    private static void registerWaterPotionRecipe(RegistryKey<Item> key, Potion output) {
+    private static void registerWaterPotionRecipe(RegistryKey<Item> key, RegistryEntry<Potion> output) {
         POTION_RECIPES.add(new BrewingRecipe<>(Potions.WATER, key, output));
     }
 
     @Unique
-    private static void registerAwkwardPotionRecipe(RegistryKey<Item> key, Potion output) {
+    private static void registerAwkwardPotionRecipe(RegistryKey<Item> key, RegistryEntry<Potion> output) {
         POTION_RECIPES.add(new BrewingRecipe<>(Potions.AWKWARD, key, output));
     }
 
     @Unique
-    private static void registerLongPotionRecipe(Potion input, Potion output) {
+    private static void registerLongPotionRecipe(RegistryEntry<Potion> input, RegistryEntry<Potion> output) {
         POTION_RECIPES.add(new BrewingRecipe<>(input, ItemKeys.REDSTONE, output));
     }
 
     @Unique
-    private static void registerStrongPotionRecipe(Potion input, Potion output) {
+    private static void registerStrongPotionRecipe(RegistryEntry<Potion> input, RegistryEntry<Potion> output) {
         POTION_RECIPES.add(new BrewingRecipe<>(input, ItemKeys.GLOWSTONE_DUST, output));
     }
 
     @Unique
-    private static void registerNegatingPotionRecipe(Potion input, Potion output) {
+    private static void registerNegatingPotionRecipe(RegistryEntry<Potion> input, RegistryEntry<Potion> output) {
         POTION_RECIPES.add(new BrewingRecipe<>(input, ItemKeys.FERMENTED_SPIDER_EYE, output));
     }
 }

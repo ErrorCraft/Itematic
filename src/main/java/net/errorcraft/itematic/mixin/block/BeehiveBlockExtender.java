@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 @Mixin(BeehiveBlock.class)
 public class BeehiveBlockExtender {
     @Redirect(
-        method = "onUse",
+        method = "onUseWithItem",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
@@ -35,7 +35,7 @@ public class BeehiveBlockExtender {
     }
 
     @Redirect(
-        method = "onUse",
+        method = "onUseWithItem",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
@@ -54,7 +54,7 @@ public class BeehiveBlockExtender {
     }
 
     @Redirect(
-        method = "onUse",
+        method = "onUseWithItem",
         at = @At(
             value = "NEW",
             target = "net/minecraft/item/ItemStack"

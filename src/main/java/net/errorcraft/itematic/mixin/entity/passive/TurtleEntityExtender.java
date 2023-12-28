@@ -25,6 +25,6 @@ public abstract class TurtleEntityExtender extends AnimalEntity {
         )
     )
     private ItemEntity dropItemForScuteUseRegistryKey(TurtleEntity instance, ItemConvertible itemConvertible, int yOffset) {
-        return this.itematic$dropItem(ItemKeys.SCUTE, yOffset);
+        return this.itematic$dropItem(ItemKeys.TURTLE_SCUTE, yOffset);
     }
 }

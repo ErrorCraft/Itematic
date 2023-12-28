@@ -1,8 +1,9 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.AnimalArmorItemComponent;
 import net.minecraft.entity.passive.HorseEntity;
-import net.minecraft.item.HorseArmorItem;
+import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +19,10 @@ public class HorseEntityExtender {
      */
     @Overwrite
     public boolean isHorseArmor(ItemStack item) {
-        return item.itematic$hasComponent(ItemComponentTypes.HORSE_ARMOR);
+        return item.itematic$getComponent(ItemComponentTypes.ANIMAL_ARMOR)
+            .map(AnimalArmorItemComponent::armorType)
+            .map(type -> type == AnimalArmorItem.Type.EQUESTRIAN)
+            .orElse(false);
     }
 
     @Redirect(
@@ -36,10 +40,10 @@ public class HorseEntityExtender {
         method = "setArmorTypeFromStack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/HorseArmorItem;getBonus()I"
+            target = "Lnet/minecraft/item/AnimalArmorItem;getBonus()I"
         )
     )
-    private int getBonusReturnDefault(HorseArmorItem instance) {
+    private int getBonusReturnDefault(AnimalArmorItem instance) {
         return 0;
     }
 }

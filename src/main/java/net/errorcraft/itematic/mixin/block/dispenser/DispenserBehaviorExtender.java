@@ -76,19 +76,19 @@ public interface DispenserBehaviorExtender {
             method = "dispenseSilently",
             at = @At(
                 value = "NEW",
-                target = "net/minecraft/item/ItemStack",
+                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
                 ordinal = 0
             )
         )
-        private ItemStack newItemStackForHoneyBottleUseDynamicRegistry(ItemConvertible item, @Local ServerWorld serverWorld) {
-            return new ItemStack(serverWorld.itematic$getItem(ItemKeys.HONEY_BOTTLE));
+        private ItemStack newItemStackForHoneyBottleUseCreateStack(ItemConvertible item, @Local ServerWorld serverWorld) {
+            return serverWorld.itematic$createStack(ItemKeys.HONEY_BOTTLE);
         }
 
         @Redirect(
             method = "dispenseSilently",
             at = @At(
                 value = "NEW",
-                target = "net/minecraft/item/ItemStack",
+                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
                 ordinal = 0
             ),
             slice = @Slice(
@@ -99,23 +99,22 @@ public interface DispenserBehaviorExtender {
                 )
             )
         )
-        private ItemStack newItemStackForPotionUseDynamicRegistry(ItemConvertible item, @Local ServerWorld serverWorld) {
-            return new ItemStack(serverWorld.itematic$getItem(ItemKeys.POTION));
+        private ItemStack newItemStackForPotionUseCreateStack(ItemConvertible item, @Local ServerWorld serverWorld) {
+            return serverWorld.itematic$createStack(ItemKeys.POTION);
         }
     }
 
-    @Mixin(targets = "net/minecraft/block/dispenser/DispenserBehavior$20")
+    @Mixin(targets = "net/minecraft/block/dispenser/DispenserBehavior$21")
     class PotionExtender {
         @Redirect(
             method = "dispenseSilently",
             at = @At(
                 value = "NEW",
-                target = "net/minecraft/item/ItemStack",
-                ordinal = 0
+                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
             )
         )
-        private ItemStack newItemStackUseDynamicRegistry(ItemConvertible item, @Local ServerWorld serverWorld) {
-            return new ItemStack(serverWorld.itematic$getItem(ItemKeys.GLASS_BOTTLE));
+        private ItemStack newItemStackForGlassBottleUseCreateStack(ItemConvertible item, @Local ServerWorld serverWorld) {
+            return serverWorld.itematic$createStack(ItemKeys.GLASS_BOTTLE);
         }
     }
 }

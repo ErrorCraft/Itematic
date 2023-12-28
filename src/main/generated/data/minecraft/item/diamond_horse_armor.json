@@ -6,11 +6,12 @@
     "max_count": 1
   },
   "components": {
+    "minecraft:animal_armor": {
+      "type": "equestrian",
+      "material": "minecraft:diamond"
+    },
     "minecraft:dispensable": {
       "behavior": "minecraft:horse_armor"
-    },
-    "minecraft:horse_armor": {
-      "material": "minecraft:diamond"
     }
   }
 }

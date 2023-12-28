@@ -7,8 +7,11 @@
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": [
+      "net.errorcraft.itematic.gametest.block.ComposterBlockTestSuite",
+      "net.errorcraft.itematic.gametest.block.DispenserBehaviorTestSuite",
       "net.errorcraft.itematic.gametest.item.component.EquipmentItemComponentTestSuite",
-      "net.errorcraft.itematic.gametest.item.component.FoodItemComponentTestSuite"
+      "net.errorcraft.itematic.gametest.item.component.FoodItemComponentTestSuite",
+      "net.errorcraft.itematic.gametest.item.component.PotionItemComponentTestSuite"
     ]
   }
 }

@@ -1903,8 +1903,8 @@ public class ItemUtil {
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
-        registerable.register(ItemKeys.SCUTE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SCUTE).build())
+        registerable.register(ItemKeys.TURTLE_SCUTE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TURTLE_SCUTE).build())
         ));
         registerable.register(ItemKeys.FLINT_AND_STEEL, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLINT_AND_STEEL).build(), 1),
@@ -3852,28 +3852,28 @@ public class ItemUtil {
         registerable.register(ItemKeys.IRON_HORSE_ARMOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HORSE_ARMOR).build(), 1),
             ItemComponentSet.builder()
-                .with(new HorseArmorItemComponent(armorMaterials.getOrThrow(ArmorMaterialKeys.IRON)))
+                .with(AnimalArmorItemComponent.of(armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), AnimalArmorItem.Type.EQUESTRIAN))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.GOLDEN_HORSE_ARMOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HORSE_ARMOR).build(), 1),
             ItemComponentSet.builder()
-                .with(new HorseArmorItemComponent(armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD)))
+                .with(AnimalArmorItemComponent.of(armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), AnimalArmorItem.Type.EQUESTRIAN))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.DIAMOND_HORSE_ARMOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HORSE_ARMOR).build(), 1),
             ItemComponentSet.builder()
-                .with(new HorseArmorItemComponent(armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND)))
+                .with(AnimalArmorItemComponent.of(armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), AnimalArmorItem.Type.EQUESTRIAN))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER_HORSE_ARMOR, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_HORSE_ARMOR).build(), 1),
             ItemComponentSet.builder()
-                .with(new HorseArmorItemComponent(armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER)))
+                .with(AnimalArmorItemComponent.of(armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), AnimalArmorItem.Type.EQUESTRIAN))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
                 .with(new TintedItemComponent(DyeableItemColor.INSTANCE))

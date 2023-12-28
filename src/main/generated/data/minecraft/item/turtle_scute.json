@@ -1,7 +1,7 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.scute"
+      "translation_key": "item.minecraft.turtle_scute"
     },
     "max_count": 64
   },

@@ -155,6 +155,9 @@
       "net/minecraft/class_3959\u0024class_242": [
         "net/minecraft/util/StringIdentifiable"
       ],
+      "net/minecraft/class_4059\u0024class_9076": [
+        "net/errorcraft/itematic/access/item/AnimalArmorItemTypeAccess"
+      ],
       "net/minecraft/class_4073": [
         "net/errorcraft/itematic/access/client/render/entity/feature/HorseArmorFeatureRendererAccess"
       ],

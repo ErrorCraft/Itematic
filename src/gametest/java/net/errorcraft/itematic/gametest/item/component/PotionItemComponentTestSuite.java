@@ -4,32 +4,30 @@ import net.errorcraft.itematic.gametest.Assert;
 import net.errorcraft.itematic.gametest.TestUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.FoodItemComponent;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionUtil;
+import net.minecraft.potion.Potions;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
 
-public class FoodItemComponentTestSuite {
+public class PotionItemComponentTestSuite {
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-    public void eatingFoodItemAddsNutrition(TestContext context) {
+    public void drinkingPotionItemAddsEffects(TestContext context) {
         PlayerEntity player = context.createMockSurvivalPlayer();
-        player.getHungerManager().setFoodLevel(0);
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.APPLE);
+        ItemStack stack = PotionUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.LEAPING);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
-        FoodItemComponent component = TestUtil.getItemComponent(stack, ItemComponentTypes.FOOD);
         stack.use(world, player, Hand.MAIN_HAND);
         context.createTimedTaskRunner().expectMinDurationAndRun(
             TestUtil.getItemComponent(stack, ItemComponentTypes.USE_DURATION).ticks(),
-            () -> Assert.areEqual(
-                player.getHungerManager().getFoodLevel(),
-                component.nutrition(),
-                (value, expected) -> "Expected nutrition to be " + expected + ", got " + value + " instead"
+            () -> Assert.forAll(
+                Potions.LEAPING.value().getEffects(),
+                effectInstance -> context.expectEntityHasEffect(player, effectInstance.getEffectType(), effectInstance.getAmplifier())
             )
         ).completeIfSuccessful();
     }

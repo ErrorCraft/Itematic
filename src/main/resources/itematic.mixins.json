@@ -152,6 +152,7 @@
     "fluid.LavaFluidExtender",
     "fluid.WaterFluidExtender",
     "inventory.EnderChestInventoryExtender",
+    "item.AnimalArmorItemExtender$TypeExtender",
     "item.CompassItemAccessor",
     "item.CrossbowItemAccessor",
     "item.CrossbowItemExtender",

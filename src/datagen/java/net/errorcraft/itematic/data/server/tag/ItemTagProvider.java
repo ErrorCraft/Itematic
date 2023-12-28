@@ -31,7 +31,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
         this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)
             .add(ItemKeys.NETHERITE_INGOT);
         this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_TURTLE_ARMOR)
-            .add(ItemKeys.SCUTE);
+            .add(ItemKeys.TURTLE_SCUTE);
         this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_ELYTRA)
             .add(ItemKeys.PHANTOM_MEMBRANE);
         this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_WOODEN_TOOL)

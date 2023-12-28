@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(PumpkinBlock.class)
 public class PumpkinBlockExtender {
     @Redirect(
-        method = "onUse",
+        method = "onUseWithItem",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
@@ -25,13 +25,13 @@ public class PumpkinBlockExtender {
     }
 
     @Redirect(
-        method = "onUse",
+        method = "onUseWithItem",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForPumpkinSeedsUseRegistryEntry(ItemConvertible item, int count, @Local World world) {
+    private ItemStack newItemStackForPumpkinSeedsUseCreateStack(ItemConvertible item, int count, @Local World world) {
         return world.itematic$createStack(ItemKeys.PUMPKIN_SEEDS);
     }
 }

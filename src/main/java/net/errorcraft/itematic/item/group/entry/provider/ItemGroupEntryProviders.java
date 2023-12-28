@@ -160,7 +160,7 @@ public class ItemGroupEntryProviders {
             .add(ItemKeys.SNOWBALL)
             .add(ItemKeys.EGG)
             .add(ItemKeys.LEATHER)
-            .add(ItemKeys.SCUTE)
+            .add(ItemKeys.TURTLE_SCUTE)
             .add(ItemKeys.FIRE_CHARGE)
             .add(ItemKeys.BLAZE_ROD)
             .add(ItemKeys.ENDER_PEARL)
@@ -262,7 +262,7 @@ public class ItemGroupEntryProviders {
     private static ItemGroupEntry[] potions(RegistryEntry<Item> item) {
         return Registries.POTION.streamEntries()
             .filter(entry -> !entry.matchesKey(Potions.EMPTY_KEY))
-            .map(entry -> StackItemGroupEntry.fromStack(PotionUtil.setPotion(new ItemStack(item), entry.value())))
+            .map(entry -> StackItemGroupEntry.fromStack(PotionUtil.setPotion(new ItemStack(item), entry)))
             .toArray(ItemGroupEntry[]::new);
     }
 

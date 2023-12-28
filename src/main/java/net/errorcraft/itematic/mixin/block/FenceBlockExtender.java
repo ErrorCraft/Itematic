@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(FenceBlock.class)
 public class FenceBlockExtender {
     @Redirect(
-        method = "onUse",
+        method = "onUseWithItem",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"

@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -35,6 +36,7 @@ import java.util.Optional;
 
 @Mixin(ArmorFeatureRenderer.class)
 public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> {
+    @Unique
     private SpriteAtlasTexture armorMaterialsAtlas;
 
     @Inject(
@@ -145,12 +147,14 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         this.renderArmorParts(matrices, vertexConsumers, light, armorItemComponent.get(), model, secondTextureLayer, red, green, blue, overlay);
     }
 
+    @Unique
     private void renderArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItemComponent component, A model, boolean secondTextureLayer, float red, float green, float blue, @Nullable String overlay) {
         Sprite sprite = this.armorMaterialsAtlas.getSprite(getArmorTexture(component, secondTextureLayer, overlay));
         VertexConsumer vertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumers.getBuffer(ItematicTexturedRenderLayers.ARMOR_MATERIAL_RENDER_LAYER));
         model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, red, green, blue, 1.0f);
     }
 
+    @Unique
     private static Identifier getArmorTexture(ArmorItemComponent component, boolean secondLayer, @Nullable String overlay) {
         Identifier armorTexture = getArmorTexture(component.material().value(), secondLayer);
         if (overlay != null) {
@@ -159,10 +163,11 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         return armorTexture;
     }
 
+    @Unique
     private static Identifier getArmorTexture(ArmorMaterial armorMaterial, boolean secondLayer) {
         if (secondLayer) {
-            return armorMaterial.getLeggingsTextureId();
+            return armorMaterial.leggingsTextureId();
         }
-        return armorMaterial.getTextureId();
+        return armorMaterial.textureId();
     }
 }

@@ -40,8 +40,8 @@ public record PotionItemComponent() implements ItemComponent {
         PlayerEntity player = target instanceof PlayerEntity playerEntity ? playerEntity : null;
         List<StatusEffectInstance> effectInstances = PotionUtil.getPotionEffects(stack);
         for (StatusEffectInstance effectInstance : effectInstances) {
-            if (effectInstance.getEffectType().isInstant()) {
-                effectInstance.getEffectType().applyInstantEffect(player, player, target, effectInstance.getAmplifier(), 1.0d);
+            if (effectInstance.getEffectType().value().isInstant()) {
+                effectInstance.getEffectType().value().applyInstantEffect(player, player, target, effectInstance.getAmplifier(), 1.0d);
                 continue;
             }
             target.addStatusEffect(new StatusEffectInstance(effectInstance));

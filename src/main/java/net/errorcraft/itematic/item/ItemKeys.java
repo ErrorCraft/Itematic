@@ -268,7 +268,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> BAMBOO_RAFT = register("bamboo_raft");
     public static final RegistryKey<Item> BAMBOO_CHEST_RAFT = register("bamboo_chest_raft");
     public static final RegistryKey<Item> TURTLE_HELMET = register("turtle_helmet");
-    public static final RegistryKey<Item> SCUTE = register("scute");
+    public static final RegistryKey<Item> TURTLE_SCUTE = register("turtle_scute");
     public static final RegistryKey<Item> FLINT_AND_STEEL = register("flint_and_steel");
     public static final RegistryKey<Item> APPLE = register("apple");
     public static final RegistryKey<Item> BOW = register("bow");
