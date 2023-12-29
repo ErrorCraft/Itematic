@@ -56,6 +56,7 @@ import net.minecraft.predicate.BlockPredicate;
 import net.minecraft.predicate.StatePredicate;
 import net.minecraft.predicate.entity.LocationPredicate;
 import net.minecraft.registry.*;
+import net.minecraft.registry.tag.BannerPatternTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
@@ -3925,6 +3926,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.WHITE_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.WHITE))
                 .build()
         ));
         registerable.register(ItemKeys.ORANGE_BANNER, create(
@@ -3932,6 +3934,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.ORANGE_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.ORANGE))
                 .build()
         ));
         registerable.register(ItemKeys.MAGENTA_BANNER, create(
@@ -3939,6 +3942,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.MAGENTA_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.MAGENTA))
                 .build()
         ));
         registerable.register(ItemKeys.LIGHT_BLUE_BANNER, create(
@@ -3946,6 +3950,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LIGHT_BLUE_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.LIGHT_BLUE))
                 .build()
         ));
         registerable.register(ItemKeys.YELLOW_BANNER, create(
@@ -3953,6 +3958,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.YELLOW_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.YELLOW))
                 .build()
         ));
         registerable.register(ItemKeys.LIME_BANNER, create(
@@ -3960,6 +3966,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LIME_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.LIME))
                 .build()
         ));
         registerable.register(ItemKeys.PINK_BANNER, create(
@@ -3967,6 +3974,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.PINK_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.PINK))
                 .build()
         ));
         registerable.register(ItemKeys.GRAY_BANNER, create(
@@ -3974,6 +3982,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.GRAY_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.GRAY))
                 .build()
         ));
         registerable.register(ItemKeys.LIGHT_GRAY_BANNER, create(
@@ -3981,6 +3990,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LIGHT_GRAY_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.LIGHT_GRAY))
                 .build()
         ));
         registerable.register(ItemKeys.CYAN_BANNER, create(
@@ -3988,6 +3998,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.CYAN_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.CYAN))
                 .build()
         ));
         registerable.register(ItemKeys.PURPLE_BANNER, create(
@@ -3995,6 +4006,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.PURPLE_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.PURPLE))
                 .build()
         ));
         registerable.register(ItemKeys.BLUE_BANNER, create(
@@ -4002,6 +4014,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BLUE_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.BLUE))
                 .build()
         ));
         registerable.register(ItemKeys.BROWN_BANNER, create(
@@ -4009,6 +4022,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BROWN_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.BROWN))
                 .build()
         ));
         registerable.register(ItemKeys.GREEN_BANNER, create(
@@ -4016,6 +4030,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.GREEN_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.GREEN))
                 .build()
         ));
         registerable.register(ItemKeys.RED_BANNER, create(
@@ -4023,6 +4038,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.RED_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.RED))
                 .build()
         ));
         registerable.register(ItemKeys.BLACK_BANNER, create(
@@ -4030,6 +4046,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.BLACK_BANNER)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .with(BannerPatternHolderItemComponent.of(DyeColor.BLACK))
                 .build()
         ));
         registerable.register(ItemKeys.END_CRYSTAL, create(
@@ -4127,6 +4144,7 @@ public class ItemUtil {
                 .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_SHIELD))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new UseAnimationItemComponent(UseAction.BLOCK))
+                .with(BannerPatternHolderItemComponent.of())
                 .build(),
             ItemEventMap.builder()
                 .add(ItemEvents.USE, ActionEntry.of(StartUsingItemAction.INSTANCE))
@@ -4257,6 +4275,42 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(new BlockItemComponent(blocks.getOrThrow(BlockKeys.LOOM)))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.FLOWER_BANNER_PATTERN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLOWER_BANNER_PATTERN).tooltip(ItemKeys.FLOWER_BANNER_PATTERN).build(), 1),
+            ItemComponentSet.builder()
+                .with(BannerPatternItemComponent.of(BannerPatternTags.FLOWER_PATTERN_ITEM))
+                .build()
+        ));
+        registerable.register(ItemKeys.CREEPER_BANNER_PATTERN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CREEPER_BANNER_PATTERN).tooltip(ItemKeys.CREEPER_BANNER_PATTERN).rarity(Rarity.UNCOMMON).build(), 1),
+            ItemComponentSet.builder()
+                .with(BannerPatternItemComponent.of(BannerPatternTags.CREEPER_PATTERN_ITEM))
+                .build()
+        ));
+        registerable.register(ItemKeys.SKULL_BANNER_PATTERN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SKULL_BANNER_PATTERN).tooltip(ItemKeys.SKULL_BANNER_PATTERN).rarity(Rarity.UNCOMMON).build(), 1),
+            ItemComponentSet.builder()
+                .with(BannerPatternItemComponent.of(BannerPatternTags.SKULL_PATTERN_ITEM))
+                .build()
+        ));
+        registerable.register(ItemKeys.MOJANG_BANNER_PATTERN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MOJANG_BANNER_PATTERN).tooltip(ItemKeys.MOJANG_BANNER_PATTERN).rarity(Rarity.EPIC).build(), 1),
+            ItemComponentSet.builder()
+                .with(BannerPatternItemComponent.of(BannerPatternTags.MOJANG_PATTERN_ITEM))
+                .build()
+        ));
+        registerable.register(ItemKeys.GLOBE_BANNER_PATTERN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOBE_BANNER_PATTERN).tooltip(ItemKeys.GLOBE_BANNER_PATTERN).build(), 1),
+            ItemComponentSet.builder()
+                .with(BannerPatternItemComponent.of(BannerPatternTags.GLOBE_PATTERN_ITEM))
+                .build()
+        ));
+        registerable.register(ItemKeys.PIGLIN_BANNER_PATTERN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIGLIN_BANNER_PATTERN).tooltip(ItemKeys.PIGLIN_BANNER_PATTERN).build(), 1),
+            ItemComponentSet.builder()
+                .with(BannerPatternItemComponent.of(BannerPatternTags.PIGLIN_PATTERN_ITEM))
                 .build()
         ));
         registerable.register(ItemKeys.COMPOSTER, create(

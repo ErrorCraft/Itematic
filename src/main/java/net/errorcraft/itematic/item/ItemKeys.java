@@ -608,6 +608,12 @@ public class ItemKeys {
     public static final RegistryKey<Item> CROSSBOW = register("crossbow");
     public static final RegistryKey<Item> SUSPICIOUS_STEW = register("suspicious_stew");
     public static final RegistryKey<Item> LOOM = register("loom");
+    public static final RegistryKey<Item> FLOWER_BANNER_PATTERN = register("flower_banner_pattern");
+    public static final RegistryKey<Item> CREEPER_BANNER_PATTERN = register("creeper_banner_pattern");
+    public static final RegistryKey<Item> SKULL_BANNER_PATTERN = register("skull_banner_pattern");
+    public static final RegistryKey<Item> MOJANG_BANNER_PATTERN = register("mojang_banner_pattern");
+    public static final RegistryKey<Item> GLOBE_BANNER_PATTERN = register("globe_banner_pattern");
+    public static final RegistryKey<Item> PIGLIN_BANNER_PATTERN = register("piglin_banner_pattern");
     public static final RegistryKey<Item> COMPOSTER = register("composter");
     public static final RegistryKey<Item> BARREL = register("barrel");
     public static final RegistryKey<Item> CARTOGRAPHY_TABLE = register("cartography_table");

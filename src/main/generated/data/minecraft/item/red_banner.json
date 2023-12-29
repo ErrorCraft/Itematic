@@ -6,6 +6,9 @@
     "max_count": 16
   },
   "components": {
+    "minecraft:banner_pattern_holder": {
+      "color": "red"
+    },
     "minecraft:block": {
       "block": "minecraft:red_banner"
     },

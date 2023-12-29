@@ -6,6 +6,9 @@
     "max_count": 16
   },
   "components": {
+    "minecraft:banner_pattern_holder": {
+      "color": "green"
+    },
     "minecraft:block": {
       "block": "minecraft:green_banner"
     },

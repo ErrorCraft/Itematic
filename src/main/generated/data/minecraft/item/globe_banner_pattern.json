@@ -1,0 +1,19 @@
+{
+  "base": {
+    "display": {
+      "tooltip": [
+        {
+          "color": "gray",
+          "translate": "item.minecraft.globe_banner_pattern.desc"
+        }
+      ],
+      "translation_key": "item.minecraft.globe_banner_pattern"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:banner_pattern": {
+      "patterns": "minecraft:pattern_item/globe"
+    }
+  }
+}

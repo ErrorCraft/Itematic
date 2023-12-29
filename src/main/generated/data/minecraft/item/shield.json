@@ -6,6 +6,7 @@
     "max_count": 1
   },
   "components": {
+    "minecraft:banner_pattern_holder": {},
     "minecraft:damageable": {
       "durability": 336
     },
