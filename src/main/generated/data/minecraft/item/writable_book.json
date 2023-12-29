@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.writable_book"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:writable": {
+      "transforms_into": "minecraft:written_book"
+    }
+  }
+}

@@ -20,4 +20,8 @@ public record FoilItemComponent(boolean foil) implements ItemComponent {
     public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
+
+    public static FoilItemComponent of(boolean foil) {
+        return new FoilItemComponent(foil);
+    }
 }

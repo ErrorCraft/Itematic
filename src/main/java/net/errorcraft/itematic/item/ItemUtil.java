@@ -2566,7 +2566,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_GOLDEN_APPLE).rarity(Rarity.EPIC).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.ENCHANTED_GOLDEN_APPLE))
-                .with(new FoilItemComponent(true))
+                .with(FoilItemComponent.of(true))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_SIGN, create(
@@ -3705,6 +3705,22 @@ public class ItemUtil {
                 .with(new FireworkShapeModifierItemComponent(FireworkRocketItem.Type.LARGE_BALL))
                 .build()
         ));
+        registerable.register(ItemKeys.WRITABLE_BOOK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WRITABLE_BOOK).build(), 1),
+            ItemComponentSet.builder()
+                .with(WritableItemComponent.of(items.getOrThrow(ItemKeys.WRITTEN_BOOK)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WRITTEN_BOOK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WRITTEN_BOOK).build(), 16),
+            ItemComponentSet.builder()
+                .with(TextHolderItemComponent.INSTANCE)
+                .with(FoilItemComponent.of(true))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE, ActionEntry.of(OpenBookFromItemAction.INSTANCE))
+                .build()
+        ));
         registerable.register(ItemKeys.ITEM_FRAME, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ITEM_FRAME).build()),
             ItemComponentSet.builder()
@@ -3820,7 +3836,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_BOOK).rarity(Rarity.UNCOMMON).build(), 1),
             ItemComponentSet.builder()
                 .with(EnchantmentHolderItemComponent.INSTANCE)
-                .with(new FoilItemComponent(true))
+                .with(FoilItemComponent.of(true))
                 .build()
         ));
         registerable.register(ItemKeys.RABBIT, create(

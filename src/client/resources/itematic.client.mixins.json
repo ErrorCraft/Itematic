@@ -6,6 +6,7 @@
     "MinecraftClientExtender",
     "color.block.BlockColorsExtender",
     "gui.screen.ingame.BeaconScreenExtender",
+    "gui.screen.ingame.BookScreenExtender$ContentsExtender",
     "gui.screen.ingame.CartographyTableScreenExtender",
     "gui.screen.ingame.CreativeInventoryScreenExtender",
     "gui.screen.ingame.LoomScreenExtender",

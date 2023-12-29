@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.player;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -30,5 +31,16 @@ public class ServerPlayerEntityExtender {
     )
     private boolean playerTickIsNetworkSyncedUseItemStackVersion(Item instance, @Local ItemStack stack) {
         return stack.itematic$isNetworkSynced();
+    }
+
+    @Redirect(
+        method = "useBook",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfForWrittenBookUseItemComponentCheck(ItemStack instance, Item item) {
+        return instance.itematic$hasComponent(ItemComponentTypes.TEXT_HOLDER);
     }
 }

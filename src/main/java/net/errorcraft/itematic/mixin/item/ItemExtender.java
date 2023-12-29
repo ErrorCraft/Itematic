@@ -22,10 +22,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
-import net.minecraft.item.CompassItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.*;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
@@ -37,15 +34,20 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Optional;
 
 @Mixin(Item.class)
 public class ItemExtender implements ItemAccess {
+    @Unique
     private ItemBase base;
+    @Unique
     private ItemComponentSet components;
+    @Unique
     private ItemEventMap events;
 
     /**
@@ -405,9 +407,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public String getTranslationKey() {
-        return this.itematic$getComponent(ItemComponentTypes.POINTABLE)
-            .flatMap(PointableItemComponent::lodestoneTranslationKey)
-            .orElse(this.base.display().translationKey());
+        return this.base.display().translationKey();
     }
 
     /**
@@ -419,7 +419,22 @@ public class ItemExtender implements ItemAccess {
         return this.itematic$getComponent(ItemComponentTypes.POINTABLE)
             .flatMap(c -> c.lodestoneTranslationKey(stack))
             .orElseGet(this::getTranslationKey);
-    };
+    }
+
+    @Inject(
+        method = "getName(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/text/Text;",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void checkTextHolderItemComponent(ItemStack stack, CallbackInfoReturnable<Text> info) {
+        if (stack.itematic$hasComponent(ItemComponentTypes.TEXT_HOLDER)) {
+            stack.itematic$nbt()
+                .map(nbt -> nbt.getString(WrittenBookItem.TITLE_KEY))
+                .filter(title -> !StringHelper.isEmpty(title))
+                .map(Text::literal)
+                .ifPresent(info::setReturnValue);
+        }
+    }
 
     @Override
     public ItemBase itematic$itemBase() {

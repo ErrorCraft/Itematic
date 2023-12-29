@@ -526,6 +526,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> ZOMBIFIED_PIGLIN_SPAWN_EGG = register("zombified_piglin_spawn_egg");
     public static final RegistryKey<Item> EXPERIENCE_BOTTLE = register("experience_bottle");
     public static final RegistryKey<Item> FIRE_CHARGE = register("fire_charge");
+    public static final RegistryKey<Item> WRITABLE_BOOK = register("writable_book");
+    public static final RegistryKey<Item> WRITTEN_BOOK = register("written_book");
     public static final RegistryKey<Item> ITEM_FRAME = register("item_frame");
     public static final RegistryKey<Item> GLOW_ITEM_FRAME = register("glow_item_frame");
     public static final RegistryKey<Item> CARROT = register("carrot");
