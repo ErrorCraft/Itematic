@@ -2566,7 +2566,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_GOLDEN_APPLE).rarity(Rarity.EPIC).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.ENCHANTED_GOLDEN_APPLE))
-                .with(FoilItemComponent.of(true))
+                .with(GlintItemComponent.of(true))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_SIGN, create(
@@ -3715,7 +3715,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WRITTEN_BOOK).build(), 16),
             ItemComponentSet.builder()
                 .with(TextHolderItemComponent.INSTANCE)
-                .with(FoilItemComponent.of(true))
+                .with(GlintItemComponent.of(true))
                 .build(),
             ItemEventMap.builder()
                 .add(ItemEvents.USE, ActionEntry.of(OpenBookFromItemAction.INSTANCE))
@@ -3836,7 +3836,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_BOOK).rarity(Rarity.UNCOMMON).build(), 1),
             ItemComponentSet.builder()
                 .with(EnchantmentHolderItemComponent.INSTANCE)
-                .with(FoilItemComponent.of(true))
+                .with(GlintItemComponent.of(true))
                 .build()
         ));
         registerable.register(ItemKeys.RABBIT, create(

@@ -6,14 +6,14 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 
-public record FoilItemComponent(boolean foil) implements ItemComponent {
-    public static final Codec<FoilItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.BOOL.fieldOf("foil").forGetter(FoilItemComponent::foil)
-    ).apply(instance, FoilItemComponent::new));
+public record GlintItemComponent(boolean glint) implements ItemComponent {
+    public static final Codec<GlintItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.BOOL.fieldOf("glint").forGetter(GlintItemComponent::glint)
+    ).apply(instance, GlintItemComponent::new));
 
     @Override
     public ItemComponentType<?> type() {
-        return ItemComponentTypes.FOIL;
+        return ItemComponentTypes.GLINT;
     }
 
     @Override
@@ -21,7 +21,7 @@ public record FoilItemComponent(boolean foil) implements ItemComponent {
         return CODEC;
     }
 
-    public static FoilItemComponent of(boolean foil) {
-        return new FoilItemComponent(foil);
+    public static GlintItemComponent of(boolean glint) {
+        return new GlintItemComponent(glint);
     }
 }

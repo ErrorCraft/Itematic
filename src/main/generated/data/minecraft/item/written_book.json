@@ -6,8 +6,8 @@
     "max_count": 16
   },
   "components": {
-    "minecraft:foil": {
-      "foil": true
+    "minecraft:glint": {
+      "glint": true
     },
     "minecraft:text_holder": {}
   },

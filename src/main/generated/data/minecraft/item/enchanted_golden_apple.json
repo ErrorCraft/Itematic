@@ -8,9 +8,6 @@
   },
   "components": {
     "minecraft:consumable": {},
-    "minecraft:foil": {
-      "foil": true
-    },
     "minecraft:food": {
       "always_edible": true,
       "effects": [
@@ -49,6 +46,9 @@
       ],
       "nutrition": 4,
       "saturation_modifier": 1.2
+    },
+    "minecraft:glint": {
+      "glint": true
     },
     "minecraft:use_animation": {
       "animation": "eat"

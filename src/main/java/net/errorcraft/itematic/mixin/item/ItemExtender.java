@@ -334,8 +334,8 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public boolean hasGlint(ItemStack stack) {
-        return this.itematic$getComponent(ItemComponentTypes.FOIL)
-            .map(FoilItemComponent::foil)
+        return this.itematic$getComponent(ItemComponentTypes.GLINT)
+            .map(GlintItemComponent::glint)
             .orElseGet(() -> {
                 if (this.itematic$hasComponent(ItemComponentTypes.POINTABLE) && CompassItem.hasLodestone(stack)) {
                     return true;

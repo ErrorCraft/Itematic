@@ -8,8 +8,8 @@
   },
   "components": {
     "minecraft:enchantment_holder": {},
-    "minecraft:foil": {
-      "foil": true
+    "minecraft:glint": {
+      "glint": true
     }
   }
 }
