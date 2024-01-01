@@ -34,6 +34,16 @@ public class DispenserBehaviorTestSuite {
         context.addInstantFinalTask(() -> context.expectEntity(EntityType.ARROW));
     }
 
+    @GameTest(templateName = "itematic:block.dispenser")
+    public void dispensingFireChargeSpawnsEntity(TestContext context) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerWorld world = context.getWorld();
+        ItemStack stack = world.itematic$createStack(ItemKeys.FIRE_CHARGE);
+        blockEntity.addToFirstFreeSlot(stack);
+        context.pushButton(BUTTON_POSITION);
+        context.addInstantFinalTask(() -> context.expectEntity(EntityType.SMALL_FIREBALL));
+    }
+
     @GameTest(templateName = "itematic:block.dispenser.grass_block")
     public void dispensingBoneMealFertilizesBlock(TestContext context) {
         DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);

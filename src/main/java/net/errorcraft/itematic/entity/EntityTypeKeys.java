@@ -30,7 +30,6 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> ENDERMITE = of("endermite");
     public static final RegistryKey<EntityType<?>> EVOKER = of("evoker");
     public static final RegistryKey<EntityType<?>> EXPERIENCE_BOTTLE = of("experience_bottle");
-    public static final RegistryKey<EntityType<?>> FIREWORK_ROCKET = of("firework_rocket");
     public static final RegistryKey<EntityType<?>> FOX = of("fox");
     public static final RegistryKey<EntityType<?>> FROG = of("frog");
     public static final RegistryKey<EntityType<?>> GHAST = of("ghast");
@@ -46,7 +45,6 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> MOOSHROOM = of("mooshroom");
     public static final RegistryKey<EntityType<?>> MULE = of("mule");
     public static final RegistryKey<EntityType<?>> OCELOT = of("ocelot");
-    public static final RegistryKey<EntityType<?>> PAINTING = of("potion");
     public static final RegistryKey<EntityType<?>> PANDA = of("panda");
     public static final RegistryKey<EntityType<?>> PARROT = of("parrot");
     public static final RegistryKey<EntityType<?>> PHANTOM = of("phantom");
@@ -66,10 +64,10 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> SKELETON = of("skeleton");
     public static final RegistryKey<EntityType<?>> SKELETON_HORSE = of("skeleton_horse");
     public static final RegistryKey<EntityType<?>> SLIME = of("slime");
+    public static final RegistryKey<EntityType<?>> SMALL_FIREBALL = of("small_fireball");
     public static final RegistryKey<EntityType<?>> SNIFFER = of("sniffer");
     public static final RegistryKey<EntityType<?>> SNOW_GOLEM = of("snow_golem");
     public static final RegistryKey<EntityType<?>> SNOWBALL = of("snowball");
-    public static final RegistryKey<EntityType<?>> SPECTRAL_ARROW = of("spectral_arrow");
     public static final RegistryKey<EntityType<?>> SPIDER = of("spider");
     public static final RegistryKey<EntityType<?>> SQUID = of("squid");
     public static final RegistryKey<EntityType<?>> STRAY = of("stray");

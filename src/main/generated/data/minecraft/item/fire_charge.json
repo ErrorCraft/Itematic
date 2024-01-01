@@ -6,8 +6,49 @@
     "max_count": 64
   },
   "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:projectile"
+    },
     "minecraft:firework_shape_modifier": {
       "shape": "large_ball"
+    },
+    "minecraft:projectile": {
+      "entity": {
+        "type": "minecraft:small_fireball"
+      }
     }
-  }
+  },
+  "events": [
+    {
+      "event": "minecraft:use_on_block",
+      "entry": {
+        "action": {
+          "type": "minecraft:sequence",
+          "entries": [
+            "minecraft:light_block",
+            {
+              "action": {
+                "type": "minecraft:decrement_item",
+                "amount": 1
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:play_sound",
+                "category": "block",
+                "pitch": {
+                  "max": 1.2,
+                  "min": 0.8
+                },
+                "position": "target",
+                "sound": "minecraft:item.firecharge.use",
+                "volume": 1.0
+              }
+            }
+          ],
+          "handler": "minecraft:passing"
+        }
+      }
+    }
+  ]
 }

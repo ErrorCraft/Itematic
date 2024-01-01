@@ -1,0 +1,94 @@
+{
+  "action": {
+    "type": "minecraft:sequence",
+    "entries": [
+      {
+        "action": {
+          "type": "minecraft:sequence",
+          "entries": [
+            {
+              "action": {
+                "type": "minecraft:modify_block_state",
+                "position": "target",
+                "properties": {
+                  "lit": "true"
+                }
+              },
+              "requirements": {
+                "conditions": {
+                  "condition": "minecraft:all_of",
+                  "terms": [
+                    {
+                      "condition": "minecraft:location_check",
+                      "predicate": {
+                        "block": {
+                          "state": {
+                            "lit": "false"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "condition": "minecraft:inverted",
+                      "term": {
+                        "condition": "minecraft:location_check",
+                        "predicate": {
+                          "block": {
+                            "state": {
+                              "waterlogged": "true"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "context": {
+                  "entity": "this",
+                  "position": "target"
+                }
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:prime_tnt",
+                "position": "target"
+              },
+              "requirements": {
+                "conditions": {
+                  "condition": "minecraft:location_check",
+                  "predicate": {
+                    "block": {
+                      "blocks": [
+                        "minecraft:tnt"
+                      ]
+                    }
+                  }
+                },
+                "context": {
+                  "entity": "this",
+                  "position": "target"
+                }
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:place_block",
+                "block": "minecraft:fire",
+                "decrement_count": false,
+                "position": "target"
+              }
+            }
+          ],
+          "handler": "minecraft:first_to_pass_requirements"
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:swing_hand"
+        }
+      }
+    ],
+    "handler": "minecraft:passing"
+  }
+}

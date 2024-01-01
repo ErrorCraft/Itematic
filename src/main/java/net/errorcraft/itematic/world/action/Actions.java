@@ -47,6 +47,7 @@ public class Actions {
     public static final RegistryKey<ActionEntry> USE_SHOVEL_ON_BLOCK = of("use_shovel_on_block");
     public static final RegistryKey<ActionEntry> FLATTEN_GROUND = of("flatten_ground");
     public static final RegistryKey<ActionEntry> EXTINGUISH_CAMPFIRE = of("extinguish_campfire");
+    public static final RegistryKey<ActionEntry> LIGHT_BLOCK = of("light_block");
 
     private Actions() {}
 
@@ -129,6 +130,44 @@ public class Actions {
                     )
                     .add(campfireParticles(false))
                 )
+        ));
+        registerable.register(LIGHT_BLOCK, ActionEntry.of(
+            PassingSequenceHandler.builder()
+                .add(FirstToPassRequirementsSequenceHandler.builder()
+                    .add(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                            AllOfLootCondition.builder(
+                                LocationCheckLootCondition.builder(
+                                    LocationPredicate.Builder.create()
+                                        .block(BlockPredicate.Builder.create()
+                                            .state(StatePredicate.Builder.create()
+                                                .exactMatch(Properties.LIT, false)))),
+                                InvertedLootCondition.builder(
+                                    LocationCheckLootCondition.builder(
+                                        LocationPredicate.Builder.create()
+                                            .block(BlockPredicate.Builder.create()
+                                                .state(StatePredicate.Builder.create()
+                                                    .exactMatch(Properties.WATERLOGGED, true))))))
+                                .build()
+                        ),
+                        ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
+                            .property(Properties.LIT, true)
+                            .build()
+                    )
+                    .add(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                            LocationCheckLootCondition.builder(
+                                LocationPredicate.Builder.create()
+                                    .block(BlockPredicate.Builder.create()
+                                        .blocks(Blocks.TNT)))
+                                .build()
+                        ),
+                        new PrimeTntAction(ActionContextParameter.TARGET)
+                    )
+                    .add(new PlaceBlockAction(blocks.getOrThrow(BlockKeys.FIRE), ActionContextParameter.TARGET, false)))
+                .add(SwingHandAction.INSTANCE)
         ));
     }
 

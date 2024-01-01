@@ -23,7 +23,9 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> ITEM_BUCKET_EMPTY_TADPOLE = of("item.bucket.empty_tadpole");
     public static final RegistryKey<SoundEvent> ENTITY_ENDER_EYE_LAUNCH = of("entity.ender_eye.launch");
     public static final RegistryKey<SoundEvent> BLOCK_END_PORTAL_FRAME_FILL = of("block.end_portal_frame.fill");
+    public static final RegistryKey<SoundEvent> FIRE_CHARGE_USE = of("item.firecharge.use");
     public static final RegistryKey<SoundEvent> BLOCK_FIRE_EXTINGUISH = of("block.fire.extinguish");
+    public static final RegistryKey<SoundEvent> FLINT_AND_STEEL_USE = of("item.flintandsteel.use");
     public static final RegistryKey<SoundEvent> ITEM_HOE_TILL = of("item.hoe.till");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_5 = of("music_disc.5");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_11 = of("music_disc.11");

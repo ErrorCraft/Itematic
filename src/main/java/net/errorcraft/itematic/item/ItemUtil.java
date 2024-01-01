@@ -48,8 +48,6 @@ import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
-import net.minecraft.loot.condition.AllOfLootCondition;
-import net.minecraft.loot.condition.InvertedLootCondition;
 import net.minecraft.loot.condition.LocationCheckLootCondition;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.BlockPredicate;
@@ -1915,48 +1913,12 @@ public class ItemUtil {
                 .build(),
             ItemEventMap.builder()
                 .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                    FirstToPassRequirementsSequenceHandler.builder()
-                        .add(
-                            ActionRequirements.of(
-                                ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                                AllOfLootCondition.builder(
-                                    LocationCheckLootCondition.builder(
-                                        LocationPredicate.Builder.create()
-                                            .block(BlockPredicate.Builder.create()
-                                                .state(StatePredicate.Builder.create()
-                                                    .exactMatch(Properties.LIT, false)))),
-                                    InvertedLootCondition.builder(
-                                        LocationCheckLootCondition.builder(
-                                            LocationPredicate.Builder.create()
-                                                .block(BlockPredicate.Builder.create()
-                                                    .state(StatePredicate.Builder.create()
-                                                        .exactMatch(Properties.WATERLOGGED, true))))))
-                                    .build()
-                            ),
-                            PassingSequenceHandler.builder()
-                                .add(ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
-                                    .property(Properties.LIT, true)
-                                    .build())
-                                .add(DamageItemAction.of(1))
-                        )
-                        .add(
-                            ActionRequirements.of(
-                                ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                                LocationCheckLootCondition.builder(
-                                    LocationPredicate.Builder.create()
-                                        .block(BlockPredicate.Builder.create()
-                                            .blocks(Blocks.TNT)))
-                                    .build()
-                            ),
-                            PassingSequenceHandler.builder()
-                                .add(new PrimeTntAction(ActionContextParameter.TARGET))
-                                .add(DamageItemAction.of(1))
-                        )
-                        .add(PassingSequenceHandler.builder()
-                            .add(new PlaceBlockAction(blocks.getOrThrow(BlockKeys.FIRE), ActionContextParameter.TARGET, false))
-                            .add(DamageItemAction.of(1))
-                            .add(SwingHandAction.INSTANCE)
-                        )
+                    PassingSequenceHandler.builder()
+                        .add(actions.getOrThrow(Actions.LIGHT_BLOCK))
+                        .add(DamageItemAction.of(1))
+                        .add(PlaySoundAction.builder(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.FLINT_AND_STEEL_USE), SoundCategory.BLOCKS)
+                            .pitch(0.8f, 1.2f)
+                            .build())
                 ))
                 .build()
         ));
@@ -3703,6 +3665,18 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIRE_CHARGE).build()),
             ItemComponentSet.builder()
                 .with(new FireworkShapeModifierItemComponent(FireworkRocketItem.Type.LARGE_BALL))
+                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.SMALL_FIREBALL)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                .build(),
+            ItemEventMap.builder()
+                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                    PassingSequenceHandler.builder()
+                        .add(actions.getOrThrow(Actions.LIGHT_BLOCK))
+                        .add(DecrementItemAction.of(1))
+                        .add(PlaySoundAction.builder(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.FIRE_CHARGE_USE), SoundCategory.BLOCKS)
+                            .pitch(0.8f, 1.2f)
+                            .build())
+                ))
                 .build()
         ));
         registerable.register(ItemKeys.WRITABLE_BOOK, create(

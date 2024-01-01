@@ -20,128 +20,28 @@
         "action": {
           "type": "minecraft:sequence",
           "entries": [
+            "minecraft:light_block",
             {
               "action": {
-                "type": "minecraft:sequence",
-                "entries": [
-                  {
-                    "action": {
-                      "type": "minecraft:modify_block_state",
-                      "position": "target",
-                      "properties": {
-                        "lit": "true"
-                      }
-                    }
-                  },
-                  {
-                    "action": {
-                      "type": "minecraft:damage_item",
-                      "amount": 1
-                    }
-                  }
-                ],
-                "handler": "minecraft:passing"
-              },
-              "requirements": {
-                "conditions": {
-                  "condition": "minecraft:all_of",
-                  "terms": [
-                    {
-                      "condition": "minecraft:location_check",
-                      "predicate": {
-                        "block": {
-                          "state": {
-                            "lit": "false"
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "condition": "minecraft:inverted",
-                      "term": {
-                        "condition": "minecraft:location_check",
-                        "predicate": {
-                          "block": {
-                            "state": {
-                              "waterlogged": "true"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                },
-                "context": {
-                  "entity": "this",
-                  "position": "target"
-                }
+                "type": "minecraft:damage_item",
+                "amount": 1
               }
             },
             {
               "action": {
-                "type": "minecraft:sequence",
-                "entries": [
-                  {
-                    "action": {
-                      "type": "minecraft:prime_tnt",
-                      "position": "target"
-                    }
-                  },
-                  {
-                    "action": {
-                      "type": "minecraft:damage_item",
-                      "amount": 1
-                    }
-                  }
-                ],
-                "handler": "minecraft:passing"
-              },
-              "requirements": {
-                "conditions": {
-                  "condition": "minecraft:location_check",
-                  "predicate": {
-                    "block": {
-                      "blocks": [
-                        "minecraft:tnt"
-                      ]
-                    }
-                  }
+                "type": "minecraft:play_sound",
+                "category": "block",
+                "pitch": {
+                  "max": 1.2,
+                  "min": 0.8
                 },
-                "context": {
-                  "entity": "this",
-                  "position": "target"
-                }
-              }
-            },
-            {
-              "action": {
-                "type": "minecraft:sequence",
-                "entries": [
-                  {
-                    "action": {
-                      "type": "minecraft:place_block",
-                      "block": "minecraft:fire",
-                      "decrement_count": false,
-                      "position": "target"
-                    }
-                  },
-                  {
-                    "action": {
-                      "type": "minecraft:damage_item",
-                      "amount": 1
-                    }
-                  },
-                  {
-                    "action": {
-                      "type": "minecraft:swing_hand"
-                    }
-                  }
-                ],
-                "handler": "minecraft:passing"
+                "position": "target",
+                "sound": "minecraft:item.flintandsteel.use",
+                "volume": 1.0
               }
             }
           ],
-          "handler": "minecraft:first_to_pass_requirements"
+          "handler": "minecraft:passing"
         }
       }
     }
