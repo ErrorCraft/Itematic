@@ -6,27 +6,27 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 public class SoundEventKeys {
-    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_CHAIN = of("item.armor.equip_chain");
-    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_DIAMOND = of("item.armor.equip_diamond");
-    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_ELYTRA = of("item.armor.equip_elytra");
-    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_GENERIC = of("item.armor.equip_generic");
-    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_GOLD = of("item.armor.equip_gold");
-    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_IRON = of("item.armor.equip_iron");
-    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_LEATHER = of("item.armor.equip_leather");
-    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_NETHERITE = of("item.armor.equip_netherite");
-    public static final RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_TURTLE = of("item.armor.equip_turtle");
-    public static final RegistryKey<SoundEvent> ITEM_BUCKET_EMPTY = of("item.bucket.empty");
-    public static final RegistryKey<SoundEvent> ITEM_BUCKET_EMPTY_AXOLOTL = of("item.bucket.empty_axolotl");
-    public static final RegistryKey<SoundEvent> ITEM_BUCKET_EMPTY_FISH = of("item.bucket.empty_fish");
-    public static final RegistryKey<SoundEvent> ITEM_BUCKET_EMPTY_LAVA = of("item.bucket.empty_lava");
-    public static final RegistryKey<SoundEvent> ITEM_BUCKET_EMPTY_POWDER_SNOW = of("item.bucket.empty_powder_snow");
-    public static final RegistryKey<SoundEvent> ITEM_BUCKET_EMPTY_TADPOLE = of("item.bucket.empty_tadpole");
-    public static final RegistryKey<SoundEvent> ENTITY_ENDER_EYE_LAUNCH = of("entity.ender_eye.launch");
-    public static final RegistryKey<SoundEvent> BLOCK_END_PORTAL_FRAME_FILL = of("block.end_portal_frame.fill");
+    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_CHAIN = of("item.armor.equip_chain");
+    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_DIAMOND = of("item.armor.equip_diamond");
+    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_ELYTRA = of("item.armor.equip_elytra");
+    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_GENERIC = of("item.armor.equip_generic");
+    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_GOLD = of("item.armor.equip_gold");
+    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_IRON = of("item.armor.equip_iron");
+    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_LEATHER = of("item.armor.equip_leather");
+    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_NETHERITE = of("item.armor.equip_netherite");
+    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_TURTLE = of("item.armor.equip_turtle");
+    public static final RegistryKey<SoundEvent> BUCKET_EMPTY = of("item.bucket.empty");
+    public static final RegistryKey<SoundEvent> BUCKET_EMPTY_AXOLOTL = of("item.bucket.empty_axolotl");
+    public static final RegistryKey<SoundEvent> BUCKET_EMPTY_FISH = of("item.bucket.empty_fish");
+    public static final RegistryKey<SoundEvent> BUCKET_EMPTY_LAVA = of("item.bucket.empty_lava");
+    public static final RegistryKey<SoundEvent> BUCKET_EMPTY_POWDER_SNOW = of("item.bucket.empty_powder_snow");
+    public static final RegistryKey<SoundEvent> BUCKET_EMPTY_TADPOLE = of("item.bucket.empty_tadpole");
+    public static final RegistryKey<SoundEvent> ENDER_EYE_LAUNCH = of("entity.ender_eye.launch");
+    public static final RegistryKey<SoundEvent> END_PORTAL_FRAME_FILL = of("block.end_portal_frame.fill");
     public static final RegistryKey<SoundEvent> FIRE_CHARGE_USE = of("item.firecharge.use");
-    public static final RegistryKey<SoundEvent> BLOCK_FIRE_EXTINGUISH = of("block.fire.extinguish");
+    public static final RegistryKey<SoundEvent> FIRE_EXTINGUISH = of("block.fire.extinguish");
     public static final RegistryKey<SoundEvent> FLINT_AND_STEEL_USE = of("item.flintandsteel.use");
-    public static final RegistryKey<SoundEvent> ITEM_HOE_TILL = of("item.hoe.till");
+    public static final RegistryKey<SoundEvent> HOE_TILL = of("item.hoe.till");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_5 = of("music_disc.5");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_11 = of("music_disc.11");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_13 = of("music_disc.13");
@@ -43,7 +43,7 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> MUSIC_DISC_STRAD = of("music_disc.strad");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_WAIT = of("music_disc.wait");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_WARD = of("music_disc.ward");
-    public static final RegistryKey<SoundEvent> ITEM_SHOVEL_FLATTEN = of("item.shovel.flatten");
+    public static final RegistryKey<SoundEvent> SHOVEL_FLATTEN = of("item.shovel.flatten");
 
     private SoundEventKeys() {}
 

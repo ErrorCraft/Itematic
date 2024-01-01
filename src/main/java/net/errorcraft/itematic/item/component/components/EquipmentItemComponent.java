@@ -75,7 +75,7 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
     public static ItemComponent[] skull(RegistryEntry<Block> block, RegistryEntryLookup<SoundEvent> soundEvents) {
         return new ItemComponent[] {
             new BlockItemComponent(block),
-            new EquipmentItemComponent(EquipmentSlot.HEAD, false, soundEvents.getOrThrow(SoundEventKeys.ITEM_ARMOR_EQUIP_GENERIC)),
+            new EquipmentItemComponent(EquipmentSlot.HEAD, false, soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)),
             new FireworkShapeModifierItemComponent(FireworkRocketItem.Type.CREEPER)
         };
     }

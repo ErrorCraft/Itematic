@@ -62,7 +62,7 @@ public class Actions {
                 .add(FirstToPassRequirementsSequenceHandler.tag(actions.getOrThrow(ActionTags.USE_HOE_ON_BLOCK)))
                 .add(DamageItemAction.of(1))
                 .add(SwingHandAction.INSTANCE)
-                .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.ITEM_HOE_TILL), SoundCategory.BLOCKS))
+                .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.HOE_TILL), SoundCategory.BLOCKS))
         ));
         registerable.register(TILL_DIRT, ActionEntry.of(
             setBlockRequirements(builder -> builder.tag(ItematicBlockTags.TILLABLE_INTO_FARMLAND), true),
@@ -94,7 +94,7 @@ public class Actions {
             setBlockRequirements(builder -> builder.tag(ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH), true),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(ActionContextParameter.TARGET, blocks.getOrThrow(BlockKeys.DIRT_PATH)))
-                .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.ITEM_SHOVEL_FLATTEN), SoundCategory.BLOCKS))
+                .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.SHOVEL_FLATTEN), SoundCategory.BLOCKS))
         ));
         registerable.register(EXTINGUISH_CAMPFIRE, ActionEntry.of(
             ActionRequirements.of(
@@ -111,7 +111,7 @@ public class Actions {
                 .add(ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
                     .property(Properties.LIT, false)
                     .build())
-                .add(PlaySoundAction.builder(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.BLOCK_FIRE_EXTINGUISH), SoundCategory.BLOCKS)
+                .add(PlaySoundAction.builder(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.FIRE_EXTINGUISH), SoundCategory.BLOCKS)
                     .volume(0.5f)
                     .pitch(1.8f, 3.4f)
                     .build())
