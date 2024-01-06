@@ -7,11 +7,16 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.registry.Registries;
 import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.function.Consumer;
@@ -41,5 +46,16 @@ public class TestUtil {
     public static void setEntityPos(TestContext context, Entity entity, BlockPos pos) {
         BlockPos absolutePos = context.getAbsolutePos(pos);
         entity.setPosition(Vec3d.ofBottomCenter(absolutePos));
+    }
+
+    public static void useStackOnBlockInside(TestContext context, PlayerEntity player, ItemStack stack, BlockPos pos, Direction direction) {
+        BlockPos absolutePos = context.getAbsolutePos(pos);
+        BlockHitResult hitResult = new BlockHitResult(Vec3d.ofCenter(absolutePos), direction, absolutePos, true);
+        stack.useOnBlock(new ItemUsageContext(player, Hand.MAIN_HAND, hitResult));
+    }
+
+    public static void useBlock(TestContext context, BlockPos pos, PlayerEntity player, Direction direction) {
+        BlockPos absolutePos = context.getAbsolutePos(pos);
+        context.useBlock(pos, player, new BlockHitResult(Vec3d.ofCenter(absolutePos), direction, absolutePos, true));
     }
 }

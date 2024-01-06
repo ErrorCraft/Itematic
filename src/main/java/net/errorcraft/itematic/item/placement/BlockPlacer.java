@@ -48,7 +48,7 @@ public class BlockPlacer extends Placer {
     }
 
     public static BlockPlacer of(ItemUsageContext context, ItemStackConsumer resultStackConsumer, RegistryEntry<Block> block, boolean operatorOnly, boolean decrementStack) {
-        ItemPlacementContext placementContext = new ItemPlacementContext(context);
+        ItemPlacementContext placementContext = block.value().itematic$placementContext(new ItemPlacementContext(context));
         World world = placementContext.getWorld();
         BlockPos blockPos = placementContext.getBlockPos();
         return new BlockPlacer(placementContext.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), placementContext.getPlayer(), block, placementContext, operatorOnly, decrementStack);

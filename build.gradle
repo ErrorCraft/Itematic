@@ -60,10 +60,10 @@ sourceSets {
 		runtimeClasspath += client.output
 	}
 	gametest {
-		compileClasspath += main.compileClasspath
-		runtimeClasspath += main.runtimeClasspath
-		compileClasspath += main.output
-		runtimeClasspath += main.output
+		compileClasspath += client.compileClasspath
+		runtimeClasspath += client.runtimeClasspath
+		compileClasspath += client.output
+		runtimeClasspath += client.output
 	}
 }
 
@@ -97,6 +97,14 @@ loom {
 			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
 
 			runDir "build/gametest"
+			source sourceSets.gametest
+		}
+		gametestClient {
+			inherit client
+			name "GameTest Client"
+			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/gametest/resources/data/itematic/gametest/structures")}"
+
+			runDir "run"
 			source sourceSets.gametest
 		}
 	}

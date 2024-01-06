@@ -27,10 +27,6 @@ public record BlockItemComponent(RegistryEntry<Block> block, boolean operatorOnl
         Codec.BOOL.optionalFieldOf("operator_only", false).forGetter(BlockItemComponent::operatorOnly)
     ).apply(instance, BlockItemComponent::new));
 
-    public BlockItemComponent(RegistryEntry<Block> block) {
-        this(block, false);
-    }
-
     @Override
     public ItemComponentType<?> type() {
         return ItemComponentTypes.BLOCK;
@@ -50,5 +46,13 @@ public record BlockItemComponent(RegistryEntry<Block> block, boolean operatorOnl
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         this.block.value().appendTooltip(stack, world, tooltip, context);
+    }
+
+    public static BlockItemComponent of(RegistryEntry<Block> block) {
+        return new BlockItemComponent(block, false);
+    }
+
+    public static BlockItemComponent operator(RegistryEntry<Block> block) {
+        return new BlockItemComponent(block, true);
     }
 }

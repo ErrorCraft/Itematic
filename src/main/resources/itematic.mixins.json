@@ -29,6 +29,7 @@
     "block.PotatoesBlockExtender",
     "block.PowderSnowBlockExtender",
     "block.PumpkinBlockExtender",
+    "block.ScaffoldingBlockExtender",
     "block.StemBlockExtender",
     "block.SweetBerryBushBlockExtender",
     "block.TntBlockExtender",

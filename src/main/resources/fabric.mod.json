@@ -119,6 +119,9 @@
       "net/minecraft/class_1937": [
         "net/errorcraft/itematic/access/world/WorldAccess"
       ],
+      "net/minecraft/class_2248": [
+        "net/errorcraft/itematic/access/block/BlockAccess"
+      ],
       "net/minecraft/class_2302": [
         "net/errorcraft/itematic/access/block/CropBlockAccess"
       ],
