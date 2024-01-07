@@ -1282,6 +1282,125 @@ public class ItemUtil {
                 .with(new CompostableItemComponent(0.85f))
                 .build()
         ));
+        registerable.register(ItemKeys.SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.WHITE_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WHITE_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.ORANGE_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ORANGE_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.MAGENTA_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MAGENTA_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.LIGHT_BLUE_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIGHT_BLUE_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.YELLOW_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.YELLOW_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.LIME_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIME_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.PINK_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PINK_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.GRAY_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GRAY_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.LIGHT_GRAY_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIGHT_GRAY_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.CYAN_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CYAN_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.PURPLE_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PURPLE_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.BLUE_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BLUE_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.BROWN_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BROWN_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.GREEN_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GREEN_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.RED_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.RED_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
+        registerable.register(ItemKeys.BLACK_SHULKER_BOX, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_SHULKER_BOX).build(), 1),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BLACK_SHULKER_BOX)))
+                .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                .build()
+        ));
         registerable.register(ItemKeys.SCAFFOLDING, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SCAFFOLDING).build()),
             ItemComponentSet.builder()

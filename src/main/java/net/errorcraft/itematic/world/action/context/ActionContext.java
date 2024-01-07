@@ -5,14 +5,18 @@ import net.errorcraft.itematic.loot.context.ItematicLootContextParameters;
 import net.errorcraft.itematic.loot.context.ItematicLootContextTypes;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.AutomaticItemPlacementContext;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.function.CommandFunctionManager;
 import net.minecraft.server.world.ServerWorld;
@@ -68,6 +72,16 @@ public class ActionContext {
                 false
             )
         );
+    }
+
+    public ItemPlacementContext createItemPlacementContext(ActionContextParameter position, RegistryEntry<Block> block) {
+        if (this.entity(ActionContextParameter.THIS).isPresent()) {
+            ItemPlacementContext placementContext = new ItemPlacementContext(this.createItemUsageContext(position));
+            return block.value().itematic$placementContext(placementContext);
+        }
+        BlockPos pos = this.blockPos(position);
+        Direction useSide = this.world.isAir(pos.down()) ? this.side : Direction.UP;
+        return new AutomaticItemPlacementContext(this.world, pos, this.side, this.stack, useSide);
     }
 
     public ServerWorld world() {

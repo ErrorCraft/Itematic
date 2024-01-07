@@ -166,7 +166,7 @@ public class Actions {
                         ),
                         new PrimeTntAction(ActionContextParameter.TARGET)
                     )
-                    .add(new PlaceBlockAction(blocks.getOrThrow(BlockKeys.FIRE), ActionContextParameter.TARGET, false)))
+                    .add(PlaceBlockAction.of(blocks.getOrThrow(BlockKeys.FIRE), ActionContextParameter.TARGET, false)))
                 .add(SwingHandAction.INSTANCE)
         ));
     }

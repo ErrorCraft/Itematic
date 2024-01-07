@@ -4,6 +4,7 @@ import net.errorcraft.itematic.gametest.Assert;
 import net.errorcraft.itematic.gametest.TestUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FacingBlock;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.DispenserBlockEntity;
 import net.minecraft.entity.EntityType;
@@ -18,6 +19,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
 public class DispenserBehaviorTestSuite {
     private static final BlockPos DISPENSER_POSITION = new BlockPos(2, 2, 3);
@@ -123,5 +125,26 @@ public class DispenserBehaviorTestSuite {
         world.spawnEntity(horse);
         context.pushButton(BUTTON_POSITION);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(horse.getEquippedStack(EquipmentSlot.CHEST), ItemKeys.IRON_HORSE_ARMOR));
+    }
+
+    @GameTest(templateName = "itematic:block.dispenser")
+    public void dispensingShulkerBoxWithBlockBelowOutputPlacesShulkerBoxFacingUp(TestContext context) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerWorld world = context.getWorld();
+        ItemStack stack = world.itematic$createStack(ItemKeys.SHULKER_BOX);
+        blockEntity.addToFirstFreeSlot(stack);
+        context.pushButton(BUTTON_POSITION);
+        context.addInstantFinalTask(() -> context.expectBlockProperty(IN_FRONT_OF_DISPENSER_POSITION, FacingBlock.FACING, Direction.UP));
+    }
+
+    @GameTest(templateName = "itematic:block.dispenser.gap_below_output")
+    public void dispensingShulkerBoxWithoutBlockBelowOutputPlacesShulkerBoxWithDispenserDirection(TestContext context) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerWorld world = context.getWorld();
+        ItemStack stack = world.itematic$createStack(ItemKeys.SHULKER_BOX);
+        blockEntity.addToFirstFreeSlot(stack);
+        context.pushButton(BUTTON_POSITION);
+        Direction dispenserDirection = context.getBlockState(DISPENSER_POSITION).get(FacingBlock.FACING);
+        context.addInstantFinalTask(() -> context.expectBlockProperty(IN_FRONT_OF_DISPENSER_POSITION, FacingBlock.FACING, dispenserDirection));
     }
 }

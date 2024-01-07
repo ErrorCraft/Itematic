@@ -23,6 +23,7 @@ public class DispenseBehaviors {
     public static final DispenserBehavior HORSE_ARMOR = register(DispenseBehaviorKeys.HORSE_ARMOR, DispenserBehaviorUtil.HORSE_ARMOR_DISPENSER_BEHAVIOR);
     public static final DispenserBehavior USE_ON_BLOCK = register(DispenseBehaviorKeys.USE_ON_BLOCK, new UseOnBlockDispenserBehavior());
     public static final DispenserBehavior WAX_BLOCK = register(DispenseBehaviorKeys.WAX_BLOCK, new WaxBlockDispenserBehavior());
+    public static final DispenserBehavior PLACE_BLOCK_FROM_ITEM = register(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM, new PlaceBlockFromItemDispenserBehavior());
 
     private DispenseBehaviors() {}
 

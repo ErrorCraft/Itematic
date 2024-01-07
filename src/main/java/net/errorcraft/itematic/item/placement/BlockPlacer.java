@@ -44,14 +44,18 @@ public class BlockPlacer extends Placer {
     }
 
     public static BlockPlacer of(ActionContext context, ActionContextParameter position, RegistryEntry<Block> block, boolean operatorOnly, boolean decrementStack) {
-        return of(context.createItemUsageContext(position), context.resultStackConsumer(), block, operatorOnly, decrementStack);
+        return of(context.createItemPlacementContext(position, block), context.resultStackConsumer(), block, operatorOnly, decrementStack);
     }
 
     public static BlockPlacer of(ItemUsageContext context, ItemStackConsumer resultStackConsumer, RegistryEntry<Block> block, boolean operatorOnly, boolean decrementStack) {
         ItemPlacementContext placementContext = block.value().itematic$placementContext(new ItemPlacementContext(context));
-        World world = placementContext.getWorld();
-        BlockPos blockPos = placementContext.getBlockPos();
-        return new BlockPlacer(placementContext.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), placementContext.getPlayer(), block, placementContext, operatorOnly, decrementStack);
+        return of(placementContext, resultStackConsumer, block, operatorOnly, decrementStack);
+    }
+
+    public static BlockPlacer of(ItemPlacementContext context, ItemStackConsumer resultStackConsumer, RegistryEntry<Block> block, boolean operatorOnly, boolean decrementStack) {
+        World world = context.getWorld();
+        BlockPos blockPos = context.getBlockPos();
+        return new BlockPlacer(context.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), block, context, operatorOnly, decrementStack);
     }
 
     @Override

@@ -5,12 +5,15 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.BlockItemComponent;
 import net.errorcraft.itematic.item.component.components.DyeableItemComponent;
+import net.minecraft.block.Block;
 import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.item.DyeableItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
@@ -19,6 +22,31 @@ import java.util.Optional;
 
 @Mixin(CauldronBehavior.class)
 public interface CauldronBehaviorExtender {
+    @Redirect(
+        method = "method_32215",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/block/Block;getBlockFromItem(Lnet/minecraft/item/Item;)Lnet/minecraft/block/Block;"
+        )
+    )
+    private static Block getBlockFromItemUseItemComponent(Item item) {
+        return item.itematic$getComponent(ItemComponentTypes.BLOCK)
+            .map(BlockItemComponent::block)
+            .map(RegistryEntry::value)
+            .orElse(null);
+    }
+
+    @Redirect(
+        method = "method_32215",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private static ItemStack newItemStackForShulkerBoxUseCreateStack(ItemConvertible item, @Local World world) {
+        return world.itematic$createStack(ItemKeys.SHULKER_BOX);
+    }
+
     @ModifyConstant(
         method = "method_32209",
         constant = @Constant(
@@ -49,13 +77,13 @@ public interface CauldronBehaviorExtender {
     }
 
     @Redirect(
-        method = { "method_32219", "method_32222"},
+        method = { "method_32219", "method_32222" },
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForGlassBottleUseRegistryEntry(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForGlassBottleUseCreateStack(ItemConvertible item, @Local World world) {
         return world.itematic$createStack(ItemKeys.GLASS_BOTTLE);
     }
 
@@ -63,10 +91,10 @@ public interface CauldronBehaviorExtender {
         method = "method_32220",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForPotionUseRegistryEntry(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForPotionUseCreateStack(ItemConvertible item, @Local World world) {
         return world.itematic$createStack(ItemKeys.POTION);
     }
 
@@ -74,10 +102,10 @@ public interface CauldronBehaviorExtender {
         method = "method_32221",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForWaterBucketUseRegistryEntry(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForWaterBucketUseCreateStack(ItemConvertible item, @Local World world) {
         return world.itematic$createStack(ItemKeys.WATER_BUCKET);
     }
 
@@ -85,10 +113,10 @@ public interface CauldronBehaviorExtender {
         method = "method_32218",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForLavaBucketUseRegistryEntry(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForLavaBucketUseCreateStack(ItemConvertible item, @Local World world) {
         return world.itematic$createStack(ItemKeys.LAVA_BUCKET);
     }
 
@@ -96,10 +124,10 @@ public interface CauldronBehaviorExtender {
         method = "method_32698",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForPowderSnowBucketUseRegistryEntry(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemConvertible item, @Local World world) {
         return world.itematic$createStack(ItemKeys.POWDER_SNOW_BUCKET);
     }
 
@@ -107,10 +135,10 @@ public interface CauldronBehaviorExtender {
         method = "fillCauldron",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForBucketUseRegistryEntry(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForBucketUseCreateStack(ItemConvertible item, @Local World world) {
         return world.itematic$createStack(ItemKeys.BUCKET);
     }
 
@@ -233,7 +261,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/block/cauldron/CauldronBehavior;LAVA_CAULDRON_BEHAVIOR:Ljava/util/Map;"
+                target = "Lnet/minecraft/block/cauldron/CauldronBehavior;LAVA_CAULDRON_BEHAVIOR:Lnet/minecraft/block/cauldron/CauldronBehavior$CauldronBehaviorMap;"
             )
         ),
         index = 0
@@ -252,7 +280,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/block/cauldron/CauldronBehavior;POWDER_SNOW_CAULDRON_BEHAVIOR:Ljava/util/Map;"
+                target = "Lnet/minecraft/block/cauldron/CauldronBehavior;POWDER_SNOW_CAULDRON_BEHAVIOR:Lnet/minecraft/block/cauldron/CauldronBehavior$CauldronBehaviorMap;"
             )
         ),
         index = 0
@@ -677,5 +705,309 @@ public interface CauldronBehaviorExtender {
     )
     private static Object yellowBannerUseRegistryKey(Object key) {
         return ItemKeys.YELLOW_BANNER;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;WHITE_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object whiteShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.WHITE_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;GRAY_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object grayShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.GRAY_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;BLACK_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object blackShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.BLACK_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;BLUE_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object blueShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.BLUE_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;BROWN_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object brownShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.BROWN_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;CYAN_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object cyanShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.CYAN_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;GREEN_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object greenShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.GREEN_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;LIGHT_BLUE_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object lightBlueShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.LIGHT_BLUE_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;LIGHT_GRAY_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object lightGrayShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.LIGHT_GRAY_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;LIME_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object limeShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.LIME_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;MAGENTA_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object magentaShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.MAGENTA_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;ORANGE_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object orangeShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.ORANGE_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;PINK_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object pinkShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.PINK_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;PURPLE_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object purpleShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.PURPLE_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;RED_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object redShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.RED_SHULKER_BOX;
+    }
+
+    @ModifyArg(
+        method = "registerBehavior",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;YELLOW_SHULKER_BOX:Lnet/minecraft/item/Item;"
+            )
+        ),
+        index = 0
+    )
+    private static Object yellowShulkerBoxUseRegistryKey(Object key) {
+        return ItemKeys.YELLOW_SHULKER_BOX;
     }
 }

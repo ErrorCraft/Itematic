@@ -31,6 +31,7 @@ public class ActionTypes {
     public static final ActionType<AttachLeashedEntitiesOnBlockAction> ATTACH_LEASHED_ENTITIES_ON_BLOCK = register(ActionTypeKeys.ATTACH_LEASHED_ENTITIES_ON_BLOCK, new ActionType<>(AttachLeashedEntitiesOnBlockAction.CODEC));
     public static final ActionType<SetEntityNameFromItemAction> SET_ENTITY_NAME_FROM_ITEM = register(ActionTypeKeys.SET_ENTITY_NAME_FROM_ITEM, new ActionType<>(SetEntityNameFromItemAction.CODEC));
     public static final ActionType<OpenBookFromItemAction> OPEN_BOOK_FROM_ITEM = register(ActionTypeKeys.OPEN_BOOK_FROM_ITEM, new ActionType<>(OpenBookFromItemAction.CODEC));
+    public static final ActionType<PlaceBlockFromItemAction> PLACE_BLOCK_FROM_ITEM = register(ActionTypeKeys.PLACE_BLOCK_FROM_ITEM, new ActionType<>(PlaceBlockFromItemAction.CODEC));
 
     private ActionTypes() {}
 

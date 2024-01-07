@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.white_shulker_box"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:white_shulker_box"
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:place_block_from_item"
+    }
+  }
+}
