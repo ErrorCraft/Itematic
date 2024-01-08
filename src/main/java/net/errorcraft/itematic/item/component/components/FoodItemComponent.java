@@ -61,7 +61,7 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
         return new ItemComponent[] {
             new UseDurationItemComponent(useDuration),
             new FoodItemComponent(component.getHunger(), component.getSaturationModifier(), component.isAlwaysEdible(), getEffects(component.getStatusEffects())),
-            new UseAnimationItemComponent(useAction),
+            UseAnimationItemComponent.of(useAction),
             ConsumableItemComponent.of(resultItem)
         };
     }

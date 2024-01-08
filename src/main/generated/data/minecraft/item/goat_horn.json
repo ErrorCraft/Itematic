@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.goat_horn"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:playable": {
+      "instruments": "minecraft:goat_horns"
+    },
+    "minecraft:use_animation": {
+      "animation": "toot_horn"
+    }
+  }
+}

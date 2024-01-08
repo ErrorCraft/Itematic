@@ -22,4 +22,8 @@ public record UseAnimationItemComponent(UseAction animation) implements ItemComp
     public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
+
+    public static UseAnimationItemComponent of(UseAction animation) {
+        return new UseAnimationItemComponent(animation);
+    }
 }

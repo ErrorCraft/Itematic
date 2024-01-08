@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -10,12 +11,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.util.Hand;
+import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Optional;
 
-public record StartUsingItemAction() implements Action {
-    public static final StartUsingItemAction INSTANCE = new StartUsingItemAction();
-    public static final Codec<StartUsingItemAction> CODEC = Codec.unit(INSTANCE);
+public record StartUsingItemAction(Optional<Integer> ticks) implements Action {
+    public static final Codec<StartUsingItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codecs.createStrictOptionalFieldCodec(Codec.INT, "ticks").forGetter(StartUsingItemAction::ticks)
+    ).apply(instance, StartUsingItemAction::new));
 
     @Override
     public ActionType<?> type() {
@@ -38,6 +41,18 @@ public record StartUsingItemAction() implements Action {
         if (hand == null) {
             return false;
         }
-        return ItemUsage.consumeHeldItem(context.world(), player, hand).getResult().isAccepted();
+        this.ticks.ifPresentOrElse(
+            ticks -> player.itematic$startUsingHand(hand, ticks),
+            () -> ItemUsage.consumeHeldItem(context.world(), player, hand)
+        );
+        return true;
+    }
+
+    public static StartUsingItemAction of(int duration) {
+        return new StartUsingItemAction(Optional.of(duration));
+    }
+
+    public static StartUsingItemAction indefinitely() {
+        return new StartUsingItemAction(Optional.empty());
     }
 }

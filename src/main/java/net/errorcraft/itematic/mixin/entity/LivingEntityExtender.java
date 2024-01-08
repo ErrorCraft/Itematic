@@ -42,10 +42,22 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     protected ItemStack activeItemStack;
 
     @Shadow
+    protected int itemUseTimeLeft;
+
+    @Shadow
     public abstract boolean isHolding(Predicate<ItemStack> predicate);
 
     @Shadow
     public abstract Hand getActiveHand();
+
+    @Shadow
+    public abstract void setCurrentHand(Hand hand);
+
+    @Shadow
+    public abstract ItemStack getStackInHand(Hand hand);
+
+    @Shadow
+    public abstract boolean isUsingItem();
 
     @Shadow
     public abstract ItemStack eatFood(World world, ItemStack stack);
@@ -260,5 +272,15 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
                 .entityPosition(ActionContextParameter.THIS, this);
             stack.itematic$invokeEvent(ItemEvents.EAT_ITEM, context);
         }
+    }
+
+    @Override
+    public void itematic$startUsingHand(Hand hand, int ticks) {
+        ItemStack stack = this.getStackInHand(hand);
+        if (stack.isEmpty() || this.isUsingItem()) {
+            return;
+        }
+        this.setCurrentHand(hand);
+        this.itemUseTimeLeft = ticks;
     }
 }

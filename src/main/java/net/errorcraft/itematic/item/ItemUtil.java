@@ -55,6 +55,7 @@ import net.minecraft.predicate.StatePredicate;
 import net.minecraft.predicate.entity.LocationPredicate;
 import net.minecraft.registry.*;
 import net.minecraft.registry.tag.BannerPatternTags;
+import net.minecraft.registry.tag.InstrumentTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
@@ -2054,7 +2055,7 @@ public class ItemUtil {
                 .with(new DamageableItemComponent(384))
                 .with(new ShooterItemComponent(ItematicItemTags.BOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, false))
                 .with(new UseDurationItemComponent(72000))
-                .with(new UseAnimationItemComponent(UseAction.BOW))
+                .with(UseAnimationItemComponent.of(UseAction.BOW))
                 .with(EnchantableItemComponent.enchants(1, EnchantmentTags.BOW_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.BOW_FORGING))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
@@ -2841,7 +2842,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MILK_BUCKET).build(), 1),
             ItemComponentSet.builder()
                 .with(new UseDurationItemComponent(MilkBucketItemAccessor.getMaxUseTime()))
-                .with(new UseAnimationItemComponent(UseAction.DRINK))
+                .with(UseAnimationItemComponent.of(UseAction.DRINK))
                 .with(ConsumableItemComponent.of(items.getOrThrow(ItemKeys.BUCKET)))
                 .build(),
             ItemEventMap.builder()
@@ -3227,7 +3228,7 @@ public class ItemUtil {
                 .with(new UseDurationItemComponent(PotionItemAccessor.getMaxUseTime()))
                 .with(new PotionItemComponent())
                 .with(new PotionHolderItemComponent())
-                .with(new UseAnimationItemComponent(UseAction.DRINK))
+                .with(UseAnimationItemComponent.of(UseAction.DRINK))
                 .with(ConsumableItemComponent.of(items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                 .with(new TintedItemComponent(new PotionItemColor()))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.POTION)))
@@ -4252,11 +4253,11 @@ public class ItemUtil {
                 .with(new EquipmentItemComponent(EquipmentSlot.OFFHAND, false, soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)))
                 .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_SHIELD))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .with(new UseAnimationItemComponent(UseAction.BLOCK))
+                .with(UseAnimationItemComponent.of(UseAction.BLOCK))
                 .with(BannerPatternHolderItemComponent.of())
                 .build(),
             ItemEventMap.builder()
-                .add(ItemEvents.USE, ActionEntry.of(StartUsingItemAction.INSTANCE))
+                .add(ItemEvents.USE, ActionEntry.of(StartUsingItemAction.indefinitely()))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_13, create(
@@ -4367,7 +4368,7 @@ public class ItemUtil {
                 .with(new DamageableItemComponent(465))
                 .with(new ShooterItemComponent(ItematicItemTags.CROSSBOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, true))
                 .with(new UseDurationItemComponent(28))
-                .with(new UseAnimationItemComponent(UseAction.CROSSBOW))
+                .with(UseAnimationItemComponent.of(UseAction.CROSSBOW))
                 .with(EnchantableItemComponent.enchants(1, EnchantmentTags.CROSSBOW_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.CROSSBOW_FORGING))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
@@ -4420,6 +4421,13 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIGLIN_BANNER_PATTERN).tooltip(ItemKeys.PIGLIN_BANNER_PATTERN).build(), 1),
             ItemComponentSet.builder()
                 .with(BannerPatternItemComponent.of(BannerPatternTags.PIGLIN_PATTERN_ITEM))
+                .build()
+        ));
+        registerable.register(ItemKeys.GOAT_HORN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOAT_HORN).build(), 1),
+            ItemComponentSet.builder()
+                .with(PlayableItemComponent.of(InstrumentTags.GOAT_HORNS))
+                .with(UseAnimationItemComponent.of(UseAction.TOOT_HORN))
                 .build()
         ));
         registerable.register(ItemKeys.COMPOSTER, create(

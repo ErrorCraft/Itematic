@@ -633,6 +633,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> MOJANG_BANNER_PATTERN = register("mojang_banner_pattern");
     public static final RegistryKey<Item> GLOBE_BANNER_PATTERN = register("globe_banner_pattern");
     public static final RegistryKey<Item> PIGLIN_BANNER_PATTERN = register("piglin_banner_pattern");
+    public static final RegistryKey<Item> GOAT_HORN = register("goat_horn");
     public static final RegistryKey<Item> COMPOSTER = register("composter");
     public static final RegistryKey<Item> BARREL = register("barrel");
     public static final RegistryKey<Item> CARTOGRAPHY_TABLE = register("cartography_table");

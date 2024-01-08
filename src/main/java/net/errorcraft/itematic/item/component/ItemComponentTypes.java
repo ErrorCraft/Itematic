@@ -50,6 +50,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<BannerPatternHolderItemComponent> BANNER_PATTERN_HOLDER = register("banner_pattern_holder", new ItemComponentType<>(BannerPatternHolderItemComponent.CODEC));
     public static final ItemComponentType<WritableItemComponent> WRITABLE = register("writable", new ItemComponentType<>(WritableItemComponent.CODEC));
     public static final ItemComponentType<TextHolderItemComponent> TEXT_HOLDER = register("text_holder", new ItemComponentType<>(TextHolderItemComponent.CODEC));
+    public static final ItemComponentType<PlayableItemComponent> PLAYABLE = register("playable", new ItemComponentType<>(PlayableItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

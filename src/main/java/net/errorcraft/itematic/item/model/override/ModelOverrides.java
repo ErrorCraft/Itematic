@@ -20,6 +20,7 @@ public class ModelOverrides {
     public static final ModelOverride BLOCKING = register(ModelOverrideKeys.BLOCKING, new BlockingModelOverride());
     public static final ModelOverride TIME = register(ModelOverrideKeys.TIME, new TimeModelOverride());
     public static final ModelOverride ANGLE = register(ModelOverrideKeys.ANGLE, new AngleModelOverride());
+    public static final ModelOverride TOOTING = register(ModelOverrideKeys.TOOTING, new TootingModelOverride());
 
     private ModelOverrides() {}
 

@@ -19,6 +19,7 @@ public class ModelOverrideKeys {
     public static final RegistryKey<ModelOverride> BLOCKING = of("blocking");
     public static final RegistryKey<ModelOverride> TIME = of("time");
     public static final RegistryKey<ModelOverride> ANGLE = of("angle");
+    public static final RegistryKey<ModelOverride> TOOTING = of("tooting");
 
     private static RegistryKey<ModelOverride> of(String id) {
         return RegistryKey.of(ItematicRegistryKeys.MODEL_OVERRIDE, new Identifier(id));
