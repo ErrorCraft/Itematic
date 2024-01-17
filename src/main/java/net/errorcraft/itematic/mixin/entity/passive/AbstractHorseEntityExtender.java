@@ -31,8 +31,8 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
             target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
         )
     )
-    private boolean isBreedingItemTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItematicItemTags.HORSE_BREEDING_ITEMS);
+    private boolean testForFoodItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
+        return itemStack.isIn(ItematicItemTags.HORSE_FOOD);
     }
 
     @Redirect(
@@ -64,6 +64,25 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
     )
     private boolean isOfForSugarUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.SUGAR);
+    }
+
+    @Redirect(
+        method = "receiveFood",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/block/Blocks;HAY_BLOCK:Lnet/minecraft/block/Block;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private boolean isOfForHayBlockUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.HAY_BLOCK);
     }
 
     @Redirect(
@@ -146,11 +165,11 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
         method = "initCustomGoals",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/entity/ai/goal/TemptGoal"
+            target = "(Lnet/minecraft/entity/mob/PathAwareEntity;DLnet/minecraft/recipe/Ingredient;Z)Lnet/minecraft/entity/ai/goal/TemptGoal;"
         )
     )
-    private TemptGoal initCustomGoalsNewTemptGoalSetFoodTag(TemptGoal original) {
-        original.setFoodTag(ItematicItemTags.HORSE_TEMPTING_ITEMS);
+    private TemptGoal newTemptGoalSetItems(TemptGoal original) {
+        original.itematic$setItems(ItematicItemTags.HORSE_TEMPT_ITEMS);
         return original;
     }
 
@@ -158,10 +177,10 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
         method = "saddle",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForSaddleUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForSaddleUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.SADDLE);
     }
 

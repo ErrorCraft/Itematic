@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -25,6 +26,7 @@ public abstract class ItemModelsExtender implements ItemModelsAccess {
     public abstract void putModel(Item item, ModelIdentifier modelId);
 
     @Nullable
+    @Unique
     private Registry<Item> registry;
 
     @Redirect(
@@ -39,7 +41,7 @@ public abstract class ItemModelsExtender implements ItemModelsAccess {
     }
 
     @Override
-    public void reloadModelIds(Registry<Item> registry) {
+    public void itematic$reloadModelIds(Registry<Item> registry) {
         this.registry = registry;
         this.modelIds.clear();
         Identifier airKey = ItemKeys.AIR.getValue();

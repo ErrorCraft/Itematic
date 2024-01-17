@@ -7,17 +7,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.tag.TagKey;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(TemptGoal.class)
 public class TemptGoalExtender implements TemptGoalAccess {
-    private TagKey<Item> foodTag;
-
-    @Override
-    public void setFoodTag(TagKey<Item> foodTag) {
-        this.foodTag = foodTag;
-    }
+    @Unique
+    private TagKey<Item> items;
 
     @Redirect(
         method = "isTemptedBy",
@@ -26,10 +23,15 @@ public class TemptGoalExtender implements TemptGoalAccess {
             target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
         )
     )
-    private boolean isTemptedByTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        if (this.foodTag == null) {
+    private boolean testTemptItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
+        if (this.items == null) {
             return false;
         }
-        return itemStack.isIn(this.foodTag);
+        return itemStack.isIn(this.items);
+    }
+
+    @Override
+    public void itematic$setItems(TagKey<Item> items) {
+        this.items = items;
     }
 }

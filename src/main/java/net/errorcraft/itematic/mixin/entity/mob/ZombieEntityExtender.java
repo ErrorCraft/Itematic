@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(ZombieEntity.class)
 public class ZombieEntityExtender extends HostileEntity {
@@ -33,7 +34,7 @@ public class ZombieEntityExtender extends HostileEntity {
         method = "getSkull",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
     private ItemStack newItemStackForZombieHeadUseRegistryEntry(ItemConvertible item) {
@@ -49,5 +50,35 @@ public class ZombieEntityExtender extends HostileEntity {
     )
     private boolean isOfForGlowInkSacUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.GLOW_INK_SAC);
+    }
+
+    @Redirect(
+        method = "initEquipment",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            ordinal = 0
+        )
+    )
+    private ItemStack newItemStackForIronSwordUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.IRON_SWORD);
+    }
+
+    @Redirect(
+        method = "initEquipment",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;IRON_SWORD:Lnet/minecraft/item/Item;"
+            )
+        )
+    )
+    private ItemStack newItemStackForIronShovelUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.IRON_SHOVEL);
     }
 }

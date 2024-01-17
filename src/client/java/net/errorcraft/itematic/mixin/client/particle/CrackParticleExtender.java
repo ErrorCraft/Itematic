@@ -17,11 +17,25 @@ public class CrackParticleExtender {
             method = "createParticle(Lnet/minecraft/particle/DefaultParticleType;Lnet/minecraft/client/world/ClientWorld;DDDDDD)Lnet/minecraft/client/particle/Particle;",
             at = @At(
                 value = "NEW",
-                target = "net/minecraft/item/ItemStack"
+                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
             )
         )
-        private ItemStack createParticleNewItemStackUseRegistryEntry(ItemConvertible item, @Local ClientWorld clientWorld) {
+        private ItemStack newItemStackForSnowballUseRegistryEntry(ItemConvertible item, @Local ClientWorld clientWorld) {
             return clientWorld.itematic$createStack(ItemKeys.SNOWBALL);
+        }
+    }
+
+    @Mixin(CrackParticle.SlimeballFactory.class)
+    public static class SlimeballFactoryExtender {
+        @Redirect(
+            method = "createParticle(Lnet/minecraft/particle/DefaultParticleType;Lnet/minecraft/client/world/ClientWorld;DDDDDD)Lnet/minecraft/client/particle/Particle;",
+            at = @At(
+                value = "NEW",
+                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            )
+        )
+        private ItemStack newItemStackForSlimeBallUseRegistryEntry(ItemConvertible item, @Local ClientWorld clientWorld) {
+            return clientWorld.itematic$createStack(ItemKeys.SLIME_BALL);
         }
     }
 }

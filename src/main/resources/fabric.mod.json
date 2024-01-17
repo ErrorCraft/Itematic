@@ -38,6 +38,9 @@
       "net/minecraft/class_60": [
         "net/errorcraft/itematic/access/loot/LootManagerAccess"
       ],
+      "net/minecraft/class_314": [
+        "net/errorcraft/itematic/access/client/recipebook/RecipeBookGroupAccess"
+      ],
       "net/minecraft/class_324": [
         "net/errorcraft/itematic/access/client/color/block/BlockColorsAccess"
       ],
@@ -166,6 +169,12 @@
       ],
       "net/minecraft/class_4538": [
         "net/errorcraft/itematic/access/world/WorldViewAccess"
+      ],
+      "net/minecraft/class_5289\u0024class_5290": [
+        "net/errorcraft/itematic/access/client/gui/screen/GameModeSelectionScreenGameModeSelectionAccess"
+      ],
+      "net/minecraft/class_5760": [
+        "net/errorcraft/itematic/access/entity/ai/brain/sensor/TemptationsSensorAccess"
       ],
       "net/minecraft/class_6880": [
         "net/errorcraft/itematic/access/registry/entry/RegistryEntryAccess"

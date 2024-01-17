@@ -99,7 +99,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRASS_BLOCK).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GRASS_BLOCK)))
-                .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .with(TintedItemComponent.of(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.CRIMSON_NYLIUM, create(
@@ -262,6 +262,12 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SAND).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SAND)))
+                .build()
+        ));
+        registerable.register(ItemKeys.REDSTONE_ORE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.REDSTONE_ORE).build()),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.REDSTONE_ORE)))
                 .build()
         ));
         registerable.register(ItemKeys.COAL_BLOCK, create(
@@ -568,79 +574,79 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_LEAVES).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_LEAVES)))
-                .with(new CompostableItemComponent(0.3f))
-                .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .with(CompostableItemComponent.of(0.3f))
+                .with(TintedItemComponent.of(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.SPRUCE_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_LEAVES).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_LEAVES)))
-                .with(new CompostableItemComponent(0.3f))
-                .with(new TintedItemComponent(new ConstantItemColor(FoliageColors.getSpruceColor())))
+                .with(CompostableItemComponent.of(0.3f))
+                .with(TintedItemComponent.of(new ConstantItemColor(FoliageColors.getSpruceColor())))
                 .build()
         ));
         registerable.register(ItemKeys.BIRCH_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_LEAVES).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_LEAVES)))
-                .with(new CompostableItemComponent(0.3f))
-                .with(new TintedItemComponent(new ConstantItemColor(FoliageColors.getBirchColor())))
+                .with(CompostableItemComponent.of(0.3f))
+                .with(TintedItemComponent.of(new ConstantItemColor(FoliageColors.getBirchColor())))
                 .build()
         ));
         registerable.register(ItemKeys.JUNGLE_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_LEAVES).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_LEAVES)))
-                .with(new CompostableItemComponent(0.3f))
-                .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .with(CompostableItemComponent.of(0.3f))
+                .with(TintedItemComponent.of(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.ACACIA_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_LEAVES).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_LEAVES)))
-                .with(new CompostableItemComponent(0.3f))
-                .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .with(CompostableItemComponent.of(0.3f))
+                .with(TintedItemComponent.of(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.DARK_OAK_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_LEAVES).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_LEAVES)))
-                .with(new CompostableItemComponent(0.3f))
-                .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .with(CompostableItemComponent.of(0.3f))
+                .with(TintedItemComponent.of(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.MANGROVE_LEAVES, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_LEAVES).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_LEAVES)))
-                .with(new CompostableItemComponent(0.3f))
-                .with(new TintedItemComponent(new ConstantItemColor(FoliageColors.getMangroveColor())))
+                .with(CompostableItemComponent.of(0.3f))
+                .with(TintedItemComponent.of(new ConstantItemColor(FoliageColors.getMangroveColor())))
                 .build()
         ));
         registerable.register(ItemKeys.SHORT_GRASS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SHORT_GRASS).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SHORT_GRASS)))
-                .with(new CompostableItemComponent(0.3f))
-                .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .with(CompostableItemComponent.of(0.3f))
+                .with(TintedItemComponent.of(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.FERN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FERN).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.FERN)))
-                .with(new CompostableItemComponent(0.65f))
-                .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .with(CompostableItemComponent.of(0.65f))
+                .with(TintedItemComponent.of(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.AZALEA, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AZALEA).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.AZALEA)))
-                .with(new CompostableItemComponent(0.65f))
+                .with(CompostableItemComponent.of(0.65f))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
@@ -648,7 +654,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FLOWERING_AZALEA).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.FLOWERING_AZALEA)))
-                .with(new CompostableItemComponent(0.85f))
+                .with(CompostableItemComponent.of(0.85f))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
                 .build()
         ));
@@ -771,39 +777,46 @@ public class ItemUtil {
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
                 .build()
         ));
+        registerable.register(ItemKeys.POPPY, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POPPY).build()),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.POPPY)))
+                .with(CompostableItemComponent.of(0.65f))
+                .build()
+        ));
         registerable.register(ItemKeys.CRIMSON_FUNGUS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_FUNGUS).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_FUNGUS)))
-                .with(new CompostableItemComponent(0.65f))
+                .with(CompostableItemComponent.of(0.65f))
                 .build()
         ));
         registerable.register(ItemKeys.WARPED_FUNGUS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_FUNGUS).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_FUNGUS)))
-                .with(new CompostableItemComponent(0.65f))
+                .with(CompostableItemComponent.of(0.65f))
                 .build()
         ));
         registerable.register(ItemKeys.CRIMSON_ROOTS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_ROOTS).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_ROOTS)))
-                .with(new CompostableItemComponent(0.65f))
+                .with(CompostableItemComponent.of(0.65f))
                 .build()
         ));
         registerable.register(ItemKeys.WARPED_ROOTS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_ROOTS).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_ROOTS)))
-                .with(new CompostableItemComponent(0.65f))
+                .with(CompostableItemComponent.of(0.65f))
                 .build()
         ));
         registerable.register(ItemKeys.HANGING_ROOTS, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HANGING_ROOTS).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.HANGING_ROOTS)))
-                .with(new CompostableItemComponent(0.3f))
+                .with(CompostableItemComponent.of(0.3f))
                 .build()
         ));
         registerable.register(ItemKeys.BAMBOO, create(
@@ -942,6 +955,12 @@ public class ItemUtil {
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SNOW)))
                 .build()
         ));
+        registerable.register(ItemKeys.CACTUS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CACTUS).build()),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CACTUS)))
+                .build()
+        ));
         registerable.register(ItemKeys.JUKEBOX, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUKEBOX).build()),
             ItemComponentSet.builder()
@@ -1024,12 +1043,38 @@ public class ItemUtil {
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_FENCE)))
                 .build()
         ));
+        registerable.register(ItemKeys.CARVED_PUMPKIN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CARVED_PUMPKIN).build()),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CARVED_PUMPKIN)))
+                .with(CompostableItemComponent.of(0.65f))
+                .build()
+        ));
+        registerable.register(ItemKeys.GLOWSTONE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GLOWSTONE).build()),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GLOWSTONE)))
+                .build()
+        ));
+        registerable.register(ItemKeys.CHISELED_STONE_BRICKS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHISELED_STONE_BRICKS).build()),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHISELED_STONE_BRICKS)))
+                .build()
+        ));
         registerable.register(ItemKeys.VINE, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.VINE).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.VINE)))
-                .with(new CompostableItemComponent(0.5f))
-                .with(new TintedItemComponent(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .with(CompostableItemComponent.of(0.5f))
+                .with(TintedItemComponent.of(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .build()
+        ));
+        registerable.register(ItemKeys.GLOW_LICHEN, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GLOW_LICHEN).build()),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GLOW_LICHEN)))
+                .with(CompostableItemComponent.of(0.5f))
                 .build()
         ));
         registerable.register(ItemKeys.LILY_PAD, create(
@@ -1037,8 +1082,8 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LILY_PAD)))
                 .with(new CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling.SOURCE_ONLY, false, Direction.UP.getVector()))
-                .with(new CompostableItemComponent(0.65f))
-                .with(new TintedItemComponent(new ConstantItemColor(0x71c35c)))
+                .with(CompostableItemComponent.of(0.65f))
+                .with(TintedItemComponent.of(new ConstantItemColor(0x71c35c)))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_STAIRS, create(
@@ -1139,6 +1184,13 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARRIER).rarity(Rarity.EPIC).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BARRIER)))
+                .build()
+        ));
+        registerable.register(ItemKeys.HAY_BLOCK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HAY_BLOCK).build()),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.HAY_BLOCK)))
+                .with(CompostableItemComponent.of(0.85f))
                 .build()
         ));
         registerable.register(ItemKeys.WHITE_CARPET, create(
@@ -1257,30 +1309,30 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TALL_GRASS).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.TALL_GRASS)))
-                .with(new CompostableItemComponent(0.5f))
-                .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .with(CompostableItemComponent.of(0.5f))
+                .with(TintedItemComponent.of(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.LARGE_FERN, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LARGE_FERN).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LARGE_FERN)))
-                .with(new CompostableItemComponent(0.65f))
-                .with(new TintedItemComponent(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
+                .with(CompostableItemComponent.of(0.65f))
+                .with(TintedItemComponent.of(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
                 .build()
         ));
         registerable.register(ItemKeys.NETHER_WART_BLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHER_WART_BLOCK).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.NETHER_WART_BLOCK)))
-                .with(new CompostableItemComponent(0.85f))
+                .with(CompostableItemComponent.of(0.85f))
                 .build()
         ));
         registerable.register(ItemKeys.WARPED_WART_BLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_WART_BLOCK).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_WART_BLOCK)))
-                .with(new CompostableItemComponent(0.85f))
+                .with(CompostableItemComponent.of(0.85f))
                 .build()
         ));
         registerable.register(ItemKeys.SHULKER_BOX, create(
@@ -2046,14 +2098,14 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.APPLE).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.APPLE))
-                .with(new CompostableItemComponent(0.65f))
+                .with(CompostableItemComponent.of(0.65f))
                 .build()
         ));
         registerable.register(ItemKeys.BOW, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOW).build(), 1),
             ItemComponentSet.builder()
                 .with(new DamageableItemComponent(384))
-                .with(new ShooterItemComponent(ItematicItemTags.BOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, false))
+                .with(ShooterItemComponent.of(ItematicItemTags.BOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, BowItem.RANGE, false))
                 .with(new UseDurationItemComponent(72000))
                 .with(UseAnimationItemComponent.of(UseAction.BOW))
                 .with(EnchantableItemComponent.enchants(1, EnchantmentTags.BOW_ENCHANTING))
@@ -2359,7 +2411,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WHEAT_SEEDS).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WHEAT)))
-                .with(new CompostableItemComponent(0.3f))
+                .with(CompostableItemComponent.of(0.3f))
                 .build()
         ));
         registerable.register(ItemKeys.WHEAT, create(
@@ -2369,7 +2421,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BREAD).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.BREAD))
-                .with(new CompostableItemComponent(0.85f))
+                .with(CompostableItemComponent.of(0.85f))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER_HELMET, create(
@@ -2381,7 +2433,7 @@ public class ItemUtil {
                 .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
-                .with(new TintedItemComponent(DyeableItemColor.INSTANCE))
+                .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER_CHESTPLATE, create(
@@ -2393,7 +2445,7 @@ public class ItemUtil {
                 .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
-                .with(new TintedItemComponent(DyeableItemColor.INSTANCE))
+                .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER_LEGGINGS, create(
@@ -2405,7 +2457,7 @@ public class ItemUtil {
                 .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
-                .with(new TintedItemComponent(DyeableItemColor.INSTANCE))
+                .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.LEATHER_BOOTS, create(
@@ -2417,7 +2469,7 @@ public class ItemUtil {
                 .with(new RepairableItemComponent(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
-                .with(new TintedItemComponent(DyeableItemColor.INSTANCE))
+                .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.CHAINMAIL_HELMET, create(
@@ -2898,7 +2950,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRIED_KELP_BLOCK).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DRIED_KELP_BLOCK)))
-                .with(new CompostableItemComponent(0.5f))
+                .with(CompostableItemComponent.of(0.5f))
                 .with(new FuelItemComponent(FurnaceBlockEntityUtil.DRIED_KELP_BLOCK_FUEL_TIME))
                 .build()
         ));
@@ -2910,6 +2962,9 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(EnchantableItemComponent.transforms(1, items.getOrThrow(ItemKeys.ENCHANTED_BOOK)))
                 .build()
+        ));
+        registerable.register(ItemKeys.SLIME_BALL, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SLIME_BALL).build())
         ));
         registerable.register(ItemKeys.EGG, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EGG).build(), 16),
@@ -3120,7 +3175,13 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKIE).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.COOKIE))
-                .with(new CompostableItemComponent(0.85f))
+                .with(CompostableItemComponent.of(0.85f))
+                .build()
+        ));
+        registerable.register(ItemKeys.FILLED_MAP, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FILLED_MAP).build()),
+            ItemComponentSet.builder()
+                .with(TintedItemComponent.of(MapItemColor.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.SHEARS, create(
@@ -3138,28 +3199,28 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MELON_SLICE).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.MELON_SLICE))
-                .with(new CompostableItemComponent(0.5f))
+                .with(CompostableItemComponent.of(0.5f))
                 .build()
         ));
         registerable.register(ItemKeys.DRIED_KELP, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DRIED_KELP).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.DRIED_KELP))
-                .with(new CompostableItemComponent(0.3f))
+                .with(CompostableItemComponent.of(0.3f))
                 .build()
         ));
         registerable.register(ItemKeys.PUMPKIN_SEEDS, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUMPKIN_SEEDS).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PUMPKIN_STEM)))
-                .with(new CompostableItemComponent(0.3f))
+                .with(CompostableItemComponent.of(0.3f))
                 .build()
         ));
         registerable.register(ItemKeys.MELON_SEEDS, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MELON_SEEDS).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MELON_STEM)))
-                .with(new CompostableItemComponent(0.3f))
+                .with(CompostableItemComponent.of(0.3f))
                 .build()
         ));
         registerable.register(ItemKeys.BEEF, create(
@@ -3219,7 +3280,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_WART).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.NETHER_WART)))
-                .with(new CompostableItemComponent(0.65f))
+                .with(CompostableItemComponent.of(0.65f))
                 .build()
         ));
         registerable.register(ItemKeys.POTION, create(
@@ -3230,7 +3291,7 @@ public class ItemUtil {
                 .with(new PotionHolderItemComponent())
                 .with(UseAnimationItemComponent.of(UseAction.DRINK))
                 .with(ConsumableItemComponent.of(items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
-                .with(new TintedItemComponent(new PotionItemColor()))
+                .with(TintedItemComponent.of(new PotionItemColor()))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.POTION)))
                 .build()
         ));
@@ -3832,7 +3893,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.CARROT))
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CARROTS)))
-                .with(new CompostableItemComponent(0.65f))
+                .with(CompostableItemComponent.of(0.65f))
                 .build()
         ));
         registerable.register(ItemKeys.POTATO, create(
@@ -3840,14 +3901,14 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.POTATO))
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.POTATOES)))
-                .with(new CompostableItemComponent(0.65f))
+                .with(CompostableItemComponent.of(0.65f))
                 .build()
         ));
         registerable.register(ItemKeys.BAKED_POTATO, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAKED_POTATO).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.BAKED_POTATO))
-                .with(new CompostableItemComponent(0.85f))
+                .with(CompostableItemComponent.of(0.85f))
                 .build()
         ));
         registerable.register(ItemKeys.POISONOUS_POTATO, create(
@@ -3855,6 +3916,9 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.POISONOUS_POTATO))
                 .build()
+        ));
+        registerable.register(ItemKeys.MAP, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MAP).build())
         ));
         registerable.register(ItemKeys.GOLDEN_CARROT, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_CARROT).build()),
@@ -3908,7 +3972,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUMPKIN_PIE).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.PUMPKIN_PIE))
-                .with(new CompostableItemComponent(1.0f))
+                .with(CompostableItemComponent.of(1.0f))
                 .build()
         ));
         registerable.register(ItemKeys.FIREWORK_ROCKET, create(
@@ -3923,13 +3987,13 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIREWORK_STAR).build()),
             ItemComponentSet.builder()
                 .with(new FireworkExplosionHolderItemComponent())
-                .with(new TintedItemComponent(new FireworkItemColor()))
+                .with(TintedItemComponent.of(new FireworkItemColor()))
                 .build()
         ));
         registerable.register(ItemKeys.ENCHANTED_BOOK, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_BOOK).rarity(Rarity.UNCOMMON).build(), 1),
             ItemComponentSet.builder()
-                .with(EnchantmentHolderItemComponent.INSTANCE)
+                .with(EnchantmentHolderItemComponent.of(items.getOrThrow(ItemKeys.BOOK)))
                 .with(GlintItemComponent.of(true))
                 .build()
         ));
@@ -3987,7 +4051,7 @@ public class ItemUtil {
                 .with(AnimalArmorItemComponent.of(armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), AnimalArmorItem.Type.EQUESTRIAN))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
                 .with(new DyeableItemComponent(DyeableItem.DEFAULT_COLOR))
-                .with(new TintedItemComponent(DyeableItemColor.INSTANCE))
+                .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
                 .build()
         ));
         registerable.register(ItemKeys.LEAD, create(
@@ -4178,28 +4242,28 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TORCHFLOWER_SEEDS).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.TORCHFLOWER_CROP)))
-                .with(new CompostableItemComponent(0.3f))
+                .with(CompostableItemComponent.of(0.3f))
                 .build()
         ));
         registerable.register(ItemKeys.PITCHER_POD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PITCHER_POD).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PITCHER_CROP)))
-                .with(new CompostableItemComponent(0.3f))
+                .with(CompostableItemComponent.of(0.3f))
                 .build()
         ));
         registerable.register(ItemKeys.BEETROOT, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEETROOT).build()),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.BEETROOT))
-                .with(new CompostableItemComponent(0.65f))
+                .with(CompostableItemComponent.of(0.65f))
                 .build()
         ));
         registerable.register(ItemKeys.BEETROOT_SEEDS, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEETROOT_SEEDS).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BEETROOTS)))
-                .with(new CompostableItemComponent(0.3f))
+                .with(CompostableItemComponent.of(0.3f))
                 .build()
         ));
         registerable.register(ItemKeys.BEETROOT_SOUP, create(
@@ -4218,7 +4282,7 @@ public class ItemUtil {
                 .with(new ThrowableItemComponent(0.5f, -20.0f))
                 .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.POTION)))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
-                .with(new TintedItemComponent(new PotionItemColor()))
+                .with(TintedItemComponent.of(new PotionItemColor()))
                 .build()
         ));
         registerable.register(ItemKeys.SPECTRAL_ARROW, create(
@@ -4233,7 +4297,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
-                .with(new TintedItemComponent(new PotionItemColor()))
+                .with(TintedItemComponent.of(new PotionItemColor()))
                 .build()
         ));
         registerable.register(ItemKeys.LINGERING_POTION, create(
@@ -4243,7 +4307,7 @@ public class ItemUtil {
                 .with(new ThrowableItemComponent(0.5f, -20.0f))
                 .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.POTION)))
                 .with(new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
-                .with(new TintedItemComponent(new PotionItemColor()))
+                .with(TintedItemComponent.of(new PotionItemColor()))
                 .build()
         ));
         registerable.register(ItemKeys.SHIELD, create(
@@ -4366,7 +4430,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CROSSBOW).build(), 1),
             ItemComponentSet.builder()
                 .with(new DamageableItemComponent(465))
-                .with(new ShooterItemComponent(ItematicItemTags.CROSSBOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, true))
+                .with(ShooterItemComponent.of(ItematicItemTags.CROSSBOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, CrossbowItem.RANGE, true))
                 .with(new UseDurationItemComponent(28))
                 .with(UseAnimationItemComponent.of(UseAction.CROSSBOW))
                 .with(EnchantableItemComponent.enchants(1, EnchantmentTags.CROSSBOW_ENCHANTING))
@@ -4470,7 +4534,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.SWEET_BERRIES))
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SWEET_BERRY_BUSH)))
-                .with(new CompostableItemComponent(0.3f))
+                .with(CompostableItemComponent.of(0.3f))
                 .build()
         ));
         registerable.register(ItemKeys.GLOW_BERRIES, create(
@@ -4478,7 +4542,7 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.GLOW_BERRIES))
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CAVE_VINES)))
-                .with(new CompostableItemComponent(0.3f))
+                .with(CompostableItemComponent.of(0.3f))
                 .build()
         ));
         registerable.register(ItemKeys.HONEYCOMB, create(

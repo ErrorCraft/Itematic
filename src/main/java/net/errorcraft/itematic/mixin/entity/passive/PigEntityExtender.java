@@ -47,12 +47,12 @@ public abstract class PigEntityExtender extends AnimalEntity {
         method = "initGoals",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/entity/ai/goal/TemptGoal",
+            target = "(Lnet/minecraft/entity/mob/PathAwareEntity;DLnet/minecraft/recipe/Ingredient;Z)Lnet/minecraft/entity/ai/goal/TemptGoal;",
             ordinal = 1
         )
     )
-    private TemptGoal newTemptGoalSetFoodTag(TemptGoal original) {
-        original.setFoodTag(ItematicItemTags.PIG_TEMPTING_ITEMS);
+    private TemptGoal newTemptGoalSetItems(TemptGoal original) {
+        original.itematic$setItems(ItematicItemTags.PIG_TEMPT_ITEMS);
         return original;
     }
 
@@ -63,18 +63,18 @@ public abstract class PigEntityExtender extends AnimalEntity {
             target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
         )
     )
-    private boolean testForBreedingItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItematicItemTags.PIG_BREEDING_ITEMS);
+    private boolean testForFoodItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
+        return itemStack.isIn(ItematicItemTags.PIG_FOOD);
     }
 
     @Redirect(
         method = "onStruckByLightning",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForGoldenSwordUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForGoldenSwordUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
     }
 

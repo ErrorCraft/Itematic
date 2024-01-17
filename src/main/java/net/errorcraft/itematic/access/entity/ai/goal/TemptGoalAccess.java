@@ -4,5 +4,5 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.tag.TagKey;
 
 public interface TemptGoalAccess {
-    default void setFoodTag(TagKey<Item> food) {}
+    default void itematic$setItems(TagKey<Item> items) {}
 }

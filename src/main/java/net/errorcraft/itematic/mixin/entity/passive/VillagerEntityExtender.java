@@ -1,6 +1,9 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.google.common.collect.ImmutableSet;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.errorcraft.itematic.entity.passive.VillagerEntityUtil;
+import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
@@ -25,7 +28,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.util.AbstractMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Mixin(VillagerEntity.class)
 public abstract class VillagerEntityExtender extends MerchantEntityExtender {
@@ -78,12 +84,52 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
         method = "readCustomDataFromNbt",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/village/TradeOfferList"
+            target = "(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/village/TradeOfferList;"
         )
     )
     private TradeOfferList newTradeOfferListUseCodec(NbtCompound nbt) {
         RegistryOps<NbtElement> ops = RegistryOps.of(NbtOps.INSTANCE, this.getWorld().getRegistryManager());
         return TradeOfferListUtil.CODEC.parse(ops, nbt).result().orElse(new TradeOfferList());
+    }
+
+    @Redirect(
+        method = "interactMob",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfForVillagerSpawnEggUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.VILLAGER_SPAWN_EGG);
+    }
+
+    @Redirect(
+        method = "consumeAvailableFood",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"
+        )
+    )
+    @SuppressWarnings("unchecked")
+    private <K, V> V getFoodPointsUseRegistryKey(Map<K, V> instance, Object o, @Local ItemStack stack) {
+        return (V) VillagerEntityUtil.ITEM_FOOD_POINTS.get(stack.itematic$key());
+    }
+
+    @Redirect(
+        method = "getAvailableFood",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Set;stream()Ljava/util/stream/Stream;"
+        )
+    )
+    private Stream<Map.Entry<Item, Integer>> getFoodPointsUseRegistryKey(Set<Map.Entry<Item, Integer>> instance) {
+        World world = this.getWorld();
+        return VillagerEntityUtil.ITEM_FOOD_POINTS.entrySet()
+            .stream()
+            .map(entry -> {
+                Item item = world.itematic$getItem(entry.getKey()).value();
+                return new AbstractMap.SimpleImmutableEntry<>(item, entry.getValue());
+            });
     }
 
     @Override

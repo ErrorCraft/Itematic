@@ -1,0 +1,15 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.filled_map"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:tinted": {
+      "tint": {
+        "type": "minecraft:map"
+      }
+    }
+  }
+}

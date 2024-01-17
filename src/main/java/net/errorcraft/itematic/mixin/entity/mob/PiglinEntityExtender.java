@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.AbstractPiglinEntity;
 import net.minecraft.entity.mob.PiglinEntity;
@@ -23,10 +24,10 @@ public abstract class PiglinEntityExtender extends AbstractPiglinEntity {
         method = "dropEquipment",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForPiglinHeadUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForPiglinHeadUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.PIGLIN_HEAD);
     }
 
@@ -34,11 +35,11 @@ public abstract class PiglinEntityExtender extends AbstractPiglinEntity {
         method = "makeInitialWeapon",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
             ordinal = 0
         )
     )
-    private ItemStack newItemStackForCrossbowUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForCrossbowUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.CROSSBOW);
     }
 
@@ -46,7 +47,7 @@ public abstract class PiglinEntityExtender extends AbstractPiglinEntity {
         method = "makeInitialWeapon",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         ),
         slice = @Slice(
             from = @At(
@@ -55,7 +56,7 @@ public abstract class PiglinEntityExtender extends AbstractPiglinEntity {
             )
         )
     )
-    private ItemStack newItemStackForGoldenSwordUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForGoldenSwordUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
     }
 
@@ -90,5 +91,82 @@ public abstract class PiglinEntityExtender extends AbstractPiglinEntity {
     )
     private boolean isOfForGoldIngotUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.GOLD_INGOT);
+    }
+
+    @Redirect(
+        method = "initEquipment",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/entity/EquipmentSlot;HEAD:Lnet/minecraft/entity/EquipmentSlot;"
+            )
+        )
+    )
+    private ItemStack newItemStackForGoldenHelmetUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_HELMET);
+    }
+
+    @Redirect(
+        method = "initEquipment",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/entity/EquipmentSlot;CHEST:Lnet/minecraft/entity/EquipmentSlot;"
+            )
+        )
+    )
+    private ItemStack newItemStackForGoldenChestplateUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_CHESTPLATE);
+    }
+
+    @Redirect(
+        method = "initEquipment",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/entity/EquipmentSlot;LEGS:Lnet/minecraft/entity/EquipmentSlot;"
+            )
+        )
+    )
+    private ItemStack newItemStackForGoldenLeggingsUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_LEGGINGS);
+    }
+
+    @Redirect(
+        method = "initEquipment",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/entity/EquipmentSlot;FEET:Lnet/minecraft/entity/EquipmentSlot;"
+            )
+        )
+    )
+    private ItemStack newItemStackForGoldenBootsUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_BOOTS);
+    }
+
+    @Override
+    public boolean itematic$canUseShooter(ItemStack stack, ShooterItemComponent component) {
+        return stack.itematic$isOf(ItemKeys.CROSSBOW);
     }
 }

@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.entity.projectile.ItematicProjectileUtil;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
@@ -25,7 +26,7 @@ public class AbstractSkeletonEntityExtender extends HostileEntity {
         method = "initEquipment",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
     private ItemStack newItemStackForBowUseRegistryEntry(ItemConvertible item) {
@@ -52,5 +53,10 @@ public class AbstractSkeletonEntityExtender extends HostileEntity {
     )
     private boolean isOfForBowUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.BOW);
+    }
+
+    @Override
+    public boolean itematic$canUseShooter(ItemStack stack, ShooterItemComponent component) {
+        return stack.itematic$isOf(ItemKeys.BOW);
     }
 }

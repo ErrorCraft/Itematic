@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#minecraft:pig_breeding_items",
+    "#minecraft:pig_food",
     "minecraft:carrot_on_a_stick"
   ]
 }

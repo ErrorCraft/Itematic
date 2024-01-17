@@ -64,7 +64,7 @@ public class ItemRendererExtender implements ItemRendererAccess {
     }
 
     @Override
-    public void reloadModelIds(Registry<Item> registry) {
-        this.models.reloadModelIds(registry);
+    public void itematic$reloadModelIds(Registry<Item> registry) {
+        this.models.itematic$reloadModelIds(registry);
     }
 }

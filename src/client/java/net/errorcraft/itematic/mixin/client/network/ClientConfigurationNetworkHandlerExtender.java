@@ -45,7 +45,7 @@ public abstract class ClientConfigurationNetworkHandlerExtender extends ClientCo
     )
     private void reloadModelIds(ClientConnection instance, Packet<?> packet, Operation<Void> original) {
         Registry<Item> itemRegistry = this.registryManager.get(RegistryKeys.ITEM);
-        this.client.getItemRenderer().reloadModelIds(itemRegistry);
+        this.client.getItemRenderer().itematic$reloadModelIds(itemRegistry);
         this.client.getBakedModelManager().setItemRegistry(itemRegistry);
         this.client.reloadResources()
             .thenRun(() -> original.call(instance, packet));

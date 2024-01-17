@@ -25,8 +25,8 @@ public class CatEntityExtender {
             target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
         )
     )
-    private boolean isBreedingItemTestUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItematicItemTags.CAT_BREEDING_ITEMS);
+    private boolean testForFoodItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
+        return itemStack.isIn(ItematicItemTags.CAT_FOOD);
     }
 
     @Inject(
@@ -38,7 +38,7 @@ public class CatEntityExtender {
             shift = At.Shift.AFTER
         )
     )
-    private void initGoalsStoreTemptGoalFieldSetFoodTag(CallbackInfo info) {
-        this.temptGoal.setFoodTag(ItematicItemTags.CAT_TEMPTING_ITEMS);
+    private void newTemptGoalSetItems(CallbackInfo info) {
+        this.temptGoal.itematic$setItems(ItematicItemTags.CAT_TEMPT_ITEMS);
     }
 }

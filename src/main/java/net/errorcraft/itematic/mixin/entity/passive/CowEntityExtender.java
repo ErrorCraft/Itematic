@@ -13,11 +13,11 @@ public class CowEntityExtender {
         method = "initGoals",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/entity/ai/goal/TemptGoal"
+            target = "(Lnet/minecraft/entity/mob/PathAwareEntity;DLnet/minecraft/recipe/Ingredient;Z)Lnet/minecraft/entity/ai/goal/TemptGoal;"
         )
     )
-    private TemptGoal initGoalsNewTemptGoalSetFoodTag(TemptGoal original) {
-        original.setFoodTag(ItematicItemTags.COW_TEMPTING_ITEMS);
+    private TemptGoal newTemptGoalSetItems(TemptGoal original) {
+        original.itematic$setItems(ItematicItemTags.COW_TEMPT_ITEMS);
         return original;
     }
 }

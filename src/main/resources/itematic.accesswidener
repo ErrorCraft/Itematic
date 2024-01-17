@@ -4,3 +4,4 @@ accessible    class    net/minecraft/registry/SerializableRegistries$Info
 accessible    class    net/minecraft/registry/Registries$Initializer
 accessible    class    net/minecraft/recipe/Ingredient$Entry
 accessible    class    net/minecraft/entity/passive/OcelotEntity$OcelotTemptGoal
+accessible    class    net/minecraft/client/gui/screen/GameModeSelectionScreen$GameModeSelection

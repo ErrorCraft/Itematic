@@ -34,15 +34,17 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
 import java.util.Optional;
 
-public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, boolean chargeable) implements ItemComponent {
+public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, boolean chargeable) implements ItemComponent {
     public static final Codec<ShooterItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("held_ammunition").forGetter(ShooterItemComponent::heldAmmunition),
         TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("ammunition").forGetter(ShooterItemComponent::ammunition),
-        Codec.BOOL.optionalFieldOf("chargeable", false).forGetter(ShooterItemComponent::chargeable)
+        Codec.INT.fieldOf("range").forGetter(ShooterItemComponent::range),
+        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "chargeable", false).forGetter(ShooterItemComponent::chargeable)
     ).apply(instance, ShooterItemComponent::new));
 
     private static final String STARTED_KEY = "started";
@@ -91,6 +93,10 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
             return;
         }
         this.shoot(stack, world, player, pullProgress, resultStackConsumer);
+    }
+
+    public static ShooterItemComponent of(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, boolean chargeable) {
+        return new ShooterItemComponent(heldAmmunition, ammunition, range, chargeable);
     }
 
     public boolean isHeldAmmunition(ItemStack stack) {

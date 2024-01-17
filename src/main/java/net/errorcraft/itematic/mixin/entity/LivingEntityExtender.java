@@ -63,7 +63,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public abstract ItemStack eatFood(World world, ItemStack stack);
 
     @Shadow
-    public abstract void equipStack(EquipmentSlot var1, ItemStack var2);
+    public abstract void equipStack(EquipmentSlot slow, ItemStack stack);
 
     @Redirect(
         method = "eatFood",
@@ -262,6 +262,11 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Override
     public boolean itematic$isHolding(RegistryKey<Item> key) {
         return this.isHolding(stack -> stack.itematic$isOf(key));
+    }
+
+    @Override
+    public boolean itematic$isHolding(ItemStack stack) {
+        return this.isHolding(s -> s == stack);
     }
 
     @Override

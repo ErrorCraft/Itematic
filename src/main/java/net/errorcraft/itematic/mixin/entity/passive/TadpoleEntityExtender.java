@@ -1,11 +1,13 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.FishEntity;
 import net.minecraft.entity.passive.TadpoleEntity;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,10 +23,21 @@ public abstract class TadpoleEntityExtender extends FishEntity {
         method = "getBucketItem",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack getBucketItemNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.TADPOLE_BUCKET));
+    private ItemStack newItemStackForTadpoleBucketUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.TADPOLE_BUCKET);
+    }
+
+    @Redirect(
+        method = "isSlimeBall",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
+        )
+    )
+    private boolean testForFoodItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
+        return itemStack.isIn(ItematicItemTags.FROG_FOOD);
     }
 }

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:item_coloring",
+  "category": "misc",
+  "color": "green",
+  "ingredient": {
+    "tag": "minecraft:shulker_boxes"
+  },
+  "result": "minecraft:green_shulker_box"
+}

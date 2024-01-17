@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:item_coloring",
+  "category": "misc",
+  "color": "yellow",
+  "ingredient": {
+    "tag": "minecraft:shulker_boxes"
+  },
+  "result": "minecraft:yellow_shulker_box"
+}

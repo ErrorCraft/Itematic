@@ -17,7 +17,7 @@ public class HoglinEntityExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean isOfUseItemTagCheck(ItemStack instance, Item item) {
-        return instance.isIn(ItematicItemTags.HOGLIN_BREEDING_ITEMS);
+    private boolean testForFoodItemsUseItemTagCheck(ItemStack instance, Item item) {
+        return instance.isIn(ItematicItemTags.HOGLIN_FOOD);
     }
 }

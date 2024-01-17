@@ -16,6 +16,7 @@ public class ModelOverrideKeys {
     public static final RegistryKey<ModelOverride> CHARGED = of("charged");
     public static final RegistryKey<ModelOverride> FIREWORK = of("firework");
     public static final RegistryKey<ModelOverride> BROKEN = of("broken");
+    public static final RegistryKey<ModelOverride> CAST = of("cast");
     public static final RegistryKey<ModelOverride> BLOCKING = of("blocking");
     public static final RegistryKey<ModelOverride> TIME = of("time");
     public static final RegistryKey<ModelOverride> ANGLE = of("angle");

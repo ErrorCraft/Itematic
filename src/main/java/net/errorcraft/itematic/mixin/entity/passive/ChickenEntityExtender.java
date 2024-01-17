@@ -40,19 +40,19 @@ public abstract class ChickenEntityExtender extends AnimalEntity {
             target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
         )
     )
-    private boolean testForBreedingItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItematicItemTags.CHICKEN_BREEDING_ITEMS);
+    private boolean testForFoodItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
+        return itemStack.isIn(ItematicItemTags.CHICKEN_FOOD);
     }
 
     @ModifyExpressionValue(
         method = "initGoals",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/entity/ai/goal/TemptGoal"
+            target = "(Lnet/minecraft/entity/mob/PathAwareEntity;DLnet/minecraft/recipe/Ingredient;Z)Lnet/minecraft/entity/ai/goal/TemptGoal;"
         )
     )
-    private TemptGoal newTemptGoalSetFoodTag(TemptGoal original) {
-        original.setFoodTag(ItematicItemTags.CHICKEN_TEMPTING_ITEMS);
+    private TemptGoal newTemptGoalSetItems(TemptGoal original) {
+        original.itematic$setItems(ItematicItemTags.CHICKEN_TEMPT_ITEMS);
         return original;
     }
 }

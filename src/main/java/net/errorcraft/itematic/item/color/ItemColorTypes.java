@@ -13,6 +13,7 @@ public class ItemColorTypes {
     public static final ItemColorType<ConstantItemColor> CONSTANT = register(ItemColorTypeKeys.CONSTANT, new ItemColorType<>(ConstantItemColor.CODEC));
     public static final ItemColorType<PotionItemColor> POTION = register(ItemColorTypeKeys.POTION, new ItemColorType<>(PotionItemColor.CODEC));
     public static final ItemColorType<FireworkItemColor> FIREWORK = register(ItemColorTypeKeys.FIREWORK, new ItemColorType<>(FireworkItemColor.CODEC));
+    public static final ItemColorType<MapItemColor> MAP = register(ItemColorTypeKeys.MAP, new ItemColorType<>(MapItemColor.CODEC));
 
     private ItemColorTypes() {}
 

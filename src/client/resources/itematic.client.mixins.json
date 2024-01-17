@@ -5,6 +5,9 @@
   "client": [
     "MinecraftClientExtender",
     "color.block.BlockColorsExtender",
+    "gui.screen.CustomizeFlatLevelScreenExtender$SuperflatLayersListWidgetExtender$SuperflatLayerEntryExtender",
+    "gui.screen.GameModeSelectionScreenExtender$ButtonWidgetExtender",
+    "gui.screen.GameModeSelectionScreenExtender$GameModeSelectionExtender",
     "gui.screen.ingame.BeaconScreenExtender",
     "gui.screen.ingame.BookScreenExtender$ContentsExtender",
     "gui.screen.ingame.CartographyTableScreenExtender",
@@ -13,13 +16,16 @@
     "gui.screen.ingame.SmithingScreenExtender",
     "gui.screen.recipebook.AbstractFurnaceRecipeBookScreenExtender",
     "gui.screen.recipebook.RecipeBookWidgetExtender",
+    "gui.screen.recipebook.RecipeGroupButtonWidgetExtender",
     "network.AbstractClientPlayerEntityExtender",
     "network.ClientConfigurationNetworkHandlerExtender",
     "network.ClientPlayerEntityExtender",
     "network.ClientPlayerInteractionManagerExtender",
     "network.ClientPlayNetworkHandlerExtender",
     "option.HotbarStorageEntryExtender",
+    "particle.CrackParticleExtender$SlimeballFactoryExtender",
     "particle.CrackParticleExtender$SnowballFactoryExtender",
+    "recipebook.RecipeBookGroupExtender",
     "render.WorldRendererExtender",
     "render.entity.FishingBobberEntityRendererExtender",
     "render.entity.HorseEntityRendererExtender",
@@ -36,7 +42,8 @@
     "render.item.ItemRendererExtender",
     "render.model.BakedModelManagerExtender",
     "render.model.ModelLoaderExtender",
-    "render.model.json.ModelOverrideListExtender"
+    "render.model.json.ModelOverrideListExtender",
+    "world.ClientWorldExtender"
   ],
   "injectors": {
     "defaultRequire": 1

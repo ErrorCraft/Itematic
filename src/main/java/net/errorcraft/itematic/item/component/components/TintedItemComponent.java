@@ -21,4 +21,8 @@ public record TintedItemComponent(ItemColor tint) implements ItemComponent {
     public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
+
+    public static TintedItemComponent of(ItemColor tint) {
+        return new TintedItemComponent(tint);
+    }
 }

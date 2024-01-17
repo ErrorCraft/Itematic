@@ -10,10 +10,18 @@
       "net.errorcraft.itematic.gametest.block.ComposterBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.DispenserBehaviorTestSuite",
       "net.errorcraft.itematic.gametest.block.WaterCauldronBlockTestSuite",
+      "net.errorcraft.itematic.gametest.entity.passive.ArmadilloEntitySuite",
+      "net.errorcraft.itematic.gametest.entity.passive.AxolotlEntitySuite",
+      "net.errorcraft.itematic.gametest.entity.passive.CamelEntitySuite",
+      "net.errorcraft.itematic.gametest.entity.passive.FrogEntitySuite",
+      "net.errorcraft.itematic.gametest.entity.passive.GoatEntitySuite",
       "net.errorcraft.itematic.gametest.item.component.BlockItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.EquipmentItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.FoodItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.PotionItemComponentTestSuite"
     ]
-  }
+  },
+  "mixins": [
+    "itematic-gametest.mixins.json"
+  ]
 }

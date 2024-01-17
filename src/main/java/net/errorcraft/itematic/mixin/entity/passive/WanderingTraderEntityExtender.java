@@ -39,11 +39,11 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
         method = "initGoals",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
             ordinal = 0
         )
     )
-    private ItemStack newItemStackForPotionUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForPotionUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.POTION);
     }
 
@@ -51,7 +51,7 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
         method = "initGoals",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -61,7 +61,7 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
             )
         )
     )
-    private ItemStack newItemStackForMilkBucketUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForMilkBucketUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.MILK_BUCKET);
     }
 
@@ -74,6 +74,17 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
     )
     private boolean isOfForMilkBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.MILK_BUCKET);
+    }
+
+    @Redirect(
+        method = "interactMob",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfForVillagerSpawnEggUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.VILLAGER_SPAWN_EGG);
     }
 
     @Override

@@ -4,5 +4,5 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registry;
 
 public interface ItemRendererAccess {
-    default void reloadModelIds(Registry<Item> registry) {}
+    default void itematic$reloadModelIds(Registry<Item> registry) {}
 }

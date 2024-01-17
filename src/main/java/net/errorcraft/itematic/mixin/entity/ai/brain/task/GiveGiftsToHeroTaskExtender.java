@@ -17,7 +17,19 @@ public class GiveGiftsToHeroTaskExtender {
         method = "getGifts",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            ordinal = 0
+        )
+    )
+    private ItemStack newItemStackForPoppyUseCreateStack(ItemConvertible item, VillagerEntity villager) {
+        return villager.getWorld().itematic$createStack(ItemKeys.POPPY);
+    }
+
+    @Redirect(
+        method = "getGifts",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -28,7 +40,7 @@ public class GiveGiftsToHeroTaskExtender {
             )
         )
     )
-    private ItemStack getGiftsNewItemStackForWheatSeedsUseRegistryEntry(ItemConvertible item, VillagerEntity villager) {
-        return new ItemStack(villager.getWorld().itematic$getItem(ItemKeys.WHEAT_SEEDS));
+    private ItemStack newItemStackForWheatSeedsUseCreateStack(ItemConvertible item, VillagerEntity villager) {
+        return villager.getWorld().itematic$createStack(ItemKeys.WHEAT_SEEDS);
     }
 }

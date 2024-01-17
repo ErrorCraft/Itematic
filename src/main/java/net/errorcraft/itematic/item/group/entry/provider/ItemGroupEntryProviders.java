@@ -5,6 +5,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.entries.StackItemGroupEntry;
+import net.errorcraft.itematic.village.raid.RaidUtil;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.enchantment.EnchantmentTarget;
@@ -79,6 +80,7 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(ItemKeys.CHEST),
             ItemGroupEntry.simple(ItemKeys.BARREL),
             ItemGroupEntry.tag(ItematicItemTags.BANNERS),
+            StackItemGroupEntry.fromStack(RaidUtil.createOminousBanner(items)),
             ItemGroupEntry.tag(ItematicItemTags.HEADS)
         ));
         registerable.register(ItemGroupEntryProviderKeys.REDSTONE_BLOCKS, ItemGroupEntryProvider.of(

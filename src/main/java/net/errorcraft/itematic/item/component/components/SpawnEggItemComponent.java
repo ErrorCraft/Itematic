@@ -65,7 +65,7 @@ public record SpawnEggItemComponent() implements ItemComponent {
             new EntityItemComponent(new SimpleEntityInitializer<>(entity.value()), true),
             new SpawnEggItemComponent(),
             new CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling.SOURCE_ONLY, true),
-            new TintedItemComponent(IndexItemColor.of(primaryColor, secondaryColor)),
+            TintedItemComponent.of(IndexItemColor.of(primaryColor, secondaryColor)),
             new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ENTITY))
         };
     }

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:item_coloring",
+  "category": "misc",
+  "color": "black",
+  "ingredient": {
+    "tag": "minecraft:shulker_boxes"
+  },
+  "result": "minecraft:black_shulker_box"
+}

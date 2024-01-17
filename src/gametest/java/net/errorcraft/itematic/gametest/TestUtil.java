@@ -43,6 +43,16 @@ public class TestUtil {
         return entity;
     }
 
+    public static <T extends Entity> void spawnEntity(TestContext context, T entity, BlockPos pos) {
+        spawnEntity(context, entity, Vec3d.ofBottomCenter(pos));
+    }
+
+    public static <T extends Entity> void spawnEntity(TestContext context, T entity, Vec3d pos) {
+        Vec3d absolutePos = context.getAbsolute(pos);
+        entity.refreshPositionAfterTeleport(absolutePos);
+        context.getWorld().spawnEntity(entity);
+    }
+
     public static void setEntityPos(TestContext context, Entity entity, BlockPos pos) {
         BlockPos absolutePos = context.getAbsolutePos(pos);
         entity.setPosition(Vec3d.ofBottomCenter(absolutePos));

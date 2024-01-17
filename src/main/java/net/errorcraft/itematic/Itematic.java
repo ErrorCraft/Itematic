@@ -10,6 +10,7 @@ import net.errorcraft.itematic.item.smithing.template.SmithingTemplateTypes;
 import net.errorcraft.itematic.loot.context.ItematicLootContextParameters;
 import net.errorcraft.itematic.loot.context.ItematicLootContextTypes;
 import net.errorcraft.itematic.loot.predicate.ItematicPredicateTypes;
+import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.fabricmc.api.ModInitializer;
@@ -31,5 +32,6 @@ public class Itematic implements ModInitializer {
         ItematicPredicateTypes.init();
         ItematicLootContextParameters.init();
         SmithingTemplateTypes.init();
+        ItematicRecipeSerializers.init();
     }
 }

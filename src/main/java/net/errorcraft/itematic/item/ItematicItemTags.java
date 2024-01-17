@@ -27,24 +27,34 @@ public class ItematicItemTags {
     public static final TagKey<Item> BOW_AMMUNITION = of("bow_ammunition");
     public static final TagKey<Item> CROSSBOW_AMMUNITION = of("crossbow_ammunition");
 
-    public static final TagKey<Item> HORSE_BREEDING_ITEMS = of("horse_breeding_items");
-    public static final TagKey<Item> HORSE_TEMPTING_ITEMS = of("horse_tempting_items");
-    public static final TagKey<Item> CAT_BREEDING_ITEMS = of("cat_breeding_items");
-    public static final TagKey<Item> CAT_TEMPTING_ITEMS = of("cat_tempting_items");
-    public static final TagKey<Item> OCELOT_BREEDING_ITEMS = of("ocelot_breeding_items");
-    public static final TagKey<Item> OCELOT_TEMPTING_ITEMS = of("ocelot_tempting_items");
-    public static final TagKey<Item> PIG_BREEDING_ITEMS = of("pig_breeding_items");
-    public static final TagKey<Item> PIG_TEMPTING_ITEMS = of("pig_tempting_items");
-    public static final TagKey<Item> RABBIT_BREEDING_ITEMS = of("rabbit_breeding_items");
-    public static final TagKey<Item> CHICKEN_BREEDING_ITEMS = of("chicken_breeding_items");
-    public static final TagKey<Item> CHICKEN_TEMPTING_ITEMS = of("chicken_tempting_items");
-    public static final TagKey<Item> PARROT_TAMING_ITEMS = of("parrot_taming_items");
-    public static final TagKey<Item> COW_TEMPTING_ITEMS = of("cow_tempting_items");
-    public static final TagKey<Item> SHEEP_TEMPTING_ITEMS = of("sheep_tempting_items");
-    public static final TagKey<Item> LLAMA_BREEDING_ITEMS = of("llama_breeding_items");
-    public static final TagKey<Item> STRIDER_BREEDING_ITEMS = of("strider_breeding_items");
-    public static final TagKey<Item> STRIDER_TEMPTING_ITEMS = of("strider_tempting_items");
-    public static final TagKey<Item> HOGLIN_BREEDING_ITEMS = of("hoglin_breeding_items");
+    public static final TagKey<Item> HORSE_FOOD = of("horse_food");
+    public static final TagKey<Item> HORSE_TEMPT_ITEMS = of("horse_tempt_items");
+    public static final TagKey<Item> CAT_FOOD = of("cat_food");
+    public static final TagKey<Item> CAT_TEMPT_ITEMS = of("cat_tempt_items");
+    public static final TagKey<Item> OCELOT_FOOD = of("ocelot_food");
+    public static final TagKey<Item> OCELOT_TEMPT_ITEMS = of("ocelot_tempt_items");
+    public static final TagKey<Item> PIG_FOOD = of("pig_food");
+    public static final TagKey<Item> PIG_TEMPT_ITEMS = of("pig_tempt_items");
+    public static final TagKey<Item> RABBIT_FOOD = of("rabbit_food");
+    public static final TagKey<Item> RABBIT_TEMPT_ITEMS = of("rabbit_tempt_items");
+    public static final TagKey<Item> CHICKEN_FOOD = of("chicken_food");
+    public static final TagKey<Item> CHICKEN_TEMPT_ITEMS = of("chicken_tempt_items");
+    public static final TagKey<Item> PARROT_TAME_ITEMS = of("parrot_tame_items");
+    public static final TagKey<Item> COW_TEMPT_ITEMS = of("cow_tempt_items");
+    public static final TagKey<Item> SHEEP_TEMPT_ITEMS = of("sheep_tempt_items");
+    public static final TagKey<Item> LLAMA_FOOD = of("llama_food");
+    public static final TagKey<Item> LLAMA_TEMPT_ITEMS = of("llama_tempt_items");
+    public static final TagKey<Item> STRIDER_FOOD = of("strider_food");
+    public static final TagKey<Item> STRIDER_TEMPT_ITEMS = of("strider_tempt_items");
+    public static final TagKey<Item> HOGLIN_FOOD = of("hoglin_food");
+    public static final TagKey<Item> GOAT_TEMPT_ITEMS = of("goat_tempt_items");
+    public static final TagKey<Item> FROG_FOOD = of("frog_food");
+    public static final TagKey<Item> FROG_TEMPT_ITEMS = of("frog_tempt_items");
+    public static final TagKey<Item> CAMEL_FOOD = of("camel_food");
+    public static final TagKey<Item> CAMEL_TEMPT_ITEMS = of("camel_tempt_items");
+    public static final TagKey<Item> ARMADILLO_FOOD = of("armadillo_food");
+    public static final TagKey<Item> ARMADILLO_TEMPT_ITEMS = of("armadillo_tempt_items");
+    public static final TagKey<Item> SNIFFER_TEMPT_ITEMS = of("sniffer_tempt_items");
     public static final TagKey<Item> VILLAGER_GATHERABLE_ITEMS = of("villager_gatherable_items");
     public static final TagKey<Item> FARMER_VILLAGER_GATHERABLE_ITEMS = of("farmer_villager_gatherable_items");
 
@@ -80,6 +90,8 @@ public class ItematicItemTags {
     public static final TagKey<Item> FOOD = of("item_group/food");
     public static final TagKey<Item> DYES = of("item_group/dyes");
     public static final TagKey<Item> BREWING_INGREDIENTS = of("item_group/brewing_ingredients");
+
+    public static final TagKey<Item> SHULKER_BOXES = of("shulker_boxes");
 
     private ItematicItemTags() {}
 

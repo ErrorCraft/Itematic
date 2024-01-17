@@ -6,8 +6,8 @@ import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.passive.RabbitEntity;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(RabbitEntity.class)
 public class RabbitEntityExtender {
@@ -15,20 +15,22 @@ public class RabbitEntityExtender {
         method = "initGoals",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/entity/ai/goal/TemptGoal"
+            target = "(Lnet/minecraft/entity/mob/PathAwareEntity;DLnet/minecraft/recipe/Ingredient;Z)Lnet/minecraft/entity/ai/goal/TemptGoal;"
         )
     )
-    private TemptGoal initGoalsNewTemptGoalSetFoodTag(TemptGoal original) {
-        original.setFoodTag(ItematicItemTags.RABBIT_BREEDING_ITEMS);
+    private TemptGoal newTemptGoalSetItems(TemptGoal original) {
+        original.itematic$setItems(ItematicItemTags.RABBIT_TEMPT_ITEMS);
         return original;
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses an item tag check instead of direct items.
-     */
-    @Overwrite
-    private static boolean isTempting(ItemStack stack) {
-        return stack.isIn(ItematicItemTags.RABBIT_BREEDING_ITEMS);
+    @Redirect(
+        method = "isBreedingItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/passive/RabbitEntity;isTempting(Lnet/minecraft/item/ItemStack;)Z"
+        )
+    )
+    private boolean testForFoodItemsUseItemTagCheck(ItemStack stack) {
+        return stack.isIn(ItematicItemTags.RABBIT_FOOD);
     }
 }

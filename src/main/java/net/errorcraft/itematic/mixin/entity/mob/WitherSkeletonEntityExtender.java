@@ -6,6 +6,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,5 +27,16 @@ public abstract class WitherSkeletonEntityExtender extends AbstractSkeletonEntit
     )
     private ItemEntity dropItemForWitherSkeletonSkullUseRegistryKey(WitherSkeletonEntity instance, ItemConvertible itemConvertible) {
         return this.itematic$dropItem(ItemKeys.WITHER_SKELETON_SKULL);
+    }
+
+    @Redirect(
+        method = "initEquipment",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private ItemStack newItemStackForStoneSwordUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.STONE_SWORD);
     }
 }

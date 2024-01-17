@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.glow_lichen"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:glow_lichen"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.5
+    }
+  }
+}

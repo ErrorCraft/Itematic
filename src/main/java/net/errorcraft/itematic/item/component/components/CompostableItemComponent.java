@@ -20,4 +20,8 @@ public record CompostableItemComponent(float levelIncreaseChance) implements Ite
     public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
+
+    public static CompostableItemComponent of(float levelIncreaseChance) {
+        return new CompostableItemComponent(levelIncreaseChance);
+    }
 }

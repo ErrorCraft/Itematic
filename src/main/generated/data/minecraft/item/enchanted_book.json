@@ -7,7 +7,9 @@
     "max_count": 1
   },
   "components": {
-    "minecraft:enchantment_holder": {},
+    "minecraft:enchantment_holder": {
+      "grinding_transforms_into": "minecraft:book"
+    },
     "minecraft:glint": {
       "glint": true
     }
