@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.inventory.RecipeInputInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.MapExtendingRecipe;
 import net.minecraft.recipe.ShapedRecipe;
@@ -31,6 +32,17 @@ public class MapExtendingRecipeExtender {
             }
         }
         return true;
+    }
+
+    @Redirect(
+        method = "findFilledMap",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private static boolean isOfForFilledMapUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.FILLED_MAP);
     }
 
     @Unique
