@@ -1,8 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#minecraft:hoe_enchanting",
-    "#minecraft:cursed",
-    "minecraft:mending"
+    "#minecraft:tool_forging",
+    "#minecraft:hoe_enchanting"
   ]
 }

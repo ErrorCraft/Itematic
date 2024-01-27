@@ -1,8 +1,6 @@
 {
   "replace": false,
   "values": [
-    "#minecraft:chestplate_enchanting",
-    "#minecraft:cursed",
-    "minecraft:mending"
+    "#minecraft:armor_forging"
   ]
 }

@@ -1,13 +1,13 @@
 {
   "replace": false,
   "values": [
+    "#minecraft:enchanting",
     "minecraft:sharpness",
     "minecraft:smite",
     "minecraft:bane_of_arthropods",
     "minecraft:knockback",
     "minecraft:fire_aspect",
     "minecraft:looting",
-    "minecraft:sweeping",
-    "minecraft:unbreaking"
+    "minecraft:sweeping_edge"
   ]
 }

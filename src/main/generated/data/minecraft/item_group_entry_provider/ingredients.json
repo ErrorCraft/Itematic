@@ -383,19 +383,19 @@
     {
       "type": "stack",
       "item": "minecraft:enchanted_book",
-      "nbt": "{StoredEnchantments:[{id:\"minecraft:sweeping\",lvl:1s}]}",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:sweeping_edge\",lvl:1s}]}",
       "visibility": "search_tab_only"
     },
     {
       "type": "stack",
       "item": "minecraft:enchanted_book",
-      "nbt": "{StoredEnchantments:[{id:\"minecraft:sweeping\",lvl:2s}]}",
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:sweeping_edge\",lvl:2s}]}",
       "visibility": "search_tab_only"
     },
     {
       "type": "stack",
       "item": "minecraft:enchanted_book",
-      "nbt": "{StoredEnchantments:[{id:\"minecraft:sweeping\",lvl:3s}]}"
+      "nbt": "{StoredEnchantments:[{id:\"minecraft:sweeping_edge\",lvl:3s}]}"
     },
     {
       "type": "stack",

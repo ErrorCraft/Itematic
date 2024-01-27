@@ -15,10 +15,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Equipment;
-import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -27,9 +27,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
 import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
@@ -52,6 +52,9 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Shadow
     public abstract void setCurrentHand(Hand hand);
+
+    @Shadow
+    public abstract ItemStack getMainHandStack();
 
     @Shadow
     public abstract ItemStack getStackInHand(Hand hand);
@@ -85,22 +88,23 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     )
     private void eatFoodDoNotDecrementItemStack(ItemStack instance, int amount) {}
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    private void applyFoodEffects(ItemStack stack, World world, LivingEntity targetEntity) {
+    @Inject(
+        method = "applyFoodEffects",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void applyFoodEffectsUseItemComponent(ItemStack stack, World world, LivingEntity targetEntity, CallbackInfo info) {
+        info.cancel();
         if (world.isClient()) {
             return;
         }
-        Optional<FoodItemComponent> component = stack.itematic$getComponent(ItemComponentTypes.FOOD);
-        if (component.isEmpty()) {
-            return;
-        }
-        for (FoodItemComponent.Effect effect : component.get().effects()) {
-            effect.tryApply(targetEntity, world.random);
-        }
+        stack.itematic$getComponent(ItemComponentTypes.FOOD)
+            .map(FoodItemComponent::effects)
+            .ifPresent(effects -> {
+                for (FoodItemComponent.Effect effect : effects) {
+                    effect.tryApply(targetEntity, world.random);
+                }
+            });
     }
 
     @Redirect(
@@ -226,25 +230,14 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         return instance.itematic$isOf(ItemKeys.DRAGON_HEAD);
     }
 
-    @Redirect(
-        method = "shouldSpawnConsumptionEffects",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;getFoodComponent()Lnet/minecraft/item/FoodComponent;"
-        )
-    )
-    private FoodComponent shouldSpawnConsumptionEffectsGetFoodComponentReturnNull(Item instance) {
-        return null;
-    }
-
     @ModifyVariable(
         method = "shouldSpawnConsumptionEffects",
-        at = @At(value = "LOAD")
+        at = @At("LOAD")
     )
     private boolean shouldSpawnConsumptionEffectsUseItemComponent(boolean value) {
         return this.activeItemStack.itematic$getComponent(ItemComponentTypes.USE_DURATION)
             .map(UseDurationItemComponent::ticks)
-            .map(ticks -> ticks <= 16)
+            .map(ticks -> value || ticks <= 16)
             .orElse(false);
     }
 
@@ -257,6 +250,15 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     )
     private boolean isOfForElytraUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.ELYTRA);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses an item tag check instead of an instanceof check.
+     */
+    @Overwrite
+    public boolean disablesShield() {
+        return this.getMainHandStack().isIn(ItemTags.AXES);
     }
 
     @Override

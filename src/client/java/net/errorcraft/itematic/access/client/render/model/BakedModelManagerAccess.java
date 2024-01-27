@@ -4,5 +4,5 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registry;
 
 public interface BakedModelManagerAccess {
-    default void setItemRegistry(Registry<Item> itemRegistry) {}
+    default void itematic$setItemRegistry(Registry<Item> itemRegistry) {}
 }

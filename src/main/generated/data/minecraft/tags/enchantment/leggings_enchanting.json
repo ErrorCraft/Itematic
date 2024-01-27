@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "#minecraft:armor",
-    "minecraft:unbreaking"
+    "#minecraft:armor_enchanting"
   ]
 }

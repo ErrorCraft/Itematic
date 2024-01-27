@@ -128,18 +128,6 @@
       "net/minecraft/class_2302": [
         "net/errorcraft/itematic/access/block/CropBlockAccess"
       ],
-      "net/minecraft/class_2535": [
-        "net/errorcraft/itematic/access/network/ClientConnectionAccess"
-      ],
-      "net/minecraft/class_2540": [
-        "net/errorcraft/itematic/access/network/PacketByteBufAccess"
-      ],
-      "net/minecraft/class_2543": [
-        "net/errorcraft/itematic/access/network/handler/DecoderHandlerAccess"
-      ],
-      "net/minecraft/class_2545": [
-        "net/errorcraft/itematic/access/network/handler/PacketEncoderAccess"
-      ],
       "net/minecraft/class_2586": [
         "net/errorcraft/itematic/access/block/entity/BlockEntityAccess"
       ],

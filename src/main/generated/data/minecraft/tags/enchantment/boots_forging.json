@@ -1,11 +1,9 @@
 {
   "replace": false,
   "values": [
-    "#minecraft:boots_enchanting",
-    "#minecraft:cursed",
+    "#minecraft:armor_forging",
+    "minecraft:thorns",
     "minecraft:frost_walker",
-    "minecraft:soul_speed",
-    "minecraft:mending",
-    "minecraft:thorns"
+    "minecraft:soul_speed"
   ]
 }

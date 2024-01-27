@@ -1,10 +1,8 @@
 {
   "replace": false,
   "values": [
-    "#minecraft:leggings_enchanting",
-    "#minecraft:cursed",
-    "minecraft:swift_sneak",
-    "minecraft:mending",
-    "minecraft:thorns"
+    "#minecraft:armor_forging",
+    "minecraft:thorns",
+    "minecraft:swift_sneak"
   ]
 }

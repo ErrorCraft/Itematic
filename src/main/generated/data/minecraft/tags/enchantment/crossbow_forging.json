@@ -2,7 +2,6 @@
   "replace": false,
   "values": [
     "#minecraft:crossbow_enchanting",
-    "#minecraft:cursed",
-    "minecraft:mending"
+    "#minecraft:forging"
   ]
 }

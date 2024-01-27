@@ -4,9 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.DyeItemComponent;
+import net.errorcraft.itematic.network.codec.PacketCodecUtil;
+import net.errorcraft.itematic.util.DyeColorUtil;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
@@ -105,6 +108,13 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
             DyeColor.CODEC.fieldOf("color").forGetter(ItemColoringRecipe::color),
             RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("result").xmap(ItemStack::new, ItemStack::getRegistryEntry).forGetter(ItemColoringRecipe::result)
         ).apply(instance, ItemColoringRecipe::new));
+        private static final PacketCodec<RegistryByteBuf, ItemColoringRecipe> PACKET_CODEC = PacketCodecUtil.tuple(
+            CraftingRecipeCategory.PACKET_CODEC, ItemColoringRecipe::category,
+            Ingredient.PACKET_CODEC, ItemColoringRecipe::ingredient,
+            DyeColorUtil.PACKET_CODEC, ItemColoringRecipe::color,
+            ItemStack.PACKET_CODEC, ItemColoringRecipe::result,
+            ItemColoringRecipe::new
+        );
 
         @Override
         public Codec<ItemColoringRecipe> codec() {
@@ -112,20 +122,8 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
         }
 
         @Override
-        public ItemColoringRecipe read(PacketByteBuf buf) {
-            CraftingRecipeCategory category = buf.readEnumConstant(CraftingRecipeCategory.class);
-            Ingredient input = Ingredient.fromPacket(buf);
-            DyeColor color = buf.readEnumConstant(DyeColor.class);
-            ItemStack result = buf.readItemStack();
-            return new ItemColoringRecipe(category, input, color, result);
-        }
-
-        @Override
-        public void write(PacketByteBuf buf, ItemColoringRecipe recipe) {
-            buf.writeEnumConstant(recipe.category);
-            recipe.ingredient.write(buf);
-            buf.writeEnumConstant(recipe.color);
-            buf.writeItemStack(recipe.result);
+        public PacketCodec<RegistryByteBuf, ItemColoringRecipe> packetCodec() {
+            return PACKET_CODEC;
         }
     }
 }

@@ -42,15 +42,15 @@ public class AngleModelOverride implements ModelOverride {
 
     private float getAngle(GlobalPos pos, Entity target, World world) {
         if (this.canPointTo(target, pos)) {
-            return this.getAngle(pos.getPos(), target, world);
+            return this.getAngle(pos.pos(), target, world);
         }
         return AIMLESS_INTERPOLATOR.update(world, world.getRandom().nextFloat());
     }
 
     private boolean canPointTo(Entity target, GlobalPos pos) {
         return pos != null
-            && pos.getDimension() == target.getWorld().getRegistryKey()
-            && pos.getPos().getSquaredDistance(target.getPos()) >= DISTANCE_EPSILON;
+            && pos.dimension() == target.getWorld().getRegistryKey()
+            && pos.pos().getSquaredDistance(target.getPos()) >= DISTANCE_EPSILON;
     }
 
     private float getAngle(BlockPos pos, Entity target, World world) {

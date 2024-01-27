@@ -1,9 +1,8 @@
 {
   "replace": false,
   "values": [
+    "#minecraft:tool_forging",
     "#minecraft:axe_enchanting",
-    "#minecraft:cursed",
-    "minecraft:mending",
     "minecraft:bane_of_arthropods",
     "minecraft:sharpness",
     "minecraft:smite"

@@ -44,7 +44,7 @@ public abstract class CrossbowItemExtender {
         method = "loadProjectiles",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
     private static ItemStack newItemStackForArrowUseRegistryEntry(ItemConvertible item, LivingEntity shooter) {
@@ -155,7 +155,7 @@ public abstract class CrossbowItemExtender {
         method = "shoot",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V"
+            target = "Lnet/minecraft/item/ItemStack;damage(ILnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/EquipmentSlot;)V"
         )
     )
     private static int damageUseItemComponentDamageAmount(int amount, @Local(ordinal = 1) ItemStack projectile) {

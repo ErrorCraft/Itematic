@@ -71,19 +71,20 @@ public class ItemExtender implements ItemAccess {
         return this.base.display().rarity();
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    @Inject(
+        method = "use",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void useUseItemComponent(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
         ItemStack stack = user.getStackInHand(hand);
         StackReference stackReference = StackReferenceUtil.of(stack);
         ActionResult result = ActionResult.PASS;
         for (ItemComponent component : this.components) {
             ActionResult newResult = component.use(world, user, hand, stack, stackReference::set);
             if (newResult == ActionResult.FAIL) {
-                return TypedActionResult.fail(stackReference.get());
+                info.setReturnValue(TypedActionResult.fail(stackReference.get()));
+                return;
             }
             result = ActionResultUtil.max(result, newResult);
         }
@@ -93,7 +94,7 @@ public class ItemExtender implements ItemAccess {
                 .entityPosition(ActionContextParameter.THIS, user);
             this.itematic$invokeEvent(ItemEvents.USE, context);
         }
-        return new TypedActionResult<>(result, stackReference.get());
+        info.setReturnValue(new TypedActionResult<>(result, stackReference.get()));
     }
 
     /**
@@ -233,12 +234,12 @@ public class ItemExtender implements ItemAccess {
         tryUpdateItemStack(user, Hand.MAIN_HAND, stack, stackReference);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
+    @Inject(
+        method = "finishUsing",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void finishUsingUseItemComponent(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> info) {
         StackReference stackReference = StackReferenceUtil.of(stack);
         for (ItemComponent component : this.components) {
             component.finishUsing(world, user, stack, stackReference::set);
@@ -252,7 +253,7 @@ public class ItemExtender implements ItemAccess {
 
         this.itematic$getComponent(ItemComponentTypes.CONSUMABLE)
             .ifPresent(c -> c.consume(user, stack, stackReference::set, user.getActiveHand()));
-        return stackReference.get();
+        info.setReturnValue(stackReference.get());
     }
 
     /**
@@ -353,22 +354,28 @@ public class ItemExtender implements ItemAccess {
         return this.itematic$getComponent(ItemComponentTypes.ENCHANTABLE).map(EnchantableItemComponent::enchantability).orElse(0);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public UseAction getUseAction(ItemStack stack) {
-        return this.itematic$getComponent(ItemComponentTypes.USE_ANIMATION).map(UseAnimationItemComponent::animation).orElse(UseAction.NONE);
+    @Inject(
+        method = "getUseAction",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void getUseActionUseItemComponent(ItemStack stack, CallbackInfoReturnable<UseAction> info) {
+        UseAction animation = this.itematic$getComponent(ItemComponentTypes.USE_ANIMATION)
+            .map(UseAnimationItemComponent::animation)
+            .orElse(UseAction.NONE);
+        info.setReturnValue(animation);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public int getMaxUseTime(ItemStack stack) {
-        return this.itematic$getComponent(ItemComponentTypes.USE_DURATION).map(UseDurationItemComponent::ticks).orElse(0);
+    @Inject(
+        method = "getMaxUseTime",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void getMaxUseTimeUseItemComponent(ItemStack stack, CallbackInfoReturnable<Integer> info) {
+        int maxUseTime = this.itematic$getComponent(ItemComponentTypes.USE_DURATION)
+            .map(UseDurationItemComponent::ticks)
+            .orElse(0);
+        info.setReturnValue(maxUseTime);
     }
 
     @Redirect(

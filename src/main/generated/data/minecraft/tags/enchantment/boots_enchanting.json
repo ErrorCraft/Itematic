@@ -1,9 +1,8 @@
 {
   "replace": false,
   "values": [
-    "#minecraft:armor",
+    "#minecraft:armor_enchanting",
     "minecraft:feather_falling",
-    "minecraft:depth_strider",
-    "minecraft:unbreaking"
+    "minecraft:depth_strider"
   ]
 }

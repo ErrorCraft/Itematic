@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "#minecraft:enchanting",
     "minecraft:protection",
     "minecraft:fire_protection",
     "minecraft:blast_protection",

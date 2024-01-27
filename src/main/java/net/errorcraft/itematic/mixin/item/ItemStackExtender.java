@@ -2,7 +2,9 @@ package net.errorcraft.itematic.mixin.item;
 
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
@@ -26,6 +28,9 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -60,7 +65,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -83,7 +87,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     private NbtCompound nbt;
 
     @Shadow
-    public abstract boolean damage(int amount, Random random, @Nullable ServerPlayerEntity player);
+    public abstract void damage(int amount, Random random, @Nullable ServerPlayerEntity serverPlayerEntity, Runnable runnable);
 
     @Shadow
     public abstract int getDamage();
@@ -298,7 +302,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         method = "copy",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
     private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, int count) {
@@ -514,14 +518,14 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Inject(
-        method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z",
+        method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/lang/Runnable;)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;setDamage(I)V",
             shift = At.Shift.AFTER
         )
     )
-    private void invokeDamageToolEvent(int amount, Random random, ServerPlayerEntity player, CallbackInfoReturnable<Boolean> info) {
+    private void invokeDamageToolEvent(int amount, Random random, ServerPlayerEntity serverPlayerEntity, Runnable breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
@@ -529,7 +533,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @WrapWithCondition(
-        method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z",
+        method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/lang/Runnable;)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/advancement/criterion/ItemDurabilityChangedCriterion;trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;I)V"
@@ -543,14 +547,13 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Inject(
-        method = "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V",
+        method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/lang/Runnable;)V",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"
+            target = "Ljava/lang/Runnable;run()V"
         )
     )
-    @SuppressWarnings("ConstantConditions")
-    private <T extends LivingEntity> void invokeBreakToolEvent(int amount, T entity, Consumer<T> breakCallback, CallbackInfo info) {
+    private void invokeBreakToolEvent(int amount, Random random, ServerPlayerEntity serverPlayerEntity, Runnable runnable, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
@@ -582,9 +585,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         }
         this.context = context;
         Entity entity = context.entity(ActionContextParameter.THIS).orElse(null);
-        if (this.damage(amount, context.world().getRandom(), entity instanceof ServerPlayerEntity player ? player : null)) {
-            this.onItemBroken(entity, context);
-        }
+        this.damage(amount, context.world().getRandom(), entity instanceof ServerPlayerEntity player ? player : null, () -> this.onItemBroken(entity, context));
         this.context = null;
     }
 
@@ -650,5 +651,45 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             player.incrementStat(Stats.BROKEN.getOrCreateStat(this.entry.value()));
         }
         this.setDamage(0);
+    }
+
+    @Mixin(targets = "net/minecraft/item/ItemStack$1")
+    public static class PacketCodecExtender {
+        @Unique
+        private static final PacketCodec<RegistryByteBuf, RegistryEntry<Item>> REGISTRY_ENTRY_PACKET_CODEC = PacketCodecs.registryEntry(RegistryKeys.ITEM);
+
+        @Redirect(
+            method = "decode(Lnet/minecraft/network/RegistryByteBuf;)Lnet/minecraft/item/ItemStack;",
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/network/codec/PacketCodec;decode(Ljava/lang/Object;)Ljava/lang/Object;"
+            )
+        )
+        private Object decodeUseRegistryEntry(PacketCodec<RegistryByteBuf, Item> instance, Object byteBuf, RegistryByteBuf registryByteBuf, @Share("itemEntry") LocalRef<RegistryEntry<Item>> itemEntry) {
+            itemEntry.set(REGISTRY_ENTRY_PACKET_CODEC.decode(registryByteBuf));
+            return null;
+        }
+
+        @Redirect(
+            method = "decode(Lnet/minecraft/network/RegistryByteBuf;)Lnet/minecraft/item/ItemStack;",
+            at = @At(
+                value = "NEW",
+                target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            )
+        )
+        private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, int count, @Share("itemEntry") LocalRef<RegistryEntry<Item>> itemEntry) {
+            return new ItemStack(itemEntry.get(), count);
+        }
+
+        @Redirect(
+            method = "encode(Lnet/minecraft/network/RegistryByteBuf;Lnet/minecraft/item/ItemStack;)V",
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/network/codec/PacketCodec;encode(Ljava/lang/Object;Ljava/lang/Object;)V"
+            )
+        )
+        private void encodeUseRegistryEntry(PacketCodec<RegistryByteBuf, Item> instance, Object byteBuf, Object item, RegistryByteBuf registryByteBuf, ItemStack stack) {
+            REGISTRY_ENTRY_PACKET_CODEC.encode(registryByteBuf, stack.getRegistryEntry());
+        }
     }
 }

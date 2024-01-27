@@ -41,7 +41,7 @@ public class BakedModelManagerExtender implements BakedModelManagerAccess {
     }
 
     @Override
-    public void setItemRegistry(Registry<Item> itemRegistry) {
+    public void itematic$setItemRegistry(Registry<Item> itemRegistry) {
         this.colorMap.setItemRegistry(itemRegistry);
     }
 }

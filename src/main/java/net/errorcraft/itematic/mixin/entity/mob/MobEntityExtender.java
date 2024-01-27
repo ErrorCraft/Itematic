@@ -28,7 +28,10 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Map;
 import java.util.Optional;
@@ -111,17 +114,6 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
     )
     private Optional<MobEntity> interactWithItemSpawnBabyUseItemComponent(SpawnEggItem instance, PlayerEntity user, MobEntity entity, EntityType<? extends MobEntity> entityType, ServerWorld world, Vec3d pos, ItemStack stack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
         return spawnEggItemComponent.get().spawnBaby(user, entity, entityType, world, pos, stack);
-    }
-
-    @ModifyArg(
-        method = "disablePlayerShield",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"
-        )
-    )
-    private Item setCooldownForShieldUseDynamicRegistry(Item item) {
-        return this.getWorld().itematic$getItem(ItemKeys.SHIELD).value();
     }
 
     @Redirect(

@@ -1,8 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#minecraft:pickaxe_enchanting",
-    "#minecraft:cursed",
-    "minecraft:mending"
+    "#minecraft:tool_forging",
+    "#minecraft:pickaxe_enchanting"
   ]
 }
