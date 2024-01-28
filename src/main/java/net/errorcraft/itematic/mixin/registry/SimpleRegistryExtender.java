@@ -13,14 +13,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(SimpleRegistry.class)
 public class SimpleRegistryExtender<T> {
     @Inject(
-        method = "set",
+        method = "add",
         at = @At(
             value = "INVOKE",
-            target = "Lit/unimi/dsi/fastutil/objects/ObjectList;set(ILjava/lang/Object;)Ljava/lang/Object;",
+            target = "Lit/unimi/dsi/fastutil/objects/ObjectList;add(Ljava/lang/Object;)Z",
             remap = false
         )
     )
-    private void setRegistryEntryRawId(int i, RegistryKey<T> registryKey, T object, Lifecycle lifecycle, CallbackInfoReturnable<RegistryEntry.Reference<T>> info, @Local RegistryEntry.Reference<T> reference) {
-        reference.itematic$setRawId(i);
+    private void setRegistryEntryRawId(RegistryKey<T> key, T value, Lifecycle lifecycle, CallbackInfoReturnable<RegistryEntry.Reference<T>> cir, @Local RegistryEntry.Reference<T> reference, @Local int rawId) {
+        reference.itematic$setRawId(rawId);
     }
 }

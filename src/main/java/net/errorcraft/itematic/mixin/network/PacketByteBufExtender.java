@@ -4,7 +4,6 @@ import com.mojang.serialization.DynamicOps;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.RegistryOps;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,11 +11,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(PacketByteBuf.class)
 public class PacketByteBufExtender {
-    @Unique
-    protected DynamicOps<NbtElement> dynamicOps() {
-        return NbtOps.INSTANCE;
-    }
-
     @ModifyArg(
         method = "decode(Lcom/mojang/serialization/DynamicOps;Lcom/mojang/serialization/Codec;Lnet/minecraft/nbt/NbtSizeTracker;)Ljava/lang/Object;",
         at = @At(
@@ -26,9 +20,6 @@ public class PacketByteBufExtender {
         )
     )
     private DynamicOps<NbtElement> parseUseCustomDynamicOps(DynamicOps<NbtElement> ops) {
-        if (ops instanceof RegistryOps<NbtElement>) {
-            return ops;
-        }
         return this.dynamicOps();
     }
 
@@ -41,9 +32,11 @@ public class PacketByteBufExtender {
         )
     )
     private DynamicOps<NbtElement> encodeStartUseCustomDynamicOps(DynamicOps<NbtElement> ops) {
-        if (ops instanceof RegistryOps<NbtElement>) {
-            return ops;
-        }
         return this.dynamicOps();
+    }
+
+    @Unique
+    protected DynamicOps<NbtElement> dynamicOps() {
+        return NbtOps.INSTANCE;
     }
 }
