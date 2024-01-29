@@ -128,6 +128,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> BRICKS = register("bricks");
     public static final RegistryKey<Item> BOOKSHELF = register("bookshelf");
     public static final RegistryKey<Item> CHISELED_BOOKSHELF = register("chiseled_bookshelf");
+    public static final RegistryKey<Item> DECORATED_POT = register("decorated_pot");
     public static final RegistryKey<Item> CHEST = register("chest");
     public static final RegistryKey<Item> CRAFTING_TABLE = register("crafting_table");
     public static final RegistryKey<Item> LADDER = register("ladder");
@@ -403,6 +404,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> LAVA_BUCKET = register("lava_bucket");
     public static final RegistryKey<Item> POWDER_SNOW_BUCKET = register("powder_snow_bucket");
     public static final RegistryKey<Item> SNOWBALL = register("snowball");
+    public static final RegistryKey<Item> LEATHER = register("leather");
     public static final RegistryKey<Item> MILK_BUCKET = register("milk_bucket");
     public static final RegistryKey<Item> PUFFERFISH_BUCKET = register("pufferfish_bucket");
     public static final RegistryKey<Item> SALMON_BUCKET = register("salmon_bucket");
@@ -410,7 +412,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> TROPICAL_FISH_BUCKET = register("tropical_fish_bucket");
     public static final RegistryKey<Item> AXOLOTL_BUCKET = register("axolotl_bucket");
     public static final RegistryKey<Item> TADPOLE_BUCKET = register("tadpole_bucket");
-    public static final RegistryKey<Item> LEATHER = register("leather");
+    public static final RegistryKey<Item> BRICK = register("brick");
     public static final RegistryKey<Item> DRIED_KELP_BLOCK = register("dried_kelp_block");
     public static final RegistryKey<Item> PAPER = register("paper");
     public static final RegistryKey<Item> BOOK = register("book");
@@ -419,8 +421,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> COMPASS = register("compass");
     public static final RegistryKey<Item> RECOVERY_COMPASS = register("recovery_compass");
     public static final RegistryKey<Item> FISHING_ROD = register("fishing_rod");
-    public static final RegistryKey<Item> GLOWSTONE_DUST = register("glowstone_dust");
     public static final RegistryKey<Item> CLOCK = register("clock");
+    public static final RegistryKey<Item> GLOWSTONE_DUST = register("glowstone_dust");
     public static final RegistryKey<Item> COD = register("cod");
     public static final RegistryKey<Item> SALMON = register("salmon");
     public static final RegistryKey<Item> TROPICAL_FISH = register("tropical_fish");
@@ -671,6 +673,26 @@ public class ItemKeys {
     public static final RegistryKey<Item> SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = register("silence_armor_trim_smithing_template");
     public static final RegistryKey<Item> RAISER_ARMOR_TRIM_SMITHING_TEMPLATE = register("raiser_armor_trim_smithing_template");
     public static final RegistryKey<Item> HOST_ARMOR_TRIM_SMITHING_TEMPLATE = register("host_armor_trim_smithing_template");
+    public static final RegistryKey<Item> ANGLER_POTTERY_SHERD = register("angler_pottery_sherd");
+    public static final RegistryKey<Item> ARCHER_POTTERY_SHERD = register("archer_pottery_sherd");
+    public static final RegistryKey<Item> ARMS_UP_POTTERY_SHERD = register("arms_up_pottery_sherd");
+    public static final RegistryKey<Item> BLADE_POTTERY_SHERD = register("blade_pottery_sherd");
+    public static final RegistryKey<Item> BREWER_POTTERY_SHERD = register("brewer_pottery_sherd");
+    public static final RegistryKey<Item> BURN_POTTERY_SHERD = register("burn_pottery_sherd");
+    public static final RegistryKey<Item> DANGER_POTTERY_SHERD = register("danger_pottery_sherd");
+    public static final RegistryKey<Item> EXPLORER_POTTERY_SHERD = register("explorer_pottery_sherd");
+    public static final RegistryKey<Item> FRIEND_POTTERY_SHERD = register("friend_pottery_sherd");
+    public static final RegistryKey<Item> HEART_POTTERY_SHERD = register("heart_pottery_sherd");
+    public static final RegistryKey<Item> HEARTBREAK_POTTERY_SHERD = register("heartbreak_pottery_sherd");
+    public static final RegistryKey<Item> HOWL_POTTERY_SHERD = register("howl_pottery_sherd");
+    public static final RegistryKey<Item> MINER_POTTERY_SHERD = register("miner_pottery_sherd");
+    public static final RegistryKey<Item> MOURNER_POTTERY_SHERD = register("mourner_pottery_sherd");
+    public static final RegistryKey<Item> PLENTY_POTTERY_SHERD = register("plenty_pottery_sherd");
+    public static final RegistryKey<Item> PRIZE_POTTERY_SHERD = register("prize_pottery_sherd");
+    public static final RegistryKey<Item> SHEAF_POTTERY_SHERD = register("sheaf_pottery_sherd");
+    public static final RegistryKey<Item> SHELTER_POTTERY_SHERD = register("shelter_pottery_sherd");
+    public static final RegistryKey<Item> SKULL_POTTERY_SHERD = register("skull_pottery_sherd");
+    public static final RegistryKey<Item> SNORT_POTTERY_SHERD = register("snort_pottery_sherd");
 
 
     private static RegistryKey<Item> register(String name) {

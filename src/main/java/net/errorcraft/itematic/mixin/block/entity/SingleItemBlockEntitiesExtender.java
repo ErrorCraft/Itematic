@@ -24,6 +24,6 @@ public abstract class SingleItemBlockEntitiesExtender extends BlockEntity {
         )
     )
     private ItemStack readNbtUseDynamicRegistry(NbtCompound nbt) {
-        return ItemStackUtil.fromNbt(nbt, this.getRegistryManager());
+        return ItemStackUtil.fromNbt(nbt, this.itematic$getRegistryManager());
     }
 }

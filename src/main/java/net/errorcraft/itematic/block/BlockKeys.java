@@ -344,6 +344,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> FLOWERING_AZALEA = of("flowering_azalea");
     public static final RegistryKey<Block> HANGING_ROOTS = of("hanging_roots");
     public static final RegistryKey<Block> ROOTED_DIRT = of("rooted_dirt");
+    public static final RegistryKey<Block> DECORATED_POT = of("decorated_pot");
 
     private BlockKeys() {}
 

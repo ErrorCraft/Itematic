@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.item;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
@@ -73,18 +74,14 @@ import java.util.stream.Stream;
 public abstract class ItemStackExtender implements ItemStackAccess {
     @Shadow
     @Final
-    public static ItemStack EMPTY;
-
-    @Shadow
-    @Final
     private static String UNBREAKABLE_KEY;
-
-    @Shadow
-    private int count;
 
     @Shadow
     @Nullable
     private NbtCompound nbt;
+
+    @Shadow
+    public abstract boolean isEmpty();
 
     @Shadow
     public abstract void damage(int amount, Random random, @Nullable ServerPlayerEntity serverPlayerEntity, Runnable runnable);
@@ -353,23 +350,15 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         return this.entry.streamTags();
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses an item key check instead of a default air item.
-     */
-    @Overwrite
-    @SuppressWarnings("ConstantConditions")
-    public boolean isEmpty() {
-        if ((Object)this == EMPTY) {
-            return true;
-        }
-        if (this.itematic$isOf(ItemKeys.AIR)) {
-            return true;
-        }
-        if (this.entry == null || !this.entry.hasKeyAndValue()) {
-            return true;
-        }
-        return this.count <= 0;
+    @ModifyReturnValue(
+        method = "isEmpty",
+        at = @At("TAIL")
+    )
+    private boolean checkNullEntryForEmptyStack(boolean original) {
+        return original
+            || this.entry == null
+            || !this.entry.hasKeyAndValue()
+            || this.itematic$isOf(ItemKeys.AIR);
     }
 
     /**
@@ -512,7 +501,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         cancellable = true
     )
     private void postMineUseRegistryEntryNullCheck(World world, BlockState state, BlockPos pos, PlayerEntity miner, CallbackInfo info) {
-        if (this.entry == null) {
+        if (this.isEmpty()) {
             info.cancel();
         }
     }

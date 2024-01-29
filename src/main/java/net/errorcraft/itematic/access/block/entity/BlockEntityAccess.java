@@ -4,8 +4,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.DynamicRegistryManager;
 
 public interface BlockEntityAccess {
-    default void readNbt(NbtCompound nbt, DynamicRegistryManager registryManager) {}
-    default DynamicRegistryManager getRegistryManager() {
+    default void itematic$readNbt(NbtCompound nbt, DynamicRegistryManager registryManager) {}
+    default DynamicRegistryManager itematic$getRegistryManager() {
         return null;
     }
 }

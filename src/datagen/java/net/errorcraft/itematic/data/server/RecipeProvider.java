@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.data.server;
 
-import net.errorcraft.itematic.data.provider.CodecDataProvider;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.recipe.ItemColoringRecipe;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
 import net.minecraft.data.DataOutput;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,7 +20,7 @@ import net.minecraft.util.Identifier;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
-public class RecipeProvider extends CodecDataProvider<Recipe<?>> {
+public class RecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
     public RecipeProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
         super(dataOutput, registriesFuture, DataOutput.OutputType.DATA_PACK, "recipes", Recipe.CODEC);
     }

@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -20,6 +21,7 @@ public abstract class BlockEntityExtender implements BlockEntityAccess {
     @Nullable
     public abstract World getWorld();
 
+    @Unique
     private DynamicRegistryManager registryManager;
 
     @Redirect(
@@ -33,14 +35,14 @@ public abstract class BlockEntityExtender implements BlockEntityAccess {
     private static void removeOriginalReadNbtMethod(BlockEntity instance, NbtCompound nbt) {}
 
     @Override
-    public void readNbt(NbtCompound nbt, DynamicRegistryManager registryManager) {
+    public void itematic$readNbt(NbtCompound nbt, DynamicRegistryManager registryManager) {
         this.registryManager = registryManager;
         this.readNbt(nbt);
         this.registryManager = null;
     }
 
     @Override
-    public DynamicRegistryManager getRegistryManager() {
+    public DynamicRegistryManager itematic$getRegistryManager() {
         World world = this.getWorld();
         if (world == null) {
             return this.registryManager;

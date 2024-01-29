@@ -27,6 +27,6 @@ public abstract class ShulkerBoxBlockEntityExtender extends LootableContainerBlo
         )
     )
     private void readInventoryNbtUseDynamicRegistry(NbtCompound nbt, DefaultedList<ItemStack> stacks) {
-        InventoryUtil.readFromNbt(nbt, this.getRegistryManager(), stacks);
+        InventoryUtil.readFromNbt(nbt, this.itematic$getRegistryManager(), stacks);
     }
 }

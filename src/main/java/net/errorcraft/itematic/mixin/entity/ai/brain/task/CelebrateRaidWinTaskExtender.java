@@ -10,6 +10,7 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 @Mixin(CelebrateRaidWinTask.class)
 public class CelebrateRaidWinTaskExtender extends MultiTickTask<VillagerEntity> {
+    @Unique
     private ServerWorld world;
 
     public CelebrateRaidWinTaskExtender(Map<MemoryModuleType<?>, MemoryModuleState> requiredMemoryState) {
@@ -51,23 +53,22 @@ public class CelebrateRaidWinTaskExtender extends MultiTickTask<VillagerEntity> 
         method = "createFirework",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
+            target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;",
             ordinal = 0
         )
     )
-    private ItemStack createFireworkNewItemStackUseRegistryEntry(ItemConvertible item, int count) {
-        return new ItemStack(this.world.itematic$getItem(ItemKeys.FIREWORK_ROCKET), count);
+    private ItemStack newItemStackForFireworkRocketUseCreateStack(ItemConvertible item, int count) {
+        return this.world.itematic$createStack(ItemKeys.FIREWORK_ROCKET, count);
     }
 
     @Redirect(
         method = "createFirework",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
-            ordinal = 1
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack createFireworkNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.world.itematic$getItem(ItemKeys.FIREWORK_STAR));
+    private ItemStack newItemStackForFireworkStarUseCreateStack(ItemConvertible item) {
+        return this.world.itematic$createStack(ItemKeys.FIREWORK_STAR);
     }
 }

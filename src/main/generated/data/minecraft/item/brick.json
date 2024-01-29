@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.brick"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:decorated_pot_pattern": {
+      "pattern": "minecraft:decorated_pot_side"
+    }
+  }
+}

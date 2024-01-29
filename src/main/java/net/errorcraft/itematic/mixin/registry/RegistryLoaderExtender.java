@@ -73,7 +73,7 @@ public class RegistryLoaderExtender {
         )
     )
     @SuppressWarnings("unchecked")
-    private static void postValidateRegistry(Map<RegistryKey<?>, Exception> exceptions, @Coerce Object loader, CallbackInfo ci, @Local Registry<?> registry) {
+    private static void postValidateRegistry(Map<RegistryKey<?>, Exception> exceptions, @Coerce Object loader, CallbackInfo info, @Local Registry<?> registry) {
         if (ItematicRegistryKeys.ACTION.equals(registry.getKey())) {
             ActionValidator validator = new ActionValidator((Registry<ActionEntry>) registry);
             validator.validate(exceptions);

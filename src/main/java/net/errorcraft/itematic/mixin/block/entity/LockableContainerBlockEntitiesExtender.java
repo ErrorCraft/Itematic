@@ -25,6 +25,6 @@ public abstract class LockableContainerBlockEntitiesExtender extends LockableCon
         )
     )
     private void readNbtUseDynamicRegistry(NbtCompound nbt, DefaultedList<ItemStack> stacks) {
-        InventoryUtil.readFromNbt(nbt, this.getRegistryManager(), stacks);
+        InventoryUtil.readFromNbt(nbt, this.itematic$getRegistryManager(), stacks);
     }
 }

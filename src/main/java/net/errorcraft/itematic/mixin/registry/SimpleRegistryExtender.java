@@ -20,7 +20,7 @@ public class SimpleRegistryExtender<T> {
             remap = false
         )
     )
-    private void setRegistryEntryRawId(RegistryKey<T> key, T value, Lifecycle lifecycle, CallbackInfoReturnable<RegistryEntry.Reference<T>> cir, @Local RegistryEntry.Reference<T> reference, @Local int rawId) {
+    private void setRegistryEntryRawId(RegistryKey<T> key, T value, Lifecycle lifecycle, CallbackInfoReturnable<RegistryEntry.Reference<T>> info, @Local RegistryEntry.Reference<T> reference, @Local int rawId) {
         reference.itematic$setRawId(rawId);
     }
 }

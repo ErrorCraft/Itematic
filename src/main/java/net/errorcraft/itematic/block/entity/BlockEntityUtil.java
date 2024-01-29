@@ -10,6 +10,6 @@ public class BlockEntityUtil {
         if (blockEntity == null) {
             return;
         }
-        blockEntity.readNbt(nbt, world.getRegistryManager());
+        blockEntity.itematic$readNbt(nbt, world.getRegistryManager());
     }
 }

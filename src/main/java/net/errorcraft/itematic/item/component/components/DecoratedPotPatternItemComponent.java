@@ -1,0 +1,30 @@
+package net.errorcraft.itematic.item.component.components;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.component.ItemComponent;
+import net.errorcraft.itematic.item.component.ItemComponentType;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryFixedCodec;
+
+public record DecoratedPotPatternItemComponent(RegistryEntry<String> pattern) implements ItemComponent {
+    public static final Codec<DecoratedPotPatternItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        RegistryFixedCodec.of(RegistryKeys.DECORATED_POT_PATTERN).fieldOf("pattern").forGetter(DecoratedPotPatternItemComponent::pattern)
+    ).apply(instance, DecoratedPotPatternItemComponent::new));
+
+    @Override
+    public ItemComponentType<?> type() {
+        return ItemComponentTypes.DECORATED_POT_PATTERN;
+    }
+
+    @Override
+    public Codec<? extends ItemComponent> codec() {
+        return CODEC;
+    }
+
+    public static DecoratedPotPatternItemComponent of(RegistryEntry<String> pattern) {
+        return new DecoratedPotPatternItemComponent(pattern);
+    }
+}

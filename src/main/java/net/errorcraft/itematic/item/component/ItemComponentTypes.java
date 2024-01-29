@@ -51,6 +51,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<WritableItemComponent> WRITABLE = register("writable", new ItemComponentType<>(WritableItemComponent.CODEC));
     public static final ItemComponentType<TextHolderItemComponent> TEXT_HOLDER = register("text_holder", new ItemComponentType<>(TextHolderItemComponent.CODEC));
     public static final ItemComponentType<PlayableItemComponent> PLAYABLE = register("playable", new ItemComponentType<>(PlayableItemComponent.CODEC));
+    public static final ItemComponentType<DecoratedPotPatternItemComponent> DECORATED_POT_PATTERN = register("decorated_pot_pattern", new ItemComponentType<>(DecoratedPotPatternItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

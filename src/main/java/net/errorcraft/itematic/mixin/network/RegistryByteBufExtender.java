@@ -22,7 +22,7 @@ public class RegistryByteBufExtender extends PacketByteBufExtender {
         method = "<init>",
         at = @At("TAIL")
     )
-    private void setDynamicOps(ByteBuf buf, DynamicRegistryManager registryManager, CallbackInfo ci) {
+    private void setDynamicOps(ByteBuf buf, DynamicRegistryManager registryManager, CallbackInfo info) {
         this.dynamicOps = RegistryOps.of(NbtOps.INSTANCE, registryManager);
     }
 

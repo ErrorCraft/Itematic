@@ -27,6 +27,7 @@
     "particle.CrackParticleExtender$SnowballFactoryExtender",
     "recipebook.RecipeBookGroupExtender",
     "render.WorldRendererExtender",
+    "render.block.entity.DecoratedPotBlockEntityRendererExtender",
     "render.entity.FishingBobberEntityRendererExtender",
     "render.entity.HorseEntityRendererExtender",
     "render.entity.PlayerEntityRendererExtender",
