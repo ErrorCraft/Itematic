@@ -14,6 +14,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryOps;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.util.Util;
@@ -28,11 +29,11 @@ public class DecoratedPotBlockEntityUtil {
 
     private DecoratedPotBlockEntityUtil() {}
 
-    public static Sherds fromNbt(DynamicRegistryManager registryManager, NbtCompound nbt) {
+    public static Sherds fromNbt(RegistryWrapper.WrapperLookup registryLookup, NbtCompound nbt) {
         if (nbt == null || !nbt.contains(DecoratedPotBlockEntity.SHERDS_NBT_KEY, NbtElement.LIST_TYPE)) {
             return null;
         }
-        RegistryOps<NbtElement> ops = RegistryOps.of(NbtOps.INSTANCE, registryManager);
+        RegistryOps<NbtElement> ops = RegistryOps.of(NbtOps.INSTANCE, registryLookup);
         return DecoratedPotBlockEntityUtil.Sherds.CODEC.parse(ops, nbt.getList(DecoratedPotBlockEntity.SHERDS_NBT_KEY, NbtElement.STRING_TYPE))
             .resultOrPartial(LOGGER::error)
             .orElse(null);

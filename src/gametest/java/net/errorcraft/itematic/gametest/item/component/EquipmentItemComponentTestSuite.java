@@ -13,11 +13,12 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
+import net.minecraft.world.GameMode;
 
 public class EquipmentItemComponentTestSuite {
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
     public void usingItemEquipsStack(TestContext context) {
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.LEATHER_HELMET);
         player.setStackInHand(Hand.MAIN_HAND, stack);
@@ -28,7 +29,7 @@ public class EquipmentItemComponentTestSuite {
 
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
     public void usingItemThatIsNotSwappableDoesNotEquipStack(TestContext context) {
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.SHIELD);
         player.setStackInHand(Hand.MAIN_HAND, stack);
@@ -39,7 +40,7 @@ public class EquipmentItemComponentTestSuite {
 
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
     public void usingItemWithAlreadyEquippedStackSwapsStacks(TestContext context) {
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         player.equipStack(EquipmentSlot.HEAD, world.itematic$createStack(ItemKeys.IRON_HELMET));
         ItemStack stack = world.itematic$createStack(ItemKeys.LEATHER_HELMET);

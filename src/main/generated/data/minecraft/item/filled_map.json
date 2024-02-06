@@ -6,10 +6,35 @@
     "max_count": 64
   },
   "components": {
+    "minecraft:map_holder": {},
     "minecraft:tinted": {
       "tint": {
         "type": "minecraft:map"
       }
     }
-  }
+  },
+  "events": [
+    {
+      "event": "minecraft:use_on_block",
+      "entry": {
+        "action": {
+          "type": "minecraft:sequence",
+          "entries": [
+            {
+              "action": {
+                "type": "minecraft:mark_banner_on_item",
+                "position": "target"
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:swing_hand"
+              }
+            }
+          ],
+          "handler": "minecraft:passing"
+        }
+      }
+    }
+  ]
 }

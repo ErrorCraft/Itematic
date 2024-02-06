@@ -66,7 +66,7 @@ public abstract class CrossbowItemExtender {
             target = "Lnet/minecraft/item/CrossbowItem;getProjectiles(Lnet/minecraft/item/ItemStack;)Ljava/util/List;"
         )
     )
-    private static List<ItemStack> getProjectilesUseDynamicRegistry(ItemStack crossbow, @Local World world) {
+    private static List<ItemStack> getProjectilesUseDynamicRegistry(ItemStack crossbow, @Local(argsOnly = true) World world) {
         return ShooterUtil.getLoadedAmmunition(crossbow, world.getRegistryManager());
     }
 
@@ -126,7 +126,8 @@ public abstract class CrossbowItemExtender {
         method = "createArrow",
         at = @At(
             value = "INVOKE_ASSIGN",
-            target = "Lnet/minecraft/item/ArrowItem;createArrow(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/projectile/PersistentProjectileEntity;"
+            target = "Lnet/minecraft/item/ArrowItem;createArrow(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/projectile/PersistentProjectileEntity;",
+            shift = At.Shift.AFTER
         ),
         cancellable = true
     )
@@ -158,7 +159,7 @@ public abstract class CrossbowItemExtender {
             target = "Lnet/minecraft/item/ItemStack;damage(ILnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/EquipmentSlot;)V"
         )
     )
-    private static int damageUseItemComponentDamageAmount(int amount, @Local(ordinal = 1) ItemStack projectile) {
+    private static int damageUseItemComponentDamageAmount(int amount, @Local(ordinal = 1, argsOnly = true) ItemStack projectile) {
         return projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE)
             .map(ProjectileItemComponent::damage)
             .orElse(0);

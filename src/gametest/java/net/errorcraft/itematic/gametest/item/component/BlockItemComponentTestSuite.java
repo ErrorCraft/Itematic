@@ -12,6 +12,7 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.GameMode;
 
 public class BlockItemComponentTestSuite {
     private static final int BEYOND_MAX_DISTANCE = ScaffoldingBlock.MAX_DISTANCE + 1;
@@ -26,7 +27,7 @@ public class BlockItemComponentTestSuite {
     public void usingScaffoldingOnGroundPlacesScaffolding(TestContext context) {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.SCAFFOLDING);
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
         TestUtil.useStackOnBlockInside(context, player, stack, GROUND_POSITION, Direction.UP);
@@ -37,7 +38,7 @@ public class BlockItemComponentTestSuite {
     public void usingScaffoldingOnTopFaceOfScaffoldingPlacesScaffoldingHorizontally(TestContext context) {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.SCAFFOLDING);
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
         TestUtil.useStackOnBlockInside(context, player, stack, SCAFFOLDING_POSITION, Direction.UP);
@@ -48,7 +49,7 @@ public class BlockItemComponentTestSuite {
     public void usingScaffoldingOnTopFaceOfBlockBelowScaffoldingPlacesScaffoldingHorizontally(TestContext context) {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.SCAFFOLDING);
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         player.setYaw(0.0f);
         world.spawnEntity(player);
@@ -60,7 +61,7 @@ public class BlockItemComponentTestSuite {
     public void usingScaffoldingOnSideFaceOfScaffoldingPlacesScaffoldingVertically(TestContext context) {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.SCAFFOLDING);
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
         TestUtil.useStackOnBlockInside(context, player, stack, SCAFFOLDING_POSITION, Direction.SOUTH);
@@ -71,7 +72,7 @@ public class BlockItemComponentTestSuite {
     public void usingScaffoldingForHorizontalPlacementFailsAfterReachingMaxDistance(TestContext context) {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.SCAFFOLDING);
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
         TestUtil.useStackOnBlockInside(context, player, stack, SCAFFOLDING_POSITION, Direction.UP);
@@ -82,7 +83,7 @@ public class BlockItemComponentTestSuite {
     public void usingScaffoldingForVerticalPlacementIgnoresMaxDistance(TestContext context) {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.SCAFFOLDING);
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
         TestUtil.useStackOnBlockInside(context, player, stack, SCAFFOLDING_POSITION, Direction.SOUTH);

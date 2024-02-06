@@ -31,7 +31,9 @@ public class ItemGroupExtender implements ItemGroupAccess {
     @Final
     private ItemGroup.Type type;
 
+    @Unique
     private RegistryKey<Item> iconKey;
+    @Unique
     private TagKey<ItemGroupEntryProvider> entryProviderTag;
 
     @WrapWithCondition(
@@ -54,20 +56,21 @@ public class ItemGroupExtender implements ItemGroupAccess {
     }
 
     @Override
-    public ItemStack icon(ItemAccess access) {
+    public ItemStack itematic$icon(ItemAccess access) {
         return new ItemStack(access.getEntry(this.iconKey));
     }
 
     @Override
-    public void setIconKey(RegistryKey<Item> iconKey) {
+    public void itematic$setIconKey(RegistryKey<Item> iconKey) {
         this.iconKey = iconKey;
     }
 
     @Override
-    public void setEntryProviderTag(TagKey<ItemGroupEntryProvider> entryProviderTag) {
+    public void itematic$setEntryProviderTag(TagKey<ItemGroupEntryProvider> entryProviderTag) {
         this.entryProviderTag = entryProviderTag;
     }
 
+    @Unique
     private static void collectEntries(RegistryEntryList.Named<ItemGroupEntryProvider> entryList, ItemGroup.DisplayContext context, ItemGroup.Entries entries) {
         for (RegistryEntry<ItemGroupEntryProvider> entry : entryList) {
             entry.value().collectEntries(context, entries);
@@ -76,6 +79,7 @@ public class ItemGroupExtender implements ItemGroupAccess {
 
     @Mixin(ItemGroup.StackVisibility.class)
     public static class StackVisibilityExtender implements StringIdentifiable {
+        @Unique
         private String name;
 
         @Inject(
@@ -93,7 +97,7 @@ public class ItemGroupExtender implements ItemGroupAccess {
     }
 
     @Mixin(targets = "net/minecraft/item/ItemGroup$EntriesImpl")
-    private static class EntriesImplExtender {
+    public static class EntriesImplExtender {
         @Shadow
         @Final
         private ItemGroup group;
@@ -105,7 +109,7 @@ public class ItemGroupExtender implements ItemGroupAccess {
             method = "add",
             at = @At(
                 value = "NEW",
-                target = "java/lang/IllegalStateException",
+                target = "(Ljava/lang/String;)Ljava/lang/IllegalStateException;",
                 remap = false
             ),
             cancellable = true

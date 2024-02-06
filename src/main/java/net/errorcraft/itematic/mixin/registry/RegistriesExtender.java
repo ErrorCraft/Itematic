@@ -16,8 +16,8 @@ public class RegistriesExtender {
         at = @At("HEAD"),
         cancellable = true
     )
-    private static <T, R extends MutableRegistry<T>> void doNotAddItemRegistry(RegistryKey<? extends Registry<T>> key, R registry, Registries.Initializer<T> initializer, Lifecycle lifecycle, CallbackInfoReturnable<R> info) {
-        if (Objects.equals(key, RegistryKeys.ITEM)) {
+    private static <T, R extends MutableRegistry<T>> void doNotAddSpecificRegistries(RegistryKey<? extends Registry<T>> key, R registry, Registries.Initializer<T> initializer, Lifecycle lifecycle, CallbackInfoReturnable<R> info) {
+        if (Objects.equals(key, RegistryKeys.ITEM) || Objects.equals(key, RegistryKeys.ARMOR_MATERIAL)) {
             info.setReturnValue(registry);
         }
     }

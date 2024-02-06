@@ -21,21 +21,10 @@ public abstract class ThrownItemEntityExtender extends ThrownEntity {
     }
 
     @Redirect(
-        method = "setItem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(this.getDefaultItemKey());
-    }
-
-    @Redirect(
-        method = "getStack",
+        method = { "initDataTracker", "readCustomDataFromNbt" },
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
     private ItemStack newItemStackUseRegistryEntry(ItemConvertible item) {

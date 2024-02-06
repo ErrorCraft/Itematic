@@ -1,8 +1,7 @@
 package net.errorcraft.itematic.access.recipe;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryWrapper;
 
 public interface IngredientAccess {
-    default void itematic$initMatchingStacks(Registry<Item> registry) {}
+    default void itematic$initMatchingStacks(RegistryWrapper.WrapperLookup lookup) {}
 }

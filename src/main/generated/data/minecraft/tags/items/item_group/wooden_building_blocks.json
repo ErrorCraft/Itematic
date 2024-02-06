@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "#minecraft:item_group/oak_building_blocks",
     "#minecraft:item_group/spruce_building_blocks",

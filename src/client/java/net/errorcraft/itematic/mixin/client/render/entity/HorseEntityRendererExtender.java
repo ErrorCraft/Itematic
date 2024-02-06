@@ -17,7 +17,7 @@ public class HorseEntityRendererExtender {
             target = "(Lnet/minecraft/client/render/entity/feature/FeatureRendererContext;Lnet/minecraft/client/render/entity/model/EntityModelLoader;)Lnet/minecraft/client/render/entity/feature/HorseArmorFeatureRenderer;"
         )
     )
-    private HorseArmorFeatureRenderer setArmorMaterialsAtlas(HorseArmorFeatureRenderer original, @Local EntityRendererFactory.Context context) {
+    private HorseArmorFeatureRenderer setArmorMaterialsAtlas(HorseArmorFeatureRenderer original, @Local(argsOnly = true) EntityRendererFactory.Context context) {
         original.itematic$setArmorMaterialsAtlas(context.getModelManager());
         return original;
     }

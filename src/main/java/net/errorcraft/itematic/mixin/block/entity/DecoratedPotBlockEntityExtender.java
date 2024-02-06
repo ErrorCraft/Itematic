@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.block.entity;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.logging.LogUtils;
 import net.errorcraft.itematic.access.block.entity.DecoratedPotBlockEntityAccess;
 import net.errorcraft.itematic.block.entity.DecoratedPotBlockEntityUtil;
@@ -13,6 +14,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.RegistryOps;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
@@ -48,11 +50,11 @@ public class DecoratedPotBlockEntityExtender extends BlockEntity implements Deco
             target = "Lnet/minecraft/block/entity/DecoratedPotBlockEntity$Sherds;toNbt(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/nbt/NbtCompound;"
         )
     )
-    private NbtCompound toNbtUseRegistryEntry(DecoratedPotBlockEntity.Sherds instance, NbtCompound nbt) {
+    private NbtCompound toNbtUseRegistryEntry(DecoratedPotBlockEntity.Sherds instance, NbtCompound nbt, @Local(argsOnly = true) RegistryWrapper.WrapperLookup registryLookup) {
         if (this.sherds == null || this.sherds.isEmpty()) {
             return nbt;
         }
-        RegistryOps<NbtElement> ops = RegistryOps.of(NbtOps.INSTANCE, this.itematic$getRegistryManager());
+        RegistryOps<NbtElement> ops = RegistryOps.of(NbtOps.INSTANCE, registryLookup);
         DecoratedPotBlockEntityUtil.Sherds.CODEC.encodeStart(ops, this.sherds)
             .resultOrPartial(LOGGER::error)
             .ifPresent(sherds -> nbt.put(SHERDS_NBT_KEY, sherds));
@@ -66,8 +68,8 @@ public class DecoratedPotBlockEntityExtender extends BlockEntity implements Deco
             target = "Lnet/minecraft/block/entity/DecoratedPotBlockEntity$Sherds;fromNbt(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/block/entity/DecoratedPotBlockEntity$Sherds;"
         )
     )
-    private DecoratedPotBlockEntity.Sherds fromNbtUseRegistryEntry(NbtCompound nbt) {
-        this.sherds = DecoratedPotBlockEntityUtil.fromNbt(this.itematic$getRegistryManager(), nbt);
+    private DecoratedPotBlockEntity.Sherds fromNbtUseRegistryEntry(NbtCompound nbt, @Local(argsOnly = true) RegistryWrapper.WrapperLookup registryLookup) {
+        this.sherds = DecoratedPotBlockEntityUtil.fromNbt(registryLookup, nbt);
         return null;
     }
 
@@ -78,8 +80,9 @@ public class DecoratedPotBlockEntityExtender extends BlockEntity implements Deco
             target = "Lnet/minecraft/block/entity/DecoratedPotBlockEntity;getStackWith(Lnet/minecraft/block/entity/DecoratedPotBlockEntity$Sherds;)Lnet/minecraft/item/ItemStack;"
         )
     )
+    @SuppressWarnings("DataFlowIssue")
     private ItemStack getStackWithUseCreateStack(DecoratedPotBlockEntity.Sherds sherds) {
-        return DecoratedPotBlockEntityUtil.createStack(this.itematic$getRegistryManager(), this.sherds);
+        return DecoratedPotBlockEntityUtil.createStack(this.world.getRegistryManager(), this.sherds);
     }
 
     @Override

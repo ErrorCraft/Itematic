@@ -1,10 +1,12 @@
 package net.errorcraft.itematic.mixin.block.entity;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,7 +25,7 @@ public abstract class SingleItemBlockEntitiesExtender extends BlockEntity {
             target = "Lnet/minecraft/item/ItemStack;fromNbt(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack readNbtUseDynamicRegistry(NbtCompound nbt) {
-        return ItemStackUtil.fromNbt(nbt, this.itematic$getRegistryManager());
+    private ItemStack fromNbtUseDynamicRegistry(NbtCompound nbt, @Local(argsOnly = true) RegistryWrapper.WrapperLookup registryLookup) {
+        return ItemStackUtil.fromNbt(nbt, registryLookup);
     }
 }

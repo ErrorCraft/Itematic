@@ -1,42 +1,44 @@
 package net.errorcraft.itematic.mixin.loot.function;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.EnchantableItemComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentLevelEntry;
-import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.function.SetEnchantmentsLootFunction;
 import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
 
 @Mixin(SetEnchantmentsLootFunction.class)
 public class SetEnchantmentsLootFunctionExtender {
-    @Inject(
+    @Redirect(
         method = "process",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
-        ),
-        cancellable = true
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
     )
-    private void checkForTransformingItem(ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> info, @Local Object2IntMap<Enchantment> levelledEnchantments) {
-        Optional<RegistryEntry<Item>> transformedEntry = stack.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
+    private boolean isOfForBookUseItemComponentCheck(ItemStack instance, Item item, @Share("transformedEntry") LocalRef<RegistryEntry<Item>> transformedEntryRef) {
+        Optional<RegistryEntry<Item>> transformedEntry = instance.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
             .flatMap(EnchantableItemComponent::transformsInto);
-        if (transformedEntry.isEmpty()) {
-            return;
-        }
-        ItemStack transformedStack = new ItemStack(transformedEntry.get());
-        levelledEnchantments.forEach((enchantment, level) -> EnchantedBookItem.addEnchantment(transformedStack, new EnchantmentLevelEntry(enchantment, level)));
-        info.setReturnValue(transformedStack);
+        transformedEntry.ifPresent(transformedEntryRef::set);
+        return transformedEntry.isPresent();
+    }
+
+    @Redirect(
+        method = "process",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private ItemStack newItemStackForEnchantedBookUseRegistryEntry(ItemConvertible item, @Share("transformedEntry") LocalRef<RegistryEntry<Item>> transformedEntryRef) {
+        return new ItemStack(transformedEntryRef.get());
     }
 }

@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -41,14 +42,14 @@ public class MapExtendingRecipeExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private static boolean isOfForFilledMapUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.FILLED_MAP);
+    private static boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
+        return instance.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
     }
 
     @Unique
     private static boolean isValid(ItemStack stack, int index) {
         if (index == MAP_SLOT) {
-            return stack.itematic$isOf(ItemKeys.FILLED_MAP);
+            return stack.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
         }
         return stack.itematic$isOf(ItemKeys.PAPER);
     }

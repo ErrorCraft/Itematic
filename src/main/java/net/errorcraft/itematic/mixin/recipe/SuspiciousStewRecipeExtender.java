@@ -11,6 +11,7 @@ import net.minecraft.registry.RegistryKeys;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(SuspiciousStewRecipe.class)
 public class SuspiciousStewRecipeExtender {
@@ -19,7 +20,13 @@ public class SuspiciousStewRecipeExtender {
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 2
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;BOWL:Lnet/minecraft/item/Item;"
+            )
         )
     )
     private boolean isOfForBowlUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -30,10 +37,10 @@ public class SuspiciousStewRecipeExtender {
         method = "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/DynamicRegistryManager;)Lnet/minecraft/item/ItemStack;",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForSuspiciousStewUseRegistryEntry(ItemConvertible item, int count, @Local DynamicRegistryManager dynamicRegistryManager) {
+    private ItemStack newItemStackForSuspiciousStewUseRegistryEntry(ItemConvertible item, int count, @Local(argsOnly = true) DynamicRegistryManager dynamicRegistryManager) {
         return new ItemStack(dynamicRegistryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.SUSPICIOUS_STEW), count);
     }
 }

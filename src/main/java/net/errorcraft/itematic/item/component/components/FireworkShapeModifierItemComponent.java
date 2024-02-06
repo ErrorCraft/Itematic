@@ -22,4 +22,8 @@ public record FireworkShapeModifierItemComponent(FireworkRocketItem.Type shape) 
     public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
+
+    public static FireworkShapeModifierItemComponent of(FireworkRocketItem.Type shape) {
+        return new FireworkShapeModifierItemComponent(shape);
+    }
 }

@@ -195,14 +195,17 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
         return instance.itematic$isOf(ItemKeys.SADDLE);
     }
 
-    @Redirect(
-        method = "method_32337",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+    @Mixin(targets = "net/minecraft/entity/passive/AbstractHorseEntity$2")
+    public static class SaddleStackReferenceExtender {
+        @Redirect(
+            method = "set",
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            )
         )
-    )
-    private static boolean staticIsOfForSaddleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SADDLE);
+        private boolean isOfForSaddleUseRegistryKeyCheck(ItemStack instance, Item item) {
+            return instance.itematic$isOf(ItemKeys.SADDLE);
+        }
     }
 }

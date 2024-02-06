@@ -1,18 +1,16 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.google.common.collect.Lists;
+import com.mojang.serialization.DynamicOps;
 import net.errorcraft.itematic.loot.context.ItematicLootContextTypes;
 import net.errorcraft.itematic.village.trade.Trade;
-import net.errorcraft.itematic.village.trade.TradeOfferListUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.RegistryOps;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
@@ -24,6 +22,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.ArrayList;
@@ -49,16 +48,16 @@ public abstract class MerchantEntityExtender extends PassiveEntity {
         this.fillRecipesFromContext();
     }
 
-    @Redirect(
+    @ModifyArg(
         method = "readCustomDataFromNbt",
         at = @At(
-            value = "NEW",
-            target = "net/minecraft/village/TradeOfferList"
+            value = "INVOKE",
+            target = "Lcom/mojang/serialization/Codec;parse(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;",
+            remap = false
         )
     )
-    private TradeOfferList newTradeOfferListUseCodec(NbtCompound nbt) {
-        RegistryOps<NbtElement> ops = RegistryOps.of(NbtOps.INSTANCE, this.getWorld().getRegistryManager());
-        return TradeOfferListUtil.CODEC.parse(ops, nbt).result().orElse(new TradeOfferList());
+    private DynamicOps<NbtElement> parseTradeOfferListUseCodec(DynamicOps<NbtElement> ops) {
+        return RegistryOps.of(ops, this.getWorld().getRegistryManager());
     }
 
     @Unique

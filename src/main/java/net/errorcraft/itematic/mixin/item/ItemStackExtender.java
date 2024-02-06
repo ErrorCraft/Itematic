@@ -74,6 +74,10 @@ import java.util.stream.Stream;
 public abstract class ItemStackExtender implements ItemStackAccess {
     @Shadow
     @Final
+    public static ItemStack EMPTY;
+
+    @Shadow
+    @Final
     private static String UNBREAKABLE_KEY;
 
     @Shadow
@@ -432,7 +436,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Redirect(
-        method = { "areItemsEqual", "canCombine" },
+        method = { "areItemsEqual", "areItemsAndNbtEqual" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
@@ -560,6 +564,23 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     @Override
     public Optional<NbtCompound> itematic$nbt() {
         return Optional.ofNullable(this.nbt);
+    }
+
+    @Override
+    public ItemStack itematic$copyWithItem(RegistryEntry<Item> item, int count) {
+        if (this.isEmpty()) {
+            return EMPTY;
+        }
+        return this.itematic$copyWithItemIgnoreEmpty(item, count);
+    }
+
+    @Override
+    public ItemStack itematic$copyWithItemIgnoreEmpty(RegistryEntry<Item> item, int count) {
+        ItemStack stack = new ItemStack(item, count);
+        if (this.nbt != null) {
+            stack.setNbt(this.nbt.copy());
+        }
+        return stack;
     }
 
     @Override

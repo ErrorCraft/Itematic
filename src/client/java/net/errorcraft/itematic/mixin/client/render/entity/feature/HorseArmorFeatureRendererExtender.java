@@ -1,24 +1,23 @@
 package net.errorcraft.itematic.mixin.client.render.entity.feature;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.access.client.render.entity.feature.HorseArmorFeatureRendererAccess;
 import net.errorcraft.itematic.client.render.ItematicTexturedRenderLayers;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.AnimalArmorItemComponent;
+import net.errorcraft.itematic.item.component.components.ArmorItemComponent;
 import net.errorcraft.itematic.item.component.components.TintedItemComponent;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.HorseArmorFeatureRenderer;
 import net.minecraft.client.render.model.BakedModelManager;
-import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.item.AnimalArmorItem;
-import net.minecraft.item.DyeableAnimalArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -38,9 +37,9 @@ public class HorseArmorFeatureRendererExtender implements HorseArmorFeatureRende
             ordinal = 0
         )
     )
-    private boolean instanceOfAnimalArmorItemUseItemComponentCheck(Object reference, Class<AnimalArmorItem> clazz, @Local ItemStack itemStack, @Share("animalArmorItemComponent") LocalRef<AnimalArmorItemComponent> animalArmorItemComponent) {
-        Optional<AnimalArmorItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.ANIMAL_ARMOR);
-        optionalComponent.ifPresent(animalArmorItemComponent::set);
+    private boolean instanceOfAnimalArmorItemUseItemComponentCheck(Object reference, Class<AnimalArmorItem> clazz, @Local ItemStack itemStack, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
+        Optional<ArmorItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.ARMOR);
+        optionalComponent.ifPresent(armorItemComponent::set);
         return optionalComponent.isPresent();
     }
 
@@ -59,8 +58,8 @@ public class HorseArmorFeatureRendererExtender implements HorseArmorFeatureRende
             target = "Lnet/minecraft/item/AnimalArmorItem;getType()Lnet/minecraft/item/AnimalArmorItem$Type;"
         )
     )
-    private AnimalArmorItem.Type getTypeUseItemComponent(AnimalArmorItem instance, @Share("animalArmorItemComponent") LocalRef<AnimalArmorItemComponent> animalArmorItemComponent) {
-        return animalArmorItemComponent.get().armorType();
+    private AnimalArmorItem.Type getTypeUseItemComponent(AnimalArmorItem instance, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
+        return armorItemComponent.get().armorType().orElse(null);
     }
 
     @Redirect(
@@ -85,26 +84,37 @@ public class HorseArmorFeatureRendererExtender implements HorseArmorFeatureRende
         return null;
     }
 
-    @Redirect(
+    @ModifyArg(
         method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/HorseEntity;FFFFFF)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/render/VertexConsumerProvider;getBuffer(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;"
         )
     )
-    private VertexConsumer getBufferUseItemComponent(VertexConsumerProvider instance, RenderLayer renderLayer, @Share("animalArmorItemComponent") LocalRef<AnimalArmorItemComponent> animalArmorItemComponent) {
-        Sprite sprite = this.armorMaterialsAtlas.getSprite(animalArmorItemComponent.get().textureId());
-        return sprite.getTextureSpecificVertexConsumer(instance.getBuffer(ItematicTexturedRenderLayers.ARMOR_MATERIAL_RENDER_LAYER));
+    private RenderLayer useArmorMaterialRenderLayer(RenderLayer layer) {
+        return ItematicTexturedRenderLayers.ARMOR_MATERIAL_RENDER_LAYER;
     }
 
-    @ModifyConstant(
+    @ModifyExpressionValue(
         method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/HorseEntity;FFFFFF)V",
-        constant = @Constant(
-            classValue = DyeableAnimalArmorItem.class,
-            ordinal = 0
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/render/VertexConsumerProvider;getBuffer(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;"
         )
     )
-    private boolean instanceOfDyeableAnimalArmorItemItemUseItemComponentCheck(Object reference, Class<DyeableAnimalArmorItem> clazz, @Local ItemStack itemStack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
+    private VertexConsumer useArmorMaterialsAtlas(VertexConsumer original, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
+        return this.armorMaterialsAtlas.getSprite(armorItemComponent.get().textureId())
+            .getTextureSpecificVertexConsumer(original);
+    }
+
+    @Redirect(
+        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/HorseEntity;FFFFFF)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
+        )
+    )
+    private boolean isInForDyeableItemUseItemComponentCheck(ItemStack instance, TagKey<Item> tag, @Local ItemStack itemStack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
         Optional<TintedItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.TINTED);
         optionalComponent.ifPresent(tintedItemComponent::set);
         return optionalComponent.isPresent();
@@ -129,10 +139,10 @@ public class HorseArmorFeatureRendererExtender implements HorseArmorFeatureRende
         method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/HorseEntity;FFFFFF)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/DyeableAnimalArmorItem;getColor(Lnet/minecraft/item/ItemStack;)I"
+            target = "Lnet/minecraft/item/DyeableItem;getColor(Lnet/minecraft/item/ItemStack;)I"
         )
     )
-    private int getColorUseItemComponent(DyeableAnimalArmorItem instance, ItemStack stack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
+    private int getColorUseItemComponent(ItemStack stack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
         return tintedItemComponent.get().tint().getColor(stack, 0);
     }
 

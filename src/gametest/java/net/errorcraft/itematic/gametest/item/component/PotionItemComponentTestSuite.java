@@ -13,11 +13,12 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
+import net.minecraft.world.GameMode;
 
 public class PotionItemComponentTestSuite {
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
     public void drinkingPotionItemAddsEffects(TestContext context) {
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         ItemStack stack = PotionUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.LEAPING);
         player.setStackInHand(Hand.MAIN_HAND, stack);

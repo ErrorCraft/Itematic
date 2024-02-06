@@ -8,9 +8,9 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.TagKey;
 
 public interface ItemGroupAccess {
-    default ItemStack icon(ItemAccess access) {
+    default ItemStack itematic$icon(ItemAccess access) {
         return ItemStack.EMPTY;
     }
-    default void setIconKey(RegistryKey<Item> iconKey) {}
-    default void setEntryProviderTag(TagKey<ItemGroupEntryProvider> entryProviderTag) {}
+    default void itematic$setIconKey(RegistryKey<Item> iconKey) {}
+    default void itematic$setEntryProviderTag(TagKey<ItemGroupEntryProvider> entryProviderTag) {}
 }

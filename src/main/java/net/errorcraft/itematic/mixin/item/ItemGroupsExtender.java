@@ -28,8 +28,8 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup buildingBlocksSetEntryTagAndIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.BRICKS);
-        original.setEntryProviderTag(ItemGroupEntryProviderTags.BUILDING_BLOCKS);
+        original.itematic$setIconKey(ItemKeys.BRICKS);
+        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.BUILDING_BLOCKS);
         return original;
     }
 
@@ -49,8 +49,8 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup coloredBlocksSetEntryTagAndIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.CYAN_WOOL);
-        original.setEntryProviderTag(ItemGroupEntryProviderTags.COLORED_BLOCKS);
+        original.itematic$setIconKey(ItemKeys.CYAN_WOOL);
+        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.COLORED_BLOCKS);
         return original;
     }
 
@@ -70,8 +70,8 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup naturalSetEntryTagAndIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.GRASS_BLOCK);
-        original.setEntryProviderTag(ItemGroupEntryProviderTags.NATURAL_BLOCKS);
+        original.itematic$setIconKey(ItemKeys.GRASS_BLOCK);
+        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.NATURAL_BLOCKS);
         return original;
     }
 
@@ -91,8 +91,8 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup functionalSetEntryTagAndIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.OAK_SIGN);
-        original.setEntryProviderTag(ItemGroupEntryProviderTags.FUNCTIONAL_BLOCKS);
+        original.itematic$setIconKey(ItemKeys.OAK_SIGN);
+        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.FUNCTIONAL_BLOCKS);
         return original;
     }
 
@@ -112,8 +112,8 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup redstoneSetEntryTagAndIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.REDSTONE);
-        original.setEntryProviderTag(ItemGroupEntryProviderTags.REDSTONE_BLOCKS);
+        original.itematic$setIconKey(ItemKeys.REDSTONE);
+        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.REDSTONE_BLOCKS);
         return original;
     }
 
@@ -133,7 +133,7 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup hotbarSetIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.BOOKSHELF);
+        original.itematic$setIconKey(ItemKeys.BOOKSHELF);
         return original;
     }
 
@@ -153,7 +153,7 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup searchSetIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.COMPASS);
+        original.itematic$setIconKey(ItemKeys.COMPASS);
         return original;
     }
 
@@ -173,8 +173,8 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup toolsSetEntryTagAndIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.DIAMOND_PICKAXE);
-        original.setEntryProviderTag(ItemGroupEntryProviderTags.TOOLS_AND_UTILITIES);
+        original.itematic$setIconKey(ItemKeys.DIAMOND_PICKAXE);
+        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.TOOLS_AND_UTILITIES);
         return original;
     }
 
@@ -194,8 +194,8 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup combatSetEntryTagAndIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.NETHERITE_SWORD);
-        original.setEntryProviderTag(ItemGroupEntryProviderTags.COMBAT);
+        original.itematic$setIconKey(ItemKeys.NETHERITE_SWORD);
+        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.COMBAT);
         return original;
     }
 
@@ -215,8 +215,8 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup foodAndDrinkSetEntryTagAndIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.GOLDEN_APPLE);
-        original.setEntryProviderTag(ItemGroupEntryProviderTags.FOOD_AND_DRINKS);
+        original.itematic$setIconKey(ItemKeys.GOLDEN_APPLE);
+        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.FOOD_AND_DRINKS);
         return original;
     }
 
@@ -236,8 +236,8 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup ingredientsSetEntryTagAndIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.IRON_INGOT);
-        original.setEntryProviderTag(ItemGroupEntryProviderTags.INGREDIENTS);
+        original.itematic$setIconKey(ItemKeys.IRON_INGOT);
+        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.INGREDIENTS);
         return original;
     }
 
@@ -257,8 +257,8 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup spawnEggsSetEntryTagAndIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.PIG_SPAWN_EGG);
-        original.setEntryProviderTag(ItemGroupEntryProviderTags.SPAWN_EGGS);
+        original.itematic$setIconKey(ItemKeys.PIG_SPAWN_EGG);
+        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.SPAWN_EGGS);
         return original;
     }
 
@@ -278,8 +278,8 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup operatorSetEntryTagAndIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.COMMAND_BLOCK);
-        original.setEntryProviderTag(ItemGroupEntryProviderTags.OP_BLOCKS);
+        original.itematic$setIconKey(ItemKeys.COMMAND_BLOCK);
+        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.OP_BLOCKS);
         return original;
     }
 
@@ -299,7 +299,7 @@ public class ItemGroupsExtender {
         )
     )
     private static ItemGroup inventorySetIcon(ItemGroup original) {
-        original.setIconKey(ItemKeys.CHEST);
+        original.itematic$setIconKey(ItemKeys.CHEST);
         return original;
     }
 }

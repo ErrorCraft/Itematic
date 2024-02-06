@@ -1,10 +1,12 @@
 package net.errorcraft.itematic.mixin.block.entity;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.inventory.InventoryUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +26,7 @@ public abstract class LockableContainerBlockEntitiesExtender extends LockableCon
             target = "Lnet/minecraft/inventory/Inventories;readNbt(Lnet/minecraft/nbt/NbtCompound;Lnet/minecraft/util/collection/DefaultedList;)V"
         )
     )
-    private void readNbtUseDynamicRegistry(NbtCompound nbt, DefaultedList<ItemStack> stacks) {
-        InventoryUtil.readFromNbt(nbt, this.itematic$getRegistryManager(), stacks);
+    private void readInventoryUseDynamicRegistry(NbtCompound nbt, DefaultedList<ItemStack> stacks, @Local(argsOnly = true) RegistryWrapper.WrapperLookup wrapperLookup) {
+        InventoryUtil.readFromNbt(nbt, stacks, wrapperLookup);
     }
 }

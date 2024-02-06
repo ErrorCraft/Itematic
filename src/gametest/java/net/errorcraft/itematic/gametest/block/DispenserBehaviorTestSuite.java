@@ -20,6 +20,7 @@ import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.GameMode;
 
 public class DispenserBehaviorTestSuite {
     private static final BlockPos DISPENSER_POSITION = new BlockPos(2, 2, 3);
@@ -60,7 +61,7 @@ public class DispenserBehaviorTestSuite {
     public void dispensingEquipmentEquipsEntity(TestContext context) {
         DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
         ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         TestUtil.setEntityPos(context, player, IN_FRONT_OF_DISPENSER_POSITION);
         world.spawnEntity(player);
         ItemStack stack = world.itematic$createStack(ItemKeys.IRON_HELMET);
@@ -124,7 +125,7 @@ public class DispenserBehaviorTestSuite {
         });
         world.spawnEntity(horse);
         context.pushButton(BUTTON_POSITION);
-        context.addInstantFinalTask(() -> Assert.itemStackIsOf(horse.getEquippedStack(EquipmentSlot.CHEST), ItemKeys.IRON_HORSE_ARMOR));
+        context.addInstantFinalTask(() -> Assert.itemStackIsOf(horse.getBodyArmor(), ItemKeys.IRON_HORSE_ARMOR));
     }
 
     @GameTest(templateName = "itematic:block.dispenser")

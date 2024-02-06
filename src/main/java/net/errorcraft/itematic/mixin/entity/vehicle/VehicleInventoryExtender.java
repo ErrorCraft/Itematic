@@ -23,7 +23,7 @@ public interface VehicleInventoryExtender {
             target = "Lnet/minecraft/inventory/Inventories;readNbt(Lnet/minecraft/nbt/NbtCompound;Lnet/minecraft/util/collection/DefaultedList;)V"
         )
     )
-    private void readInventoryFromNbtUseDynamicRegistry(NbtCompound nbt, DefaultedList<ItemStack> stacks) {
-        InventoryUtil.readFromNbt(nbt, this.getWorld().getRegistryManager(), stacks);
+    private void readInventoryUseDynamicRegistry(NbtCompound nbt, DefaultedList<ItemStack> stacks) {
+        InventoryUtil.readFromNbt(nbt, stacks, this.getWorld().getRegistryManager());
     }
 }

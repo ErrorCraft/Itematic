@@ -45,7 +45,7 @@ public record BlockItemComponent(RegistryEntry<Block> block, boolean operatorOnl
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        this.block.value().appendTooltip(stack, world, tooltip, context);
+        this.block.value().appendTooltip(stack, world, tooltip, context, world != null ? world.getRegistryManager() : null);
     }
 
     public static BlockItemComponent of(RegistryEntry<Block> block) {

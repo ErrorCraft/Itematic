@@ -1,3 +1,12 @@
 {
-  "asset_id": "minecraft:gold"
+  "asset_id": "minecraft:gold",
+  "defense": {
+    "body": 7,
+    "boots": 1,
+    "chestplate": 5,
+    "helmet": 2,
+    "leggings": 3
+  },
+  "knockback_resistance": 0.0,
+  "toughness": 0.0
 }

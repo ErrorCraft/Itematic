@@ -23,13 +23,12 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, RegistryEntry<SoundEvent> equipSound) implements ItemComponent, Equipment {
     public static final Codec<EquipmentItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        StringIdentifiable.createCodec(EquipmentSlot::values).fieldOf("slot").forGetter(EquipmentItemComponent::slot),
+        EquipmentSlot.CODEC.fieldOf("slot").forGetter(EquipmentItemComponent::slot),
         Codec.BOOL.optionalFieldOf("swappable", false).forGetter(EquipmentItemComponent::swappable),
         SoundEvent.ENTRY_CODEC.fieldOf("equip_sound").forGetter(EquipmentItemComponent::equipSound)
     ).apply(instance, EquipmentItemComponent::new));
@@ -68,15 +67,19 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
     }
 
     @Override
-    public SoundEvent getEquipSound() {
-        return this.equipSound.value();
+    public RegistryEntry<SoundEvent> getEquipSound() {
+        return this.equipSound;
+    }
+
+    public static EquipmentItemComponent of(EquipmentSlot slot, boolean swappable, RegistryEntry<SoundEvent> equipSound) {
+        return new EquipmentItemComponent(slot, swappable, equipSound);
     }
 
     public static ItemComponent[] skull(RegistryEntry<Block> block, RegistryEntryLookup<SoundEvent> soundEvents) {
         return new ItemComponent[] {
             BlockItemComponent.of(block),
-            new EquipmentItemComponent(EquipmentSlot.HEAD, false, soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)),
-            new FireworkShapeModifierItemComponent(FireworkRocketItem.Type.CREEPER)
+            of(EquipmentSlot.HEAD, false, soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)),
+            FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.CREEPER)
         };
     }
 }

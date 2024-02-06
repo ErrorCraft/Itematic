@@ -3,17 +3,18 @@ package net.errorcraft.itematic.mixin.entity.player;
 import net.errorcraft.itematic.inventory.InventoryUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.collection.DefaultedList;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerInventory.class)
@@ -39,28 +40,25 @@ public class PlayerInventoryExtender {
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/util/collection/DefaultedList;clear()V",
-            ordinal = 2,
+            ordinal = 0,
             shift = At.Shift.AFTER
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/entity/player/PlayerInventory;offHand:Lnet/minecraft/util/collection/DefaultedList;",
+                opcode = Opcodes.GETFIELD
+            )
         ),
         cancellable = true
     )
-    private void readNbtUseDynamicRegistry(NbtList nbtList, CallbackInfo info) {
+    private void readInventoryUseDynamicRegistry(NbtList nbtList, CallbackInfo info) {
         DynamicRegistryManager registryManager = this.player.getWorld().getRegistryManager();
         InventoryUtil.readFromNbt(nbtList, registryManager, this::setItem);
         info.cancel();
     }
 
-    @Redirect(
-        method = "addStack(ILnet/minecraft/item/ItemStack;)I",
-        at = @At(
-            value = "NEW",
-            target = "net/minecraft/item/ItemStack"
-        )
-    )
-    private ItemStack addStackCreateItemStackWithRegistryEntry(ItemConvertible item, int count, int slot, ItemStack stack) {
-        return new ItemStack(stack.getRegistryEntry(), count);
-    }
-
+    @Unique
     private void setItem(int slot, ItemStack itemStack) {
         if (slot >= 0 && slot < this.main.size()) {
             this.main.set(slot, itemStack);

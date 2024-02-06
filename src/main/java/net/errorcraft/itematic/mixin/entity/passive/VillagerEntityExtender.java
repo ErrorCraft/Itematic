@@ -7,20 +7,14 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
-import net.errorcraft.itematic.village.trade.TradeOfferListUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryOps;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.village.TradeOfferList;
 import net.minecraft.village.VillagerData;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -81,18 +75,6 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
     }
 
     @Redirect(
-        method = "readCustomDataFromNbt",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/village/TradeOfferList;"
-        )
-    )
-    private TradeOfferList newTradeOfferListUseCodec(NbtCompound nbt) {
-        RegistryOps<NbtElement> ops = RegistryOps.of(NbtOps.INSTANCE, this.getWorld().getRegistryManager());
-        return TradeOfferListUtil.CODEC.parse(ops, nbt).result().orElse(new TradeOfferList());
-    }
-
-    @Redirect(
         method = "interactMob",
         at = @At(
             value = "INVOKE",
@@ -123,11 +105,10 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
         )
     )
     private Stream<Map.Entry<Item, Integer>> getFoodPointsUseRegistryKey(Set<Map.Entry<Item, Integer>> instance) {
-        World world = this.getWorld();
         return VillagerEntityUtil.ITEM_FOOD_POINTS.entrySet()
             .stream()
             .map(entry -> {
-                Item item = world.itematic$getItem(entry.getKey()).value();
+                Item item = this.getWorld().itematic$getItem(entry.getKey()).value();
                 return new AbstractMap.SimpleImmutableEntry<>(item, entry.getValue());
             });
     }

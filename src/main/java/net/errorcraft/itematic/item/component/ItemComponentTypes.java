@@ -41,7 +41,6 @@ public class ItemComponentTypes {
     public static final ItemComponentType<PotionItemComponent> POTION = register("potion", new ItemComponentType<>(PotionItemComponent.CODEC));
     public static final ItemComponentType<PotionHolderItemComponent> POTION_HOLDER = register("potion_holder", new ItemComponentType<>(PotionHolderItemComponent.CODEC));
     public static final ItemComponentType<SaddleItemComponent> SADDLE = register("saddle", new ItemComponentType<>(SaddleItemComponent.CODEC));
-    public static final ItemComponentType<AnimalArmorItemComponent> ANIMAL_ARMOR = register("animal_armor", new ItemComponentType<>(AnimalArmorItemComponent.CODEC));
     public static final ItemComponentType<SteeringItemComponent> STEERING = register("steering", new ItemComponentType<>(SteeringItemComponent.CODEC));
     public static final ItemComponentType<PointableItemComponent> POINTABLE = register("pointable", new ItemComponentType<>(PointableItemComponent.CODEC));
     public static final ItemComponentType<PreventUseWhenUsedOnTargetItemComponent> PREVENT_USE_WHEN_USED_ON_TARGET = register("prevent_use_when_used_on_target", new ItemComponentType<>(PreventUseWhenUsedOnTargetItemComponent.CODEC));
@@ -52,6 +51,8 @@ public class ItemComponentTypes {
     public static final ItemComponentType<TextHolderItemComponent> TEXT_HOLDER = register("text_holder", new ItemComponentType<>(TextHolderItemComponent.CODEC));
     public static final ItemComponentType<PlayableItemComponent> PLAYABLE = register("playable", new ItemComponentType<>(PlayableItemComponent.CODEC));
     public static final ItemComponentType<DecoratedPotPatternItemComponent> DECORATED_POT_PATTERN = register("decorated_pot_pattern", new ItemComponentType<>(DecoratedPotPatternItemComponent.CODEC));
+    public static final ItemComponentType<MappableItemComponent> MAPPABLE = register("mappable", new ItemComponentType<>(MappableItemComponent.CODEC));
+    public static final ItemComponentType<MapHolderItemComponent> MAP_HOLDER = register("map_holder", new ItemComponentType<>(MapHolderItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

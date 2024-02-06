@@ -50,5 +50,7 @@ public interface ItemComponent {
 
     default void inventoryTick(ItemStack stack, World world, Entity holder, int slot, boolean selected) {}
 
+    default void onCraft(ItemStack stack, World world) {}
+
     default void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {}
 }

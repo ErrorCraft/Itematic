@@ -26,18 +26,19 @@ public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
             target = "Lnet/minecraft/entity/LivingEntity;getHandPosOffset(Lnet/minecraft/item/Item;)Lnet/minecraft/util/math/Vec3d;"
         )
     )
-    private Item tickGetHandPosOffsetModifyItem(Item item) {
+    private Item getHandPosOffsetUseRegistryEntry(Item item) {
         return this.getWorld().itematic$getItem(ItemKeys.FIREWORK_ROCKET).value();
     }
 
+
     @Redirect(
-        method = "getStack",
+        method = "initDataTracker",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack getStackNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.FIREWORK_ROCKET));
+    private ItemStack newItemStackForFireworkRocketUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.FIREWORK_ROCKET);
     }
 }

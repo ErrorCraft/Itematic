@@ -9,16 +9,17 @@ import net.errorcraft.itematic.item.component.components.BlockItemComponent;
 import net.errorcraft.itematic.item.component.components.DyeableItemComponent;
 import net.minecraft.block.Block;
 import net.minecraft.block.cauldron.CauldronBehavior;
-import net.minecraft.item.DyeableItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.*;
-
-import java.util.Optional;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(CauldronBehavior.class)
 public interface CauldronBehaviorExtender {
@@ -39,41 +40,23 @@ public interface CauldronBehaviorExtender {
     @Redirect(
         method = "method_32215",
         at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;copyNbtToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForShulkerBoxUseCreateStack(ItemConvertible item, @Local World world) {
-        return world.itematic$createStack(ItemKeys.SHULKER_BOX);
+    private static ItemStack copyNbtToNewStackForShulkerBoxUseRegistryEntry(ItemStack instance, ItemConvertible itemConvertible, int i, @Local(argsOnly = true) World world) {
+        return instance.itematic$copyWithItem(world.itematic$getItem(ItemKeys.SHULKER_BOX), 1);
     }
 
-    @ModifyConstant(
+    @Redirect(
         method = "method_32209",
-        constant = @Constant(
-            classValue = DyeableItem.class,
-            ordinal = 0
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
         )
     )
-    private static boolean instanceOfDyeableItemUseItemComponentCheck(Object reference, Class<DyeableItem> clazz, @Local ItemStack stack, @Share("dyeableItemComponent") LocalRef<DyeableItemComponent> dyeableItemComponent) {
-        Optional<DyeableItemComponent> optionalComponent = stack.itematic$getComponent(ItemComponentTypes.DYEABLE);
-        optionalComponent.ifPresent(dyeableItemComponent::set);
-        return optionalComponent.isPresent();
-    }
-
-    @ModifyVariable(
-        method = "method_32209",
-        at = @At("LOAD")
-    )
-    private static Item castToDyeableItemUseNull(Item value) {
-        return null;
-    }
-
-    @ModifyVariable(
-        method = "method_32209",
-        at = @At("LOAD")
-    )
-    private static DyeableItem getDyeableItemUseItemComponent(DyeableItem value, @Share("dyeableItemComponent") LocalRef<DyeableItemComponent> dyeableItemComponent) {
-        return dyeableItemComponent.get();
+    private static boolean isInForDyeableItemUseItemComponentCheck(ItemStack instance, TagKey<Item> tag, @Share("dyeableItemComponent") LocalRef<DyeableItemComponent> dyeableItemComponent) {
+        return instance.itematic$hasComponent(ItemComponentTypes.DYEABLE);
     }
 
     @Redirect(
@@ -83,7 +66,7 @@ public interface CauldronBehaviorExtender {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForGlassBottleUseCreateStack(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForGlassBottleUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
         return world.itematic$createStack(ItemKeys.GLASS_BOTTLE);
     }
 
@@ -94,7 +77,7 @@ public interface CauldronBehaviorExtender {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForPotionUseCreateStack(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForPotionUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
         return world.itematic$createStack(ItemKeys.POTION);
     }
 
@@ -105,7 +88,7 @@ public interface CauldronBehaviorExtender {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForWaterBucketUseCreateStack(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForWaterBucketUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
         return world.itematic$createStack(ItemKeys.WATER_BUCKET);
     }
 
@@ -116,7 +99,7 @@ public interface CauldronBehaviorExtender {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForLavaBucketUseCreateStack(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForLavaBucketUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
         return world.itematic$createStack(ItemKeys.LAVA_BUCKET);
     }
 
@@ -127,7 +110,7 @@ public interface CauldronBehaviorExtender {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
         return world.itematic$createStack(ItemKeys.POWDER_SNOW_BUCKET);
     }
 
@@ -138,7 +121,7 @@ public interface CauldronBehaviorExtender {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForBucketUseCreateStack(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForBucketUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
         return world.itematic$createStack(ItemKeys.BUCKET);
     }
 

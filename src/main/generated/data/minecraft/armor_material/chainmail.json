@@ -1,3 +1,12 @@
 {
-  "asset_id": "minecraft:chainmail"
+  "asset_id": "minecraft:chainmail",
+  "defense": {
+    "body": 4,
+    "boots": 1,
+    "chestplate": 5,
+    "helmet": 2,
+    "leggings": 4
+  },
+  "knockback_resistance": 0.0,
+  "toughness": 0.0
 }

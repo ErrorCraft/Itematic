@@ -44,7 +44,7 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
         method = "setSelectedTab",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
     private ItemStack setSelectedTabNewItemStackUseRegistryEntry(ItemConvertible item, @Share("paper") LocalRef<RegistryEntry<Item>> paper) {
@@ -60,7 +60,7 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
     )
     @SuppressWarnings("ConstantConditions")
     private ItemStack renderTabIconUseDynamicRegistry(ItemGroup instance, DrawContext context) {
-        return instance.icon(this.client.world.itematic$getItemAccess());
+        return instance.itematic$icon(this.client.world.itematic$getItemAccess());
     }
 
     @Inject(
@@ -69,7 +69,7 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
         cancellable = true,
         remap = false
     )
-    @SuppressWarnings("UnstableApiUsage")
+    @SuppressWarnings({"UnstableApiUsage", "MixinAnnotationTarget", "UnresolvedMixinReference"})
     private void fabricApiCompatibility_checkDisplayContextNull(FabricCreativeGuiComponents.Type type, CallbackInfoReturnable<Boolean> info) {
         if (ItemGroupsAccessor.displayContext() == null) {
             info.setReturnValue(false);

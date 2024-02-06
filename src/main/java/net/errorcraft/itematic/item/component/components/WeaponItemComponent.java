@@ -15,9 +15,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 
-public record WeaponItemComponent(int damage) implements ItemComponent {
+public record WeaponItemComponent(int damage, double attackDamage, double attackSpeed) implements ItemComponent {
     public static final Codec<WeaponItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("damage").forGetter(WeaponItemComponent::damage)
+        Codec.INT.fieldOf("damage").forGetter(WeaponItemComponent::damage),
+        Codec.DOUBLE.fieldOf("attack_damage").forGetter(WeaponItemComponent::attackDamage),
+        Codec.DOUBLE.fieldOf("attack_speed").forGetter(WeaponItemComponent::attackSpeed)
     ).apply(instance, WeaponItemComponent::new));
 
     @Override
@@ -41,5 +43,9 @@ public record WeaponItemComponent(int damage) implements ItemComponent {
         stack.itematic$invokeEvent(ItemEvents.USE_WEAPON, context);
         stack.itematic$damage(this.damage, context);
         return true;
+    }
+
+    public static WeaponItemComponent of(int damage, double attackDamage, double attackSpeed) {
+        return new WeaponItemComponent(damage, attackDamage, attackSpeed);
     }
 }

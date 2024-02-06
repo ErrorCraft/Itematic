@@ -33,8 +33,8 @@ public record EnchantableItemComponent(int enchantability, Optional<TagKey<Encha
         return CODEC;
     }
 
-    public static EnchantableItemComponent enchants(ArmorMaterial material, TagKey<Enchantment> enchantments) {
-        return enchants(material.getEnchantability(), enchantments);
+    public static EnchantableItemComponent enchants(RegistryEntry<ArmorMaterial> material, TagKey<Enchantment> enchantments) {
+        return enchants(material.value().getEnchantability(), enchantments);
     }
 
     public static EnchantableItemComponent enchants(ToolMaterial material, TagKey<Enchantment> enchantments) {

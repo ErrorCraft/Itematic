@@ -6,12 +6,16 @@
     "max_count": 1
   },
   "components": {
-    "minecraft:animal_armor": {
-      "type": "equestrian",
+    "minecraft:armor": {
+      "armor_type": "equestrian",
       "material": "minecraft:iron"
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:horse_armor"
+    },
+    "minecraft:equipment": {
+      "equip_sound": "minecraft:item.armor.equip_iron",
+      "slot": "body"
     }
   }
 }

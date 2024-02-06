@@ -2,9 +2,14 @@ package net.errorcraft.itematic.mixin.entity.player;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.NetworkSyncedItem;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -18,7 +23,7 @@ public class ServerPlayerEntityExtender {
             target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
         )
     )
-    private Item playerTickGetItemReturnNull(ItemStack instance) {
+    private Item getItemReturnNull(ItemStack instance) {
         return null;
     }
 
@@ -29,8 +34,22 @@ public class ServerPlayerEntityExtender {
             target = "Lnet/minecraft/item/Item;isNetworkSynced()Z"
         )
     )
-    private boolean playerTickIsNetworkSyncedUseItemStackVersion(Item instance, @Local ItemStack stack) {
+    private boolean isNetworkSyncedUseItemStackVersion(Item instance, @Local ItemStack stack) {
         return stack.itematic$isNetworkSynced();
+    }
+
+    @Redirect(
+        method = "playerTick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/NetworkSyncedItem;createSyncPacket(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;)Lnet/minecraft/network/packet/Packet;"
+        )
+    )
+    @Nullable
+    private Packet<?> createSyncPacketUseItemComponent(NetworkSyncedItem instance, ItemStack stack, World world, PlayerEntity player) {
+        return stack.itematic$getComponent(ItemComponentTypes.MAP_HOLDER)
+            .map(c -> c.createSyncPacket(stack, world, player))
+            .orElse(null);
     }
 
     @Redirect(

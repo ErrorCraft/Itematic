@@ -1,3 +1,12 @@
 {
-  "asset_id": "minecraft:diamond"
+  "asset_id": "minecraft:diamond",
+  "defense": {
+    "body": 11,
+    "boots": 3,
+    "chestplate": 8,
+    "helmet": 3,
+    "leggings": 6
+  },
+  "knockback_resistance": 0.0,
+  "toughness": 2.0
 }

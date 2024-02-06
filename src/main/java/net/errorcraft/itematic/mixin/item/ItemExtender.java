@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.mixin.item;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.errorcraft.itematic.access.item.ItemAccess;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemBase;
@@ -20,9 +22,13 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.*;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
@@ -30,9 +36,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -40,9 +44,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Mixin(Item.class)
 public class ItemExtender implements ItemAccess {
+    @Shadow
+    @Final
+    protected static UUID ATTACK_DAMAGE_MODIFIER_ID;
+
+    @Shadow
+    @Final
+    protected static UUID ATTACK_SPEED_MODIFIER_ID;
+
     @Unique
     private ItemBase base;
     @Unique
@@ -334,6 +347,30 @@ public class ItemExtender implements ItemAccess {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
+    public Multimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
+        if (this.components == null) {
+            return ImmutableMultimap.of();
+        }
+        ImmutableMultimap.Builder<RegistryEntry<EntityAttribute>, EntityAttributeModifier> attributeModifiers = ImmutableMultimap.builder();
+        if (slot == EquipmentSlot.MAINHAND) {
+            this.itematic$getComponent(ItemComponentTypes.WEAPON)
+                .ifPresent(c -> {
+                    attributeModifiers.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", c.attackDamage(), EntityAttributeModifier.Operation.ADDITION));
+                    attributeModifiers.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", c.attackSpeed(), EntityAttributeModifier.Operation.ADDITION));
+                });
+        }
+        if (slot == this.itematic$getComponent(ItemComponentTypes.EQUIPMENT).map(EquipmentItemComponent::slot).orElse(null)) {
+            this.itematic$getComponent(ItemComponentTypes.ARMOR)
+                .ifPresent(c -> c.material().value().addAttributes(slot, attributeModifiers));
+        }
+        return attributeModifiers.build();
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
     public boolean hasGlint(ItemStack stack) {
         return this.itematic$getComponent(ItemComponentTypes.GLINT)
             .map(GlintItemComponent::glint)
@@ -352,6 +389,15 @@ public class ItemExtender implements ItemAccess {
     @Overwrite
     public int getEnchantability() {
         return this.itematic$getComponent(ItemComponentTypes.ENCHANTABLE).map(EnchantableItemComponent::enchantability).orElse(0);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public boolean isNetworkSynced() {
+        return this.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
     }
 
     @Inject(

@@ -35,6 +35,8 @@
       ]
     },
     "minecraft:weapon": {
+      "attack_damage": 1.0,
+      "attack_speed": -2.8,
       "damage": 2
     }
   }

@@ -23,4 +23,8 @@ public record RepairableItemComponent(TagKey<Item> items) implements ItemCompone
     public Codec<? extends ItemComponent> codec() {
         return CODEC;
     }
+
+    public static RepairableItemComponent of(TagKey<Item> items) {
+        return new RepairableItemComponent(items);
+    }
 }

@@ -1,3 +1,12 @@
 {
-  "asset_id": "minecraft:iron"
+  "asset_id": "minecraft:iron",
+  "defense": {
+    "body": 5,
+    "boots": 2,
+    "chestplate": 6,
+    "helmet": 2,
+    "leggings": 5
+  },
+  "knockback_resistance": 0.0,
+  "toughness": 0.0
 }

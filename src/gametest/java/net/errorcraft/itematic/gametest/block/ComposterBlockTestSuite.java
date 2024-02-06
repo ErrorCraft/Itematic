@@ -9,13 +9,14 @@ import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameMode;
 
 public class ComposterBlockTestSuite {
     private static final BlockPos COMPOSTER_POSITION = new BlockPos(1, 2, 1);
 
     @GameTest(templateName = "itematic:block.composter.empty")
     public void usingCompostableItemOnComposterIncreasesLevel(TestContext context) {
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.PUMPKIN_PIE);
         player.setStackInHand(Hand.MAIN_HAND, stack);

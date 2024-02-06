@@ -35,9 +35,6 @@
   "accessWidener": "itematic.accesswidener",
   "custom": {
     "loom:injected_interfaces": {
-      "net/minecraft/class_60": [
-        "net/errorcraft/itematic/access/loot/LootManagerAccess"
-      ],
       "net/minecraft/class_314": [
         "net/errorcraft/itematic/access/client/recipebook/RecipeBookGroupAccess"
       ],
@@ -64,9 +61,6 @@
       ],
       "net/minecraft/class_1299\u0024class_1300": [
         "net/errorcraft/itematic/access/entity/EntityTypeBuilderAccess"
-      ],
-      "net/minecraft/class_1304": [
-        "net/errorcraft/itematic/access/entity/EquipmentSlotAccess"
       ],
       "net/minecraft/class_1308": [
         "net/errorcraft/itematic/access/entity/mob/MobEntityAccess"
@@ -113,9 +107,6 @@
       "net/minecraft/class_1856\u0024class_1859": [
         "net/errorcraft/itematic/access/recipe/IngredientEntryAccess"
       ],
-      "net/minecraft/class_1863": [
-        "net/errorcraft/itematic/access/recipe/RecipeManagerAccess"
-      ],
       "net/minecraft/class_1914": [
         "net/errorcraft/itematic/access/village/TradeOfferAccess"
       ],
@@ -127,12 +118,6 @@
       ],
       "net/minecraft/class_2302": [
         "net/errorcraft/itematic/access/block/CropBlockAccess"
-      ],
-      "net/minecraft/class_2586": [
-        "net/errorcraft/itematic/access/block/entity/BlockEntityAccess"
-      ],
-      "net/minecraft/class_2989": [
-        "net/errorcraft/itematic/access/server/ServerAdvancementLoaderAccess"
       ],
       "net/minecraft/class_3419": [
         "net/minecraft/util/StringIdentifiable"

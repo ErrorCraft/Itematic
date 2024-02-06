@@ -12,11 +12,12 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
+import net.minecraft.world.GameMode;
 
 public class FoodItemComponentTestSuite {
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
     public void eatingFoodItemAddsNutrition(TestContext context) {
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         player.getHungerManager().setFoodLevel(0);
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.APPLE);

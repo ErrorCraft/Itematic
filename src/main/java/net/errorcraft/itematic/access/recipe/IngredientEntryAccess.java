@@ -1,14 +1,13 @@
 package net.errorcraft.itematic.access.recipe;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryWrapper;
 
 import java.util.Collection;
 import java.util.List;
 
 public interface IngredientEntryAccess {
-    default Collection<ItemStack> itematic$getStacks(Registry<Item> registry) {
+    default Collection<ItemStack> itematic$getStacks(RegistryWrapper.WrapperLookup lookup) {
         return List.of();
     }
 }

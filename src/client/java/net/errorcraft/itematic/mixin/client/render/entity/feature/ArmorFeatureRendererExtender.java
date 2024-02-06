@@ -1,38 +1,41 @@
 package net.errorcraft.itematic.mixin.client.render.entity.feature;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.client.render.ItematicTexturedRenderLayers;
-import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ArmorItemComponent;
 import net.errorcraft.itematic.item.component.components.EquipmentItemComponent;
 import net.errorcraft.itematic.item.component.components.TintedItemComponent;
-import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.model.BakedModelManager;
-import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.DyeableArmorItem;
+import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Mixin(ArmorFeatureRenderer.class)
 public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> {
@@ -54,7 +57,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
             ordinal = 0
         )
     )
-    private boolean renderArmorInstanceOfArmorItemUseItemComponentCheck(Object reference, Class<ArmorItem> clazz, @Local ItemStack itemStack, @Share("equipmentItemComponent") LocalRef<EquipmentItemComponent> equipmentItemComponent) {
+    private boolean instanceOfArmorItemUseItemComponentCheck(Object reference, Class<ArmorItem> clazz, @Local ItemStack itemStack, @Share("equipmentItemComponent") LocalRef<EquipmentItemComponent> equipmentItemComponent) {
         Optional<EquipmentItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.EQUIPMENT);
         optionalComponent.ifPresent(equipmentItemComponent::set);
         return optionalComponent.isPresent();
@@ -65,7 +68,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         at = @At("LOAD"),
         ordinal = 0
     )
-    private Item renderArmorCastToArmorItemUseNull(Item instance) {
+    private Item castToArmorItemUseNull(Item instance) {
         return null;
     }
 
@@ -76,7 +79,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
             target = "Lnet/minecraft/item/ArmorItem;getSlotType()Lnet/minecraft/entity/EquipmentSlot;"
         )
     )
-    private EquipmentSlot renderArmorGetSlotTypeUseItemComponent(ArmorItem instance, @Share("equipmentItemComponent") LocalRef<EquipmentItemComponent> equipmentItemComponent) {
+    private EquipmentSlot getSlotTypeUseItemComponent(ArmorItem instance, @Share("equipmentItemComponent") LocalRef<EquipmentItemComponent> equipmentItemComponent) {
         return equipmentItemComponent.get().slot();
     }
 
@@ -88,7 +91,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         ),
         cancellable = true
     )
-    private void renderArmorStoreArmorItemComponent(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo info, @Local ItemStack itemStack, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
+    private void storeArmorItemComponent(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo info, @Local ItemStack itemStack, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
         Optional<ArmorItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.ARMOR);
         if (optionalComponent.isEmpty()) {
             info.cancel();
@@ -97,31 +100,14 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         armorItemComponent.set(optionalComponent.get());
     }
 
-    @ModifyConstant(
+    @Redirect(
         method = "renderArmor",
-        constant = @Constant(
-            classValue = DyeableArmorItem.class,
-            ordinal = 0
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ArmorItem;getMaterial()Lnet/minecraft/registry/entry/RegistryEntry;"
         )
     )
-    private boolean renderArmorInstanceOfDyeableArmorItemUseItemComponentCheck(Object reference, Class<DyeableArmorItem> clazz, @Local ItemStack itemStack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
-        Optional<TintedItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.TINTED);
-        optionalComponent.ifPresent(tintedItemComponent::set);
-        return optionalComponent.isPresent();
-    }
-
-    @ModifyVariable(
-        method = "renderArmor",
-        at = @At("LOAD"),
-        slice = @Slice(
-            from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/render/entity/feature/ArmorFeatureRenderer;usesInnerModel(Lnet/minecraft/entity/EquipmentSlot;)Z"
-            )
-        ),
-        ordinal = 0
-    )
-    private ArmorItem renderArmorCastToDyeableArmorItemUseNull(ArmorItem instance) {
+    private RegistryEntry<net.minecraft.item.ArmorMaterial> getMaterialReturnNull(ArmorItem instance) {
         return null;
     }
 
@@ -129,10 +115,34 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         method = "renderArmor",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/DyeableArmorItem;getColor(Lnet/minecraft/item/ItemStack;)I"
+            target = "Lnet/minecraft/registry/entry/RegistryEntry;value()Ljava/lang/Object;"
         )
     )
-    private int renderArmorGetColorUseItemComponent(DyeableArmorItem instance, ItemStack stack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
+    private <R> R registryEntryValueReturnNull(RegistryEntry<R> instance) {
+        return null;
+    }
+
+    @Redirect(
+        method = "renderArmor",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
+        )
+    )
+    private boolean isInForDyeableItemUseItemComponentCheck(ItemStack instance, TagKey<Item> tag, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
+        Optional<TintedItemComponent> optionalComponent = instance.itematic$getComponent(ItemComponentTypes.TINTED);
+        optionalComponent.ifPresent(tintedItemComponent::set);
+        return optionalComponent.isPresent();
+    }
+
+    @Redirect(
+        method = "renderArmor",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/DyeableItem;getColor(Lnet/minecraft/item/ItemStack;)I"
+        )
+    )
+    private int getColorUseItemComponent(ItemStack stack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
         return tintedItemComponent.get().tint().getColor(stack, 0);
     }
 
@@ -140,34 +150,82 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         method = "renderArmor",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/render/entity/feature/ArmorFeatureRenderer;renderArmorParts(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/item/ArmorItem;Lnet/minecraft/client/render/entity/model/BipedEntityModel;ZFFFLjava/lang/String;)V"
+            target = "Lnet/minecraft/item/ArmorMaterial;layers()Ljava/util/List;"
         )
     )
-    private void renderArmorRenderArmorUseItemComponent(ArmorFeatureRenderer<T, M, A> instance, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItem item, A model, boolean secondTextureLayer, float red, float green, float blue, @Nullable String overlay, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
-        this.renderArmorParts(matrices, vertexConsumers, light, armorItemComponent.get(), model, secondTextureLayer, red, green, blue, overlay);
+    private List<ArmorMaterial.Layer> layersForArmorMaterialReturnNull(ArmorMaterial instance) {
+        return null;
     }
 
-    @Unique
-    private void renderArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItemComponent component, A model, boolean secondTextureLayer, float red, float green, float blue, @Nullable String overlay) {
-        Sprite sprite = this.armorMaterialsAtlas.getSprite(getArmorTexture(component, secondTextureLayer, overlay));
-        VertexConsumer vertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumers.getBuffer(ItematicTexturedRenderLayers.ARMOR_MATERIAL_RENDER_LAYER));
-        model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, red, green, blue, 1.0f);
-    }
-
-    @Unique
-    private static Identifier getArmorTexture(ArmorItemComponent component, boolean secondLayer, @Nullable String overlay) {
-        Identifier armorTexture = getArmorTexture(component.material().value(), secondLayer);
-        if (overlay != null) {
-            return armorTexture.withPath(path -> path + "_" + overlay);
+    @Redirect(
+        method = "renderArmor",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/List;iterator()Ljava/util/Iterator;"
+        )
+    )
+    private <E> Iterator<String> iteratorForLayersUseCustomIterator(List<E> instance, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
+        if (tintedItemComponent.get() != null) {
+            return Stream.of("", "_overlay").iterator();
         }
-        return armorTexture;
+        return Stream.of("").iterator();
     }
 
-    @Unique
-    private static Identifier getArmorTexture(ArmorMaterial armorMaterial, boolean secondLayer) {
-        if (secondLayer) {
-            return armorMaterial.leggingsTextureId();
-        }
-        return armorMaterial.textureId();
+    @Redirect(
+        method = "renderArmor",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Iterator;next()Ljava/lang/Object;"
+        )
+    )
+    private <E> E nextElementForIteratorReturnNull(Iterator<E> instance, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
+        return null;
+    }
+
+    @Redirect(
+        method = "renderArmor",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ArmorMaterial$Layer;getTexture(Z)Lnet/minecraft/util/Identifier;"
+        )
+    )
+    private Identifier getTextureUseItemComponent(ArmorMaterial.Layer instance, boolean secondLayer, @Local Iterator<String> layers, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
+        return armorItemComponent.get()
+            .textureId(secondLayer)
+            .withPath(path -> path + layers.next());
+    }
+
+    @Redirect(
+        method = "renderArmor",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ArmorMaterial$Layer;isDyeable()Z"
+        )
+    )
+    private boolean isDyeableUseItemComponent(ArmorMaterial.Layer instance, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
+        return tintedItemComponent.get() != null;
+    }
+
+    @ModifyArg(
+        method = "renderArmorParts",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/render/VertexConsumerProvider;getBuffer(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;"
+        )
+    )
+    private RenderLayer useArmorMaterialRenderLayer(RenderLayer layer) {
+        return ItematicTexturedRenderLayers.ARMOR_MATERIAL_RENDER_LAYER;
+    }
+
+    @ModifyExpressionValue(
+        method = "renderArmorParts",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/render/VertexConsumerProvider;getBuffer(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;"
+        )
+    )
+    private VertexConsumer useArmorMaterialsAtlas(VertexConsumer original, @Local(argsOnly = true) Identifier armorTexture) {
+        return this.armorMaterialsAtlas.getSprite(armorTexture)
+            .getTextureSpecificVertexConsumer(original);
     }
 }

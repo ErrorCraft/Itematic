@@ -10,8 +10,6 @@ import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.entity.passive.HorseEntity;
-import net.minecraft.entity.passive.LlamaEntity;
 import net.minecraft.entity.projectile.AbstractFireballEntity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -23,7 +21,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin({ ItemEntity.class, EyeOfEnderEntity.class, ArmorStandEntity.class, ItemFrameEntity.class, MobEntity.class, AbstractDonkeyEntity.class, AbstractHorseEntity.class, HorseEntity.class, LlamaEntity.class, AbstractFireballEntity.class, FireworkRocketEntity.class, PersistentProjectileEntity.class, ThrownItemEntity.class })
+@Mixin({ ItemEntity.class, EyeOfEnderEntity.class, ArmorStandEntity.class, ItemFrameEntity.class, MobEntity.class, AbstractDonkeyEntity.class, AbstractHorseEntity.class, AbstractFireballEntity.class, FireworkRocketEntity.class, PersistentProjectileEntity.class, ThrownItemEntity.class })
 public abstract class ItemEntitiesExtender extends Entity {
     private ItemEntitiesExtender(EntityType<?> type, World world) {
         super(type, world);

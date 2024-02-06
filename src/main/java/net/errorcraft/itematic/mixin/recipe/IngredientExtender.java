@@ -5,8 +5,8 @@ import net.errorcraft.itematic.access.recipe.IngredientEntryAccess;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -28,8 +28,11 @@ public class IngredientExtender implements IngredientAccess {
     private ItemStack[] matchingStacks;
 
     @Override
-    public void itematic$initMatchingStacks(Registry<Item> registry) {
-        this.matchingStacks = Arrays.stream(this.entries).flatMap(entry -> entry.itematic$getStacks(registry).stream()).distinct().toArray(ItemStack[]::new);
+    public void itematic$initMatchingStacks(RegistryWrapper.WrapperLookup lookup) {
+        this.matchingStacks = Arrays.stream(this.entries)
+            .flatMap(entry -> entry.itematic$getStacks(lookup).stream())
+            .distinct()
+            .toArray(ItemStack[]::new);
     }
 
     @Mixin(targets = "net/minecraft/recipe/Ingredient$TagEntry")
@@ -39,12 +42,12 @@ public class IngredientExtender implements IngredientAccess {
         private TagKey<Item> tag;
 
         @Override
-        public Collection<ItemStack> itematic$getStacks(Registry<Item> registry) {
-            ArrayList<ItemStack> itemStacks = new ArrayList<>();
-            for (RegistryEntry<Item> entry : registry.iterateEntries(this.tag)) {
-                itemStacks.add(new ItemStack(entry));
-            }
-            return itemStacks;
+        public Collection<ItemStack> itematic$getStacks(RegistryWrapper.WrapperLookup lookup) {
+            ArrayList<ItemStack> stacks = new ArrayList<>();
+            lookup.getWrapperOrThrow(RegistryKeys.ITEM)
+                .getOptional(this.tag)
+                .ifPresent(entries -> entries.forEach(entry -> stacks.add(new ItemStack(entry))));
+            return stacks;
         }
     }
 
@@ -54,7 +57,7 @@ public class IngredientExtender implements IngredientAccess {
         public abstract Collection<ItemStack> getStacks();
 
         @Override
-        public Collection<ItemStack> itematic$getStacks(Registry<Item> registry) {
+        public Collection<ItemStack> itematic$getStacks(RegistryWrapper.WrapperLookup lookup) {
             return this.getStacks();
         }
     }

@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.client.render.item;
 
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,7 +34,25 @@ public class HeldItemRendererExtender {
     }
 
     @Redirect(
-        method = { "getHandRenderType", "getUsingItemHandRenderType", "isChargedCrossbow", "renderFirstPersonItem" },
+        method = "renderFirstPersonItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;CROSSBOW:Lnet/minecraft/item/Item;"
+            )
+        )
+    )
+    private boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.CROSSBOW);
+    }
+
+    @Redirect(
+        method = { "getHandRenderType", "getUsingItemHandRenderType", "isChargedCrossbow" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
@@ -45,7 +64,25 @@ public class HeldItemRendererExtender {
             )
         )
     )
-    private static boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
+    private static boolean isOfForCrossbowUseRegistryKeyCheckStatic(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.CROSSBOW);
+    }
+
+    @Redirect(
+        method = "renderFirstPersonItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;FILLED_MAP:Lnet/minecraft/item/Item;"
+            )
+        )
+    )
+    private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
+        return instance.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
     }
 }

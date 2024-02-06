@@ -6,8 +6,8 @@
     "max_count": 1
   },
   "components": {
-    "minecraft:animal_armor": {
-      "type": "equestrian",
+    "minecraft:armor": {
+      "armor_type": "equestrian",
       "material": "minecraft:leather"
     },
     "minecraft:dispensable": {
@@ -15,6 +15,10 @@
     },
     "minecraft:dyeable": {
       "default_color": 10511680
+    },
+    "minecraft:equipment": {
+      "equip_sound": "minecraft:item.armor.equip_leather",
+      "slot": "body"
     },
     "minecraft:tinted": {
       "tint": {

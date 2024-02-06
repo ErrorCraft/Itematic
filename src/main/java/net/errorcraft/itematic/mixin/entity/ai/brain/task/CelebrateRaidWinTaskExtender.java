@@ -34,7 +34,7 @@ public class CelebrateRaidWinTaskExtender extends MultiTickTask<VillagerEntity> 
             target = "Lnet/minecraft/entity/ai/brain/task/CelebrateRaidWinTask;createFirework(Lnet/minecraft/util/DyeColor;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private void keepRunningStoreServerWorld(ServerWorld serverWorld, VillagerEntity villagerEntity, long l, CallbackInfo ci) {
+    private void keepRunningStoreServerWorld(ServerWorld serverWorld, VillagerEntity villagerEntity, long l, CallbackInfo info) {
         this.world = serverWorld;
     }
 
@@ -45,7 +45,7 @@ public class CelebrateRaidWinTaskExtender extends MultiTickTask<VillagerEntity> 
             target = "Lnet/minecraft/entity/ai/brain/task/CelebrateRaidWinTask;createFirework(Lnet/minecraft/util/DyeColor;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private void keepRunningResetServerWorld(ServerWorld serverWorld, VillagerEntity villagerEntity, long l, CallbackInfo ci) {
+    private void keepRunningResetServerWorld(ServerWorld serverWorld, VillagerEntity villagerEntity, long l, CallbackInfo info) {
         this.world = null;
     }
 

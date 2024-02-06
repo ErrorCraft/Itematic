@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,6 +23,12 @@ public interface ItemStackAccess {
     }
     default Optional<NbtCompound> itematic$nbt() {
         return Optional.empty();
+    }
+    default ItemStack itematic$copyWithItem(RegistryEntry<Item> item, int count) {
+        return ItemStack.EMPTY;
+    }
+    default ItemStack itematic$copyWithItemIgnoreEmpty(RegistryEntry<Item> item, int count) {
+        return ItemStack.EMPTY;
     }
     default boolean itematic$isOf(RegistryKey<Item> key) {
         return false;

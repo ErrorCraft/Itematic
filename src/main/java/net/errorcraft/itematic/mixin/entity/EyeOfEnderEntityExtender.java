@@ -4,7 +4,6 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EyeOfEnderEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -19,24 +18,13 @@ public abstract class EyeOfEnderEntityExtender extends Entity {
     }
 
     @Redirect(
-        method = "setItem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForEnderEyeUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.ENDER_EYE);
-    }
-
-    @Redirect(
-        method = "getStack",
+        method = "getItem",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForEnderEyeUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForEnderEyeUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.ENDER_EYE);
     }
 }

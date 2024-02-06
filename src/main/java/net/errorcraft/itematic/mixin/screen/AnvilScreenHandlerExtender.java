@@ -8,6 +8,7 @@ import net.minecraft.screen.AnvilScreenHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(AnvilScreenHandler.class)
 public class AnvilScreenHandlerExtender {
@@ -19,7 +20,7 @@ public class AnvilScreenHandlerExtender {
             ordinal = 1
         )
     )
-    private boolean updateResultIsOfUseRegistryEntryCheck(ItemStack instance, Item item, @Local(ordinal = 2) ItemStack secondaryInputItem) {
+    private boolean isOfUseRegistryEntryCheck(ItemStack instance, Item item, @Local(ordinal = 2) ItemStack secondaryInputItem) {
         return instance.itemMatches(secondaryInputItem.getRegistryEntry());
     }
 
@@ -31,7 +32,7 @@ public class AnvilScreenHandlerExtender {
             ordinal = 1
         )
     )
-    private boolean updateResultIsDamageableAlwaysTrue(ItemStack instance) {
+    private boolean isDamageableAlwaysTrue(ItemStack instance) {
         return true;
     }
 
@@ -43,7 +44,7 @@ public class AnvilScreenHandlerExtender {
             ordinal = 0
         )
     )
-    private boolean updateResultIsOfHoldsEnchantmentsUseComponentCheck(ItemStack instance, Item item) {
+    private boolean isOfForEnchantedBookHoldsEnchantmentsUseComponentCheck(ItemStack instance, Item item) {
         return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTMENT_HOLDER);
     }
 
@@ -52,10 +53,16 @@ public class AnvilScreenHandlerExtender {
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 2
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/enchantment/Enchantment;isAcceptableItem(Lnet/minecraft/item/ItemStack;)Z"
+            )
         )
     )
-    private boolean updateResultIsOfIsEnchantmentHolderUseComponentCheck(ItemStack instance, Item item) {
+    private boolean isOfForEnchantedBookUseComponentCheck(ItemStack instance, Item item) {
         return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTMENT_HOLDER);
     }
 }

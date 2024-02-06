@@ -9,13 +9,14 @@ import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameMode;
 
 public class WaterCauldronBlockTestSuite {
     private static final BlockPos WATER_CAULDRON_POSITION = new BlockPos(1, 2, 1);
 
     @GameTest(templateName = "itematic:block.water_cauldron")
     public void usingColoredShulkerBoxOnWaterCauldronClearsColor(TestContext context) {
-        PlayerEntity player = context.createMockSurvivalPlayer();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.WHITE_SHULKER_BOX);
         player.setStackInHand(Hand.MAIN_HAND, stack);

@@ -21,10 +21,10 @@ public class GlowItemFrameEntityExtender extends ItemFrameEntity {
         method = "getAsItemStack",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack getAsItemStackNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.GLOW_ITEM_FRAME));
+    private ItemStack newItemStackForGlowItemFrameUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.GLOW_ITEM_FRAME);
     }
 }

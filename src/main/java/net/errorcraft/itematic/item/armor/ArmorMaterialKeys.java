@@ -12,6 +12,7 @@ public class ArmorMaterialKeys {
     public static final RegistryKey<ArmorMaterial> DIAMOND = register("diamond");
     public static final RegistryKey<ArmorMaterial> NETHERITE = register("netherite");
     public static final RegistryKey<ArmorMaterial> TURTLE = register("turtle");
+    public static final RegistryKey<ArmorMaterial> ARMADILLO = register("armadillo");
 
     private ArmorMaterialKeys() {}
 
