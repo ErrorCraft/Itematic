@@ -15,13 +15,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldEvents;
 import net.minecraft.world.event.GameEvent;
 
-public record WaxBlockAction(ActionContextParameter position) implements Action {
+public record WaxBlockAction(ActionContextParameter position) implements Action<WaxBlockAction> {
     public static final Codec<WaxBlockAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(WaxBlockAction::position)
     ).apply(instance, WaxBlockAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<WaxBlockAction> type() {
         return ActionTypes.WAX_BLOCK;
     }
 

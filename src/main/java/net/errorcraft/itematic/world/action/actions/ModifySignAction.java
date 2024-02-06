@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.Optional;
 
-public record ModifySignAction(ActionContextParameter position, Optional<DyeColor> color, Optional<Boolean> glow, Optional<Boolean> wax) implements Action {
+public record ModifySignAction(ActionContextParameter position, Optional<DyeColor> color, Optional<Boolean> glow, Optional<Boolean> wax) implements Action<ModifySignAction> {
     public static final Codec<ModifySignAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(ModifySignAction::position),
         Codecs.createStrictOptionalFieldCodec(DyeColor.CODEC, "color").forGetter(ModifySignAction::color),
@@ -25,7 +25,7 @@ public record ModifySignAction(ActionContextParameter position, Optional<DyeColo
     ).apply(instance, ModifySignAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<ModifySignAction> type() {
         return ActionTypes.MODIFY_SIGN;
     }
 

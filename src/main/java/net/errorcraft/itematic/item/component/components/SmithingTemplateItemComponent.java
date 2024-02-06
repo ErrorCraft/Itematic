@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record SmithingTemplateItemComponent(RegistryEntry<SmithingTemplate> template) implements ItemComponent {
+public record SmithingTemplateItemComponent(RegistryEntry<SmithingTemplate> template) implements ItemComponent<SmithingTemplateItemComponent> {
     public static final Codec<SmithingTemplateItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(ItematicRegistryKeys.SMITHING_TEMPLATE).fieldOf("template").forGetter(SmithingTemplateItemComponent::template)
     ).apply(instance, SmithingTemplateItemComponent::new));
@@ -30,12 +30,12 @@ public record SmithingTemplateItemComponent(RegistryEntry<SmithingTemplate> temp
     private static final Text INGREDIENTS_TEXT = SmithingTemplateItemAccessor.getIngredientsText();
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<SmithingTemplateItemComponent> type() {
         return ItemComponentTypes.SMITHING_TEMPLATE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<SmithingTemplateItemComponent> codec() {
         return CODEC;
     }
 

@@ -11,13 +11,13 @@ import net.minecraft.block.TntBlock;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
-public record PrimeTntAction(ActionContextParameter position) implements Action {
+public record PrimeTntAction(ActionContextParameter position) implements Action<PrimeTntAction> {
     public static final Codec<PrimeTntAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(PrimeTntAction::position)
     ).apply(instance, PrimeTntAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<PrimeTntAction> type() {
         return ActionTypes.PRIME_TNT;
     }
 

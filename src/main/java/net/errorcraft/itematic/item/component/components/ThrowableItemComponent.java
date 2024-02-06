@@ -17,19 +17,19 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-public record ThrowableItemComponent(float speed, float angleOffset) implements ItemComponent {
+public record ThrowableItemComponent(float speed, float angleOffset) implements ItemComponent<ThrowableItemComponent> {
     public static final Codec<ThrowableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.FLOAT.fieldOf("speed").forGetter(ThrowableItemComponent::speed),
         Codec.FLOAT.fieldOf("angle_offset").forGetter(ThrowableItemComponent::angleOffset)
     ).apply(instance, ThrowableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<ThrowableItemComponent> type() {
         return ItemComponentTypes.THROWABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<ThrowableItemComponent> codec() {
         return CODEC;
     }
 

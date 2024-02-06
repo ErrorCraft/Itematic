@@ -12,18 +12,18 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-public record CooldownItemComponent(int ticks) implements ItemComponent {
+public record CooldownItemComponent(int ticks) implements ItemComponent<CooldownItemComponent> {
     public static final Codec<CooldownItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("ticks").forGetter(CooldownItemComponent::ticks)
     ).apply(instance, CooldownItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<CooldownItemComponent> type() {
         return ItemComponentTypes.COOLDOWN;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<CooldownItemComponent> codec() {
         return CODEC;
     }
 

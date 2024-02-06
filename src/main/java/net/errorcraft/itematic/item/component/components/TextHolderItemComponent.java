@@ -15,17 +15,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record TextHolderItemComponent() implements ItemComponent {
+public record TextHolderItemComponent() implements ItemComponent<TextHolderItemComponent> {
     public static final TextHolderItemComponent INSTANCE = new TextHolderItemComponent();
     public static final Codec<TextHolderItemComponent> CODEC = Codec.unit(INSTANCE);
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<TextHolderItemComponent> type() {
         return ItemComponentTypes.TEXT_HOLDER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<TextHolderItemComponent> codec() {
         return CODEC;
     }
 

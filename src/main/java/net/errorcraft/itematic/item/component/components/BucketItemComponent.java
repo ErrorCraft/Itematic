@@ -40,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional<EntityInitializer<?>> entity, Optional<RegistryEntry<Block>> block, Optional<RegistryEntry<SoundEvent>> emptyingSound) implements ItemComponent {
+public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional<EntityInitializer<?>> entity, Optional<RegistryEntry<Block>> block, Optional<RegistryEntry<SoundEvent>> emptyingSound) implements ItemComponent<BucketItemComponent> {
     public static final Codec<BucketItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.FLUID).optionalFieldOf("fluid").forGetter(BucketItemComponent::fluid),
         EntityInitializer.CODEC.optionalFieldOf("entity").forGetter(BucketItemComponent::entity),
@@ -49,12 +49,12 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
     ).apply(instance, BucketItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<BucketItemComponent> type() {
         return ItemComponentTypes.BUCKET;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<BucketItemComponent> codec() {
         return CODEC;
     }
 

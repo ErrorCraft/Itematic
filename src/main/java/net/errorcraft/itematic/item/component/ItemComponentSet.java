@@ -1,30 +1,26 @@
 package net.errorcraft.itematic.item.component;
 
-import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.registry.ItematicRegistries;
-import net.errorcraft.itematic.serialization.SetMapCodec;
+import com.mojang.serialization.Codec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ItemComponentSet implements Iterable<ItemComponent> {
+public class ItemComponentSet implements Iterable<ItemComponent<?>> {
     public static final ItemComponentSet EMPTY = new ItemComponentSet();
-    public static final MapCodec<ItemComponentSet> CODEC = SetMapCodec.ofRegistry(ItematicRegistries.ITEM_COMPONENT_TYPE, ItemComponentType::codec, ItemComponent::codec, ItemComponent::type).xmap(ItemComponentSet::new, v -> v.values);
-    private final Set<ItemComponent> values;
-    private final HashMap<ItemComponentType<?>, ItemComponent> map;
+    public static final Codec<ItemComponentSet> CODEC = ItemComponent.SET_CODEC.xmap(ItemComponentSet::new, ItemComponentSet::values);
+    private final HashMap<ItemComponentType<?>, ItemComponent<?>> map;
 
     private ItemComponentSet() {
-        this(new HashSet<>(), new HashMap<>());
+        this(new HashMap<>());
     }
 
-    private ItemComponentSet(Set<ItemComponent> values) {
-        this(values, new HashMap<>(values.stream().collect(Collectors.toMap(ItemComponent::type, Function.identity()))));
+    private ItemComponentSet(Set<ItemComponent<?>> values) {
+        this(new HashMap<>(values.stream().collect(Collectors.toMap(ItemComponent::type, Function.identity()))));
     }
 
-    private ItemComponentSet(Set<ItemComponent> values, HashMap<ItemComponentType<?>, ItemComponent> map) {
-        this.values = values;
+    private ItemComponentSet(HashMap<ItemComponentType<?>, ItemComponent<?>> map) {
         this.map = map;
     }
 
@@ -34,28 +30,32 @@ public class ItemComponentSet implements Iterable<ItemComponent> {
 
     @NotNull
     @Override
-    public Iterator<ItemComponent> iterator() {
-        return this.values.iterator();
+    public Iterator<ItemComponent<?>> iterator() {
+        return this.map.values().iterator();
     }
 
-    public <T extends ItemComponent> boolean contains(ItemComponentType<T> type) {
+    public <T extends ItemComponent<T>> boolean contains(ItemComponentType<T> type) {
         return this.map.containsKey(type);
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ItemComponent> Optional<T> get(ItemComponentType<T> type) {
+    public <T extends ItemComponent<T>> Optional<T> get(ItemComponentType<T> type) {
         return Optional.ofNullable((T) this.map.get(type));
     }
 
-    public static class Builder {
-        private final Set<ItemComponent> components = new HashSet<>();
+    private Set<ItemComponent<?>> values() {
+        return new HashSet<>(this.map.values());
+    }
 
-        public Builder with(ItemComponent component) {
+    public static class Builder {
+        private final Set<ItemComponent<?>> components = new HashSet<>();
+
+        public Builder with(ItemComponent<?> component) {
             this.components.add(component);
             return this;
         }
 
-        public Builder with(ItemComponent... components) {
+        public Builder with(ItemComponent<?>... components) {
             this.components.addAll(Arrays.asList(components));
             return this;
         }

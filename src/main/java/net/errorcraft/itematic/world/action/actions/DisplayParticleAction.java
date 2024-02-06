@@ -15,7 +15,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Vec3d;
 
-public record DisplayParticleAction(ActionContextParameter position, ParticleEffect particle, int count, Vec3dProvider offset, Vec3dProvider delta, double speed, boolean force) implements Action {
+public record DisplayParticleAction(ActionContextParameter position, ParticleEffect particle, int count, Vec3dProvider offset, Vec3dProvider delta, double speed, boolean force) implements Action<DisplayParticleAction> {
     public static final Codec<DisplayParticleAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(DisplayParticleAction::position),
         ParticleTypes.TYPE_CODEC.fieldOf("particle").forGetter(DisplayParticleAction::particle),
@@ -27,7 +27,7 @@ public record DisplayParticleAction(ActionContextParameter position, ParticleEff
     ).apply(instance, DisplayParticleAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<DisplayParticleAction> type() {
         return ActionTypes.DISPLAY_PARTICLE;
     }
 

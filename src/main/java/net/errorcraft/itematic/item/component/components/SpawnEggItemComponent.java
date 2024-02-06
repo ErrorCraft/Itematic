@@ -21,16 +21,16 @@ import net.minecraft.world.RaycastContext;
 
 import java.util.Optional;
 
-public record SpawnEggItemComponent() implements ItemComponent {
+public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemComponent> {
     public static final Codec<SpawnEggItemComponent> CODEC = Codec.unit(new SpawnEggItemComponent());
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<SpawnEggItemComponent> type() {
         return ItemComponentTypes.SPAWN_EGG;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<SpawnEggItemComponent> codec() {
         return CODEC;
     }
 
@@ -60,8 +60,8 @@ public record SpawnEggItemComponent() implements ItemComponent {
         return Optional.of(mobEntity);
     }
 
-    public static ItemComponent[] from(RegistryEntry<EntityType<?>> entity, int primaryColor, int secondaryColor, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
-        return new ItemComponent[] {
+    public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, int primaryColor, int secondaryColor, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
+        return new ItemComponent<?>[] {
             new EntityItemComponent(new SimpleEntityInitializer<>(entity.value()), true),
             new SpawnEggItemComponent(),
             new CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling.SOURCE_ONLY, true),

@@ -26,7 +26,7 @@ import net.minecraft.util.math.Position;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, float chargedSpeed) implements ItemComponent {
+public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, float chargedSpeed) implements ItemComponent<ProjectileItemComponent> {
     public static final Codec<ProjectileItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         EntityInitializer.CODEC.fieldOf("entity").forGetter(ProjectileItemComponent::entity),
         Codec.INT.optionalFieldOf("damage", 0).forGetter(ProjectileItemComponent::damage),
@@ -34,12 +34,12 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, f
     ).apply(instance, ProjectileItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<ProjectileItemComponent> type() {
         return ItemComponentTypes.PROJECTILE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<ProjectileItemComponent> codec() {
         return CODEC;
     }
 

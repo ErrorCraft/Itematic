@@ -29,18 +29,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public record FireworkItemComponent() implements ItemComponent {
+public record FireworkItemComponent() implements ItemComponent<FireworkItemComponent> {
     public static final Codec<FireworkItemComponent> CODEC = Codec.unit(new FireworkItemComponent());
     private static final String FLIGHT_TRANSLATION_KEY = "item.minecraft.firework_rocket.flight";
     private static final String EXPLOSION_INDENTATION = "  ";
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<FireworkItemComponent> type() {
         return ItemComponentTypes.FIREWORK;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<FireworkItemComponent> codec() {
         return CODEC;
     }
 

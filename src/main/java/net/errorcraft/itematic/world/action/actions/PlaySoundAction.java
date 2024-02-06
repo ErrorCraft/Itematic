@@ -16,7 +16,7 @@ import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 
-public record PlaySoundAction(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category, Range.FloatRange volume, Range.FloatRange pitch) implements Action {
+public record PlaySoundAction(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category, Range.FloatRange volume, Range.FloatRange pitch) implements Action<PlaySoundAction> {
     public static final Codec<PlaySoundAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(PlaySoundAction::position),
         SoundEvent.ENTRY_CODEC.fieldOf("sound").forGetter(PlaySoundAction::sound),
@@ -26,7 +26,7 @@ public record PlaySoundAction(ActionContextParameter position, RegistryEntry<Sou
     ).apply(instance, PlaySoundAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<PlaySoundAction> type() {
         return ActionTypes.PLAY_SOUND;
     }
 

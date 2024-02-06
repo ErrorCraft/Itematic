@@ -9,18 +9,18 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 
-public record RepairableItemComponent(TagKey<Item> items) implements ItemComponent {
+public record RepairableItemComponent(TagKey<Item> items) implements ItemComponent<RepairableItemComponent> {
     public static final Codec<RepairableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("items").forGetter(RepairableItemComponent::items)
     ).apply(instance, RepairableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<RepairableItemComponent> type() {
         return ItemComponentTypes.REPAIRABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<RepairableItemComponent> codec() {
         return CODEC;
     }
 

@@ -20,19 +20,19 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-public record MappableItemComponent(RegistryEntry<Item> transformsInto) implements ItemComponent {
+public record MappableItemComponent(RegistryEntry<Item> transformsInto) implements ItemComponent<MappableItemComponent> {
     public static final Codec<MappableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("transforms_into").forGetter(MappableItemComponent::transformsInto)
     ).apply(instance, MappableItemComponent::new));
 
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<MappableItemComponent> type() {
         return ItemComponentTypes.MAPPABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<MappableItemComponent> codec() {
         return CODEC;
     }
 

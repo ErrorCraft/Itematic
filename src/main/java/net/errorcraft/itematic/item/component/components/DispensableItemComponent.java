@@ -10,18 +10,18 @@ import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 
-public record DispensableItemComponent(RegistryEntry<DispenserBehavior> behavior) implements ItemComponent {
+public record DispensableItemComponent(RegistryEntry<DispenserBehavior> behavior) implements ItemComponent<DispensableItemComponent> {
     public static final Codec<DispensableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(ItematicRegistryKeys.DISPENSE_BEHAVIOR).fieldOf("behavior").forGetter(DispensableItemComponent::behavior)
     ).apply(instance, DispensableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<DispensableItemComponent> type() {
         return ItemComponentTypes.DISPENSABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<DispensableItemComponent> codec() {
         return CODEC;
     }
 }

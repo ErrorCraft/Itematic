@@ -18,14 +18,14 @@ import net.minecraft.registry.entry.RegistryFixedCodec;
 
 import java.util.Optional;
 
-public record ExchangeItemAction(RegistryEntry<Item> item, boolean decrementCount) implements Action {
+public record ExchangeItemAction(RegistryEntry<Item> item, boolean decrementCount) implements Action<ExchangeItemAction> {
     public static final Codec<ExchangeItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(ExchangeItemAction::item),
         Codec.BOOL.optionalFieldOf("decrement_count", true).forGetter(ExchangeItemAction::decrementCount)
     ).apply(instance, ExchangeItemAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<ExchangeItemAction> type() {
         return ActionTypes.EXCHANGE_ITEM;
     }
 

@@ -15,13 +15,13 @@ import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Optional;
 
-public record StartUsingItemAction(Optional<Integer> ticks) implements Action {
+public record StartUsingItemAction(Optional<Integer> ticks) implements Action<StartUsingItemAction> {
     public static final Codec<StartUsingItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.createStrictOptionalFieldCodec(Codec.INT, "ticks").forGetter(StartUsingItemAction::ticks)
     ).apply(instance, StartUsingItemAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<StartUsingItemAction> type() {
         return ActionTypes.START_USING_ITEM;
     }
 

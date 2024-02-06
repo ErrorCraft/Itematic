@@ -25,19 +25,19 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds) implements ItemComponent {
+public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds) implements ItemComponent<ToolItemComponent> {
     public static final Codec<ToolItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("damage").forGetter(ToolItemComponent::damage),
         MiningSpeedEntry.CODEC.listOf().optionalFieldOf("mining_speeds", List.of()).forGetter(ToolItemComponent::miningSpeeds)
     ).apply(instance, ToolItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<ToolItemComponent> type() {
         return ItemComponentTypes.TOOL;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<ToolItemComponent> codec() {
         return CODEC;
     }
 

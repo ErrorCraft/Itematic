@@ -11,7 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.dynamic.Codecs;
 
-public record DamageItemAction(int amount, boolean ignoreGameMode) implements Action {
+public record DamageItemAction(int amount, boolean ignoreGameMode) implements Action<DamageItemAction> {
     public static final Codec<DamageItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("amount").forGetter(DamageItemAction::amount),
         Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "ignore_game_mode", false).forGetter(DamageItemAction::ignoreGameMode)
@@ -22,7 +22,7 @@ public record DamageItemAction(int amount, boolean ignoreGameMode) implements Ac
     }
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<DamageItemAction> type() {
         return ActionTypes.DAMAGE_ITEM;
     }
 

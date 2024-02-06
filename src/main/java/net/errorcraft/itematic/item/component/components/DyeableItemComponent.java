@@ -10,18 +10,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 
-public record DyeableItemComponent(int defaultColor) implements ItemComponent, DyeableItem {
+public record DyeableItemComponent(int defaultColor) implements ItemComponent<DyeableItemComponent>, DyeableItem {
     public static final Codec<DyeableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("default_color").forGetter(DyeableItemComponent::defaultColor)
     ).apply(instance, DyeableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<DyeableItemComponent> type() {
         return ItemComponentTypes.DYEABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<DyeableItemComponent> codec() {
         return CODEC;
     }
 

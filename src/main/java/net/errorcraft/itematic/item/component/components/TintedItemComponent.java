@@ -7,18 +7,18 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 
-public record TintedItemComponent(ItemColor tint) implements ItemComponent {
+public record TintedItemComponent(ItemColor tint) implements ItemComponent<TintedItemComponent> {
     public static final Codec<TintedItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ItemColor.CODEC.fieldOf("tint").forGetter(TintedItemComponent::tint)
     ).apply(instance, TintedItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<TintedItemComponent> type() {
         return ItemComponentTypes.TINTED;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<TintedItemComponent> codec() {
         return CODEC;
     }
 

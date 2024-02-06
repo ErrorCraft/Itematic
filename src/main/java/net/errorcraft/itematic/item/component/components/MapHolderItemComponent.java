@@ -17,18 +17,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record MapHolderItemComponent() implements ItemComponent {
+public record MapHolderItemComponent() implements ItemComponent<MapHolderItemComponent> {
     public static final MapHolderItemComponent INSTANCE = new MapHolderItemComponent();
     public static final Codec<MapHolderItemComponent> CODEC = Codec.unit(INSTANCE);
     private static final FilledMapItem DUMMY = new FilledMapItem(new Item.Settings());
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<MapHolderItemComponent> type() {
         return ItemComponentTypes.MAP_HOLDER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<MapHolderItemComponent> codec() {
         return CODEC;
     }
 

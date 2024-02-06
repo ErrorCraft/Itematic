@@ -17,18 +17,18 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-public record WritableItemComponent(RegistryEntry<Item> transformsInto) implements ItemComponent {
+public record WritableItemComponent(RegistryEntry<Item> transformsInto) implements ItemComponent<WritableItemComponent> {
     public static final Codec<WritableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("transforms_into").forGetter(WritableItemComponent::transformsInto)
     ).apply(instance, WritableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<WritableItemComponent> type() {
         return ItemComponentTypes.WRITABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<WritableItemComponent> codec() {
         return CODEC;
     }
 

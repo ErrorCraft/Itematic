@@ -39,7 +39,7 @@ import net.minecraft.world.World;
 
 import java.util.Optional;
 
-public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, boolean chargeable) implements ItemComponent {
+public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, boolean chargeable) implements ItemComponent<ShooterItemComponent> {
     public static final Codec<ShooterItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("held_ammunition").forGetter(ShooterItemComponent::heldAmmunition),
         TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("ammunition").forGetter(ShooterItemComponent::ammunition),
@@ -51,12 +51,12 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
     private static final String LOADED_KEY = "loaded";
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<ShooterItemComponent> type() {
         return ItemComponentTypes.SHOOTER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<ShooterItemComponent> codec() {
         return CODEC;
     }
 

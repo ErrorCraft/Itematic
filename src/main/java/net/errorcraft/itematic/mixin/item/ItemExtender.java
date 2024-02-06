@@ -40,6 +40,7 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
@@ -93,7 +94,7 @@ public class ItemExtender implements ItemAccess {
         ItemStack stack = user.getStackInHand(hand);
         StackReference stackReference = StackReferenceUtil.of(stack);
         ActionResult result = ActionResult.PASS;
-        for (ItemComponent component : this.components) {
+        for (ItemComponent<?> component : this.components) {
             ActionResult newResult = component.use(world, user, hand, stack, stackReference::set);
             if (newResult == ActionResult.FAIL) {
                 info.setReturnValue(TypedActionResult.fail(stackReference.get()));
@@ -123,7 +124,7 @@ public class ItemExtender implements ItemAccess {
         ItemStack stack = context.getStack();
         StackReference stackReference = StackReferenceUtil.of(stack);
         ActionResult result = ActionResult.PASS;
-        for (ItemComponent component : this.components) {
+        for (ItemComponent<?> component : this.components) {
             ActionResult newResult = component.useOnBlock(context, stackReference::set);
             if (newResult == ActionResult.FAIL) {
                 return newResult;
@@ -151,7 +152,7 @@ public class ItemExtender implements ItemAccess {
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
         StackReference stackReference = StackReferenceUtil.of(stack);
         ActionResult result = ActionResult.PASS;
-        for (ItemComponent component : this.components) {
+        for (ItemComponent<?> component : this.components) {
             ActionResult newResult = component.useOnEntity(user, entity, hand, stack, stackReference::set);
             if (newResult == ActionResult.FAIL) {
                 return newResult;
@@ -178,7 +179,7 @@ public class ItemExtender implements ItemAccess {
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         boolean result = false;
         StackReference stackReference = StackReferenceUtil.of(stack);
-        for (ItemComponent component : this.components) {
+        for (ItemComponent<?> component : this.components) {
             result |= component.postHit(stack, target, attacker, stackReference::set);
         }
 
@@ -201,7 +202,7 @@ public class ItemExtender implements ItemAccess {
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
         boolean result = false;
         StackReference stackReference = StackReferenceUtil.of(stack);
-        for (ItemComponent component : this.components) {
+        for (ItemComponent<?> component : this.components) {
             result |= component.postMine(stack, world, state, pos, miner, stackReference::set);
         }
 
@@ -222,7 +223,7 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-        for (ItemComponent component : this.components) {
+        for (ItemComponent<?> component : this.components) {
             component.using(stack, world, user, remainingUseTicks);
         }
     }
@@ -234,7 +235,7 @@ public class ItemExtender implements ItemAccess {
     @Overwrite
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         StackReference stackReference = StackReferenceUtil.of(stack);
-        for (ItemComponent component : this.components) {
+        for (ItemComponent<?> component : this.components) {
             component.stopUsing(stack, world, user, remainingUseTicks, stackReference::set);
         }
 
@@ -254,7 +255,7 @@ public class ItemExtender implements ItemAccess {
     )
     public void finishUsingUseItemComponent(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> info) {
         StackReference stackReference = StackReferenceUtil.of(stack);
-        for (ItemComponent component : this.components) {
+        for (ItemComponent<?> component : this.components) {
             component.finishUsing(world, user, stack, stackReference::set);
         }
 
@@ -275,8 +276,18 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        for (ItemComponent component : this.components) {
+        for (ItemComponent<?> component : this.components) {
             component.inventoryTick(stack, world, entity, slot, selected);
+        }
+    }
+
+    @Inject(
+        method = "onCraft",
+        at = @At("HEAD")
+    )
+    public void onCraft(ItemStack stack, World world, CallbackInfo info) {
+        for (ItemComponent<?> component : this.components) {
+            component.onCraft(stack, world);
         }
     }
 
@@ -287,7 +298,7 @@ public class ItemExtender implements ItemAccess {
     @Overwrite
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         this.base.display().tooltip().ifPresent(tooltip::addAll);
-        for (ItemComponent component : this.components) {
+        for (ItemComponent<?> component : this.components) {
             component.appendTooltip(stack, world, tooltip, context);
         }
     }
@@ -510,7 +521,7 @@ public class ItemExtender implements ItemAccess {
     }
 
     @Override
-    public <T extends ItemComponent> boolean itematic$hasComponent(ItemComponentType<T> type) {
+    public <T extends ItemComponent<T>> boolean itematic$hasComponent(ItemComponentType<T> type) {
         if (this.components == null) {
             return false;
         }
@@ -518,7 +529,7 @@ public class ItemExtender implements ItemAccess {
     }
 
     @Override
-    public <T extends ItemComponent> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
+    public <T extends ItemComponent<T>> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
         if (this.components == null) {
             return Optional.empty();
         }

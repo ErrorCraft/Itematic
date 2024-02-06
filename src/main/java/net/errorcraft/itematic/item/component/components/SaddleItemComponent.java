@@ -15,17 +15,17 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
-public record SaddleItemComponent() implements ItemComponent {
+public record SaddleItemComponent() implements ItemComponent<SaddleItemComponent> {
     public static final SaddleItemComponent INSTANCE = new SaddleItemComponent();
     public static final Codec<SaddleItemComponent> CODEC = Codec.unit(INSTANCE);
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<SaddleItemComponent> type() {
         return ItemComponentTypes.SADDLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<SaddleItemComponent> codec() {
         return CODEC;
     }
 

@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public record FoodItemComponent(int nutrition, float saturationModifier, boolean alwaysEdible, List<Effect> effects) implements ItemComponent {
+public record FoodItemComponent(int nutrition, float saturationModifier, boolean alwaysEdible, List<Effect> effects) implements ItemComponent<FoodItemComponent> {
     public static final Codec<FoodItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("nutrition").forGetter(FoodItemComponent::nutrition),
         Codec.FLOAT.fieldOf("saturation_modifier").forGetter(FoodItemComponent::saturationModifier),
@@ -31,12 +31,12 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
     ).apply(instance, FoodItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<FoodItemComponent> type() {
         return ItemComponentTypes.FOOD;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<FoodItemComponent> codec() {
         return CODEC;
     }
 
@@ -49,16 +49,16 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
         return user.canConsume(this.alwaysEdible);
     }
 
-    public static ItemComponent[] from(FoodComponent component) {
+    public static ItemComponent<?>[] from(FoodComponent component) {
         return from(component, null);
     }
 
-    public static ItemComponent[] from(FoodComponent component, RegistryEntry<Item> resultItem) {
+    public static ItemComponent<?>[] from(FoodComponent component, RegistryEntry<Item> resultItem) {
         return from(component, component.isSnack() ? 16 : 32, UseAction.EAT, resultItem);
     }
 
-    public static ItemComponent[] from(FoodComponent component, int useDuration, UseAction useAction, RegistryEntry<Item> resultItem) {
-        return new ItemComponent[] {
+    public static ItemComponent<?>[] from(FoodComponent component, int useDuration, UseAction useAction, RegistryEntry<Item> resultItem) {
+        return new ItemComponent<?>[] {
             new UseDurationItemComponent(useDuration),
             new FoodItemComponent(component.getHunger(), component.getSaturationModifier(), component.isAlwaysEdible(), getEffects(component.getStatusEffects())),
             UseAnimationItemComponent.of(useAction),

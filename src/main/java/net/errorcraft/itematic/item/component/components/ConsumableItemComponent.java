@@ -27,18 +27,18 @@ import net.minecraft.world.World;
 
 import java.util.Optional;
 
-public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem) implements ItemComponent {
+public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem) implements ItemComponent<ConsumableItemComponent> {
     public static final Codec<ConsumableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.ITEM).optionalFieldOf("result_item").forGetter(ConsumableItemComponent::resultItem)
     ).apply(instance, ConsumableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<ConsumableItemComponent> type() {
         return ItemComponentTypes.CONSUMABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<ConsumableItemComponent> codec() {
         return CODEC;
     }
 

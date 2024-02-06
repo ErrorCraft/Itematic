@@ -9,12 +9,12 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
 
-public record SwingHandAction() implements Action {
+public record SwingHandAction() implements Action<SwingHandAction> {
     public static final SwingHandAction INSTANCE = new SwingHandAction();
     public static final Codec<SwingHandAction> CODEC = Codec.unit(INSTANCE);
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<SwingHandAction> type() {
         return ActionTypes.SWING_HAND;
     }
 

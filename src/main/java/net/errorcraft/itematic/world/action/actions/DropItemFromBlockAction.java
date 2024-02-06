@@ -14,14 +14,14 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 
-public record DropItemFromBlockAction(ActionContextParameter position, RegistryEntry<Item> item) implements Action {
+public record DropItemFromBlockAction(ActionContextParameter position, RegistryEntry<Item> item) implements Action<DropItemFromBlockAction> {
     public static final Codec<DropItemFromBlockAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(DropItemFromBlockAction::position),
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(DropItemFromBlockAction::item)
     ).apply(instance, DropItemFromBlockAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<DropItemFromBlockAction> type() {
         return ActionTypes.DROP_ITEM_FROM_BLOCK;
     }
 

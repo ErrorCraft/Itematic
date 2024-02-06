@@ -6,18 +6,18 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 
-public record FuelItemComponent(int ticks) implements ItemComponent {
+public record FuelItemComponent(int ticks) implements ItemComponent<FuelItemComponent> {
     public static final Codec<FuelItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("ticks").forGetter(FuelItemComponent::ticks)
     ).apply(instance, FuelItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<FuelItemComponent> type() {
         return ItemComponentTypes.FUEL;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<FuelItemComponent> codec() {
         return CODEC;
     }
 }

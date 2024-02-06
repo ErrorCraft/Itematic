@@ -16,7 +16,7 @@ import net.minecraft.registry.tag.TagKey;
 
 import java.util.Optional;
 
-public record EnchantableItemComponent(int enchantability, Optional<TagKey<Enchantment>> enchantments, Optional<RegistryEntry<Item>> transformsInto) implements ItemComponent {
+public record EnchantableItemComponent(int enchantability, Optional<TagKey<Enchantment>> enchantments, Optional<RegistryEntry<Item>> transformsInto) implements ItemComponent<EnchantableItemComponent> {
     public static final Codec<EnchantableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("enchantability").forGetter(EnchantableItemComponent::enchantability),
         TagKey.unprefixedCodec(RegistryKeys.ENCHANTMENT).optionalFieldOf("enchantments").forGetter(EnchantableItemComponent::enchantments),
@@ -24,12 +24,12 @@ public record EnchantableItemComponent(int enchantability, Optional<TagKey<Encha
     ).apply(instance, EnchantableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<EnchantableItemComponent> type() {
         return ItemComponentTypes.ENCHANTABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<EnchantableItemComponent> codec() {
         return CODEC;
     }
 

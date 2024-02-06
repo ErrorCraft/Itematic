@@ -12,13 +12,13 @@ import net.minecraft.entity.LivingEntity;
 
 import java.util.Optional;
 
-public record ClearStatusEffectsAction(ActionContextParameter entity) implements Action {
+public record ClearStatusEffectsAction(ActionContextParameter entity) implements Action<ClearStatusEffectsAction> {
     public static final Codec<ClearStatusEffectsAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("entity").forGetter(ClearStatusEffectsAction::entity)
     ).apply(instance, ClearStatusEffectsAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<ClearStatusEffectsAction> type() {
         return ActionTypes.CLEAR_STATUS_EFFECTS;
     }
 

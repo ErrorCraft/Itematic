@@ -19,7 +19,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
-public record CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling handler, boolean allowOriginalPlacement, Vec3i offset) implements ItemComponent {
+public record CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling handler, boolean allowOriginalPlacement, Vec3i offset) implements ItemComponent<CanPlaceOnFluidsItemComponent> {
     public static final Codec<CanPlaceOnFluidsItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         StringIdentifiable.createCodec(RaycastContext.FluidHandling::values).fieldOf("handler").forGetter(CanPlaceOnFluidsItemComponent::handler),
         Codec.BOOL.fieldOf("allow_original_placement").forGetter(CanPlaceOnFluidsItemComponent::allowOriginalPlacement),
@@ -31,12 +31,12 @@ public record CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling handler
     }
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<CanPlaceOnFluidsItemComponent> type() {
         return ItemComponentTypes.CAN_PLACE_ON_FLUIDS;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<CanPlaceOnFluidsItemComponent> codec() {
         return CODEC;
     }
 

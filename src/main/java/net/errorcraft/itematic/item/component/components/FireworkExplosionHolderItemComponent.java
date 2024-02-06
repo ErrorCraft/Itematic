@@ -15,16 +15,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record FireworkExplosionHolderItemComponent() implements ItemComponent {
+public record FireworkExplosionHolderItemComponent() implements ItemComponent<FireworkExplosionHolderItemComponent> {
     public static final Codec<FireworkExplosionHolderItemComponent> CODEC = Codec.unit(new FireworkExplosionHolderItemComponent());
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<FireworkExplosionHolderItemComponent> type() {
         return ItemComponentTypes.FIREWORK_EXPLOSION_HOLDER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<FireworkExplosionHolderItemComponent> codec() {
         return CODEC;
     }
 

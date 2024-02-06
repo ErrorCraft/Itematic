@@ -10,11 +10,11 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.minecraft.registry.entry.RegistryEntry;
 
-public record SequenceAction(SequenceHandler handler) implements Action {
+public record SequenceAction(SequenceHandler handler) implements Action<SequenceAction> {
     public static final Codec<SequenceAction> CODEC = SequenceHandler.CODEC.xmap(SequenceAction::new, SequenceAction::handler).codec();
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<SequenceAction> type() {
         return ActionTypes.SEQUENCE;
     }
 

@@ -26,7 +26,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, RegistryEntry<SoundEvent> equipSound) implements ItemComponent, Equipment {
+public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, RegistryEntry<SoundEvent> equipSound) implements ItemComponent<EquipmentItemComponent>, Equipment {
     public static final Codec<EquipmentItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         EquipmentSlot.CODEC.fieldOf("slot").forGetter(EquipmentItemComponent::slot),
         Codec.BOOL.optionalFieldOf("swappable", false).forGetter(EquipmentItemComponent::swappable),
@@ -34,12 +34,12 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
     ).apply(instance, EquipmentItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<EquipmentItemComponent> type() {
         return ItemComponentTypes.EQUIPMENT;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<EquipmentItemComponent> codec() {
         return CODEC;
     }
 
@@ -75,8 +75,8 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
         return new EquipmentItemComponent(slot, swappable, equipSound);
     }
 
-    public static ItemComponent[] skull(RegistryEntry<Block> block, RegistryEntryLookup<SoundEvent> soundEvents) {
-        return new ItemComponent[] {
+    public static ItemComponent<?>[] skull(RegistryEntry<Block> block, RegistryEntryLookup<SoundEvent> soundEvents) {
+        return new ItemComponent<?>[] {
             BlockItemComponent.of(block),
             of(EquipmentSlot.HEAD, false, soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)),
             FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.CREEPER)

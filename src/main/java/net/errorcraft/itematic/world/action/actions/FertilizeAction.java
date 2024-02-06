@@ -12,12 +12,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldEvents;
 
-public record FertilizeAction() implements Action {
+public record FertilizeAction() implements Action<FertilizeAction> {
     public static final FertilizeAction INSTANCE = new FertilizeAction();
     public static final Codec<FertilizeAction> CODEC = Codec.unit(INSTANCE);
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<FertilizeAction> type() {
         return ActionTypes.FERTILIZE;
     }
 

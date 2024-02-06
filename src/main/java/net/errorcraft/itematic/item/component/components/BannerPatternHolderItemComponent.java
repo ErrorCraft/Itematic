@@ -17,18 +17,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public record BannerPatternHolderItemComponent(Optional<DyeColor> color) implements ItemComponent {
+public record BannerPatternHolderItemComponent(Optional<DyeColor> color) implements ItemComponent<BannerPatternHolderItemComponent> {
     public static final Codec<BannerPatternHolderItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.createStrictOptionalFieldCodec(DyeColor.CODEC, "color").forGetter(BannerPatternHolderItemComponent::color)
     ).apply(instance, BannerPatternHolderItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<BannerPatternHolderItemComponent> type() {
         return ItemComponentTypes.BANNER_PATTERN_HOLDER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<BannerPatternHolderItemComponent> codec() {
         return CODEC;
     }
 

@@ -10,14 +10,14 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.util.dynamic.Codecs;
 
-public record PlaceBlockFromItemAction(ActionContextParameter position, boolean decrementCount) implements Action {
+public record PlaceBlockFromItemAction(ActionContextParameter position, boolean decrementCount) implements Action<PlaceBlockFromItemAction> {
     public static final Codec<PlaceBlockFromItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(PlaceBlockFromItemAction::position),
         Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "decrement_count", true).forGetter(PlaceBlockFromItemAction::decrementCount)
     ).apply(instance, PlaceBlockFromItemAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<PlaceBlockFromItemAction> type() {
         return ActionTypes.PLACE_BLOCK_FROM_ITEM;
     }
 

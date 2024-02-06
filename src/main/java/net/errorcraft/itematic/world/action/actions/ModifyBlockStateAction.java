@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import java.util.HashMap;
 import java.util.Map;
 
-public record ModifyBlockStateAction(ActionContextParameter position, Map<String, String> properties, boolean pushEntitiesUpwards) implements Action {
+public record ModifyBlockStateAction(ActionContextParameter position, Map<String, String> properties, boolean pushEntitiesUpwards) implements Action<ModifyBlockStateAction> {
     public static final Codec<ModifyBlockStateAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(ModifyBlockStateAction::position),
         Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("properties").forGetter(ModifyBlockStateAction::properties),
@@ -27,7 +27,7 @@ public record ModifyBlockStateAction(ActionContextParameter position, Map<String
     ).apply(instance, ModifyBlockStateAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<ModifyBlockStateAction> type() {
         return ActionTypes.MODIFY_BLOCK_STATE;
     }
 

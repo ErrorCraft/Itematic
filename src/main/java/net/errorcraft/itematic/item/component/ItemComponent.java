@@ -2,6 +2,8 @@ package net.errorcraft.itematic.item.component;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.ItemStackConsumer;
+import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.serialization.SetMapCodec;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
@@ -17,10 +19,14 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Set;
 
-public interface ItemComponent {
-    ItemComponentType<?> type();
-    Codec<? extends ItemComponent> codec();
+public interface ItemComponent<T extends ItemComponent<T>> {
+    SetMapCodec<ItemComponentType<?>, ItemComponent<?>> SET_MAP_CODEC = SetMapCodec.ofRegistry(ItematicRegistries.ITEM_COMPONENT_TYPE, ItemComponentType::codec, ItemComponent::codec, ItemComponent::type);
+    Codec<Set<ItemComponent<?>>> SET_CODEC = SET_MAP_CODEC.codec();
+
+    ItemComponentType<T> type();
+    Codec<T> codec();
 
     default ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         return ActionResult.PASS;

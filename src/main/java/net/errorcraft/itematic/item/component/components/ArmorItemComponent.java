@@ -19,19 +19,19 @@ import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Optional;
 
-public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional<AnimalArmorItem.Type> armorType) implements ItemComponent {
+public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional<AnimalArmorItem.Type> armorType) implements ItemComponent<ArmorItemComponent> {
     public static final Codec<ArmorItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(ItematicRegistryKeys.ARMOR_MATERIAL).fieldOf("material").forGetter(ArmorItemComponent::material),
         Codecs.createStrictOptionalFieldCodec(StringIdentifiable.createCodec(AnimalArmorItem.Type::values), "armor_type").forGetter(ArmorItemComponent::armorType)
     ).apply(instance, ArmorItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<ArmorItemComponent> type() {
         return ItemComponentTypes.ARMOR;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<ArmorItemComponent> codec() {
         return CODEC;
     }
 
@@ -52,24 +52,24 @@ public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional
         return new ArmorItemComponent(material, Optional.of(armorType));
     }
 
-    public static ItemComponent[] of(ArmorItem.Type type, int damageFactor, RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound) {
-        return new ItemComponent[] {
+    public static ItemComponent<?>[] of(ArmorItem.Type type, int damageFactor, RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound) {
+        return new ItemComponent<?>[] {
             DamageableItemComponent.of(type.getMaxDamage(damageFactor)),
             EquipmentItemComponent.of(type.getEquipmentSlot(), true, equipSound),
             of(material)
         };
     }
 
-    public static ItemComponent[] of(int durability, EquipmentSlot slot, RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound) {
-        return new ItemComponent[] {
+    public static ItemComponent<?>[] of(int durability, EquipmentSlot slot, RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound) {
+        return new ItemComponent<?>[] {
             DamageableItemComponent.of(durability),
             EquipmentItemComponent.of(slot, true, equipSound),
             of(material)
         };
     }
 
-    public static ItemComponent[] ofAnimal(RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound, AnimalArmorItem.Type type) {
-        return new ItemComponent[] {
+    public static ItemComponent<?>[] ofAnimal(RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound, AnimalArmorItem.Type type) {
+        return new ItemComponent<?>[] {
             EquipmentItemComponent.of(EquipmentSlot.BODY, false, equipSound),
             of(material, type)
         };

@@ -12,13 +12,13 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
-public record SetEntityNameFromItemAction(ActionContextParameter entity) implements Action {
+public record SetEntityNameFromItemAction(ActionContextParameter entity) implements Action<SetEntityNameFromItemAction> {
     public static final Codec<SetEntityNameFromItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("entity").forGetter(SetEntityNameFromItemAction::entity)
     ).apply(instance, SetEntityNameFromItemAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<SetEntityNameFromItemAction> type() {
         return ActionTypes.SET_ENTITY_NAME_FROM_ITEM;
     }
 

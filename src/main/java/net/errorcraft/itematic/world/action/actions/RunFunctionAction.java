@@ -14,14 +14,14 @@ import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
-public record RunFunctionAction(Identifier function, ActionContextParameters context) implements Action {
+public record RunFunctionAction(Identifier function, ActionContextParameters context) implements Action<RunFunctionAction> {
     public static final Codec<RunFunctionAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Identifier.CODEC.fieldOf("function").forGetter(RunFunctionAction::function),
         ActionContextParameters.CODEC.fieldOf("context").forGetter(RunFunctionAction::context)
     ).apply(instance, RunFunctionAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<RunFunctionAction> type() {
         return ActionTypes.RUN_FUNCTION;
     }
 

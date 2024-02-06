@@ -15,16 +15,16 @@ import net.minecraft.world.event.GameEvent;
 
 import java.util.List;
 
-public record PotionItemComponent() implements ItemComponent {
+public record PotionItemComponent() implements ItemComponent<PotionItemComponent> {
     public static final Codec<PotionItemComponent> CODEC = Codec.unit(new PotionItemComponent());
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<PotionItemComponent> type() {
         return ItemComponentTypes.POTION;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<PotionItemComponent> codec() {
         return CODEC;
     }
 

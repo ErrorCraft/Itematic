@@ -9,18 +9,18 @@ import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 
-public record BannerPatternItemComponent(TagKey<BannerPattern> patterns) implements ItemComponent {
+public record BannerPatternItemComponent(TagKey<BannerPattern> patterns) implements ItemComponent<BannerPatternItemComponent> {
     public static final Codec<BannerPatternItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         TagKey.unprefixedCodec(RegistryKeys.BANNER_PATTERN).fieldOf("patterns").forGetter(BannerPatternItemComponent::patterns)
     ).apply(instance, BannerPatternItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<BannerPatternItemComponent> type() {
         return ItemComponentTypes.BANNER_PATTERN;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<BannerPatternItemComponent> codec() {
         return CODEC;
     }
 

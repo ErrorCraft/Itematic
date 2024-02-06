@@ -11,12 +11,12 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
-public record AttachLeashedEntitiesOnBlockAction() implements Action {
+public record AttachLeashedEntitiesOnBlockAction() implements Action<AttachLeashedEntitiesOnBlockAction> {
     public static final AttachLeashedEntitiesOnBlockAction INSTANCE = new AttachLeashedEntitiesOnBlockAction();
     public static final Codec<AttachLeashedEntitiesOnBlockAction> CODEC = Codec.unit(INSTANCE);
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<AttachLeashedEntitiesOnBlockAction> type() {
         return ActionTypes.ATTACH_LEASHED_ENTITIES_ON_BLOCK;
     }
 

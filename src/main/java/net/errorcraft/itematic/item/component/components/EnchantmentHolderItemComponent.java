@@ -20,18 +20,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public record EnchantmentHolderItemComponent(Optional<RegistryEntry<Item>> grindingTransformsInto) implements ItemComponent {
+public record EnchantmentHolderItemComponent(Optional<RegistryEntry<Item>> grindingTransformsInto) implements ItemComponent<EnchantmentHolderItemComponent> {
     public static final Codec<EnchantmentHolderItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.createStrictOptionalFieldCodec(RegistryFixedCodec.of(RegistryKeys.ITEM), "grinding_transforms_into").forGetter(EnchantmentHolderItemComponent::grindingTransformsInto)
     ).apply(instance, EnchantmentHolderItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<EnchantmentHolderItemComponent> type() {
         return ItemComponentTypes.ENCHANTMENT_HOLDER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<EnchantmentHolderItemComponent> codec() {
         return CODEC;
     }
 

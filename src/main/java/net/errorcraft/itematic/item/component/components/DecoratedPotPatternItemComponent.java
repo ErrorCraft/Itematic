@@ -9,18 +9,18 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 
-public record DecoratedPotPatternItemComponent(RegistryEntry<String> pattern) implements ItemComponent {
+public record DecoratedPotPatternItemComponent(RegistryEntry<String> pattern) implements ItemComponent<DecoratedPotPatternItemComponent> {
     public static final Codec<DecoratedPotPatternItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.DECORATED_POT_PATTERN).fieldOf("pattern").forGetter(DecoratedPotPatternItemComponent::pattern)
     ).apply(instance, DecoratedPotPatternItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<DecoratedPotPatternItemComponent> type() {
         return ItemComponentTypes.DECORATED_POT_PATTERN;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<DecoratedPotPatternItemComponent> codec() {
         return CODEC;
     }
 

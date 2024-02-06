@@ -15,18 +15,18 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 
-public record DyeItemComponent(DyeColor color) implements ItemComponent {
+public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemComponent> {
     public static final Codec<DyeItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         DyeColor.CODEC.fieldOf("color").forGetter(DyeItemComponent::color)
     ).apply(instance, DyeItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<DyeItemComponent> type() {
         return ItemComponentTypes.DYE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<DyeItemComponent> codec() {
         return CODEC;
     }
 

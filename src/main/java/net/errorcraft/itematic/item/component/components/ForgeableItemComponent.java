@@ -11,18 +11,18 @@ import net.minecraft.registry.tag.TagKey;
 
 import java.util.Optional;
 
-public record ForgeableItemComponent(Optional<TagKey<Enchantment>> enchantments) implements ItemComponent {
+public record ForgeableItemComponent(Optional<TagKey<Enchantment>> enchantments) implements ItemComponent<ForgeableItemComponent> {
     public static final Codec<ForgeableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         TagKey.unprefixedCodec(RegistryKeys.ENCHANTMENT).optionalFieldOf("enchantments").forGetter(ForgeableItemComponent::enchantments)
     ).apply(instance, ForgeableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<ForgeableItemComponent> type() {
         return ItemComponentTypes.FORGEABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<ForgeableItemComponent> codec() {
         return CODEC;
     }
 

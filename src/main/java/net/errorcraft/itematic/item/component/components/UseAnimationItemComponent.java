@@ -8,18 +8,18 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.util.UseActionUtil;
 import net.minecraft.util.UseAction;
 
-public record UseAnimationItemComponent(UseAction animation) implements ItemComponent {
+public record UseAnimationItemComponent(UseAction animation) implements ItemComponent<UseAnimationItemComponent> {
     public static final Codec<UseAnimationItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         UseActionUtil.CODEC.fieldOf("animation").forGetter(UseAnimationItemComponent::animation)
     ).apply(instance, UseAnimationItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<UseAnimationItemComponent> type() {
         return ItemComponentTypes.USE_ANIMATION;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<UseAnimationItemComponent> codec() {
         return CODEC;
     }
 

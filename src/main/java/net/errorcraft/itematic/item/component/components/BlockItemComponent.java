@@ -21,19 +21,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record BlockItemComponent(RegistryEntry<Block> block, boolean operatorOnly) implements ItemComponent {
+public record BlockItemComponent(RegistryEntry<Block> block, boolean operatorOnly) implements ItemComponent<BlockItemComponent> {
     public static final Codec<BlockItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.BLOCK).fieldOf("block").forGetter(BlockItemComponent::block),
         Codec.BOOL.optionalFieldOf("operator_only", false).forGetter(BlockItemComponent::operatorOnly)
     ).apply(instance, BlockItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<BlockItemComponent> type() {
         return ItemComponentTypes.BLOCK;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<BlockItemComponent> codec() {
         return CODEC;
     }
 

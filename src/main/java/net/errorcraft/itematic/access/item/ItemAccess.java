@@ -23,10 +23,10 @@ public interface ItemAccess {
         return null;
     }
     default void itematic$setComponents(ItemComponentSet components) {}
-    default <T extends ItemComponent> boolean itematic$hasComponent(ItemComponentType<T> type) {
+    default <T extends ItemComponent<T>> boolean itematic$hasComponent(ItemComponentType<T> type) {
         return false;
     }
-    default <T extends ItemComponent> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
+    default <T extends ItemComponent<T>> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
         return Optional.empty();
     }
     default ItemEventMap itematic$events() {

@@ -15,14 +15,14 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldEvents;
 
-public record LightEndPortalAction(ActionContextParameter position) implements Action {
+public record LightEndPortalAction(ActionContextParameter position) implements Action<LightEndPortalAction> {
     public static final Codec<LightEndPortalAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(LightEndPortalAction::position)
     ).apply(instance, LightEndPortalAction::new));
     private static final int PORTAL_SIZE = 3;
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<LightEndPortalAction> type() {
         return ActionTypes.LIGHT_END_PORTAL;
     }
 

@@ -8,18 +8,18 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.util.StringIdentifiable;
 
-public record FireworkShapeModifierItemComponent(FireworkRocketItem.Type shape) implements ItemComponent {
+public record FireworkShapeModifierItemComponent(FireworkRocketItem.Type shape) implements ItemComponent<FireworkShapeModifierItemComponent> {
     public static final Codec<FireworkShapeModifierItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         StringIdentifiable.createCodec(FireworkRocketItem.Type::values).fieldOf("shape").forGetter(FireworkShapeModifierItemComponent::shape)
     ).apply(instance, FireworkShapeModifierItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<FireworkShapeModifierItemComponent> type() {
         return ItemComponentTypes.FIREWORK_SHAPE_MODIFIER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<FireworkShapeModifierItemComponent> codec() {
         return CODEC;
     }
 

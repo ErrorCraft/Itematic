@@ -14,7 +14,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.util.dynamic.Codecs;
 
-public record PlaceBlockAction(RegistryEntry<Block> block, ActionContextParameter position, boolean decrementCount) implements Action {
+public record PlaceBlockAction(RegistryEntry<Block> block, ActionContextParameter position, boolean decrementCount) implements Action<PlaceBlockAction> {
     public static final Codec<PlaceBlockAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.BLOCK).fieldOf("block").forGetter(PlaceBlockAction::block),
         ActionContextParameter.CODEC.fieldOf("position").forGetter(PlaceBlockAction::position),
@@ -22,7 +22,7 @@ public record PlaceBlockAction(RegistryEntry<Block> block, ActionContextParamete
     ).apply(instance, PlaceBlockAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<PlaceBlockAction> type() {
         return ActionTypes.PLACE_BLOCK;
     }
 

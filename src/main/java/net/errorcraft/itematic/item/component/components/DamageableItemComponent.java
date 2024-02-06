@@ -15,19 +15,19 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
 
-public record DamageableItemComponent(int durability, boolean preserveItem) implements ItemComponent {
+public record DamageableItemComponent(int durability, boolean preserveItem) implements ItemComponent<DamageableItemComponent> {
     public static Codec<DamageableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("durability").forGetter(DamageableItemComponent::durability),
         Codec.BOOL.optionalFieldOf("preserve_item", false).forGetter(DamageableItemComponent::preserveItem)
     ).apply(instance, DamageableItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<DamageableItemComponent> type() {
         return ItemComponentTypes.DAMAGEABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<DamageableItemComponent> codec() {
         return CODEC;
     }
 
@@ -47,8 +47,8 @@ public record DamageableItemComponent(int durability, boolean preserveItem) impl
         return new DamageableItemComponent(durability, preserveItem);
     }
 
-    public static ItemComponent[] sword(ToolMaterial material, TagKey<Item> repairItemsTag) {
-        return new ItemComponent[] {
+    public static ItemComponent<?>[] sword(ToolMaterial material, TagKey<Item> repairItemsTag) {
+        return new ItemComponent<?>[] {
             DamageableItemComponent.of(material.getDurability()),
             ToolItemComponent.builder(2)
                 .miningSpeed(15.0f, ItematicBlockTags.SWORD_SUPER_EFFICIENT, true)
@@ -61,24 +61,24 @@ public record DamageableItemComponent(int durability, boolean preserveItem) impl
         };
     }
 
-    public static ItemComponent[] shovel(ToolMaterial material, TagKey<Item> repairItemsTag) {
+    public static ItemComponent<?>[] shovel(ToolMaterial material, TagKey<Item> repairItemsTag) {
         return tool(material, 1.5d, -3.0d, BlockTags.SHOVEL_MINEABLE, EnchantmentTags.SHOVEL_ENCHANTING, EnchantmentTags.SHOVEL_FORGING, repairItemsTag);
     }
 
-    public static ItemComponent[] pickaxe(ToolMaterial material, TagKey<Item> repairItemsTag) {
+    public static ItemComponent<?>[] pickaxe(ToolMaterial material, TagKey<Item> repairItemsTag) {
         return tool(material, 1.0d, -2.8d, BlockTags.PICKAXE_MINEABLE, EnchantmentTags.PICKAXE_ENCHANTING, EnchantmentTags.PICKAXE_FORGING, repairItemsTag);
     }
 
-    public static ItemComponent[] axe(ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItemsTag) {
+    public static ItemComponent<?>[] axe(ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItemsTag) {
         return tool(material, attackDamage, attackSpeed, BlockTags.AXE_MINEABLE, EnchantmentTags.AXE_ENCHANTING, EnchantmentTags.AXE_FORGING, repairItemsTag);
     }
 
-    public static ItemComponent[] hoe(ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItemsTag) {
+    public static ItemComponent<?>[] hoe(ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItemsTag) {
         return tool(material, attackDamage, attackSpeed, BlockTags.HOE_MINEABLE, EnchantmentTags.HOE_ENCHANTING, EnchantmentTags.HOE_FORGING, repairItemsTag);
     }
 
-    private static ItemComponent[] tool(ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Block> miningSpeedTag, TagKey<Enchantment> toolEnchantingTag, TagKey<Enchantment> toolForgingTag, TagKey<Item> repairItemsTag) {
-        return new ItemComponent[] {
+    private static ItemComponent<?>[] tool(ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Block> miningSpeedTag, TagKey<Enchantment> toolEnchantingTag, TagKey<Enchantment> toolForgingTag, TagKey<Item> repairItemsTag) {
+        return new ItemComponent<?>[] {
             DamageableItemComponent.of(material.getDurability()),
             ToolItemComponent.builder(1)
                 .miningSpeed(material.getMiningSpeedMultiplier(), miningSpeedTag, true)

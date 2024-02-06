@@ -14,14 +14,14 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.event.GameEvent;
 
-public record SetBlockStateAction(ActionContextParameter position, BlockState state) implements Action {
+public record SetBlockStateAction(ActionContextParameter position, BlockState state) implements Action<SetBlockStateAction> {
     public static final Codec<SetBlockStateAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(SetBlockStateAction::position),
         BlockState.CODEC.fieldOf("state").forGetter(SetBlockStateAction::state)
     ).apply(instance, SetBlockStateAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<SetBlockStateAction> type() {
         return ActionTypes.SET_BLOCK_STATE;
     }
 

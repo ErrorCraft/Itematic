@@ -20,7 +20,8 @@ public class HotbarStorageEntryExtender {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/Codec;encodeStart(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;"
+            target = "Lcom/mojang/serialization/Codec;encodeStart(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;",
+            remap = false
         )
     )
     private static DataResult<NbtElement> encodeStartForEmptyItemStackDoNotUseCodec(Codec<ItemStack> instance, DynamicOps<NbtElement> ops, Object o) {
@@ -31,7 +32,8 @@ public class HotbarStorageEntryExtender {
         method = "serialize",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/Codec;encodeStart(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;"
+            target = "Lcom/mojang/serialization/Codec;encodeStart(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;",
+            remap = false
         )
     )
     private DataResult<NbtElement> useEmptyIfItemStackIsEmpty(Codec<ItemStack> instance, DynamicOps<NbtElement> ops, Object o, Operation<DataResult<NbtElement>> original) {
@@ -45,7 +47,8 @@ public class HotbarStorageEntryExtender {
         method = "method_56840",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/Codec;parse(Lcom/mojang/serialization/Dynamic;)Lcom/mojang/serialization/DataResult;"
+            target = "Lcom/mojang/serialization/Codec;parse(Lcom/mojang/serialization/Dynamic;)Lcom/mojang/serialization/DataResult;",
+            remap = false
         )
     )
     private static DataResult<ItemStack> useEmptyItemStackIfDataIsEmpty(Codec<ItemStack> instance, Dynamic<NbtElement> dynamic, Operation<DataResult<ItemStack>> original) {

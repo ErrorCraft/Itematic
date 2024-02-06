@@ -20,7 +20,7 @@ import net.minecraft.world.event.GameEvent;
 
 import java.util.Optional;
 
-public record TeleportAction(int distance, ActionContextParameter entity) implements Action {
+public record TeleportAction(int distance, ActionContextParameter entity) implements Action<TeleportAction> {
     public static final Codec<TeleportAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("distance").forGetter(TeleportAction::distance),
         ActionContextParameter.CODEC.fieldOf("entity").forGetter(TeleportAction::entity)
@@ -28,7 +28,7 @@ public record TeleportAction(int distance, ActionContextParameter entity) implem
     private static final int MAX_TELEPORT_ATTEMPTS = 16;
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<TeleportAction> type() {
         return ActionTypes.TELEPORT;
     }
 

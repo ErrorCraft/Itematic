@@ -13,16 +13,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record PotionHolderItemComponent() implements ItemComponent {
+public record PotionHolderItemComponent() implements ItemComponent<PotionHolderItemComponent> {
     public static final Codec<PotionHolderItemComponent> CODEC = Codec.unit(new PotionHolderItemComponent());
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<PotionHolderItemComponent> type() {
         return ItemComponentTypes.POTION_HOLDER;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<PotionHolderItemComponent> codec() {
         return CODEC;
     }
 

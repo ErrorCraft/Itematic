@@ -21,7 +21,7 @@ import net.minecraft.util.ActionResult;
 
 import java.util.Optional;
 
-public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItemData) implements ItemComponent {
+public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItemData) implements ItemComponent<EntityItemComponent> {
     public static final Codec<EntityItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         EntityInitializer.CODEC.fieldOf("entity").forGetter(EntityItemComponent::entity),
         Codec.BOOL.optionalFieldOf("allow_item_data", false).forGetter(EntityItemComponent::allowItemData)
@@ -32,21 +32,21 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
     }
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<EntityItemComponent> type() {
         return ItemComponentTypes.ENTITY;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<EntityItemComponent> codec() {
         return CODEC;
     }
 
-    public static ItemComponent[] from(EntityInitializer<?> entity, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
+    public static ItemComponent<?>[] from(EntityInitializer<?> entity, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
         return from(entity, false, dispenseBehaviors);
     }
 
-    public static ItemComponent[] from(EntityInitializer<?> entity, boolean allowItemData, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
-        return new ItemComponent[] {
+    public static ItemComponent<?>[] from(EntityInitializer<?> entity, boolean allowItemData, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
+        return new ItemComponent<?>[] {
             new EntityItemComponent(entity, allowItemData),
             new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ENTITY))
         };

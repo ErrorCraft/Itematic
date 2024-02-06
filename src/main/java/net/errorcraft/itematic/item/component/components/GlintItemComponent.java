@@ -6,18 +6,18 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 
-public record GlintItemComponent(boolean glint) implements ItemComponent {
+public record GlintItemComponent(boolean glint) implements ItemComponent<GlintItemComponent> {
     public static final Codec<GlintItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.BOOL.fieldOf("glint").forGetter(GlintItemComponent::glint)
     ).apply(instance, GlintItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<GlintItemComponent> type() {
         return ItemComponentTypes.GLINT;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<GlintItemComponent> codec() {
         return CODEC;
     }
 

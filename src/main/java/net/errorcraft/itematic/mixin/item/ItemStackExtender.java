@@ -600,12 +600,12 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
-    public <T extends ItemComponent> boolean itematic$hasComponent(ItemComponentType<T> type) {
+    public <T extends ItemComponent<T>> boolean itematic$hasComponent(ItemComponentType<T> type) {
         return this.entry != null && this.entry.value().itematic$hasComponent(type);
     }
 
     @Override
-    public <T extends ItemComponent> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
+    public <T extends ItemComponent<T>> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
         if (this.entry == null) {
             return Optional.empty();
         }

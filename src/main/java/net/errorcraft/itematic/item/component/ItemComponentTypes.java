@@ -58,7 +58,7 @@ public class ItemComponentTypes {
 
     public static void init() {}
 
-    private static <T extends ItemComponent> ItemComponentType<T> register(String id, ItemComponentType<T> type) {
+    private static <T extends ItemComponent<T>> ItemComponentType<T> register(String id, ItemComponentType<T> type) {
         return Registry.register(ItematicRegistries.ITEM_COMPONENT_TYPE, id, type);
     }
 }

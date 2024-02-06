@@ -13,13 +13,13 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
-public record MarkBannerOnItemAction(ActionContextParameter position) implements Action {
+public record MarkBannerOnItemAction(ActionContextParameter position) implements Action<MarkBannerOnItemAction> {
     public static final Codec<MarkBannerOnItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(MarkBannerOnItemAction::position)
     ).apply(instance, MarkBannerOnItemAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<MarkBannerOnItemAction> type() {
         return ActionTypes.MARK_BANNER_ON_ITEM;
     }
 

@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record RecordItemComponent(RegistryEntry<SoundEvent> soundEvent, String descriptionKey, int duration, int outputSignal) implements ItemComponent {
+public record RecordItemComponent(RegistryEntry<SoundEvent> soundEvent, String descriptionKey, int duration, int outputSignal) implements ItemComponent<RecordItemComponent> {
     public static final Codec<RecordItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.SOUND_EVENT).fieldOf("sound_event").forGetter(RecordItemComponent::soundEvent),
         Codec.STRING.fieldOf("description_key").forGetter(RecordItemComponent::descriptionKey),
@@ -43,12 +43,12 @@ public record RecordItemComponent(RegistryEntry<SoundEvent> soundEvent, String d
     ).apply(instance, RecordItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<RecordItemComponent> type() {
         return ItemComponentTypes.RECORD;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<RecordItemComponent> codec() {
         return CODEC;
     }
 

@@ -11,14 +11,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.dynamic.Codecs;
 
-public record DecrementItemAction(int amount, boolean ignoreGameMode) implements Action {
+public record DecrementItemAction(int amount, boolean ignoreGameMode) implements Action<DecrementItemAction> {
     public static final Codec<DecrementItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("amount").forGetter(DecrementItemAction::amount),
         Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "ignore_game_mode", false).forGetter(DecrementItemAction::ignoreGameMode)
     ).apply(instance, DecrementItemAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<DecrementItemAction> type() {
         return ActionTypes.DECREMENT_ITEM;
     }
 

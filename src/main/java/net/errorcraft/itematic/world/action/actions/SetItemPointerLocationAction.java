@@ -24,14 +24,14 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-public record SetItemPointerLocationAction(ActionContextParameter position) implements Action {
+public record SetItemPointerLocationAction(ActionContextParameter position) implements Action<SetItemPointerLocationAction> {
     public static final Codec<SetItemPointerLocationAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(SetItemPointerLocationAction::position)
     ).apply(instance, SetItemPointerLocationAction::new));
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<SetItemPointerLocationAction> type() {
         return ActionTypes.SET_ITEM_POINTER_LOCATION;
     }
 

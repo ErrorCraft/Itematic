@@ -30,19 +30,19 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public record PlayableItemComponent(TagKey<Instrument> instruments) implements ItemComponent {
+public record PlayableItemComponent(TagKey<Instrument> instruments) implements ItemComponent<PlayableItemComponent> {
     public static final Codec<PlayableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         TagKey.unprefixedCodec(RegistryKeys.INSTRUMENT).fieldOf("instruments").forGetter(PlayableItemComponent::instruments)
     ).apply(instance, PlayableItemComponent::new));
     private static final String INSTRUMENT_KEY = GoatHornItemAccessor.instrumentKey();
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<PlayableItemComponent> type() {
         return ItemComponentTypes.PLAYABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<PlayableItemComponent> codec() {
         return CODEC;
     }
 

@@ -15,7 +15,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 
-public record WeaponItemComponent(int damage, double attackDamage, double attackSpeed) implements ItemComponent {
+public record WeaponItemComponent(int damage, double attackDamage, double attackSpeed) implements ItemComponent<WeaponItemComponent> {
     public static final Codec<WeaponItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("damage").forGetter(WeaponItemComponent::damage),
         Codec.DOUBLE.fieldOf("attack_damage").forGetter(WeaponItemComponent::attackDamage),
@@ -23,12 +23,12 @@ public record WeaponItemComponent(int damage, double attackDamage, double attack
     ).apply(instance, WeaponItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<WeaponItemComponent> type() {
         return ItemComponentTypes.WEAPON;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<WeaponItemComponent> codec() {
         return CODEC;
     }
 

@@ -38,7 +38,7 @@ public class ActionTypes {
 
     public static void init() {}
 
-    private static <T extends Action> ActionType<T> register(RegistryKey<ActionType<?>> id, ActionType<T> actionType) {
+    private static <T extends Action<T>> ActionType<T> register(RegistryKey<ActionType<?>> id, ActionType<T> actionType) {
         return Registry.register(ItematicRegistries.ACTION_TYPE, id, actionType);
     }
 }

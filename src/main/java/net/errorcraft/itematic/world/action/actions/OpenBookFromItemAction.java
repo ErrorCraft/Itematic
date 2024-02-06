@@ -10,12 +10,12 @@ import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.Optional;
 
-public record OpenBookFromItemAction() implements Action {
+public record OpenBookFromItemAction() implements Action<OpenBookFromItemAction> {
     public static final OpenBookFromItemAction INSTANCE = new OpenBookFromItemAction();
     public static final Codec<OpenBookFromItemAction> CODEC = Codec.unit(INSTANCE);
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<OpenBookFromItemAction> type() {
         return ActionTypes.OPEN_BOOK_FROM_ITEM;
     }
 

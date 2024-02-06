@@ -11,14 +11,14 @@ import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionTypes;
 
-public record ModifyItemAction(LootFunction itemModifier, ActionContextParameters context) implements Action {
+public record ModifyItemAction(LootFunction itemModifier, ActionContextParameters context) implements Action<ModifyItemAction> {
     public static final Codec<ModifyItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         LootFunctionTypes.CODEC.fieldOf("item_modifier").forGetter(ModifyItemAction::itemModifier),
         ActionContextParameters.CODEC.fieldOf("context").forGetter(ModifyItemAction::context)
     ).apply(instance, ModifyItemAction::new));
 
     @Override
-    public ActionType<?> type() {
+    public ActionType<ModifyItemAction> type() {
         return ActionTypes.MODIFY_ITEM;
     }
 

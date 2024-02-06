@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 
 import java.util.Optional;
 
-public record PointableItemComponent(RegistryEntry<Pointer> pointsTo, Optional<String> lodestoneTranslationKey) implements ItemComponent {
+public record PointableItemComponent(RegistryEntry<Pointer> pointsTo, Optional<String> lodestoneTranslationKey) implements ItemComponent<PointableItemComponent> {
     public static final Codec<PointableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Pointer.ENTRY_CODEC.fieldOf("points_to").forGetter(PointableItemComponent::pointsTo),
         Codecs.createStrictOptionalFieldCodec(Codec.STRING,"lodestone_translation_key").forGetter(PointableItemComponent::lodestoneTranslationKey)
@@ -31,12 +31,12 @@ public record PointableItemComponent(RegistryEntry<Pointer> pointsTo, Optional<S
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<PointableItemComponent> type() {
         return ItemComponentTypes.POINTABLE;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<PointableItemComponent> codec() {
         return CODEC;
     }
 

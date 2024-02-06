@@ -24,19 +24,19 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int damage) implements ItemComponent {
+public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int damage) implements ItemComponent<SteeringItemComponent> {
     public static final Codec<SteeringItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.ENTITY_TYPE).fieldOf("target").forGetter(SteeringItemComponent::target),
         Codec.INT.fieldOf("damage").forGetter(SteeringItemComponent::damage)
     ).apply(instance, SteeringItemComponent::new));
 
     @Override
-    public ItemComponentType<?> type() {
+    public ItemComponentType<SteeringItemComponent> type() {
         return ItemComponentTypes.STEERING;
     }
 
     @Override
-    public Codec<? extends ItemComponent> codec() {
+    public Codec<SteeringItemComponent> codec() {
         return CODEC;
     }
 
