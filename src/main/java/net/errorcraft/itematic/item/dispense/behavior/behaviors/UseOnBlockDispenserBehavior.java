@@ -3,7 +3,6 @@ package net.errorcraft.itematic.item.dispense.behavior.behaviors;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.FallibleItemDispenserBehavior;
@@ -17,10 +16,11 @@ public class UseOnBlockDispenserBehavior extends FallibleItemDispenserBehavior {
     protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
         StackReference stackReference = StackReferenceUtil.of(stack);
         Direction direction = pointer.state().get(DispenserBlock.FACING);
-        ActionContext actionContext = MutableActionContext.stackUsage(pointer.world(), stack, stackReference::set)
+        ActionContext actionContext = ActionContext.builder(pointer.world(), stack, stackReference::set)
             .position(ActionContextParameter.THIS, pointer.pos())
             .position(ActionContextParameter.TARGET, pointer.pos().offset(direction))
-            .side(direction);
+            .side(direction)
+            .build();
         if (!stack.itematic$invokeEvent(ItemEvents.USE_ON_BLOCK, actionContext)) {
             this.setSuccess(false);
         }

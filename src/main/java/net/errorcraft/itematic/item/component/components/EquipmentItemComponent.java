@@ -9,7 +9,6 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EquipmentSlot;
@@ -51,8 +50,9 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
         TypedActionResult<ItemStack> result = this.equipAndSwap(stack.getItem(), world, user, hand);
         resultStackConsumer.set(result.getValue());
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, resultStackConsumer, hand)
-                .entityPosition(ActionContextParameter.THIS, user);
+            ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, hand)
+                .entityPosition(ActionContextParameter.THIS, user)
+                .build();
             stack.itematic$invokeEvent(ItemEvents.EQUIP_ITEM, context);
         }
         if (result.getResult() == ActionResult.FAIL) {

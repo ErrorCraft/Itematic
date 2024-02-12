@@ -22,6 +22,7 @@ public class ModelOverrides {
     public static final ModelOverride TIME = register(ModelOverrideKeys.TIME, new TimeModelOverride());
     public static final ModelOverride ANGLE = register(ModelOverrideKeys.ANGLE, new AngleModelOverride());
     public static final ModelOverride TOOTING = register(ModelOverrideKeys.TOOTING, new TootingModelOverride());
+    public static final ModelOverride THROWING = register(ModelOverrideKeys.THROWING, new ThrowingModelOverride());
 
     private ModelOverrides() {}
 

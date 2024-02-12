@@ -49,7 +49,7 @@ public abstract class ArrowEntityExtender extends PersistentProjectileEntity {
             target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;<init>(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;)V"
         )
     )
-    private static ItemStack newArrowEntityDefaultStackUseDynamicRegistry(ItemStack stack, @Local World world) {
+    private static ItemStack defaultStackUseCreateStack(ItemStack stack, @Local(argsOnly = true) World world) {
         return world.itematic$createStack(ItemKeys.ARROW);
     }
 

@@ -11,11 +11,9 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
@@ -43,27 +41,37 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, f
         return CODEC;
     }
 
-    public Entity createEntity(World world, LivingEntity user, ItemStack stack, float angleOffset, float speed) {
+    public Entity createEntity(World world, Entity user, ItemStack stack, float angleOffset, float speed) {
         if (world.isClient()) {
             return null;
         }
-        MutableActionContext context = MutableActionContext.stackUsage((ServerWorld) world, stack, ItemStackConsumer.EMPTY)
+        return this.createEntity((ServerWorld) world, user, stack, ItemStackConsumer.EMPTY, angleOffset, speed, 1.0f);
+    }
+
+    public Entity createEntity(ServerWorld world, Entity user, ItemStack stack, ItemStackConsumer resultStackConsumer, float angleOffset, float speed, float variation) {
+        ActionContext context = ActionContext.builder(world, stack, resultStackConsumer)
             .entityPosition(ActionContextParameter.THIS, user)
-            .position(ActionContextParameter.TARGET, user.getEyePos().add(0.0d, -0.1d, 0.0d));
-        return this.createEntity(context, angleOffset, speed, 1.0f);
+            .position(ActionContextParameter.TARGET, user.getEyePos().add(0.0d, -0.1d, 0.0d))
+            .build();
+        return this.createEntity(context, angleOffset, speed, variation);
     }
 
     public Entity createEntity(World world, Position position, ItemStack stack, float speed, float variation) {
         if (world.isClient()) {
             return null;
         }
-        ActionContext context = MutableActionContext.stackUsage((ServerWorld) world, stack, ItemStackConsumer.EMPTY)
-            .position(ActionContextParameter.TARGET, position);
+        ActionContext context = ActionContext.builder((ServerWorld) world, stack, ItemStackConsumer.EMPTY)
+            .position(ActionContextParameter.TARGET, position)
+            .build();
         return this.createEntity(context, 0.0f, speed, variation);
     }
 
+    public static ProjectileItemComponent of(EntityInitializer<?> entity, int damage, float chargedSpeed) {
+        return new ProjectileItemComponent(entity, damage, chargedSpeed);
+    }
+
     public static ProjectileItemComponent of(EntityInitializer<?> entity, int damage) {
-        return new ProjectileItemComponent(entity, damage, CrossbowItemAccessor.getDefaultSpeed());
+        return of(entity, damage, CrossbowItemAccessor.getDefaultSpeed());
     }
 
     public static ProjectileItemComponent of(RegistryEntry<EntityType<?>> entity) {
@@ -74,7 +82,7 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, f
         return of(new PersistentProjectileEntityInitializer<>(entityType, ownerCreator, simpleCreator), 1);
     }
 
-    private Entity createEntity(ActionContext context, float angleOffset, float speed, float variation) {
+    public Entity createEntity(ActionContext context, float angleOffset, float speed, float variation) {
         Entity entity = this.entity.create(context);
         if (entity == null) {
             return null;

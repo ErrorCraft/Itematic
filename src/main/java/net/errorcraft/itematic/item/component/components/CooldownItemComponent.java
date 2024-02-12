@@ -32,4 +32,8 @@ public record CooldownItemComponent(int ticks) implements ItemComponent<Cooldown
         user.getItemCooldownManager().set(stack.getItem(), this.ticks);
         return ActionResult.PASS;
     }
+
+    public static CooldownItemComponent of(int ticks) {
+        return new CooldownItemComponent(ticks);
+    }
 }

@@ -16,7 +16,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public record FireworkExplosionHolderItemComponent() implements ItemComponent<FireworkExplosionHolderItemComponent> {
-    public static final Codec<FireworkExplosionHolderItemComponent> CODEC = Codec.unit(new FireworkExplosionHolderItemComponent());
+    public static final FireworkExplosionHolderItemComponent INSTANCE = new FireworkExplosionHolderItemComponent();
+    public static final Codec<FireworkExplosionHolderItemComponent> CODEC = Codec.unit(INSTANCE);
 
     @Override
     public ItemComponentType<FireworkExplosionHolderItemComponent> type() {

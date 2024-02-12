@@ -17,7 +17,7 @@ public class PullModelOverride implements ClampedModelOverride {
             return 0.0f;
         }
         return stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
-            .map(c -> c.getPullProgress(stack, target.getItemUseTimeLeft()))
+            .map(c -> c.getPullProgress(stack, target.itematic$itemUsedTicks()))
             .orElse(0.0f);
     }
 

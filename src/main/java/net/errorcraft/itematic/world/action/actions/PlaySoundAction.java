@@ -13,16 +13,18 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 
-public record PlaySoundAction(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category, Range.FloatRange volume, Range.FloatRange pitch) implements Action<PlaySoundAction> {
+public record PlaySoundAction(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category, Range.FloatRange volume, Range.FloatRange pitch, boolean fromEntity) implements Action<PlaySoundAction> {
     public static final Codec<PlaySoundAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(PlaySoundAction::position),
         SoundEvent.ENTRY_CODEC.fieldOf("sound").forGetter(PlaySoundAction::sound),
         StringIdentifiable.createCodec(SoundCategory::values).fieldOf("category").forGetter(PlaySoundAction::category),
         Range.FLOAT_CODEC.fieldOf("volume").forGetter(PlaySoundAction::volume),
-        Range.FLOAT_CODEC.fieldOf("pitch").forGetter(PlaySoundAction::pitch)
+        Range.FLOAT_CODEC.fieldOf("pitch").forGetter(PlaySoundAction::pitch),
+        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "from_entity", false).forGetter(PlaySoundAction::fromEntity)
     ).apply(instance, PlaySoundAction::new));
 
     @Override
@@ -32,10 +34,20 @@ public record PlaySoundAction(ActionContextParameter position, RegistryEntry<Sou
 
     @Override
     public boolean execute(ActionContext context) {
-        Vec3d pos = context.position(this.position);
         ServerWorld world = context.world();
         Random random = world.getRandom();
-        world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), this.sound, this.category, this.volume.get(random), this.pitch.get(random), world.getRandom().nextLong());
+        float volume = this.volume.get(random);
+        float pitch = this.pitch.get(random);
+        long seed = world.getRandom().nextLong();
+        context.player(ActionContextParameter.THIS)
+            .filter(player -> this.fromEntity)
+            .ifPresentOrElse(
+                player -> world.playSoundFromEntity(null, player, this.sound, this.category, volume, pitch, seed),
+                () -> {
+                    Vec3d pos = context.position(this.position);
+                    world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), this.sound, this.category, volume, pitch, seed);
+                }
+            );
         return true;
     }
 
@@ -44,11 +56,15 @@ public record PlaySoundAction(ActionContextParameter position, RegistryEntry<Sou
     }
 
     public static PlaySoundAction of(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
-        return new PlaySoundAction(position, sound, category, Range.FloatRange.of(1.0f), Range.FloatRange.of(1.0f));
+        return new PlaySoundAction(position, sound, category, Range.FloatRange.of(1.0f), Range.FloatRange.of(1.0f), false);
+    }
+
+    public static PlaySoundAction fromEntity(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
+        return new PlaySoundAction(position, sound, category, Range.FloatRange.of(1.0f), Range.FloatRange.of(1.0f), true);
     }
 
     public static PlaySoundAction of(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category, float volume, float pitch) {
-        return new PlaySoundAction(position, sound, category, Range.FloatRange.of(volume), Range.FloatRange.of(pitch));
+        return new PlaySoundAction(position, sound, category, Range.FloatRange.of(volume), Range.FloatRange.of(pitch), false);
     }
 
     public static class Builder {
@@ -57,6 +73,7 @@ public record PlaySoundAction(ActionContextParameter position, RegistryEntry<Sou
         private final SoundCategory category;
         private Range.FloatRange volume = Range.FloatRange.of(1.0f);
         private Range.FloatRange pitch = Range.FloatRange.of(1.0f);
+        private boolean fromEntity = false;
 
         private Builder(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
             this.position = position;
@@ -65,7 +82,7 @@ public record PlaySoundAction(ActionContextParameter position, RegistryEntry<Sou
         }
 
         public PlaySoundAction build() {
-            return new PlaySoundAction(this.position, this.sound, this.category, this.volume, this.pitch);
+            return new PlaySoundAction(this.position, this.sound, this.category, this.volume, this.pitch, this.fromEntity);
         }
 
         public Builder volume(float volume) {
@@ -85,6 +102,11 @@ public record PlaySoundAction(ActionContextParameter position, RegistryEntry<Sou
 
         public Builder pitch(float min, float max) {
             this.pitch = Range.FloatRange.of(min, max);
+            return this;
+        }
+
+        public Builder fromEntity() {
+            this.fromEntity = true;
             return this;
         }
     }

@@ -27,10 +27,6 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
         Codec.BOOL.optionalFieldOf("allow_item_data", false).forGetter(EntityItemComponent::allowItemData)
     ).apply(instance, EntityItemComponent::new));
 
-    public EntityItemComponent(EntityInitializer<?> entity) {
-        this(entity, false);
-    }
-
     @Override
     public ItemComponentType<EntityItemComponent> type() {
         return ItemComponentTypes.ENTITY;
@@ -41,14 +37,22 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
         return CODEC;
     }
 
+    public static EntityItemComponent of(EntityInitializer<?> entity) {
+        return of(entity, false);
+    }
+
+    public static EntityItemComponent of(EntityInitializer<?> entity, boolean allowItemData) {
+        return new EntityItemComponent(entity, allowItemData);
+    }
+
     public static ItemComponent<?>[] from(EntityInitializer<?> entity, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
         return from(entity, false, dispenseBehaviors);
     }
 
     public static ItemComponent<?>[] from(EntityInitializer<?> entity, boolean allowItemData, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
-            new EntityItemComponent(entity, allowItemData),
-            new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ENTITY))
+            of(entity, allowItemData),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ENTITY))
         };
     }
 

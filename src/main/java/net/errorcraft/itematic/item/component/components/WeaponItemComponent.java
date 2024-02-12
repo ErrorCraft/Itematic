@@ -8,7 +8,6 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -37,9 +36,10 @@ public record WeaponItemComponent(int damage, double attackDamage, double attack
         if (!(attacker.getWorld() instanceof ServerWorld serverWorld)) {
             return true;
         }
-        ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, resultStackConsumer, EquipmentSlot.MAINHAND)
+        ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, EquipmentSlot.MAINHAND)
             .entityPosition(ActionContextParameter.THIS, attacker)
-            .entityPosition(ActionContextParameter.TARGET, target);
+            .entityPosition(ActionContextParameter.TARGET, target)
+            .build();
         stack.itematic$invokeEvent(ItemEvents.USE_WEAPON, context);
         stack.itematic$damage(this.damage, context);
         return true;

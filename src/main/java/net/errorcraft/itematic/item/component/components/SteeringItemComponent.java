@@ -7,7 +7,6 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -45,13 +44,18 @@ public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int dam
         if (world.isClient()) {
             return ActionResult.PASS;
         }
-        ActionContext context = MutableActionContext.stackUsage((ServerWorld) world, stack, resultStackConsumer, hand)
-            .entityPosition(ActionContextParameter.THIS, user);
+        ActionContext context = ActionContext.builder((ServerWorld) world, stack, resultStackConsumer, hand)
+            .entityPosition(ActionContextParameter.THIS, user)
+            .build();
         if (this.apply(user, stack, context)) {
             return ActionResult.SUCCESS;
         }
         user.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
         return ActionResult.PASS;
+    }
+
+    public static SteeringItemComponent of(RegistryEntry<EntityType<?>> target, int damage) {
+        return new SteeringItemComponent(target, damage);
     }
 
     private boolean apply(PlayerEntity user, ItemStack stack, ActionContext context) {

@@ -113,11 +113,20 @@
       "net/minecraft/class_1937": [
         "net/errorcraft/itematic/access/world/WorldAccess"
       ],
+      "net/minecraft/class_2048": [
+        "net/errorcraft/itematic/access/predicate/EntityPredicateAccess"
+      ],
+      "net/minecraft/class_2048\u0024class_2049": [
+        "net/errorcraft/itematic/access/predicate/EntityPredicateBuilderAccess"
+      ],
       "net/minecraft/class_2248": [
         "net/errorcraft/itematic/access/block/BlockAccess"
       ],
       "net/minecraft/class_2302": [
         "net/errorcraft/itematic/access/block/CropBlockAccess"
+      ],
+      "net/minecraft/class_2602": [
+        "net/errorcraft/itematic/access/network/listener/ClientPlayPacketListenerAccess"
       ],
       "net/minecraft/class_3419": [
         "net/minecraft/util/StringIdentifiable"

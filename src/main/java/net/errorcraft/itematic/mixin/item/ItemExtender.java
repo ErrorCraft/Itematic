@@ -15,7 +15,6 @@ import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.util.ActionResultUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
@@ -104,8 +103,9 @@ public class ItemExtender implements ItemAccess {
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, hand)
-                .entityPosition(ActionContextParameter.THIS, user);
+            ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, hand)
+                .entityPosition(ActionContextParameter.THIS, user)
+                .build();
             this.itematic$invokeEvent(ItemEvents.USE, context);
         }
         info.setReturnValue(new TypedActionResult<>(result, stackReference.get()));
@@ -133,10 +133,11 @@ public class ItemExtender implements ItemAccess {
         }
 
         if (context.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext actionContext = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, context.getHand())
+            ActionContext actionContext = ActionContext.builder(serverWorld, stack, stackReference::set, context.getHand())
                 .entityPosition(ActionContextParameter.THIS, context.getPlayer())
                 .position(ActionContextParameter.TARGET, context.getBlockPos())
-                .side(context.getSide());
+                .side(context.getSide())
+                .build();
             this.itematic$invokeEvent(ItemEvents.USE_ON_BLOCK, actionContext);
         }
 
@@ -161,9 +162,10 @@ public class ItemExtender implements ItemAccess {
         }
 
         if (user.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, hand)
+            ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, hand)
                 .entityPosition(ActionContextParameter.THIS, user)
-                .entityPosition(ActionContextParameter.TARGET, entity);
+                .entityPosition(ActionContextParameter.TARGET, entity)
+                .build();
             this.itematic$invokeEvent(ItemEvents.USE_ON_ENTITY, context);
         }
 
@@ -184,9 +186,10 @@ public class ItemExtender implements ItemAccess {
         }
 
         if (attacker.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, EquipmentSlot.MAINHAND)
+            ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, EquipmentSlot.MAINHAND)
                 .entityPosition(ActionContextParameter.THIS, attacker)
-                .entityPosition(ActionContextParameter.TARGET, target);
+                .entityPosition(ActionContextParameter.TARGET, target)
+                .build();
             this.itematic$invokeEvent(ItemEvents.HIT_ENTITY, context);
         }
 
@@ -207,9 +210,10 @@ public class ItemExtender implements ItemAccess {
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, EquipmentSlot.MAINHAND)
+            ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, EquipmentSlot.MAINHAND)
                 .entityPosition(ActionContextParameter.THIS, miner)
-                .position(ActionContextParameter.TARGET, pos.toCenterPos());
+                .position(ActionContextParameter.TARGET, pos.toCenterPos())
+                .build();
             this.itematic$invokeEvent(ItemEvents.BROKE_BLOCK, context);
         }
 
@@ -223,8 +227,9 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+        int usedTicks = user.itematic$itemUsedTicks();
         for (ItemComponent<?> component : this.components) {
-            component.using(stack, world, user, remainingUseTicks);
+            component.using(stack, world, user, usedTicks, remainingUseTicks);
         }
     }
 
@@ -234,14 +239,16 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+        int usedTicks = user.itematic$itemUsedTicks();
         StackReference stackReference = StackReferenceUtil.of(stack);
         for (ItemComponent<?> component : this.components) {
-            component.stopUsing(stack, world, user, remainingUseTicks, stackReference::set);
+            component.stopUsing(stack, world, user, usedTicks, remainingUseTicks, stackReference::set);
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, user.getActiveHand())
-                .entityPosition(ActionContextParameter.THIS, user);
+            ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, user.getActiveHand())
+                .entityPosition(ActionContextParameter.THIS, user)
+                .build();
             this.itematic$invokeEvent(ItemEvents.STOPPED_USING, context);
         }
 
@@ -254,14 +261,16 @@ public class ItemExtender implements ItemAccess {
         cancellable = true
     )
     public void finishUsingUseItemComponent(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> info) {
+        int usedTicks = user.itematic$itemUsedTicks();
         StackReference stackReference = StackReferenceUtil.of(stack);
         for (ItemComponent<?> component : this.components) {
-            component.finishUsing(world, user, stack, stackReference::set);
+            component.finishUsing(world, user, stack, usedTicks, stackReference::set);
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, stackReference::set, user.getActiveHand())
-                .entityPosition(ActionContextParameter.THIS, user);
+            ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, user.getActiveHand())
+                .entityPosition(ActionContextParameter.THIS, user)
+                .build();
             this.itematic$invokeEvent(ItemEvents.FINISHED_USING, context);
         }
 
@@ -431,7 +440,7 @@ public class ItemExtender implements ItemAccess {
     public void getMaxUseTimeUseItemComponent(ItemStack stack, CallbackInfoReturnable<Integer> info) {
         int maxUseTime = this.itematic$getComponent(ItemComponentTypes.USE_DURATION)
             .map(UseDurationItemComponent::ticks)
-            .orElse(0);
+            .orElse(-1);
         info.setReturnValue(maxUseTime);
     }
 

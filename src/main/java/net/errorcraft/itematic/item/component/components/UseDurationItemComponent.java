@@ -20,4 +20,8 @@ public record UseDurationItemComponent(int ticks) implements ItemComponent<UseDu
     public Codec<UseDurationItemComponent> codec() {
         return CODEC;
     }
+
+    public static UseDurationItemComponent of(int ticks) {
+        return new UseDurationItemComponent(ticks);
+    }
 }

@@ -14,7 +14,6 @@ import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
-import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -355,7 +354,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<?> setTridentInitializerCodec(EntityType.Builder<?> type) {
-        type.itematic$initializerCodec(entityType -> PersistentProjectileEntityInitializer.createCodec(entityType, TridentEntity::new, (world, x, y, z, stack) -> null));
+        type.itematic$initializerCodec(TridentEntityInitializer.CODEC);
         return type;
     }
 
@@ -369,7 +368,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         slice = @Slice(
             from = @At(
                 value = "CONSTANT",
-                args = "stringValue=trident"
+                args = "stringValue=firework_rocket"
             )
         )
     )

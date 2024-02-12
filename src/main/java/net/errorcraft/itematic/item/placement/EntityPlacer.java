@@ -7,7 +7,6 @@ import net.errorcraft.itematic.item.component.components.BucketItemComponent;
 import net.errorcraft.itematic.item.component.components.EntityItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -106,10 +105,11 @@ public class EntityPlacer extends Placer {
             return;
         }
         BlockPos offset = this.blockState.getCollisionShape(this.world, this.blockPos).isEmpty() ? this.blockPos : this.blockPos.offset(this.direction);
-        MutableActionContext context = MutableActionContext.stackUsage(serverWorld, this.stack, this.resultStackConsumer, this.hand)
+        ActionContext context = ActionContext.builder(serverWorld, this.stack, this.resultStackConsumer, this.hand)
             .entityPosition(ActionContextParameter.THIS, this.player)
             .position(ActionContextParameter.TARGET, offset)
-            .side(this.direction);
+            .side(this.direction)
+            .build();
         Entity entity = this.createEntity(offset, context);
         if (entity == null) {
             return;
@@ -119,7 +119,7 @@ public class EntityPlacer extends Placer {
         }
         this.tryDecrementStack();
         this.world.emitGameEvent(this.player, GameEvent.ENTITY_PLACE, entity.getBlockPos());
-        this.stack.itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, context.entity(ActionContextParameter.TARGET, entity));
+        this.stack.itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, context.builderForCopy().entity(ActionContextParameter.TARGET, entity).build());
     }
 
     private Entity createEntity(BlockPos offset, ActionContext context) {

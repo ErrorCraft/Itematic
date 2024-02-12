@@ -32,4 +32,12 @@ public record DyeableItemComponent(int defaultColor) implements ItemComponent<Dy
         }
         return this.defaultColor;
     }
+
+    public static DyeableItemComponent of() {
+        return of(DyeableItem.DEFAULT_COLOR);
+    }
+
+    public static DyeableItemComponent of(int defaultColor) {
+        return new DyeableItemComponent(defaultColor);
+    }
 }

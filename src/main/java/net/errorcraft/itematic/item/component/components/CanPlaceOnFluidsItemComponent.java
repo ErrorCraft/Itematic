@@ -26,10 +26,6 @@ public record CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling handler
         Vec3i.CODEC.optionalFieldOf("offset", Vec3i.ZERO).forGetter(CanPlaceOnFluidsItemComponent::offset)
     ).apply(instance, CanPlaceOnFluidsItemComponent::new));
 
-    public CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling handler, boolean allowOriginalPlacement) {
-        this(handler, allowOriginalPlacement, Vec3i.ZERO);
-    }
-
     @Override
     public ItemComponentType<CanPlaceOnFluidsItemComponent> type() {
         return ItemComponentTypes.CAN_PLACE_ON_FLUIDS;
@@ -50,6 +46,14 @@ public record CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling handler
         ItemUsageContext itemUsageContext = new ItemUsageContext(world, user, hand, stack, blockHitResult);
         itemUsageContext.setIgnoresPlacementComponent(true);
         return stack.useOnBlock(itemUsageContext);
+    }
+
+    public static CanPlaceOnFluidsItemComponent of(RaycastContext.FluidHandling handler, boolean allowOriginalPlacement) {
+        return of(handler, allowOriginalPlacement, Vec3i.ZERO);
+    }
+
+    public static CanPlaceOnFluidsItemComponent of(RaycastContext.FluidHandling handler, boolean allowOriginalPlacement, Vec3i offset) {
+        return new CanPlaceOnFluidsItemComponent(handler, allowOriginalPlacement, offset);
     }
 
     private BlockHitResult raycast(World world, PlayerEntity user) {

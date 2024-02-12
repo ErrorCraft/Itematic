@@ -22,7 +22,8 @@ import net.minecraft.world.RaycastContext;
 import java.util.Optional;
 
 public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemComponent> {
-    public static final Codec<SpawnEggItemComponent> CODEC = Codec.unit(new SpawnEggItemComponent());
+    public static final SpawnEggItemComponent INSTANCE = new SpawnEggItemComponent();
+    public static final Codec<SpawnEggItemComponent> CODEC = Codec.unit(INSTANCE);
 
     @Override
     public ItemComponentType<SpawnEggItemComponent> type() {
@@ -62,11 +63,11 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
 
     public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, int primaryColor, int secondaryColor, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
-            new EntityItemComponent(new SimpleEntityInitializer<>(entity.value()), true),
-            new SpawnEggItemComponent(),
-            new CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling.SOURCE_ONLY, true),
+            EntityItemComponent.of(new SimpleEntityInitializer<>(entity.value()), true),
+            INSTANCE,
+            CanPlaceOnFluidsItemComponent.of(RaycastContext.FluidHandling.SOURCE_ONLY, true),
             TintedItemComponent.of(IndexItemColor.of(primaryColor, secondaryColor)),
-            new DispensableItemComponent(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ENTITY))
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ENTITY))
         };
     }
 

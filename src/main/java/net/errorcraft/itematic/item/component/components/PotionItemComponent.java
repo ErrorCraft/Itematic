@@ -16,7 +16,8 @@ import net.minecraft.world.event.GameEvent;
 import java.util.List;
 
 public record PotionItemComponent() implements ItemComponent<PotionItemComponent> {
-    public static final Codec<PotionItemComponent> CODEC = Codec.unit(new PotionItemComponent());
+    public static final PotionItemComponent INSTANCE = new PotionItemComponent();
+    public static final Codec<PotionItemComponent> CODEC = Codec.unit(INSTANCE);
 
     @Override
     public ItemComponentType<PotionItemComponent> type() {
@@ -29,7 +30,7 @@ public record PotionItemComponent() implements ItemComponent<PotionItemComponent
     }
 
     @Override
-    public void finishUsing(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackConsumer resultStackConsumer) {
         if (!world.isClient()) {
             this.applyEffects(user, stack);
         }

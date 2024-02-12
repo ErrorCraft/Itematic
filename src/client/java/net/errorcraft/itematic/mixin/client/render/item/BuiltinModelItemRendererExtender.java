@@ -94,9 +94,33 @@ public class BuiltinModelItemRendererExtender {
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
             ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;SHIELD:Lnet/minecraft/item/Item;"
+            )
         )
     )
     private boolean isOfForShieldUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.SHIELD);
+    }
+
+    @Redirect(
+        method = "render",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;TRIDENT:Lnet/minecraft/item/Item;"
+            )
+        )
+    )
+    private boolean isOfForTridentUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.TRIDENT);
     }
 }

@@ -53,13 +53,13 @@ public record EyeOfEnderEntityInitializer() implements EntityInitializer<EyeOfEn
     private Vec3d getPosition(ActionContext context) {
         return context.entity(ActionContextParameter.THIS)
             .map(target -> new Vec3d(target.getX(), target.getBodyY(0.5d), target.getZ()))
-            .orElseGet(() -> context.position(ActionContextParameter.THIS));
+            .orElseGet(() -> context.position(ActionContextParameter.TARGET));
     }
 
     private BlockPos getBlockPos(ActionContext context) {
         return context.entity(ActionContextParameter.THIS)
             .map(Entity::getBlockPos)
-            .orElseGet(() -> context.blockPos(ActionContextParameter.THIS));
+            .orElseGet(() -> context.blockPos(ActionContextParameter.TARGET));
     }
 
     private EyeOfEnderEntity createEntity(ServerWorld world, Vec3d pos, ItemStack stack, BlockPos strongholdPos) {

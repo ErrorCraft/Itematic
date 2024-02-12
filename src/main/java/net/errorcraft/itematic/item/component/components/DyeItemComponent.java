@@ -8,7 +8,6 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.actions.ModifySignAction;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.world.ServerWorld;
@@ -35,14 +34,19 @@ public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemC
         if (!(context.getWorld() instanceof ServerWorld world)) {
             return ActionResult.SUCCESS;
         }
-        ActionContext actionContext = MutableActionContext.stackUsage(world, context.getStack(), resultStackConsumer)
+        ActionContext actionContext = ActionContext.builder(world, context.getStack(), resultStackConsumer)
             .entityPosition(ActionContextParameter.THIS, context.getPlayer())
-            .position(ActionContextParameter.TARGET, context.getBlockPos());
+            .position(ActionContextParameter.TARGET, context.getBlockPos())
+            .build();
         ModifySignAction action = ModifySignAction.dye(ActionContextParameter.TARGET, this.color);
         if (action.execute(actionContext)) {
             context.getStack().decrement(1);
             return ActionResult.CONSUME;
         }
         return ActionResult.PASS;
+    }
+
+    public static DyeItemComponent of(DyeColor color) {
+        return new DyeItemComponent(color);
     }
 }

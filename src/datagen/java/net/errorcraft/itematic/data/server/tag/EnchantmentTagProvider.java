@@ -102,12 +102,18 @@ public class EnchantmentTagProvider extends FabricTagProvider<Enchantment> {
         this.getOrCreateTagBuilder(EnchantmentTags.CROSSBOW_ENCHANTING)
             .addTag(EnchantmentTags.ENCHANTING)
             .add(EnchantmentKeys.MULTISHOT, EnchantmentKeys.QUICK_CHARGE, EnchantmentKeys.PIERCING);
+        this.getOrCreateTagBuilder(EnchantmentTags.TRIDENT_ENCHANTING)
+            .addTag(EnchantmentTags.ENCHANTING)
+            .add(EnchantmentKeys.CHANNELING, EnchantmentKeys.RIPTIDE, EnchantmentKeys.LOYALTY);
 
         this.getOrCreateTagBuilder(EnchantmentTags.BOW_FORGING)
             .addTag(EnchantmentTags.BOW_ENCHANTING)
             .addTag(EnchantmentTags.FORGING);
         this.getOrCreateTagBuilder(EnchantmentTags.CROSSBOW_FORGING)
             .addTag(EnchantmentTags.CROSSBOW_ENCHANTING)
+            .addTag(EnchantmentTags.FORGING);
+        this.getOrCreateTagBuilder(EnchantmentTags.TRIDENT_FORGING)
+            .addTag(EnchantmentTags.TRIDENT_ENCHANTING)
             .addTag(EnchantmentTags.FORGING);
 
         this.getOrCreateTagBuilder(EnchantmentTags.STEERING_FORGING)

@@ -10,7 +10,6 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.util.ShooterUtil;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -75,16 +74,16 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
     }
 
     @Override
-    public void using(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+    public void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {
         if (!this.chargeable) {
             return;
         }
-        this.tryLoad(stack, world, user, this.getPullProgress(stack, remainingUseTicks));
+        this.tryLoad(stack, world, user, this.getPullProgress(stack, usedTicks));
     }
 
     @Override
-    public void stopUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
-        float pullProgress = this.getPullProgress(stack, remainingUseTicks);
+    public void stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
+        float pullProgress = this.getPullProgress(stack, usedTicks);
         if (this.chargeable) {
             this.charge(stack, world, user, pullProgress);
             return;
@@ -107,13 +106,12 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         return stack.isIn(this.ammunition);
     }
 
-    public float getPullProgress(ItemStack stack, int remainingUseTicks) {
-        int useTicks = stack.getMaxUseTime() - remainingUseTicks;
+    public float getPullProgress(ItemStack stack, int usedTicks) {
         if (this.chargeable) {
-            float progress = (float)useTicks / getPullTime(stack);
+            float progress = (float)usedTicks / getPullTime(stack);
             return Math.min(progress, 1.0f);
         }
-        return BowItem.getPullProgress(useTicks);
+        return BowItem.getPullProgress(usedTicks);
     }
 
     public boolean isCharged(ItemStack stack) {
@@ -190,8 +188,9 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         if (entity instanceof PersistentProjectileEntity persistentProjectileEntity) {
             this.initProjectile(persistentProjectileEntity, stack, pullProgress);
 
-            ActionContext context = MutableActionContext.stackUsage(world, stack, resultStackConsumer, player.getActiveHand())
-                .entityPosition(ActionContextParameter.THIS, player);
+            ActionContext context = ActionContext.builder(world, stack, resultStackConsumer, player.getActiveHand())
+                .entityPosition(ActionContextParameter.THIS, player)
+                .build();
             stack.itematic$damage(1, context);
             if (disallowPickup) {
                 persistentProjectileEntity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;

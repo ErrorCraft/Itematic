@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -36,6 +37,42 @@ public class ItemRendererExtender implements ItemRendererAccess {
     )
     private Iterator<Item> doNotRegisterItems(DefaultedRegistry<Item> instance) {
         return Collections.emptyIterator();
+    }
+
+    @Redirect(
+        method = { "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", "getModel" },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;TRIDENT:Lnet/minecraft/item/Item;"
+            )
+        )
+    )
+    private boolean isOfForTridentUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.TRIDENT);
+    }
+
+    @Redirect(
+        method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/render/model/BakedModel;isBuiltin()Z"
+            )
+        )
+    )
+    private boolean isOfForTridentBuiltinCheckUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.TRIDENT);
     }
 
     @Redirect(

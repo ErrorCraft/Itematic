@@ -41,7 +41,7 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
     }
 
     @Override
-    public void finishUsing(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackConsumer resultStackConsumer) {
         user.itematic$eatFood(world, stack, resultStackConsumer);
     }
 
@@ -57,10 +57,14 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
         return from(component, component.isSnack() ? 16 : 32, UseAction.EAT, resultItem);
     }
 
+    public static FoodItemComponent of(int nutrition, float saturationModifier, boolean alwaysEdible, List<Effect> effects) {
+        return new FoodItemComponent(nutrition, saturationModifier, alwaysEdible, effects);
+    }
+
     public static ItemComponent<?>[] from(FoodComponent component, int useDuration, UseAction useAction, RegistryEntry<Item> resultItem) {
         return new ItemComponent<?>[] {
-            new UseDurationItemComponent(useDuration),
-            new FoodItemComponent(component.getHunger(), component.getSaturationModifier(), component.isAlwaysEdible(), getEffects(component.getStatusEffects())),
+            UseDurationItemComponent.of(useDuration),
+            of(component.getHunger(), component.getSaturationModifier(), component.isAlwaysEdible(), getEffects(component.getStatusEffects())),
             UseAnimationItemComponent.of(useAction),
             ConsumableItemComponent.of(resultItem)
         };

@@ -14,7 +14,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public record PotionHolderItemComponent() implements ItemComponent<PotionHolderItemComponent> {
-    public static final Codec<PotionHolderItemComponent> CODEC = Codec.unit(new PotionHolderItemComponent());
+    public static final PotionHolderItemComponent INSTANCE = new PotionHolderItemComponent();
+    public static final Codec<PotionHolderItemComponent> CODEC = Codec.unit(INSTANCE);
 
     @Override
     public ItemComponentType<PotionHolderItemComponent> type() {

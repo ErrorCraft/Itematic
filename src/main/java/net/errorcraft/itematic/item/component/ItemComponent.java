@@ -48,11 +48,11 @@ public interface ItemComponent<T extends ItemComponent<T>> {
         return false;
     }
 
-    default void using(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {}
+    default void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {}
 
-    default void stopUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {}
+    default void stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {}
 
-    default void finishUsing(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {}
+    default void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackConsumer resultStackConsumer) {}
 
     default void inventoryTick(ItemStack stack, World world, Entity holder, int slot, boolean selected) {}
 

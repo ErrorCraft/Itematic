@@ -9,7 +9,6 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.tool.MiningSpeedEntry;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -62,9 +61,10 @@ public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds)
         if (!(world instanceof ServerWorld serverWorld)) {
             return;
         }
-        ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, resultStackConsumer, EquipmentSlot.MAINHAND)
+        ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, EquipmentSlot.MAINHAND)
             .entityPosition(ActionContextParameter.THIS, miner)
-            .position(ActionContextParameter.TARGET, pos.toCenterPos());
+            .position(ActionContextParameter.TARGET, pos.toCenterPos())
+            .build();
         stack.itematic$invokeEvent(ItemEvents.USE_TOOL, context);
         stack.itematic$damage(this.damage, context);
     }

@@ -30,7 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record FireworkItemComponent() implements ItemComponent<FireworkItemComponent> {
-    public static final Codec<FireworkItemComponent> CODEC = Codec.unit(new FireworkItemComponent());
+    public static final FireworkItemComponent INSTANCE = new FireworkItemComponent();
+    public static final Codec<FireworkItemComponent> CODEC = Codec.unit(INSTANCE);
     private static final String FLIGHT_TRANSLATION_KEY = "item.minecraft.firework_rocket.flight";
     private static final String EXPLOSION_INDENTATION = "  ";
 

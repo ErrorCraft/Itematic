@@ -20,4 +20,8 @@ public record FuelItemComponent(int ticks) implements ItemComponent<FuelItemComp
     public Codec<FuelItemComponent> codec() {
         return CODEC;
     }
+
+    public static FuelItemComponent of(int ticks) {
+        return new FuelItemComponent(ticks);
+    }
 }

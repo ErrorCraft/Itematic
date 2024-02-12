@@ -20,4 +20,7 @@ public interface LivingEntityAccess {
     }
     default void itematic$eatFood(World world, ItemStack stack, ItemStackConsumer resultStackConsumer) {}
     default void itematic$startUsingHand(Hand hand, int ticks) {}
+    default int itematic$itemUsedTicks() {
+        return 0;
+    }
 }

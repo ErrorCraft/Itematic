@@ -636,7 +636,9 @@ public class ItemKeys {
     public static final RegistryKey<Item> MUSIC_DISC_5 = register("music_disc_5");
     public static final RegistryKey<Item> MUSIC_DISC_PIGSTEP = register("music_disc_pigstep");
     public static final RegistryKey<Item> DISC_FRAGMENT_5 = register("disc_fragment_5");
+    public static final RegistryKey<Item> TRIDENT = register("trident");
     public static final RegistryKey<Item> PHANTOM_MEMBRANE = register("phantom_membrane");
+    public static final RegistryKey<Item> NAUTILUS_SHELL = register("nautilus_shell");
     public static final RegistryKey<Item> CROSSBOW = register("crossbow");
     public static final RegistryKey<Item> SUSPICIOUS_STEW = register("suspicious_stew");
     public static final RegistryKey<Item> LOOM = register("loom");

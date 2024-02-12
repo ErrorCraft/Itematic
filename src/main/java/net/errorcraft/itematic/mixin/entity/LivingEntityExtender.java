@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.entity;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.access.entity.LivingEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
@@ -8,12 +9,11 @@ import net.errorcraft.itematic.item.component.components.FoodItemComponent;
 import net.errorcraft.itematic.item.component.components.UseDurationItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.data.TrackedData;
 import net.minecraft.item.Equipment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,6 +26,7 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -65,8 +66,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Shadow
     public abstract ItemStack eatFood(World world, ItemStack stack);
 
-    @Shadow
-    public abstract void equipStack(EquipmentSlot slow, ItemStack stack);
+    @Unique
+    private int itemUsedTicks;
 
     @Redirect(
         method = "eatFood",
@@ -230,6 +231,69 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         return instance.itematic$isOf(ItemKeys.DRAGON_HEAD);
     }
 
+    @Inject(
+        method = "setCurrentHand",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/entity/LivingEntity;itemUseTimeLeft:I",
+            opcode = Opcodes.PUTFIELD
+        )
+    )
+    private void resetUseTime(Hand hand, CallbackInfo info) {
+        this.itemUsedTicks = 0;
+    }
+
+    @Inject(
+        method = "onTrackedDataSet",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/entity/LivingEntity;itemUseTimeLeft:I",
+            opcode = Opcodes.PUTFIELD
+        )
+    )
+    private void resetUseTime(TrackedData<?> data, CallbackInfo info) {
+        this.itemUsedTicks = 0;
+    }
+
+    @Inject(
+        method = "clearActiveItem",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/entity/LivingEntity;itemUseTimeLeft:I",
+            opcode = Opcodes.PUTFIELD
+        )
+    )
+    private void resetUseTime(CallbackInfo info) {
+        this.itemUsedTicks = 0;
+    }
+
+    @Inject(
+        method = "tickItemStackUsage",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/entity/LivingEntity;itemUseTimeLeft:I",
+            opcode = Opcodes.GETFIELD
+        )
+    )
+    private void incrementUseTime(ItemStack stack, CallbackInfo info) {
+        this.itemUsedTicks++;
+    }
+
+    @ModifyExpressionValue(
+        method = "tickItemStackUsage",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/entity/LivingEntity;itemUseTimeLeft:I",
+            opcode = Opcodes.GETFIELD
+        )
+    )
+    private int keepAtConstantWhenUseDurationIsIndefinite(int original) {
+        if (original == -1) {
+            return 0;
+        }
+        return original;
+    }
+
     @ModifyVariable(
         method = "shouldSpawnConsumptionEffects",
         at = @At("LOAD")
@@ -275,8 +339,9 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public void itematic$eatFood(World world, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         this.eatFood(world, stack);
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = MutableActionContext.stackUsage(serverWorld, stack, resultStackConsumer, this.getActiveHand())
-                .entityPosition(ActionContextParameter.THIS, this);
+            ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, this.getActiveHand())
+                .entityPosition(ActionContextParameter.THIS, this)
+                .build();
             stack.itematic$invokeEvent(ItemEvents.EAT_ITEM, context);
         }
     }
@@ -289,5 +354,10 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         }
         this.setCurrentHand(hand);
         this.itemUseTimeLeft = ticks;
+    }
+
+    @Override
+    public int itematic$itemUsedTicks() {
+        return this.itemUsedTicks;
     }
 }

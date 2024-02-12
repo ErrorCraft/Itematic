@@ -8,7 +8,6 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.MutableActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
@@ -60,8 +59,9 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem) 
             .ifPresent(resultStackConsumer::set);
         if (player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.CONSUME_ITEM.trigger(serverPlayer, stack);
-            ActionContext context = MutableActionContext.stackUsage(serverPlayer.getServerWorld(), stack, resultStackConsumer, hand)
-                .entityPosition(ActionContextParameter.THIS, serverPlayer);
+            ActionContext context = ActionContext.builder(serverPlayer.getServerWorld(), stack, resultStackConsumer, hand)
+                .entityPosition(ActionContextParameter.THIS, serverPlayer)
+                .build();
             stack.itematic$invokeEvent(ItemEvents.CONSUME_ITEM, context);
         }
 

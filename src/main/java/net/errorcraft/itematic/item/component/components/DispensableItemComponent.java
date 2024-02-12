@@ -24,4 +24,8 @@ public record DispensableItemComponent(RegistryEntry<DispenserBehavior> behavior
     public Codec<DispensableItemComponent> codec() {
         return CODEC;
     }
+
+    public static DispensableItemComponent of(RegistryEntry<DispenserBehavior> behavior) {
+        return new DispensableItemComponent(behavior);
+    }
 }
