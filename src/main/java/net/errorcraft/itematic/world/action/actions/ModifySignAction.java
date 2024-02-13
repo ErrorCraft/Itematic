@@ -9,7 +9,6 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
@@ -36,11 +35,11 @@ public record ModifySignAction(ActionContextParameter position, Optional<DyeColo
             return false;
         }
         return context.player(ActionContextParameter.THIS)
-            .map(player -> this.modify(blockEntity, player, context.stack()))
+            .map(player -> this.modify(blockEntity, player))
             .orElse(false);
     }
 
-    private boolean modify(SignBlockEntity blockEntity, PlayerEntity player, ItemStack stack) {
+    private boolean modify(SignBlockEntity blockEntity, PlayerEntity player) {
         if (blockEntity.isWaxed()) {
             return false;
         }

@@ -22,6 +22,7 @@
     "network.ClientPlayerEntityExtender",
     "network.ClientPlayerInteractionManagerExtender",
     "network.ClientPlayNetworkHandlerExtender",
+    "network.ClientTagLoaderExtender",
     "option.HotbarStorageEntryExtender",
     "particle.CrackParticleExtender$SlimeballFactoryExtender",
     "particle.CrackParticleExtender$SnowballFactoryExtender",

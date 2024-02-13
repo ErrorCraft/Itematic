@@ -29,7 +29,6 @@
           "chance": 1.0,
           "effect": {
             "id": "minecraft:nausea",
-            "amplifier": 0,
             "duration": 300
           }
         }

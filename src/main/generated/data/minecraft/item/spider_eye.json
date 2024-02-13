@@ -13,7 +13,6 @@
           "chance": 1.0,
           "effect": {
             "id": "minecraft:poison",
-            "amplifier": 0,
             "duration": 100
           }
         }

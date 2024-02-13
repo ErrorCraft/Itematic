@@ -128,10 +128,10 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         method = { "method_28376", "method_55067" },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/DefaultedRegistry;createEntryCodec()Lcom/mojang/serialization/Codec;"
+            target = "Lnet/minecraft/registry/DefaultedRegistry;getEntryCodec()Lcom/mojang/serialization/Codec;"
         )
     )
-    private static Codec<RegistryEntry<Item>> createEntryCodecUseRegistryFixedCodec(DefaultedRegistry<Item> instance) {
+    private static Codec<RegistryEntry<Item>> doNotUseStaticItemRegistry(DefaultedRegistry<Item> instance) {
         return RegistryFixedCodec.of(RegistryKeys.ITEM);
     }
 
@@ -142,7 +142,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             target = "Lnet/minecraft/registry/DefaultedRegistry;getCodec()Lcom/mojang/serialization/Codec;"
         )
     )
-    private static Codec<RegistryEntry<Item>> getCodecUseRegistryFixedCodec(DefaultedRegistry<Item> instance) {
+    private static Codec<RegistryEntry<Item>> valueDoNotUseStaticItemRegistry(DefaultedRegistry<Item> instance) {
         return RegistryFixedCodec.of(RegistryKeys.ITEM);
     }
 

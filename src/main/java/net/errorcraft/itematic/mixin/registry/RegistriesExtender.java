@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.registry;
 
-import com.mojang.serialization.Lifecycle;
 import net.minecraft.registry.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,11 +11,11 @@ import java.util.Objects;
 @Mixin(Registries.class)
 public class RegistriesExtender {
     @Inject(
-        method = "create(Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/registry/MutableRegistry;Lnet/minecraft/registry/Registries$Initializer;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/registry/MutableRegistry;",
+        method = "create(Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/registry/MutableRegistry;Lnet/minecraft/registry/Registries$Initializer;)Lnet/minecraft/registry/MutableRegistry;",
         at = @At("HEAD"),
         cancellable = true
     )
-    private static <T, R extends MutableRegistry<T>> void doNotAddSpecificRegistries(RegistryKey<? extends Registry<T>> key, R registry, Registries.Initializer<T> initializer, Lifecycle lifecycle, CallbackInfoReturnable<R> info) {
+    private static <T, R extends MutableRegistry<T>> void doNotAddSpecificRegistries(RegistryKey<? extends Registry<T>> key, R registry, Registries.Initializer<T> initializer, CallbackInfoReturnable<R> info) {
         if (Objects.equals(key, RegistryKeys.ITEM) || Objects.equals(key, RegistryKeys.ARMOR_MATERIAL)) {
             info.setReturnValue(registry);
         }

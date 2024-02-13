@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.mixin.registry;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.serialization.Lifecycle;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryInfo;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,7 +20,7 @@ public class SimpleRegistryExtender<T> {
             remap = false
         )
     )
-    private void setRegistryEntryRawId(RegistryKey<T> key, T value, Lifecycle lifecycle, CallbackInfoReturnable<RegistryEntry.Reference<T>> info, @Local RegistryEntry.Reference<T> reference, @Local int rawId) {
+    private void setRegistryEntryRawId(RegistryKey<T> key, T value, RegistryEntryInfo info, CallbackInfoReturnable<RegistryEntry.Reference<T>> infoReturnable, @Local RegistryEntry.Reference<T> reference, @Local int rawId) {
         reference.itematic$setRawId(rawId);
     }
 }

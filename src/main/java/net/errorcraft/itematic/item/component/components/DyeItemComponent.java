@@ -40,7 +40,7 @@ public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemC
             .build();
         ModifySignAction action = ModifySignAction.dye(ActionContextParameter.TARGET, this.color);
         if (action.execute(actionContext)) {
-            context.getStack().decrement(1);
+            context.getStack().decrementUnlessCreative(1, context.getPlayer());
             return ActionResult.CONSUME;
         }
         return ActionResult.PASS;

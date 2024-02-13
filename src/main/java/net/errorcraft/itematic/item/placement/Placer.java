@@ -30,12 +30,6 @@ public abstract class Placer {
     public abstract ActionResult place();
 
     protected void tryDecrementStack() {
-        if (this.player != null && this.player.isCreative()) {
-            return;
-        }
-        if (this.stack.isEmpty()) {
-            return;
-        }
-        this.stack.decrement(1);
+        this.stack.decrementUnlessCreative(1, this.player);
     }
 }

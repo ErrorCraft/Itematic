@@ -9,6 +9,7 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AutomaticItemPlacementContext;
 import net.minecraft.item.ItemPlacementContext;
@@ -136,6 +137,15 @@ public class ActionContext {
 
     public Optional<Entity> entity(ActionContextParameter parameter) {
         return Optional.ofNullable(this.entities.get(parameter));
+    }
+
+    public Optional<LivingEntity> livingEntity(ActionContextParameter parameter) {
+        return this.entity(parameter).map(entity -> {
+            if (entity instanceof LivingEntity livingEntity) {
+                return livingEntity;
+            }
+            return null;
+        });
     }
 
     public Optional<PlayerEntity> player(ActionContextParameter parameter) {

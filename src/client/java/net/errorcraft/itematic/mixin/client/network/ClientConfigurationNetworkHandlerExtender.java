@@ -5,7 +5,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommonNetworkHandler;
 import net.minecraft.client.network.ClientConfigurationNetworkHandler;
 import net.minecraft.client.network.ClientConnectionState;
-import net.minecraft.client.network.ClientRegistries;
 import net.minecraft.item.Item;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkThreadUtils;
@@ -14,22 +13,22 @@ import net.minecraft.network.packet.s2c.config.ReadyS2CPacket;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.resource.ResourceFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.util.function.Function;
+
 @Mixin(ClientConfigurationNetworkHandler.class)
 public abstract class ClientConfigurationNetworkHandlerExtender extends ClientCommonNetworkHandler implements ClientConfigurationPacketListener, ClientConfigurationNetworkHandlerAccess {
-    @Final
     @Shadow
-    private DynamicRegistryManager.Immutable registryManager;
+    protected abstract <T> T openClientDataPack(Function<ResourceFactory, T> opener);
 
     @Shadow
-    @Final
-    private ClientRegistries clientRegistries;
+    protected abstract DynamicRegistryManager.Immutable method_57043(ResourceFactory par1);
 
     @Unique
     private DynamicRegistryManager.Immutable createdRegistryManager;
@@ -42,19 +41,20 @@ public abstract class ClientConfigurationNetworkHandlerExtender extends ClientCo
         method = "onReady",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/network/ClientRegistries;createRegistryManager(Lnet/minecraft/registry/DynamicRegistryManager;Z)Lnet/minecraft/registry/DynamicRegistryManager$Immutable;"
+            target = "Lnet/minecraft/client/network/ClientConfigurationNetworkHandler;openClientDataPack(Ljava/util/function/Function;)Ljava/lang/Object;"
         )
     )
-    private DynamicRegistryManager.Immutable useEarlierCreatedRegistryManager(ClientRegistries instance, DynamicRegistryManager precedingRegistryManager, boolean local) {
+    @SuppressWarnings("unchecked")
+    private <T> T useEarlierCreatedRegistryManager(ClientConfigurationNetworkHandler instance, Function<ResourceFactory, T> opener) {
         DynamicRegistryManager.Immutable createdRegistryManager = this.createdRegistryManager;
         this.createdRegistryManager = null;
-        return createdRegistryManager;
+        return (T) createdRegistryManager;
     }
 
     @Override
     public void itematic$onReady(ReadyS2CPacket packet) {
         NetworkThreadUtils.forceMainThread(packet, this, this.client);
-        this.createdRegistryManager = this.clientRegistries.createRegistryManager(this.registryManager, this.connection.isLocal());
+        this.createdRegistryManager = this.openClientDataPack(this::method_57043);
         Registry<Item> itemRegistry = this.createdRegistryManager.get(RegistryKeys.ITEM);
         this.client.getItemRenderer().itematic$reloadModelIds(itemRegistry);
         this.client.getBakedModelManager().itematic$setItemRegistry(itemRegistry);

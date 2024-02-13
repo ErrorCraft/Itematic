@@ -23,7 +23,6 @@
           "chance": 1.0,
           "effect": {
             "id": "minecraft:resistance",
-            "amplifier": 0,
             "duration": 6000
           }
         },
@@ -31,7 +30,6 @@
           "chance": 1.0,
           "effect": {
             "id": "minecraft:fire_resistance",
-            "amplifier": 0,
             "duration": 6000
           }
         },

@@ -7,7 +7,6 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.dynamic.Codecs;
 
@@ -28,19 +27,15 @@ public record DecrementItemAction(int amount, boolean ignoreGameMode) implements
         if (stack.isEmpty()) {
             return false;
         }
-        if (!this.preventDecrement(context)) {
+        if (this.ignoreGameMode) {
             stack.decrement(this.amount);
+        } else {
+            stack.decrementUnlessCreative(this.amount, context.livingEntity(ActionContextParameter.THIS).orElse(null));
         }
         return true;
     }
 
     public static DecrementItemAction of(int amount) {
         return new DecrementItemAction(amount, false);
-    }
-
-    private boolean preventDecrement(ActionContext context) {
-        return context.entity(ActionContextParameter.THIS).orElse(null) instanceof PlayerEntity player
-            && player.isCreative()
-            && !this.ignoreGameMode;
     }
 }

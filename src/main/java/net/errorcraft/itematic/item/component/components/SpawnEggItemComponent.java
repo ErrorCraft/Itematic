@@ -55,9 +55,7 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
             mobEntity.setCustomName(stack.getName());
         }
         world.spawnEntityAndPassengers(mobEntity);
-        if (!user.getAbilities().creativeMode) {
-            stack.decrement(1);
-        }
+        stack.decrementUnlessCreative(1, user);
         return Optional.of(mobEntity);
     }
 

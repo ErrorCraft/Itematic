@@ -13,7 +13,6 @@
           "chance": 0.3,
           "effect": {
             "id": "minecraft:hunger",
-            "amplifier": 0,
             "duration": 600
           }
         }

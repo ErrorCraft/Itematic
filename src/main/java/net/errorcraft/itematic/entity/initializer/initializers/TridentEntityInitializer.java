@@ -7,7 +7,6 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
@@ -38,9 +37,7 @@ public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implemen
 
     private TridentEntity create(ActionContext context, ItemStack stack) {
         stack.itematic$damage(1, context);
-        if (!context.player(ActionContextParameter.THIS).map(PlayerEntity::isCreative).orElse(true)) {
-            stack.decrement(1);
-        }
+        stack.decrementUnlessCreative(1, context.player(ActionContextParameter.THIS).orElse(null));
         ServerWorld world = context.world();
         return context.player(ActionContextParameter.THIS)
             .map(player -> new TridentEntity(world, player, stack))

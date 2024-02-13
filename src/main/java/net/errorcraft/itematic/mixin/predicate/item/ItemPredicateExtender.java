@@ -17,10 +17,10 @@ public class ItemPredicateExtender {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/DefaultedRegistry;createEntryCodec()Lcom/mojang/serialization/Codec;"
+            target = "Lnet/minecraft/registry/DefaultedRegistry;getEntryCodec()Lcom/mojang/serialization/Codec;"
         )
     )
-    private static Codec<RegistryEntry<Item>> doNotUseStaticRegistry(DefaultedRegistry<Item> instance) {
+    private static Codec<RegistryEntry<Item>> doNotUseStaticItemRegistry(DefaultedRegistry<Item> instance) {
         return RegistryFixedCodec.of(RegistryKeys.ITEM);
     }
 }

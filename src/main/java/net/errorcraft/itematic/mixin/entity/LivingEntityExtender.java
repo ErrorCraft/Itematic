@@ -21,6 +21,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -76,7 +77,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             target = "Lnet/minecraft/item/ItemStack;isFood()Z"
         )
     )
-    private boolean eatFoodAssumeExistingItemComponent(ItemStack instance) {
+    private boolean doNotCheckForFood(ItemStack instance) {
         return true;
     }
 
@@ -84,17 +85,17 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         method = "eatFood",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;decrement(I)V"
+            target = "Lnet/minecraft/item/ItemStack;decrementUnlessCreative(ILnet/minecraft/entity/LivingEntity;)V"
         )
     )
-    private void eatFoodDoNotDecrementItemStack(ItemStack instance, int amount) {}
+    private void doNotDecrementItemStack(ItemStack instance, int amount, LivingEntity entity) {}
 
     @Inject(
         method = "applyFoodEffects",
         at = @At("HEAD"),
         cancellable = true
     )
-    private void applyFoodEffectsUseItemComponent(ItemStack stack, World world, LivingEntity targetEntity, CallbackInfo info) {
+    private void applyEffectsUseItemComponent(ItemStack stack, World world, LivingEntity targetEntity, CallbackInfo info) {
         info.cancel();
         if (world.isClient()) {
             return;
@@ -102,8 +103,9 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         stack.itematic$getComponent(ItemComponentTypes.FOOD)
             .map(FoodItemComponent::effects)
             .ifPresent(effects -> {
+                Random random = world.getRandom();
                 for (FoodItemComponent.Effect effect : effects) {
-                    effect.tryApply(targetEntity, world.random);
+                    effect.tryApply(targetEntity, random);
                 }
             });
     }
@@ -115,7 +117,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             target = "Lnet/minecraft/item/Equipment;fromStack(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/Equipment;"
         )
     )
-    private static Equipment getPreferredEquipmentSlotFromStackUseItemComponent(ItemStack stack) {
+    private static Equipment equipmentFromStackUseItemComponentStatic(ItemStack stack) {
         return stack.itematic$getComponent(ItemComponentTypes.EQUIPMENT).orElse(null);
     }
 
@@ -126,7 +128,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             target = "Lnet/minecraft/item/Equipment;fromStack(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/Equipment;"
         )
     )
-    private Equipment onEquipStackFromStackUseItemComponent(ItemStack stack) {
+    private Equipment equipmentFromStackUseItemComponent(ItemStack stack) {
         return stack.itematic$getComponent(ItemComponentTypes.EQUIPMENT).orElse(null);
     }
 
@@ -135,7 +137,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         at = @At("HEAD"),
         cancellable = true
     )
-    private void getProjectileTypeUseItemComponent(ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
+    private void getAmmunitionUseItemComponent(ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
         stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
             .ifPresent(component -> info.setReturnValue(this.itematic$getAmmunition(component)));
     }
@@ -155,7 +157,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             )
         )
     )
-    private boolean getAttackDistanceScalingFactorIsOfForSkeletonSkullUseRegistryKeyCheck(ItemStack instance, Item item) {
+    private boolean isOfForSkeletonSkullUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.SKELETON_SKULL);
     }
 
@@ -174,7 +176,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             )
         )
     )
-    private boolean getAttackDistanceScalingFactorIsOfForZombieHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
+    private boolean isOfForZombieHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.ZOMBIE_HEAD);
     }
 
@@ -193,7 +195,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             )
         )
     )
-    private boolean getAttackDistanceScalingFactorIsOfForCreeperHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
+    private boolean isOfForCreeperHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.CREEPER_HEAD);
     }
 
@@ -216,7 +218,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             )
         )
     )
-    private boolean getAttackDistanceScalingFactorIsOfForPiglinHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
+    private boolean isOfForPiglinHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.PIGLIN_HEAD);
     }
 

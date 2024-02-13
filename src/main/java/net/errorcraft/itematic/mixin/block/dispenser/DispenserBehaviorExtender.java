@@ -70,7 +70,7 @@ public interface DispenserBehaviorExtender {
         return DispenserBehaviorUtil.HORSE_ARMOR_DISPENSER_BEHAVIOR = behavior;
     }
 
-    @Mixin(targets = "net/minecraft/block/dispenser/DispenserBehavior$17")
+    @Mixin(targets = "net/minecraft/block/dispenser/DispenserBehavior$18")
     class GlassBottleExtender {
         @Redirect(
             method = "dispenseSilently",
@@ -104,7 +104,7 @@ public interface DispenserBehaviorExtender {
         }
     }
 
-    @Mixin(targets = "net/minecraft/block/dispenser/DispenserBehavior$21")
+    @Mixin(targets = "net/minecraft/block/dispenser/DispenserBehavior$22")
     class PotionExtender {
         @Redirect(
             method = "dispenseSilently",
