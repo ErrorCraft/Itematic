@@ -34,7 +34,7 @@ public class GrindstoneScreenHandlerExtender {
     )
     private boolean isOfForEnchantedBookUseItemComponent(ItemStack instance, Item item) {
         return instance.itematic$getComponent(ItemComponentTypes.ENCHANTMENT_HOLDER)
-            .flatMap(EnchantmentHolderItemComponent::grindingTransformsInto)
+            .map(EnchantmentHolderItemComponent::grindingTransformsInto)
             .isPresent();
     }
 
@@ -47,7 +47,7 @@ public class GrindstoneScreenHandlerExtender {
     )
     private boolean isOfForEnchantedBookUseItemComponent(ItemStack instance, Item item, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
         Optional<RegistryEntry<Item>> optionalEntry = instance.itematic$getComponent(ItemComponentTypes.ENCHANTMENT_HOLDER)
-            .flatMap(EnchantmentHolderItemComponent::grindingTransformsInto);
+            .map(EnchantmentHolderItemComponent::grindingTransformsInto);
         optionalEntry.ifPresent(transformsInto::set);
         return optionalEntry.isPresent();
     }

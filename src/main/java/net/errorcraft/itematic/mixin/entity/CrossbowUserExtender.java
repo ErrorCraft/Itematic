@@ -22,4 +22,15 @@ public interface CrossbowUserExtender {
     private Hand getHandPossiblyHoldingForCrossbowUseRegistryKey(LivingEntity entity, Item item) {
         return ItematicProjectileUtil.getHandPossiblyHolding(entity, ItemKeys.CROSSBOW);
     }
+
+    @Redirect(
+        method = "shoot(Lnet/minecraft/entity/LivingEntity;F)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/LivingEntity;isHolding(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isHoldingForCrossbowUseRegistryKeyCheck(LivingEntity instance, Item item) {
+        return instance.itematic$isHolding(ItemKeys.CROSSBOW);
+    }
 }

@@ -120,6 +120,10 @@ public class EnchantmentTagProvider extends FabricTagProvider<Enchantment> {
             .add(EnchantmentKeys.VANISHING_CURSE)
             .add(EnchantmentKeys.MENDING)
             .add(EnchantmentKeys.UNBREAKING);
+        this.getOrCreateTagBuilder(EnchantmentTags.BRUSH_FORGING)
+            .add(EnchantmentKeys.VANISHING_CURSE)
+            .add(EnchantmentKeys.MENDING)
+            .add(EnchantmentKeys.UNBREAKING);
     }
 
     private static Identifier[] getAll(RegistryWrapper.Impl<Enchantment> registry, Predicate<Enchantment> predicate) {

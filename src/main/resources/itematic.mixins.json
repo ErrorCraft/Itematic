@@ -180,6 +180,8 @@
     "inventory.EnderChestInventoryExtender",
     "item.AnimalArmorItemExtender$TypeExtender",
     "item.ArmorItemAccessor",
+    "item.BrushItemAccessor",
+    "item.BrushItemExtender",
     "item.CompassItemAccessor",
     "item.CrossbowItemAccessor",
     "item.CrossbowItemExtender",

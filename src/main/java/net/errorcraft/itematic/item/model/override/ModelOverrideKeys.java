@@ -22,6 +22,7 @@ public class ModelOverrideKeys {
     public static final RegistryKey<ModelOverride> ANGLE = of("angle");
     public static final RegistryKey<ModelOverride> TOOTING = of("tooting");
     public static final RegistryKey<ModelOverride> THROWING = of("throwing");
+    public static final RegistryKey<ModelOverride> BRUSHING = of("brushing");
 
     private static RegistryKey<ModelOverride> of(String id) {
         return RegistryKey.of(ItematicRegistryKeys.MODEL_OVERRIDE, new Identifier(id));

@@ -23,6 +23,7 @@ public class ModelOverrides {
     public static final ModelOverride ANGLE = register(ModelOverrideKeys.ANGLE, new AngleModelOverride());
     public static final ModelOverride TOOTING = register(ModelOverrideKeys.TOOTING, new TootingModelOverride());
     public static final ModelOverride THROWING = register(ModelOverrideKeys.THROWING, new ThrowingModelOverride());
+    public static final ModelOverride BRUSHING = register(ModelOverrideKeys.BRUSHING, new BrushingModelOverride());
 
     private ModelOverrides() {}
 

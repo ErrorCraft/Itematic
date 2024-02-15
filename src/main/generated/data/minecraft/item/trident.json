@@ -32,8 +32,16 @@
       "speed": 2.5,
       "use_riptide_check": true
     },
+    "minecraft:tool": {
+      "damage": 2
+    },
     "minecraft:use_animation": {
       "animation": "spear"
+    },
+    "minecraft:weapon": {
+      "attack_damage": 8.0,
+      "attack_speed": -2.9,
+      "damage": 1
     }
   },
   "events": [

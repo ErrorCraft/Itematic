@@ -20,7 +20,7 @@ public class ChiseledBookshelfBlockExtender {
     )
     private static boolean isOfForEnchantedBookUseItemComponent(ItemStack instance, Item item) {
         return instance.itematic$getComponent(ItemComponentTypes.ENCHANTMENT_HOLDER)
-            .flatMap(EnchantmentHolderItemComponent::grindingTransformsInto)
+            .map(EnchantmentHolderItemComponent::grindingTransformsInto)
             .isPresent();
     }
 }

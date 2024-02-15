@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.predicate.TagPredicate;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,7 +28,7 @@ import java.util.List;
 public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds) implements ItemComponent<ToolItemComponent> {
     public static final Codec<ToolItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("damage").forGetter(ToolItemComponent::damage),
-        MiningSpeedEntry.CODEC.listOf().optionalFieldOf("mining_speeds", List.of()).forGetter(ToolItemComponent::miningSpeeds)
+        Codecs.createStrictOptionalFieldCodec(MiningSpeedEntry.CODEC.listOf(), "mining_speeds", List.of()).forGetter(ToolItemComponent::miningSpeeds)
     ).apply(instance, ToolItemComponent::new));
 
     @Override

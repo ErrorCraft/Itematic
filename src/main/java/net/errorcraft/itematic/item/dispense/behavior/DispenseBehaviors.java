@@ -24,6 +24,7 @@ public class DispenseBehaviors {
     public static final DispenserBehavior USE_ON_BLOCK = register(DispenseBehaviorKeys.USE_ON_BLOCK, new UseOnBlockDispenserBehavior());
     public static final DispenserBehavior WAX_BLOCK = register(DispenseBehaviorKeys.WAX_BLOCK, new WaxBlockDispenserBehavior());
     public static final DispenserBehavior PLACE_BLOCK_FROM_ITEM = register(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM, new PlaceBlockFromItemDispenserBehavior());
+    public static final DispenserBehavior BRUSH = register(DispenseBehaviorKeys.BRUSH, DispenserBehaviorUtil.BRUSH_DISPENSER_BEHAVIOR);
 
     private DispenseBehaviors() {}
 

@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PumpkinBlock.class)
@@ -24,6 +25,18 @@ public class PumpkinBlockExtender {
         return instance.itematic$isOf(ItemKeys.SHEARS);
     }
 
+    @ModifyArg(
+        method = "onUseWithItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+        )
+    )
+    @SuppressWarnings("unchecked")
+    private <T> T getShearsUseDynamicRegistry(T key, @Local(argsOnly = true) World world) {
+        return (T) world.itematic$getItem(ItemKeys.SHEARS).value();
+    }
+
     @Redirect(
         method = "onUseWithItem",
         at = @At(
@@ -31,7 +44,7 @@ public class PumpkinBlockExtender {
             target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForPumpkinSeedsUseCreateStack(ItemConvertible item, int count, @Local World world) {
+    private ItemStack newItemStackForPumpkinSeedsUseCreateStack(ItemConvertible item, int count, @Local(argsOnly = true) World world) {
         return world.itematic$createStack(ItemKeys.PUMPKIN_SEEDS);
     }
 }

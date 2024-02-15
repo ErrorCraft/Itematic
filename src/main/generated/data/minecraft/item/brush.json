@@ -1,0 +1,26 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.brush"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:brush": {},
+    "minecraft:damageable": {
+      "durability": 64
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:brush"
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:brush_forging"
+    },
+    "minecraft:use_animation": {
+      "animation": "brush"
+    },
+    "minecraft:use_duration": {
+      "ticks": 200
+    }
+  }
+}

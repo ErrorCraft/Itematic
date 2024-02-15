@@ -658,6 +658,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> GLOW_BERRIES = register("glow_berries");
     public static final RegistryKey<Item> HONEYCOMB = register("honeycomb");
     public static final RegistryKey<Item> HONEY_BOTTLE = register("honey_bottle");
+    public static final RegistryKey<Item> BRUSH = register("brush");
     public static final RegistryKey<Item> NETHERITE_UPGRADE_SMITHING_TEMPLATE = register("netherite_upgrade_smithing_template");
     public static final RegistryKey<Item> SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE = register("sentry_armor_trim_smithing_template");
     public static final RegistryKey<Item> DUNE_ARMOR_TRIM_SMITHING_TEMPLATE = register("dune_armor_trim_smithing_template");

@@ -22,6 +22,7 @@ import net.errorcraft.itematic.item.pointer.PointerKeys;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.mixin.block.DecoratedPotPatternsAccessor;
+import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.item.MilkBucketItemAccessor;
 import net.errorcraft.itematic.mixin.item.PotionItemAccessor;
@@ -4461,7 +4462,10 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TRIDENT).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.of(250, true))
-                .with(ThrowableItemComponent.trident(2.5f, 0.0f, 10))
+                .with(ToolItemComponent.builder(2)
+                    .build())
+                .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE, -2.9d))
+                .with(ThrowableItemComponent.trident(TridentItem.field_30928, 0.0f, TridentItem.field_30926))
                 .with(ProjectileItemComponent.of(TridentEntityInitializer.of(true), 1))
                 .with(UseAnimationItemComponent.of(UseAction.SPEAR))
                 .with(EnchantableItemComponent.enchants(1, EnchantmentTags.TRIDENT_ENCHANTING))
@@ -4475,7 +4479,7 @@ public class ItemUtil {
                             EntityPropertiesLootCondition.builder(
                                 LootContext.EntityTarget.THIS,
                                 EntityPredicate.Builder.create()
-                                    .itematic$usedItemAtLeast(10)
+                                    .itematic$usedItemAtLeast(TridentItem.field_30926)
                                     .itematic$inWaterOrRain(true)
                             ),
                             MatchToolLootCondition.builder(
@@ -4633,6 +4637,17 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEY_BOTTLE).build(), 16),
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40, UseAction.DRINK, items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
+                .build()
+        ));
+        registerable.register(ItemKeys.BRUSH, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BRUSH).build(), 1),
+            ItemComponentSet.builder()
+                .with(BrushItemComponent.INSTANCE)
+                .with(UseDurationItemComponent.of(BrushItemAccessor.maxBrushTime()))
+                .with(DamageableItemComponent.of(64))
+                .with(UseAnimationItemComponent.of(UseAction.BRUSH))
+                .with(ForgeableItemComponent.of(EnchantmentTags.BRUSH_FORGING))
+                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BRUSH)))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE, create(
