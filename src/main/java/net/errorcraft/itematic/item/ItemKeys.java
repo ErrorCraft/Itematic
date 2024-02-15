@@ -422,6 +422,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> RECOVERY_COMPASS = register("recovery_compass");
     public static final RegistryKey<Item> FISHING_ROD = register("fishing_rod");
     public static final RegistryKey<Item> CLOCK = register("clock");
+    public static final RegistryKey<Item> SPYGLASS = register("spyglass");
     public static final RegistryKey<Item> GLOWSTONE_DUST = register("glowstone_dust");
     public static final RegistryKey<Item> COD = register("cod");
     public static final RegistryKey<Item> SALMON = register("salmon");

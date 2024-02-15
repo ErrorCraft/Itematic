@@ -44,6 +44,8 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> MUSIC_DISC_WAIT = of("music_disc.wait");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_WARD = of("music_disc.ward");
     public static final RegistryKey<SoundEvent> SHOVEL_FLATTEN = of("item.shovel.flatten");
+    public static final RegistryKey<SoundEvent> SPYGLASS_USE = of("item.spyglass.use");
+    public static final RegistryKey<SoundEvent> SPYGLASS_STOP_USING = of("item.spyglass.stop_using");
 
     private SoundEventKeys() {}
 

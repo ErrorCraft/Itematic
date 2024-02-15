@@ -3034,6 +3034,14 @@ public class ItemUtil {
         registerable.register(ItemKeys.CLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CLOCK).build())
         ));
+        registerable.register(ItemKeys.SPYGLASS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPYGLASS).build(), 1),
+            ItemComponentSet.builder()
+                .with(ZoomItemComponent.of(SpyglassItem.field_30922, soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
+                .with(UseDurationItemComponent.of(SpyglassItem.MAX_USE_TIME))
+                .with(UseAnimationItemComponent.of(UseAction.SPYGLASS))
+                .build()
+        ));
         registerable.register(ItemKeys.GLOWSTONE_DUST, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOWSTONE_DUST).build())
         ));

@@ -270,6 +270,7 @@
     "text.HoverEventExtender$ItemStackContentExtender",
     "util.RarityExtender",
     "util.UseActionExtender",
+    "util.dynamic.CodecsAccessor",
     "village.TradeOfferExtender",
     "village.TradeOffersAccessor",
     "village.VillagerDataExtender",

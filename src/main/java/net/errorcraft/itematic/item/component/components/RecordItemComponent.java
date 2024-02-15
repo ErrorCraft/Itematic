@@ -17,9 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.MutableText;
@@ -36,7 +34,7 @@ import java.util.List;
 
 public record RecordItemComponent(RegistryEntry<SoundEvent> soundEvent, String descriptionKey, int duration, int outputSignal) implements ItemComponent<RecordItemComponent> {
     public static final Codec<RecordItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.SOUND_EVENT).fieldOf("sound_event").forGetter(RecordItemComponent::soundEvent),
+        SoundEvent.ENTRY_CODEC.fieldOf("sound_event").forGetter(RecordItemComponent::soundEvent),
         Codec.STRING.fieldOf("description_key").forGetter(RecordItemComponent::descriptionKey),
         Codecs.NONNEGATIVE_INT.fieldOf("duration").forGetter(RecordItemComponent::duration),
         Codec.intRange(0, 15).fieldOf("output_signal").forGetter(RecordItemComponent::outputSignal)

@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.entity.player;
 
 import com.mojang.authlib.GameProfile;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -128,4 +129,15 @@ public abstract class PlayerEntityExtender extends LivingEntity {
         )
     )
     private void neverSetEmptyStack(PlayerEntity instance, Hand hand, ItemStack stack) {}
+
+    @Redirect(
+        method = "isUsingSpyglass",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfUseItemComponentCheck(ItemStack instance, Item item) {
+        return instance.itematic$hasComponent(ItemComponentTypes.ZOOM);
+    }
 }

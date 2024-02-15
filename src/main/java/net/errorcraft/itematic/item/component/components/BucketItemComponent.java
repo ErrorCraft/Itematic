@@ -32,6 +32,7 @@ import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.RaycastContext;
@@ -42,10 +43,10 @@ import java.util.Optional;
 
 public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional<EntityInitializer<?>> entity, Optional<RegistryEntry<Block>> block, Optional<RegistryEntry<SoundEvent>> emptyingSound) implements ItemComponent<BucketItemComponent> {
     public static final Codec<BucketItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.FLUID).optionalFieldOf("fluid").forGetter(BucketItemComponent::fluid),
-        EntityInitializer.CODEC.optionalFieldOf("entity").forGetter(BucketItemComponent::entity),
-        RegistryFixedCodec.of(RegistryKeys.BLOCK).optionalFieldOf("block").forGetter(BucketItemComponent::block),
-        RegistryFixedCodec.of(RegistryKeys.SOUND_EVENT).optionalFieldOf("emptying_sound_event").forGetter(BucketItemComponent::emptyingSound)
+        Codecs.createStrictOptionalFieldCodec(RegistryFixedCodec.of(RegistryKeys.FLUID), "fluid").forGetter(BucketItemComponent::fluid),
+        Codecs.createStrictOptionalFieldCodec(EntityInitializer.CODEC, "entity").forGetter(BucketItemComponent::entity),
+        Codecs.createStrictOptionalFieldCodec(RegistryFixedCodec.of(RegistryKeys.BLOCK), "block").forGetter(BucketItemComponent::block),
+        Codecs.createStrictOptionalFieldCodec(SoundEvent.ENTRY_CODEC, "emptying_sound_event").forGetter(BucketItemComponent::emptyingSound)
     ).apply(instance, BucketItemComponent::new));
 
     @Override

@@ -54,6 +54,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<MappableItemComponent> MAPPABLE = register("mappable", new ItemComponentType<>(MappableItemComponent.CODEC));
     public static final ItemComponentType<MapHolderItemComponent> MAP_HOLDER = register("map_holder", new ItemComponentType<>(MapHolderItemComponent.CODEC));
     public static final ItemComponentType<BrushItemComponent> BRUSH = register("brush", new ItemComponentType<>(BrushItemComponent.CODEC));
+    public static final ItemComponentType<ZoomItemComponent> ZOOM = register("zoom", new ItemComponentType<>(ZoomItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

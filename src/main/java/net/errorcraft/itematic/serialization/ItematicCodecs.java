@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import net.errorcraft.itematic.mixin.util.dynamic.CodecsAccessor;
 import net.minecraft.util.dynamic.Codecs;
 
 import java.util.ArrayList;
@@ -29,6 +30,13 @@ public class ItematicCodecs {
 
     public static <T> Codec<Set<T>> setCodec(Codec<T> codec) {
         return new SetCodec<>(codec);
+    }
+
+    public static Codec<Float> positiveFloat(float maxInclusive) {
+        if (maxInclusive <= 0.0f) {
+            throw new IllegalArgumentException("maxInclusive must be positive, got " + maxInclusive + " instead");
+        }
+        return CodecsAccessor.rangedFloat(0.0f, maxInclusive, value -> "Value must be positive and at most " + maxInclusive + ": " + value);
     }
 
     private static class SetCodec<E> implements Codec<Set<E>> {

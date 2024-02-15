@@ -38,6 +38,7 @@
     "render.entity.feature.ElytraFeatureRendererExtender",
     "render.entity.feature.HeadFeatureRendererExtender",
     "render.entity.feature.HorseArmorFeatureRendererExtender",
+    "render.entity.feature.PlayerHeldItemFeatureRendererExtender",
     "render.entity.model.DrownedEntityModelExtender",
     "render.entity.model.SkeletonEntityModelExtender",
     "render.feature.WitchHeldItemFeatureRendererExtender",

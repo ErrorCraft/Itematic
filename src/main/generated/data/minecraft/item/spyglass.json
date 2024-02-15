@@ -1,0 +1,21 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.spyglass"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:use_animation": {
+      "animation": "spyglass"
+    },
+    "minecraft:use_duration": {
+      "ticks": 1200
+    },
+    "minecraft:zoom": {
+      "field_of_view_multiplier": 0.1,
+      "start_using_sound": "minecraft:item.spyglass.use",
+      "stop_using_sound": "minecraft:item.spyglass.stop_using"
+    }
+  }
+}
