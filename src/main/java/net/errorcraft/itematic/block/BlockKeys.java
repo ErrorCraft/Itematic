@@ -338,6 +338,8 @@ public class BlockKeys {
     public static final RegistryKey<Block> CRIMSON_SIGN = of("crimson_sign");
     public static final RegistryKey<Block> WARPED_SIGN = of("warped_sign");
     public static final RegistryKey<Block> COMPOSTER = of("composter");
+    public static final RegistryKey<Block> BEE_NEST = of("bee_nest");
+    public static final RegistryKey<Block> BEEHIVE = of("beehive");
     public static final RegistryKey<Block> POWDER_SNOW = of("powder_snow");
     public static final RegistryKey<Block> CAVE_VINES = of("cave_vines");
     public static final RegistryKey<Block> AZALEA = of("azalea");

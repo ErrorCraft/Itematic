@@ -3025,6 +3025,12 @@ public class ItemUtil {
                 .with(PointableItemComponent.of(pointers.getOrThrow(PointerKeys.LAST_DEATH)))
                 .build()
         ));
+        registerable.register(ItemKeys.BUNDLE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUNDLE).build(), 1),
+            ItemComponentSet.builder()
+                .with(ItemHolderItemComponent.of(BundleItem.MAX_STORAGE, soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT), soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE), soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
+                .build()
+        ));
         registerable.register(ItemKeys.FISHING_ROD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FISHING_ROD).build(), 1),
             ItemComponentSet.builder()
@@ -4639,6 +4645,18 @@ public class ItemUtil {
                             .add(new WaxBlockAction(ActionContextParameter.TARGET))
                             .add(DecrementItemAction.of(1))
                             .add(SwingHandAction.INSTANCE))))
+                .build()
+        ));
+        registerable.register(ItemKeys.BEE_NEST, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BEE_NEST).build()),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BEE_NEST)))
+                .build()
+        ));
+        registerable.register(ItemKeys.BEEHIVE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BEEHIVE).build()),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BEEHIVE)))
                 .build()
         ));
         registerable.register(ItemKeys.HONEY_BOTTLE, create(

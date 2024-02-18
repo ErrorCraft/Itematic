@@ -5,6 +5,7 @@
   "client": [
     "MinecraftClientExtender",
     "color.block.BlockColorsExtender",
+    "gui.DrawContextExtender",
     "gui.screen.CustomizeFlatLevelScreenExtender$SuperflatLayersListWidgetExtender$SuperflatLayerEntryExtender",
     "gui.screen.GameModeSelectionScreenExtender$ButtonWidgetExtender",
     "gui.screen.GameModeSelectionScreenExtender$GameModeSelectionExtender",
@@ -12,11 +13,13 @@
     "gui.screen.ingame.BookScreenExtender$ContentsExtender",
     "gui.screen.ingame.CartographyTableScreenExtender",
     "gui.screen.ingame.CreativeInventoryScreenExtender",
+    "gui.screen.ingame.HandledScreenExtender",
     "gui.screen.ingame.LoomScreenExtender",
     "gui.screen.ingame.SmithingScreenExtender",
     "gui.screen.recipebook.AbstractFurnaceRecipeBookScreenExtender",
     "gui.screen.recipebook.RecipeBookWidgetExtender",
     "gui.screen.recipebook.RecipeGroupButtonWidgetExtender",
+    "gui.tooltip.BundleTooltipComponentExtender",
     "network.AbstractClientPlayerEntityExtender",
     "network.ClientConfigurationNetworkHandlerExtender",
     "network.ClientPlayerEntityExtender",
@@ -49,6 +52,7 @@
     "render.model.BakedModelManagerExtender",
     "render.model.ModelLoaderExtender",
     "render.model.json.ModelOverrideListExtender",
+    "tutorial.BundleTutorialExtender",
     "world.ClientWorldExtender"
   ],
   "injectors": {

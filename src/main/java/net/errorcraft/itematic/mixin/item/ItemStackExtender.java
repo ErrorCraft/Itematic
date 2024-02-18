@@ -14,6 +14,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.ItemHolderItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -21,9 +22,11 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.minecraft.advancement.criterion.ItemDurabilityChangedCriterion;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -35,17 +38,16 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
+import net.minecraft.util.*;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -500,6 +502,28 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Inject(
+        method = "onStackClicked",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void onStackClickedUseRegistryEntryNullCheck(Slot slot, ClickType clickType, PlayerEntity player, CallbackInfoReturnable<Boolean> info) {
+        if (this.isEmpty()) {
+            info.setReturnValue(false);
+        }
+    }
+
+    @Inject(
+        method = "onClicked",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void onClickedUseRegistryEntryNullCheck(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference, CallbackInfoReturnable<Boolean> info) {
+        if (this.isEmpty()) {
+            info.setReturnValue(false);
+        }
+    }
+
+    @Inject(
         method = "postMine",
         at = @At("HEAD"),
         cancellable = true
@@ -627,6 +651,22 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
+    public boolean itematic$isItemBarVisible(RegistryWrapper.WrapperLookup lookup) {
+        if (this.entry == null) {
+            return false;
+        }
+        return this.entry.value().itematic$isItemBarVisible((ItemStack)(Object) this, lookup);
+    }
+
+    @Override
+    public int itematic$itemBarStep(RegistryWrapper.WrapperLookup lookup) {
+        if (this.entry == null) {
+            return 0;
+        }
+        return this.entry.value().itematic$itemBarStep((ItemStack)(Object) this, lookup);
+    }
+
+    @Override
     public boolean itematic$canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
         if (this.entry == null) {
             return true;
@@ -648,6 +688,31 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             return false;
         }
         return this.entry.value().itematic$mayStartUsing(world, user, hand, stack);
+    }
+
+    @Override
+    public Optional<TooltipData> itematic$tooltipData(@Nullable RegistryWrapper.WrapperLookup lookup) {
+        if (this.entry == null) {
+            return Optional.empty();
+        }
+        return this.entry.value().itematic$tooltipData((ItemStack)(Object) this, lookup);
+    }
+
+    @Override
+    public boolean itematic$canBeNested() {
+        if (this.entry == null) {
+            return true;
+        }
+        return this.entry.value().canBeNested();
+    }
+
+    @Override
+    public double itematic$occupancy(RegistryWrapper.WrapperLookup lookup) {
+        return this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+            .map(c -> ItemHolderItemComponent.ITEM_HOLDER_OCCUPANCY + c.getHolderOccupancy((ItemStack)(Object) this, lookup))
+            .orElseGet(() -> this.itematic$getComponent(ItemComponentTypes.BLOCK)
+                .map(c -> (double)ItemBase.MAX_MAX_COUNT / c.modifiedMaxCountForOccupancy((ItemStack)(Object) this))
+                .orElseGet(() -> (double)ItemBase.MAX_MAX_COUNT / this.getMaxCount()));
     }
 
     @Unique

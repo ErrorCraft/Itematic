@@ -420,6 +420,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> EGG = register("egg");
     public static final RegistryKey<Item> COMPASS = register("compass");
     public static final RegistryKey<Item> RECOVERY_COMPASS = register("recovery_compass");
+    public static final RegistryKey<Item> BUNDLE = register("bundle");
     public static final RegistryKey<Item> FISHING_ROD = register("fishing_rod");
     public static final RegistryKey<Item> CLOCK = register("clock");
     public static final RegistryKey<Item> SPYGLASS = register("spyglass");
@@ -658,6 +659,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> SWEET_BERRIES = register("sweet_berries");
     public static final RegistryKey<Item> GLOW_BERRIES = register("glow_berries");
     public static final RegistryKey<Item> HONEYCOMB = register("honeycomb");
+    public static final RegistryKey<Item> BEE_NEST = register("bee_nest");
+    public static final RegistryKey<Item> BEEHIVE = register("beehive");
     public static final RegistryKey<Item> HONEY_BOTTLE = register("honey_bottle");
     public static final RegistryKey<Item> BRUSH = register("brush");
     public static final RegistryKey<Item> NETHERITE_UPGRADE_SMITHING_TEMPLATE = register("netherite_upgrade_smithing_template");

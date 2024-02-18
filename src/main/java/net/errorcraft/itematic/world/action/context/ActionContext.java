@@ -70,7 +70,8 @@ public class ActionContext {
     }
 
     public static Builder builder(ServerWorld world, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        return builder(world).stack(stack)
+        return builder(world)
+            .stack(stack)
             .resultStackConsumer(resultStackConsumer);
     }
 

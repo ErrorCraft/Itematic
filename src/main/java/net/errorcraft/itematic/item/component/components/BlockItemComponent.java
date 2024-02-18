@@ -2,16 +2,28 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.placement.BlockPlacer;
 import net.minecraft.block.Block;
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.block.entity.BeehiveBlockEntity;
+import net.minecraft.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsage;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryOps;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.text.Text;
@@ -54,5 +66,39 @@ public record BlockItemComponent(RegistryEntry<Block> block, boolean operatorOnl
 
     public static BlockItemComponent operator(RegistryEntry<Block> block) {
         return new BlockItemComponent(block, true);
+    }
+
+    public int modifiedMaxCountForOccupancy(ItemStack stack) {
+        if (!this.block.matchesKey(BlockKeys.BEEHIVE) && !this.block.matchesKey(BlockKeys.BEE_NEST)) {
+            return stack.getMaxCount();
+        }
+        NbtCompound blockEntityNbt = BlockItem.getBlockEntityNbt(stack);
+        if (blockEntityNbt == null) {
+            return stack.getMaxCount();
+        }
+        if (blockEntityNbt.getList(BeehiveBlockEntity.BEES_KEY, NbtElement.COMPOUND_TYPE).isEmpty()) {
+            return stack.getMaxCount();
+        }
+        return 1;
+    }
+
+    public boolean canBeNested() {
+        return !(this.block.value() instanceof ShulkerBoxBlock);
+    }
+
+    public void onDestroyed(ItemEntity item) {
+        if (!(this.block.value() instanceof ShulkerBoxBlock)) {
+            return;
+        }
+        NbtCompound blockEntityNbt = BlockItem.getBlockEntityNbt(item.getStack());
+        if (blockEntityNbt == null) {
+            return;
+        }
+        if (!blockEntityNbt.contains(ShulkerBoxBlockEntity.ITEMS_KEY, NbtElement.LIST_TYPE)) {
+            return;
+        }
+        NbtList itemsNbt = blockEntityNbt.getList(ShulkerBoxBlockEntity.ITEMS_KEY, NbtElement.COMPOUND_TYPE);
+        RegistryOps<NbtElement> ops = RegistryOps.of(NbtOps.INSTANCE, item.getWorld().getRegistryManager());
+        ItemUsage.spawnItemContents(item, itemsNbt.stream().map(itemNbt -> ItemStack.CODEC.parse(ops, itemNbt).result().orElse(ItemStack.EMPTY)));
     }
 }

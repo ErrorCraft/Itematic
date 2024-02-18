@@ -21,6 +21,9 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> BUCKET_EMPTY_LAVA = of("item.bucket.empty_lava");
     public static final RegistryKey<SoundEvent> BUCKET_EMPTY_POWDER_SNOW = of("item.bucket.empty_powder_snow");
     public static final RegistryKey<SoundEvent> BUCKET_EMPTY_TADPOLE = of("item.bucket.empty_tadpole");
+    public static final RegistryKey<SoundEvent> BUNDLE_DROP_CONTENTS = of("item.bundle.drop_contents");
+    public static final RegistryKey<SoundEvent> BUNDLE_INSERT = of("item.bundle.insert");
+    public static final RegistryKey<SoundEvent> BUNDLE_REMOVE_ONE = of("item.bundle.remove_one");
     public static final RegistryKey<SoundEvent> ENDER_EYE_LAUNCH = of("entity.ender_eye.launch");
     public static final RegistryKey<SoundEvent> END_PORTAL_FRAME_FILL = of("block.end_portal_frame.fill");
     public static final RegistryKey<SoundEvent> FIRE_CHARGE_USE = of("item.firecharge.use");

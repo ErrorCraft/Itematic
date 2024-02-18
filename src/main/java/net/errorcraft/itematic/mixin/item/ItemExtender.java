@@ -18,8 +18,10 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -27,7 +29,9 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.*;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
@@ -47,7 +51,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Mixin(Item.class)
-public class ItemExtender implements ItemAccess {
+public abstract class ItemExtender implements ItemAccess {
     @Shadow
     @Final
     protected static UUID ATTACK_DAMAGE_MODIFIER_ID;
@@ -55,6 +59,12 @@ public class ItemExtender implements ItemAccess {
     @Shadow
     @Final
     protected static UUID ATTACK_SPEED_MODIFIER_ID;
+
+    @Shadow
+    public abstract boolean isItemBarVisible(ItemStack stack);
+
+    @Shadow
+    public abstract int getItemBarStep(ItemStack stack);
 
     @Unique
     private ItemBase base;
@@ -233,6 +243,17 @@ public class ItemExtender implements ItemAccess {
         }
     }
 
+    @Inject(
+        method = "onItemEntityDestroyed",
+        at = @At("HEAD")
+    )
+    private void onItemEntityDestroyedUseItemComponent(ItemEntity entity, CallbackInfo info) {
+        this.itematic$getComponent(ItemComponentTypes.BLOCK)
+            .ifPresent(c -> c.onDestroyed(entity));
+        this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+            .ifPresent(c -> c.onDestroyed(entity));
+    }
+
     /**
      * @author ErrorCraft
      * @reason Uses the ItemComponent implementation for data-driven items.
@@ -290,6 +311,32 @@ public class ItemExtender implements ItemAccess {
         }
     }
 
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public boolean onStackClicked(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player) {
+        boolean result = false;
+        for (ItemComponent<?> component : this.components) {
+            result |= component.clickOnSlot(stack, slot, clickType, player);
+        }
+        return result;
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
+        boolean result = false;
+        for (ItemComponent<?> component : this.components) {
+            result |= component.clickedOnWithStack(stack, otherStack, slot, clickType, player, cursorStackReference::set);
+        }
+        return result;
+    }
+
     @Inject(
         method = "onCraft",
         at = @At("HEAD")
@@ -306,7 +353,9 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        this.base.display().tooltip().ifPresent(tooltip::addAll);
+        this.base.display()
+            .tooltip()
+            .ifPresent(tooltip::addAll);
         for (ItemComponent<?> component : this.components) {
             component.appendTooltip(stack, world, tooltip, context);
         }
@@ -407,8 +456,21 @@ public class ItemExtender implements ItemAccess {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
+    public boolean canBeNested() {
+        return this.itematic$getComponent(ItemComponentTypes.BLOCK)
+            .map(BlockItemComponent::canBeNested)
+            .orElse(true);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
     public int getEnchantability() {
-        return this.itematic$getComponent(ItemComponentTypes.ENCHANTABLE).map(EnchantableItemComponent::enchantability).orElse(0);
+        return this.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
+            .map(EnchantableItemComponent::enchantability)
+            .orElse(0);
     }
 
     /**
@@ -444,6 +506,17 @@ public class ItemExtender implements ItemAccess {
         info.setReturnValue(maxUseTime);
     }
 
+    @Inject(
+        method = "getItemBarColor",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void itemBarColorUseItemComponentCheck(ItemStack stack, CallbackInfoReturnable<Integer> info) {
+        if (this.itematic$hasComponent(ItemComponentTypes.ITEM_HOLDER)) {
+            info.setReturnValue(ItemHolderItemComponent.ITEM_BAR_COLOR);
+        }
+    }
+
     @Redirect(
         method = { "getItemBarStep", "getItemBarColor" },
         at = @At(
@@ -462,7 +535,9 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public final int getMaxDamage() {
-        return this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE).map(DamageableItemComponent::durability).orElse(0);
+        return this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
+            .map(DamageableItemComponent::durability)
+            .orElse(0);
     }
 
     /**
@@ -471,7 +546,9 @@ public class ItemExtender implements ItemAccess {
      */
     @Overwrite
     public float getMiningSpeedMultiplier(ItemStack stack, BlockState state) {
-        return this.itematic$getComponent(ItemComponentTypes.TOOL).map(component -> component.getMiningSpeed(state)).orElse(1.0f);
+        return this.itematic$getComponent(ItemComponentTypes.TOOL)
+            .map(c -> c.getMiningSpeed(state))
+            .orElse(1.0f);
     }
 
     /**
@@ -561,10 +638,33 @@ public class ItemExtender implements ItemAccess {
     }
 
     @Override
+    public boolean itematic$isItemBarVisible(ItemStack stack, RegistryWrapper.WrapperLookup lookup) {
+        return this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+            .map(c -> c.itemBarVisible(stack, lookup))
+            .orElseGet(() -> this.isItemBarVisible(stack));
+    }
+
+    @Override
+    public int itematic$itemBarStep(ItemStack stack, RegistryWrapper.WrapperLookup lookup) {
+        return this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+            .map(c -> c.itemBarStep(stack, lookup))
+            .orElseGet(() -> this.getItemBarStep(stack));
+    }
+
+    @Override
     public boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return this.itematic$getComponent(ItemComponentTypes.FOOD)
             .map(c -> c.mayStartUsing(user))
             .orElse(true);
+    }
+
+    @Override
+    public Optional<TooltipData> itematic$tooltipData(ItemStack stack, @Nullable RegistryWrapper.WrapperLookup lookup) {
+        if (lookup == null) {
+            return Optional.empty();
+        }
+        return this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+            .map(c -> c.tooltipData(stack, lookup));
     }
 
     @Unique

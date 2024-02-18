@@ -7,10 +7,13 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.minecraft.client.item.TooltipData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -36,7 +39,16 @@ public interface ItemAccess {
     default boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
         return false;
     }
+    default boolean itematic$isItemBarVisible(ItemStack stack, RegistryWrapper.WrapperLookup lookup) {
+        return false;
+    }
+    default int itematic$itemBarStep(ItemStack stack, RegistryWrapper.WrapperLookup lookup) {
+        return 0;
+    }
     default boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return true;
+    }
+    default Optional<TooltipData> itematic$tooltipData(ItemStack stack, @Nullable RegistryWrapper.WrapperLookup lookup) {
+        return Optional.empty();
     }
 }
