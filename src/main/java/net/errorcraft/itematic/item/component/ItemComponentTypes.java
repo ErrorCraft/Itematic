@@ -56,6 +56,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<BrushItemComponent> BRUSH = register("brush", new ItemComponentType<>(BrushItemComponent.CODEC));
     public static final ItemComponentType<ZoomItemComponent> ZOOM = register("zoom", new ItemComponentType<>(ZoomItemComponent.CODEC));
     public static final ItemComponentType<ItemHolderItemComponent> ITEM_HOLDER = register("item_holder", new ItemComponentType<>(ItemHolderItemComponent.CODEC));
+    public static final ItemComponentType<ImmuneToDamageItemComponent> IMMUNE_TO_DAMAGE = register("immune_to_damage", new ItemComponentType<>(ImmuneToDamageItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

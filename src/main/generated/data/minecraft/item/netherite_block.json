@@ -1,11 +1,14 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.netherite_ingot"
+      "translation_key": "block.minecraft.netherite_block"
     },
     "max_count": 64
   },
   "components": {
+    "minecraft:block": {
+      "block": "minecraft:netherite_block"
+    },
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_fire"
     }

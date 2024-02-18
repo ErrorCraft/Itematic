@@ -26,6 +26,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.*;
@@ -449,6 +450,17 @@ public abstract class ItemExtender implements ItemAccess {
                 }
                 return stack.hasEnchantments();
             });
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public boolean damage(DamageSource source) {
+        return this.itematic$getComponent(ItemComponentTypes.IMMUNE_TO_DAMAGE)
+            .map(c -> c.damage(source))
+            .orElse(true);
     }
 
     /**

@@ -34,7 +34,9 @@ public class ItemKeys {
     public static final RegistryKey<Item> MANGROVE_PROPAGULE = register("mangrove_propagule");
     public static final RegistryKey<Item> SAND = register("sand");
     public static final RegistryKey<Item> REDSTONE_ORE = register("redstone_ore");
+    public static final RegistryKey<Item> ANCIENT_DEBRIS = register("ancient_debris");
     public static final RegistryKey<Item> COAL_BLOCK = register("coal_block");
+    public static final RegistryKey<Item> NETHERITE_BLOCK = register("netherite_block");
     public static final RegistryKey<Item> OAK_LOG = register("oak_log");
     public static final RegistryKey<Item> SPRUCE_LOG = register("spruce_log");
     public static final RegistryKey<Item> BIRCH_LOG = register("birch_log");
@@ -310,6 +312,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> COPPER_INGOT = register("copper_ingot");
     public static final RegistryKey<Item> GOLD_INGOT = register("gold_ingot");
     public static final RegistryKey<Item> NETHERITE_INGOT = register("netherite_ingot");
+    public static final RegistryKey<Item> NETHERITE_SCRAP = register("netherite_scrap");
     public static final RegistryKey<Item> WOODEN_SWORD = register("wooden_sword");
     public static final RegistryKey<Item> WOODEN_SHOVEL = register("wooden_shovel");
     public static final RegistryKey<Item> WOODEN_PICKAXE = register("wooden_pickaxe");
@@ -574,6 +577,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> CREEPER_HEAD = register("creeper_head");
     public static final RegistryKey<Item> DRAGON_HEAD = register("dragon_head");
     public static final RegistryKey<Item> PIGLIN_HEAD = register("piglin_head");
+    public static final RegistryKey<Item> NETHER_STAR = register("nether_star");
     public static final RegistryKey<Item> PUMPKIN_PIE = register("pumpkin_pie");
     public static final RegistryKey<Item> FIREWORK_ROCKET = register("firework_rocket");
     public static final RegistryKey<Item> FIREWORK_STAR = register("firework_star");

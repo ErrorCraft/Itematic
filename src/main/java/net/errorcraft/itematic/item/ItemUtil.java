@@ -66,6 +66,7 @@ import net.minecraft.predicate.item.EnchantmentPredicate;
 import net.minecraft.predicate.item.ItemPredicate;
 import net.minecraft.registry.*;
 import net.minecraft.registry.tag.BannerPatternTags;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.InstrumentTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -282,11 +283,25 @@ public class ItemUtil {
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.REDSTONE_ORE)))
                 .build()
         ));
+        registerable.register(ItemKeys.ANCIENT_DEBRIS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ANCIENT_DEBRIS).build()),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ANCIENT_DEBRIS)))
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                .build()
+        ));
         registerable.register(ItemKeys.COAL_BLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COAL_BLOCK).build()),
             ItemComponentSet.builder()
                 .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.COAL_BLOCK)))
                 .with(FuelItemComponent.of(FurnaceBlockEntityUtil.COAL_BLOCK_FUEL_TIME))
+                .build()
+        ));
+        registerable.register(ItemKeys.NETHERITE_BLOCK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHERITE_BLOCK).build()),
+            ItemComponentSet.builder()
+                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.NETHERITE_BLOCK)))
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                 .build()
         ));
         registerable.register(ItemKeys.OAK_LOG, create(
@@ -2175,7 +2190,16 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLD_INGOT).build())
         ));
         registerable.register(ItemKeys.NETHERITE_INGOT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_INGOT).build())
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_INGOT).build()),
+            ItemComponentSet.builder()
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                .build()
+        ));
+        registerable.register(ItemKeys.NETHERITE_SCRAP, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SCRAP).build()),
+            ItemComponentSet.builder()
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                .build()
         ));
         registerable.register(ItemKeys.WOODEN_SWORD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_SWORD).build(), 1),
@@ -2366,12 +2390,14 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SWORD).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.sword(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_SHOVEL, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SHOVEL).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.shovel(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                 .build(),
             ItemEventMap.builder()
                 .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -2381,18 +2407,21 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_PICKAXE).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.pickaxe(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_AXE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_AXE).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.axe(ToolMaterials.NETHERITE, 5.0d, -3.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                 .build()
         ));
         registerable.register(ItemKeys.NETHERITE_HOE, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HOE).build(), 1),
             ItemComponentSet.builder()
                 .with(DamageableItemComponent.hoe(ToolMaterials.NETHERITE, 4.0d, 0.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                 .build(),
             ItemEventMap.builder()
                 .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -2654,6 +2683,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HELMET).build(), 1),
             ItemComponentSet.builder()
                 .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 37, armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.HELMET_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                 .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
@@ -2664,6 +2694,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_CHESTPLATE).build(), 1),
             ItemComponentSet.builder()
                 .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 37, armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.CHESTPLATE_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                 .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
@@ -2674,6 +2705,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_LEGGINGS).build(), 1),
             ItemComponentSet.builder()
                 .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 37, armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.LEGGINGS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                 .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
@@ -2684,6 +2716,7 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_BOOTS).build(), 1),
             ItemComponentSet.builder()
                 .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 37, armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                 .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.BOOTS_ENCHANTING))
                 .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                 .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
@@ -4015,6 +4048,12 @@ public class ItemUtil {
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PIGLIN_HEAD).rarity(Rarity.UNCOMMON).build()),
             ItemComponentSet.builder()
                 .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.PIGLIN_HEAD), soundEvents))
+                .build()
+        ));
+        registerable.register(ItemKeys.NETHER_STAR, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_STAR).build()),
+            ItemComponentSet.builder()
+                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_EXPLOSION))
                 .build()
         ));
         registerable.register(ItemKeys.PUMPKIN_PIE, create(

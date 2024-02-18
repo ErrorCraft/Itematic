@@ -18,6 +18,7 @@
       "net.errorcraft.itematic.gametest.item.component.BlockItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.EquipmentItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.FoodItemComponentTestSuite",
+      "net.errorcraft.itematic.gametest.item.component.ImmuneToDamageItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.PotionItemComponentTestSuite"
     ]
   },

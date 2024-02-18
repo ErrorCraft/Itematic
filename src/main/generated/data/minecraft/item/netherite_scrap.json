@@ -1,7 +1,7 @@
 {
   "base": {
     "display": {
-      "translation_key": "item.minecraft.netherite_ingot"
+      "translation_key": "item.minecraft.netherite_scrap"
     },
     "max_count": 64
   },

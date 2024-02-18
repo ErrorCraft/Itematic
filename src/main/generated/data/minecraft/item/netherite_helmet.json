@@ -27,6 +27,9 @@
     "minecraft:forgeable": {
       "enchantments": "minecraft:helmet_forging"
     },
+    "minecraft:immune_to_damage": {
+      "damage": "minecraft:is_fire"
+    },
     "minecraft:repairable": {
       "items": "minecraft:repairs_netherite_armor"
     }
