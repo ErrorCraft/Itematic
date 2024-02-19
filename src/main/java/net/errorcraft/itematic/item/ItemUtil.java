@@ -4545,7 +4545,7 @@ public class ItemUtil {
                 .with(ToolItemComponent.builder(2)
                     .build())
                 .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE, -2.9d))
-                .with(ThrowableItemComponent.trident(TridentItem.field_30928, 0.0f, TridentItem.field_30926))
+                .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
                 .with(ProjectileItemComponent.of(TridentEntityInitializer.of(true), 1))
                 .with(UseAnimationItemComponent.of(UseAction.SPEAR))
                 .with(EnchantableItemComponent.enchants(1, EnchantmentTags.TRIDENT_ENCHANTING))
@@ -4559,7 +4559,7 @@ public class ItemUtil {
                             EntityPropertiesLootCondition.builder(
                                 LootContext.EntityTarget.THIS,
                                 EntityPredicate.Builder.create()
-                                    .itematic$usedItemAtLeast(TridentItem.field_30926)
+                                    .itematic$usedItemAtLeast(TridentItem.MIN_DRAW_DURATION)
                                     .itematic$inWaterOrRain(true)
                             ),
                             MatchToolLootCondition.builder(
