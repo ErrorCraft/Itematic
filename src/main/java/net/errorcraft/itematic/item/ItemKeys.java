@@ -308,8 +308,11 @@ public class ItemKeys {
     public static final RegistryKey<Item> LAPIS_LAZULI = register("lapis_lazuli");
     public static final RegistryKey<Item> QUARTZ = register("quartz");
     public static final RegistryKey<Item> AMETHYST_SHARD = register("amethyst_shard");
+    public static final RegistryKey<Item> RAW_IRON = register("raw_iron");
     public static final RegistryKey<Item> IRON_INGOT = register("iron_ingot");
+    public static final RegistryKey<Item> RAW_COPPER = register("raw_copper");
     public static final RegistryKey<Item> COPPER_INGOT = register("copper_ingot");
+    public static final RegistryKey<Item> RAW_GOLD = register("raw_gold");
     public static final RegistryKey<Item> GOLD_INGOT = register("gold_ingot");
     public static final RegistryKey<Item> NETHERITE_INGOT = register("netherite_ingot");
     public static final RegistryKey<Item> NETHERITE_SCRAP = register("netherite_scrap");
@@ -375,6 +378,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> NETHERITE_CHESTPLATE = register("netherite_chestplate");
     public static final RegistryKey<Item> NETHERITE_LEGGINGS = register("netherite_leggings");
     public static final RegistryKey<Item> NETHERITE_BOOTS = register("netherite_boots");
+    public static final RegistryKey<Item> FLINT = register("flint");
     public static final RegistryKey<Item> PORKCHOP = register("porkchop");
     public static final RegistryKey<Item> COOKED_PORKCHOP = register("cooked_porkchop");
     public static final RegistryKey<Item> PAINTING = register("painting");
@@ -416,6 +420,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> AXOLOTL_BUCKET = register("axolotl_bucket");
     public static final RegistryKey<Item> TADPOLE_BUCKET = register("tadpole_bucket");
     public static final RegistryKey<Item> BRICK = register("brick");
+    public static final RegistryKey<Item> CLAY_BALL = register("clay_ball");
     public static final RegistryKey<Item> DRIED_KELP_BLOCK = register("dried_kelp_block");
     public static final RegistryKey<Item> PAPER = register("paper");
     public static final RegistryKey<Item> BOOK = register("book");
@@ -453,6 +458,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> RED_DYE = register("red_dye");
     public static final RegistryKey<Item> BLACK_DYE = register("black_dye");
     public static final RegistryKey<Item> BONE_MEAL = register("bone_meal");
+    public static final RegistryKey<Item> BONE = register("bone");
     public static final RegistryKey<Item> SUGAR = register("sugar");
     public static final RegistryKey<Item> COOKIE = register("cookie");
     public static final RegistryKey<Item> FILLED_MAP = register("filled_map");
@@ -582,10 +588,14 @@ public class ItemKeys {
     public static final RegistryKey<Item> FIREWORK_ROCKET = register("firework_rocket");
     public static final RegistryKey<Item> FIREWORK_STAR = register("firework_star");
     public static final RegistryKey<Item> ENCHANTED_BOOK = register("enchanted_book");
+    public static final RegistryKey<Item> NETHER_BRICK = register("nether_brick");
+    public static final RegistryKey<Item> PRISMARINE_SHARD = register("prismarine_shard");
+    public static final RegistryKey<Item> PRISMARINE_CRYSTALS = register("prismarine_crystals");
     public static final RegistryKey<Item> RABBIT = register("rabbit");
     public static final RegistryKey<Item> COOKED_RABBIT = register("cooked_rabbit");
     public static final RegistryKey<Item> RABBIT_STEW = register("rabbit_stew");
     public static final RegistryKey<Item> RABBIT_FOOT = register("rabbit_foot");
+    public static final RegistryKey<Item> RABBIT_HIDE = register("rabbit_hide");
     public static final RegistryKey<Item> ARMOR_STAND = register("armor_stand");
     public static final RegistryKey<Item> IRON_HORSE_ARMOR = register("iron_horse_armor");
     public static final RegistryKey<Item> GOLDEN_HORSE_ARMOR = register("golden_horse_armor");
@@ -614,6 +624,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> BLACK_BANNER = register("black_banner");
     public static final RegistryKey<Item> END_CRYSTAL = register("end_crystal");
     public static final RegistryKey<Item> CHORUS_FRUIT = register("chorus_fruit");
+    public static final RegistryKey<Item> POPPED_CHORUS_FRUIT = register("popped_chorus_fruit");
     public static final RegistryKey<Item> TORCHFLOWER_SEEDS = register("torchflower_seeds");
     public static final RegistryKey<Item> PITCHER_POD = register("pitcher_pod");
     public static final RegistryKey<Item> BEETROOT = register("beetroot");
@@ -626,6 +637,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> LINGERING_POTION = register("lingering_potion");
     public static final RegistryKey<Item> SHIELD = register("shield");
     public static final RegistryKey<Item> TOTEM_OF_UNDYING = register("totem_of_undying");
+    public static final RegistryKey<Item> SHULKER_SHELL = register("shulker_shell");
+    public static final RegistryKey<Item> IRON_NUGGET = register("iron_nugget");
     public static final RegistryKey<Item> KNOWLEDGE_BOOK = register("knowledge_book");
     public static final RegistryKey<Item> DEBUG_STICK = register("debug_stick");
     public static final RegistryKey<Item> MUSIC_DISC_13 = register("music_disc_13");
@@ -648,6 +661,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> TRIDENT = register("trident");
     public static final RegistryKey<Item> PHANTOM_MEMBRANE = register("phantom_membrane");
     public static final RegistryKey<Item> NAUTILUS_SHELL = register("nautilus_shell");
+    public static final RegistryKey<Item> HEART_OF_THE_SEA = register("heart_of_the_sea");
     public static final RegistryKey<Item> CROSSBOW = register("crossbow");
     public static final RegistryKey<Item> SUSPICIOUS_STEW = register("suspicious_stew");
     public static final RegistryKey<Item> LOOM = register("loom");
@@ -669,6 +683,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> BEE_NEST = register("bee_nest");
     public static final RegistryKey<Item> BEEHIVE = register("beehive");
     public static final RegistryKey<Item> HONEY_BOTTLE = register("honey_bottle");
+    public static final RegistryKey<Item> ECHO_SHARD = register("echo_shard");
     public static final RegistryKey<Item> BRUSH = register("brush");
     public static final RegistryKey<Item> NETHERITE_UPGRADE_SMITHING_TEMPLATE = register("netherite_upgrade_smithing_template");
     public static final RegistryKey<Item> SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE = register("sentry_armor_trim_smithing_template");

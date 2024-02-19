@@ -15,6 +15,7 @@
       "net.errorcraft.itematic.gametest.entity.passive.CamelEntitySuite",
       "net.errorcraft.itematic.gametest.entity.passive.FrogEntitySuite",
       "net.errorcraft.itematic.gametest.entity.passive.GoatEntitySuite",
+      "net.errorcraft.itematic.gametest.entity.passive.WolfEntitySuite",
       "net.errorcraft.itematic.gametest.item.component.BlockItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.EquipmentItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.FoodItemComponentTestSuite",

@@ -149,6 +149,21 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .addTag(ItematicItemTags.ARMADILLO_FOOD);
         this.getOrCreateTagBuilder(ItematicItemTags.SNIFFER_TEMPT_ITEMS)
             .add(ItemKeys.TORCHFLOWER_SEEDS);
+        this.getOrCreateTagBuilder(ItematicItemTags.WOLF_FOOD)
+            .add(ItemKeys.BEEF)
+            .add(ItemKeys.PORKCHOP)
+            .add(ItemKeys.CHICKEN)
+            .add(ItemKeys.MUTTON)
+            .add(ItemKeys.RABBIT)
+            .add(ItemKeys.COOKED_BEEF)
+            .add(ItemKeys.COOKED_PORKCHOP)
+            .add(ItemKeys.COOKED_CHICKEN)
+            .add(ItemKeys.COOKED_MUTTON)
+            .add(ItemKeys.COOKED_RABBIT)
+            .add(ItemKeys.ROTTEN_FLESH);
+        this.getOrCreateTagBuilder(ItematicItemTags.WOLF_TEMPT_ITEMS)
+            .addTag(ItematicItemTags.WOLF_FOOD)
+            .add(ItemKeys.BONE);
         this.getOrCreateTagBuilder(ItematicItemTags.OAK_BUILDING_BLOCKS)
             .add(ItemKeys.OAK_LOG)
             .add(ItemKeys.OAK_WOOD)

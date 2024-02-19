@@ -2184,11 +2184,20 @@ public class ItemUtil {
         registerable.register(ItemKeys.AMETHYST_SHARD, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.AMETHYST_SHARD).build())
         ));
+        registerable.register(ItemKeys.RAW_IRON, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAW_IRON).build())
+        ));
         registerable.register(ItemKeys.IRON_INGOT, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_INGOT).build())
         ));
+        registerable.register(ItemKeys.RAW_COPPER, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAW_COPPER).build())
+        ));
         registerable.register(ItemKeys.COPPER_INGOT, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COPPER_INGOT).build())
+        ));
+        registerable.register(ItemKeys.RAW_GOLD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAW_GOLD).build())
         ));
         registerable.register(ItemKeys.GOLD_INGOT, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLD_INGOT).build())
@@ -2727,6 +2736,9 @@ public class ItemUtil {
                 .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
                 .build()
         ));
+        registerable.register(ItemKeys.FLINT, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLINT).build())
+        ));
         registerable.register(ItemKeys.PORKCHOP, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PORKCHOP).build()),
             ItemComponentSet.builder()
@@ -3007,6 +3019,9 @@ public class ItemUtil {
                 .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.decoratedPotSide())))
                 .build()
         ));
+        registerable.register(ItemKeys.CLAY_BALL, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CLAY_BALL).build())
+        ));
         registerable.register(ItemKeys.DRIED_KELP_BLOCK, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRIED_KELP_BLOCK).build()),
             ItemComponentSet.builder()
@@ -3242,6 +3257,9 @@ public class ItemUtil {
             ItemEventMap.builder()
                 .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(FertilizeAction.INSTANCE))
                 .build()
+        ));
+        registerable.register(ItemKeys.BONE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BONE).build())
         ));
         registerable.register(ItemKeys.SUGAR, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SUGAR).build())
@@ -4089,6 +4107,15 @@ public class ItemUtil {
                 .with(GlintItemComponent.of(true))
                 .build()
         ));
+        registerable.register(ItemKeys.NETHER_BRICK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_BRICK).build())
+        ));
+        registerable.register(ItemKeys.PRISMARINE_SHARD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PRISMARINE_SHARD).build())
+        ));
+        registerable.register(ItemKeys.PRISMARINE_CRYSTALS, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PRISMARINE_CRYSTALS).build())
+        ));
         registerable.register(ItemKeys.RABBIT, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT).build()),
             ItemComponentSet.builder()
@@ -4109,6 +4136,9 @@ public class ItemUtil {
         ));
         registerable.register(ItemKeys.RABBIT_FOOT, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_FOOT).build())
+        ));
+        registerable.register(ItemKeys.RABBIT_HIDE, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_HIDE).build())
         ));
         registerable.register(ItemKeys.ARMOR_STAND, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARMOR_STAND).build(), 16),
@@ -4330,6 +4360,9 @@ public class ItemUtil {
                 .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(new TeleportAction(16, ActionContextParameter.THIS)))
                 .build()
         ));
+        registerable.register(ItemKeys.POPPED_CHORUS_FRUIT, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POPPED_CHORUS_FRUIT).build())
+        ));
         registerable.register(ItemKeys.TORCHFLOWER_SEEDS, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TORCHFLOWER_SEEDS).build()),
             ItemComponentSet.builder()
@@ -4425,6 +4458,12 @@ public class ItemUtil {
                     new StatusEffectInstance(statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 800, 0)
                 ))
                 .build()
+        ));
+        registerable.register(ItemKeys.SHULKER_SHELL, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHULKER_SHELL).build())
+        ));
+        registerable.register(ItemKeys.IRON_NUGGET, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_NUGGET).build())
         ));
         registerable.register(ItemKeys.KNOWLEDGE_BOOK, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.KNOWLEDGE_BOOK).rarity(Rarity.EPIC).build(), 1),
@@ -4579,6 +4618,9 @@ public class ItemUtil {
         registerable.register(ItemKeys.NAUTILUS_SHELL, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NAUTILUS_SHELL).build())
         ));
+        registerable.register(ItemKeys.HEART_OF_THE_SEA, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HEART_OF_THE_SEA).rarity(Rarity.UNCOMMON).build())
+        ));
         registerable.register(ItemKeys.CROSSBOW, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CROSSBOW).build(), 1),
             ItemComponentSet.builder()
@@ -4730,6 +4772,9 @@ public class ItemUtil {
             ItemComponentSet.builder()
                 .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40, UseAction.DRINK, items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                 .build()
+        ));
+        registerable.register(ItemKeys.ECHO_SHARD, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ECHO_SHARD).build())
         ));
         registerable.register(ItemKeys.BRUSH, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BRUSH).build(), 1),
