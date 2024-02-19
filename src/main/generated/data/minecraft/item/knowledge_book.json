@@ -1,0 +1,12 @@
+{
+  "base": {
+    "display": {
+      "rarity": "epic",
+      "translation_key": "item.minecraft.knowledge_book"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:unlock_recipes": {}
+  }
+}

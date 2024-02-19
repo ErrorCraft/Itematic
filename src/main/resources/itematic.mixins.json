@@ -205,6 +205,7 @@
     "item.ItemStackExtender$PacketCodecExtender",
     "item.ItemUsageContextExtender",
     "item.ItemUsageExtender",
+    "item.KnowledgeBookItemExtender",
     "item.MilkBucketItemAccessor",
     "item.PotionItemAccessor",
     "item.SmithingTemplateItemAccessor",

@@ -4426,6 +4426,12 @@ public class ItemUtil {
                 ))
                 .build()
         ));
+        registerable.register(ItemKeys.KNOWLEDGE_BOOK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.KNOWLEDGE_BOOK).rarity(Rarity.EPIC).build(), 1),
+            ItemComponentSet.builder()
+                .with(UnlockRecipesItemComponent.INSTANCE)
+                .build()
+        ));
         registerable.register(ItemKeys.MUSIC_DISC_13, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_13).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()
