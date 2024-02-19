@@ -54,7 +54,7 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
     }
 
     public static ItemComponent<?>[] from(FoodComponent component, RegistryEntry<Item> resultItem) {
-        return from(component, component.isSnack() ? 16 : 32, UseAction.EAT, resultItem);
+        return from(component, component.isSnack() ? Item.DEFAULT_MAX_USE_TIME / 2 : Item.DEFAULT_MAX_USE_TIME, UseAction.EAT, resultItem);
     }
 
     public static FoodItemComponent of(int nutrition, float saturationModifier, boolean alwaysEdible, List<Effect> effects) {

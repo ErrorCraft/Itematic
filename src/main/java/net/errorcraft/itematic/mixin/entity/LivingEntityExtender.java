@@ -1,11 +1,15 @@
 package net.errorcraft.itematic.mixin.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.access.entity.LivingEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.FoodItemComponent;
+import net.errorcraft.itematic.item.component.components.LifeSavingItemComponent;
 import net.errorcraft.itematic.item.component.components.UseDurationItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -13,7 +17,9 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Equipment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,6 +38,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
@@ -231,6 +238,54 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     )
     private boolean isOfForDragonHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.DRAGON_HEAD);
+    }
+
+    @Redirect(
+        method = "tryUseTotem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfForTotemOfUndyingUseItemComponent(ItemStack instance, Item item, @Share("lifeSavingItemComponent") LocalRef<LifeSavingItemComponent> lifeSavingItemComponent) {
+        Optional<LifeSavingItemComponent> optionalComponent = instance.itematic$getComponent(ItemComponentTypes.LIFE_SAVING);
+        optionalComponent.ifPresent(lifeSavingItemComponent::set);
+        return optionalComponent.isPresent();
+    }
+
+    @ModifyArg(
+        method = "tryUseTotem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+        )
+    )
+    @SuppressWarnings("unchecked")
+    private <T> T getTotemOfUndyingUseExistingStack(T key, @Local(ordinal = 0) ItemStack stack) {
+        return (T) stack.getItem();
+    }
+
+    @Inject(
+        method = "tryUseTotem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/LivingEntity;clearStatusEffects()Z",
+            shift = At.Shift.AFTER
+        )
+    )
+    private void addEffectsFromLifeSavingItemComponent(DamageSource source, CallbackInfoReturnable<Boolean> info, @Share("lifeSavingItemComponent") LocalRef<LifeSavingItemComponent> lifeSavingItemComponent) {
+        lifeSavingItemComponent.get().apply((LivingEntity)(Object) this);
+    }
+
+    @Redirect(
+        method = "tryUseTotem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/LivingEntity;addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;)Z"
+        )
+    )
+    private boolean doNotAddStatusEffects(LivingEntity instance, StatusEffectInstance effect) {
+        return false;
     }
 
     @Inject(

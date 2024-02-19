@@ -32,11 +32,17 @@ public class Assert {
         }
     }
 
-    public static void areEqual(int value, int expected) {
-        areEqual(value, expected, (v, e) -> "Expected value to be " + e + ", got " + v + " instead");
+    public static void areIntsEqual(int value, int expected) {
+        areIntsEqual(value, expected, (v, e) -> "Expected value to be " + e + ", got " + v + " instead");
     }
 
-    public static void areEqual(int value, int expected, ComparingIntStringSupplier messageSupplier) {
+    public static void areIntsEqual(int value, int expected, ComparingIntStringSupplier messageSupplier) {
+        if (value != expected) {
+            throw new GameTestException(messageSupplier.get(value, expected));
+        }
+    }
+
+    public static void areFloatsEqual(float value, float expected, ComparingFloatStringSupplier messageSupplier) {
         if (value != expected) {
             throw new GameTestException(messageSupplier.get(value, expected));
         }
@@ -51,5 +57,10 @@ public class Assert {
     @FunctionalInterface
     public interface ComparingIntStringSupplier {
         String get(int value, int expected);
+    }
+
+    @FunctionalInterface
+    public interface ComparingFloatStringSupplier {
+        String get(float value, float expected);
     }
 }

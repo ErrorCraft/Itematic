@@ -7,6 +7,7 @@ import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
+import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
 import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
@@ -46,6 +47,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.entity.vehicle.*;
@@ -98,6 +101,7 @@ public class ItemUtil {
         RegistryEntryLookup<ActionEntry> actions = registerable.getRegistryLookup(ItematicRegistryKeys.ACTION);
         RegistryEntryLookup<SmithingTemplate> smithingTemplates = registerable.getRegistryLookup(ItematicRegistryKeys.SMITHING_TEMPLATE);
         RegistryEntryLookup<String> decoratedPotPatterns = registerable.getRegistryLookup(RegistryKeys.DECORATED_POT_PATTERN);
+        RegistryEntryLookup<StatusEffect> statusEffects = registerable.getRegistryLookup(RegistryKeys.STATUS_EFFECT);
 
         registerable.register(ItemKeys.AIR, create(
             new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build())
@@ -4051,7 +4055,7 @@ public class ItemUtil {
                 .build()
         ));
         registerable.register(ItemKeys.NETHER_STAR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_STAR).build()),
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_STAR).rarity(Rarity.UNCOMMON).build()),
             ItemComponentSet.builder()
                 .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_EXPLOSION))
                 .build()
@@ -4410,6 +4414,16 @@ public class ItemUtil {
                 .build(),
             ItemEventMap.builder()
                 .add(ItemEvents.USE, ActionEntry.of(StartUsingItemAction.indefinitely()))
+                .build()
+        ));
+        registerable.register(ItemKeys.TOTEM_OF_UNDYING, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TOTEM_OF_UNDYING).rarity(Rarity.UNCOMMON).build(), 1),
+            ItemComponentSet.builder()
+                .with(LifeSavingItemComponent.of(
+                    new StatusEffectInstance(statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 900, 1),
+                    new StatusEffectInstance(statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 100, 1),
+                    new StatusEffectInstance(statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 800, 0)
+                ))
                 .build()
         ));
         registerable.register(ItemKeys.MUSIC_DISC_13, create(

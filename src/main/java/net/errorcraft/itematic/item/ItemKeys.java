@@ -625,6 +625,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> TIPPED_ARROW = register("tipped_arrow");
     public static final RegistryKey<Item> LINGERING_POTION = register("lingering_potion");
     public static final RegistryKey<Item> SHIELD = register("shield");
+    public static final RegistryKey<Item> TOTEM_OF_UNDYING = register("totem_of_undying");
     public static final RegistryKey<Item> MUSIC_DISC_13 = register("music_disc_13");
     public static final RegistryKey<Item> MUSIC_DISC_CAT = register("music_disc_cat");
     public static final RegistryKey<Item> MUSIC_DISC_BLOCKS = register("music_disc_blocks");
