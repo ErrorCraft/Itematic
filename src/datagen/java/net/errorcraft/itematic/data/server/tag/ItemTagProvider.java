@@ -628,5 +628,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.RED_SHULKER_BOX)
             .add(ItemKeys.WHITE_SHULKER_BOX)
             .add(ItemKeys.YELLOW_SHULKER_BOX);
+        this.getOrCreateTagBuilder(ItematicItemTags.PREVENT_MINING_IN_CREATIVE)
+            .forceAddTag(ItemTags.SWORDS)
+            .add(ItemKeys.TRIDENT);
     }
 }

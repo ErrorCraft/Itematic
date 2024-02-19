@@ -4432,6 +4432,13 @@ public class ItemUtil {
                 .with(UnlockRecipesItemComponent.INSTANCE)
                 .build()
         ));
+        registerable.register(ItemKeys.DEBUG_STICK, create(
+            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DEBUG_STICK).rarity(Rarity.EPIC).build(), 1),
+            ItemComponentSet.builder()
+                .with(DebugStickItemComponent.INSTANCE)
+                .with(GlintItemComponent.of(true))
+                .build()
+        ));
         registerable.register(ItemKeys.MUSIC_DISC_13, create(
             new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_13).rarity(Rarity.EPIC).build(), 1),
             ItemComponentSet.builder()

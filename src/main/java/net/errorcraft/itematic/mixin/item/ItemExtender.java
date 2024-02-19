@@ -400,6 +400,19 @@ public abstract class ItemExtender implements ItemAccess {
             .orElse(false);
     }
 
+    @Inject(
+        method = "canMine",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void useDebugStickItemComponent(BlockState state, World world, BlockPos pos, PlayerEntity miner, CallbackInfoReturnable<Boolean> info) {
+        this.itematic$getComponent(ItemComponentTypes.DEBUG_STICK)
+            .ifPresent(c -> {
+                c.use(miner, state, world, pos);
+                info.setReturnValue(false);
+            });
+    }
+
     /**
      * @author ErrorCraft
      * @reason Uses the ItemComponent implementation for data-driven items.

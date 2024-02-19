@@ -1,0 +1,15 @@
+{
+  "base": {
+    "display": {
+      "rarity": "epic",
+      "translation_key": "item.minecraft.debug_stick"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:debug_stick": {},
+    "minecraft:glint": {
+      "glint": true
+    }
+  }
+}

@@ -93,6 +93,8 @@ public class ItematicItemTags {
 
     public static final TagKey<Item> SHULKER_BOXES = of("shulker_boxes");
 
+    public static final TagKey<Item> PREVENT_MINING_IN_CREATIVE = of("prevent_mining_in_creative");
+
     private ItematicItemTags() {}
 
     private static TagKey<Item> of(String id) {
