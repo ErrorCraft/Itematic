@@ -27,11 +27,14 @@ public class FoodItemComponentTestSuite {
         stack.use(world, player, Hand.MAIN_HAND);
         context.createTimedTaskRunner().expectMinDurationAndRun(
             TestUtil.getItemComponent(stack, ItemComponentTypes.USE_DURATION).ticks(),
-            () -> Assert.areIntsEqual(
-                player.getHungerManager().getFoodLevel(),
-                component.nutrition(),
-                (value, expected) -> "Expected nutrition to be " + expected + ", got " + value + " instead"
-            )
+            () -> {
+                Assert.itemStackIsEmpty(player.getStackInHand(Hand.MAIN_HAND));
+                Assert.areIntsEqual(
+                    player.getHungerManager().getFoodLevel(),
+                    component.nutrition(),
+                    (value, expected) -> "Expected nutrition to be " + expected + ", got " + value + " instead"
+                );
+            }
         ).completeIfSuccessful();
     }
 }

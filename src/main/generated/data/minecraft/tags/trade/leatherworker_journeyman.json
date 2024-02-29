@@ -1,3 +1,6 @@
 {
-  "values": []
+  "values": [
+    "minecraft:buy_rabbit_hide",
+    "minecraft:sell_leather_chestplate"
+  ]
 }

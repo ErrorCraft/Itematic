@@ -1,5 +1,6 @@
 {
   "values": [
-    "minecraft:buy_rabbit_foot"
+    "minecraft:buy_rabbit_foot",
+    "minecraft:sell_glowstone"
   ]
 }

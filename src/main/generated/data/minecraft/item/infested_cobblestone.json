@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.infested_cobblestone"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:infested_cobblestone"
+    }
+  }
+}

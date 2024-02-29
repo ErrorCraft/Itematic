@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.fire_coral_block"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:fire_coral_block"
+    }
+  }
+}

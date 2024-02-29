@@ -2,16 +2,25 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.ArmadilloEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ArmadilloEntity.class)
-public class ArmadilloEntityExtender {
+public abstract class ArmadilloEntityExtender extends AnimalEntity {
+    protected ArmadilloEntityExtender(EntityType<? extends AnimalEntity> entityType, World world) {
+        super(entityType, world);
+    }
+
     @Redirect(
         method = "isBreedingItem",
         at = @At(
@@ -32,5 +41,27 @@ public class ArmadilloEntityExtender {
     )
     private boolean isOfForBrushUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.BRUSH);
+    }
+
+    @Redirect(
+        method = "mobTick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/passive/ArmadilloEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+        )
+    )
+    private ItemEntity dropItemForArmadilloScuteUseRegistryKey(ArmadilloEntity instance, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(ItemKeys.ARMADILLO_SCUTE);
+    }
+
+    @Redirect(
+        method = "brushScute",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private ItemStack newItemStackForArmadilloScuteUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.ARMADILLO_SCUTE);
     }
 }

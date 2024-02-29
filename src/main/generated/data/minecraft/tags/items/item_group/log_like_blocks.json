@@ -1,0 +1,17 @@
+{
+  "values": [
+    "minecraft:oak_log",
+    "minecraft:spruce_log",
+    "minecraft:birch_log",
+    "minecraft:jungle_log",
+    "minecraft:acacia_log",
+    "minecraft:dark_oak_log",
+    "minecraft:mangrove_log",
+    "minecraft:mangrove_roots",
+    "minecraft:muddy_mangrove_roots",
+    "minecraft:cherry_log",
+    "minecraft:mushroom_stem",
+    "minecraft:crimson_stem",
+    "minecraft:warped_stem"
+  ]
+}

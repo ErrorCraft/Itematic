@@ -124,6 +124,9 @@ public class EnchantmentTagProvider extends FabricTagProvider<Enchantment> {
             .add(EnchantmentKeys.VANISHING_CURSE)
             .add(EnchantmentKeys.MENDING)
             .add(EnchantmentKeys.UNBREAKING);
+
+        this.getOrCreateTagBuilder(EnchantmentTags.TRADEABLE)
+            .add(getAll(registry, Enchantment::isAvailableForEnchantedBookOffer));
     }
 
     private static Identifier[] getAll(RegistryWrapper.Impl<Enchantment> registry, Predicate<Enchantment> predicate) {

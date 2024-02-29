@@ -42,6 +42,25 @@ public class CartographyTableScreenHandlerExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
+                target = "Lnet/minecraft/item/Items;GLASS_PANE:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private boolean isOfForGlassPaneUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.GLASS_PANE);
+    }
+
+    @Redirect(
+        method = { "method_17382", "quickMove" },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
                 target = "Lnet/minecraft/item/Items;PAPER:Lnet/minecraft/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
@@ -97,6 +116,25 @@ public class CartographyTableScreenHandlerExtender {
         )
         private boolean isOfForPaperUseRegistryKeyCheck(ItemStack instance, Item item) {
             return instance.itematic$isOf(ItemKeys.PAPER);
+        }
+
+        @Redirect(
+            method = "canInsert",
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+                ordinal = 0
+            ),
+            slice = @Slice(
+                from = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/item/Items;GLASS_PANE:Lnet/minecraft/item/Item;",
+                    opcode = Opcodes.GETSTATIC
+                )
+            )
+        )
+        private boolean isOfForGlassPaneUseRegistryKeyCheck(ItemStack instance, Item item) {
+            return instance.itematic$isOf(ItemKeys.GLASS_PANE);
         }
 
         @Redirect(

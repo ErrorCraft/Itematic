@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.yellow_concrete_powder"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:yellow_concrete_powder"
+    }
+  }
+}

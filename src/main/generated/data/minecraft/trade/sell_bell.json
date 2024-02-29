@@ -1,0 +1,14 @@
+{
+  "gives": {
+    "item": "minecraft:bell"
+  },
+  "max_uses": 12,
+  "price_multiplier": 0.05,
+  "trade_experience": 5,
+  "wants": [
+    {
+      "count": 36,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

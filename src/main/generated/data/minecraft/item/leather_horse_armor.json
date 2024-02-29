@@ -11,7 +11,7 @@
       "material": "minecraft:leather"
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:horse_armor"
+      "behavior": "minecraft:equipment"
     },
     "minecraft:dyeable": {
       "default_color": 10511680

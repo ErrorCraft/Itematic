@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.pitcher_plant"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:pitcher_plant"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.85
+    }
+  }
+}

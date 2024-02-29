@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.lightning_rod"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:lightning_rod"
+    }
+  }
+}

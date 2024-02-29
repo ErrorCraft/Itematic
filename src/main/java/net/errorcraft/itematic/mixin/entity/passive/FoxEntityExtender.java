@@ -156,7 +156,14 @@ public abstract class FoxEntityExtender extends AnimalEntity {
             method = "pickSweetBerries",
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+                target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;",
+                ordinal = 0
+            ),
+            slice = @Slice(
+                from = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/passive/FoxEntity;equipStack(Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/item/ItemStack;)V"
+                )
             )
         )
         private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemConvertible item, int count) {

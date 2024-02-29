@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.cocoa_beans"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:cocoa"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.65
+    }
+  }
+}

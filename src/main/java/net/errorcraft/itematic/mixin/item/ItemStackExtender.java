@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.item;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
@@ -51,6 +51,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -82,6 +83,9 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     @Shadow
     @Final
     private static String UNBREAKABLE_KEY;
+
+    @Shadow
+    private int count;
 
     @Shadow
     @Nullable
@@ -592,15 +596,28 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
-    public ItemStack itematic$copyWithItem(RegistryEntry<Item> item, int count) {
+    public void itematic$tryIncrement(int count) {
         if (this.isEmpty()) {
-            return EMPTY;
+            return;
         }
-        return this.itematic$copyWithItemIgnoreEmpty(item, count);
+        this.count = MathHelper.clamp(this.count + count, 0, this.getMaxCount());
     }
 
     @Override
-    public ItemStack itematic$copyWithItemIgnoreEmpty(RegistryEntry<Item> item, int count) {
+    public ItemStack itematic$copyWithItem(RegistryEntry<Item> item) {
+        return this.itematic$copyNbtToNewStack(item, this.count);
+    }
+
+    @Override
+    public ItemStack itematic$copyNbtToNewStack(RegistryEntry<Item> item, int count) {
+        if (this.isEmpty()) {
+            return EMPTY;
+        }
+        return this.itematic$copyNbtToNewStackIgnoreEmpty(item, count);
+    }
+
+    @Override
+    public ItemStack itematic$copyNbtToNewStackIgnoreEmpty(RegistryEntry<Item> item, int count) {
         ItemStack stack = new ItemStack(item, count);
         if (this.nbt != null) {
             stack.setNbt(this.nbt.copy());

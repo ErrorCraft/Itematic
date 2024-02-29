@@ -11,13 +11,18 @@ import java.util.List;
 
 @Mixin(CrossbowItem.class)
 public interface CrossbowItemAccessor {
+    @Accessor("DEFAULT_PULL_TIME")
+    static int defaultPullTime() {
+        throw new AssertionError();
+    }
+
     @Accessor("DEFAULT_SPEED")
-    static float getDefaultSpeed() {
+    static float defaultSpeed() {
         throw new AssertionError();
     }
 
     @Accessor("FIREWORK_ROCKET_SPEED")
-    static float getFireworkRocketSpeed() {
+    static float fireworkRocketSpeed() {
         throw new AssertionError();
     }
 

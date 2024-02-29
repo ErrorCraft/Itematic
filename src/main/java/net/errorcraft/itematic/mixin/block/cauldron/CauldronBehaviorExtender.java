@@ -7,6 +7,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
 import net.errorcraft.itematic.item.component.components.DyeableItemComponent;
+import net.errorcraft.itematic.item.placement.block.modifier.BlockStateModifier;
 import net.minecraft.block.Block;
 import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.item.Item;
@@ -33,6 +34,7 @@ public interface CauldronBehaviorExtender {
     private static Block getBlockFromItemUseItemComponent(Item item) {
         return item.itematic$getComponent(ItemComponentTypes.BLOCK)
             .map(BlockItemComponent::block)
+            .map(BlockStateModifier::defaultBlock)
             .map(RegistryEntry::value)
             .orElse(null);
     }
@@ -45,7 +47,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack copyNbtToNewStackForShulkerBoxUseRegistryEntry(ItemStack instance, ItemConvertible itemConvertible, int i, @Local(argsOnly = true) World world) {
-        return instance.itematic$copyWithItem(world.itematic$getItem(ItemKeys.SHULKER_BOX), 1);
+        return instance.itematic$copyNbtToNewStack(world.itematic$getItem(ItemKeys.SHULKER_BOX), 1);
     }
 
     @Redirect(

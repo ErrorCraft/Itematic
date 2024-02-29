@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.lilac"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:lilac"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.65
+    }
+  }
+}

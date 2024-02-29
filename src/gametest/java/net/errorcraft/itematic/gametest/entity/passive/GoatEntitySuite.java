@@ -20,7 +20,7 @@ import java.util.Optional;
 public class GoatEntitySuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 2, 1);
 
-    @GameTest(templateName = "itematic:entity.fence_around")
+    @GameTest(templateName = "itematic:entity.platform")
     @SuppressWarnings("removal")
     public void holdingWheatTemptsGoat(TestContext context) {
         GoatEntity goat = context.spawnEntity(EntityType.GOAT, SPAWN_POSITION);

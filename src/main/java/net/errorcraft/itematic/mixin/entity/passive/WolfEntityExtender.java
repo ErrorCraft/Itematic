@@ -71,6 +71,24 @@ public class WolfEntityExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
+                target = "Lnet/minecraft/item/Items;WOLF_ARMOR:Lnet/minecraft/item/Item;"
+            )
+        )
+    )
+    private boolean isOfForWolfArmorUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.WOLF_ARMOR);
+    }
+
+    @Redirect(
+        method = "interactMob",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
                 target = "Lnet/minecraft/item/Items;SHEARS:Lnet/minecraft/item/Item;"
             )
         )

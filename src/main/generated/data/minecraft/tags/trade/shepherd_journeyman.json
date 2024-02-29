@@ -4,6 +4,22 @@
     "minecraft:buy_light_gray_dye",
     "minecraft:buy_orange_dye",
     "minecraft:buy_red_dye",
-    "minecraft:buy_pink_dye"
+    "minecraft:buy_pink_dye",
+    "minecraft:sell_white_bed",
+    "minecraft:sell_yellow_bed",
+    "minecraft:sell_red_bed",
+    "minecraft:sell_black_bed",
+    "minecraft:sell_blue_bed",
+    "minecraft:sell_brown_bed",
+    "minecraft:sell_cyan_bed",
+    "minecraft:sell_gray_bed",
+    "minecraft:sell_green_bed",
+    "minecraft:sell_light_blue_bed",
+    "minecraft:sell_light_gray_bed",
+    "minecraft:sell_lime_bed",
+    "minecraft:sell_magenta_bed",
+    "minecraft:sell_orange_bed",
+    "minecraft:sell_pink_bed",
+    "minecraft:sell_purple_bed"
   ]
 }

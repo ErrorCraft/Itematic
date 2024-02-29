@@ -5,12 +5,15 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.model.override.ModelOverrides;
+import net.errorcraft.itematic.item.placement.block.modifier.BlockStateModifierTypes;
 import net.errorcraft.itematic.item.pointer.Pointers;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateTypes;
 import net.errorcraft.itematic.loot.context.ItematicLootContextParameters;
 import net.errorcraft.itematic.loot.context.ItematicLootContextTypes;
+import net.errorcraft.itematic.loot.function.ItematicItemModifierTypes;
 import net.errorcraft.itematic.loot.predicate.ItematicPredicateTypes;
 import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
+import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.fabricmc.api.ModInitializer;
@@ -33,5 +36,8 @@ public class Itematic implements ModInitializer {
         ItematicLootContextParameters.init();
         SmithingTemplateTypes.init();
         ItematicRecipeSerializers.init();
+        BlockStateModifierTypes.init();
+        ItematicItemModifierTypes.init();
+        TradeModifierTypes.init();
     }
 }

@@ -1,0 +1,14 @@
+{
+  "base": {
+    "display": {
+      "rarity": "epic",
+      "translation_key": "block.minecraft.dragon_egg"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:dragon_egg"
+    }
+  }
+}

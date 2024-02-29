@@ -59,7 +59,10 @@ public class BuiltinModelItemRendererExtender {
         )
     )
     private Block getBlockUseItemComponent(BlockItem instance, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
-        return blockItemComponent.get().block().value();
+        return blockItemComponent.get()
+            .block()
+            .defaultBlock()
+            .value();
     }
 
     @Redirect(

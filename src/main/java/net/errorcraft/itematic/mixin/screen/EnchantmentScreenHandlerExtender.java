@@ -40,7 +40,7 @@ public class EnchantmentScreenHandlerExtender {
         )
     )
     private ItemStack copyWithItemForEnchantedBookUseItemComponent(ItemStack instance, ItemConvertible itemConvertible, int count, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
-        return instance.itematic$copyWithItem(transformsInto.get(), count);
+        return instance.itematic$copyNbtToNewStack(transformsInto.get(), count);
     }
 
     @Redirect(

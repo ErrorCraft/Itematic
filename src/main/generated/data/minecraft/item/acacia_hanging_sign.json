@@ -7,7 +7,12 @@
   },
   "components": {
     "minecraft:block": {
-      "block": "minecraft:acacia_hanging_sign"
+      "block": {
+        "type": "minecraft:attached_to_side",
+        "attached_block": "minecraft:acacia_hanging_sign",
+        "attached_side": "up",
+        "other_block": "minecraft:acacia_wall_hanging_sign"
+      }
     },
     "minecraft:fuel": {
       "ticks": 800

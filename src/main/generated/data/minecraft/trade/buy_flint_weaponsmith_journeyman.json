@@ -1,0 +1,14 @@
+{
+  "gives": {
+    "item": "minecraft:emerald"
+  },
+  "max_uses": 12,
+  "price_multiplier": 0.05,
+  "trade_experience": 20,
+  "wants": [
+    {
+      "count": 24,
+      "item": "minecraft:flint"
+    }
+  ]
+}

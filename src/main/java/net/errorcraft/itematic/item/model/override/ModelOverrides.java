@@ -25,6 +25,7 @@ public class ModelOverrides {
     public static final ModelOverride THROWING = register(ModelOverrideKeys.THROWING, new ThrowingModelOverride());
     public static final ModelOverride BRUSHING = register(ModelOverrideKeys.BRUSHING, new BrushingModelOverride());
     public static final ModelOverride FILLED = register(ModelOverrideKeys.FILLED, new FilledModelOverride());
+    public static final ModelOverride LEVEL = register(ModelOverrideKeys.LEVEL, new LevelModelOverride());
 
     private ModelOverrides() {}
 

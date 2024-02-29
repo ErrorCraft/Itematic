@@ -6,6 +6,7 @@ import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public record ItemGroupEntryProvider(List<ItemGroupEntry> entries) {
             return new ItemGroupEntryProvider(this.entries);
         }
 
-        public Builder add(RegistryKey<Item> entry) {
+        public Builder add(RegistryEntry<Item> entry) {
             return this.add(ItemGroupEntry.simple(entry));
         }
 

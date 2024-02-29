@@ -6,11 +6,13 @@ import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
+import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Equipment;
@@ -23,6 +25,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, RegistryEntry<SoundEvent> equipSound) implements ItemComponent<EquipmentItemComponent>, Equipment {
@@ -75,10 +78,11 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
         return new EquipmentItemComponent(slot, swappable, equipSound);
     }
 
-    public static ItemComponent<?>[] skull(RegistryEntry<Block> block, RegistryEntryLookup<SoundEvent> soundEvents) {
+    public static ItemComponent<?>[] skull(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, RegistryEntryLookup<SoundEvent> soundEvents, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
-            BlockItemComponent.of(block),
+            BlockItemComponent.attachedToSide(attachedBlock, otherBlock, Direction.DOWN),
             of(EquipmentSlot.HEAD, false, soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)),
             FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.CREEPER)
         };
     }

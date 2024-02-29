@@ -2,6 +2,9 @@
   "values": [
     "minecraft:sell_tropical_fish_bucket",
     "minecraft:sell_pufferfish_bucket",
-    "minecraft:sell_gunpowder"
+    "minecraft:sell_packed_ice",
+    "minecraft:sell_blue_ice",
+    "minecraft:sell_gunpowder",
+    "minecraft:sell_podzol"
   ]
 }

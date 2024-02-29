@@ -1,0 +1,18 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "item.minecraft.wolf_armor"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:armor": {
+      "armor_type": "canine",
+      "material": "minecraft:armadillo"
+    },
+    "minecraft:equipment": {
+      "equip_sound": "minecraft:item.armor.equip_diamond",
+      "slot": "body"
+    }
+  }
+}

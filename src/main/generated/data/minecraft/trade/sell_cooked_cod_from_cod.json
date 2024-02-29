@@ -1,0 +1,17 @@
+{
+  "gives": {
+    "count": 6,
+    "item": "minecraft:cooked_cod"
+  },
+  "max_uses": 16,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "count": 6,
+      "item": "minecraft:cod"
+    }
+  ]
+}

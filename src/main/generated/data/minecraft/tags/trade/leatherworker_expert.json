@@ -1,5 +1,6 @@
 {
   "values": [
-    "minecraft:buy_scute"
+    "minecraft:buy_turtle_scute",
+    "minecraft:sell_leather_horse_armor"
   ]
 }

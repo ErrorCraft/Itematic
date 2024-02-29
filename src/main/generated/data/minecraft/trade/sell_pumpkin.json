@@ -1,0 +1,12 @@
+{
+  "gives": {
+    "item": "minecraft:pumpkin"
+  },
+  "max_uses": 4,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "item": "minecraft:emerald"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "gives": {
+    "count": 10,
+    "item": "minecraft:flint"
+  },
+  "max_uses": 12,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "count": 10,
+      "item": "minecraft:gravel"
+    }
+  ]
+}

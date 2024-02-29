@@ -1,0 +1,24 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.torchflower"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:torchflower"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.85
+    },
+    "minecraft:suspicious_effect_ingredient": {
+      "effects": [
+        {
+          "id": "minecraft:night_vision",
+          "duration": 100
+        }
+      ]
+    }
+  }
+}

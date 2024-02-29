@@ -11,7 +11,7 @@
       "material": "minecraft:iron"
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:horse_armor"
+      "behavior": "minecraft:equipment"
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_iron",

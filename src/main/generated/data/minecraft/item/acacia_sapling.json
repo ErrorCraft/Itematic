@@ -9,6 +9,9 @@
     "minecraft:block": {
       "block": "minecraft:acacia_sapling"
     },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.3
+    },
     "minecraft:fuel": {
       "ticks": 100
     }

@@ -1,0 +1,13 @@
+{
+  "gives": {
+    "item": "minecraft:slime_ball"
+  },
+  "max_uses": 5,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "count": 4,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

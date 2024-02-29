@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.small_dripleaf"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:small_dripleaf"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.3
+    }
+  }
+}

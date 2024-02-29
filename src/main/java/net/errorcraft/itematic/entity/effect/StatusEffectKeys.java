@@ -13,6 +13,7 @@ public class StatusEffectKeys {
     public static final RegistryKey<StatusEffect> NIGHT_VISION = of("night_vision");
     public static final RegistryKey<StatusEffect> WEAKNESS = of("weakness");
     public static final RegistryKey<StatusEffect> POISON = of("poison");
+    public static final RegistryKey<StatusEffect> WITHER = of("wither");
     public static final RegistryKey<StatusEffect> ABSORPTION = of("absorption");
     public static final RegistryKey<StatusEffect> SATURATION = of("saturation");
 

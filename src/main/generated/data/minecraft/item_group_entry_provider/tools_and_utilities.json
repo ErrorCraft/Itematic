@@ -9,20 +9,57 @@
       "tag": "minecraft:item_group/buckets"
     },
     "minecraft:fishing_rod",
+    "minecraft:flint_and_steel",
     "minecraft:fire_charge",
     "minecraft:bone_meal",
+    "minecraft:shears",
+    "minecraft:brush",
+    "minecraft:name_tag",
+    "minecraft:lead",
+    "minecraft:bundle",
     "minecraft:compass",
+    "minecraft:recovery_compass",
     "minecraft:clock",
+    "minecraft:spyglass",
+    "minecraft:map",
+    "minecraft:writable_book",
     "minecraft:ender_pearl",
+    "minecraft:ender_eye",
     "minecraft:elytra",
+    {
+      "type": "stack",
+      "item": "minecraft:firework_rocket",
+      "nbt": "{Fireworks:{Flight:1b}}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:firework_rocket",
+      "nbt": "{Fireworks:{Flight:2b}}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:firework_rocket",
+      "nbt": "{Fireworks:{Flight:3b}}"
+    },
     "minecraft:saddle",
+    "minecraft:carrot_on_a_stick",
+    "minecraft:warped_fungus_on_a_stick",
     {
       "type": "tag",
       "tag": "minecraft:item_group/boats"
     },
     {
       "type": "tag",
+      "tag": "minecraft:item_group/rails"
+    },
+    {
+      "type": "tag",
       "tag": "minecraft:item_group/minecarts"
+    },
+    {
+      "type": "instrument",
+      "item": "minecraft:goat_horn",
+      "tag": "minecraft:goat_horns"
     },
     {
       "type": "tag",

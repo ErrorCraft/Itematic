@@ -1,5 +1,6 @@
 {
   "values": [
-    "minecraft:buy_paper"
+    "minecraft:buy_paper",
+    "minecraft:sell_map"
   ]
 }

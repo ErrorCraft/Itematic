@@ -45,7 +45,9 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         Codec.INT.fieldOf("range").forGetter(ShooterItemComponent::range),
         Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "chargeable", false).forGetter(ShooterItemComponent::chargeable)
     ).apply(instance, ShooterItemComponent::new));
-
+    private static final int DEFAULT_CHARGE_TIME = CrossbowItemAccessor.defaultPullTime();
+    private static final int EXTRA_USE_TIME = 3;
+    private static final int CHARGE_TIME_PER_QUICK_CHARGE_LEVEL = 5;
     private static final String STARTED_KEY = "started";
     private static final String LOADED_KEY = "loaded";
 
@@ -96,6 +98,15 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
 
     public static ShooterItemComponent of(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, boolean chargeable) {
         return new ShooterItemComponent(heldAmmunition, ammunition, range, chargeable);
+    }
+
+    public static int useDuration(ItemStack stack) {
+        return getPullTime(stack) + EXTRA_USE_TIME;
+    }
+
+    public static int getPullTime(ItemStack stack) {
+        int quickChargeLevel = EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack);
+        return DEFAULT_CHARGE_TIME - CHARGE_TIME_PER_QUICK_CHARGE_LEVEL * quickChargeLevel;
     }
 
     public boolean isHeldAmmunition(ItemStack stack) {
@@ -217,15 +228,10 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         }
     }
 
-    private static int getPullTime(ItemStack stack) {
-        int quickChargeLevel = EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack);
-        return stack.getMaxUseTime() - 5 * quickChargeLevel + 3;
-    }
-
     private static float getSpeed(ItemStack stack) {
         return stack.itematic$getComponent(ItemComponentTypes.PROJECTILE)
             .map(ProjectileItemComponent::chargedSpeed)
-            .orElse(CrossbowItemAccessor.getDefaultSpeed());
+            .orElse(CrossbowItemAccessor.defaultSpeed());
     }
 
     private static SoundEvent getQuickChargeSound(int level) {

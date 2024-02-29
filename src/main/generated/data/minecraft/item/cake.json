@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.cake"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:cake"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 1.0
+    }
+  }
+}

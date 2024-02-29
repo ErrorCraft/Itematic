@@ -10,7 +10,12 @@
       "color": "brown"
     },
     "minecraft:block": {
-      "block": "minecraft:brown_banner"
+      "block": {
+        "type": "minecraft:attached_to_side",
+        "attached_block": "minecraft:brown_banner",
+        "attached_side": "down",
+        "other_block": "minecraft:brown_wall_banner"
+      }
     },
     "minecraft:fuel": {
       "ticks": 300

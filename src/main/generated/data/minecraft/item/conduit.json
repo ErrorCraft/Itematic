@@ -1,0 +1,14 @@
+{
+  "base": {
+    "display": {
+      "rarity": "rare",
+      "translation_key": "block.minecraft.conduit"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:conduit"
+    }
+  }
+}

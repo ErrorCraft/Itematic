@@ -24,11 +24,14 @@ public class TradeTagProvider extends FabricTagProvider<Trade> {
             .add(Trades.BUY_BEETROOT)
             .add(Trades.SELL_BREAD);
         this.getOrCreateTagBuilder(TradeTags.FARMER_APPRENTICE)
+            .add(Trades.BUY_PUMPKIN)
             .add(Trades.SELL_PUMPKIN_PIE)
             .add(Trades.SELL_APPLE);
         this.getOrCreateTagBuilder(TradeTags.FARMER_JOURNEYMAN)
-            .add(Trades.SELL_COOKIE);
+            .add(Trades.SELL_COOKIE)
+            .add(Trades.BUY_MELON);
         this.getOrCreateTagBuilder(TradeTags.FARMER_EXPERT)
+            .add(Trades.SELL_CAKE)
             .add(Trades.SELL_NIGHT_VISION_SUSPICIOUS_STEW)
             .add(Trades.SELL_JUMP_BOOST_SUSPICIOUS_STEW)
             .add(Trades.SELL_WEAKNESS_SUSPICIOUS_STEW)
@@ -39,17 +42,22 @@ public class TradeTagProvider extends FabricTagProvider<Trade> {
             .add(Trades.SELL_GOLDEN_CARROT)
             .add(Trades.SELL_GLISTERING_MELON_SLICE);
         this.getOrCreateTagBuilder(TradeTags.FISHERMAN_NOVICE)
+            .add(Trades.BUY_STRING_NOVICE)
             .add(Trades.BUY_COAL)
+            .add(Trades.SELL_COOKED_COD_FROM_COD)
             .add(Trades.SELL_COD_BUCKET);
         this.getOrCreateTagBuilder(TradeTags.FISHERMAN_APPRENTICE)
-            .add(Trades.BUY_COD);
+            .add(Trades.BUY_COD)
+            .add(Trades.SELL_COOKED_SALMON_FROM_SALMON)
+            .add(Trades.SELL_CAMPFIRE);
         this.getOrCreateTagBuilder(TradeTags.FISHERMAN_JOURNEYMAN)
             .add(Trades.BUY_SALMON)
             .add(Trades.SELL_ENCHANTED_FISHING_ROD);
         this.getOrCreateTagBuilder(TradeTags.FISHERMAN_EXPERT)
             .add(Trades.BUY_TROPICAL_FISH);
         this.getOrCreateTagBuilder(TradeTags.FISHERMAN_MASTER)
-            .add(Trades.BUY_PUFFERFISH);
+            .add(Trades.BUY_PUFFERFISH)
+            .add(Trades.BUY_BOAT);
         this.getOrCreateTagBuilder(TradeTags.SHEPHERD_NOVICE)
             .add(Trades.BUY_WHITE_WOOL)
             .add(Trades.BUY_BROWN_WOOL)
@@ -99,7 +107,23 @@ public class TradeTagProvider extends FabricTagProvider<Trade> {
             .add(Trades.BUY_LIGHT_GRAY_DYE)
             .add(Trades.BUY_ORANGE_DYE)
             .add(Trades.BUY_RED_DYE)
-            .add(Trades.BUY_PINK_DYE);
+            .add(Trades.BUY_PINK_DYE)
+            .add(Trades.SELL_WHITE_BED)
+            .add(Trades.SELL_YELLOW_BED)
+            .add(Trades.SELL_RED_BED)
+            .add(Trades.SELL_BLACK_BED)
+            .add(Trades.SELL_BLUE_BED)
+            .add(Trades.SELL_BROWN_BED)
+            .add(Trades.SELL_CYAN_BED)
+            .add(Trades.SELL_GRAY_BED)
+            .add(Trades.SELL_GREEN_BED)
+            .add(Trades.SELL_LIGHT_BLUE_BED)
+            .add(Trades.SELL_LIGHT_GRAY_BED)
+            .add(Trades.SELL_LIME_BED)
+            .add(Trades.SELL_MAGENTA_BED)
+            .add(Trades.SELL_ORANGE_BED)
+            .add(Trades.SELL_PINK_BED)
+            .add(Trades.SELL_PURPLE_BED);
         this.getOrCreateTagBuilder(TradeTags.SHEPHERD_EXPERT)
             .add(Trades.BUY_BROWN_DYE)
             .add(Trades.BUY_PURPLE_DYE)
@@ -127,32 +151,49 @@ public class TradeTagProvider extends FabricTagProvider<Trade> {
             .add(Trades.SELL_PAINTING);
         this.getOrCreateTagBuilder(TradeTags.FLETCHER_NOVICE)
             .add(Trades.BUY_STICK)
-            .add(Trades.SELL_ARROW);
+            .add(Trades.SELL_ARROW)
+            .add(Trades.SELL_FLINT_FROM_GRAVEL);
         this.getOrCreateTagBuilder(TradeTags.FLETCHER_APPRENTICE)
+            .add(Trades.BUY_FLINT_APPRENTICE)
             .add(Trades.SELL_BOW);
         this.getOrCreateTagBuilder(TradeTags.FLETCHER_JOURNEYMAN)
+            .add(Trades.BUY_STRING_JOURNEYMAN)
             .add(Trades.SELL_CROSSBOW);
         this.getOrCreateTagBuilder(TradeTags.FLETCHER_EXPERT)
             .add(Trades.BUY_FEATHER)
             .add(Trades.SELL_ENCHANTED_BOW);
         this.getOrCreateTagBuilder(TradeTags.FLETCHER_MASTER)
-            .add(Trades.SELL_ENCHANTED_CROSSBOW);
+            .add(Trades.BUY_TRIPWIRE_HOOK)
+            .add(Trades.SELL_ENCHANTED_CROSSBOW)
+            .add(Trades.SELL_TIPPED_ARROW);
         this.getOrCreateTagBuilder(TradeTags.LIBRARIAN_NOVICE)
             .add(Trades.BUY_PAPER)
+            .add(Trades.SELL_ENCHANTED_BOOK_NOVICE)
             .add(Trades.SELL_BOOKSHELF);
         this.getOrCreateTagBuilder(TradeTags.LIBRARIAN_APPRENTICE)
-            .add(Trades.BUY_BOOK);
+            .add(Trades.BUY_BOOK)
+            .add(Trades.SELL_ENCHANTED_BOOK_APPRENTICE)
+            .add(Trades.SELL_LANTERN);
         this.getOrCreateTagBuilder(TradeTags.LIBRARIAN_JOURNEYMAN)
-            .add(Trades.BUY_INK_SAC);
+            .add(Trades.BUY_INK_SAC)
+            .add(Trades.SELL_ENCHANTED_BOOK_JOURNEYMAN)
+            .add(Trades.SELL_GLASS);
         this.getOrCreateTagBuilder(TradeTags.LIBRARIAN_EXPERT)
+            .add(Trades.BUY_WRITABLE_BOOK)
+            .add(Trades.SELL_ENCHANTED_BOOK_EXPERT)
             .add(Trades.SELL_CLOCK)
             .add(Trades.SELL_COMPASS);
-        this.getOrCreateTagBuilder(TradeTags.LIBRARIAN_MASTER);
+        this.getOrCreateTagBuilder(TradeTags.LIBRARIAN_MASTER)
+            .add(Trades.SELL_NAME_TAG);
         this.getOrCreateTagBuilder(TradeTags.CARTOGRAPHER_NOVICE)
-            .add(Trades.BUY_PAPER);
-        this.getOrCreateTagBuilder(TradeTags.CARTOGRAPHER_APPRENTICE);
+            .add(Trades.BUY_PAPER)
+            .add(Trades.SELL_MAP);
+        this.getOrCreateTagBuilder(TradeTags.CARTOGRAPHER_APPRENTICE)
+            .add(Trades.BUY_GLASS_PANE)
+            .add(Trades.SELL_MONUMENT_MAP);
         this.getOrCreateTagBuilder(TradeTags.CARTOGRAPHER_JOURNEYMAN)
-            .add(Trades.BUY_COMPASS);
+            .add(Trades.BUY_COMPASS)
+            .add(Trades.SELL_MANSION_MAP);
         this.getOrCreateTagBuilder(TradeTags.CARTOGRAPHER_EXPERT)
             .add(Trades.SELL_ITEM_FRAME)
             .add(Trades.SELL_WHITE_BANNER)
@@ -171,7 +212,8 @@ public class TradeTagProvider extends FabricTagProvider<Trade> {
             .add(Trades.SELL_YELLOW_BANNER)
             .add(Trades.SELL_ORANGE_BANNER)
             .add(Trades.SELL_LIGHT_GRAY_BANNER);
-        this.getOrCreateTagBuilder(TradeTags.CARTOGRAPHER_MASTER);
+        this.getOrCreateTagBuilder(TradeTags.CARTOGRAPHER_MASTER)
+            .add(Trades.SELL_GLOBE_BANNER_PATTERN);
         this.getOrCreateTagBuilder(TradeTags.CLERIC_NOVICE)
             .add(Trades.BUY_ROTTEN_FLESH)
             .add(Trades.SELL_REDSTONE);
@@ -179,27 +221,29 @@ public class TradeTagProvider extends FabricTagProvider<Trade> {
             .add(Trades.BUY_GOLD_INGOT)
             .add(Trades.SELL_LAPIS_LAZULI);
         this.getOrCreateTagBuilder(TradeTags.CLERIC_JOURNEYMAN)
-            .add(Trades.BUY_RABBIT_FOOT);
+            .add(Trades.BUY_RABBIT_FOOT)
+            .add(Trades.SELL_GLOWSTONE);
         this.getOrCreateTagBuilder(TradeTags.CLERIC_EXPERT)
-            .add(Trades.BUY_SCUTE)
+            .add(Trades.BUY_TURTLE_SCUTE)
             .add(Trades.BUY_GLASS_BOTTLE)
             .add(Trades.SELL_ENDER_PEARL);
         this.getOrCreateTagBuilder(TradeTags.CLERIC_MASTER)
             .add(Trades.BUY_NETHER_WART)
             .add(Trades.SELL_EXPERIENCE_BOTTLE);
         this.getOrCreateTagBuilder(TradeTags.ARMORER_NOVICE)
-            .add(Trades.BUY_COAL_CHEAPER)
+            .add(Trades.BUY_COAL_NOVICE_MORE_ITEMS)
             .add(Trades.SELL_IRON_LEGGINGS)
             .add(Trades.SELL_IRON_BOOTS)
             .add(Trades.SELL_IRON_HELMET)
             .add(Trades.SELL_IRON_CHESTPLATE);
         this.getOrCreateTagBuilder(TradeTags.ARMORER_APPRENTICE)
             .add(Trades.BUY_IRON_INGOT)
+            .add(Trades.SELL_BELL)
             .add(Trades.SELL_CHAINMAIL_BOOTS)
             .add(Trades.SELL_CHAINMAIL_LEGGINGS);
         this.getOrCreateTagBuilder(TradeTags.ARMORER_JOURNEYMAN)
             .add(Trades.BUY_LAVA_BUCKET)
-            .add(Trades.BUY_DIAMOND)
+            .add(Trades.BUY_DIAMOND_JOURNEYMAN)
             .add(Trades.SELL_CHAINMAIL_HELMET)
             .add(Trades.SELL_CHAINMAIL_CHESTPLATE)
             .add(Trades.SELL_SHIELD);
@@ -210,32 +254,36 @@ public class TradeTagProvider extends FabricTagProvider<Trade> {
             .add(Trades.SELL_ENCHANTED_DIAMOND_HELMET)
             .add(Trades.SELL_ENCHANTED_DIAMOND_CHESTPLATE);
         this.getOrCreateTagBuilder(TradeTags.WEAPONSMITH_NOVICE)
-            .add(Trades.BUY_COAL_CHEAPER)
+            .add(Trades.BUY_COAL_NOVICE_MORE_ITEMS)
             .add(Trades.SELL_IRON_AXE)
             .add(Trades.SELL_ENCHANTED_IRON_SWORD);
         this.getOrCreateTagBuilder(TradeTags.WEAPONSMITH_APPRENTICE)
-            .add(Trades.BUY_IRON_INGOT);
-        this.getOrCreateTagBuilder(TradeTags.WEAPONSMITH_JOURNEYMAN);
+            .add(Trades.BUY_IRON_INGOT)
+            .add(Trades.SELL_BELL);
+        this.getOrCreateTagBuilder(TradeTags.WEAPONSMITH_JOURNEYMAN)
+            .add(Trades.BUY_FLINT_WEAPONSMITH_JOURNEYMAN);
         this.getOrCreateTagBuilder(TradeTags.WEAPONSMITH_EXPERT)
-            .add(Trades.BUY_DIAMOND_MORE_EXPERIENCE)
+            .add(Trades.BUY_DIAMOND_EXPERT)
             .add(Trades.SELL_ENCHANTED_DIAMOND_AXE);
         this.getOrCreateTagBuilder(TradeTags.WEAPONSMITH_MASTER)
             .add(Trades.SELL_ENCHANTED_DIAMOND_SWORD);
         this.getOrCreateTagBuilder(TradeTags.TOOLSMITH_NOVICE)
-            .add(Trades.BUY_COAL_CHEAPER)
+            .add(Trades.BUY_COAL_NOVICE_MORE_ITEMS)
             .add(Trades.SELL_STONE_AXE)
             .add(Trades.SELL_STONE_SHOVEL)
             .add(Trades.SELL_STONE_PICKAXE)
             .add(Trades.SELL_STONE_HOE);
         this.getOrCreateTagBuilder(TradeTags.TOOLSMITH_APPRENTICE)
-            .add(Trades.BUY_IRON_INGOT);
+            .add(Trades.BUY_IRON_INGOT)
+            .add(Trades.SELL_BELL);
         this.getOrCreateTagBuilder(TradeTags.TOOLSMITH_JOURNEYMAN)
+            .add(Trades.BUY_FLINT_TOOLSMITH_JOURNEYMAN)
             .add(Trades.SELL_ENCHANTED_IRON_AXE)
             .add(Trades.SELL_ENCHANTED_IRON_SHOVEL)
             .add(Trades.SELL_ENCHANTED_IRON_PICKAXE)
             .add(Trades.SELL_DIAMOND_HOE);
         this.getOrCreateTagBuilder(TradeTags.TOOLSMITH_EXPERT)
-            .add(Trades.BUY_DIAMOND_MORE_EXPERIENCE)
+            .add(Trades.BUY_DIAMOND_EXPERT)
             .add(Trades.SELL_ENCHANTED_DIAMOND_AXE)
             .add(Trades.SELL_ENCHANTED_DIAMOND_SHOVEL);
         this.getOrCreateTagBuilder(TradeTags.TOOLSMITH_MASTER)
@@ -246,7 +294,7 @@ public class TradeTagProvider extends FabricTagProvider<Trade> {
             .add(Trades.BUY_RABBIT)
             .add(Trades.SELL_RABBIT_STEW);
         this.getOrCreateTagBuilder(TradeTags.BUTCHER_APPRENTICE)
-            .add(Trades.BUY_COAL_CHEAPER)
+            .add(Trades.BUY_COAL)
             .add(Trades.SELL_COOKED_PORKCHOP)
             .add(Trades.SELL_COOKED_CHICKEN);
         this.getOrCreateTagBuilder(TradeTags.BUTCHER_JOURNEYMAN)
@@ -257,21 +305,95 @@ public class TradeTagProvider extends FabricTagProvider<Trade> {
         this.getOrCreateTagBuilder(TradeTags.BUTCHER_MASTER)
             .add(Trades.BUY_SWEET_BERRIES);
         this.getOrCreateTagBuilder(TradeTags.LEATHERWORKER_NOVICE)
-            .add(Trades.BUY_LEATHER);
-        this.getOrCreateTagBuilder(TradeTags.LEATHERWORKER_APPRENTICE);
-        this.getOrCreateTagBuilder(TradeTags.LEATHERWORKER_JOURNEYMAN);
+            .add(Trades.BUY_LEATHER)
+            .add(Trades.SELL_LEATHER_LEGGINGS)
+            .add(Trades.SELL_LEATHER_CHESTPLATE);
+        this.getOrCreateTagBuilder(TradeTags.LEATHERWORKER_APPRENTICE)
+            .add(Trades.BUY_FLINT_APPRENTICE)
+            .add(Trades.SELL_LEATHER_HELMET_APPRENTICE)
+            .add(Trades.SELL_LEATHER_BOOTS);
+        this.getOrCreateTagBuilder(TradeTags.LEATHERWORKER_JOURNEYMAN)
+            .add(Trades.BUY_RABBIT_HIDE)
+            .add(Trades.SELL_LEATHER_CHESTPLATE);
         this.getOrCreateTagBuilder(TradeTags.LEATHERWORKER_EXPERT)
-            .add(Trades.BUY_SCUTE);
+            .add(Trades.BUY_TURTLE_SCUTE)
+            .add(Trades.SELL_LEATHER_HORSE_ARMOR);
         this.getOrCreateTagBuilder(TradeTags.LEATHERWORKER_MASTER)
-            .add(Trades.SELL_SADDLE);
-        this.getOrCreateTagBuilder(TradeTags.MASON_NOVICE);
+            .add(Trades.SELL_SADDLE)
+            .add(Trades.SELL_LEATHER_HELMET_MASTER);
+        this.getOrCreateTagBuilder(TradeTags.MASON_NOVICE)
+            .add(Trades.BUY_CLAY_BALL)
+            .add(Trades.SELL_BRICK);
         this.getOrCreateTagBuilder(TradeTags.MASON_APPRENTICE)
-            .add(Trades.BUY_STONE);
-        this.getOrCreateTagBuilder(TradeTags.MASON_JOURNEYMAN);
-        this.getOrCreateTagBuilder(TradeTags.MASON_EXPERT);
-        this.getOrCreateTagBuilder(TradeTags.MASON_MASTER);
+            .add(Trades.BUY_STONE)
+            .add(Trades.SELL_CHISELED_STONE_BRICKS);
+        this.getOrCreateTagBuilder(TradeTags.MASON_JOURNEYMAN)
+            .add(Trades.BUY_GRANITE)
+            .add(Trades.BUY_ANDESITE)
+            .add(Trades.BUY_DIORITE)
+            .add(Trades.SELL_DRIPSTONE_BLOCK)
+            .add(Trades.SELL_POLISHED_ANDESITE)
+            .add(Trades.SELL_POLISHED_DIORITE)
+            .add(Trades.SELL_POLISHED_GRANITE);
+        this.getOrCreateTagBuilder(TradeTags.MASON_EXPERT)
+            .add(Trades.BUY_QUARTZ)
+            .add(Trades.SELL_ORANGE_TERRACOTTA)
+            .add(Trades.SELL_WHITE_TERRACOTTA)
+            .add(Trades.SELL_BLUE_TERRACOTTA)
+            .add(Trades.SELL_LIGHT_BLUE_TERRACOTTA)
+            .add(Trades.SELL_GRAY_TERRACOTTA)
+            .add(Trades.SELL_LIGHT_GRAY_TERRACOTTA)
+            .add(Trades.SELL_BLACK_TERRACOTTA)
+            .add(Trades.SELL_RED_TERRACOTTA)
+            .add(Trades.SELL_PINK_TERRACOTTA)
+            .add(Trades.SELL_MAGENTA_TERRACOTTA)
+            .add(Trades.SELL_LIME_TERRACOTTA)
+            .add(Trades.SELL_GREEN_TERRACOTTA)
+            .add(Trades.SELL_CYAN_TERRACOTTA)
+            .add(Trades.SELL_PURPLE_TERRACOTTA)
+            .add(Trades.SELL_YELLOW_TERRACOTTA)
+            .add(Trades.SELL_BROWN_TERRACOTTA)
+            .add(Trades.SELL_ORANGE_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_WHITE_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_BLUE_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_LIGHT_BLUE_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_GRAY_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_LIGHT_GRAY_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_BLACK_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_RED_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_PINK_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_MAGENTA_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_LIME_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_GREEN_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_CYAN_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_PURPLE_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_YELLOW_GLAZED_TERRACOTTA)
+            .add(Trades.SELL_BROWN_GLAZED_TERRACOTTA);
+        this.getOrCreateTagBuilder(TradeTags.MASON_MASTER)
+            .add(Trades.SELL_QUARTZ_PILLAR)
+            .add(Trades.SELL_QUARTZ_BLOCK);
         this.getOrCreateTagBuilder(TradeTags.WANDERING_TRADER_REGULAR)
+            .add(Trades.SELL_SEA_PICKLE)
+            .add(Trades.SELL_SLIME_BALL)
+            .add(Trades.SELL_GLOWSTONE_WANDERING_TRADER)
+            .add(Trades.SELL_NAUTILUS_SHELL)
             .add(Trades.SELL_FERN)
+            .add(Trades.SELL_SUGAR_CANE)
+            .add(Trades.SELL_PUMPKIN)
+            .add(Trades.SELL_KELP)
+            .add(Trades.SELL_CACTUS)
+            .add(Trades.SELL_DANDELION)
+            .add(Trades.SELL_POPPY)
+            .add(Trades.SELL_BLUE_ORCHID)
+            .add(Trades.SELL_ALLIUM)
+            .add(Trades.SELL_AZURE_BLUET)
+            .add(Trades.SELL_RED_TULIP)
+            .add(Trades.SELL_ORANGE_TULIP)
+            .add(Trades.SELL_WHITE_TULIP)
+            .add(Trades.SELL_PINK_TULIP)
+            .add(Trades.SELL_OXEYE_DAISY)
+            .add(Trades.SELL_CORNFLOWER)
+            .add(Trades.SELL_LILY_OF_THE_VALLEY)
             .add(Trades.SELL_WHEAT_SEEDS)
             .add(Trades.SELL_BEETROOT_SEEDS)
             .add(Trades.SELL_PUMPKIN_SEEDS)
@@ -300,12 +422,27 @@ public class TradeTagProvider extends FabricTagProvider<Trade> {
             .add(Trades.SELL_ORANGE_DYE)
             .add(Trades.SELL_BROWN_DYE)
             .add(Trades.SELL_CYAN_DYE)
+            .add(Trades.SELL_BRAIN_CORAL_BLOCK)
+            .add(Trades.SELL_BUBBLE_CORAL_BLOCK)
+            .add(Trades.SELL_FIRE_CORAL_BLOCK)
+            .add(Trades.SELL_HORN_CORAL_BLOCK)
+            .add(Trades.SELL_TUBE_CORAL_BLOCK)
             .add(Trades.SELL_VINE)
+            .add(Trades.SELL_BROWN_MUSHROOM)
+            .add(Trades.SELL_RED_MUSHROOM)
             .add(Trades.SELL_LILY_PAD)
-            .add(Trades.SELL_SAND);
+            .add(Trades.SELL_SMALL_DRIPLEAF)
+            .add(Trades.SELL_SAND)
+            .add(Trades.SELL_RED_SAND)
+            .add(Trades.SELL_POINTED_DRIPSTONE)
+            .add(Trades.SELL_ROOTED_DIRT)
+            .add(Trades.SELL_MOSS_BLOCK);
         this.getOrCreateTagBuilder(TradeTags.WANDERING_TRADER_SPECIAL)
             .add(Trades.SELL_TROPICAL_FISH_BUCKET)
             .add(Trades.SELL_PUFFERFISH_BUCKET)
-            .add(Trades.SELL_GUNPOWDER);
+            .add(Trades.SELL_PACKED_ICE)
+            .add(Trades.SELL_BLUE_ICE)
+            .add(Trades.SELL_GUNPOWDER)
+            .add(Trades.SELL_PODZOL);
     }
 }

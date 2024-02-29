@@ -1,25 +1,21 @@
 {
   "gives": {
-    "item": "minecraft:diamond_chestplate",
-    "item_modifier": {
-      "function": "minecraft:enchant_with_levels",
-      "levels": {
-        "type": "minecraft:uniform",
-        "max": 20.0,
-        "min": 5.0
-      },
-      "treasure": false
-    }
+    "item": "minecraft:diamond_chestplate"
   },
   "max_uses": 3,
   "price_multiplier": 0.2,
   "trade_experience": 30,
+  "trade_modifier": {
+    "type": "minecraft:enchant_with_levels",
+    "index": 0,
+    "level": {
+      "max": 19,
+      "min": 5
+    }
+  },
   "wants": [
     {
-      "count": {
-        "max": 36,
-        "min": 21
-      },
+      "count": 16,
       "item": "minecraft:emerald"
     }
   ]

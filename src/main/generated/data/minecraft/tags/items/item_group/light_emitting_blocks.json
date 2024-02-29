@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:end_rod",
+    "minecraft:sea_lantern",
+    "minecraft:redstone_lamp",
+    "minecraft:glowstone",
+    "minecraft:shroomlight",
+    "#minecraft:item_group/froglights",
+    "minecraft:crying_obsidian",
+    "minecraft:glow_lichen",
+    "minecraft:magma_block"
+  ]
+}

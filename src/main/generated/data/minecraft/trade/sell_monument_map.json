@@ -1,0 +1,31 @@
+{
+  "gives": {
+    "item": "minecraft:map",
+    "item_modifier": {
+      "function": "minecraft:sequence",
+      "functions": [
+        {
+          "decoration": "monument",
+          "destination": "minecraft:on_ocean_explorer_maps",
+          "function": "minecraft:exploration_map",
+          "search_radius": 100
+        },
+        {
+          "function": "minecraft:set_name",
+          "name": {
+            "translate": "filled_map.monument"
+          }
+        }
+      ]
+    }
+  },
+  "max_uses": 12,
+  "price_multiplier": 0.05,
+  "trade_experience": 5,
+  "wants": [
+    {
+      "count": 13,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

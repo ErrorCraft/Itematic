@@ -1,0 +1,12 @@
+{
+  "gives": {
+    "item": "minecraft:blue_orchid"
+  },
+  "max_uses": 8,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "item": "minecraft:emerald"
+    }
+  ]
+}

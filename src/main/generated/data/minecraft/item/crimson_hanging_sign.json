@@ -7,7 +7,12 @@
   },
   "components": {
     "minecraft:block": {
-      "block": "minecraft:crimson_hanging_sign"
+      "block": {
+        "type": "minecraft:attached_to_side",
+        "attached_block": "minecraft:crimson_hanging_sign",
+        "attached_side": "up",
+        "other_block": "minecraft:crimson_wall_hanging_sign"
+      }
     }
   }
 }

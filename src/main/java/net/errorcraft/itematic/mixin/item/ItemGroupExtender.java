@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.item;
 
-import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.mojang.logging.LogUtils;
 import net.errorcraft.itematic.access.item.ItemGroupAccess;
 import net.errorcraft.itematic.item.ItemAccess;

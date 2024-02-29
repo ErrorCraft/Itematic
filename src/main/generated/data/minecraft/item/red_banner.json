@@ -10,7 +10,12 @@
       "color": "red"
     },
     "minecraft:block": {
-      "block": "minecraft:red_banner"
+      "block": {
+        "type": "minecraft:attached_to_side",
+        "attached_block": "minecraft:red_banner",
+        "attached_side": "down",
+        "other_block": "minecraft:red_wall_banner"
+      }
     },
     "minecraft:fuel": {
       "ticks": 300

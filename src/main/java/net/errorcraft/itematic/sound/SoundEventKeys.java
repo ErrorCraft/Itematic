@@ -30,6 +30,7 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> FIRE_EXTINGUISH = of("block.fire.extinguish");
     public static final RegistryKey<SoundEvent> FLINT_AND_STEEL_USE = of("item.flintandsteel.use");
     public static final RegistryKey<SoundEvent> HOE_TILL = of("item.hoe.till");
+    public static final RegistryKey<SoundEvent> HORSE_SADDLE = of("entity.horse.saddle");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_5 = of("music_disc.5");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_11 = of("music_disc.11");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_13 = of("music_disc.13");

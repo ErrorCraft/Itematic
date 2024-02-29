@@ -1,5 +1,7 @@
 {
   "values": [
-    "minecraft:buy_leather"
+    "minecraft:buy_leather",
+    "minecraft:sell_leather_leggings",
+    "minecraft:sell_leather_chestplate"
   ]
 }

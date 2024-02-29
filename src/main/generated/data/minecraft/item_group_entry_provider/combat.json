@@ -8,6 +8,7 @@
       "type": "tag",
       "tag": "minecraft:item_group/axes"
     },
+    "minecraft:trident",
     "minecraft:shield",
     {
       "type": "tag",
@@ -17,222 +18,34 @@
       "type": "tag",
       "tag": "minecraft:item_group/horse_armor"
     },
+    "minecraft:wolf_armor",
+    "minecraft:totem_of_undying",
+    "minecraft:tnt",
     "minecraft:end_crystal",
     "minecraft:snowball",
     "minecraft:egg",
     "minecraft:bow",
     "minecraft:crossbow",
+    {
+      "type": "stack",
+      "item": "minecraft:firework_rocket",
+      "nbt": "{Fireworks:{Flight:1b}}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:firework_rocket",
+      "nbt": "{Fireworks:{Flight:2b}}"
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:firework_rocket",
+      "nbt": "{Fireworks:{Flight:3b}}"
+    },
     "minecraft:arrow",
     "minecraft:spectral_arrow",
     {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:water\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:mundane\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:thick\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:awkward\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:night_vision\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_night_vision\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:invisibility\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_invisibility\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:leaping\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_leaping\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:strong_leaping\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:fire_resistance\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_fire_resistance\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:swiftness\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_swiftness\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:strong_swiftness\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:slowness\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_slowness\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:strong_slowness\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:turtle_master\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_turtle_master\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:strong_turtle_master\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:water_breathing\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_water_breathing\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:healing\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:strong_healing\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:harming\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:strong_harming\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:poison\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_poison\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:strong_poison\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:regeneration\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_regeneration\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:strong_regeneration\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:strength\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_strength\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:strong_strength\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:weakness\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_weakness\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:luck\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:slow_falling\"}"
-    },
-    {
-      "type": "stack",
-      "item": "minecraft:tipped_arrow",
-      "nbt": "{Potion:\"minecraft:long_slow_falling\"}"
+      "type": "potion",
+      "item": "minecraft:tipped_arrow"
     }
   ]
 }

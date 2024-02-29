@@ -1,0 +1,25 @@
+{
+  "gives": {
+    "item": "minecraft:emerald"
+  },
+  "max_uses": 12,
+  "price_multiplier": 0.05,
+  "trade_experience": 30,
+  "trade_modifier": {
+    "type": "minecraft:item_from_type",
+    "types": {
+      "minecraft:desert": "minecraft:jungle_boat",
+      "minecraft:jungle": "minecraft:jungle_boat",
+      "minecraft:plains": "minecraft:oak_boat",
+      "minecraft:savanna": "minecraft:acacia_boat",
+      "minecraft:snow": "minecraft:spruce_boat",
+      "minecraft:swamp": "minecraft:dark_oak_boat",
+      "minecraft:taiga": "minecraft:spruce_boat"
+    }
+  },
+  "wants": [
+    {
+      "item": "minecraft:oak_boat"
+    }
+  ]
+}

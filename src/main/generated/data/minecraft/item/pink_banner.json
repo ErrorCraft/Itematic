@@ -10,7 +10,12 @@
       "color": "pink"
     },
     "minecraft:block": {
-      "block": "minecraft:pink_banner"
+      "block": {
+        "type": "minecraft:attached_to_side",
+        "attached_block": "minecraft:pink_banner",
+        "attached_side": "down",
+        "other_block": "minecraft:pink_wall_banner"
+      }
     },
     "minecraft:fuel": {
       "ticks": 300

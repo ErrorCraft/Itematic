@@ -27,10 +27,14 @@ public interface ItemStackAccess {
     default Optional<NbtCompound> itematic$nbt() {
         return Optional.empty();
     }
-    default ItemStack itematic$copyWithItem(RegistryEntry<Item> item, int count) {
+    default void itematic$tryIncrement(int count) {}
+    default ItemStack itematic$copyWithItem(RegistryEntry<Item> item) {
         return ItemStack.EMPTY;
     }
-    default ItemStack itematic$copyWithItemIgnoreEmpty(RegistryEntry<Item> item, int count) {
+    default ItemStack itematic$copyNbtToNewStack(RegistryEntry<Item> item, int count) {
+        return ItemStack.EMPTY;
+    }
+    default ItemStack itematic$copyNbtToNewStackIgnoreEmpty(RegistryEntry<Item> item, int count) {
         return ItemStack.EMPTY;
     }
     default boolean itematic$isOf(RegistryKey<Item> key) {

@@ -9,10 +9,12 @@ import net.errorcraft.itematic.item.group.entry.entries.TagItemGroupEntry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -20,7 +22,7 @@ import java.util.function.Function;
 
 public abstract class ItemGroupEntry {
     public static final Codec<ItemGroupEntry> ENTRY_CODEC = StringIdentifiable.createCodec(ItemGroupEntryType::values).dispatch(ItemGroupEntry::type, ItemGroupEntryType::codec);
-    public static final Codec<ItemGroupEntry> CODEC = Codec.either(RegistryKey.createCodec(RegistryKeys.ITEM), ENTRY_CODEC).xmap(either -> either.map(StackItemGroupEntry::new, Function.identity()), ItemGroupEntry::createEither);
+    public static final Codec<ItemGroupEntry> CODEC = Codec.either(RegistryFixedCodec.of(RegistryKeys.ITEM), ENTRY_CODEC).xmap(either -> either.map(StackItemGroupEntry::new, Function.identity()), ItemGroupEntry::createEither);
 
     private final ItemGroup.StackVisibility visibility;
     private final boolean requiresPermissions;
@@ -52,15 +54,15 @@ public abstract class ItemGroupEntry {
         entries.addAll(this.createStacks(context), this.visibility);
     }
 
-    protected Either<RegistryKey<Item>, ItemGroupEntry> createEither() {
+    protected Either<RegistryEntry<Item>, ItemGroupEntry> createEither() {
         return Either.right(this);
     }
 
-    public static ItemGroupEntry simple(RegistryKey<Item> item) {
+    public static ItemGroupEntry simple(RegistryEntry<Item> item) {
         return new StackItemGroupEntry(item);
     }
 
-    public static ItemGroupEntry requiresPermissions(RegistryKey<Item> item) {
+    public static ItemGroupEntry requiresPermissions(RegistryEntry<Item> item) {
         return new StackItemGroupEntry(ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS, true, item, Optional.empty());
     }
 
@@ -71,7 +73,7 @@ public abstract class ItemGroupEntry {
     protected static <T extends ItemGroupEntry> Products.P2<RecordCodecBuilder.Mu<T>, ItemGroup.StackVisibility, Boolean> createCodec(RecordCodecBuilder.Instance<T> instance) {
         return instance.group(
             StringIdentifiable.createCodec(ItemGroup.StackVisibility::values).optionalFieldOf("visibility", ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS).forGetter(ItemGroupEntry::visibility),
-            Codec.BOOL.optionalFieldOf("requires_permissions", false).forGetter(ItemGroupEntry::requiresPermissions)
+            Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "requires_permissions", false).forGetter(ItemGroupEntry::requiresPermissions)
         );
     }
 }

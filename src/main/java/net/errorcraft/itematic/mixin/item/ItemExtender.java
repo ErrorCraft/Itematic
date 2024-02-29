@@ -389,17 +389,6 @@ public abstract class ItemExtender implements ItemAccess {
         return stack.getCount() == 1 && this.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean isUsedOnRelease(ItemStack stack) {
-        return this.itematic$getComponent(ItemComponentTypes.SHOOTER)
-            .map(ShooterItemComponent::chargeable)
-            .orElse(false);
-    }
-
     @Inject(
         method = "canMine",
         at = @At("HEAD"),

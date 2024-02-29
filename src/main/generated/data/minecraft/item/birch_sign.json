@@ -7,7 +7,12 @@
   },
   "components": {
     "minecraft:block": {
-      "block": "minecraft:birch_sign"
+      "block": {
+        "type": "minecraft:attached_to_side",
+        "attached_block": "minecraft:birch_sign",
+        "attached_side": "down",
+        "other_block": "minecraft:birch_wall_sign"
+      }
     },
     "minecraft:fuel": {
       "ticks": 200

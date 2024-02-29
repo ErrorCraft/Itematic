@@ -1,0 +1,22 @@
+{
+  "gives": {
+    "item": "minecraft:leather_helmet",
+    "item_modifier": {
+      "chances": [
+        1.0,
+        0.3,
+        0.2
+      ],
+      "function": "minecraft:dye"
+    }
+  },
+  "max_uses": 12,
+  "price_multiplier": 0.05,
+  "trade_experience": 30,
+  "wants": [
+    {
+      "count": 5,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

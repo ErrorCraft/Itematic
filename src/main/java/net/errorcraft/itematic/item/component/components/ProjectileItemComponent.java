@@ -28,7 +28,7 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, f
     public static final Codec<ProjectileItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         EntityInitializer.CODEC.fieldOf("entity").forGetter(ProjectileItemComponent::entity),
         Codec.INT.optionalFieldOf("damage", 0).forGetter(ProjectileItemComponent::damage),
-        Codec.FLOAT.optionalFieldOf("charged_speed", CrossbowItemAccessor.getDefaultSpeed()).forGetter(ProjectileItemComponent::chargedSpeed)
+        Codec.FLOAT.optionalFieldOf("charged_speed", CrossbowItemAccessor.defaultSpeed()).forGetter(ProjectileItemComponent::chargedSpeed)
     ).apply(instance, ProjectileItemComponent::new));
 
     @Override
@@ -71,7 +71,7 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, f
     }
 
     public static ProjectileItemComponent of(EntityInitializer<?> entity, int damage) {
-        return of(entity, damage, CrossbowItemAccessor.getDefaultSpeed());
+        return of(entity, damage, CrossbowItemAccessor.defaultSpeed());
     }
 
     public static ProjectileItemComponent of(RegistryEntry<EntityType<?>> entity) {

@@ -4,6 +4,7 @@ import net.errorcraft.itematic.block.BlockStateUtil;
 import net.errorcraft.itematic.block.ShapeContextUtil;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.item.placement.block.modifier.BlockStateModifier;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.advancement.criterion.Criteria;
@@ -16,7 +17,6 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
@@ -29,12 +29,12 @@ import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockPlacer extends Placer {
-    private final RegistryEntry<Block> block;
+    private final BlockStateModifier<?> block;
     private final ItemPlacementContext context;
     private final boolean operatorOnly;
     private final boolean decrementStack;
 
-    public BlockPlacer(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, RegistryEntry<Block> block, ItemPlacementContext context, boolean operatorOnly, boolean decrementStack) {
+    public BlockPlacer(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, BlockStateModifier<?> block, ItemPlacementContext context, boolean operatorOnly, boolean decrementStack) {
         super(stack, resultStackConsumer, world, blockPos, blockState, player);
         this.block = block;
         this.context = context;
@@ -42,16 +42,16 @@ public class BlockPlacer extends Placer {
         this.decrementStack = decrementStack;
     }
 
-    public static BlockPlacer of(ActionContext context, ActionContextParameter position, RegistryEntry<Block> block, boolean operatorOnly, boolean decrementStack) {
-        return of(context.createItemPlacementContext(position, block), context.resultStackConsumer(), block, operatorOnly, decrementStack);
+    public static BlockPlacer of(ActionContext context, ActionContextParameter position, BlockStateModifier<?> block, boolean operatorOnly, boolean decrementStack) {
+        return of(context.createItemPlacementContext(position, block.defaultBlock()), context.resultStackConsumer(), block, operatorOnly, decrementStack);
     }
 
-    public static BlockPlacer of(ItemUsageContext context, ItemStackConsumer resultStackConsumer, RegistryEntry<Block> block, boolean operatorOnly, boolean decrementStack) {
-        ItemPlacementContext placementContext = block.value().itematic$placementContext(new ItemPlacementContext(context));
+    public static BlockPlacer of(ItemUsageContext context, ItemStackConsumer resultStackConsumer, BlockStateModifier<?> block, boolean operatorOnly, boolean decrementStack) {
+        ItemPlacementContext placementContext = block.placementContext(new ItemPlacementContext(context));
         return of(placementContext, resultStackConsumer, block, operatorOnly, decrementStack);
     }
 
-    public static BlockPlacer of(ItemPlacementContext context, ItemStackConsumer resultStackConsumer, RegistryEntry<Block> block, boolean operatorOnly, boolean decrementStack) {
+    public static BlockPlacer of(ItemPlacementContext context, ItemStackConsumer resultStackConsumer, BlockStateModifier<?> block, boolean operatorOnly, boolean decrementStack) {
         World world = context.getWorld();
         BlockPos blockPos = context.getBlockPos();
         return new BlockPlacer(context.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), block, context, operatorOnly, decrementStack);
@@ -100,8 +100,8 @@ public class BlockPlacer extends Placer {
         if (this.operatorOnly && this.player != null && !this.player.isCreativeLevelTwoOp()) {
             return null;
         }
-        BlockState blockState = this.block.value().getPlacementState(this.context);
-        return this.canPlace(blockState) ? blockState : null;
+        BlockState state = this.block.placementState(this.context);
+        return this.canPlace(state) ? state : null;
     }
 
     private boolean canPlace(BlockState state) {

@@ -1,6 +1,8 @@
 {
   "values": [
+    "minecraft:buy_string_novice",
     "minecraft:buy_coal",
+    "minecraft:sell_cooked_cod_from_cod",
     "minecraft:sell_cod_bucket"
   ]
 }

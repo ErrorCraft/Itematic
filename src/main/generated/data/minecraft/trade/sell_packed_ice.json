@@ -1,0 +1,13 @@
+{
+  "gives": {
+    "item": "minecraft:packed_ice"
+  },
+  "max_uses": 6,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "count": 3,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 {
   "values": [
+    "minecraft:buy_writable_book",
+    "minecraft:sell_enchanted_book_expert",
     "minecraft:sell_clock",
     "minecraft:sell_compass"
   ]

@@ -62,24 +62,6 @@ public interface DispenserBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;LEATHER_HORSE_ARMOR:Lnet/minecraft/item/Item;"
-            )
-        )
-    )
-    private static DispenserBehavior storeHorseArmorDispenserBehavior(DispenserBehavior behavior) {
-        return DispenserBehaviorUtil.HORSE_ARMOR_DISPENSER_BEHAVIOR = behavior;
-    }
-
-    @ModifyArg(
-        method = "registerDefaults",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/block/DispenserBlock;registerBehavior(Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/block/dispenser/DispenserBehavior;)V",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
                 target = "Lnet/minecraft/item/Items;BRUSH:Lnet/minecraft/item/Item;"
             )
         )

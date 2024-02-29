@@ -48,6 +48,6 @@ public class ServerPlayNetworkHandlerExtender {
         )
     )
     private ItemStack copyWithItemForWrittenBookUseItemComponent(ItemStack instance, ItemConvertible itemConvertible, int count, @Share("writableItemComponent") LocalRef<WritableItemComponent> writableItemComponent) {
-        return instance.itematic$copyWithItem(writableItemComponent.get().transformsInto(), count);
+        return instance.itematic$copyNbtToNewStack(writableItemComponent.get().transformsInto(), count);
     }
 }

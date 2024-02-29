@@ -1,24 +1,20 @@
 {
   "gives": {
-    "item": "minecraft:iron_sword",
-    "item_modifier": {
-      "function": "minecraft:enchant_with_levels",
-      "levels": {
-        "type": "minecraft:uniform",
-        "max": 20.0,
-        "min": 5.0
-      },
-      "treasure": false
-    }
+    "item": "minecraft:iron_sword"
   },
   "max_uses": 3,
   "price_multiplier": 0.05,
+  "trade_modifier": {
+    "type": "minecraft:enchant_with_levels",
+    "index": 0,
+    "level": {
+      "max": 19,
+      "min": 5
+    }
+  },
   "wants": [
     {
-      "count": {
-        "max": 22,
-        "min": 7
-      },
+      "count": 2,
       "item": "minecraft:emerald"
     }
   ]

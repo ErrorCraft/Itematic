@@ -1,0 +1,12 @@
+{
+  "values": [
+    "minecraft:lily_pad",
+    "minecraft:seagrass",
+    "minecraft:sea_pickle",
+    "minecraft:kelp",
+    "minecraft:dried_kelp_block",
+    "#minecraft:item_group/coral_blocks",
+    "#minecraft:item_group/coral",
+    "#minecraft:item_group/coral_fans"
+  ]
+}

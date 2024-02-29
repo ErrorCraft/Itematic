@@ -1,0 +1,21 @@
+{
+  "gives": {
+    "item": "minecraft:leather_chestplate",
+    "item_modifier": {
+      "chances": [
+        1.0,
+        0.3,
+        0.2
+      ],
+      "function": "minecraft:dye"
+    }
+  },
+  "max_uses": 12,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "count": 7,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

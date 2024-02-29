@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.sea_pickle"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:sea_pickle"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.65
+    }
+  }
+}

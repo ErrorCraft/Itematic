@@ -8,6 +8,8 @@
     "#minecraft:item_group/dark_oak_building_blocks",
     "#minecraft:item_group/mangrove_building_blocks",
     "#minecraft:item_group/cherry_building_blocks",
-    "#minecraft:item_group/bamboo_building_blocks"
+    "#minecraft:item_group/bamboo_building_blocks",
+    "#minecraft:item_group/crimson_building_blocks",
+    "#minecraft:item_group/warped_building_blocks"
   ]
 }

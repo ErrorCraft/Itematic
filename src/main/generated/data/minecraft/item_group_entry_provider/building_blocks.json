@@ -4,8 +4,36 @@
       "type": "tag",
       "tag": "minecraft:item_group/wooden_building_blocks"
     },
-    "minecraft:stone",
-    "minecraft:cobblestone",
-    "minecraft:bricks"
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/stone_like_building_blocks"
+    },
+    "minecraft:coal_block",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/iron_building_blocks"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/gold_building_blocks"
+    },
+    "minecraft:redstone_block",
+    "minecraft:emerald_block",
+    "minecraft:lapis_block",
+    "minecraft:diamond_block",
+    "minecraft:netherite_block",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/quartz_building_blocks"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/smooth_quartz_building_blocks"
+    },
+    "minecraft:amethyst_block",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/copper_like_building_blocks"
+    }
   ]
 }

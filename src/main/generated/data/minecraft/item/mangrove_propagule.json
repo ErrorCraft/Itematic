@@ -9,6 +9,9 @@
     "minecraft:block": {
       "block": "minecraft:mangrove_propagule"
     },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.3
+    },
     "minecraft:fuel": {
       "ticks": 100
     }

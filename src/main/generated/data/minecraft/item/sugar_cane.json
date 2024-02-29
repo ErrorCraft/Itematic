@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.sugar_cane"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:sugar_cane"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.5
+    }
+  }
+}

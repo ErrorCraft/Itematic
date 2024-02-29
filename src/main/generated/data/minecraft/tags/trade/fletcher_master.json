@@ -1,5 +1,7 @@
 {
   "values": [
-    "minecraft:sell_enchanted_crossbow"
+    "minecraft:buy_tripwire_hook",
+    "minecraft:sell_enchanted_crossbow",
+    "minecraft:sell_tipped_arrow"
   ]
 }

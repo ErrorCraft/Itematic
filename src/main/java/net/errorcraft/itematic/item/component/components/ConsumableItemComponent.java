@@ -56,7 +56,7 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem) 
 
         this.resultItem.map(ItemStack::new)
             .map(resultStack -> ItemUsage.exchangeStack(stack, player, resultStack))
-            .ifPresent(resultStackConsumer::set);
+            .ifPresentOrElse(resultStackConsumer::set, () -> stack.decrementUnlessCreative(1, user));
         if (player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.CONSUME_ITEM.trigger(serverPlayer, stack);
             ActionContext context = ActionContext.builder(serverPlayer.getServerWorld(), stack, resultStackConsumer, hand)

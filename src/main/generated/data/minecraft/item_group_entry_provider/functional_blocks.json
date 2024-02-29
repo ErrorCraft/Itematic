@@ -1,31 +1,89 @@
 {
   "entries": [
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/torches"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/lanterns"
+    },
+    "minecraft:chain",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/light_emitting_blocks"
+    },
     "minecraft:crafting_table",
+    "minecraft:stonecutter",
     "minecraft:cartography_table",
     "minecraft:fletching_table",
     "minecraft:smithing_table",
+    "minecraft:grindstone",
     "minecraft:loom",
+    "minecraft:furnace",
+    "minecraft:smoker",
+    "minecraft:blast_furnace",
+    "minecraft:campfire",
+    "minecraft:soul_campfire",
+    "minecraft:anvil",
+    "minecraft:chipped_anvil",
+    "minecraft:damaged_anvil",
     "minecraft:composter",
     "minecraft:note_block",
     "minecraft:jukebox",
+    "minecraft:enchanting_table",
     "minecraft:end_crystal",
     "minecraft:brewing_stand",
     "minecraft:cauldron",
+    "minecraft:bell",
+    "minecraft:beacon",
+    "minecraft:conduit",
+    "minecraft:lodestone",
     "minecraft:ladder",
     "minecraft:scaffolding",
+    "minecraft:bee_nest",
+    "minecraft:beehive",
+    "minecraft:suspicious_sand",
+    "minecraft:suspicious_gravel",
+    "minecraft:lightning_rod",
+    "minecraft:flower_pot",
+    "minecraft:decorated_pot",
     "minecraft:armor_stand",
     "minecraft:item_frame",
     "minecraft:glow_item_frame",
     "minecraft:painting",
+    {
+      "type": "painting_variant",
+      "item": "minecraft:painting",
+      "tag": {
+        "id": "minecraft:placeable",
+        "expected": true
+      }
+    },
     "minecraft:bookshelf",
     "minecraft:chiseled_bookshelf",
     "minecraft:lectern",
+    "minecraft:tinted_glass",
     {
       "type": "tag",
       "tag": "minecraft:item_group/signs"
     },
     "minecraft:chest",
     "minecraft:barrel",
+    "minecraft:ender_chest",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/shulker_boxes"
+    },
+    "minecraft:respawn_anchor",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/beds"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/candles"
+    },
     {
       "type": "tag",
       "tag": "minecraft:item_group/banners"
@@ -38,6 +96,13 @@
     {
       "type": "tag",
       "tag": "minecraft:item_group/heads"
+    },
+    "minecraft:dragon_egg",
+    "minecraft:end_portal_frame",
+    "minecraft:ender_eye",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/infested_blocks"
     }
   ]
 }

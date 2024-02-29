@@ -22,7 +22,7 @@ import java.util.Set;
 @Mixin(ClientWorld.class)
 public class ClientWorldExtender {
     @Unique
-    private static final Set<RegistryKey<Item>> BLOCK_MARKER_ITEM_KEYS = Set.of(ItemKeys.BARRIER);
+    private static final Set<RegistryKey<Item>> BLOCK_MARKER_ITEM_KEYS = Set.of(ItemKeys.BARRIER, ItemKeys.LIGHT);
 
     @Redirect(
         method = "getBlockParticle",
@@ -65,6 +65,9 @@ public class ClientWorldExtender {
         )
     )
     private Block blockUseItemComponent(BlockItem instance, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
-        return blockItemComponent.get().block().value();
+        return blockItemComponent.get()
+            .block()
+            .defaultBlock()
+            .value();
     }
 }

@@ -13,9 +13,9 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public abstract class Range<T extends Comparable<T>> {
-    public static final Codec<Range.IntegerRange> INT_CODEC = Codecs.createLazy(() -> createCodec(Codec.INT, IntegerRange::new, IntegerRange::of));
-    public static final Codec<Range.FloatRange> FLOAT_CODEC = Codecs.createLazy(() -> createCodec(Codec.FLOAT, FloatRange::new, FloatRange::of));
-    public static final Codec<Range.DoubleRange> DOUBLE_CODEC = Codecs.createLazy(() -> createCodec(Codec.DOUBLE, DoubleRange::new, DoubleRange::of));
+    public static final Codec<Range.IntegerRange> INT_CODEC = Codecs.createLazy(() -> createCodec(Codec.INT, Integer.MIN_VALUE, Integer.MAX_VALUE, IntegerRange::new, IntegerRange::of));
+    public static final Codec<Range.FloatRange> FLOAT_CODEC = Codecs.createLazy(() -> createCodec(Codec.FLOAT, -Float.MAX_VALUE, Float.MAX_VALUE, FloatRange::new, FloatRange::of));
+    public static final Codec<Range.DoubleRange> DOUBLE_CODEC = Codecs.createLazy(() -> createCodec(Codec.DOUBLE, -Double.MAX_VALUE, Double.MAX_VALUE, DoubleRange::new, DoubleRange::of));
 
     protected final T min;
     protected final T max;
@@ -65,16 +65,16 @@ public abstract class Range<T extends Comparable<T>> {
             "max=" + max + ']';
     }
 
-    private static <T extends Comparable<T>, S extends Range<T>> Codec<S> createCodec(Codec<T> codec, BiFunction<T, T, S> creator, Function<T, S> singleValueCreator) {
+    private static <T extends Comparable<T>, S extends Range<T>> Codec<S> createCodec(Codec<T> codec, T min, T max, BiFunction<T, T, S> creator, Function<T, S> singleValueCreator) {
         Codec<S> elementCodec = RecordCodecBuilder.create(instance -> instance.group(
-            codec.fieldOf("min").forGetter(Range::min),
-            codec.fieldOf("max").forGetter(Range::max)
+            Codecs.createStrictOptionalFieldCodec(codec, "min", min).forGetter(Range::min),
+            Codecs.createStrictOptionalFieldCodec(codec, "max", max).forGetter(Range::max)
         ).apply(instance, creator));
-        return Codecs.validate(Codecs.either(elementCodec, codec).xmap(either -> either.map(s -> s, singleValueCreator), s -> {
+        return Codecs.validate(Codecs.either(codec, elementCodec).xmap(either -> either.map(singleValueCreator, s -> s), s -> {
             if (s.min.compareTo(s.max) == 0) {
-                return Either.right(s.min);
+                return Either.left(s.min);
             }
-            return Either.left(s);
+            return Either.right(s);
         }), Range::validate);
     }
 
@@ -104,6 +104,10 @@ public abstract class Range<T extends Comparable<T>> {
 
         public static IntegerRange of(int value) {
             return new IntegerRange(value, value);
+        }
+
+        public static IntegerRange atLeast(int min) {
+            return new IntegerRange(min, Integer.MAX_VALUE);
         }
     }
 

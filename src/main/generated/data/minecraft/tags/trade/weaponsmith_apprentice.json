@@ -1,5 +1,6 @@
 {
   "values": [
-    "minecraft:buy_iron_ingot"
+    "minecraft:buy_iron_ingot",
+    "minecraft:sell_bell"
   ]
 }

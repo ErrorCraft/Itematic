@@ -1,0 +1,14 @@
+{
+  "gives": {
+    "count": 4,
+    "item": "minecraft:dripstone_block"
+  },
+  "max_uses": 16,
+  "price_multiplier": 0.05,
+  "trade_experience": 10,
+  "wants": [
+    {
+      "item": "minecraft:emerald"
+    }
+  ]
+}

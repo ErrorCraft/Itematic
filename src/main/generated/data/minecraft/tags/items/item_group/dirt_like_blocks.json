@@ -1,0 +1,11 @@
+{
+  "values": [
+    "minecraft:dirt_path",
+    "minecraft:dirt",
+    "minecraft:coarse_dirt",
+    "minecraft:rooted_dirt",
+    "minecraft:farmland",
+    "minecraft:mud",
+    "minecraft:clay"
+  ]
+}

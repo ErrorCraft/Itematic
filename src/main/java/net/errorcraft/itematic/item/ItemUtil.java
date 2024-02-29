@@ -3,6 +3,7 @@ package net.errorcraft.itematic.item;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
+import net.errorcraft.itematic.block.ComposterBlockUtil;
 import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
@@ -40,6 +41,7 @@ import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPas
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SuspiciousStewIngredient;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.enchantment.Enchantments;
@@ -89,4926 +91,7 @@ public class ItemUtil {
     ).apply(instance, ItemUtil::create));
 
     public static void bootstrap(Registerable<Item> registerable) {
-        RegistryEntryLookup<ArmorMaterial> armorMaterials = registerable.getRegistryLookup(ItematicRegistryKeys.ARMOR_MATERIAL);
-        RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
-        RegistryEntryLookup<EntityType<?>> entityTypes = registerable.getRegistryLookup(RegistryKeys.ENTITY_TYPE);
-        RegistryEntryLookup<Biome> biomes = registerable.getRegistryLookup(RegistryKeys.BIOME);
-        RegistryEntryLookup<Block> blocks = registerable.getRegistryLookup(RegistryKeys.BLOCK);
-        RegistryEntryLookup<DispenserBehavior> dispenseBehaviors = registerable.getRegistryLookup(ItematicRegistryKeys.DISPENSE_BEHAVIOR);
-        RegistryEntryLookup<SoundEvent> soundEvents = registerable.getRegistryLookup(RegistryKeys.SOUND_EVENT);
-        RegistryEntryLookup<Fluid> fluids = registerable.getRegistryLookup(RegistryKeys.FLUID);
-        RegistryEntryLookup<Pointer> pointers = registerable.getRegistryLookup(ItematicRegistryKeys.POINTER);
-        RegistryEntryLookup<ActionEntry> actions = registerable.getRegistryLookup(ItematicRegistryKeys.ACTION);
-        RegistryEntryLookup<SmithingTemplate> smithingTemplates = registerable.getRegistryLookup(ItematicRegistryKeys.SMITHING_TEMPLATE);
-        RegistryEntryLookup<String> decoratedPotPatterns = registerable.getRegistryLookup(RegistryKeys.DECORATED_POT_PATTERN);
-        RegistryEntryLookup<StatusEffect> statusEffects = registerable.getRegistryLookup(RegistryKeys.STATUS_EFFECT);
-
-        registerable.register(ItemKeys.AIR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build())
-        ));
-        registerable.register(ItemKeys.STONE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STONE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.GRASS_BLOCK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRASS_BLOCK).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GRASS_BLOCK)))
-                .with(TintedItemComponent.of(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_NYLIUM, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_NYLIUM).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_NYLIUM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_NYLIUM, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_NYLIUM).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_NYLIUM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.COBBLESTONE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COBBLESTONE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.COBBLESTONE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_PLANKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_PLANKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_PLANKS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_PLANKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_PLANKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_PLANKS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_PLANKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_PLANKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_PLANKS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_PLANKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_PLANKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_PLANKS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_PLANKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_PLANKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_PLANKS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_PLANKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_PLANKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_PLANKS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_PLANKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_PLANKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_PLANKS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_PLANKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_PLANKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_PLANKS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_PLANKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_PLANKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_PLANKS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_PLANKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_PLANKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_PLANKS)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_PLANKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_PLANKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_PLANKS)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_MOSAIC, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_MOSAIC).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_SAPLING, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_SAPLING).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_SAPLING)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_SAPLING, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_SAPLING).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_SAPLING)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_SAPLING, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_SAPLING).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_SAPLING)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_SAPLING, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_SAPLING).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_SAPLING)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_SAPLING, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_SAPLING).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_SAPLING)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_SAPLING, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_SAPLING).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_SAPLING)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_SAPLING, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SAPLING).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_SAPLING)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_PROPAGULE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_PROPAGULE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_PROPAGULE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SAND, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SAND).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SAND)))
-                .build()
-        ));
-        registerable.register(ItemKeys.REDSTONE_ORE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.REDSTONE_ORE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.REDSTONE_ORE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.ANCIENT_DEBRIS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ANCIENT_DEBRIS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ANCIENT_DEBRIS)))
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .build()
-        ));
-        registerable.register(ItemKeys.COAL_BLOCK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COAL_BLOCK).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.COAL_BLOCK)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.COAL_BLOCK_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHERITE_BLOCK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHERITE_BLOCK).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.NETHERITE_BLOCK)))
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_ROOTS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_ROOTS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_ROOTS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_STEM, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_STEM).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_STEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_STEM, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_STEM).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_STEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_BLOCK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_BLOCK).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_BLOCK)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_OAK_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_OAK_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_OAK_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_SPRUCE_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_SPRUCE_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_SPRUCE_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_BIRCH_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_BIRCH_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_BIRCH_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_JUNGLE_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_JUNGLE_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_JUNGLE_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_ACACIA_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_ACACIA_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_ACACIA_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_CHERRY_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_CHERRY_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_CHERRY_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_DARK_OAK_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_DARK_OAK_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_DARK_OAK_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_MANGROVE_LOG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_MANGROVE_LOG).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_MANGROVE_LOG)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_CRIMSON_STEM, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_CRIMSON_STEM).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_CRIMSON_STEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_WARPED_STEM, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_WARPED_STEM).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_WARPED_STEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_OAK_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_OAK_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_OAK_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_SPRUCE_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_SPRUCE_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_SPRUCE_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_BIRCH_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_BIRCH_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_BIRCH_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_JUNGLE_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_JUNGLE_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_JUNGLE_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_ACACIA_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_ACACIA_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_ACACIA_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_CHERRY_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_CHERRY_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_CHERRY_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_DARK_OAK_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_DARK_OAK_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_DARK_OAK_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_MANGROVE_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_MANGROVE_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_MANGROVE_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_CRIMSON_HYPHAE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_CRIMSON_HYPHAE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_CRIMSON_HYPHAE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_WARPED_HYPHAE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_WARPED_HYPHAE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_WARPED_HYPHAE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIPPED_BAMBOO_BLOCK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_BAMBOO_BLOCK).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.STRIPPED_BAMBOO_BLOCK)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_WOOD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_WOOD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_WOOD)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_HYPHAE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_HYPHAE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_HYPHAE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_HYPHAE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_HYPHAE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_HYPHAE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_LEAVES, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_LEAVES).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_LEAVES)))
-                .with(CompostableItemComponent.of(0.3f))
-                .with(TintedItemComponent.of(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_LEAVES, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_LEAVES).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_LEAVES)))
-                .with(CompostableItemComponent.of(0.3f))
-                .with(TintedItemComponent.of(new ConstantItemColor(FoliageColors.getSpruceColor())))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_LEAVES, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_LEAVES).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_LEAVES)))
-                .with(CompostableItemComponent.of(0.3f))
-                .with(TintedItemComponent.of(new ConstantItemColor(FoliageColors.getBirchColor())))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_LEAVES, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_LEAVES).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_LEAVES)))
-                .with(CompostableItemComponent.of(0.3f))
-                .with(TintedItemComponent.of(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_LEAVES, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_LEAVES).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_LEAVES)))
-                .with(CompostableItemComponent.of(0.3f))
-                .with(TintedItemComponent.of(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_LEAVES, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_LEAVES).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_LEAVES)))
-                .with(CompostableItemComponent.of(0.3f))
-                .with(TintedItemComponent.of(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_LEAVES, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_LEAVES).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_LEAVES)))
-                .with(CompostableItemComponent.of(0.3f))
-                .with(TintedItemComponent.of(new ConstantItemColor(FoliageColors.getMangroveColor())))
-                .build()
-        ));
-        registerable.register(ItemKeys.SHORT_GRASS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SHORT_GRASS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SHORT_GRASS)))
-                .with(CompostableItemComponent.of(0.3f))
-                .with(TintedItemComponent.of(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
-                .build()
-        ));
-        registerable.register(ItemKeys.FERN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FERN).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.FERN)))
-                .with(CompostableItemComponent.of(0.65f))
-                .with(TintedItemComponent.of(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
-                .build()
-        ));
-        registerable.register(ItemKeys.AZALEA, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AZALEA).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.AZALEA)))
-                .with(CompostableItemComponent.of(0.65f))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.FLOWERING_AZALEA, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FLOWERING_AZALEA).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.FLOWERING_AZALEA)))
-                .with(CompostableItemComponent.of(0.85f))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DEAD_BUSH, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_BUSH).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DEAD_BUSH)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.WHITE_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WHITE_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ORANGE_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ORANGE_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MAGENTA_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MAGENTA_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIGHT_BLUE_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIGHT_BLUE_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.YELLOW_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.YELLOW_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIME_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIME_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.PINK_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PINK_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.GRAY_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GRAY_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIGHT_GRAY_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIGHT_GRAY_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CYAN_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CYAN_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.PURPLE_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PURPLE_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLUE_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BLUE_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BROWN_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BROWN_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.GREEN_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GREEN_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.RED_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.RED_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLACK_WOOL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_WOOL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BLACK_WOOL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.POPPY, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POPPY).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.POPPY)))
-                .with(CompostableItemComponent.of(0.65f))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_FUNGUS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_FUNGUS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_FUNGUS)))
-                .with(CompostableItemComponent.of(0.65f))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_FUNGUS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_FUNGUS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_FUNGUS)))
-                .with(CompostableItemComponent.of(0.65f))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_ROOTS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_ROOTS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_ROOTS)))
-                .with(CompostableItemComponent.of(0.65f))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_ROOTS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_ROOTS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_ROOTS)))
-                .with(CompostableItemComponent.of(0.65f))
-                .build()
-        ));
-        registerable.register(ItemKeys.HANGING_ROOTS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HANGING_ROOTS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.HANGING_ROOTS)))
-                .with(CompostableItemComponent.of(0.3f))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BAMBOO_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_SLAB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_SLAB).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_SLAB)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_SLAB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_SLAB).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_SLAB)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_SLAB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_SLAB).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_SLAB)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_SLAB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_SLAB).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_SLAB)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_SLAB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_SLAB).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_SLAB)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_SLAB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_SLAB).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_SLAB)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_SLAB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SLAB).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_SLAB)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_SLAB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_SLAB).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_SLAB)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_SLAB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_SLAB).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_SLAB)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_MOSAIC_SLAB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_MOSAIC_SLAB).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC_SLAB)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_SLAB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_SLAB).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_SLAB)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_SLAB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_SLAB).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_SLAB)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BRICKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BRICKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BRICKS)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BOOKSHELF, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BOOKSHELF).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BOOKSHELF)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHISELED_BOOKSHELF, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHISELED_BOOKSHELF).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHISELED_BOOKSHELF)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DECORATED_POT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DECORATED_POT).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DECORATED_POT)))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHEST, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHEST).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHEST)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRAFTING_TABLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRAFTING_TABLE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRAFTING_TABLE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.LADDER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LADDER).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LADDER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SNOW, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SNOW).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SNOW)))
-                .build()
-        ));
-        registerable.register(ItemKeys.CACTUS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CACTUS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CACTUS)))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUKEBOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUKEBOX).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUKEBOX)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_FENCE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_FENCE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_FENCE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_FENCE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_FENCE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_FENCE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_FENCE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_FENCE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_FENCE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_FENCE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_FENCE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_FENCE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_FENCE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_FENCE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_FENCE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_FENCE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_FENCE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_FENCE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_FENCE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_FENCE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_FENCE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_FENCE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_FENCE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_FENCE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_FENCE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_FENCE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_FENCE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_FENCE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_FENCE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_FENCE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_FENCE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_FENCE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_FENCE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.CARVED_PUMPKIN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CARVED_PUMPKIN).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CARVED_PUMPKIN)))
-                .with(CompostableItemComponent.of(0.65f))
-                .build()
-        ));
-        registerable.register(ItemKeys.GLOWSTONE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GLOWSTONE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GLOWSTONE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHISELED_STONE_BRICKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHISELED_STONE_BRICKS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHISELED_STONE_BRICKS)))
-                .build()
-        ));
-        registerable.register(ItemKeys.VINE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.VINE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.VINE)))
-                .with(CompostableItemComponent.of(0.5f))
-                .with(TintedItemComponent.of(new FoliageItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
-                .build()
-        ));
-        registerable.register(ItemKeys.GLOW_LICHEN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GLOW_LICHEN).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GLOW_LICHEN)))
-                .with(CompostableItemComponent.of(0.5f))
-                .build()
-        ));
-        registerable.register(ItemKeys.LILY_PAD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LILY_PAD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LILY_PAD)))
-                .with(CanPlaceOnFluidsItemComponent.of(RaycastContext.FluidHandling.SOURCE_ONLY, false, Direction.UP.getVector()))
-                .with(CompostableItemComponent.of(0.65f))
-                .with(TintedItemComponent.of(new ConstantItemColor(0x71c35c)))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_STAIRS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_STAIRS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_STAIRS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_STAIRS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_STAIRS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_STAIRS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_STAIRS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_STAIRS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_STAIRS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_STAIRS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_STAIRS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_STAIRS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_STAIRS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_STAIRS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_STAIRS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_STAIRS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_STAIRS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_STAIRS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_STAIRS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_STAIRS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_STAIRS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_STAIRS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_STAIRS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_STAIRS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_STAIRS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_STAIRS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_STAIRS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_MOSAIC_STAIRS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_MOSAIC_STAIRS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC_STAIRS)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_STAIRS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_STAIRS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_STAIRS)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_STAIRS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_STAIRS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_STAIRS)))
-                .build()
-        ));
-        registerable.register(ItemKeys.COMMAND_BLOCK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COMMAND_BLOCK).rarity(Rarity.EPIC).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.operator(blocks.getOrThrow(BlockKeys.COMMAND_BLOCK)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BEACON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BEACON).rarity(Rarity.RARE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BEACON)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BARRIER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARRIER).rarity(Rarity.EPIC).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BARRIER)))
-                .build()
-        ));
-        registerable.register(ItemKeys.HAY_BLOCK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HAY_BLOCK).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.HAY_BLOCK)))
-                .with(CompostableItemComponent.of(0.85f))
-                .build()
-        ));
-        registerable.register(ItemKeys.WHITE_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WHITE_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ORANGE_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ORANGE_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MAGENTA_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MAGENTA_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIGHT_BLUE_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIGHT_BLUE_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.YELLOW_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.YELLOW_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIME_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIME_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.PINK_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PINK_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.GRAY_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GRAY_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIGHT_GRAY_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIGHT_GRAY_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CYAN_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CYAN_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.PURPLE_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PURPLE_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLUE_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BLUE_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BROWN_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BROWN_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.GREEN_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GREEN_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.RED_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.RED_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLACK_CARPET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_CARPET).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BLACK_CARPET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.TALL_GRASS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TALL_GRASS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.TALL_GRASS)))
-                .with(CompostableItemComponent.of(0.5f))
-                .with(TintedItemComponent.of(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
-                .build()
-        ));
-        registerable.register(ItemKeys.LARGE_FERN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LARGE_FERN).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LARGE_FERN)))
-                .with(CompostableItemComponent.of(0.65f))
-                .with(TintedItemComponent.of(new GrassItemColor(biomes.getOrThrow(BiomeKeys.PLAINS))))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHER_WART_BLOCK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHER_WART_BLOCK).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.NETHER_WART_BLOCK)))
-                .with(CompostableItemComponent.of(0.85f))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_WART_BLOCK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_WART_BLOCK).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_WART_BLOCK)))
-                .with(CompostableItemComponent.of(0.85f))
-                .build()
-        ));
-        registerable.register(ItemKeys.SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WHITE_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WHITE_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.ORANGE_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ORANGE_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.MAGENTA_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MAGENTA_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIGHT_BLUE_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIGHT_BLUE_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.YELLOW_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.YELLOW_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIME_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIME_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.PINK_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PINK_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.GRAY_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GRAY_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIGHT_GRAY_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIGHT_GRAY_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.CYAN_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CYAN_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.PURPLE_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PURPLE_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLUE_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BLUE_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BROWN_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BROWN_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.GREEN_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GREEN_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.RED_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.RED_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLACK_SHULKER_BOX, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_SHULKER_BOX).build(), 1),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BLACK_SHULKER_BOX)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
-                .build()
-        ));
-        registerable.register(ItemKeys.SCAFFOLDING, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SCAFFOLDING).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SCAFFOLDING)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SCAFFOLDING_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.REDSTONE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.REDSTONE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.REDSTONE_WIRE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.LECTERN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LECTERN).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LECTERN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DAYLIGHT_DETECTOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DAYLIGHT_DETECTOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DAYLIGHT_DETECTOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.TRAPPED_CHEST, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TRAPPED_CHEST).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.TRAPPED_CHEST)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.NOTE_BLOCK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NOTE_BLOCK).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.NOTE_BLOCK)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_BUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_BUTTON).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_BUTTON)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_BUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_BUTTON).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_BUTTON)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_BUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_BUTTON).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_BUTTON)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_BUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_BUTTON).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_BUTTON)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_BUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_BUTTON).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_BUTTON)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_BUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_BUTTON).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_BUTTON)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_BUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_BUTTON).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_BUTTON)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_BUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_BUTTON).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_BUTTON)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_BUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_BUTTON).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_BUTTON)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_BUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_BUTTON).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_BUTTON)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_BUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_BUTTON).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_BUTTON)))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_PRESSURE_PLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_PRESSURE_PLATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_PRESSURE_PLATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_PRESSURE_PLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_PRESSURE_PLATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_PRESSURE_PLATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_PRESSURE_PLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_PRESSURE_PLATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_PRESSURE_PLATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_PRESSURE_PLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_PRESSURE_PLATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_PRESSURE_PLATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_PRESSURE_PLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_PRESSURE_PLATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_PRESSURE_PLATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_PRESSURE_PLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_PRESSURE_PLATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_PRESSURE_PLATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_PRESSURE_PLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_PRESSURE_PLATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_PRESSURE_PLATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_PRESSURE_PLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_PRESSURE_PLATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_PRESSURE_PLATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_PRESSURE_PLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_PRESSURE_PLATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_PRESSURE_PLATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_PRESSURE_PLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_PRESSURE_PLATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_PRESSURE_PLATE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_PRESSURE_PLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_PRESSURE_PLATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_PRESSURE_PLATE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_DOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_DOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_DOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_DOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_DOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_DOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_DOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_DOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_DOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_DOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_DOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_DOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_DOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_DOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_DOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_DOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_DOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_DOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_DOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_DOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_DOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_DOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_DOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_DOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_DOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_DOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_DOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_DOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_DOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_DOOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_DOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_DOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_DOOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_TRAPDOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_TRAPDOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_TRAPDOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_TRAPDOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_TRAPDOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_TRAPDOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_TRAPDOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_TRAPDOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_TRAPDOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_TRAPDOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_TRAPDOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_TRAPDOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_TRAPDOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_TRAPDOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_TRAPDOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_TRAPDOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_TRAPDOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_TRAPDOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_TRAPDOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_TRAPDOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_TRAPDOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_TRAPDOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_TRAPDOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_TRAPDOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_TRAPDOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_TRAPDOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_TRAPDOOR)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_TRAPDOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_TRAPDOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_TRAPDOOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_TRAPDOOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_TRAPDOOR).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_TRAPDOOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_FENCE_GATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_FENCE_GATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_FENCE_GATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_FENCE_GATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_FENCE_GATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_FENCE_GATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_FENCE_GATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_FENCE_GATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_FENCE_GATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_FENCE_GATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_FENCE_GATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_FENCE_GATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_FENCE_GATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_FENCE_GATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_FENCE_GATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_FENCE_GATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_FENCE_GATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_FENCE_GATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_FENCE_GATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_FENCE_GATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_FENCE_GATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_FENCE_GATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_FENCE_GATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_FENCE_GATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_FENCE_GATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_FENCE_GATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_FENCE_GATE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_FENCE_GATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_FENCE_GATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_FENCE_GATE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_FENCE_GATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_FENCE_GATE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_FENCE_GATE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.SADDLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SADDLE).build(), 1),
-            ItemComponentSet.builder()
-                .with(SaddleItemComponent.INSTANCE)
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.SADDLE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.MINECART, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MINECART).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.MINECART, MinecartEntity::new), dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHEST_MINECART, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHEST_MINECART).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.CHEST_MINECART, ChestMinecartEntity::new), dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.FURNACE_MINECART, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FURNACE_MINECART).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.FURNACE_MINECART, FurnaceMinecartEntity::new), dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.TNT_MINECART, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TNT_MINECART).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.TNT_MINECART, TntMinecartEntity::new), dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.HOPPER_MINECART, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HOPPER_MINECART).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.HOPPER_MINECART, HopperMinecartEntity::new), dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.CARROT_ON_A_STICK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CARROT_ON_A_STICK).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.of(25))
-                .with(ForgeableItemComponent.of(EnchantmentTags.STEERING_FORGING))
-                .with(SteeringItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.PIG), 7))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.BREAK_ITEM, ActionEntry.of(new ExchangeItemAction(items.getOrThrow(ItemKeys.FISHING_ROD), false)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_FUNGUS_ON_A_STICK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WARPED_FUNGUS_ON_A_STICK).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.of(100))
-                .with(ForgeableItemComponent.of(EnchantmentTags.STEERING_FORGING))
-                .with(SteeringItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.STRIDER), 1))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.BREAK_ITEM, ActionEntry.of(new ExchangeItemAction(items.getOrThrow(ItemKeys.FISHING_ROD), false)))
-                .build()
-        ));
-        registerable.register(ItemKeys.ELYTRA, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ELYTRA).rarity(Rarity.UNCOMMON).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.of(432, true))
-                .with(EquipmentItemComponent.of(EquipmentSlot.CHEST, true, soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_ELYTRA)))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_ELYTRA))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.OAK_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.OAK), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_CHEST_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.OAK_CHEST_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.OAK), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPRUCE_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.SPRUCE), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_CHEST_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPRUCE_CHEST_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.SPRUCE), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BIRCH_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.BIRCH), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_CHEST_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BIRCH_CHEST_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.BIRCH), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.JUNGLE_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.JUNGLE), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_CHEST_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.JUNGLE_CHEST_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.JUNGLE), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ACACIA_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.ACACIA), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_CHEST_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ACACIA_CHEST_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.ACACIA), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHERRY_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.CHERRY), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_CHEST_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHERRY_CHEST_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.CHERRY), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DARK_OAK_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.DARK_OAK), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_CHEST_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DARK_OAK_CHEST_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.DARK_OAK), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MANGROVE_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.MANGROVE), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_CHEST_BOAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MANGROVE_CHEST_BOAT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.MANGROVE), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_RAFT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAMBOO_RAFT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.BAMBOO), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_CHEST_RAFT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAMBOO_CHEST_RAFT).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.BAMBOO), dispenseBehaviors))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.TURTLE_HELMET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TURTLE_HELMET).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(275, EquipmentSlot.HEAD, armorMaterials.getOrThrow(ArmorMaterialKeys.TURTLE), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_TURTLE)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.TURTLE, EnchantmentTags.HELMET_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_TURTLE_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.TURTLE_SCUTE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TURTLE_SCUTE).build())
-        ));
-        registerable.register(ItemKeys.FLINT_AND_STEEL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLINT_AND_STEEL).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.of(64))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.USE_ON_BLOCK)))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                    PassingSequenceHandler.builder()
-                        .add(actions.getOrThrow(Actions.LIGHT_BLOCK))
-                        .add(DamageItemAction.of(1))
-                        .add(PlaySoundAction.builder(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.FLINT_AND_STEEL_USE), SoundCategory.BLOCKS)
-                            .pitch(0.8f, 1.2f)
-                            .build())
-                ))
-                .build()
-        ));
-        registerable.register(ItemKeys.APPLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.APPLE).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.APPLE))
-                .with(CompostableItemComponent.of(0.65f))
-                .build()
-        ));
-        registerable.register(ItemKeys.BOW, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOW).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.of(384))
-                .with(ShooterItemComponent.of(ItematicItemTags.BOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, BowItem.RANGE, false))
-                .with(UseDurationItemComponent.of(72000))
-                .with(UseAnimationItemComponent.of(UseAction.BOW))
-                .with(EnchantableItemComponent.enchants(1, EnchantmentTags.BOW_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.BOW_FORGING))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ARROW, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARROW).build()),
-            ItemComponentSet.builder()
-                .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.COAL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COAL).build()),
-            ItemComponentSet.builder()
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.COAL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHARCOAL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHARCOAL).build()),
-            ItemComponentSet.builder()
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.COAL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DIAMOND, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND).build())
-        ));
-        registerable.register(ItemKeys.EMERALD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EMERALD).build())
-        ));
-        registerable.register(ItemKeys.LAPIS_LAZULI, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LAPIS_LAZULI).build())
-        ));
-        registerable.register(ItemKeys.QUARTZ, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.QUARTZ).build())
-        ));
-        registerable.register(ItemKeys.AMETHYST_SHARD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.AMETHYST_SHARD).build())
-        ));
-        registerable.register(ItemKeys.RAW_IRON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAW_IRON).build())
-        ));
-        registerable.register(ItemKeys.IRON_INGOT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_INGOT).build())
-        ));
-        registerable.register(ItemKeys.RAW_COPPER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAW_COPPER).build())
-        ));
-        registerable.register(ItemKeys.COPPER_INGOT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COPPER_INGOT).build())
-        ));
-        registerable.register(ItemKeys.RAW_GOLD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAW_GOLD).build())
-        ));
-        registerable.register(ItemKeys.GOLD_INGOT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLD_INGOT).build())
-        ));
-        registerable.register(ItemKeys.NETHERITE_INGOT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_INGOT).build()),
-            ItemComponentSet.builder()
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHERITE_SCRAP, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SCRAP).build()),
-            ItemComponentSet.builder()
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .build()
-        ));
-        registerable.register(ItemKeys.WOODEN_SWORD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_SWORD).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.sword(ToolMaterials.WOOD,ItematicItemTags.REPAIRS_WOODEN_TOOL))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.WOODEN_SHOVEL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_SHOVEL).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.shovel(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                .build()
-        ));
-        registerable.register(ItemKeys.WOODEN_PICKAXE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_PICKAXE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.pickaxe(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.WOODEN_AXE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_AXE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.axe(ToolMaterials.WOOD, 6.0d, -3.2d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.WOODEN_HOE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_HOE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.hoe(ToolMaterials.WOOD, 0.0d, -3.0d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                .build()
-        ));
-        registerable.register(ItemKeys.STONE_SWORD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_SWORD).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.sword(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
-                .build()
-        ));
-        registerable.register(ItemKeys.STONE_SHOVEL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_SHOVEL).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.shovel(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                .build()
-        ));
-        registerable.register(ItemKeys.STONE_PICKAXE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_PICKAXE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.pickaxe(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
-                .build()
-        ));
-        registerable.register(ItemKeys.STONE_AXE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_AXE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.axe(ToolMaterials.STONE, 7.0d, -3.2d, ItematicItemTags.REPAIRS_STONE_TOOL))
-                .build()
-        ));
-        registerable.register(ItemKeys.STONE_HOE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_HOE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.hoe(ToolMaterials.STONE, 1.0d, -2.0d, ItematicItemTags.REPAIRS_STONE_TOOL))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOLDEN_SWORD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_SWORD).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.sword(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOLDEN_SHOVEL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_SHOVEL).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.shovel(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOLDEN_PICKAXE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_PICKAXE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.pickaxe(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOLDEN_AXE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_AXE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.axe(ToolMaterials.GOLD, 6.0d, -3.0d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOLDEN_HOE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HOE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.hoe(ToolMaterials.GOLD, 0.0d, -3.0d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                .build()
-        ));
-        registerable.register(ItemKeys.IRON_SWORD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_SWORD).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.sword(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
-                .build()
-        ));
-        registerable.register(ItemKeys.IRON_SHOVEL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_SHOVEL).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.shovel(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                .build()
-        ));
-        registerable.register(ItemKeys.IRON_PICKAXE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_PICKAXE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.pickaxe(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
-                .build()
-        ));
-        registerable.register(ItemKeys.IRON_AXE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_AXE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.axe(ToolMaterials.IRON, 6.0d, -3.1d, ItematicItemTags.REPAIRS_IRON_TOOL))
-                .build()
-        ));
-        registerable.register(ItemKeys.IRON_HOE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HOE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.hoe(ToolMaterials.IRON, 2.0d, -1.0d, ItematicItemTags.REPAIRS_IRON_TOOL))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                .build()
-        ));
-        registerable.register(ItemKeys.DIAMOND_SWORD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_SWORD).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.sword(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
-                .build()
-        ));
-        registerable.register(ItemKeys.DIAMOND_SHOVEL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_SHOVEL).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.shovel(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                .build()
-        ));
-        registerable.register(ItemKeys.DIAMOND_PICKAXE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_PICKAXE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.pickaxe(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
-                .build()
-        ));
-        registerable.register(ItemKeys.DIAMOND_AXE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_AXE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.axe(ToolMaterials.DIAMOND, 5.0d, -3.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
-                .build()
-        ));
-        registerable.register(ItemKeys.DIAMOND_HOE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HOE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.hoe(ToolMaterials.DIAMOND, 3.0d, 0.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHERITE_SWORD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SWORD).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.sword(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHERITE_SHOVEL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SHOVEL).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.shovel(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHERITE_PICKAXE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_PICKAXE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.pickaxe(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHERITE_AXE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_AXE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.axe(ToolMaterials.NETHERITE, 5.0d, -3.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHERITE_HOE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HOE).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.hoe(ToolMaterials.NETHERITE, 4.0d, 0.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                .build()
-        ));
-        registerable.register(ItemKeys.STICK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STICK).build()),
-            ItemComponentSet.builder()
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SMALL_WOODEN_ITEM_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BOWL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOWL).build()),
-            ItemComponentSet.builder()
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SMALL_WOODEN_ITEM_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSHROOM_STEW, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSHROOM_STEW).build(), 1),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.MUSHROOM_STEW, items.getOrThrow(ItemKeys.BOWL)))
-                .build()
-        ));
-        registerable.register(ItemKeys.FEATHER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FEATHER).build()),
-            ItemComponentSet.builder()
-                .with(FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.BURST))
-                .build()
-        ));
-        registerable.register(ItemKeys.GUNPOWDER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GUNPOWDER).build())
-        ));
-        registerable.register(ItemKeys.WHEAT_SEEDS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WHEAT_SEEDS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WHEAT)))
-                .with(CompostableItemComponent.of(0.3f))
-                .build()
-        ));
-        registerable.register(ItemKeys.WHEAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WHEAT).build())
-        ));
-        registerable.register(ItemKeys.BREAD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BREAD).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.BREAD))
-                .with(CompostableItemComponent.of(0.85f))
-                .build()
-        ));
-        registerable.register(ItemKeys.LEATHER_HELMET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_HELMET).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 5, armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.HELMET_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .with(DyeableItemComponent.of())
-                .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
-                .build()
-        ));
-        registerable.register(ItemKeys.LEATHER_CHESTPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_CHESTPLATE).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 5, armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.CHESTPLATE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .with(DyeableItemComponent.of())
-                .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
-                .build()
-        ));
-        registerable.register(ItemKeys.LEATHER_LEGGINGS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_LEGGINGS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 5, armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.LEGGINGS_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .with(DyeableItemComponent.of())
-                .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
-                .build()
-        ));
-        registerable.register(ItemKeys.LEATHER_BOOTS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_BOOTS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 5, armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.BOOTS_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .with(DyeableItemComponent.of())
-                .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHAINMAIL_HELMET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_HELMET).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 15, armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.HELMET_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHAINMAIL_CHESTPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_CHESTPLATE).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 15, armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.CHESTPLATE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHAINMAIL_LEGGINGS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_LEGGINGS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 15, armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.LEGGINGS_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHAINMAIL_BOOTS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_BOOTS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 15, armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.BOOTS_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.IRON_HELMET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 15, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.HELMET_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.IRON_CHESTPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_CHESTPLATE).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 15, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.CHESTPLATE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.IRON_LEGGINGS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_LEGGINGS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 15, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.LEGGINGS_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.IRON_BOOTS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_BOOTS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 15, armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.BOOTS_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.DIAMOND_HELMET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HELMET).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 33, armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.HELMET_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.DIAMOND_CHESTPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_CHESTPLATE).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 33, armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.CHESTPLATE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.DIAMOND_LEGGINGS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_LEGGINGS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 33, armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.LEGGINGS_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.DIAMOND_BOOTS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_BOOTS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 33, armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.BOOTS_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOLDEN_HELMET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HELMET).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 7, armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.HELMET_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOLDEN_CHESTPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_CHESTPLATE).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 7, armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.CHESTPLATE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOLDEN_LEGGINGS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_LEGGINGS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 7, armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.LEGGINGS_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOLDEN_BOOTS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_BOOTS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 7, armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.BOOTS_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHERITE_HELMET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HELMET).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 37, armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.HELMET_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHERITE_CHESTPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_CHESTPLATE).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 37, armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.CHESTPLATE_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHERITE_LEGGINGS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_LEGGINGS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 37, armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.LEGGINGS_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHERITE_BOOTS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_BOOTS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 37, armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.BOOTS_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.FLINT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLINT).build())
-        ));
-        registerable.register(ItemKeys.PORKCHOP, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PORKCHOP).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.PORKCHOP))
-                .build()
-        ));
-        registerable.register(ItemKeys.COOKED_PORKCHOP, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_PORKCHOP).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.COOKED_PORKCHOP))
-                .build()
-        ));
-        registerable.register(ItemKeys.PAINTING, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PAINTING).build()),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.of(DecorationEntityInitializer.createPainting(EntityType.PAINTING)))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOLDEN_APPLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_APPLE).rarity(Rarity.RARE).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.GOLDEN_APPLE))
-                .build()
-        ));
-        registerable.register(ItemKeys.ENCHANTED_GOLDEN_APPLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_GOLDEN_APPLE).rarity(Rarity.EPIC).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.ENCHANTED_GOLDEN_APPLE))
-                .with(GlintItemComponent.of(true))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_SIGN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_SIGN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.OAK_HANGING_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_HANGING_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.OAK_HANGING_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPRUCE_HANGING_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_HANGING_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SPRUCE_HANGING_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BIRCH_HANGING_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_HANGING_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BIRCH_HANGING_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.JUNGLE_HANGING_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_HANGING_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.JUNGLE_HANGING_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.ACACIA_HANGING_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_HANGING_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ACACIA_HANGING_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHERRY_HANGING_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_HANGING_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CHERRY_HANGING_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.DARK_OAK_HANGING_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_HANGING_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DARK_OAK_HANGING_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.MANGROVE_HANGING_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_HANGING_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MANGROVE_HANGING_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAMBOO_HANGING_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_HANGING_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BAMBOO_HANGING_SIGN)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CRIMSON_HANGING_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_HANGING_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CRIMSON_HANGING_SIGN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARPED_HANGING_SIGN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_HANGING_SIGN).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WARPED_HANGING_SIGN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BUCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUCKET).build(), 16),
-            ItemComponentSet.builder()
-                .with(BucketItemComponent.fluid(fluids.getOrThrow(FluidKeys.EMPTY)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WATER_BUCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build(), 1),
-            ItemComponentSet.builder()
-                .with(BucketItemComponent.fluid(fluids.getOrThrow(FluidKeys.WATER), soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
-                .build()
-        ));
-        registerable.register(ItemKeys.LAVA_BUCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LAVA_BUCKET).build(), 1),
-            ItemComponentSet.builder()
-                .with(BucketItemComponent.fluid(fluids.getOrThrow(FluidKeys.LAVA), soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_LAVA)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.LAVA_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.POWDER_SNOW_BUCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POWDER_SNOW_BUCKET).build(), 1),
-            ItemComponentSet.builder()
-                .with(BucketItemComponent.block(blocks.getOrThrow(BlockKeys.POWDER_SNOW), soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_POWDER_SNOW)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
-                .build()
-        ));
-        registerable.register(ItemKeys.SNOWBALL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNOWBALL).build(), 16),
-            ItemComponentSet.builder()
-                .with(ThrowableItemComponent.of(1.5f))
-                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.SNOWBALL)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.LEATHER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER).build())
-        ));
-        registerable.register(ItemKeys.MILK_BUCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MILK_BUCKET).build(), 1),
-            ItemComponentSet.builder()
-                .with(UseDurationItemComponent.of(MilkBucketItemAccessor.getMaxUseTime()))
-                .with(UseAnimationItemComponent.of(UseAction.DRINK))
-                .with(ConsumableItemComponent.of(items.getOrThrow(ItemKeys.BUCKET)))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(new ClearStatusEffectsAction(ActionContextParameter.THIS)))
-                .build()
-        ));
-        registerable.register(ItemKeys.PUFFERFISH_BUCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUFFERFISH_BUCKET).build(), 1),
-            ItemComponentSet.builder()
-                .with(BucketItemComponent.entity(fluids.getOrThrow(FluidKeys.WATER), entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
-                .build()
-        ));
-        registerable.register(ItemKeys.SALMON_BUCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SALMON_BUCKET).build(), 1),
-            ItemComponentSet.builder()
-                .with(BucketItemComponent.entity(fluids.getOrThrow(FluidKeys.WATER), entityTypes.getOrThrow(EntityTypeKeys.SALMON), soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
-                .build()
-        ));
-        registerable.register(ItemKeys.COD_BUCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COD_BUCKET).build(), 1),
-            ItemComponentSet.builder()
-                .with(BucketItemComponent.entity(fluids.getOrThrow(FluidKeys.WATER), entityTypes.getOrThrow(EntityTypeKeys.COD), soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
-                .build()
-        ));
-        registerable.register(ItemKeys.TROPICAL_FISH_BUCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH_BUCKET).build(), 1),
-            ItemComponentSet.builder()
-                .with(BucketItemComponent.entity(fluids.getOrThrow(FluidKeys.WATER), entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
-                .build()
-        ));
-        registerable.register(ItemKeys.AXOLOTL_BUCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.AXOLOTL_BUCKET).build(), 1),
-            ItemComponentSet.builder()
-                .with(BucketItemComponent.entity(fluids.getOrThrow(FluidKeys.WATER), entityTypes.getOrThrow(EntityTypeKeys.AXOLOTL), soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_AXOLOTL)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
-                .build()
-        ));
-        registerable.register(ItemKeys.TADPOLE_BUCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TADPOLE_BUCKET).build(), 1),
-            ItemComponentSet.builder()
-                .with(BucketItemComponent.entity(fluids.getOrThrow(FluidKeys.WATER), entityTypes.getOrThrow(EntityTypeKeys.TADPOLE), soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_TADPOLE)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BRICK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BRICK).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.decoratedPotSide())))
-                .build()
-        ));
-        registerable.register(ItemKeys.CLAY_BALL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CLAY_BALL).build())
-        ));
-        registerable.register(ItemKeys.DRIED_KELP_BLOCK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRIED_KELP_BLOCK).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.DRIED_KELP_BLOCK)))
-                .with(CompostableItemComponent.of(0.5f))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DRIED_KELP_BLOCK_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.PAPER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PAPER).build())
-        ));
-        registerable.register(ItemKeys.BOOK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOOK).build()),
-            ItemComponentSet.builder()
-                .with(EnchantableItemComponent.transforms(1, items.getOrThrow(ItemKeys.ENCHANTED_BOOK)))
-                .build()
-        ));
-        registerable.register(ItemKeys.SLIME_BALL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SLIME_BALL).build())
-        ));
-        registerable.register(ItemKeys.EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EGG).build(), 16),
-            ItemComponentSet.builder()
-                .with(ThrowableItemComponent.of(1.5f))
-                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.EGG)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.COMPASS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COMPASS).build()),
-            ItemComponentSet.builder()
-                .with(PointableItemComponent.of(pointers.getOrThrow(PointerKeys.SPAWN_LOCATION), Util.createTranslationKey("item", new Identifier("lodestone_compass"))))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                    ActionRequirements.of(
-                        ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                        LocationCheckLootCondition.builder(
-                            LocationPredicate.Builder.create()
-                                .block(BlockPredicate.Builder.create()
-                                    .blocks(Blocks.LODESTONE)))
-                            .build()
-                    ),
-                    PassingSequenceHandler.builder()
-                        .add(SetItemPointerLocationAction.of(ActionContextParameter.TARGET))
-                        .add(SwingHandAction.INSTANCE)
-                ))
-                .build()
-        ));
-        registerable.register(ItemKeys.RECOVERY_COMPASS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RECOVERY_COMPASS).build()),
-            ItemComponentSet.builder()
-                .with(PointableItemComponent.of(pointers.getOrThrow(PointerKeys.LAST_DEATH)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BUNDLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUNDLE).build(), 1),
-            ItemComponentSet.builder()
-                .with(ItemHolderItemComponent.of(BundleItem.MAX_STORAGE, soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT), soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE), soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
-                .build()
-        ));
-        registerable.register(ItemKeys.FISHING_ROD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FISHING_ROD).build(), 1),
-            ItemComponentSet.builder()
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CLOCK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CLOCK).build())
-        ));
-        registerable.register(ItemKeys.SPYGLASS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPYGLASS).build(), 1),
-            ItemComponentSet.builder()
-                .with(ZoomItemComponent.of(SpyglassItem.field_30922, soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
-                .with(UseDurationItemComponent.of(SpyglassItem.MAX_USE_TIME))
-                .with(UseAnimationItemComponent.of(UseAction.SPYGLASS))
-                .build()
-        ));
-        registerable.register(ItemKeys.GLOWSTONE_DUST, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOWSTONE_DUST).build())
-        ));
-        registerable.register(ItemKeys.COD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COD).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.COD))
-                .build()
-        ));
-        registerable.register(ItemKeys.SALMON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SALMON).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.SALMON))
-                .build()
-        ));
-        registerable.register(ItemKeys.TROPICAL_FISH, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.TROPICAL_FISH))
-                .build()
-        ));
-        registerable.register(ItemKeys.PUFFERFISH, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUFFERFISH).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.PUFFERFISH))
-                .build()
-        ));
-        registerable.register(ItemKeys.COOKED_COD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_COD).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.COOKED_COD))
-                .build()
-        ));
-        registerable.register(ItemKeys.COOKED_SALMON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_SALMON).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.COOKED_SALMON))
-                .build()
-        ));
-        registerable.register(ItemKeys.INK_SAC, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.INK_SAC).build()),
-            ItemComponentSet.EMPTY,
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(false))
-                .build()
-        ));
-        registerable.register(ItemKeys.GLOW_INK_SAC, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOW_INK_SAC).build()),
-            ItemComponentSet.EMPTY,
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(true))
-                .build()
-        ));
-        registerable.register(ItemKeys.WHITE_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WHITE_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.WHITE))
-                .build()
-        ));
-        registerable.register(ItemKeys.ORANGE_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ORANGE_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.ORANGE))
-                .build()
-        ));
-        registerable.register(ItemKeys.MAGENTA_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MAGENTA_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.MAGENTA))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIGHT_BLUE_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LIGHT_BLUE_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.LIGHT_BLUE))
-                .build()
-        ));
-        registerable.register(ItemKeys.YELLOW_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.YELLOW_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.YELLOW))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIME_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LIME_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.LIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.PINK_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PINK_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.PINK))
-                .build()
-        ));
-        registerable.register(ItemKeys.GRAY_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GRAY_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.GRAY))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIGHT_GRAY_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LIGHT_GRAY_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.LIGHT_GRAY))
-                .build()
-        ));
-        registerable.register(ItemKeys.CYAN_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CYAN_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.CYAN))
-                .build()
-        ));
-        registerable.register(ItemKeys.PURPLE_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PURPLE_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.PURPLE))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLUE_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLUE_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.BLUE))
-                .build()
-        ));
-        registerable.register(ItemKeys.BROWN_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BROWN_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.BROWN))
-                .build()
-        ));
-        registerable.register(ItemKeys.GREEN_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GREEN_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.GREEN))
-                .build()
-        ));
-        registerable.register(ItemKeys.RED_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RED_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.RED))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLACK_DYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLACK_DYE).build()),
-            ItemComponentSet.builder()
-                .with(DyeItemComponent.of(DyeColor.BLACK))
-                .build()
-        ));
-        registerable.register(ItemKeys.BONE_MEAL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BONE_MEAL).build()),
-            ItemComponentSet.builder()
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.FERTILIZE)))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(FertilizeAction.INSTANCE))
-                .build()
-        ));
-        registerable.register(ItemKeys.BONE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BONE).build())
-        ));
-        registerable.register(ItemKeys.SUGAR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SUGAR).build())
-        ));
-        registerable.register(ItemKeys.COOKIE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKIE).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.COOKIE))
-                .with(CompostableItemComponent.of(0.85f))
-                .build()
-        ));
-        registerable.register(ItemKeys.FILLED_MAP, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FILLED_MAP).build()),
-            ItemComponentSet.builder()
-                .with(MapHolderItemComponent.INSTANCE)
-                .with(TintedItemComponent.of(MapItemColor.INSTANCE))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                    PassingSequenceHandler.builder()
-                        .add(MarkBannerOnItemAction.of(ActionContextParameter.TARGET))
-                        .add(SwingHandAction.INSTANCE)
-                ))
-                .build()
-        ));
-        registerable.register(ItemKeys.SHEARS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHEARS).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.of(238))
-                .with(ToolItemComponent.builder(1)
-                    .miningSpeed(15.0f, ItematicBlockTags.SHEARS_SUPER_EFFICIENT, true)
-                    .miningSpeed(5.0f, ItematicBlockTags.SHEARS_SLIGHTLY_EFFICIENT, true)
-                    .miningSpeed(2.0f, ItematicBlockTags.SHEARS_EFFICIENT, true)
-                    .build())
-                .build()
-        ));
-        registerable.register(ItemKeys.MELON_SLICE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MELON_SLICE).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.MELON_SLICE))
-                .with(CompostableItemComponent.of(0.5f))
-                .build()
-        ));
-        registerable.register(ItemKeys.DRIED_KELP, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DRIED_KELP).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.DRIED_KELP))
-                .with(CompostableItemComponent.of(0.3f))
-                .build()
-        ));
-        registerable.register(ItemKeys.PUMPKIN_SEEDS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUMPKIN_SEEDS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PUMPKIN_STEM)))
-                .with(CompostableItemComponent.of(0.3f))
-                .build()
-        ));
-        registerable.register(ItemKeys.MELON_SEEDS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MELON_SEEDS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MELON_STEM)))
-                .with(CompostableItemComponent.of(0.3f))
-                .build()
-        ));
-        registerable.register(ItemKeys.BEEF, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEEF).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.BEEF))
-                .build()
-        ));
-        registerable.register(ItemKeys.COOKED_BEEF, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_BEEF).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.COOKED_BEEF))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHICKEN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHICKEN).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.CHICKEN))
-                .build()
-        ));
-        registerable.register(ItemKeys.COOKED_CHICKEN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_CHICKEN).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.COOKED_CHICKEN))
-                .build()
-        ));
-        registerable.register(ItemKeys.ROTTEN_FLESH, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ROTTEN_FLESH).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.ROTTEN_FLESH))
-                .build()
-        ));
-        registerable.register(ItemKeys.ENDER_PEARL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDER_PEARL).build(), 16),
-            ItemComponentSet.builder()
-                .with(ThrowableItemComponent.of(1.5f))
-                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.ENDER_PEARL)))
-                .with(CooldownItemComponent.of(20))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLAZE_ROD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLAZE_ROD).build()),
-            ItemComponentSet.builder()
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BLAZE_ROD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.GHAST_TEAR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GHAST_TEAR).build())
-        ));
-        registerable.register(ItemKeys.GOLD_NUGGET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLD_NUGGET).build()),
-            ItemComponentSet.builder()
-                .with(FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.STAR))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHER_WART, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_WART).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.NETHER_WART)))
-                .with(CompostableItemComponent.of(0.65f))
-                .build()
-        ));
-        registerable.register(ItemKeys.POTION, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POTION).build(), 1),
-            ItemComponentSet.builder()
-                .with(UseDurationItemComponent.of(PotionItemAccessor.getMaxUseTime()))
-                .with(PotionItemComponent.INSTANCE)
-                .with(PotionHolderItemComponent.INSTANCE)
-                .with(UseAnimationItemComponent.of(UseAction.DRINK))
-                .with(ConsumableItemComponent.of(items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
-                .with(TintedItemComponent.of(new PotionItemColor()))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.POTION)))
-                .build()
-        ));
-        registerable.register(ItemKeys.GLASS_BOTTLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLASS_BOTTLE).build()),
-            ItemComponentSet.builder()
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BOTTLE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPIDER_EYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPIDER_EYE).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.SPIDER_EYE))
-                .build()
-        ));
-        registerable.register(ItemKeys.FERMENTED_SPIDER_EYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FERMENTED_SPIDER_EYE).build())
-        ));
-        registerable.register(ItemKeys.BLAZE_POWDER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLAZE_POWDER).build())
-        ));
-        registerable.register(ItemKeys.MAGMA_CREAM, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MAGMA_CREAM).build())
-        ));
-        registerable.register(ItemKeys.BREWING_STAND, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BREWING_STAND).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BREWING_STAND)))
-                .build()
-        ));
-        registerable.register(ItemKeys.CAULDRON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CAULDRON).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CAULDRON)))
-                .build()
-        ));
-        registerable.register(ItemKeys.ENDER_EYE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDER_EYE).build()),
-            ItemComponentSet.builder()
-                .with(ThrowableItemComponent.of())
-                .with(ProjectileItemComponent.of(EyeOfEnderEntityInitializer.INSTANCE, 0))
-                .with(PreventUseWhenUsedOnTargetItemComponent.forBlock())
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                    ActionRequirements.of(
-                        ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                        LocationCheckLootCondition.builder(
-                            LocationPredicate.Builder.create()
-                                .block(BlockPredicate.Builder.create()
-                                    .blocks(Blocks.END_PORTAL_FRAME)
-                                    .state(StatePredicate.Builder.create()
-                                        .exactMatch(Properties.EYE, false))))
-                            .build()
-                    ),
-                    PassingSequenceHandler.builder()
-                        .add(ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
-                            .property(Properties.EYE, true)
-                            .pushEntitiesUpwards()
-                            .build())
-                        .add(DecrementItemAction.of(1))
-                        .add(SwingHandAction.INSTANCE)
-                        .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS))
-                        .add(DisplayParticleAction.builder(ActionContextParameter.TARGET, ParticleTypes.SMOKE)
-                            .count(16)
-                            .offset(Vec3dProvider.of(
-                                -0.1875d, 0.1875d,
-                                0.8125d, 0.8125d,
-                                -0.1875d, 0.1875d))
-                            .build())
-                        .addOptional(LightEndPortalAction.of(ActionContextParameter.TARGET))
-                ))
-                .add(ItemEvents.THROW_PROJECTILE, ActionEntry.of(
-                    PlaySoundAction.of(ActionContextParameter.THIS, soundEvents.getOrThrow(SoundEventKeys.ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL, 1.0f, 1.2f)
-                ))
-                .build()
-        ));
-        registerable.register(ItemKeys.GLISTERING_MELON_SLICE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLISTERING_MELON_SLICE).build())
-        ));
-        registerable.register(ItemKeys.ALLAY_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ALLAY_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.ALLAY), 0x00daff, 0x00adff, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.AXOLOTL_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.AXOLOTL_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.AXOLOTL), 0xfbc1e3, 0xa62d74, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAT_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAT_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.BAT), 0x4c3e30, 0x0f0f0f, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.BEE_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEE_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.BEE), 0xedc343, 0x43241b, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLAZE_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLAZE_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.BLAZE), 0xf6b201, 0xfff87e, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.CAT_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CAT_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.CAT), 0xefc88e, 0x957256, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.CAMEL_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CAMEL_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.CAMEL), 0xfcc369, 0xcb9337, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.CAVE_SPIDER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CAVE_SPIDER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.CAVE_SPIDER), 0x0c424e, 0xa80e0e, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHICKEN_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHICKEN_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.CHICKEN), 0xa1a1a1, 0xff0000, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.COD_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COD_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.COD), 0xc1a76a, 0xe5c48b, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.COW_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COW_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.COW), 0x443626, 0xa1a1a1, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.CREEPER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CREEPER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.CREEPER), 0x0da70b, 0x000000, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.DOLPHIN_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DOLPHIN_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.DOLPHIN), 0x223b4d, 0xf9f9f9, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.DONKEY_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DONKEY_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.DONKEY), 0x534539, 0x867566, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.DROWNED_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DROWNED_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.DROWNED), 0x8ff1d7, 0x799c65, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.ELDER_GUARDIAN_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ELDER_GUARDIAN_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.ELDER_GUARDIAN), 0xceccba, 0x747693, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.ENDER_DRAGON_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDER_DRAGON_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.ENDER_DRAGON), 0x1c1c1c, 0xe079fa, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.ENDERMAN_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDERMAN_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.ENDERMAN), 0x161616, 0x000000, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.ENDERMITE_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDERMITE_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.ENDERMITE), 0x161616, 0x6e6e6e, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.EVOKER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EVOKER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.EVOKER), 0x959b9b, 0x1e1c1a, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.FOX_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FOX_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.FOX), 0xd5b69f, 0xcc6920, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.FROG_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FROG_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.FROG), 0xd07444, 0xffc77c, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.GHAST_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GHAST_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.GHAST), 0xf9f9f9, 0xbcbcbc, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.GLOW_SQUID_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOW_SQUID_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.GLOW_SQUID), 0x095656, 0x85f1bc, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOAT_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOAT_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.GOAT), 0xa5947c, 0x55493e, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.GUARDIAN_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GUARDIAN_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.GUARDIAN), 0x5a8272, 0xf17d30, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.HOGLIN_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HOGLIN_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.HOGLIN), 0xc66e55, 0x5f6464, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.HORSE_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HORSE_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.HORSE), 0xc09e7d, 0xeee500, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.HUSK_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HUSK_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.HUSK), 0x797061, 0xe6cc94, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.IRON_GOLEM_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_GOLEM_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.IRON_GOLEM), 0xdbcdc2, 0x74a332, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.LLAMA_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LLAMA_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.LLAMA), 0xc09e7d, 0x995f40, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.MAGMA_CUBE_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MAGMA_CUBE_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.MAGMA_CUBE), 0x340000, 0xfcfc00, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.MOOSHROOM_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MOOSHROOM_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.MOOSHROOM), 0xa00f10, 0xb7b7b7, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.MULE_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MULE_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.MULE), 0x1b0200, 0x51331d, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.OCELOT_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.OCELOT_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.OCELOT), 0xefde7d, 0x564434, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.PANDA_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PANDA_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.PANDA), 0xe7e7e7, 0x1b1b22, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.PARROT_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PARROT_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.PARROT), 0x0da70b, 0xff0000, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.PHANTOM_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PHANTOM_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.PHANTOM), 0x43518a, 0x88ff00, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.PIG_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIG_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.PIG), 0xf0a5a2, 0xdb635f, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.PIGLIN_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIGLIN_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.PIGLIN), 0x995f40, 0xf9f3a4, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.PIGLIN_BRUTE_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIGLIN_BRUTE_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.PIGLIN_BRUTE), 0x592a10, 0xf9f3a4, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.PILLAGER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PILLAGER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.PILLAGER), 0x532f36, 0x959b9b, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.POLAR_BEAR_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POLAR_BEAR_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.POLAR_BEAR), 0xeeeede, 0xd5d6cd, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.PUFFERFISH_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUFFERFISH_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), 0xf6b201, 0x37c3f2, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.RABBIT_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.RABBIT), 0x995f40, 0x734831, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.RAVAGER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAVAGER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.RAVAGER), 0x757470, 0x5b5049, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.SALMON_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SALMON_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.SALMON), 0xa00f10, 0x0e8474, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.SHEEP_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHEEP_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.SHEEP), 0xe7e7e7, 0xffb5b5, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.SHULKER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHULKER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.SHULKER), 0x946794, 0x4d3852, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.SILVERFISH_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SILVERFISH_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.SILVERFISH), 0x6e6e6e, 0x303030, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.SKELETON_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SKELETON_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.SKELETON), 0xc1c1c1, 0x494949, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.SKELETON_HORSE_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SKELETON_HORSE_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.SKELETON_HORSE), 0x68684f, 0xe5e5d8, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.SLIME_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SLIME_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.SLIME), 0x51a03e, 0x7ebf6e, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.SNIFFER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNIFFER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.SNIFFER), 0x871e09, 0x25ab70, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.SNOW_GOLEM_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNOW_GOLEM_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.SNOW_GOLEM), 0xd9f2f2, 0x81a4a4, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPIDER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPIDER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.SPIDER), 0x342d27, 0xa80e0e, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.SQUID_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SQUID_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.SQUID), 0x223b4d, 0x708899, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRAY_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STRAY_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.STRAY), 0x617677, 0xddeaea, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.STRIDER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STRIDER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.STRIDER), 0x9c3436, 0x4d494d, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.TADPOLE_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TADPOLE_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.TADPOLE), 0x6d533d, 0x160a00, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.TRADER_LLAMA_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TRADER_LLAMA_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.TRADER_LLAMA), 0xeaa430, 0x456296, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.TROPICAL_FISH_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), 0xef6915, 0xfff9ef, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.TURTLE_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TURTLE_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.TURTLE), 0xe7e7e7, 0x00afaf, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.VEX_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.VEX_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.VEX), 0x7a90a4, 0xe8edf1, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.VILLAGER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.VILLAGER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.VILLAGER), 0x563c33, 0xbd8b72, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.VINDICATOR_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.VINDICATOR_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.VINDICATOR), 0x959b9b, 0x275e61, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.WANDERING_TRADER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WANDERING_TRADER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.WANDERING_TRADER), 0x456296, 0xeaa430, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARDEN_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WARDEN_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.WARDEN), 0x0f4649, 0x39d6e0, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.WITCH_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WITCH_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.WITCH), 0x340000, 0x51a03e, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.WITHER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WITHER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.WITHER), 0x141414, 0x4d72a0, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.WITHER_SKELETON_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WITHER_SKELETON_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.WITHER_SKELETON), 0x141414, 0x474d4d, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.WOLF_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOLF_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.WOLF), 0xd7d3d3, 0xceaf96, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.ZOGLIN_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ZOGLIN_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.ZOGLIN), 0xc66e55, 0xe6e6e6, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.ZOMBIE_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ZOMBIE_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE), 0x00afaf, 0x799c65, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.ZOMBIE_HORSE_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ZOMBIE_HORSE_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_HORSE), 0x315234, 0x97c284, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.ZOMBIE_VILLAGER_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ZOMBIE_VILLAGER_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_VILLAGER), 0x563c33, 0x799c65, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG).build()),
-            ItemComponentSet.builder()
-                .with(SpawnEggItemComponent.from(entityTypes.getOrThrow(EntityTypeKeys.ZOMBIFIED_PIGLIN), 0xea9393, 0x4c7129, dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.EXPERIENCE_BOTTLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EXPERIENCE_BOTTLE).rarity(Rarity.UNCOMMON).build()),
-            ItemComponentSet.builder()
-                .with(ThrowableItemComponent.of(0.7f, -20.0f))
-                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.FIRE_CHARGE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIRE_CHARGE).build()),
-            ItemComponentSet.builder()
-                .with(FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.LARGE_BALL))
-                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.SMALL_FIREBALL)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                    PassingSequenceHandler.builder()
-                        .add(actions.getOrThrow(Actions.LIGHT_BLOCK))
-                        .add(DecrementItemAction.of(1))
-                        .add(PlaySoundAction.builder(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.FIRE_CHARGE_USE), SoundCategory.BLOCKS)
-                            .pitch(0.8f, 1.2f)
-                            .build())
-                ))
-                .build()
-        ));
-        registerable.register(ItemKeys.WRITABLE_BOOK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WRITABLE_BOOK).build(), 1),
-            ItemComponentSet.builder()
-                .with(WritableItemComponent.of(items.getOrThrow(ItemKeys.WRITTEN_BOOK)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WRITTEN_BOOK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WRITTEN_BOOK).build(), 16),
-            ItemComponentSet.builder()
-                .with(TextHolderItemComponent.INSTANCE)
-                .with(GlintItemComponent.of(true))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE, ActionEntry.of(OpenBookFromItemAction.INSTANCE))
-                .build()
-        ));
-        registerable.register(ItemKeys.ITEM_FRAME, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ITEM_FRAME).build()),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.of(DecorationEntityInitializer.createItemFrame(EntityType.ITEM_FRAME, ItemFrameEntity::new)))
-                .build()
-        ));
-        registerable.register(ItemKeys.GLOW_ITEM_FRAME, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOW_ITEM_FRAME).build()),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.of(DecorationEntityInitializer.createItemFrame(EntityType.GLOW_ITEM_FRAME, GlowItemFrameEntity::new)))
-                .build()
-        ));
-        registerable.register(ItemKeys.CARROT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CARROT).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.CARROT))
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CARROTS)))
-                .with(CompostableItemComponent.of(0.65f))
-                .build()
-        ));
-        registerable.register(ItemKeys.POTATO, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POTATO).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.POTATO))
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.POTATOES)))
-                .with(CompostableItemComponent.of(0.65f))
-                .build()
-        ));
-        registerable.register(ItemKeys.BAKED_POTATO, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAKED_POTATO).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.BAKED_POTATO))
-                .with(CompostableItemComponent.of(0.85f))
-                .build()
-        ));
-        registerable.register(ItemKeys.POISONOUS_POTATO, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POISONOUS_POTATO).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.POISONOUS_POTATO))
-                .build()
-        ));
-        registerable.register(ItemKeys.MAP, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MAP).build()),
-            ItemComponentSet.builder()
-                .with(MappableItemComponent.of(items.getOrThrow(ItemKeys.FILLED_MAP)))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOLDEN_CARROT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_CARROT).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.GOLDEN_CARROT))
-                .build()
-        ));
-        registerable.register(ItemKeys.SKELETON_SKULL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SKELETON_SKULL).rarity(Rarity.UNCOMMON).build()),
-            ItemComponentSet.builder()
-                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.SKELETON_SKULL), soundEvents))
-                .build()
-        ));
-        registerable.register(ItemKeys.WITHER_SKELETON_SKULL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WITHER_SKELETON_SKULL).rarity(Rarity.UNCOMMON).build()),
-            ItemComponentSet.builder()
-                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.WITHER_SKELETON_SKULL), soundEvents))
-                .build()
-        ));
-        registerable.register(ItemKeys.PLAYER_HEAD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PLAYER_HEAD).rarity(Rarity.UNCOMMON).build()),
-            ItemComponentSet.builder()
-                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.PLAYER_HEAD), soundEvents))
-                .build()
-        ));
-        registerable.register(ItemKeys.ZOMBIE_HEAD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ZOMBIE_HEAD).rarity(Rarity.UNCOMMON).build()),
-            ItemComponentSet.builder()
-                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.ZOMBIE_HEAD), soundEvents))
-                .build()
-        ));
-        registerable.register(ItemKeys.CREEPER_HEAD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CREEPER_HEAD).rarity(Rarity.UNCOMMON).build()),
-            ItemComponentSet.builder()
-                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.CREEPER_HEAD), soundEvents))
-                .build()
-        ));
-        registerable.register(ItemKeys.DRAGON_HEAD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRAGON_HEAD).rarity(Rarity.UNCOMMON).build()),
-            ItemComponentSet.builder()
-                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.DRAGON_HEAD), soundEvents))
-                .build()
-        ));
-        registerable.register(ItemKeys.PIGLIN_HEAD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PIGLIN_HEAD).rarity(Rarity.UNCOMMON).build()),
-            ItemComponentSet.builder()
-                .with(EquipmentItemComponent.skull(blocks.getOrThrow(BlockKeys.PIGLIN_HEAD), soundEvents))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHER_STAR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_STAR).rarity(Rarity.UNCOMMON).build()),
-            ItemComponentSet.builder()
-                .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_EXPLOSION))
-                .build()
-        ));
-        registerable.register(ItemKeys.PUMPKIN_PIE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUMPKIN_PIE).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.PUMPKIN_PIE))
-                .with(CompostableItemComponent.of(1.0f))
-                .build()
-        ));
-        registerable.register(ItemKeys.FIREWORK_ROCKET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIREWORK_ROCKET).build()),
-            ItemComponentSet.builder()
-                .with(FireworkItemComponent.INSTANCE)
-                .with(ProjectileItemComponent.of(FireworkRocketEntityInitializer.INSTANCE, 3, CrossbowItemAccessor.getFireworkRocketSpeed()))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.FIREWORK)))
-                .build()
-        ));
-        registerable.register(ItemKeys.FIREWORK_STAR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIREWORK_STAR).build()),
-            ItemComponentSet.builder()
-                .with(FireworkExplosionHolderItemComponent.INSTANCE)
-                .with(TintedItemComponent.of(new FireworkItemColor()))
-                .build()
-        ));
-        registerable.register(ItemKeys.ENCHANTED_BOOK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_BOOK).rarity(Rarity.UNCOMMON).build(), 1),
-            ItemComponentSet.builder()
-                .with(EnchantmentHolderItemComponent.of(items.getOrThrow(ItemKeys.BOOK)))
-                .with(GlintItemComponent.of(true))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHER_BRICK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_BRICK).build())
-        ));
-        registerable.register(ItemKeys.PRISMARINE_SHARD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PRISMARINE_SHARD).build())
-        ));
-        registerable.register(ItemKeys.PRISMARINE_CRYSTALS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PRISMARINE_CRYSTALS).build())
-        ));
-        registerable.register(ItemKeys.RABBIT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.RABBIT))
-                .build()
-        ));
-        registerable.register(ItemKeys.COOKED_RABBIT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_RABBIT).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.COOKED_RABBIT))
-                .build()
-        ));
-        registerable.register(ItemKeys.RABBIT_STEW, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_STEW).build(), 1),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.RABBIT_STEW, items.getOrThrow(ItemKeys.BOWL)))
-                .build()
-        ));
-        registerable.register(ItemKeys.RABBIT_FOOT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_FOOT).build())
-        ));
-        registerable.register(ItemKeys.RABBIT_HIDE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_HIDE).build())
-        ));
-        registerable.register(ItemKeys.ARMOR_STAND, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARMOR_STAND).build(), 16),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new ArmorStandEntityInitializer(), dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.IRON_HORSE_ARMOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HORSE_ARMOR).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.ofAnimal(armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON), AnimalArmorItem.Type.EQUESTRIAN))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOLDEN_HORSE_ARMOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HORSE_ARMOR).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.ofAnimal(armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD), AnimalArmorItem.Type.EQUESTRIAN))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.DIAMOND_HORSE_ARMOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HORSE_ARMOR).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.ofAnimal(armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND), AnimalArmorItem.Type.EQUESTRIAN))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
-                .build()
-        ));
-        registerable.register(ItemKeys.LEATHER_HORSE_ARMOR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_HORSE_ARMOR).build(), 1),
-            ItemComponentSet.builder()
-                .with(ArmorItemComponent.ofAnimal(armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER), AnimalArmorItem.Type.EQUESTRIAN))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.HORSE_ARMOR)))
-                .with(DyeableItemComponent.of())
-                .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
-                .build()
-        ));
-        registerable.register(ItemKeys.LEAD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEAD).build()),
-            ItemComponentSet.EMPTY,
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                    PassingSequenceHandler.builder()
-                        .add(AttachLeashedEntitiesOnBlockAction.INSTANCE)
-                        .add(SwingHandAction.INSTANCE)
-                ))
-                .build()
-        ));
-        registerable.register(ItemKeys.NAME_TAG, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NAME_TAG).build()),
-            ItemComponentSet.EMPTY,
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_ENTITY, ActionEntry.of(
-                    PassingSequenceHandler.builder()
-                        .add(SetEntityNameFromItemAction.of(ActionContextParameter.TARGET))
-                        .add(DecrementItemAction.of(1))
-                        .add(SwingHandAction.INSTANCE)
-                ))
-                .build()
-        ));
-        registerable.register(ItemKeys.COMMAND_BLOCK_MINECART, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COMMAND_BLOCK_MINECART).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.COMMAND_BLOCK_MINECART, CommandBlockMinecartEntity::new), dispenseBehaviors))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUTTON).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.MUTTON))
-                .build()
-        ));
-        registerable.register(ItemKeys.COOKED_MUTTON, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_MUTTON).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.COOKED_MUTTON))
-                .build()
-        ));
-        registerable.register(ItemKeys.WHITE_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.WHITE_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.WHITE))
-                .build()
-        ));
-        registerable.register(ItemKeys.ORANGE_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.ORANGE_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.ORANGE))
-                .build()
-        ));
-        registerable.register(ItemKeys.MAGENTA_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.MAGENTA_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.MAGENTA))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIGHT_BLUE_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIGHT_BLUE_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.LIGHT_BLUE))
-                .build()
-        ));
-        registerable.register(ItemKeys.YELLOW_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.YELLOW_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.YELLOW))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIME_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIME_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.LIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.PINK_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PINK_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.PINK))
-                .build()
-        ));
-        registerable.register(ItemKeys.GRAY_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GRAY_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.GRAY))
-                .build()
-        ));
-        registerable.register(ItemKeys.LIGHT_GRAY_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LIGHT_GRAY_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.LIGHT_GRAY))
-                .build()
-        ));
-        registerable.register(ItemKeys.CYAN_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CYAN_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.CYAN))
-                .build()
-        ));
-        registerable.register(ItemKeys.PURPLE_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PURPLE_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.PURPLE))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLUE_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BLUE_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.BLUE))
-                .build()
-        ));
-        registerable.register(ItemKeys.BROWN_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BROWN_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.BROWN))
-                .build()
-        ));
-        registerable.register(ItemKeys.GREEN_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.GREEN_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.GREEN))
-                .build()
-        ));
-        registerable.register(ItemKeys.RED_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.RED_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.RED))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLACK_BANNER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_BANNER).build(), 16),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BLACK_BANNER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .with(BannerPatternHolderItemComponent.of(DyeColor.BLACK))
-                .build()
-        ));
-        registerable.register(ItemKeys.END_CRYSTAL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.END_CRYSTAL).rarity(Rarity.RARE).build()),
-            ItemComponentSet.builder()
-                .with(EntityItemComponent.of(new EndCrystalEntityInitializer()))
-                .build()
-        ));
-        registerable.register(ItemKeys.CHORUS_FRUIT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHORUS_FRUIT).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.CHORUS_FRUIT))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(new TeleportAction(16, ActionContextParameter.THIS)))
-                .build()
-        ));
-        registerable.register(ItemKeys.POPPED_CHORUS_FRUIT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POPPED_CHORUS_FRUIT).build())
-        ));
-        registerable.register(ItemKeys.TORCHFLOWER_SEEDS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TORCHFLOWER_SEEDS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.TORCHFLOWER_CROP)))
-                .with(CompostableItemComponent.of(0.3f))
-                .build()
-        ));
-        registerable.register(ItemKeys.PITCHER_POD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PITCHER_POD).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.PITCHER_CROP)))
-                .with(CompostableItemComponent.of(0.3f))
-                .build()
-        ));
-        registerable.register(ItemKeys.BEETROOT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEETROOT).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.BEETROOT))
-                .with(CompostableItemComponent.of(0.65f))
-                .build()
-        ));
-        registerable.register(ItemKeys.BEETROOT_SEEDS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEETROOT_SEEDS).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BEETROOTS)))
-                .with(CompostableItemComponent.of(0.3f))
-                .build()
-        ));
-        registerable.register(ItemKeys.BEETROOT_SOUP, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEETROOT_SOUP).build(), 1),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.BEETROOT_SOUP))
-                .build()
-        ));
-        registerable.register(ItemKeys.DRAGON_BREATH, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DRAGON_BREATH).rarity(Rarity.UNCOMMON).build())
-        ));
-        registerable.register(ItemKeys.SPLASH_POTION, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPLASH_POTION).build(), 1),
-            ItemComponentSet.builder()
-                .with(PotionHolderItemComponent.INSTANCE)
-                .with(ThrowableItemComponent.of(0.5f, -20.0f))
-                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.POTION)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
-                .with(TintedItemComponent.of(new PotionItemColor()))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPECTRAL_ARROW, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPECTRAL_ARROW).build()),
-            ItemComponentSet.builder()
-                .with(ProjectileItemComponent.persistentProjectile(EntityType.SPECTRAL_ARROW, SpectralArrowEntity::new, SpectralArrowEntity::new))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.TIPPED_ARROW, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TIPPED_ARROW).build()),
-            ItemComponentSet.builder()
-                .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
-                .with(TintedItemComponent.of(new PotionItemColor()))
-                .build()
-        ));
-        registerable.register(ItemKeys.LINGERING_POTION, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LINGERING_POTION).build(), 1),
-            ItemComponentSet.builder()
-                .with(PotionHolderItemComponent.INSTANCE)
-                .with(ThrowableItemComponent.of(0.5f, -20.0f))
-                .with(ProjectileItemComponent.of(entityTypes.getOrThrow(EntityTypeKeys.POTION)))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
-                .with(TintedItemComponent.of(new PotionItemColor()))
-                .build()
-        ));
-        registerable.register(ItemKeys.SHIELD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHIELD).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.of(336))
-                .with(EquipmentItemComponent.of(EquipmentSlot.OFFHAND, false, soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)))
-                .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_SHIELD))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ARMOR)))
-                .with(UseAnimationItemComponent.of(UseAction.BLOCK))
-                .with(BannerPatternHolderItemComponent.of())
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE, ActionEntry.of(StartUsingItemAction.indefinitely()))
-                .build()
-        ));
-        registerable.register(ItemKeys.TOTEM_OF_UNDYING, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TOTEM_OF_UNDYING).rarity(Rarity.UNCOMMON).build(), 1),
-            ItemComponentSet.builder()
-                .with(LifeSavingItemComponent.of(
-                    new StatusEffectInstance(statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 900, 1),
-                    new StatusEffectInstance(statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 100, 1),
-                    new StatusEffectInstance(statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 800, 0)
-                ))
-                .build()
-        ));
-        registerable.register(ItemKeys.SHULKER_SHELL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHULKER_SHELL).build())
-        ));
-        registerable.register(ItemKeys.IRON_NUGGET, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_NUGGET).build())
-        ));
-        registerable.register(ItemKeys.KNOWLEDGE_BOOK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.KNOWLEDGE_BOOK).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(UnlockRecipesItemComponent.INSTANCE)
-                .build()
-        ));
-        registerable.register(ItemKeys.DEBUG_STICK, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DEBUG_STICK).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(DebugStickItemComponent.INSTANCE)
-                .with(GlintItemComponent.of(true))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_13, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_13).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_13), ItemKeys.MUSIC_DISC_13, 178 * 20, 1))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_CAT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CAT).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CAT), ItemKeys.MUSIC_DISC_CAT, 185 * 20, 2))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_BLOCKS, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_BLOCKS).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_BLOCKS), ItemKeys.MUSIC_DISC_BLOCKS, 345 * 20, 3))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_CHIRP, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CHIRP).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CHIRP), ItemKeys.MUSIC_DISC_CHIRP, 185 * 20, 4))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_FAR, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_FAR).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_FAR), ItemKeys.MUSIC_DISC_FAR, 174 * 20, 5))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_MALL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MALL).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_MALL), ItemKeys.MUSIC_DISC_MALL, 197 * 20, 6))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_MELLOHI, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MELLOHI).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_MELLOHI), ItemKeys.MUSIC_DISC_MELLOHI, 96 * 20, 7))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_STAL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STAL).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_STAL), ItemKeys.MUSIC_DISC_STAL, 150 * 20, 8))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_STRAD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STRAD).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_STRAD), ItemKeys.MUSIC_DISC_STRAD, 188 * 20, 9))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_WARD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WARD).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_WARD), ItemKeys.MUSIC_DISC_WARD, 251 * 20, 10))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_11, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_11).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_11), ItemKeys.MUSIC_DISC_11, 71 * 20, 11))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_WAIT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WAIT).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_WAIT), ItemKeys.MUSIC_DISC_WAIT, 238 * 20, 12))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_OTHERSIDE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_OTHERSIDE).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_OTHERSIDE), ItemKeys.MUSIC_DISC_OTHERSIDE, 195 * 20, 14))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_RELIC, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_RELIC).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_RELIC), ItemKeys.MUSIC_DISC_RELIC, 218 * 20, 14))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_5, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_5).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_5), ItemKeys.MUSIC_DISC_5, 178 * 20, 15))
-                .build()
-        ));
-        registerable.register(ItemKeys.MUSIC_DISC_PIGSTEP, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_PIGSTEP).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(RecordItemComponent.of(soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_PIGSTEP), ItemKeys.MUSIC_DISC_PIGSTEP, 149 * 20, 13))
-                .build()
-        ));
-        registerable.register(ItemKeys.DISC_FRAGMENT_5, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DISC_FRAGMENT_5).tooltip(ItemKeys.DISC_FRAGMENT_5).build())
-        ));
-        registerable.register(ItemKeys.TRIDENT, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TRIDENT).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.of(250, true))
-                .with(ToolItemComponent.builder(2)
-                    .build())
-                .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE, -2.9d))
-                .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
-                .with(ProjectileItemComponent.of(TridentEntityInitializer.of(true), 1))
-                .with(UseAnimationItemComponent.of(UseAction.SPEAR))
-                .with(EnchantableItemComponent.enchants(1, EnchantmentTags.TRIDENT_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.TRIDENT_FORGING))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.STOPPED_USING, ActionEntry.of(
-                    ActionRequirements.of(
-                        ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
-                        AllOfLootCondition.builder(
-                            EntityPropertiesLootCondition.builder(
-                                LootContext.EntityTarget.THIS,
-                                EntityPredicate.Builder.create()
-                                    .itematic$usedItemAtLeast(TridentItem.MIN_DRAW_DURATION)
-                                    .itematic$inWaterOrRain(true)
-                            ),
-                            MatchToolLootCondition.builder(
-                                ItemPredicate.Builder.create()
-                                    .enchantment(new EnchantmentPredicate(Enchantments.RIPTIDE, NumberRange.IntRange.ANY)))
-                        ).build()
-                    ),
-                    PassingSequenceHandler.builder()
-                        .add(TwirlPlayerAction.INSTANCE)
-                        .add(DamageItemAction.of(1))
-                ))
-                .build()
-        ));
-        registerable.register(ItemKeys.PHANTOM_MEMBRANE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PHANTOM_MEMBRANE).build())
-        ));
-        registerable.register(ItemKeys.NAUTILUS_SHELL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NAUTILUS_SHELL).build())
-        ));
-        registerable.register(ItemKeys.HEART_OF_THE_SEA, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HEART_OF_THE_SEA).rarity(Rarity.UNCOMMON).build())
-        ));
-        registerable.register(ItemKeys.CROSSBOW, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CROSSBOW).build(), 1),
-            ItemComponentSet.builder()
-                .with(DamageableItemComponent.of(465))
-                .with(ShooterItemComponent.of(ItematicItemTags.CROSSBOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, CrossbowItem.RANGE, true))
-                .with(UseDurationItemComponent.of(28))
-                .with(UseAnimationItemComponent.of(UseAction.CROSSBOW))
-                .with(EnchantableItemComponent.enchants(1, EnchantmentTags.CROSSBOW_ENCHANTING))
-                .with(ForgeableItemComponent.of(EnchantmentTags.CROSSBOW_FORGING))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SUSPICIOUS_STEW, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SUSPICIOUS_STEW).build(), 1),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.SUSPICIOUS_STEW, items.getOrThrow(ItemKeys.BOWL)))
-                .build()
-        ));
-        registerable.register(ItemKeys.LOOM, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LOOM).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.LOOM)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.FLOWER_BANNER_PATTERN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLOWER_BANNER_PATTERN).tooltip(ItemKeys.FLOWER_BANNER_PATTERN).build(), 1),
-            ItemComponentSet.builder()
-                .with(BannerPatternItemComponent.of(BannerPatternTags.FLOWER_PATTERN_ITEM))
-                .build()
-        ));
-        registerable.register(ItemKeys.CREEPER_BANNER_PATTERN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CREEPER_BANNER_PATTERN).tooltip(ItemKeys.CREEPER_BANNER_PATTERN).rarity(Rarity.UNCOMMON).build(), 1),
-            ItemComponentSet.builder()
-                .with(BannerPatternItemComponent.of(BannerPatternTags.CREEPER_PATTERN_ITEM))
-                .build()
-        ));
-        registerable.register(ItemKeys.SKULL_BANNER_PATTERN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SKULL_BANNER_PATTERN).tooltip(ItemKeys.SKULL_BANNER_PATTERN).rarity(Rarity.UNCOMMON).build(), 1),
-            ItemComponentSet.builder()
-                .with(BannerPatternItemComponent.of(BannerPatternTags.SKULL_PATTERN_ITEM))
-                .build()
-        ));
-        registerable.register(ItemKeys.MOJANG_BANNER_PATTERN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MOJANG_BANNER_PATTERN).tooltip(ItemKeys.MOJANG_BANNER_PATTERN).rarity(Rarity.EPIC).build(), 1),
-            ItemComponentSet.builder()
-                .with(BannerPatternItemComponent.of(BannerPatternTags.MOJANG_PATTERN_ITEM))
-                .build()
-        ));
-        registerable.register(ItemKeys.GLOBE_BANNER_PATTERN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOBE_BANNER_PATTERN).tooltip(ItemKeys.GLOBE_BANNER_PATTERN).build(), 1),
-            ItemComponentSet.builder()
-                .with(BannerPatternItemComponent.of(BannerPatternTags.GLOBE_PATTERN_ITEM))
-                .build()
-        ));
-        registerable.register(ItemKeys.PIGLIN_BANNER_PATTERN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIGLIN_BANNER_PATTERN).tooltip(ItemKeys.PIGLIN_BANNER_PATTERN).build(), 1),
-            ItemComponentSet.builder()
-                .with(BannerPatternItemComponent.of(BannerPatternTags.PIGLIN_PATTERN_ITEM))
-                .build()
-        ));
-        registerable.register(ItemKeys.GOAT_HORN, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOAT_HORN).build(), 1),
-            ItemComponentSet.builder()
-                .with(PlayableItemComponent.of(InstrumentTags.GOAT_HORNS))
-                .with(UseAnimationItemComponent.of(UseAction.TOOT_HORN))
-                .build()
-        ));
-        registerable.register(ItemKeys.COMPOSTER, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COMPOSTER).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.COMPOSTER)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.BARREL, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARREL).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BARREL)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.CARTOGRAPHY_TABLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CARTOGRAPHY_TABLE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CARTOGRAPHY_TABLE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.FLETCHING_TABLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FLETCHING_TABLE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.FLETCHING_TABLE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SMITHING_TABLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMITHING_TABLE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SMITHING_TABLE)))
-                .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                .build()
-        ));
-        registerable.register(ItemKeys.SWEET_BERRIES, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SWEET_BERRIES).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.SWEET_BERRIES))
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.SWEET_BERRY_BUSH)))
-                .with(CompostableItemComponent.of(0.3f))
-                .build()
-        ));
-        registerable.register(ItemKeys.GLOW_BERRIES, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOW_BERRIES).build()),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.GLOW_BERRIES))
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.CAVE_VINES)))
-                .with(CompostableItemComponent.of(0.3f))
-                .build()
-        ));
-        registerable.register(ItemKeys.HONEYCOMB, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEYCOMB).build()),
-            ItemComponentSet.builder()
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.WAX_BLOCK)))
-                .build(),
-            ItemEventMap.builder()
-                .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                    FirstToPassRequirementsSequenceHandler.builder()
-                        .add(Actions.waxSign(true))
-                        .add(PassingSequenceHandler.builder()
-                            .add(new WaxBlockAction(ActionContextParameter.TARGET))
-                            .add(DecrementItemAction.of(1))
-                            .add(SwingHandAction.INSTANCE))))
-                .build()
-        ));
-        registerable.register(ItemKeys.BEE_NEST, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BEE_NEST).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BEE_NEST)))
-                .build()
-        ));
-        registerable.register(ItemKeys.BEEHIVE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BEEHIVE).build()),
-            ItemComponentSet.builder()
-                .with(BlockItemComponent.of(blocks.getOrThrow(BlockKeys.BEEHIVE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.HONEY_BOTTLE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEY_BOTTLE).build(), 16),
-            ItemComponentSet.builder()
-                .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40, UseAction.DRINK, items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.ECHO_SHARD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ECHO_SHARD).build())
-        ));
-        registerable.register(ItemKeys.BRUSH, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BRUSH).build(), 1),
-            ItemComponentSet.builder()
-                .with(BrushItemComponent.INSTANCE)
-                .with(UseDurationItemComponent.of(BrushItemAccessor.maxBrushTime()))
-                .with(DamageableItemComponent.of(64))
-                .with(UseAnimationItemComponent.of(UseAction.BRUSH))
-                .with(ForgeableItemComponent.of(EnchantmentTags.BRUSH_FORGING))
-                .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BRUSH)))
-                .build()
-        ));
-        registerable.register(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.NETHERITE_UPGRADE)))
-                .build()
-        ));
-        registerable.register(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.SENTRY_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.DUNE_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.COAST_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.WILD_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.WARD_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.EYE_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.VEX_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.TIDE_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.SNOUT_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.RIB_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.SPIRE_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.WAYFINDER_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.SHAPER_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.SILENCE_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.RAISER_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
-            ItemComponentSet.builder()
-                .with(SmithingTemplateItemComponent.of(smithingTemplates.getOrThrow(SmithingTemplates.HOST_PATTERN)))
-                .build()
-        ));
-        registerable.register(ItemKeys.ANGLER_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ANGLER_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.angler())))
-                .build()
-        ));
-        registerable.register(ItemKeys.ARCHER_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARCHER_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.archer())))
-                .build()
-        ));
-        registerable.register(ItemKeys.ARMS_UP_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARMS_UP_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.armsUp())))
-                .build()
-        ));
-        registerable.register(ItemKeys.BLADE_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLADE_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.blade())))
-                .build()
-        ));
-        registerable.register(ItemKeys.BREWER_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BREWER_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.brewer())))
-                .build()
-        ));
-        registerable.register(ItemKeys.BURN_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BURN_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.burn())))
-                .build()
-        ));
-        registerable.register(ItemKeys.DANGER_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DANGER_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.danger())))
-                .build()
-        ));
-        registerable.register(ItemKeys.EXPLORER_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EXPLORER_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.explorer())))
-                .build()
-        ));
-        registerable.register(ItemKeys.FRIEND_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FRIEND_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.friend())))
-                .build()
-        ));
-        registerable.register(ItemKeys.HEART_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HEART_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.heart())))
-                .build()
-        ));
-        registerable.register(ItemKeys.HEARTBREAK_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HEARTBREAK_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.heartbreak())))
-                .build()
-        ));
-        registerable.register(ItemKeys.HOWL_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HOWL_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.howl())))
-                .build()
-        ));
-        registerable.register(ItemKeys.MINER_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MINER_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.miner())))
-                .build()
-        ));
-        registerable.register(ItemKeys.MOURNER_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MOURNER_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.mourner())))
-                .build()
-        ));
-        registerable.register(ItemKeys.PLENTY_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PLENTY_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.plenty())))
-                .build()
-        ));
-        registerable.register(ItemKeys.PRIZE_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PRIZE_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.prize())))
-                .build()
-        ));
-        registerable.register(ItemKeys.SHEAF_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHEAF_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.sheaf())))
-                .build()
-        ));
-        registerable.register(ItemKeys.SHELTER_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHELTER_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.shelter())))
-                .build()
-        ));
-        registerable.register(ItemKeys.SKULL_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SKULL_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.skull())))
-                .build()
-        ));
-        registerable.register(ItemKeys.SNORT_POTTERY_SHERD, create(
-            new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNORT_POTTERY_SHERD).build()),
-            ItemComponentSet.builder()
-                .with(DecoratedPotPatternItemComponent.of(decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.snort())))
-                .build()
-        ));
+        new Bootstrapper(registerable).bootstrap();
     }
 
     public static RegistryKey<Item> keyFromBlock(Block block) {
@@ -5030,5 +113,8431 @@ public class ItemUtil {
         item.itematic$setComponents(components);
         item.itematic$setEvents(events);
         return item;
+    }
+
+    private static class Bootstrapper {
+        private final Registerable<Item> registerable;
+        private final RegistryEntryLookup<ArmorMaterial> armorMaterials;
+        private final RegistryEntryLookup<Item> items;
+        private final RegistryEntryLookup<EntityType<?>> entityTypes;
+        private final RegistryEntryLookup<Biome> biomes;
+        private final RegistryEntryLookup<Block> blocks;
+        private final RegistryEntryLookup<DispenserBehavior> dispenseBehaviors;
+        private final RegistryEntryLookup<SoundEvent> soundEvents;
+        private final RegistryEntryLookup<Fluid> fluids;
+        private final RegistryEntryLookup<Pointer> pointers;
+        private final RegistryEntryLookup<ActionEntry> actions;
+        private final RegistryEntryLookup<SmithingTemplate> smithingTemplates;
+        private final RegistryEntryLookup<String> decoratedPotPatterns;
+        private final RegistryEntryLookup<StatusEffect> statusEffects;
+
+        private Bootstrapper(Registerable<Item> registerable) {
+            this.registerable = registerable;
+            this.armorMaterials = registerable.getRegistryLookup(ItematicRegistryKeys.ARMOR_MATERIAL);
+            this.items = registerable.getRegistryLookup(RegistryKeys.ITEM);
+            this.entityTypes = registerable.getRegistryLookup(RegistryKeys.ENTITY_TYPE);
+            this.biomes = registerable.getRegistryLookup(RegistryKeys.BIOME);
+            this.blocks = registerable.getRegistryLookup(RegistryKeys.BLOCK);
+            this.dispenseBehaviors = registerable.getRegistryLookup(ItematicRegistryKeys.DISPENSE_BEHAVIOR);
+            this.soundEvents = registerable.getRegistryLookup(RegistryKeys.SOUND_EVENT);
+            this.fluids = registerable.getRegistryLookup(RegistryKeys.FLUID);
+            this.pointers = registerable.getRegistryLookup(ItematicRegistryKeys.POINTER);
+            this.actions = registerable.getRegistryLookup(ItematicRegistryKeys.ACTION);
+            this.smithingTemplates = registerable.getRegistryLookup(ItematicRegistryKeys.SMITHING_TEMPLATE);
+            this.decoratedPotPatterns = registerable.getRegistryLookup(RegistryKeys.DECORATED_POT_PATTERN);
+            this.statusEffects = registerable.getRegistryLookup(RegistryKeys.STATUS_EFFECT);
+        }
+
+        private void bootstrap() {
+            this.bootstrapConsumables();
+            this.bootstrapBlocks();
+            this.bootstrapToolsAndWeapons();
+            this.bootstrapEntities();
+            this.bootstrapCompostables();
+            this.bootstrapEquipment();
+            this.bootstrapFuel();
+            this.bootstrapProjectiles();
+            this.bootstrapDyes();
+            this.bootstrapRecords();
+            this.bootstrapBuckets();
+            this.bootstrapSmithingTemplates();
+            this.bootstrapBanners();
+            this.bootstrapDecoratedPotPatterns();
+            this.bootstrapImmuneToDamage();
+            this.bootstrapMiscellaneous();
+        }
+
+        private void bootstrapConsumables() {
+            this.bootstrapFood();
+            this.registerable.register(ItemKeys.MILK_BUCKET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MILK_BUCKET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(UseDurationItemComponent.of(MilkBucketItemAccessor.getMaxUseTime()))
+                    .with(UseAnimationItemComponent.of(UseAction.DRINK))
+                    .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(new ClearStatusEffectsAction(ActionContextParameter.THIS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POTION, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POTION).build(), 1),
+                ItemComponentSet.builder()
+                    .with(UseDurationItemComponent.of(PotionItemAccessor.getMaxUseTime()))
+                    .with(PotionItemComponent.INSTANCE)
+                    .with(PotionHolderItemComponent.INSTANCE)
+                    .with(UseAnimationItemComponent.of(UseAction.DRINK))
+                    .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
+                    .with(TintedItemComponent.of(new PotionItemColor()))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.POTION)))
+                    .build()
+            ));
+        }
+
+        private void bootstrapFood() {
+            this.registerable.register(ItemKeys.APPLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.APPLE).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.APPLE))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MELON_SLICE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MELON_SLICE).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.MELON_SLICE))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DRIED_KELP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DRIED_KELP).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.DRIED_KELP))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CARROT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CARROT).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.CARROT))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARROTS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POTATO, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POTATO).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.POTATO))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POTATOES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAKED_POTATO, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAKED_POTATO).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.BAKED_POTATO))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHORUS_FRUIT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHORUS_FRUIT).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.CHORUS_FRUIT))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(new TeleportAction(16, ActionContextParameter.THIS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BEETROOT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEETROOT).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.BEETROOT))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SWEET_BERRIES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SWEET_BERRIES).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.SWEET_BERRIES))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SWEET_BERRY_BUSH)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GLOW_BERRIES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOW_BERRIES).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.GLOW_BERRIES))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAVE_VINES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BREAD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BREAD).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.BREAD))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COOKIE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKIE).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.COOKIE))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PORKCHOP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PORKCHOP).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.PORKCHOP))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COOKED_PORKCHOP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_PORKCHOP).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.COOKED_PORKCHOP))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BEEF, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEEF).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.BEEF))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COOKED_BEEF, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_BEEF).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.COOKED_BEEF))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHICKEN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHICKEN).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.CHICKEN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COOKED_CHICKEN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_CHICKEN).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.COOKED_CHICKEN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RABBIT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.RABBIT))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COOKED_RABBIT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_RABBIT).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.COOKED_RABBIT))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.MUTTON))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COOKED_MUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_MUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.COOKED_MUTTON))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COD).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.COD))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SALMON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SALMON).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.SALMON))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TROPICAL_FISH, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.TROPICAL_FISH))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PUFFERFISH, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUFFERFISH).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.PUFFERFISH))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COOKED_COD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_COD).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.COOKED_COD))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COOKED_SALMON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COOKED_SALMON).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.COOKED_SALMON))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSHROOM_STEW, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSHROOM_STEW).build(), 1),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.MUSHROOM_STEW, this.items.getOrThrow(ItemKeys.BOWL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RABBIT_STEW, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_STEW).build(), 1),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.RABBIT_STEW, this.items.getOrThrow(ItemKeys.BOWL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BEETROOT_SOUP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEETROOT_SOUP).build(), 1),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.BEETROOT_SOUP))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SUSPICIOUS_STEW, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SUSPICIOUS_STEW).build(), 1),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.SUSPICIOUS_STEW, this.items.getOrThrow(ItemKeys.BOWL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ROTTEN_FLESH, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ROTTEN_FLESH).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.ROTTEN_FLESH))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPIDER_EYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPIDER_EYE).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.SPIDER_EYE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POISONOUS_POTATO, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POISONOUS_POTATO).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.POISONOUS_POTATO))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_APPLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_APPLE).rarity(Rarity.RARE).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.GOLDEN_APPLE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ENCHANTED_GOLDEN_APPLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_GOLDEN_APPLE).rarity(Rarity.EPIC).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.ENCHANTED_GOLDEN_APPLE))
+                    .with(GlintItemComponent.of(true))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_CARROT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_CARROT).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.GOLDEN_CARROT))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PUMPKIN_PIE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUMPKIN_PIE).build()),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.PUMPKIN_PIE))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.GUARANTEED_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HONEY_BOTTLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEY_BOTTLE).build(), 16),
+                ItemComponentSet.builder()
+                    .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40, UseAction.DRINK, this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
+                    .build()
+            ));
+        }
+        
+        private void bootstrapBlocks() {
+            this.bootstrapAttachedToSideBlocks();
+            this.bootstrapColoredBlocks();
+            this.bootstrapItemNameBlocks();
+            this.bootstrapOperatorOnlyBlocks();
+            this.registerable.register(ItemKeys.STONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRANITE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRANITE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRANITE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_GRANITE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_GRANITE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_GRANITE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIORITE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DIORITE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIORITE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_DIORITE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_DIORITE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DIORITE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ANDESITE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ANDESITE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ANDESITE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_ANDESITE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_ANDESITE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_ANDESITE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COBBLED_DEEPSLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COBBLED_DEEPSLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLED_DEEPSLATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_DEEPSLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_DEEPSLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DEEPSLATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CALCITE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CALCITE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CALCITE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TUFF, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TUFF).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUFF)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DRIPSTONE_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRIPSTONE_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DRIPSTONE_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRASS_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRASS_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRASS_BLOCK)))
+                    .with(TintedItemComponent.of(new GrassItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIRT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DIRT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIRT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COARSE_DIRT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COARSE_DIRT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COARSE_DIRT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PODZOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PODZOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PODZOL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ROOTED_DIRT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ROOTED_DIRT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ROOTED_DIRT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MUD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUD)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_NYLIUM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_NYLIUM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_NYLIUM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_NYLIUM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_NYLIUM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_NYLIUM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COBBLESTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COBBLESTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLESTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_PLANKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_PLANKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_PLANKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_PLANKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_PLANKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_PLANKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BEDROCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BEDROCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BEDROCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SAND, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SAND).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SAND)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SUSPICIOUS_SAND, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SUSPICIOUS_SAND).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SUSPICIOUS_SAND)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SUSPICIOUS_GRAVEL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SUSPICIOUS_GRAVEL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SUSPICIOUS_GRAVEL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_SAND, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_SAND).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SAND)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAVEL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAVEL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAVEL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COAL_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COAL_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COAL_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_COAL_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_COAL_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_COAL_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.IRON_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_IRON_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_IRON_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_IRON_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COPPER_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COPPER_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_COPPER_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_COPPER_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_COPPER_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLD_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GOLD_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GOLD_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_GOLD_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_GOLD_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_GOLD_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.REDSTONE_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.REDSTONE_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REDSTONE_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_REDSTONE_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_REDSTONE_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_REDSTONE_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EMERALD_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.EMERALD_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EMERALD_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_EMERALD_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_EMERALD_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_EMERALD_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LAPIS_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LAPIS_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LAPIS_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_LAPIS_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_LAPIS_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_LAPIS_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DIAMOND_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIAMOND_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_DIAMOND_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_DIAMOND_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_DIAMOND_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHER_GOLD_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHER_GOLD_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_GOLD_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHER_QUARTZ_ORE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHER_QUARTZ_ORE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_QUARTZ_ORE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RAW_IRON_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RAW_IRON_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RAW_IRON_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RAW_COPPER_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RAW_COPPER_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RAW_COPPER_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RAW_GOLD_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RAW_GOLD_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RAW_GOLD_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.AMETHYST_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AMETHYST_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AMETHYST_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BUDDING_AMETHYST, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BUDDING_AMETHYST).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BUDDING_AMETHYST)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.IRON_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COPPER_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COPPER_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLD_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GOLD_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GOLD_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DIAMOND_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIAMOND_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EXPOSED_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WEATHERED_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OXIDIZED_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CUT_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CUT_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EXPOSED_CUT_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.EXPOSED_CUT_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_CUT_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WEATHERED_CUT_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WEATHERED_CUT_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_CUT_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OXIDIZED_CUT_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OXIDIZED_CUT_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_CUT_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CUT_COPPER_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CUT_COPPER_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_COPPER_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EXPOSED_CUT_COPPER_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.EXPOSED_CUT_COPPER_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_CUT_COPPER_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WEATHERED_CUT_COPPER_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WEATHERED_CUT_COPPER_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_CUT_COPPER_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OXIDIZED_CUT_COPPER_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OXIDIZED_CUT_COPPER_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_CUT_COPPER_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CUT_COPPER_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CUT_COPPER_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_COPPER_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EXPOSED_CUT_COPPER_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.EXPOSED_CUT_COPPER_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_CUT_COPPER_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WEATHERED_CUT_COPPER_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WEATHERED_CUT_COPPER_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_CUT_COPPER_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OXIDIZED_CUT_COPPER_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OXIDIZED_CUT_COPPER_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_CUT_COPPER_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_COPPER_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_CUT_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_CUT_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_CUT_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_EXPOSED_CUT_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_CUT_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_CUT_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_WEATHERED_CUT_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_CUT_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_CUT_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_OXIDIZED_CUT_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_CUT_COPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_CUT_COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_CUT_COPPER_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_CUT_COPPER_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_CUT_COPPER_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_EXPOSED_CUT_COPPER_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_CUT_COPPER_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_CUT_COPPER_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_WEATHERED_CUT_COPPER_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_CUT_COPPER_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_CUT_COPPER_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_CUT_COPPER_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_CUT_COPPER_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_CUT_COPPER_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_CUT_COPPER_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_EXPOSED_CUT_COPPER_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_CUT_COPPER_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_CUT_COPPER_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_WEATHERED_CUT_COPPER_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_CUT_COPPER_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_CUT_COPPER_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_CUT_COPPER_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUDDY_MANGROVE_ROOTS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MUDDY_MANGROVE_ROOTS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUDDY_MANGROVE_ROOTS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_STEM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_STEM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_STEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_STEM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_STEM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_STEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_CRIMSON_STEM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_CRIMSON_STEM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_CRIMSON_STEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_WARPED_STEM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_WARPED_STEM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_WARPED_STEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_CRIMSON_HYPHAE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_CRIMSON_HYPHAE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_CRIMSON_HYPHAE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_WARPED_HYPHAE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_WARPED_HYPHAE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_WARPED_HYPHAE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_HYPHAE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_HYPHAE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_HYPHAE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_HYPHAE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_HYPHAE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_HYPHAE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPONGE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPONGE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPONGE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WET_SPONGE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WET_SPONGE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WET_SPONGE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TINTED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TINTED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TINTED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LAPIS_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LAPIS_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LAPIS_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SANDSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SANDSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SANDSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHISELED_SANDSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHISELED_SANDSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_SANDSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CUT_SANDSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CUT_SANDSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_SANDSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COBWEB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COBWEB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBWEB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOOTH_STONE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOOTH_STONE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_STONE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SANDSTONE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SANDSTONE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SANDSTONE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CUT_SANDSTONE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CUT_SANDSTONE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_SANDSTONE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PETRIFIED_OAK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PETRIFIED_OAK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PETRIFIED_OAK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COBBLESTONE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COBBLESTONE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLESTONE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BRICK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BRICK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BRICK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_BRICK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE_BRICK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_BRICK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUD_BRICK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MUD_BRICK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUD_BRICK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHER_BRICK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHER_BRICK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_BRICK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.QUARTZ_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.QUARTZ_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.QUARTZ_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_SANDSTONE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_SANDSTONE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SANDSTONE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CUT_RED_SANDSTONE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CUT_RED_SANDSTONE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_RED_SANDSTONE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPUR_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPUR_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPUR_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PRISMARINE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PRISMARINE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PRISMARINE_BRICK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PRISMARINE_BRICK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE_BRICK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_PRISMARINE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_PRISMARINE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_PRISMARINE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOOTH_QUARTZ, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOOTH_QUARTZ).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_QUARTZ)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOOTH_RED_SANDSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOOTH_RED_SANDSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_RED_SANDSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOOTH_SANDSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOOTH_SANDSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_SANDSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOOTH_STONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOOTH_STONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_STONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DECORATED_POT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DECORATED_POT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DECORATED_POT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOSSY_COBBLESTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MOSSY_COBBLESTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_COBBLESTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OBSIDIAN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OBSIDIAN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OBSIDIAN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.END_ROD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.END_ROD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_ROD)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHORUS_PLANT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHORUS_PLANT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHORUS_PLANT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHORUS_FLOWER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHORUS_FLOWER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHORUS_FLOWER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPUR_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPUR_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPUR_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPUR_PILLAR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPUR_PILLAR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPUR_PILLAR)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPUR_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPUR_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPUR_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPAWNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPAWNER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPAWNER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FARMLAND, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FARMLAND).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FARMLAND)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FURNACE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FURNACE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FURNACE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COBBLESTONE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COBBLESTONE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLESTONE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SNOW, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SNOW).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SNOW)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ICE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ICE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ICE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SNOW_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SNOW_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SNOW_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CLAY, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CLAY).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CLAY)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_FENCE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_FENCE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_FENCE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_FENCE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_FENCE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_FENCE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JACK_O_LANTERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JACK_O_LANTERN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JACK_O_LANTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERRACK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHERRACK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHERRACK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SOUL_SAND, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SOUL_SAND).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SOUL_SAND)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SOUL_SOIL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SOUL_SOIL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SOUL_SOIL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BASALT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BASALT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BASALT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_BASALT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_BASALT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BASALT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOOTH_BASALT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOOTH_BASALT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_BASALT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GLOWSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GLOWSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GLOWSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.INFESTED_STONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.INFESTED_STONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_STONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.INFESTED_COBBLESTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.INFESTED_COBBLESTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_COBBLESTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.INFESTED_STONE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.INFESTED_STONE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_STONE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.INFESTED_MOSSY_STONE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.INFESTED_MOSSY_STONE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_MOSSY_STONE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.INFESTED_CRACKED_STONE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.INFESTED_CRACKED_STONE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_CRACKED_STONE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.INFESTED_CHISELED_STONE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.INFESTED_CHISELED_STONE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_CHISELED_STONE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.INFESTED_DEEPSLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.INFESTED_DEEPSLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_DEEPSLATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOSSY_STONE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MOSSY_STONE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_STONE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRACKED_STONE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRACKED_STONE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRACKED_STONE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHISELED_STONE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHISELED_STONE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_STONE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PACKED_MUD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PACKED_MUD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PACKED_MUD)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUD_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MUD_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUD_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRACKED_DEEPSLATE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRACKED_DEEPSLATE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRACKED_DEEPSLATE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_TILES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_TILES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_TILES)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRACKED_DEEPSLATE_TILES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRACKED_DEEPSLATE_TILES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRACKED_DEEPSLATE_TILES)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHISELED_DEEPSLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHISELED_DEEPSLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_DEEPSLATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.REINFORCED_DEEPSLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.REINFORCED_DEEPSLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REINFORCED_DEEPSLATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_BARS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.IRON_BARS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_BARS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHAIN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHAIN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHAIN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BRICK_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BRICK_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BRICK_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_BRICK_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE_BRICK_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_BRICK_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUD_BRICK_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MUD_BRICK_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUD_BRICK_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MYCELIUM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MYCELIUM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MYCELIUM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHER_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHER_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRACKED_NETHER_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRACKED_NETHER_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRACKED_NETHER_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHISELED_NETHER_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHISELED_NETHER_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_NETHER_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHER_BRICK_FENCE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHER_BRICK_FENCE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_BRICK_FENCE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHER_BRICK_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHER_BRICK_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_BRICK_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SCULK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SCULK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SCULK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SCULK_VEIN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SCULK_VEIN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SCULK_VEIN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SCULK_CATALYST, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SCULK_CATALYST).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SCULK_CATALYST)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SCULK_SHRIEKER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SCULK_SHRIEKER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SCULK_SHRIEKER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ENCHANTING_TABLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ENCHANTING_TABLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ENCHANTING_TABLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.END_PORTAL_FRAME, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.END_PORTAL_FRAME).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.END_STONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.END_STONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_STONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.END_STONE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.END_STONE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_STONE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DRAGON_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRAGON_EGG).rarity(Rarity.EPIC).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DRAGON_EGG)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SANDSTONE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SANDSTONE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SANDSTONE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ENDER_CHEST, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ENDER_CHEST).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ENDER_CHEST)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EMERALD_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.EMERALD_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EMERALD_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BEACON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BEACON).rarity(Rarity.RARE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BEACON)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COBBLESTONE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COBBLESTONE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLESTONE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOSSY_COBBLESTONE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MOSSY_COBBLESTONE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_COBBLESTONE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BRICK_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BRICK_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BRICK_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PRISMARINE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PRISMARINE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_SANDSTONE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_SANDSTONE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SANDSTONE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOSSY_STONE_BRICK_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MOSSY_STONE_BRICK_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_STONE_BRICK_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRANITE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRANITE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRANITE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_BRICK_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE_BRICK_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_BRICK_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUD_BRICK_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MUD_BRICK_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUD_BRICK_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHER_BRICK_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHER_BRICK_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_BRICK_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ANDESITE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ANDESITE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ANDESITE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_NETHER_BRICK_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_NETHER_BRICK_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_NETHER_BRICK_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SANDSTONE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SANDSTONE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SANDSTONE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.END_STONE_BRICK_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.END_STONE_BRICK_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_STONE_BRICK_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIORITE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DIORITE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIORITE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACKSTONE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACKSTONE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACKSTONE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_BRICK_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_BRICK_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_BRICK_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COBBLED_DEEPSLATE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COBBLED_DEEPSLATE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLED_DEEPSLATE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_DEEPSLATE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_DEEPSLATE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DEEPSLATE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_BRICK_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_BRICK_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_BRICK_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_TILE_WALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_TILE_WALL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_TILE_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ANVIL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ANVIL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ANVIL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHIPPED_ANVIL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHIPPED_ANVIL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHIPPED_ANVIL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DAMAGED_ANVIL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DAMAGED_ANVIL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DAMAGED_ANVIL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHISELED_QUARTZ_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHISELED_QUARTZ_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_QUARTZ_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.QUARTZ_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.QUARTZ_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.QUARTZ_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.QUARTZ_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.QUARTZ_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.QUARTZ_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.QUARTZ_PILLAR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.QUARTZ_PILLAR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.QUARTZ_PILLAR)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.QUARTZ_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.QUARTZ_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.QUARTZ_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BARRIER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARRIER).rarity(Rarity.EPIC).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BARRIER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT).rarity(Rarity.EPIC).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PACKED_ICE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PACKED_ICE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PACKED_ICE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIRT_PATH, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DIRT_PATH).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIRT_PATH)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PRISMARINE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PRISMARINE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PRISMARINE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PRISMARINE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_PRISMARINE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_PRISMARINE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_PRISMARINE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PRISMARINE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PRISMARINE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PRISMARINE_BRICK_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PRISMARINE_BRICK_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE_BRICK_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_PRISMARINE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_PRISMARINE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_PRISMARINE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SEA_LANTERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SEA_LANTERN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SEA_LANTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_SANDSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_SANDSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SANDSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHISELED_RED_SANDSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHISELED_RED_SANDSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_RED_SANDSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CUT_RED_SANDSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CUT_RED_SANDSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_RED_SANDSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_SANDSTONE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_SANDSTONE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SANDSTONE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGMA_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGMA_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGMA_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_NETHER_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_NETHER_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_NETHER_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BONE_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BONE_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BONE_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRUCTURE_VOID, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRUCTURE_VOID).rarity(Rarity.EPIC).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRUCTURE_VOID)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TURTLE_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TURTLE_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TURTLE_EGG)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SNIFFER_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SNIFFER_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SNIFFER_EGG)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_TUBE_CORAL_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_TUBE_CORAL_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_TUBE_CORAL_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_BRAIN_CORAL_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_BRAIN_CORAL_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_BRAIN_CORAL_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_BUBBLE_CORAL_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_BUBBLE_CORAL_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_BUBBLE_CORAL_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_FIRE_CORAL_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_FIRE_CORAL_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_FIRE_CORAL_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_HORN_CORAL_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_HORN_CORAL_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_HORN_CORAL_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TUBE_CORAL_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TUBE_CORAL_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUBE_CORAL_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BRAIN_CORAL_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BRAIN_CORAL_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BRAIN_CORAL_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BUBBLE_CORAL_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BUBBLE_CORAL_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BUBBLE_CORAL_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FIRE_CORAL_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FIRE_CORAL_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FIRE_CORAL_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HORN_CORAL_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HORN_CORAL_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HORN_CORAL_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TUBE_CORAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TUBE_CORAL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUBE_CORAL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BRAIN_CORAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BRAIN_CORAL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BRAIN_CORAL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BUBBLE_CORAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BUBBLE_CORAL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BUBBLE_CORAL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FIRE_CORAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FIRE_CORAL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FIRE_CORAL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HORN_CORAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HORN_CORAL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HORN_CORAL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_BRAIN_CORAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_BRAIN_CORAL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_BRAIN_CORAL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_BUBBLE_CORAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_BUBBLE_CORAL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_BUBBLE_CORAL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_FIRE_CORAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_FIRE_CORAL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_FIRE_CORAL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_HORN_CORAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_HORN_CORAL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_HORN_CORAL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_TUBE_CORAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_TUBE_CORAL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_TUBE_CORAL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_ICE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_ICE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_ICE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CONDUIT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CONDUIT).rarity(Rarity.RARE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CONDUIT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_GRANITE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_GRANITE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_GRANITE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOOTH_RED_SANDSTONE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOOTH_RED_SANDSTONE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_RED_SANDSTONE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOSSY_STONE_BRICK_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MOSSY_STONE_BRICK_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_STONE_BRICK_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_DIORITE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_DIORITE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DIORITE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOSSY_COBBLESTONE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MOSSY_COBBLESTONE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_COBBLESTONE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.END_STONE_BRICK_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.END_STONE_BRICK_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_STONE_BRICK_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOOTH_SANDSTONE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOOTH_SANDSTONE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_SANDSTONE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOOTH_QUARTZ_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOOTH_QUARTZ_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_QUARTZ_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRANITE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRANITE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRANITE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ANDESITE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ANDESITE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ANDESITE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_NETHER_BRICK_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_NETHER_BRICK_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_NETHER_BRICK_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_ANDESITE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_ANDESITE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_ANDESITE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIORITE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DIORITE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIORITE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COBBLED_DEEPSLATE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COBBLED_DEEPSLATE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLED_DEEPSLATE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_DEEPSLATE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_DEEPSLATE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DEEPSLATE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_BRICK_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_BRICK_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_BRICK_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_TILE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_TILE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_TILE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_GRANITE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_GRANITE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_GRANITE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOOTH_RED_SANDSTONE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOOTH_RED_SANDSTONE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_RED_SANDSTONE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOSSY_STONE_BRICK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MOSSY_STONE_BRICK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_STONE_BRICK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_DIORITE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_DIORITE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DIORITE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOSSY_COBBLESTONE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MOSSY_COBBLESTONE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_COBBLESTONE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.END_STONE_BRICK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.END_STONE_BRICK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_STONE_BRICK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOOTH_SANDSTONE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOOTH_SANDSTONE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_SANDSTONE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOOTH_QUARTZ_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOOTH_QUARTZ_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_QUARTZ_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRANITE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRANITE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRANITE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ANDESITE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ANDESITE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ANDESITE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_NETHER_BRICK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_NETHER_BRICK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_NETHER_BRICK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_ANDESITE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_ANDESITE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_ANDESITE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIORITE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DIORITE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIORITE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COBBLED_DEEPSLATE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COBBLED_DEEPSLATE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLED_DEEPSLATE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_DEEPSLATE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_DEEPSLATE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DEEPSLATE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_BRICK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_BRICK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_BRICK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEEPSLATE_TILE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_TILE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_TILE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.REDSTONE_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.REDSTONE_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REDSTONE_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.REPEATER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.REPEATER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REPEATER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COMPARATOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COMPARATOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COMPARATOR)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PISTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PISTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PISTON)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STICKY_PISTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STICKY_PISTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STICKY_PISTON)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SLIME_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SLIME_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SLIME_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HONEY_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HONEY_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HONEY_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OBSERVER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OBSERVER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OBSERVER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HOPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HOPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HOPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DISPENSER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DISPENSER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DISPENSER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DROPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DROPPER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DROPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TARGET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TARGET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TARGET)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LEVER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LEVER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LEVER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHTNING_ROD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHTNING_ROD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHTNING_ROD)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SCULK_SENSOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SCULK_SENSOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SCULK_SENSOR)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CALIBRATED_SCULK_SENSOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CALIBRATED_SCULK_SENSOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CALIBRATED_SCULK_SENSOR)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TRIPWIRE_HOOK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TRIPWIRE_HOOK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TRIPWIRE_HOOK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TNT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TNT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TNT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.REDSTONE_LAMP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.REDSTONE_LAMP).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REDSTONE_LAMP)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_BUTTON)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_BUTTON)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_BUTTON)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_BUTTON)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONE_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_PRESSURE_PLATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_PRESSURE_PLATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_WEIGHTED_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_WEIGHTED_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_WEIGHTED_PRESSURE_PLATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HEAVY_WEIGHTED_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HEAVY_WEIGHTED_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HEAVY_WEIGHTED_PRESSURE_PLATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_PRESSURE_PLATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_PRESSURE_PLATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_DOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.IRON_DOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_DOOR)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_DOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_DOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_DOOR)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_DOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_DOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_DOOR)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_TRAPDOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.IRON_TRAPDOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_TRAPDOOR)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_TRAPDOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_TRAPDOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_TRAPDOOR)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_TRAPDOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_TRAPDOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_TRAPDOOR)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_FENCE_GATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_FENCE_GATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_FENCE_GATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_FENCE_GATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_FENCE_GATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_FENCE_GATE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POWERED_RAIL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POWERED_RAIL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POWERED_RAIL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DETECTOR_RAIL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DETECTOR_RAIL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DETECTOR_RAIL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RAIL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RAIL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RAIL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACTIVATOR_RAIL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACTIVATOR_RAIL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACTIVATOR_RAIL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BREWING_STAND, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BREWING_STAND).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BREWING_STAND)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CAULDRON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CAULDRON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAULDRON)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FLOWER_POT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FLOWER_POT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FLOWER_POT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMOKER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMOKER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOKER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLAST_FURNACE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLAST_FURNACE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLAST_FURNACE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRINDSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRINDSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRINDSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONECUTTER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STONECUTTER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONECUTTER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BELL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BELL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BELL)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LANTERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LANTERN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LANTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SOUL_LANTERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SOUL_LANTERN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SOUL_LANTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CAMPFIRE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CAMPFIRE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAMPFIRE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SOUL_CAMPFIRE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SOUL_CAMPFIRE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SOUL_CAMPFIRE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BEE_NEST, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BEE_NEST).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BEE_NEST)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BEEHIVE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BEEHIVE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BEEHIVE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HONEYCOMB_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HONEYCOMB_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HONEYCOMB_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LODESTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LODESTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LODESTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRYING_OBSIDIAN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRYING_OBSIDIAN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRYING_OBSIDIAN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACKSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACKSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACKSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACKSTONE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACKSTONE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACKSTONE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACKSTONE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACKSTONE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACKSTONE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GILDED_BLACKSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GILDED_BLACKSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GILDED_BLACKSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_BLACKSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHISELED_POLISHED_BLACKSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHISELED_POLISHED_BLACKSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_POLISHED_BLACKSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_BRICK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_BRICK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_BRICK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_BRICK_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_BRICK_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_BRICK_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRACKED_POLISHED_BLACKSTONE_BRICKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRACKED_POLISHED_BLACKSTONE_BRICKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRACKED_POLISHED_BLACKSTONE_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RESPAWN_ANCHOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RESPAWN_ANCHOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RESPAWN_ANCHOR)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMALL_AMETHYST_BUD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMALL_AMETHYST_BUD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMALL_AMETHYST_BUD)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MEDIUM_AMETHYST_BUD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MEDIUM_AMETHYST_BUD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MEDIUM_AMETHYST_BUD)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LARGE_AMETHYST_BUD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LARGE_AMETHYST_BUD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LARGE_AMETHYST_BUD)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.AMETHYST_CLUSTER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AMETHYST_CLUSTER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AMETHYST_CLUSTER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POINTED_DRIPSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POINTED_DRIPSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POINTED_DRIPSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OCHRE_FROGLIGHT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OCHRE_FROGLIGHT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OCHRE_FROGLIGHT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.VERDANT_FROGLIGHT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.VERDANT_FROGLIGHT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.VERDANT_FROGLIGHT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PEARLESCENT_FROGLIGHT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PEARLESCENT_FROGLIGHT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PEARLESCENT_FROGLIGHT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FROGSPAWN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FROGSPAWN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FROGSPAWN)))
+                    .with(CanPlaceOnFluidsItemComponent.of(RaycastContext.FluidHandling.SOURCE_ONLY, false, Direction.UP.getVector()))
+                    .build()
+            ));
+        }
+
+        private void bootstrapAttachedToSideBlocks() {
+            this.registerable.register(ItemKeys.TORCH, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TORCH).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.TORCH), this.blocks.getOrThrow(BlockKeys.WALL_TORCH), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SOUL_TORCH, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SOUL_TORCH).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.SOUL_TORCH), this.blocks.getOrThrow(BlockKeys.SOUL_WALL_TORCH), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TUBE_CORAL_FAN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TUBE_CORAL_FAN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.TUBE_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.TUBE_CORAL_WALL_FAN), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BRAIN_CORAL_FAN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BRAIN_CORAL_FAN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BRAIN_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.BRAIN_CORAL_WALL_FAN), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BUBBLE_CORAL_FAN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BUBBLE_CORAL_FAN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BUBBLE_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.BUBBLE_CORAL_WALL_FAN), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FIRE_CORAL_FAN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FIRE_CORAL_FAN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.FIRE_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.FIRE_CORAL_WALL_FAN), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HORN_CORAL_FAN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HORN_CORAL_FAN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.HORN_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.HORN_CORAL_WALL_FAN), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_TUBE_CORAL_FAN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_TUBE_CORAL_FAN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DEAD_TUBE_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.DEAD_TUBE_CORAL_WALL_FAN), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_BRAIN_CORAL_FAN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_BRAIN_CORAL_FAN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DEAD_BRAIN_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.DEAD_BRAIN_CORAL_WALL_FAN), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_BUBBLE_CORAL_FAN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_BUBBLE_CORAL_FAN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DEAD_BUBBLE_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.DEAD_BUBBLE_CORAL_WALL_FAN), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_FIRE_CORAL_FAN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_FIRE_CORAL_FAN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DEAD_FIRE_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.DEAD_FIRE_CORAL_WALL_FAN), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_HORN_CORAL_FAN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_HORN_CORAL_FAN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DEAD_HORN_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.DEAD_HORN_CORAL_WALL_FAN), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.REDSTONE_TORCH, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.REDSTONE_TORCH).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.REDSTONE_TORCH), this.blocks.getOrThrow(BlockKeys.REDSTONE_WALL_TORCH), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CRIMSON_SIGN), this.blocks.getOrThrow(BlockKeys.CRIMSON_WALL_SIGN), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.WARPED_SIGN), this.blocks.getOrThrow(BlockKeys.WARPED_WALL_SIGN), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_HANGING_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_HANGING_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CRIMSON_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.CRIMSON_WALL_HANGING_SIGN), Direction.UP))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_HANGING_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_HANGING_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.WARPED_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.WARPED_WALL_HANGING_SIGN), Direction.UP))
+                    .build()
+            ));
+        }
+
+        private void bootstrapColoredBlocks() {
+            this.bootstrapShulkerBoxes();
+            this.registerable.register(ItemKeys.WHITE_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHITE_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_STAINED_GLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_STAINED_GLASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_STAINED_GLASS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHITE_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_STAINED_GLASS_PANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_STAINED_GLASS_PANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_STAINED_GLASS_PANE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHITE_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_GLAZED_TERRACOTTA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_GLAZED_TERRACOTTA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_GLAZED_TERRACOTTA)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHITE_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_CONCRETE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_CONCRETE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_CONCRETE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHITE_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_CONCRETE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_CONCRETE_POWDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_CONCRETE_POWDER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHITE_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_BED, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_BED).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_BED)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHITE_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_CANDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_CANDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_CANDLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_CANDLE)))
+                    .build()
+            ));
+        }
+
+        private void bootstrapShulkerBoxes() {
+            this.registerable.register(ItemKeys.SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHITE_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_SHULKER_BOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_SHULKER_BOX).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_SHULKER_BOX)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .build()
+            ));
+        }
+
+        private void bootstrapItemNameBlocks() {
+            this.registerable.register(ItemKeys.REDSTONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.REDSTONE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REDSTONE_WIRE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRING, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STRING).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TRIPWIRE)))
+                    .build()
+            ));
+        }
+
+        private void bootstrapOperatorOnlyBlocks() {
+            this.registerable.register(ItemKeys.COMMAND_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COMMAND_BLOCK).rarity(Rarity.EPIC).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.COMMAND_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.REPEATING_COMMAND_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.REPEATING_COMMAND_BLOCK).rarity(Rarity.EPIC).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.REPEATING_COMMAND_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHAIN_COMMAND_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHAIN_COMMAND_BLOCK).rarity(Rarity.EPIC).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.CHAIN_COMMAND_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRUCTURE_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRUCTURE_BLOCK).rarity(Rarity.EPIC).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.STRUCTURE_BLOCK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JIGSAW, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JIGSAW).rarity(Rarity.EPIC).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.JIGSAW)))
+                    .build()
+            ));
+        }
+
+        private void bootstrapToolsAndWeapons() {
+            this.registerable.register(ItemKeys.WOODEN_SWORD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_SWORD).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.sword(ToolMaterials.WOOD,ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WOODEN_SHOVEL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_SHOVEL).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.shovel(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WOODEN_PICKAXE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_PICKAXE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.pickaxe(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WOODEN_AXE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_AXE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.axe(ToolMaterials.WOOD, 6.0d, -3.2d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WOODEN_HOE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_HOE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.hoe(ToolMaterials.WOOD, 0.0d, -3.0d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_SWORD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_SWORD).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.sword(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_SHOVEL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_SHOVEL).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.shovel(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_PICKAXE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_PICKAXE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.pickaxe(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_AXE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_AXE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.axe(ToolMaterials.STONE, 7.0d, -3.2d, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_HOE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_HOE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.hoe(ToolMaterials.STONE, 1.0d, -2.0d, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_SWORD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_SWORD).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.sword(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_SHOVEL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_SHOVEL).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.shovel(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_PICKAXE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_PICKAXE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.pickaxe(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_AXE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_AXE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.axe(ToolMaterials.GOLD, 6.0d, -3.0d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_HOE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HOE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.hoe(ToolMaterials.GOLD, 0.0d, -3.0d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_SWORD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_SWORD).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.sword(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_SHOVEL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_SHOVEL).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.shovel(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_PICKAXE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_PICKAXE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.pickaxe(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_AXE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_AXE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.axe(ToolMaterials.IRON, 6.0d, -3.1d, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_HOE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HOE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.hoe(ToolMaterials.IRON, 2.0d, -1.0d, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_SWORD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_SWORD).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.sword(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_SHOVEL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_SHOVEL).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.shovel(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_PICKAXE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_PICKAXE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.pickaxe(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_AXE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_AXE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.axe(ToolMaterials.DIAMOND, 5.0d, -3.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_HOE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HOE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.hoe(ToolMaterials.DIAMOND, 3.0d, 0.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_SWORD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SWORD).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.sword(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_SHOVEL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SHOVEL).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.shovel(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_PICKAXE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_PICKAXE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.pickaxe(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_AXE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_AXE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.axe(ToolMaterials.NETHERITE, 5.0d, -3.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_HOE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HOE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.hoe(ToolMaterials.NETHERITE, 4.0d, 0.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FISHING_ROD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FISHING_ROD).build(), 1),
+                ItemComponentSet.builder()
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SHEARS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHEARS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.of(238))
+                    .with(ToolItemComponent.builder(1)
+                        .miningSpeed(15.0f, ItematicBlockTags.SHEARS_SUPER_EFFICIENT, true)
+                        .miningSpeed(5.0f, ItematicBlockTags.SHEARS_SLIGHTLY_EFFICIENT, true)
+                        .miningSpeed(2.0f, ItematicBlockTags.SHEARS_EFFICIENT, true)
+                        .build())
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BOW, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOW).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.of(384))
+                    .with(ShooterItemComponent.of(ItematicItemTags.BOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, BowItem.RANGE, false))
+                    .with(UseAnimationItemComponent.of(UseAction.BOW))
+                    .with(EnchantableItemComponent.enchants(1, EnchantmentTags.BOW_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.BOW_FORGING))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CROSSBOW, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CROSSBOW).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.of(465))
+                    .with(ShooterItemComponent.of(ItematicItemTags.CROSSBOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, CrossbowItem.RANGE, true))
+                    .with(UseAnimationItemComponent.of(UseAction.CROSSBOW))
+                    .with(EnchantableItemComponent.enchants(1, EnchantmentTags.CROSSBOW_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.CROSSBOW_FORGING))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TRIDENT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TRIDENT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.of(250, true))
+                    .with(ToolItemComponent.builder(2)
+                        .build())
+                    .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE, -2.9d))
+                    .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
+                    .with(ProjectileItemComponent.of(TridentEntityInitializer.of(true), 1))
+                    .with(UseAnimationItemComponent.of(UseAction.SPEAR))
+                    .with(EnchantableItemComponent.enchants(1, EnchantmentTags.TRIDENT_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.TRIDENT_FORGING))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.STOPPED_USING, ActionEntry.of(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
+                            AllOfLootCondition.builder(
+                                EntityPropertiesLootCondition.builder(
+                                    LootContext.EntityTarget.THIS,
+                                    EntityPredicate.Builder.create()
+                                        .itematic$usedItemAtLeast(TridentItem.MIN_DRAW_DURATION)
+                                        .itematic$inWaterOrRain(true)
+                                ),
+                                MatchToolLootCondition.builder(
+                                    ItemPredicate.Builder.create()
+                                        .enchantment(new EnchantmentPredicate(Enchantments.RIPTIDE, NumberRange.IntRange.ANY)))
+                            ).build()
+                        ),
+                        PassingSequenceHandler.builder()
+                            .add(TwirlPlayerAction.INSTANCE)
+                            .add(DamageItemAction.of(1))
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CARROT_ON_A_STICK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CARROT_ON_A_STICK).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.of(25))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.STEERING_FORGING))
+                    .with(SteeringItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.PIG), 7))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.BREAK_ITEM, ActionEntry.of(new ExchangeItemAction(this.items.getOrThrow(ItemKeys.FISHING_ROD), false)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_FUNGUS_ON_A_STICK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WARPED_FUNGUS_ON_A_STICK).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.of(100))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.STEERING_FORGING))
+                    .with(SteeringItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.STRIDER), 1))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.BREAK_ITEM, ActionEntry.of(new ExchangeItemAction(this.items.getOrThrow(ItemKeys.FISHING_ROD), false)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FLINT_AND_STEEL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLINT_AND_STEEL).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.of(64))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.USE_ON_BLOCK)))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
+                            .add(DamageItemAction.of(1))
+                            .add(PlaySoundAction.builder(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.FLINT_AND_STEEL_USE), SoundCategory.BLOCKS)
+                                .pitch(0.8f, 1.2f)
+                                .build())
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BRUSH, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BRUSH).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BrushItemComponent.INSTANCE)
+                    .with(UseDurationItemComponent.of(BrushItemAccessor.maxBrushTime()))
+                    .with(DamageableItemComponent.of(64))
+                    .with(UseAnimationItemComponent.of(UseAction.BRUSH))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.BRUSH_FORGING))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BRUSH)))
+                    .build()
+            ));
+        }
+
+        private void bootstrapEntities() {
+            this.bootstrapSpawnEggs();
+            this.registerable.register(ItemKeys.MINECART, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MINECART).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.MINECART, MinecartEntity::new), this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHEST_MINECART, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHEST_MINECART).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.CHEST_MINECART, ChestMinecartEntity::new), this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FURNACE_MINECART, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FURNACE_MINECART).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.FURNACE_MINECART, FurnaceMinecartEntity::new), this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TNT_MINECART, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TNT_MINECART).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.TNT_MINECART, TntMinecartEntity::new), this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HOPPER_MINECART, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HOPPER_MINECART).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.HOPPER_MINECART, HopperMinecartEntity::new), this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COMMAND_BLOCK_MINECART, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COMMAND_BLOCK_MINECART).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.COMMAND_BLOCK_MINECART, CommandBlockMinecartEntity::new), this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.OAK_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.OAK), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_CHEST_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.OAK_CHEST_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.OAK), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPRUCE_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.SPRUCE), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_CHEST_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPRUCE_CHEST_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.SPRUCE), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BIRCH_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.BIRCH), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_CHEST_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BIRCH_CHEST_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.BIRCH), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.JUNGLE_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.JUNGLE), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_CHEST_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.JUNGLE_CHEST_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.JUNGLE), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ACACIA_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.ACACIA), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_CHEST_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ACACIA_CHEST_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.ACACIA), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHERRY_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.CHERRY), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_CHEST_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHERRY_CHEST_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.CHERRY), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DARK_OAK_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.DARK_OAK), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_CHEST_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DARK_OAK_CHEST_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.DARK_OAK), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MANGROVE_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.MANGROVE), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_CHEST_BOAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MANGROVE_CHEST_BOAT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.MANGROVE), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_RAFT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAMBOO_RAFT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.BAMBOO), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_CHEST_RAFT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAMBOO_CHEST_RAFT).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.BAMBOO), this.dispenseBehaviors))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PAINTING, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PAINTING).build()),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.of(DecorationEntityInitializer.createPainting(EntityType.PAINTING)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ITEM_FRAME, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ITEM_FRAME).build()),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.of(DecorationEntityInitializer.createItemFrame(EntityType.ITEM_FRAME, ItemFrameEntity::new)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GLOW_ITEM_FRAME, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOW_ITEM_FRAME).build()),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.of(DecorationEntityInitializer.createItemFrame(EntityType.GLOW_ITEM_FRAME, GlowItemFrameEntity::new)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ARMOR_STAND, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARMOR_STAND).build(), 16),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.from(new ArmorStandEntityInitializer(), this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.END_CRYSTAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.END_CRYSTAL).rarity(Rarity.RARE).build()),
+                ItemComponentSet.builder()
+                    .with(EntityItemComponent.of(new EndCrystalEntityInitializer()))
+                    .build()
+            ));
+        }
+
+        private void bootstrapSpawnEggs() {
+            this.registerable.register(ItemKeys.ARMADILLO_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARMADILLO_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ARMADILLO), 0xad716d, 0x824848, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ALLAY_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ALLAY_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ALLAY), 0x00daff, 0x00adff, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.AXOLOTL_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.AXOLOTL_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.AXOLOTL), 0xfbc1e3, 0xa62d74, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAT_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAT_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BAT), 0x4c3e30, 0x0f0f0f, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BEE_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEE_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BEE), 0xedc343, 0x43241b, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLAZE_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLAZE_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BLAZE), 0xf6b201, 0xfff87e, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CAT_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CAT_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CAT), 0xefc88e, 0x957256, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CAMEL_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CAMEL_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CAMEL), 0xfcc369, 0xcb9337, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CAVE_SPIDER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CAVE_SPIDER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CAVE_SPIDER), 0x0c424e, 0xa80e0e, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHICKEN_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHICKEN_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CHICKEN), 0xa1a1a1, 0xff0000, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COD_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COD_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.COD), 0xc1a76a, 0xe5c48b, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COW_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COW_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.COW), 0x443626, 0xa1a1a1, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CREEPER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CREEPER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CREEPER), 0x0da70b, 0x000000, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DOLPHIN_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DOLPHIN_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.DOLPHIN), 0x223b4d, 0xf9f9f9, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DONKEY_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DONKEY_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.DONKEY), 0x534539, 0x867566, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DROWNED_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DROWNED_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.DROWNED), 0x8ff1d7, 0x799c65, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ELDER_GUARDIAN_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ELDER_GUARDIAN_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ELDER_GUARDIAN), 0xceccba, 0x747693, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ENDER_DRAGON_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDER_DRAGON_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ENDER_DRAGON), 0x1c1c1c, 0xe079fa, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ENDERMAN_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDERMAN_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ENDERMAN), 0x161616, 0x000000, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ENDERMITE_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDERMITE_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ENDERMITE), 0x161616, 0x6e6e6e, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EVOKER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EVOKER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.EVOKER), 0x959b9b, 0x1e1c1a, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FOX_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FOX_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.FOX), 0xd5b69f, 0xcc6920, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FROG_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FROG_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.FROG), 0xd07444, 0xffc77c, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GHAST_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GHAST_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.GHAST), 0xf9f9f9, 0xbcbcbc, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GLOW_SQUID_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOW_SQUID_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.GLOW_SQUID), 0x095656, 0x85f1bc, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOAT_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOAT_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.GOAT), 0xa5947c, 0x55493e, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GUARDIAN_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GUARDIAN_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.GUARDIAN), 0x5a8272, 0xf17d30, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HOGLIN_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HOGLIN_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.HOGLIN), 0xc66e55, 0x5f6464, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HORSE_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HORSE_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.HORSE), 0xc09e7d, 0xeee500, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HUSK_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HUSK_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.HUSK), 0x797061, 0xe6cc94, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_GOLEM_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_GOLEM_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.IRON_GOLEM), 0xdbcdc2, 0x74a332, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LLAMA_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LLAMA_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.LLAMA), 0xc09e7d, 0x995f40, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGMA_CUBE_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MAGMA_CUBE_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MAGMA_CUBE), 0x340000, 0xfcfc00, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOOSHROOM_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MOOSHROOM_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MOOSHROOM), 0xa00f10, 0xb7b7b7, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MULE_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MULE_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MULE), 0x1b0200, 0x51331d, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OCELOT_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.OCELOT_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.OCELOT), 0xefde7d, 0x564434, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PANDA_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PANDA_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PANDA), 0xe7e7e7, 0x1b1b22, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PARROT_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PARROT_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PARROT), 0x0da70b, 0xff0000, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PHANTOM_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PHANTOM_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PHANTOM), 0x43518a, 0x88ff00, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PIG_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIG_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PIG), 0xf0a5a2, 0xdb635f, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PIGLIN_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIGLIN_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PIGLIN), 0x995f40, 0xf9f3a4, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PIGLIN_BRUTE_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIGLIN_BRUTE_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PIGLIN_BRUTE), 0x592a10, 0xf9f3a4, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PILLAGER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PILLAGER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PILLAGER), 0x532f36, 0x959b9b, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POLAR_BEAR_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POLAR_BEAR_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.POLAR_BEAR), 0xeeeede, 0xd5d6cd, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PUFFERFISH_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUFFERFISH_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), 0xf6b201, 0x37c3f2, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RABBIT_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.RABBIT), 0x995f40, 0x734831, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RAVAGER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAVAGER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.RAVAGER), 0x757470, 0x5b5049, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SALMON_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SALMON_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SALMON), 0xa00f10, 0x0e8474, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SHEEP_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHEEP_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SHEEP), 0xe7e7e7, 0xffb5b5, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SHULKER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHULKER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SHULKER), 0x946794, 0x4d3852, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SILVERFISH_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SILVERFISH_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SILVERFISH), 0x6e6e6e, 0x303030, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SKELETON_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SKELETON_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SKELETON), 0xc1c1c1, 0x494949, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SKELETON_HORSE_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SKELETON_HORSE_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SKELETON_HORSE), 0x68684f, 0xe5e5d8, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SLIME_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SLIME_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SLIME), 0x51a03e, 0x7ebf6e, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SNIFFER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNIFFER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SNIFFER), 0x871e09, 0x25ab70, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SNOW_GOLEM_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNOW_GOLEM_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SNOW_GOLEM), 0xd9f2f2, 0x81a4a4, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPIDER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPIDER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SPIDER), 0x342d27, 0xa80e0e, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SQUID_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SQUID_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SQUID), 0x223b4d, 0x708899, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRAY_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STRAY_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.STRAY), 0x617677, 0xddeaea, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIDER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STRIDER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.STRIDER), 0x9c3436, 0x4d494d, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TADPOLE_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TADPOLE_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.TADPOLE), 0x6d533d, 0x160a00, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TRADER_LLAMA_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TRADER_LLAMA_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.TRADER_LLAMA), 0xeaa430, 0x456296, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TROPICAL_FISH_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), 0xef6915, 0xfff9ef, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TURTLE_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TURTLE_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.TURTLE), 0xe7e7e7, 0x00afaf, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.VEX_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.VEX_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.VEX), 0x7a90a4, 0xe8edf1, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.VILLAGER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.VILLAGER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.VILLAGER), 0x563c33, 0xbd8b72, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.VINDICATOR_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.VINDICATOR_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.VINDICATOR), 0x959b9b, 0x275e61, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WANDERING_TRADER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WANDERING_TRADER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.WANDERING_TRADER), 0x456296, 0xeaa430, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARDEN_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WARDEN_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.WARDEN), 0x0f4649, 0x39d6e0, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WITCH_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WITCH_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.WITCH), 0x340000, 0x51a03e, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WITHER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WITHER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.WITHER), 0x141414, 0x4d72a0, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WITHER_SKELETON_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WITHER_SKELETON_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.WITHER_SKELETON), 0x141414, 0x474d4d, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WOLF_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOLF_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.WOLF), 0xd7d3d3, 0xceaf96, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ZOGLIN_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ZOGLIN_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ZOGLIN), 0xc66e55, 0xe6e6e6, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ZOMBIE_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ZOMBIE_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE), 0x00afaf, 0x799c65, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ZOMBIE_HORSE_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ZOMBIE_HORSE_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_HORSE), 0x315234, 0x97c284, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ZOMBIE_VILLAGER_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ZOMBIE_VILLAGER_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_VILLAGER), 0x563c33, 0x799c65, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG).build()),
+                ItemComponentSet.builder()
+                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIFIED_PIGLIN), 0xea9393, 0x4c7129, this.dispenseBehaviors))
+                    .build()
+            ));
+        }
+
+        private void bootstrapCompostables() {
+            this.registerable.register(ItemKeys.OAK_LEAVES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_LEAVES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_LEAVES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new FoliageItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_LEAVES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_LEAVES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_LEAVES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new ConstantItemColor(FoliageColors.getSpruceColor())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_LEAVES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_LEAVES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_LEAVES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new ConstantItemColor(FoliageColors.getBirchColor())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_LEAVES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_LEAVES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_LEAVES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new FoliageItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_LEAVES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_LEAVES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_LEAVES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new FoliageItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_LEAVES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_LEAVES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_LEAVES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_LEAVES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_LEAVES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_LEAVES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new FoliageItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_LEAVES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_LEAVES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_LEAVES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new ConstantItemColor(FoliageColors.getMangroveColor())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.AZALEA_LEAVES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AZALEA_LEAVES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AZALEA_LEAVES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_SAPLING, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_SAPLING).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_SAPLING)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_SAPLING, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_SAPLING).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_SAPLING)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_SAPLING, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_SAPLING).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_SAPLING)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_SAPLING, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_SAPLING).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_SAPLING)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_SAPLING, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_SAPLING).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_SAPLING)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_SAPLING, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_SAPLING).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_SAPLING)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_SAPLING, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SAPLING).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_SAPLING)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_PROPAGULE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_PROPAGULE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_PROPAGULE)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SHORT_GRASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SHORT_GRASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHORT_GRASS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new GrassItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.KELP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.KELP).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.KELP)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOSS_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MOSS_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSS_CARPET)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_PETALS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_PETALS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_PETALS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HANGING_ROOTS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HANGING_ROOTS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HANGING_ROOTS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMALL_DRIPLEAF, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMALL_DRIPLEAF).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMALL_DRIPLEAF)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHEAT_SEEDS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WHEAT_SEEDS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHEAT)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PUMPKIN_SEEDS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUMPKIN_SEEDS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PUMPKIN_STEM)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MELON_SEEDS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MELON_SEEDS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MELON_STEM)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TORCHFLOWER_SEEDS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TORCHFLOWER_SEEDS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TORCHFLOWER_CROP)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PITCHER_POD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PITCHER_POD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PITCHER_CROP)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BEETROOT_SEEDS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEETROOT_SEEDS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BEETROOTS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_ROOTS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_ROOTS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_ROOTS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SEAGRASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SEAGRASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SEAGRASS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FLOWERING_AZALEA_LEAVES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FLOWERING_AZALEA_LEAVES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FLOWERING_AZALEA_LEAVES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHER_SPROUTS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHER_SPROUTS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_SPROUTS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WEEPING_VINES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WEEPING_VINES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEEPING_VINES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TWISTING_VINES, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TWISTING_VINES).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TWISTING_VINES)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SUGAR_CANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SUGAR_CANE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SUGAR_CANE)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.VINE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.VINE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.VINE)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new FoliageItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GLOW_LICHEN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GLOW_LICHEN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GLOW_LICHEN)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TALL_GRASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TALL_GRASS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TALL_GRASS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new GrassItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CACTUS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CACTUS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CACTUS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DRIED_KELP_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRIED_KELP_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DRIED_KELP_BLOCK)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DRIED_KELP_BLOCK_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FERN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FERN)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new GrassItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LILY_PAD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LILY_PAD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_PAD)))
+                    .with(CanPlaceOnFluidsItemComponent.of(RaycastContext.FluidHandling.SOURCE_ONLY, false, Direction.UP.getVector()))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new ConstantItemColor(0x71c35c)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHER_WART, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_WART).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_WART)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COCOA_BEANS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COCOA_BEANS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COCOA)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIG_DRIPLEAF, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIG_DRIPLEAF).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIG_DRIPLEAF)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PUMPKIN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PUMPKIN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PUMPKIN)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CARVED_PUMPKIN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CARVED_PUMPKIN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARVED_PUMPKIN)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MELON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MELON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MELON)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SEA_PICKLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SEA_PICKLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SEA_PICKLE)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHEAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WHEAT).build()),
+                ItemComponentSet.builder()
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DANDELION, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DANDELION).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DANDELION)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.SATURATION), 140)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POPPY, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.POPPY).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POPPY)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.NIGHT_VISION), 100)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_ORCHID, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_ORCHID).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_ORCHID)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.SATURATION), 140)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ALLIUM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ALLIUM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ALLIUM)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 80)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.AZURE_BLUET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AZURE_BLUET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AZURE_BLUET)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.BLINDNESS), 160)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_TULIP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_TULIP).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_TULIP)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_TULIP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_TULIP).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_TULIP)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHITE_TULIP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_TULIP).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_TULIP)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_TULIP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_TULIP).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_TULIP)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OXEYE_DAISY, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OXEYE_DAISY).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXEYE_DAISY)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 160)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CORNFLOWER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CORNFLOWER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CORNFLOWER)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.JUMP_BOOST), 120)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LILY_OF_THE_VALLEY, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LILY_OF_THE_VALLEY).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_OF_THE_VALLEY)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 240)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WITHER_ROSE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WITHER_ROSE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WITHER_ROSE)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WITHER), 160)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.AZALEA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AZALEA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AZALEA)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SUNFLOWER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SUNFLOWER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SUNFLOWER)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LILAC, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LILAC).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILAC)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ROSE_BUSH, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ROSE_BUSH).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ROSE_BUSH)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PEONY, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PEONY).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PEONY)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LARGE_FERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LARGE_FERN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LARGE_FERN)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(TintedItemComponent.of(new GrassItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPORE_BLOSSOM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPORE_BLOSSOM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPORE_BLOSSOM)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_MUSHROOM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_MUSHROOM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_MUSHROOM)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_MUSHROOM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_MUSHROOM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_MUSHROOM)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_FUNGUS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_FUNGUS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_FUNGUS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_FUNGUS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_FUNGUS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_FUNGUS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRIMSON_ROOTS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_ROOTS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_ROOTS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_ROOTS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_ROOTS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_ROOTS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOSS_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MOSS_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSS_BLOCK)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSHROOM_STEM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MUSHROOM_STEM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUSHROOM_STEM)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SHROOMLIGHT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SHROOMLIGHT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHROOMLIGHT)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHER_WART_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHER_WART_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_WART_BLOCK)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARPED_WART_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_WART_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_WART_BLOCK)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HAY_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.HAY_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HAY_BLOCK)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FLOWERING_AZALEA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FLOWERING_AZALEA).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FLOWERING_AZALEA)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TORCHFLOWER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TORCHFLOWER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TORCHFLOWER)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(SuspiciousEffectIngredientItemComponent.of(
+                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.NIGHT_VISION), 100)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PITCHER_PLANT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PITCHER_PLANT).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PITCHER_PLANT)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_MUSHROOM_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_MUSHROOM_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_MUSHROOM_BLOCK)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_MUSHROOM_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_MUSHROOM_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_MUSHROOM_BLOCK)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CAKE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CAKE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAKE)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.GUARANTEED_TO_COMPOST))
+                    .build()
+            ));
+        }
+
+        private void bootstrapEquipment() {
+            this.bootstrapArmor();
+            this.bootstrapSkulls();
+            this.registerable.register(ItemKeys.ELYTRA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ELYTRA).rarity(Rarity.UNCOMMON).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.of(432, true))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.CHEST, true, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_ELYTRA)))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_ELYTRA))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SHIELD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHIELD).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.of(336))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.OFFHAND, false, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_SHIELD))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(UseAnimationItemComponent.of(UseAction.BLOCK))
+                    .with(BannerPatternHolderItemComponent.of())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE, ActionEntry.of(StartUsingItemAction.indefinitely()))
+                    .build()
+            ));
+        }
+
+        private void bootstrapArmor() {
+            this.registerable.register(ItemKeys.LEATHER_HELMET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_HELMET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.HELMET_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DyeableItemComponent.of())
+                    .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LEATHER_CHESTPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_CHESTPLATE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.CHESTPLATE_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DyeableItemComponent.of())
+                    .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LEATHER_LEGGINGS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_LEGGINGS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.LEGGINGS_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DyeableItemComponent.of())
+                    .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LEATHER_BOOTS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_BOOTS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.BOOTS_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DyeableItemComponent.of())
+                    .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHAINMAIL_HELMET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_HELMET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.HELMET_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHAINMAIL_CHESTPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_CHESTPLATE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.CHESTPLATE_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHAINMAIL_LEGGINGS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_LEGGINGS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.LEGGINGS_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHAINMAIL_BOOTS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_BOOTS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.BOOTS_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_HELMET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.HELMET_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_CHESTPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_CHESTPLATE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.CHESTPLATE_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_LEGGINGS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_LEGGINGS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.LEGGINGS_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_BOOTS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_BOOTS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.BOOTS_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_HELMET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HELMET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.HELMET_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_CHESTPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_CHESTPLATE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.CHESTPLATE_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_LEGGINGS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_LEGGINGS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.LEGGINGS_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_BOOTS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_BOOTS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.BOOTS_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_HELMET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HELMET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.HELMET_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_CHESTPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_CHESTPLATE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.CHESTPLATE_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_LEGGINGS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_LEGGINGS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.LEGGINGS_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_BOOTS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_BOOTS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.BOOTS_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_HELMET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HELMET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.HELMET_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_CHESTPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_CHESTPLATE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.CHESTPLATE_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_LEGGINGS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_LEGGINGS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.LEGGINGS_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_BOOTS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_BOOTS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.BOOTS_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TURTLE_HELMET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TURTLE_HELMET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.of(275, EquipmentSlot.HEAD, this.armorMaterials.getOrThrow(ArmorMaterialKeys.TURTLE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_TURTLE)))
+                    .with(EnchantableItemComponent.enchants(ArmorMaterials.TURTLE, EnchantmentTags.HELMET_ENCHANTING))
+                    .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
+                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_TURTLE_ARMOR))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LEATHER_HORSE_ARMOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_HORSE_ARMOR).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER), AnimalArmorItem.Type.EQUESTRIAN))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DyeableItemComponent.of())
+                    .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_HORSE_ARMOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HORSE_ARMOR).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON), AnimalArmorItem.Type.EQUESTRIAN))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_HORSE_ARMOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HORSE_ARMOR).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD), AnimalArmorItem.Type.EQUESTRIAN))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_HORSE_ARMOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HORSE_ARMOR).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND), AnimalArmorItem.Type.EQUESTRIAN))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WOLF_ARMOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOLF_ARMOR).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.ARMADILLO), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND), AnimalArmorItem.Type.CANINE))
+                    .build()
+            ));
+        }
+
+        private void bootstrapSkulls() {
+            this.registerable.register(ItemKeys.SKELETON_SKULL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SKELETON_SKULL).rarity(Rarity.UNCOMMON).build()),
+                ItemComponentSet.builder()
+                    .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.SKELETON_SKULL), this.blocks.getOrThrow(BlockKeys.SKELETON_WALL_SKULL), this.soundEvents, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WITHER_SKELETON_SKULL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WITHER_SKELETON_SKULL).rarity(Rarity.UNCOMMON).build()),
+                ItemComponentSet.builder()
+                    .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.WITHER_SKELETON_SKULL), this.blocks.getOrThrow(BlockKeys.WITHER_SKELETON_WALL_SKULL), this.soundEvents, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PLAYER_HEAD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PLAYER_HEAD).rarity(Rarity.UNCOMMON).build()),
+                ItemComponentSet.builder()
+                    .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.PLAYER_HEAD), this.blocks.getOrThrow(BlockKeys.PLAYER_WALL_HEAD), this.soundEvents, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ZOMBIE_HEAD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ZOMBIE_HEAD).rarity(Rarity.UNCOMMON).build()),
+                ItemComponentSet.builder()
+                    .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.ZOMBIE_HEAD), this.blocks.getOrThrow(BlockKeys.ZOMBIE_WALL_HEAD), this.soundEvents, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CREEPER_HEAD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CREEPER_HEAD).rarity(Rarity.UNCOMMON).build()),
+                ItemComponentSet.builder()
+                    .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.CREEPER_HEAD), this.blocks.getOrThrow(BlockKeys.CREEPER_WALL_HEAD), this.soundEvents, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DRAGON_HEAD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRAGON_HEAD).rarity(Rarity.UNCOMMON).build()),
+                ItemComponentSet.builder()
+                    .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.DRAGON_HEAD), this.blocks.getOrThrow(BlockKeys.DRAGON_WALL_HEAD), this.soundEvents, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PIGLIN_HEAD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PIGLIN_HEAD).rarity(Rarity.UNCOMMON).build()),
+                ItemComponentSet.builder()
+                    .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.PIGLIN_HEAD), this.blocks.getOrThrow(BlockKeys.PIGLIN_WALL_HEAD), this.soundEvents, this.dispenseBehaviors))
+                    .build()
+            ));
+        }
+
+        private void bootstrapFuel() {
+            this.registerable.register(ItemKeys.COAL_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COAL_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COAL_BLOCK)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.COAL_BLOCK_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLAZE_ROD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLAZE_ROD).build()),
+                ItemComponentSet.builder()
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BLAZE_ROD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COAL).build()),
+                ItemComponentSet.builder()
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.COAL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHARCOAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHARCOAL).build()),
+                ItemComponentSet.builder()
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.COAL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_HANGING_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_HANGING_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.OAK_WALL_HANGING_SIGN), Direction.UP))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_HANGING_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_HANGING_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.SPRUCE_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.SPRUCE_WALL_HANGING_SIGN), Direction.UP))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_HANGING_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_HANGING_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BIRCH_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.BIRCH_WALL_HANGING_SIGN), Direction.UP))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_HANGING_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_HANGING_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.JUNGLE_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.JUNGLE_WALL_HANGING_SIGN), Direction.UP))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_HANGING_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_HANGING_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.ACACIA_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.ACACIA_WALL_HANGING_SIGN), Direction.UP))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_HANGING_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_HANGING_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CHERRY_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.CHERRY_WALL_HANGING_SIGN), Direction.UP))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_HANGING_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_HANGING_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DARK_OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.DARK_OAK_WALL_HANGING_SIGN), Direction.UP))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_HANGING_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_HANGING_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.MANGROVE_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.MANGROVE_WALL_HANGING_SIGN), Direction.UP))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_HANGING_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_HANGING_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BAMBOO_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.BAMBOO_WALL_HANGING_SIGN), Direction.UP))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.OAK_SIGN), this.blocks.getOrThrow(BlockKeys.OAK_WALL_SIGN), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.SPRUCE_SIGN), this.blocks.getOrThrow(BlockKeys.SPRUCE_WALL_SIGN), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BIRCH_SIGN), this.blocks.getOrThrow(BlockKeys.BIRCH_WALL_SIGN), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.JUNGLE_SIGN), this.blocks.getOrThrow(BlockKeys.JUNGLE_WALL_SIGN), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.ACACIA_SIGN), this.blocks.getOrThrow(BlockKeys.ACACIA_WALL_SIGN), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CHERRY_SIGN), this.blocks.getOrThrow(BlockKeys.CHERRY_WALL_SIGN), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DARK_OAK_SIGN), this.blocks.getOrThrow(BlockKeys.DARK_OAK_WALL_SIGN), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.MANGROVE_SIGN), this.blocks.getOrThrow(BlockKeys.MANGROVE_WALL_SIGN), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_SIGN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_SIGN).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BAMBOO_SIGN), this.blocks.getOrThrow(BlockKeys.BAMBOO_WALL_SIGN), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_PLANKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_PLANKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_PLANKS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_PLANKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_PLANKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_PLANKS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_PLANKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_PLANKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_PLANKS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_PLANKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_PLANKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_PLANKS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_PLANKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_PLANKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_PLANKS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_PLANKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_PLANKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_PLANKS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_PLANKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_PLANKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_PLANKS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_PLANKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_PLANKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_PLANKS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_PLANKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_PLANKS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_PLANKS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_MOSAIC, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_MOSAIC).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_BLOCK)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_OAK_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_OAK_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_OAK_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_SPRUCE_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_SPRUCE_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_SPRUCE_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_BIRCH_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_BIRCH_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_BIRCH_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_JUNGLE_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_JUNGLE_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_JUNGLE_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_ACACIA_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_ACACIA_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_ACACIA_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_CHERRY_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_CHERRY_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_CHERRY_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_DARK_OAK_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_DARK_OAK_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_DARK_OAK_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_MANGROVE_LOG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_MANGROVE_LOG).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_MANGROVE_LOG)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_OAK_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_OAK_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_OAK_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_SPRUCE_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_SPRUCE_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_SPRUCE_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_BIRCH_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_BIRCH_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_BIRCH_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_JUNGLE_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_JUNGLE_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_JUNGLE_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_ACACIA_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_ACACIA_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_ACACIA_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_CHERRY_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_CHERRY_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_CHERRY_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_DARK_OAK_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_DARK_OAK_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_DARK_OAK_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_MANGROVE_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_MANGROVE_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_MANGROVE_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STRIPPED_BAMBOO_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRIPPED_BAMBOO_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_BAMBOO_BLOCK)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_WOOD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_WOOD).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_WOOD)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_FENCE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_FENCE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_FENCE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_FENCE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_FENCE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_FENCE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_FENCE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_FENCE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_FENCE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_FENCE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_FENCE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_FENCE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_FENCE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_FENCE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_FENCE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_FENCE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_FENCE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_FENCE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_FENCE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_FENCE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_FENCE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_FENCE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_FENCE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_FENCE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_FENCE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_FENCE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_FENCE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_STAIRS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_STAIRS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_STAIRS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_STAIRS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_STAIRS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_STAIRS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_STAIRS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_STAIRS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_STAIRS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_MOSAIC_STAIRS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_MOSAIC_STAIRS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC_STAIRS)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_PRESSURE_PLATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_PRESSURE_PLATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_PRESSURE_PLATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_PRESSURE_PLATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_PRESSURE_PLATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_PRESSURE_PLATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_PRESSURE_PLATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_PRESSURE_PLATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_PRESSURE_PLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_PRESSURE_PLATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_PRESSURE_PLATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_TRAPDOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_TRAPDOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_TRAPDOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_TRAPDOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_TRAPDOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_TRAPDOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_TRAPDOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_TRAPDOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_TRAPDOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_TRAPDOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_TRAPDOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_TRAPDOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_TRAPDOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_TRAPDOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_TRAPDOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_TRAPDOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_TRAPDOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_TRAPDOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_TRAPDOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_TRAPDOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_TRAPDOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_TRAPDOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_TRAPDOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_TRAPDOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_TRAPDOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_TRAPDOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_TRAPDOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_FENCE_GATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_FENCE_GATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_FENCE_GATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_FENCE_GATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_FENCE_GATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_FENCE_GATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_FENCE_GATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_FENCE_GATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_FENCE_GATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_FENCE_GATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_FENCE_GATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_FENCE_GATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_FENCE_GATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_FENCE_GATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_FENCE_GATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_FENCE_GATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_FENCE_GATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_FENCE_GATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_FENCE_GATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_FENCE_GATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_FENCE_GATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_FENCE_GATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_FENCE_GATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_FENCE_GATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_FENCE_GATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_FENCE_GATE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_FENCE_GATE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BOOKSHELF, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BOOKSHELF).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BOOKSHELF)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHISELED_BOOKSHELF, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHISELED_BOOKSHELF).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_BOOKSHELF)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LECTERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LECTERN).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LECTERN)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHEST, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHEST).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHEST)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TRAPPED_CHEST, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TRAPPED_CHEST).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TRAPPED_CHEST)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LADDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LADDER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LADDER)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRAFTING_TABLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRAFTING_TABLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRAFTING_TABLE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUKEBOX, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUKEBOX).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUKEBOX)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NOTE_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NOTE_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NOTE_BLOCK)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LOOM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LOOM).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LOOM)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COMPOSTER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COMPOSTER).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COMPOSTER)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BARREL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARREL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BARREL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CARTOGRAPHY_TABLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CARTOGRAPHY_TABLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARTOGRAPHY_TABLE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FLETCHING_TABLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.FLETCHING_TABLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FLETCHING_TABLE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SMITHING_TABLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SMITHING_TABLE).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMITHING_TABLE)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DAYLIGHT_DETECTOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DAYLIGHT_DETECTOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DAYLIGHT_DETECTOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_DOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_DOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_DOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_DOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_DOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_DOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_DOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_DOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_DOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_DOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_DOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_DOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_DOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_DOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_DOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_DOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_DOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_DOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_DOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_DOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_DOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_DOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_DOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_DOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_DOOR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_DOOR).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_DOOR)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.DOOR_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_SLAB)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_SLAB)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_SLAB)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_SLAB)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_SLAB)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_SLAB)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_SLAB)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_SLAB)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_SLAB)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_MOSAIC_SLAB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_MOSAIC_SLAB).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC_SLAB)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SLAB_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEAD_BUSH, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DEAD_BUSH).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_BUSH)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OAK_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_BUTTON)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPRUCE_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_BUTTON)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BIRCH_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_BUTTON)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.JUNGLE_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_BUTTON)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ACACIA_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_BUTTON)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CHERRY_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_BUTTON)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DARK_OAK_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_BUTTON)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MANGROVE_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_BUTTON)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO_BUTTON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_BUTTON).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_BUTTON)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BUTTON_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STICK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STICK).build()),
+                ItemComponentSet.builder()
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SMALL_WOODEN_ITEM_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BOWL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOWL).build()),
+                ItemComponentSet.builder()
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SMALL_WOODEN_ITEM_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BAMBOO, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BAMBOO_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SCAFFOLDING, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SCAFFOLDING).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SCAFFOLDING)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SCAFFOLDING_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHITE_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_WOOL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_WOOL).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_WOOL)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHITE_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_CARPET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_CARPET).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_CARPET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
+                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .build()
+            ));
+        }
+
+        private void bootstrapProjectiles() {
+            this.registerable.register(ItemKeys.ARROW, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARROW).build()),
+                ItemComponentSet.builder()
+                    .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SNOWBALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNOWBALL).build(), 16),
+                ItemComponentSet.builder()
+                    .with(ThrowableItemComponent.of(1.5f))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.SNOWBALL)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EGG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EGG).build(), 16),
+                ItemComponentSet.builder()
+                    .with(ThrowableItemComponent.of(1.5f))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EGG)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ENDER_PEARL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDER_PEARL).build(), 16),
+                ItemComponentSet.builder()
+                    .with(ThrowableItemComponent.of(1.5f))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.ENDER_PEARL)))
+                    .with(CooldownItemComponent.of(20))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ENDER_EYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDER_EYE).build()),
+                ItemComponentSet.builder()
+                    .with(ThrowableItemComponent.of())
+                    .with(ProjectileItemComponent.of(EyeOfEnderEntityInitializer.INSTANCE, 0))
+                    .with(PreventUseWhenUsedOnTargetItemComponent.forBlock())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                            LocationCheckLootCondition.builder(
+                                LocationPredicate.Builder.create()
+                                    .block(BlockPredicate.Builder.create()
+                                        .blocks(Blocks.END_PORTAL_FRAME)
+                                        .state(StatePredicate.Builder.create()
+                                            .exactMatch(Properties.EYE, false))))
+                                .build()
+                        ),
+                        PassingSequenceHandler.builder()
+                            .add(ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
+                                .property(Properties.EYE, true)
+                                .pushEntitiesUpwards()
+                                .build())
+                            .add(DecrementItemAction.of(1))
+                            .add(SwingHandAction.INSTANCE)
+                            .add(PlaySoundAction.of(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS))
+                            .add(DisplayParticleAction.builder(ActionContextParameter.TARGET, ParticleTypes.SMOKE)
+                                .count(16)
+                                .offset(Vec3dProvider.of(
+                                    -0.1875d, 0.1875d,
+                                    0.8125d, 0.8125d,
+                                    -0.1875d, 0.1875d))
+                                .build())
+                            .addOptional(LightEndPortalAction.of(ActionContextParameter.TARGET))
+                    ))
+                    .add(ItemEvents.THROW_PROJECTILE, ActionEntry.of(
+                        PlaySoundAction.of(ActionContextParameter.THIS, this.soundEvents.getOrThrow(SoundEventKeys.ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL, 1.0f, 1.2f)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EXPERIENCE_BOTTLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EXPERIENCE_BOTTLE).rarity(Rarity.UNCOMMON).build()),
+                ItemComponentSet.builder()
+                    .with(ThrowableItemComponent.of(0.7f, -20.0f))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FIRE_CHARGE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIRE_CHARGE).build()),
+                ItemComponentSet.builder()
+                    .with(FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.LARGE_BALL))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.SMALL_FIREBALL)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
+                            .add(DecrementItemAction.of(1))
+                            .add(PlaySoundAction.builder(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.FIRE_CHARGE_USE), SoundCategory.BLOCKS)
+                                .pitch(0.8f, 1.2f)
+                                .build())
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FIREWORK_ROCKET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIREWORK_ROCKET).build()),
+                ItemComponentSet.builder()
+                    .with(FireworkItemComponent.INSTANCE)
+                    .with(ProjectileItemComponent.of(FireworkRocketEntityInitializer.INSTANCE, 3, CrossbowItemAccessor.fireworkRocketSpeed()))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.FIREWORK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPLASH_POTION, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPLASH_POTION).build(), 1),
+                ItemComponentSet.builder()
+                    .with(PotionHolderItemComponent.INSTANCE)
+                    .with(ThrowableItemComponent.of(0.5f, -20.0f))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.POTION)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .with(TintedItemComponent.of(new PotionItemColor()))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPECTRAL_ARROW, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPECTRAL_ARROW).build()),
+                ItemComponentSet.builder()
+                    .with(ProjectileItemComponent.persistentProjectile(EntityType.SPECTRAL_ARROW, SpectralArrowEntity::new, SpectralArrowEntity::new))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TIPPED_ARROW, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TIPPED_ARROW).build()),
+                ItemComponentSet.builder()
+                    .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .with(TintedItemComponent.of(new PotionItemColor()))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LINGERING_POTION, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LINGERING_POTION).build(), 1),
+                ItemComponentSet.builder()
+                    .with(PotionHolderItemComponent.INSTANCE)
+                    .with(ThrowableItemComponent.of(0.5f, -20.0f))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.POTION)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .with(TintedItemComponent.of(new PotionItemColor()))
+                    .build()
+            ));
+        }
+
+        private void bootstrapDyes() {
+            this.registerable.register(ItemKeys.WHITE_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WHITE_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.WHITE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ORANGE_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.ORANGE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MAGENTA_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.MAGENTA))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LIGHT_BLUE_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.LIGHT_BLUE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.YELLOW_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.YELLOW))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LIME_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.LIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PINK_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.PINK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GRAY_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.GRAY))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LIGHT_GRAY_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.LIGHT_GRAY))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CYAN_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.CYAN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PURPLE_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.PURPLE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLUE_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.BLUE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BROWN_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.BROWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GREEN_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.GREEN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RED_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.RED))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_DYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLACK_DYE).build()),
+                ItemComponentSet.builder()
+                    .with(DyeItemComponent.of(DyeColor.BLACK))
+                    .build()
+            ));
+        }
+
+        private void bootstrapRecords() {
+            this.registerable.register(ItemKeys.MUSIC_DISC_13, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_13).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_13), ItemKeys.MUSIC_DISC_13, 178 * 20, 1))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_CAT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CAT).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CAT), ItemKeys.MUSIC_DISC_CAT, 185 * 20, 2))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_BLOCKS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_BLOCKS).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_BLOCKS), ItemKeys.MUSIC_DISC_BLOCKS, 345 * 20, 3))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_CHIRP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CHIRP).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CHIRP), ItemKeys.MUSIC_DISC_CHIRP, 185 * 20, 4))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_FAR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_FAR).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_FAR), ItemKeys.MUSIC_DISC_FAR, 174 * 20, 5))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_MALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MALL).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_MALL), ItemKeys.MUSIC_DISC_MALL, 197 * 20, 6))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_MELLOHI, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MELLOHI).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_MELLOHI), ItemKeys.MUSIC_DISC_MELLOHI, 96 * 20, 7))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_STAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STAL).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_STAL), ItemKeys.MUSIC_DISC_STAL, 150 * 20, 8))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_STRAD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STRAD).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_STRAD), ItemKeys.MUSIC_DISC_STRAD, 188 * 20, 9))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_WARD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WARD).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_WARD), ItemKeys.MUSIC_DISC_WARD, 251 * 20, 10))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_11, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_11).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_11), ItemKeys.MUSIC_DISC_11, 71 * 20, 11))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_WAIT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WAIT).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_WAIT), ItemKeys.MUSIC_DISC_WAIT, 238 * 20, 12))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_OTHERSIDE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_OTHERSIDE).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_OTHERSIDE), ItemKeys.MUSIC_DISC_OTHERSIDE, 195 * 20, 14))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_RELIC, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_RELIC).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_RELIC), ItemKeys.MUSIC_DISC_RELIC, 218 * 20, 14))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_PIGSTEP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_PIGSTEP).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_PIGSTEP), ItemKeys.MUSIC_DISC_PIGSTEP, 149 * 20, 13))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_5, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_5).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_5), ItemKeys.MUSIC_DISC_5, 178 * 20, 15))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DISC_FRAGMENT_5, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DISC_FRAGMENT_5).tooltip(ItemKeys.DISC_FRAGMENT_5).build())
+            ));
+        }
+
+        private void bootstrapBuckets() {
+            this.registerable.register(ItemKeys.BUCKET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUCKET).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.EMPTY)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WATER_BUCKET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.WATER), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LAVA_BUCKET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LAVA_BUCKET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.LAVA), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_LAVA)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.LAVA_FUEL_TIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POWDER_SNOW_BUCKET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POWDER_SNOW_BUCKET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BucketItemComponent.block(this.blocks.getOrThrow(BlockKeys.POWDER_SNOW), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_POWDER_SNOW)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PUFFERFISH_BUCKET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUFFERFISH_BUCKET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SALMON_BUCKET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SALMON_BUCKET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.SALMON), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COD_BUCKET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COD_BUCKET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.COD), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TROPICAL_FISH_BUCKET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH_BUCKET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.AXOLOTL_BUCKET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.AXOLOTL_BUCKET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.AXOLOTL), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_AXOLOTL)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TADPOLE_BUCKET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TADPOLE_BUCKET).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.TADPOLE), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_TADPOLE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .build()
+            ));
+        }
+
+        private void bootstrapSmithingTemplates() {
+            this.registerable.register(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.NETHERITE_UPGRADE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SENTRY_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.DUNE_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.COAST_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.WILD_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.WARD_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.EYE_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.VEX_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.TIDE_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SNOUT_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.RIB_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SPIRE_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.WAYFINDER_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SHAPER_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SILENCE_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.RAISER_PATTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE).build()),
+                ItemComponentSet.builder()
+                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.HOST_PATTERN)))
+                    .build()
+            ));
+        }
+
+        private void bootstrapBanners() {
+            this.bootstrapBannerPatterns();
+            this.registerable.register(ItemKeys.WHITE_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.WHITE_BANNER), this.blocks.getOrThrow(BlockKeys.WHITE_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.WHITE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.ORANGE_BANNER), this.blocks.getOrThrow(BlockKeys.ORANGE_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.ORANGE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.MAGENTA_BANNER), this.blocks.getOrThrow(BlockKeys.MAGENTA_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.MAGENTA))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_BANNER), this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.LIGHT_BLUE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.YELLOW_BANNER), this.blocks.getOrThrow(BlockKeys.YELLOW_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.YELLOW))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.LIME_BANNER), this.blocks.getOrThrow(BlockKeys.LIME_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.LIME))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.PINK_BANNER), this.blocks.getOrThrow(BlockKeys.PINK_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.PINK))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.GRAY_BANNER), this.blocks.getOrThrow(BlockKeys.GRAY_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.GRAY))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_BANNER), this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.LIGHT_GRAY))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CYAN_BANNER), this.blocks.getOrThrow(BlockKeys.CYAN_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.CYAN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.PURPLE_BANNER), this.blocks.getOrThrow(BlockKeys.PURPLE_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.PURPLE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BLUE_BANNER), this.blocks.getOrThrow(BlockKeys.BLUE_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.BLUE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BROWN_BANNER), this.blocks.getOrThrow(BlockKeys.BROWN_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.BROWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.GREEN_BANNER), this.blocks.getOrThrow(BlockKeys.GREEN_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.GREEN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.RED_BANNER), this.blocks.getOrThrow(BlockKeys.RED_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.RED))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_BANNER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_BANNER).build(), 16),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BLACK_BANNER), this.blocks.getOrThrow(BlockKeys.BLACK_WALL_BANNER), Direction.DOWN))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(BannerPatternHolderItemComponent.of(DyeColor.BLACK))
+                    .build()
+            ));
+        }
+
+        private void bootstrapBannerPatterns() {
+            this.registerable.register(ItemKeys.FLOWER_BANNER_PATTERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLOWER_BANNER_PATTERN).tooltip(ItemKeys.FLOWER_BANNER_PATTERN).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BannerPatternItemComponent.of(BannerPatternTags.FLOWER_PATTERN_ITEM))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CREEPER_BANNER_PATTERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CREEPER_BANNER_PATTERN).tooltip(ItemKeys.CREEPER_BANNER_PATTERN).rarity(Rarity.UNCOMMON).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BannerPatternItemComponent.of(BannerPatternTags.CREEPER_PATTERN_ITEM))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SKULL_BANNER_PATTERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SKULL_BANNER_PATTERN).tooltip(ItemKeys.SKULL_BANNER_PATTERN).rarity(Rarity.UNCOMMON).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BannerPatternItemComponent.of(BannerPatternTags.SKULL_PATTERN_ITEM))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOJANG_BANNER_PATTERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MOJANG_BANNER_PATTERN).tooltip(ItemKeys.MOJANG_BANNER_PATTERN).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BannerPatternItemComponent.of(BannerPatternTags.MOJANG_PATTERN_ITEM))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GLOBE_BANNER_PATTERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOBE_BANNER_PATTERN).tooltip(ItemKeys.GLOBE_BANNER_PATTERN).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BannerPatternItemComponent.of(BannerPatternTags.GLOBE_PATTERN_ITEM))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PIGLIN_BANNER_PATTERN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIGLIN_BANNER_PATTERN).tooltip(ItemKeys.PIGLIN_BANNER_PATTERN).build(), 1),
+                ItemComponentSet.builder()
+                    .with(BannerPatternItemComponent.of(BannerPatternTags.PIGLIN_PATTERN_ITEM))
+                    .build()
+            ));
+        }
+
+        private void bootstrapDecoratedPotPatterns() {
+            this.registerable.register(ItemKeys.BRICK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BRICK).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.decoratedPotSide())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ANGLER_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ANGLER_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.angler())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ARCHER_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARCHER_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.archer())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ARMS_UP_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARMS_UP_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.armsUp())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLADE_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLADE_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.blade())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BREWER_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BREWER_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.brewer())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BURN_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BURN_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.burn())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DANGER_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DANGER_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.danger())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EXPLORER_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EXPLORER_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.explorer())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FRIEND_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FRIEND_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.friend())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HEART_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HEART_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.heart())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HEARTBREAK_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HEARTBREAK_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.heartbreak())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HOWL_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HOWL_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.howl())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MINER_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MINER_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.miner())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MOURNER_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MOURNER_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.mourner())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PLENTY_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PLENTY_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.plenty())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PRIZE_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PRIZE_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.prize())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SHEAF_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHEAF_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.sheaf())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SHELTER_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHELTER_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.shelter())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SKULL_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SKULL_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.skull())))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SNORT_POTTERY_SHERD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNORT_POTTERY_SHERD).build()),
+                ItemComponentSet.builder()
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.snort())))
+                    .build()
+            ));
+        }
+
+        private void bootstrapImmuneToDamage() {
+            this.registerable.register(ItemKeys.ANCIENT_DEBRIS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ANCIENT_DEBRIS).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ANCIENT_DEBRIS)))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_BLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.NETHERITE_BLOCK).build()),
+                ItemComponentSet.builder()
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHERITE_BLOCK)))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_INGOT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_INGOT).build()),
+                ItemComponentSet.builder()
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_SCRAP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SCRAP).build()),
+                ItemComponentSet.builder()
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHER_STAR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_STAR).rarity(Rarity.UNCOMMON).build()),
+                ItemComponentSet.builder()
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_EXPLOSION))
+                    .build()
+            ));
+        }
+
+        private void bootstrapMiscellaneous() {
+            this.registerable.register(ItemKeys.AIR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build())
+            ));
+            this.registerable.register(ItemKeys.SADDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SADDLE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(SaddleItemComponent.INSTANCE)
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.SADDLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TURTLE_SCUTE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TURTLE_SCUTE).build())
+            ));
+            this.registerable.register(ItemKeys.ARMADILLO_SCUTE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARMADILLO_SCUTE).build())
+            ));
+            this.registerable.register(ItemKeys.DIAMOND, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND).build())
+            ));
+            this.registerable.register(ItemKeys.EMERALD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EMERALD).build())
+            ));
+            this.registerable.register(ItemKeys.LAPIS_LAZULI, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LAPIS_LAZULI).build())
+            ));
+            this.registerable.register(ItemKeys.QUARTZ, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.QUARTZ).build())
+            ));
+            this.registerable.register(ItemKeys.AMETHYST_SHARD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.AMETHYST_SHARD).build())
+            ));
+            this.registerable.register(ItemKeys.RAW_IRON, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAW_IRON).build())
+            ));
+            this.registerable.register(ItemKeys.IRON_INGOT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_INGOT).build())
+            ));
+            this.registerable.register(ItemKeys.RAW_COPPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAW_COPPER).build())
+            ));
+            this.registerable.register(ItemKeys.COPPER_INGOT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COPPER_INGOT).build())
+            ));
+            this.registerable.register(ItemKeys.RAW_GOLD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RAW_GOLD).build())
+            ));
+            this.registerable.register(ItemKeys.GOLD_INGOT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLD_INGOT).build())
+            ));
+            this.registerable.register(ItemKeys.FEATHER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FEATHER).build()),
+                ItemComponentSet.builder()
+                    .with(FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.BURST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GUNPOWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GUNPOWDER).build())
+            ));
+            this.registerable.register(ItemKeys.FLINT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLINT).build())
+            ));
+            this.registerable.register(ItemKeys.LEATHER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER).build())
+            ));
+            this.registerable.register(ItemKeys.CLAY_BALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CLAY_BALL).build())
+            ));
+            this.registerable.register(ItemKeys.PAPER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PAPER).build())
+            ));
+            this.registerable.register(ItemKeys.BOOK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOOK).build()),
+                ItemComponentSet.builder()
+                    .with(EnchantableItemComponent.transforms(1, this.items.getOrThrow(ItemKeys.ENCHANTED_BOOK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SLIME_BALL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SLIME_BALL).build())
+            ));
+            this.registerable.register(ItemKeys.COMPASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COMPASS).build()),
+                ItemComponentSet.builder()
+                    .with(PointableItemComponent.of(this.pointers.getOrThrow(PointerKeys.SPAWN_LOCATION), Util.createTranslationKey("item", new Identifier("lodestone_compass"))))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                            LocationCheckLootCondition.builder(
+                                LocationPredicate.Builder.create()
+                                    .block(BlockPredicate.Builder.create()
+                                        .blocks(Blocks.LODESTONE)))
+                                .build()
+                        ),
+                        PassingSequenceHandler.builder()
+                            .add(SetItemPointerLocationAction.of(ActionContextParameter.TARGET))
+                            .add(SwingHandAction.INSTANCE)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RECOVERY_COMPASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RECOVERY_COMPASS).build()),
+                ItemComponentSet.builder()
+                    .with(PointableItemComponent.of(this.pointers.getOrThrow(PointerKeys.LAST_DEATH)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BUNDLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUNDLE).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(BundleItem.MAX_STORAGE, this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CLOCK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CLOCK).build())
+            ));
+            this.registerable.register(ItemKeys.SPYGLASS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPYGLASS).build(), 1),
+                ItemComponentSet.builder()
+                    .with(ZoomItemComponent.of(SpyglassItem.field_30922, this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
+                    .with(UseDurationItemComponent.of(SpyglassItem.MAX_USE_TIME))
+                    .with(UseAnimationItemComponent.of(UseAction.SPYGLASS))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GLOWSTONE_DUST, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOWSTONE_DUST).build())
+            ));
+            this.registerable.register(ItemKeys.INK_SAC, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.INK_SAC).build()),
+                ItemComponentSet.EMPTY,
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(false))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GLOW_INK_SAC, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOW_INK_SAC).build()),
+                ItemComponentSet.EMPTY,
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(true))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BONE_MEAL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BONE_MEAL).build()),
+                ItemComponentSet.builder()
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.FERTILIZE)))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(FertilizeAction.INSTANCE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BONE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BONE).build())
+            ));
+            this.registerable.register(ItemKeys.SUGAR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SUGAR).build())
+            ));
+            this.registerable.register(ItemKeys.FILLED_MAP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FILLED_MAP).build()),
+                ItemComponentSet.builder()
+                    .with(MapHolderItemComponent.INSTANCE)
+                    .with(TintedItemComponent.of(MapItemColor.INSTANCE))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .add(MarkBannerOnItemAction.of(ActionContextParameter.TARGET))
+                            .add(SwingHandAction.INSTANCE)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GHAST_TEAR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GHAST_TEAR).build())
+            ));
+            this.registerable.register(ItemKeys.GOLD_NUGGET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLD_NUGGET).build()),
+                ItemComponentSet.builder()
+                    .with(FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.STAR))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GLASS_BOTTLE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLASS_BOTTLE).build()),
+                ItemComponentSet.builder()
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BOTTLE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FERMENTED_SPIDER_EYE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FERMENTED_SPIDER_EYE).build())
+            ));
+            this.registerable.register(ItemKeys.BLAZE_POWDER, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BLAZE_POWDER).build())
+            ));
+            this.registerable.register(ItemKeys.MAGMA_CREAM, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MAGMA_CREAM).build())
+            ));
+            this.registerable.register(ItemKeys.GLISTERING_MELON_SLICE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLISTERING_MELON_SLICE).build())
+            ));
+            this.registerable.register(ItemKeys.WRITABLE_BOOK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WRITABLE_BOOK).build(), 1),
+                ItemComponentSet.builder()
+                    .with(WritableItemComponent.of(this.items.getOrThrow(ItemKeys.WRITTEN_BOOK)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WRITTEN_BOOK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WRITTEN_BOOK).build(), 16),
+                ItemComponentSet.builder()
+                    .with(TextHolderItemComponent.INSTANCE)
+                    .with(GlintItemComponent.of(true))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE, ActionEntry.of(OpenBookFromItemAction.INSTANCE))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAP, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MAP).build()),
+                ItemComponentSet.builder()
+                    .with(MappableItemComponent.of(this.items.getOrThrow(ItemKeys.FILLED_MAP)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FIREWORK_STAR, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIREWORK_STAR).build()),
+                ItemComponentSet.builder()
+                    .with(FireworkExplosionHolderItemComponent.INSTANCE)
+                    .with(TintedItemComponent.of(new FireworkItemColor()))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ENCHANTED_BOOK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_BOOK).rarity(Rarity.UNCOMMON).build(), 1),
+                ItemComponentSet.builder()
+                    .with(EnchantmentHolderItemComponent.of(this.items.getOrThrow(ItemKeys.BOOK)))
+                    .with(GlintItemComponent.of(true))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHER_BRICK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_BRICK).build())
+            ));
+            this.registerable.register(ItemKeys.PRISMARINE_SHARD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PRISMARINE_SHARD).build())
+            ));
+            this.registerable.register(ItemKeys.PRISMARINE_CRYSTALS, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PRISMARINE_CRYSTALS).build())
+            ));
+            this.registerable.register(ItemKeys.RABBIT_FOOT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_FOOT).build())
+            ));
+            this.registerable.register(ItemKeys.RABBIT_HIDE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_HIDE).build())
+            ));
+            this.registerable.register(ItemKeys.LEAD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEAD).build()),
+                ItemComponentSet.EMPTY,
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .add(AttachLeashedEntitiesOnBlockAction.INSTANCE)
+                            .add(SwingHandAction.INSTANCE)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NAME_TAG, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NAME_TAG).build()),
+                ItemComponentSet.EMPTY,
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_ENTITY, ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .add(SetEntityNameFromItemAction.of(ActionContextParameter.TARGET))
+                            .add(DecrementItemAction.of(1))
+                            .add(SwingHandAction.INSTANCE)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.POPPED_CHORUS_FRUIT, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POPPED_CHORUS_FRUIT).build())
+            ));
+            this.registerable.register(ItemKeys.DRAGON_BREATH, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DRAGON_BREATH).rarity(Rarity.UNCOMMON).build())
+            ));
+            this.registerable.register(ItemKeys.TOTEM_OF_UNDYING, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TOTEM_OF_UNDYING).rarity(Rarity.UNCOMMON).build(), 1),
+                ItemComponentSet.builder()
+                    .with(LifeSavingItemComponent.of(
+                        new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 900, 1),
+                        new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 100, 1),
+                        new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 800, 0)
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.SHULKER_SHELL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHULKER_SHELL).build())
+            ));
+            this.registerable.register(ItemKeys.IRON_NUGGET, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_NUGGET).build())
+            ));
+            this.registerable.register(ItemKeys.KNOWLEDGE_BOOK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.KNOWLEDGE_BOOK).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(UnlockRecipesItemComponent.INSTANCE)
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DEBUG_STICK, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DEBUG_STICK).rarity(Rarity.EPIC).build(), 1),
+                ItemComponentSet.builder()
+                    .with(DebugStickItemComponent.INSTANCE)
+                    .with(GlintItemComponent.of(true))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PHANTOM_MEMBRANE, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PHANTOM_MEMBRANE).build())
+            ));
+            this.registerable.register(ItemKeys.NAUTILUS_SHELL, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NAUTILUS_SHELL).build())
+            ));
+            this.registerable.register(ItemKeys.HEART_OF_THE_SEA, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HEART_OF_THE_SEA).rarity(Rarity.UNCOMMON).build())
+            ));
+            this.registerable.register(ItemKeys.GOAT_HORN, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOAT_HORN).build(), 1),
+                ItemComponentSet.builder()
+                    .with(PlayableItemComponent.of(InstrumentTags.GOAT_HORNS))
+                    .with(UseAnimationItemComponent.of(UseAction.TOOT_HORN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.HONEYCOMB, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEYCOMB).build()),
+                ItemComponentSet.builder()
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.WAX_BLOCK)))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                        FirstToPassRequirementsSequenceHandler.builder()
+                            .add(Actions.waxSign(true))
+                            .add(PassingSequenceHandler.builder()
+                                .add(new WaxBlockAction(ActionContextParameter.TARGET))
+                                .add(DecrementItemAction.of(1))
+                                .add(SwingHandAction.INSTANCE))))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ECHO_SHARD, create(
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ECHO_SHARD).build())
+            ));
+        }
     }
 }

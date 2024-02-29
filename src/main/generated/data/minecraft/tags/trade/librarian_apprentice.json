@@ -1,5 +1,7 @@
 {
   "values": [
-    "minecraft:buy_book"
+    "minecraft:buy_book",
+    "minecraft:sell_enchanted_book_apprentice",
+    "minecraft:sell_lantern"
   ]
 }

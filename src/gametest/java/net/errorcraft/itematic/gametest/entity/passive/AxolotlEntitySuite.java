@@ -20,7 +20,7 @@ import java.util.Optional;
 public class AxolotlEntitySuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 2, 1);
 
-    @GameTest(templateName = "itematic:entity.fence_around")
+    @GameTest(templateName = "itematic:entity.platform")
     @SuppressWarnings("removal")
     public void holdingTropicalFishBucketTemptsAxolotl(TestContext context) {
         AxolotlEntity axolotl = context.spawnEntity(EntityType.AXOLOTL, SPAWN_POSITION);

@@ -8,7 +8,15 @@
   },
   "components": {
     "minecraft:block": {
-      "block": "minecraft:skeleton_skull"
+      "block": {
+        "type": "minecraft:attached_to_side",
+        "attached_block": "minecraft:skeleton_skull",
+        "attached_side": "down",
+        "other_block": "minecraft:skeleton_wall_skull"
+      }
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:equipment"
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_generic",

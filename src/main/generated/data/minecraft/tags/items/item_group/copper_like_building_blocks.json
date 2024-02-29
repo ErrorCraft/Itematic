@@ -1,0 +1,12 @@
+{
+  "values": [
+    "#minecraft:item_group/copper_building_blocks",
+    "#minecraft:item_group/exposed_copper_building_blocks",
+    "#minecraft:item_group/weathered_copper_building_blocks",
+    "#minecraft:item_group/oxidized_copper_building_blocks",
+    "#minecraft:item_group/waxed_copper_building_blocks",
+    "#minecraft:item_group/waxed_exposed_copper_building_blocks",
+    "#minecraft:item_group/waxed_weathered_copper_building_blocks",
+    "#minecraft:item_group/waxed_oxidized_copper_building_blocks"
+  ]
+}

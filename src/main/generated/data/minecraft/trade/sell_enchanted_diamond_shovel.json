@@ -1,25 +1,21 @@
 {
   "gives": {
-    "item": "minecraft:diamond_shovel",
-    "item_modifier": {
-      "function": "minecraft:enchant_with_levels",
-      "levels": {
-        "type": "minecraft:uniform",
-        "max": 20.0,
-        "min": 5.0
-      },
-      "treasure": false
-    }
+    "item": "minecraft:diamond_shovel"
   },
   "max_uses": 3,
   "price_multiplier": 0.2,
   "trade_experience": 15,
+  "trade_modifier": {
+    "type": "minecraft:enchant_with_levels",
+    "index": 0,
+    "level": {
+      "max": 19,
+      "min": 5
+    }
+  },
   "wants": [
     {
-      "count": {
-        "max": 25,
-        "min": 10
-      },
+      "count": 5,
       "item": "minecraft:emerald"
     }
   ]

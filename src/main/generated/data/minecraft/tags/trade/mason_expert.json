@@ -1,3 +1,37 @@
 {
-  "values": []
+  "values": [
+    "minecraft:buy_quartz",
+    "minecraft:sell_orange_terracotta",
+    "minecraft:sell_white_terracotta",
+    "minecraft:sell_blue_terracotta",
+    "minecraft:sell_light_blue_terracotta",
+    "minecraft:sell_gray_terracotta",
+    "minecraft:sell_light_gray_terracotta",
+    "minecraft:sell_black_terracotta",
+    "minecraft:sell_red_terracotta",
+    "minecraft:sell_pink_terracotta",
+    "minecraft:sell_magenta_terracotta",
+    "minecraft:sell_lime_terracotta",
+    "minecraft:sell_green_terracotta",
+    "minecraft:sell_cyan_terracotta",
+    "minecraft:sell_purple_terracotta",
+    "minecraft:sell_yellow_terracotta",
+    "minecraft:sell_brown_terracotta",
+    "minecraft:sell_orange_glazed_terracotta",
+    "minecraft:sell_white_glazed_terracotta",
+    "minecraft:sell_blue_glazed_terracotta",
+    "minecraft:sell_light_blue_glazed_terracotta",
+    "minecraft:sell_gray_glazed_terracotta",
+    "minecraft:sell_light_gray_glazed_terracotta",
+    "minecraft:sell_black_glazed_terracotta",
+    "minecraft:sell_red_glazed_terracotta",
+    "minecraft:sell_pink_glazed_terracotta",
+    "minecraft:sell_magenta_glazed_terracotta",
+    "minecraft:sell_lime_glazed_terracotta",
+    "minecraft:sell_green_glazed_terracotta",
+    "minecraft:sell_cyan_glazed_terracotta",
+    "minecraft:sell_purple_glazed_terracotta",
+    "minecraft:sell_yellow_glazed_terracotta",
+    "minecraft:sell_brown_glazed_terracotta"
+  ]
 }

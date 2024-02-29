@@ -1,3 +1,11 @@
 {
-  "values": []
+  "values": [
+    "minecraft:buy_granite",
+    "minecraft:buy_andesite",
+    "minecraft:buy_diorite",
+    "minecraft:sell_dripstone_block",
+    "minecraft:sell_polished_andesite",
+    "minecraft:sell_polished_diorite",
+    "minecraft:sell_polished_granite"
+  ]
 }

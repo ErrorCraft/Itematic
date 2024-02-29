@@ -10,6 +10,42 @@
     },
     {
       "type": "tag",
+      "tag": "minecraft:item_group/terracotta"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/concrete"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/concrete_powder"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/glazed_terracotta"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/glass"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/glass_panes"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/shulker_boxes"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/beds"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/candles"
+    },
+    {
+      "type": "tag",
       "tag": "minecraft:item_group/banners"
     }
   ]

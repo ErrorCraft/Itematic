@@ -1,16 +1,59 @@
 {
   "entries": [
-    "minecraft:grass_block",
-    "minecraft:sand",
-    "minecraft:snow",
-    "minecraft:stone",
     {
       "type": "tag",
-      "tag": "minecraft:item_group/wood_blocks"
+      "tag": "minecraft:item_group/grass_like_blocks"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/dirt_like_blocks"
+    },
+    "minecraft:gravel",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/sand_blocks"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/ice_blocks"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/snow_blocks"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/moss_blocks"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/stone_like_blocks"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/nether_blocks"
+    },
+    "minecraft:end_stone",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/ore_like_blocks"
+    },
+    "minecraft:glowstone",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/amethyst_blocks"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/log_like_blocks"
     },
     {
       "type": "tag",
       "tag": "minecraft:item_group/leaves"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/mushroom_like_blocks"
     },
     {
       "type": "tag",
@@ -22,9 +65,37 @@
     },
     {
       "type": "tag",
+      "tag": "minecraft:item_group/egg_like_blocks"
+    },
+    {
+      "type": "tag",
       "tag": "minecraft:item_group/seeds"
     },
-    "minecraft:lily_pad",
-    "minecraft:dried_kelp_block"
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/water_blocks"
+    },
+    "minecraft:sponge",
+    "minecraft:wet_sponge",
+    "minecraft:melon",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/pumpkins"
+    },
+    "minecraft:hay_block",
+    "minecraft:bee_nest",
+    "minecraft:honeycomb_block",
+    "minecraft:slime_block",
+    "minecraft:honey_block",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/froglights"
+    },
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/sculk"
+    },
+    "minecraft:cobweb",
+    "minecraft:bedrock"
   ]
 }

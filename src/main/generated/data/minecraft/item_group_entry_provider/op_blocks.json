@@ -7,13 +7,147 @@
     },
     {
       "type": "stack",
+      "item": "minecraft:chain_command_block",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:repeating_command_block",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
       "item": "minecraft:command_block_minecart",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:jigsaw",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:structure_block",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:structure_void",
       "requires_permissions": true
     },
     {
       "type": "stack",
       "item": "minecraft:barrier",
       "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:debug_stick",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"14\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"13\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"12\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"11\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"10\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"9\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"8\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"7\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"6\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"5\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"4\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"3\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"2\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"1\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "item": "minecraft:light",
+      "nbt": "{BlockStateTag:{level:\"0\"}}",
+      "requires_permissions": true
+    },
+    {
+      "type": "painting_variant",
+      "item": "minecraft:painting",
+      "requires_permissions": true,
+      "tag": {
+        "id": "minecraft:placeable",
+        "expected": false
+      }
     }
   ]
 }

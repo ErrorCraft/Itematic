@@ -9,11 +9,15 @@ import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.model.override.ModelOverride;
 import net.errorcraft.itematic.item.model.override.ModelOverrides;
+import net.errorcraft.itematic.item.placement.block.modifier.BlockStateModifierType;
+import net.errorcraft.itematic.item.placement.block.modifier.BlockStateModifierTypes;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.pointer.Pointers;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateType;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateTypes;
 import net.errorcraft.itematic.mixin.registry.RegistriesAccessor;
+import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
+import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
@@ -31,6 +35,8 @@ public class ItematicRegistries {
     public static final Registry<Pointer> POINTER = RegistriesAccessor.create(ItematicRegistryKeys.POINTER, r -> Pointers.SPAWN_LOCATION);
     public static final Registry<SequenceHandlerType<?>> SEQUENCE_HANDLER_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.SEQUENCE_HANDLER_TYPE, r -> SequenceHandlerTypes.UNCHECKED);
     public static final Registry<SmithingTemplateType<?>> SMITHING_TEMPLATE_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.SMITHING_TEMPLATE_TYPE, r -> SmithingTemplateTypes.TRIM_PATTERN);
+    public static final Registry<BlockStateModifierType<?>> BLOCK_STATE_MODIFIER_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.BLOCK_STATE_MODIFIER_TYPE, r -> BlockStateModifierTypes.SIMPLE);
+    public static final Registry<TradeModifierType<?>> TRADE_MODIFIER_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.TRADE_MODIFIER_TYPE, r -> TradeModifierTypes.ENCHANT_WITH_LEVELS);
 
     private ItematicRegistries() {}
 }

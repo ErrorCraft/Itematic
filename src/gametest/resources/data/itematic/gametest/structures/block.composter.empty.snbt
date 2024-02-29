@@ -1,16 +1,16 @@
 {
-    DataVersion: 3802,
+    DataVersion: 3817,
     size: [3, 3, 3],
     data: [
-        {pos: [0, 0, 0], state: "minecraft:polished_andesite"},
-        {pos: [0, 0, 1], state: "minecraft:polished_andesite"},
-        {pos: [0, 0, 2], state: "minecraft:polished_andesite"},
-        {pos: [1, 0, 0], state: "minecraft:polished_andesite"},
-        {pos: [1, 0, 1], state: "minecraft:polished_andesite"},
-        {pos: [1, 0, 2], state: "minecraft:polished_andesite"},
-        {pos: [2, 0, 0], state: "minecraft:polished_andesite"},
-        {pos: [2, 0, 1], state: "minecraft:polished_andesite"},
-        {pos: [2, 0, 2], state: "minecraft:polished_andesite"},
+        {pos: [0, 0, 0], state: "minecraft:bedrock"},
+        {pos: [0, 0, 1], state: "minecraft:bedrock"},
+        {pos: [0, 0, 2], state: "minecraft:bedrock"},
+        {pos: [1, 0, 0], state: "minecraft:bedrock"},
+        {pos: [1, 0, 1], state: "minecraft:bedrock"},
+        {pos: [1, 0, 2], state: "minecraft:bedrock"},
+        {pos: [2, 0, 0], state: "minecraft:bedrock"},
+        {pos: [2, 0, 1], state: "minecraft:bedrock"},
+        {pos: [2, 0, 2], state: "minecraft:bedrock"},
         {pos: [0, 1, 0], state: "minecraft:air"},
         {pos: [0, 1, 1], state: "minecraft:air"},
         {pos: [0, 1, 2], state: "minecraft:air"},
@@ -32,7 +32,7 @@
     ],
     entities: [],
     palette: [
-        "minecraft:polished_andesite",
+        "minecraft:bedrock",
         "minecraft:air",
         "minecraft:composter{level:0}"
     ]

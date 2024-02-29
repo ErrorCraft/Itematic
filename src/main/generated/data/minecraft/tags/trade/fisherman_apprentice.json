@@ -1,5 +1,7 @@
 {
   "values": [
-    "minecraft:buy_cod"
+    "minecraft:buy_cod",
+    "minecraft:sell_cooked_salmon_from_salmon",
+    "minecraft:sell_campfire"
   ]
 }

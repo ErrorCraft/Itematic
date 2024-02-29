@@ -1,0 +1,13 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.red_bed"
+    },
+    "max_count": 1
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:red_bed"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.flowering_azalea_leaves"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:flowering_azalea_leaves"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.5
+    }
+  }
+}

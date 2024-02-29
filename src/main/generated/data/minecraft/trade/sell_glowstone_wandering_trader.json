@@ -1,0 +1,13 @@
+{
+  "gives": {
+    "item": "minecraft:glowstone"
+  },
+  "max_uses": 5,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "count": 2,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

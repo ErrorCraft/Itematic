@@ -22,6 +22,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Equipment;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.ItemTags;
@@ -43,10 +44,6 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityExtender extends Entity implements LivingEntityAccess {
-    public LivingEntityExtender(EntityType<?> type, World world) {
-        super(type, world);
-    }
-
     @Shadow
     protected ItemStack activeItemStack;
 
@@ -76,6 +73,10 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Unique
     private int itemUsedTicks;
+
+    public LivingEntityExtender(EntityType<?> type, World world) {
+        super(type, world);
+    }
 
     @Redirect(
         method = "eatFood",
@@ -371,6 +372,17 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     )
     private boolean isOfForElytraUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.ELYTRA);
+    }
+
+    @Redirect(
+        method = "onKilledBy",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private ItemStack newItemStackForWitherRoseUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.WITHER_ROSE);
     }
 
     /**

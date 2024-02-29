@@ -1,0 +1,23 @@
+{
+  "base": {
+    "display": {
+      "translation_key": "block.minecraft.wither_rose"
+    },
+    "max_count": 64
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:wither_rose"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.65
+    },
+    "minecraft:suspicious_effect_ingredient": {
+      "effects": [
+        {
+          "id": "minecraft:wither"
+        }
+      ]
+    }
+  }
+}

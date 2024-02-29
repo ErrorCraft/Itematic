@@ -1,0 +1,14 @@
+{
+  "gives": {
+    "item": "minecraft:white_bed"
+  },
+  "max_uses": 12,
+  "price_multiplier": 0.05,
+  "trade_experience": 10,
+  "wants": [
+    {
+      "count": 3,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

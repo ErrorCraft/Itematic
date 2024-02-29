@@ -1,0 +1,13 @@
+{
+  "gives": {
+    "item": "minecraft:nautilus_shell"
+  },
+  "max_uses": 5,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "count": 5,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

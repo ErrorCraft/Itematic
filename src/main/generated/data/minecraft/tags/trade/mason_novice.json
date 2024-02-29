@@ -1,3 +1,6 @@
 {
-  "values": []
+  "values": [
+    "minecraft:buy_clay_ball",
+    "minecraft:sell_brick"
+  ]
 }

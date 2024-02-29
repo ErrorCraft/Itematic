@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.enchantment;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -77,7 +78,7 @@ public class EnchantmentHelperExtender {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForEnchantedBookUseItemComponent(ItemConvertible item, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
-        return new ItemStack(transformsInto.get());
+    private static ItemStack newItemStackForEnchantedBookUseItemComponent(ItemConvertible item, @Local(argsOnly = true) ItemStack target, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
+        return target.itematic$copyWithItem(transformsInto.get());
     }
 }

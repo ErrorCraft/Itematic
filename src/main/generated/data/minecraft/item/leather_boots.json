@@ -13,7 +13,7 @@
       "durability": 65
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:armor"
+      "behavior": "minecraft:equipment"
     },
     "minecraft:dyeable": {
       "default_color": 10511680

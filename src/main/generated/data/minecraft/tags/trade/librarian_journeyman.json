@@ -1,5 +1,7 @@
 {
   "values": [
-    "minecraft:buy_ink_sac"
+    "minecraft:buy_ink_sac",
+    "minecraft:sell_enchanted_book_journeyman",
+    "minecraft:sell_glass"
   ]
 }

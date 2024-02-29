@@ -8,6 +8,9 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.placement.BlockPlacer;
+import net.errorcraft.itematic.item.placement.block.modifier.BlockStateModifier;
+import net.errorcraft.itematic.item.placement.block.modifier.modifiers.AttachedToSideBlockStateModifier;
+import net.errorcraft.itematic.item.placement.block.modifier.modifiers.SimpleBlockStateModifier;
 import net.minecraft.block.Block;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.block.entity.BeehiveBlockEntity;
@@ -22,20 +25,19 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryOps;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record BlockItemComponent(RegistryEntry<Block> block, boolean operatorOnly) implements ItemComponent<BlockItemComponent> {
+public record BlockItemComponent(BlockStateModifier<?> block, boolean operatorOnly) implements ItemComponent<BlockItemComponent> {
     public static final Codec<BlockItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.BLOCK).fieldOf("block").forGetter(BlockItemComponent::block),
+        BlockStateModifier.CODEC.fieldOf("block").forGetter(BlockItemComponent::block),
         Codec.BOOL.optionalFieldOf("operator_only", false).forGetter(BlockItemComponent::operatorOnly)
     ).apply(instance, BlockItemComponent::new));
 
@@ -57,19 +59,24 @@ public record BlockItemComponent(RegistryEntry<Block> block, boolean operatorOnl
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        this.block.value().appendTooltip(stack, world, tooltip, context, world != null ? world.getRegistryManager() : null);
+        this.block.defaultBlock().value().appendTooltip(stack, world, tooltip, context, world != null ? world.getRegistryManager() : null);
+    }
+
+    public static BlockItemComponent attachedToSide(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, Direction attachedSide) {
+        return new BlockItemComponent(new AttachedToSideBlockStateModifier(attachedBlock, otherBlock, attachedSide), false);
     }
 
     public static BlockItemComponent of(RegistryEntry<Block> block) {
-        return new BlockItemComponent(block, false);
+        return new BlockItemComponent(new SimpleBlockStateModifier(block), false);
     }
 
     public static BlockItemComponent operator(RegistryEntry<Block> block) {
-        return new BlockItemComponent(block, true);
+        return new BlockItemComponent(new SimpleBlockStateModifier(block), true);
     }
 
     public int modifiedMaxCountForOccupancy(ItemStack stack) {
-        if (!this.block.matchesKey(BlockKeys.BEEHIVE) && !this.block.matchesKey(BlockKeys.BEE_NEST)) {
+        RegistryEntry<Block> block = this.block.defaultBlock();
+        if (!block.matchesKey(BlockKeys.BEEHIVE) && !block.matchesKey(BlockKeys.BEE_NEST)) {
             return stack.getMaxCount();
         }
         NbtCompound blockEntityNbt = BlockItem.getBlockEntityNbt(stack);
@@ -83,11 +90,11 @@ public record BlockItemComponent(RegistryEntry<Block> block, boolean operatorOnl
     }
 
     public boolean canBeNested() {
-        return !(this.block.value() instanceof ShulkerBoxBlock);
+        return !(this.block.defaultBlock().value() instanceof ShulkerBoxBlock);
     }
 
     public void onDestroyed(ItemEntity item) {
-        if (!(this.block.value() instanceof ShulkerBoxBlock)) {
+        if (!(this.block.defaultBlock().value() instanceof ShulkerBoxBlock)) {
             return;
         }
         NbtCompound blockEntityNbt = BlockItem.getBlockEntityNbt(item.getStack());

@@ -1,3 +1,7 @@
 {
-  "values": []
+  "values": [
+    "minecraft:buy_flint_apprentice",
+    "minecraft:sell_leather_helmet_apprentice",
+    "minecraft:sell_leather_boots"
+  ]
 }

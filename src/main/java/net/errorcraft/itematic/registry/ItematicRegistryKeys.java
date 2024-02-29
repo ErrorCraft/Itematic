@@ -6,10 +6,12 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.item.model.override.ModelOverride;
+import net.errorcraft.itematic.item.placement.block.modifier.BlockStateModifierType;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateType;
 import net.errorcraft.itematic.village.trade.Trade;
+import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
@@ -33,6 +35,8 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<SequenceHandlerType<?>>> SEQUENCE_HANDLER_TYPE = RegistryKey.ofRegistry(new Identifier("sequence_handler_type"));
     public static final RegistryKey<Registry<SmithingTemplateType<?>>> SMITHING_TEMPLATE_TYPE = RegistryKey.ofRegistry(new Identifier("smithing_template_type"));
     public static final RegistryKey<Registry<SmithingTemplate>> SMITHING_TEMPLATE = RegistryKey.ofRegistry(new Identifier("smithing_template"));
+    public static final RegistryKey<Registry<BlockStateModifierType<?>>> BLOCK_STATE_MODIFIER_TYPE = RegistryKey.ofRegistry(new Identifier("block_state_modifier_type"));
+    public static final RegistryKey<Registry<TradeModifierType<?>>> TRADE_MODIFIER_TYPE = RegistryKey.ofRegistry(new Identifier("trade_modifier_type"));
 
     private ItematicRegistryKeys() {}
 }

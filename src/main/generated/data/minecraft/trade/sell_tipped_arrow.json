@@ -1,0 +1,23 @@
+{
+  "gives": {
+    "count": 5,
+    "item": "minecraft:tipped_arrow",
+    "item_modifier": {
+      "id": "#minecraft:tradeable",
+      "function": "minecraft:set_potion"
+    }
+  },
+  "max_uses": 12,
+  "price_multiplier": 0.05,
+  "trade_experience": 30,
+  "wants": [
+    {
+      "count": 2,
+      "item": "minecraft:emerald"
+    },
+    {
+      "count": 5,
+      "item": "minecraft:arrow"
+    }
+  ]
+}

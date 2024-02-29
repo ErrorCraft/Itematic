@@ -8,7 +8,15 @@
   },
   "components": {
     "minecraft:block": {
-      "block": "minecraft:dragon_head"
+      "block": {
+        "type": "minecraft:attached_to_side",
+        "attached_block": "minecraft:dragon_head",
+        "attached_side": "down",
+        "other_block": "minecraft:dragon_wall_head"
+      }
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:equipment"
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_generic",

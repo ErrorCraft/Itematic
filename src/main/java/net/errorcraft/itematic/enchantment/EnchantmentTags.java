@@ -42,6 +42,8 @@ public class EnchantmentTags {
     public static final TagKey<Enchantment> STEERING_FORGING = of("steering_forging");
     public static final TagKey<Enchantment> BRUSH_FORGING = of("brush_forging");
 
+    public static final TagKey<Enchantment> TRADEABLE = of("tradeable");
+
     private EnchantmentTags() {}
 
     private static TagKey<Enchantment> of(String id) {

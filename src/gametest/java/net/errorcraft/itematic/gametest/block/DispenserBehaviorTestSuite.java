@@ -10,6 +10,7 @@ import net.minecraft.block.entity.DispenserBlockEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.passive.HorseEntity;
+import net.minecraft.entity.passive.LlamaEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionUtil;
@@ -126,6 +127,21 @@ public class DispenserBehaviorTestSuite {
         world.spawnEntity(horse);
         context.pushButton(BUTTON_POSITION);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(horse.getBodyArmor(), ItemKeys.IRON_HORSE_ARMOR));
+    }
+
+    @GameTest(templateName = "itematic:block.dispenser")
+    public void dispensingCarpetOnLlamaEquipsLlama(TestContext context) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerWorld world = context.getWorld();
+        ItemStack stack = world.itematic$createStack(ItemKeys.WHITE_CARPET);
+        blockEntity.addToFirstFreeSlot(stack);
+        LlamaEntity llama = TestUtil.createEntity(context, EntityType.LLAMA, entity -> {
+            TestUtil.setEntityPos(context, entity, IN_FRONT_OF_DISPENSER_POSITION);
+            entity.setTame(true);
+        });
+        world.spawnEntity(llama);
+        context.pushButton(BUTTON_POSITION);
+        context.addInstantFinalTask(() -> Assert.itemStackIsOf(llama.getBodyArmor(), ItemKeys.WHITE_CARPET));
     }
 
     @GameTest(templateName = "itematic:block.dispenser")

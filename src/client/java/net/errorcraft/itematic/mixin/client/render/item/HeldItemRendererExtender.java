@@ -1,7 +1,14 @@
 package net.errorcraft.itematic.mixin.client.render.item;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -9,6 +16,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
+
+import java.util.Optional;
 
 @Mixin(HeldItemRenderer.class)
 public class HeldItemRendererExtender {
@@ -47,8 +56,80 @@ public class HeldItemRendererExtender {
             )
         )
     )
-    private boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.CROSSBOW);
+    private boolean isOfForCrossbowUseItemComponent(ItemStack instance, Item item, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
+        Optional<ShooterItemComponent> optionalComponent = instance.itematic$getComponent(ItemComponentTypes.SHOOTER);
+        optionalComponent.ifPresent(shooterItemComponent::set);
+        return optionalComponent.map(ShooterItemComponent::chargeable).orElse(false);
+    }
+
+    @Redirect(
+        method = "renderFirstPersonItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getItemUseTimeLeft()I",
+            ordinal = 0
+        )
+    )
+    private int useDifference(AbstractClientPlayerEntity instance, @Local(argsOnly = true) ItemStack stack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
+        return ShooterItemComponent.useDuration(stack) - instance.itematic$itemUsedTicks();
+    }
+
+    @Redirect(
+        method = "renderFirstPersonItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/CrossbowItem;isCharged(Lnet/minecraft/item/ItemStack;)Z"
+        )
+    )
+    private boolean isChargedUseItemComponent(ItemStack stack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
+        return shooterItemComponent.get().isCharged(stack);
+    }
+
+    @Redirect(
+        method = "renderFirstPersonItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;getMaxUseTime()I",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isUsingItem()Z"
+            )
+        )
+    )
+    private int getMaxUseTimeUseUsedTicksInstead(ItemStack stack, AbstractClientPlayerEntity player) {
+        return player.itematic$itemUsedTicks() - 1;
+    }
+
+    @Redirect(
+        method = "renderFirstPersonItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/network/ClientPlayerEntity;getItemUseTimeLeft()I",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isUsingItem()Z"
+            )
+        )
+    )
+    private int getUseTimeLeftReturnZero(ClientPlayerEntity instance) {
+        return 0;
+    }
+
+    @Redirect(
+        method = "renderFirstPersonItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/CrossbowItem;getPullTime(Lnet/minecraft/item/ItemStack;)I"
+        )
+    )
+    private int getPullTimeUseItemComponent(ItemStack stack) {
+        return ShooterItemComponent.getPullTime(stack);
     }
 
     @Redirect(
@@ -84,5 +165,20 @@ public class HeldItemRendererExtender {
     )
     private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
         return instance.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
+    }
+
+    @ModifyExpressionValue(
+        method = "renderFirstPersonItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getItemUseTimeLeft()I",
+            ordinal = 1
+        )
+    )
+    private int useMaxValueWhenUseDurationIsIndefinite(int original) {
+        if (original == -1) {
+            return Integer.MAX_VALUE;
+        }
+        return original;
     }
 }

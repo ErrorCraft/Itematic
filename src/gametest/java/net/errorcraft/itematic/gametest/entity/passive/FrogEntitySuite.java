@@ -20,7 +20,7 @@ import java.util.Optional;
 public class FrogEntitySuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 2, 1);
 
-    @GameTest(templateName = "itematic:entity.fence_around")
+    @GameTest(templateName = "itematic:entity.platform")
     @SuppressWarnings("removal")
     public void holdingSlimeBallTemptsFrog(TestContext context) {
         FrogEntity frog = context.spawnEntity(EntityType.FROG, SPAWN_POSITION);

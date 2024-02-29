@@ -14,12 +14,16 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(AbstractHorseEntity.class)
 public abstract class AbstractHorseEntityExtender extends AnimalEntity {
+    @Shadow
+    public abstract boolean isTame();
+
     protected AbstractHorseEntityExtender(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -193,6 +197,11 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
     )
     private boolean isOfForSaddleUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.SADDLE);
+    }
+
+    @Override
+    public boolean canEquip(ItemStack stack) {
+        return this.isTame() && this.hasArmorSlot() && this.isHorseArmor(stack) && !this.isWearingBodyArmor();
     }
 
     @Mixin(targets = "net/minecraft/entity/passive/AbstractHorseEntity$2")

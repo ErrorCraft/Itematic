@@ -12,7 +12,7 @@
       "preserve_item": true
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:armor"
+      "behavior": "minecraft:equipment"
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_elytra",

@@ -7,6 +7,7 @@ import net.minecraft.util.Identifier;
 
 public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> ALLAY = of("allay");
+    public static final RegistryKey<EntityType<?>> ARMADILLO = of("armadillo");
     public static final RegistryKey<EntityType<?>> ARROW = of("arrow");
     public static final RegistryKey<EntityType<?>> AXOLOTL = of("axolotl");
     public static final RegistryKey<EntityType<?>> BAT = of("bat");

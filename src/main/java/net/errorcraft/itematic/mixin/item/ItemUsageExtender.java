@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.item;
 
-import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import net.errorcraft.itematic.item.ItemUsageUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;

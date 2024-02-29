@@ -1,0 +1,13 @@
+{
+  "gives": {
+    "item": "minecraft:fire_coral_block"
+  },
+  "max_uses": 8,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "count": 3,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

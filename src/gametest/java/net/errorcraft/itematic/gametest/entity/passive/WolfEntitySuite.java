@@ -17,7 +17,7 @@ import net.minecraft.world.GameMode;
 public class WolfEntitySuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 2, 1);
 
-    @GameTest(templateName = "itematic:entity.fence_around")
+    @GameTest(templateName = "itematic:entity.platform")
     @SuppressWarnings("removal")
     public void holdingBoneTemptsWolf(TestContext context) {
         WolfEntity wolf = context.spawnEntity(EntityType.WOLF, SPAWN_POSITION);
@@ -30,7 +30,7 @@ public class WolfEntitySuite {
         context.addInstantFinalTask(() -> context.assertTrue(wolf.isBegging(), "Expected wolf to be begging"));
     }
 
-    @GameTest(templateName = "itematic:entity.fence_around")
+    @GameTest(templateName = "itematic:entity.platform")
     @SuppressWarnings("removal")
     public void holdingMeatTemptsWolf(TestContext context) {
         WolfEntity wolf = context.spawnEntity(EntityType.WOLF, SPAWN_POSITION);
@@ -43,7 +43,7 @@ public class WolfEntitySuite {
         context.addInstantFinalTask(() -> context.assertTrue(wolf.isBegging(), "Expected wolf to be begging"));
     }
 
-    @GameTest(templateName = "itematic:entity.fence_around")
+    @GameTest(templateName = "itematic:entity.platform")
     public void feedingWolfMeatHealsWolf(TestContext context) {
         WolfEntity wolf = context.spawnEntity(EntityType.WOLF, SPAWN_POSITION);
         wolf.setTamed(true, true);
