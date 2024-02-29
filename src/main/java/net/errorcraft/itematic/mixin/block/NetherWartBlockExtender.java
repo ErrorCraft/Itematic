@@ -15,7 +15,7 @@ public class NetherWartBlockExtender {
         method = "getPickStack",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
     private ItemStack newItemStackUseCreateStack(ItemConvertible item, WorldView world) {

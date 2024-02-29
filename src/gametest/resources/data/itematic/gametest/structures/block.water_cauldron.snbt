@@ -15,7 +15,7 @@
         {pos: [0, 1, 1], state: "minecraft:air"},
         {pos: [0, 1, 2], state: "minecraft:air"},
         {pos: [1, 1, 0], state: "minecraft:air"},
-        {pos: [1, 1, 1], state: "minecraft:water_cauldron{level:3}"},
+        {pos: [1, 1, 1], state: "minecraft:water_cauldron{level:1}"},
         {pos: [1, 1, 2], state: "minecraft:air"},
         {pos: [2, 1, 0], state: "minecraft:air"},
         {pos: [2, 1, 1], state: "minecraft:air"},
@@ -34,6 +34,6 @@
     palette: [
         "minecraft:bedrock",
         "minecraft:air",
-        "minecraft:water_cauldron{level:3}"
+        "minecraft:water_cauldron{level:1}"
     ]
 }

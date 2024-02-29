@@ -22,7 +22,7 @@ public abstract class AbstractBlockExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean isOfUseItemKeyCheck(ItemStack instance, Item item) {
+    private boolean isOfUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemUtil.keyFromBlock(this.asBlock()));
     }
 }

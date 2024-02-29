@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(PotatoesBlock.class)
 public class PotatoesBlockExtender implements CropBlockAccess {
     @Override
-    public RegistryKey<Item> getSeedsItemKey() {
+    public RegistryKey<Item> itematic$seedsItemKey() {
         return ItemKeys.POTATO;
     }
 }

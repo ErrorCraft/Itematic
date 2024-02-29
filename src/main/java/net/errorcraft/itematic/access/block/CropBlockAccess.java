@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKey;
 
 public interface CropBlockAccess {
-    default RegistryKey<Item> getSeedsItemKey() {
+    default RegistryKey<Item> itematic$seedsItemKey() {
         return ItemKeys.WHEAT_SEEDS;
     }
 }

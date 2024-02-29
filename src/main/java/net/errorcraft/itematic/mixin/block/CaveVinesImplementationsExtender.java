@@ -16,10 +16,10 @@ public class CaveVinesImplementationsExtender {
         method = "getPickStack",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseCreateStack(ItemConvertible item, WorldView world) {
+    private ItemStack newItemStackForGlowBerriesUseCreateStack(ItemConvertible item, WorldView world) {
         return world.itematic$createStack(ItemKeys.GLOW_BERRIES);
     }
 }

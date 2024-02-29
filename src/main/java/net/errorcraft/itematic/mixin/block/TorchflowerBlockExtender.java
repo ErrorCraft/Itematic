@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(TorchflowerBlock.class)
 public class TorchflowerBlockExtender implements CropBlockAccess {
     @Override
-    public RegistryKey<Item> getSeedsItemKey() {
+    public RegistryKey<Item> itematic$seedsItemKey() {
         return ItemKeys.TORCHFLOWER_SEEDS;
     }
 }
