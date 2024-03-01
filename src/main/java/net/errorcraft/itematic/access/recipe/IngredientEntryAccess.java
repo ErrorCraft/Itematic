@@ -7,6 +7,9 @@ import java.util.Collection;
 import java.util.List;
 
 public interface IngredientEntryAccess {
+    default boolean itematic$test(ItemStack stack) {
+        return false;
+    }
     default Collection<ItemStack> itematic$getStacks(RegistryWrapper.WrapperLookup lookup) {
         return List.of();
     }

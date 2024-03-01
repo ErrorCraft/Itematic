@@ -43,7 +43,7 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
             target = "Ljava/util/function/Predicate;test(Ljava/lang/Object;)Z"
         )
     )
-    private static <T> boolean hasRecipeTestUseItemComponentCheck(Predicate<Item> instance, T t) {
+    private static <T> boolean testPotionTypeUseItemComponentCheck(Predicate<Item> instance, T t) {
         return ((ItemStack) t).itematic$hasComponent(ItemComponentTypes.POTION_HOLDER);
     }
 
@@ -93,7 +93,8 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
         method = "hasPotionRecipe",
         at = @At(
             value = "INVOKE_ASSIGN",
-            target = "Lnet/minecraft/potion/PotionUtil;getPotion(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/registry/entry/RegistryEntry;"
+            target = "Lnet/minecraft/potion/PotionUtil;getPotion(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/registry/entry/RegistryEntry;",
+            shift = At.Shift.AFTER
         ),
         cancellable = true
     )

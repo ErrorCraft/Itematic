@@ -16,7 +16,7 @@ public class SmithingTrimRecipeExtender {
         method = "getResult",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
     private ItemStack newItemStackForIronChestplateUseRegistryEntry(ItemConvertible item, DynamicRegistryManager registryManager) {

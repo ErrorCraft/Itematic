@@ -16,6 +16,7 @@ import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.util.ActionResultUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
@@ -52,7 +53,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Mixin(Item.class)
-public abstract class ItemExtender implements ItemAccess {
+public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Shadow
     @Final
     protected static UUID ATTACK_DAMAGE_MODIFIER_ID;
@@ -297,7 +298,7 @@ public abstract class ItemExtender implements ItemAccess {
         }
 
         this.itematic$getComponent(ItemComponentTypes.CONSUMABLE)
-            .ifPresent(c -> c.consume(user, stack, stackReference::set, user.getActiveHand()));
+            .ifPresent(c -> c.consume(user, stack, stackReference::set, world, user.getActiveHand()));
         info.setReturnValue(stackReference.get());
     }
 
@@ -452,6 +453,15 @@ public abstract class ItemExtender implements ItemAccess {
                 }
                 return stack.hasEnchantments();
             });
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public boolean hasRecipeRemainder() {
+        return this.itematic$hasComponent(ItemComponentTypes.RECIPE_REMAINDER);
     }
 
     /**
@@ -679,6 +689,15 @@ public abstract class ItemExtender implements ItemAccess {
         }
         return this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
             .map(c -> c.tooltipData(stack, lookup));
+    }
+
+    @Override
+    public ItemStack getRecipeRemainder(ItemStack stack) {
+        // Use the ItemComponent implementation for data-driven items, so we don't get a NullPointerException
+        return this.itematic$getComponent(ItemComponentTypes.RECIPE_REMAINDER)
+            .map(RecipeRemainderItemComponent::item)
+            .map(ItemStack::new)
+            .orElse(ItemStack.EMPTY);
     }
 
     @Unique

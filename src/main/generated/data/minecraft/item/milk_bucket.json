@@ -9,6 +9,9 @@
     "minecraft:consumable": {
       "result_item": "minecraft:bucket"
     },
+    "minecraft:recipe_remainder": {
+      "item": "minecraft:bucket"
+    },
     "minecraft:use_animation": {
       "animation": "drink"
     },

@@ -26,16 +26,18 @@ public class FireworkStarFadeRecipeExtender {
             target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
         )
     )
-    private boolean fireworkStarUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.itematic$isOf(ItemKeys.FIREWORK_STAR);
+    private boolean fireworkStarUseRegistryKeyCheck(Ingredient instance, ItemStack stack) {
+        return stack.itematic$isOf(ItemKeys.FIREWORK_STAR);
     }
 
     @ModifyConstant(
         method = "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z",
-        constant = @Constant(classValue = DyeItem.class)
+        constant = @Constant(
+            classValue = DyeItem.class
+        )
     )
-    private boolean matchesInstanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local ItemStack itemStack) {
-        return itemStack.itematic$hasComponent(ItemComponentTypes.DYE);
+    private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local ItemStack inputStack) {
+        return inputStack.itematic$hasComponent(ItemComponentTypes.DYE);
     }
 
     @ModifyConstant(
@@ -45,7 +47,7 @@ public class FireworkStarFadeRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean craftInstanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack ingredient, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
+    private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack ingredient, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
         Optional<DyeItemComponent> optionalComponent = ingredient.itematic$getComponent(ItemComponentTypes.DYE);
         optionalComponent.ifPresent(dyeItemComponent::set);
         return optionalComponent.isPresent();
@@ -56,7 +58,7 @@ public class FireworkStarFadeRecipeExtender {
         at = @At("LOAD"),
         ordinal = 0
     )
-    private Item craftCastToDyeItemUseNull(Item instance) {
+    private Item castToDyeItemUseNull(Item instance) {
         return null;
     }
 
@@ -67,7 +69,7 @@ public class FireworkStarFadeRecipeExtender {
             target = "Lnet/minecraft/item/DyeItem;getColor()Lnet/minecraft/util/DyeColor;"
         )
     )
-    private DyeColor craftGetColorUseItemComponent(DyeItem instance, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
+    private DyeColor getColorUseItemComponent(DyeItem instance, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
         return dyeItemComponent.get().color();
     }
 }

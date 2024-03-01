@@ -6,5 +6,9 @@
     },
     "max_count": 64
   },
-  "components": {}
+  "components": {
+    "minecraft:recipe_remainder": {
+      "item": "minecraft:glass_bottle"
+    }
+  }
 }

@@ -1,8 +1,10 @@
 package net.errorcraft.itematic.mixin.block.entity;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.FuelItemComponent;
+import net.errorcraft.itematic.item.component.components.RecipeRemainderItemComponent;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
@@ -11,10 +13,7 @@ import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKeys;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
@@ -63,7 +62,7 @@ public class AbstractFurnaceBlockEntityExtender {
         method = "craftRecipe",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
     private static ItemStack newItemStackForWaterBucketUseRegistryEntry(ItemConvertible item, DynamicRegistryManager registryManager) {
@@ -117,5 +116,20 @@ public class AbstractFurnaceBlockEntityExtender {
     )
     private boolean isValidIsOfForBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.BUCKET);
+    }
+
+    @ModifyArg(
+        method = "tick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/util/collection/DefaultedList;set(ILjava/lang/Object;)Ljava/lang/Object;"
+        )
+    )
+    @SuppressWarnings("unchecked")
+    private static <E> E setRemainderItemStackUseItemComponent(E element, @Local(ordinal = 0) Item item) {
+        return (E) item.itematic$getComponent(ItemComponentTypes.RECIPE_REMAINDER)
+            .map(RecipeRemainderItemComponent::item)
+            .map(ItemStack::new)
+            .orElse(ItemStack.EMPTY);
     }
 }

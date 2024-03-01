@@ -42,13 +42,13 @@ public class CraftingDecoratedPotRecipeExtender {
      * @reason Uses a registry entry for data-driven items.
      */
     @Overwrite
-    public ItemStack craft(RecipeInputInventory recipeInputInventory, DynamicRegistryManager dynamicRegistryManager) {
+    public ItemStack craft(RecipeInputInventory recipeInputInventory, DynamicRegistryManager registryManager) {
         DecoratedPotBlockEntityUtil.Sherds sherds = new DecoratedPotBlockEntityUtil.Sherds(
             recipeInputInventory.getStack(1).getRegistryEntry(),
             recipeInputInventory.getStack(3).getRegistryEntry(),
             recipeInputInventory.getStack(5).getRegistryEntry(),
             recipeInputInventory.getStack(7).getRegistryEntry()
         );
-        return DecoratedPotBlockEntityUtil.createStack(dynamicRegistryManager, sherds);
+        return DecoratedPotBlockEntityUtil.createStack(registryManager, sherds);
     }
 }

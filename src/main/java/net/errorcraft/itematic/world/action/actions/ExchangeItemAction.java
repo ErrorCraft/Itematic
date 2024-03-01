@@ -42,4 +42,8 @@ public record ExchangeItemAction(RegistryEntry<Item> item, boolean decrementCoun
         context.setResultStack(stack);
         return true;
     }
+
+    public static ExchangeItemAction of(RegistryEntry<Item> item, boolean decrementCount) {
+        return new ExchangeItemAction(item, decrementCount);
+    }
 }

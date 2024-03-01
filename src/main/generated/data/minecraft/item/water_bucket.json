@@ -12,6 +12,9 @@
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:bucket"
+    },
+    "minecraft:recipe_remainder": {
+      "item": "minecraft:bucket"
     }
   }
 }

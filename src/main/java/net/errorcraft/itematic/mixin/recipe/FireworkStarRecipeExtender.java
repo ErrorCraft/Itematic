@@ -33,7 +33,7 @@ public class FireworkStarRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean matchesTestUseItemComponentCheck(Ingredient instance, ItemStack itemStack) {
+    private boolean testUseItemComponentCheck(Ingredient instance, ItemStack itemStack) {
         return itemStack.itematic$hasComponent(ItemComponentTypes.FIREWORK_SHAPE_MODIFIER);
     }
 
@@ -45,7 +45,7 @@ public class FireworkStarRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean craftTestUseItemComponentCheck(Ingredient instance, ItemStack itemStack, @Share("fireworkTypeModifierItemComponent") LocalRef<FireworkShapeModifierItemComponent> fireworkTypeModifierItemComponent) {
+    private boolean testUseItemComponentCheck(Ingredient instance, ItemStack itemStack, @Share("fireworkTypeModifierItemComponent") LocalRef<FireworkShapeModifierItemComponent> fireworkTypeModifierItemComponent) {
         Optional<FireworkShapeModifierItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.FIREWORK_SHAPE_MODIFIER);
         optionalComponent.ifPresent(fireworkTypeModifierItemComponent::set);
         return optionalComponent.isPresent();
@@ -59,7 +59,7 @@ public class FireworkStarRecipeExtender {
         )
     )
     @SuppressWarnings("unchecked")
-    private <K, V> V craftGetUseItemComponent(Map<K, V> instance, Object o, @Share("fireworkTypeModifierItemComponent") LocalRef<FireworkShapeModifierItemComponent> fireworkTypeModifierItemComponent) {
+    private <K, V> V getModifierUseItemComponent(Map<K, V> instance, Object o, @Share("fireworkTypeModifierItemComponent") LocalRef<FireworkShapeModifierItemComponent> fireworkTypeModifierItemComponent) {
         return (V) fireworkTypeModifierItemComponent.get().shape();
     }
 
@@ -116,15 +116,17 @@ public class FireworkStarRecipeExtender {
             )
         )
     )
-    private boolean matchesTestGunpowderUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack) {
+    private boolean testGunpowderUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack) {
         return itemStack.itematic$isOf(ItemKeys.GUNPOWDER);
     }
 
     @ModifyConstant(
         method = "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z",
-        constant = @Constant(classValue = DyeItem.class)
+        constant = @Constant(
+            classValue = DyeItem.class
+        )
     )
-    private boolean matchesInstanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local ItemStack itemStack) {
+    private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local ItemStack itemStack) {
         return itemStack.itematic$hasComponent(ItemComponentTypes.DYE);
     }
 
@@ -135,7 +137,7 @@ public class FireworkStarRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean craftInstanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack ingredient, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
+    private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack ingredient, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
         Optional<DyeItemComponent> optionalComponent = ingredient.itematic$getComponent(ItemComponentTypes.DYE);
         optionalComponent.ifPresent(dyeItemComponent::set);
         return optionalComponent.isPresent();
@@ -156,7 +158,7 @@ public class FireworkStarRecipeExtender {
             )
         )
     )
-    private Item craftCastToDyeItemUseNull(ItemStack instance) {
+    private Item castToDyeItemUseNull(ItemStack instance) {
         return null;
     }
 
@@ -167,7 +169,7 @@ public class FireworkStarRecipeExtender {
             target = "Lnet/minecraft/item/DyeItem;getColor()Lnet/minecraft/util/DyeColor;"
         )
     )
-    private DyeColor craftGetColorUseItemComponent(DyeItem instance, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
+    private DyeColor getColorUseItemComponent(DyeItem instance, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
         return dyeItemComponent.get().color();
     }
 
@@ -175,10 +177,10 @@ public class FireworkStarRecipeExtender {
         method = { "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/DynamicRegistryManager;)Lnet/minecraft/item/ItemStack;", "getResult" },
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForFireworkStarUseRegistryEntry(ItemConvertible item, @Local DynamicRegistryManager registryManager) {
+    private ItemStack newItemStackForFireworkStarUseRegistryEntry(ItemConvertible item, @Local(argsOnly = true) DynamicRegistryManager registryManager) {
         return new ItemStack(registryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.FIREWORK_STAR));
     }
 }

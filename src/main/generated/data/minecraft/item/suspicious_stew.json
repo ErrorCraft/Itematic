@@ -20,5 +20,30 @@
     "minecraft:use_duration": {
       "ticks": 32
     }
-  }
+  },
+  "events": [
+    {
+      "event": "minecraft:consume_item",
+      "entry": {
+        "action": {
+          "type": "minecraft:sequence",
+          "entries": [
+            {
+              "action": {
+                "type": "minecraft:apply_suspicious_effects",
+                "entity": "this"
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:exchange_item",
+                "item": "minecraft:bowl"
+              }
+            }
+          ],
+          "handler": "minecraft:passing"
+        }
+      }
+    }
+  ]
 }

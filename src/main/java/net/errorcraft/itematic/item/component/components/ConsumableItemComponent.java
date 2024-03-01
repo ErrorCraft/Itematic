@@ -19,6 +19,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -49,7 +50,7 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem) 
         return ActionResult.PASS;
     }
 
-    public void consume(LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer, Hand hand) {
+    public void consume(LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer, World world, Hand hand) {
         if (!(user instanceof PlayerEntity player)) {
             return;
         }
@@ -59,8 +60,10 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem) 
             .ifPresentOrElse(resultStackConsumer::set, () -> stack.decrementUnlessCreative(1, user));
         if (player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.CONSUME_ITEM.trigger(serverPlayer, stack);
-            ActionContext context = ActionContext.builder(serverPlayer.getServerWorld(), stack, resultStackConsumer, hand)
-                .entityPosition(ActionContextParameter.THIS, serverPlayer)
+        }
+        if (world instanceof ServerWorld serverWorld) {
+            ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, hand)
+                .entityPosition(ActionContextParameter.THIS, user)
                 .build();
             stack.itematic$invokeEvent(ItemEvents.CONSUME_ITEM, context);
         }

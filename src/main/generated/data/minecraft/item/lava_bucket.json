@@ -15,6 +15,9 @@
     },
     "minecraft:fuel": {
       "ticks": 20000
+    },
+    "minecraft:recipe_remainder": {
+      "item": "minecraft:bucket"
     }
   }
 }

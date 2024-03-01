@@ -175,6 +175,7 @@ public class ItemUtil {
                     .with(UseDurationItemComponent.of(MilkBucketItemAccessor.getMaxUseTime()))
                     .with(UseAnimationItemComponent.of(UseAction.DRINK))
                     .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
+                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(new ClearStatusEffectsAction(ActionContextParameter.THIS)))
@@ -403,6 +404,13 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SUSPICIOUS_STEW).build(), 1),
                 ItemComponentSet.builder()
                     .with(FoodItemComponent.from(FoodComponents.SUSPICIOUS_STEW, this.items.getOrThrow(ItemKeys.BOWL)))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .add(ApplySuspiciousEffectsAction.of(ActionContextParameter.THIS))
+                            .add(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.BOWL), true))
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.ROTTEN_FLESH, create(
@@ -453,6 +461,7 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEY_BOTTLE).build(), 16),
                 ItemComponentSet.builder()
                     .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40, UseAction.DRINK, this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
+                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .build()
             ));
         }
@@ -4180,7 +4189,7 @@ public class ItemUtil {
                     .with(SteeringItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.PIG), 7))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.BREAK_ITEM, ActionEntry.of(new ExchangeItemAction(this.items.getOrThrow(ItemKeys.FISHING_ROD), false)))
+                    .add(ItemEvents.BREAK_ITEM, ActionEntry.of(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.FISHING_ROD), false)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_FUNGUS_ON_A_STICK, create(
@@ -4191,7 +4200,7 @@ public class ItemUtil {
                     .with(SteeringItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.STRIDER), 1))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.BREAK_ITEM, ActionEntry.of(new ExchangeItemAction(this.items.getOrThrow(ItemKeys.FISHING_ROD), false)))
+                    .add(ItemEvents.BREAK_ITEM, ActionEntry.of(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.FISHING_ROD), false)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FLINT_AND_STEEL, create(
@@ -7697,6 +7706,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.WATER), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LAVA_BUCKET, create(
@@ -7705,6 +7715,7 @@ public class ItemUtil {
                     .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.LAVA), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_LAVA)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.LAVA_FUEL_TIME))
+                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POWDER_SNOW_BUCKET, create(
@@ -8473,7 +8484,10 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POPPED_CHORUS_FRUIT).build())
             ));
             this.registerable.register(ItemKeys.DRAGON_BREATH, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DRAGON_BREATH).rarity(Rarity.UNCOMMON).build())
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DRAGON_BREATH).rarity(Rarity.UNCOMMON).build()),
+                ItemComponentSet.builder()
+                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
+                    .build()
             ));
             this.registerable.register(ItemKeys.TOTEM_OF_UNDYING, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TOTEM_OF_UNDYING).rarity(Rarity.UNCOMMON).build(), 1),
