@@ -186,7 +186,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(UseDurationItemComponent.of(PotionItemAccessor.getMaxUseTime()))
                     .with(PotionItemComponent.INSTANCE)
-                    .with(PotionHolderItemComponent.INSTANCE)
+                    .with(PotionHolderItemComponent.of(1.0f))
                     .with(UseAnimationItemComponent.of(UseAction.DRINK))
                     .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .with(TintedItemComponent.of(new PotionItemColor()))
@@ -7458,7 +7458,7 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.SPLASH_POTION, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPLASH_POTION).build(), 1),
                 ItemComponentSet.builder()
-                    .with(PotionHolderItemComponent.INSTANCE)
+                    .with(PotionHolderItemComponent.of(1.0f))
                     .with(ThrowableItemComponent.of(0.5f, -20.0f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.POTION)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
@@ -7475,6 +7475,7 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.TIPPED_ARROW, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TIPPED_ARROW).build()),
                 ItemComponentSet.builder()
+                    .with(PotionHolderItemComponent.of(0.125f))
                     .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                     .with(TintedItemComponent.of(new PotionItemColor()))
@@ -7483,7 +7484,7 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.LINGERING_POTION, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LINGERING_POTION).build(), 1),
                 ItemComponentSet.builder()
-                    .with(PotionHolderItemComponent.INSTANCE)
+                    .with(PotionHolderItemComponent.of(0.25f))
                     .with(ThrowableItemComponent.of(0.5f, -20.0f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.POTION)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))

@@ -9,6 +9,9 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:projectile"
     },
+    "minecraft:potion_holder": {
+      "duration_multiplier": 0.125
+    },
     "minecraft:projectile": {
       "damage": 1,
       "entity": {

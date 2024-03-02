@@ -13,7 +13,9 @@
       "behavior": "minecraft:potion"
     },
     "minecraft:potion": {},
-    "minecraft:potion_holder": {},
+    "minecraft:potion_holder": {
+      "duration_multiplier": 1.0
+    },
     "minecraft:tinted": {
       "tint": {
         "type": "minecraft:potion"

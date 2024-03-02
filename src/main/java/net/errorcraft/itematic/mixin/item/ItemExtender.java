@@ -592,6 +592,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     public String getTranslationKey(ItemStack stack) {
         return this.itematic$getComponent(ItemComponentTypes.POINTABLE)
             .flatMap(c -> c.lodestoneTranslationKey(stack))
+            .or(() -> this.itematic$getComponent(ItemComponentTypes.POTION_HOLDER)
+                .map(c -> c.translationKey(stack, this.getTranslationKey())))
+            .or(() -> this.itematic$getComponent(ItemComponentTypes.BANNER_PATTERN_HOLDER)
+                .flatMap(c -> c.translationKey(stack, this.getTranslationKey())))
             .orElseGet(this::getTranslationKey);
     }
 

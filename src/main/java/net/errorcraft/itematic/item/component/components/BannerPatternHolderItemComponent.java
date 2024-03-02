@@ -7,7 +7,9 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.BannerItem;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.dynamic.Codecs;
@@ -39,6 +41,16 @@ public record BannerPatternHolderItemComponent(Optional<DyeColor> color) impleme
 
     public boolean modifiable() {
         return this.color.isPresent();
+    }
+
+    public Optional<String> translationKey(ItemStack stack, String baseTranslationKey) {
+        if (this.modifiable()) {
+            return Optional.empty();
+        }
+        if (BlockItem.getBlockEntityNbt(stack) == null) {
+            return Optional.empty();
+        }
+        return Optional.of(baseTranslationKey + "." + ShieldItem.getColor(stack).getName());
     }
 
     public static BannerPatternHolderItemComponent of() {
