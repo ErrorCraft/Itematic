@@ -54,7 +54,7 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
                 user.itematic$startUsingHand(hand, instrument.useDuration());
                 GoatHornItemAccessor.playSound(world, user, instrument);
                 user.getItemCooldownManager().set(stack.getItem(), instrument.useDuration());
-                user.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+                user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
                 return ActionResult.CONSUME;
             }).orElse(ActionResult.PASS);
     }

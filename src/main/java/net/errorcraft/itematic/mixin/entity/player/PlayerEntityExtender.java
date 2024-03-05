@@ -13,6 +13,8 @@ import net.minecraft.inventory.EnderChestInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.RangedWeaponItem;
+import net.minecraft.stat.Stat;
+import net.minecraft.stat.StatType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -103,6 +105,18 @@ public abstract class PlayerEntityExtender extends LivingEntity {
         return instance.itematic$isOf(ItemKeys.SHIELD);
     }
 
+    @Redirect(
+        method = "damageShield",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+        )
+    )
+    @SuppressWarnings("unchecked")
+    private <T> Stat<Item> getOrCreateStatForActiveItemUseRegistryEntry(StatType<Item> instance, T key) {
+        return instance.itematic$getOrCreateStat(this.activeItemStack.getRegistryEntry());
+    }
+
     @ModifyArg(
         method = "disableShield",
         at = @At(
@@ -129,6 +143,17 @@ public abstract class PlayerEntityExtender extends LivingEntity {
         )
     )
     private void neverSetEmptyStack(PlayerEntity instance, Hand hand, ItemStack stack) {}
+
+    @Redirect(
+        method = "eatFood",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+        )
+    )
+    private <T> Stat<T> doNotGetOrCreateStat(StatType<T> instance, T key) {
+        return null;
+    }
 
     @Redirect(
         method = "isUsingSpyglass",

@@ -131,6 +131,12 @@
       "net/minecraft/class_3419": [
         "net/minecraft/util/StringIdentifiable"
       ],
+      "net/minecraft/class_3445": [
+        "net/errorcraft/itematic/access/stat/StatAccess"
+      ],
+      "net/minecraft/class_3448": [
+        "net/errorcraft/itematic/access/stat/StatTypeAccess"
+      ],
       "net/minecraft/class_3611": [
         "net/errorcraft/itematic/access/fluid/FluidAccess"
       ],

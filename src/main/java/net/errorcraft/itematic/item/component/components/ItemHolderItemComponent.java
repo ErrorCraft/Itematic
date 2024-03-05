@@ -70,7 +70,7 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
     public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (this.dropItems(stack.getOrCreateNbt(), user, world)) {
             user.playSound(this.emptySound.value(), 0.8f, 0.8f + world.getRandom().nextFloat() * 0.4f);
-            user.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+            user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
             return ActionResult.success(world.isClient());
         }
         return ActionResult.PASS;

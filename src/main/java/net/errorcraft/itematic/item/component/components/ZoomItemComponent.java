@@ -38,7 +38,7 @@ public record ZoomItemComponent(float fieldOfViewMultiplier, RegistryEntry<Sound
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         user.playSound(this.startUsingSound.value(), 1.0f, 1.0f);
-        user.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+        user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         return ItemUsage.consumeHeldItem(world, user, hand).getResult();
     }
 

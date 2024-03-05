@@ -46,6 +46,8 @@ import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.stat.Stat;
+import net.minecraft.stat.StatType;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
@@ -582,6 +584,18 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         this.itematic$invokeEvent(ItemEvents.BREAK_ITEM, this.context);
     }
 
+    @Redirect(
+        method = { "useOnBlock", "method_56097", "postHit", "postMine", "onCraftByPlayer" },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+        )
+    )
+    @SuppressWarnings("unchecked")
+    private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key) {
+        return instance.itematic$getOrCreateStat(this.entry);
+    }
+
     @Override
     public RegistryKey<Item> itematic$key() {
         if (this.entry == null) {
@@ -744,7 +758,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         this.decrement(1);
         this.itematic$invokeEvent(ItemEvents.BREAK_ITEM, context);
         if (entity instanceof PlayerEntity player && this.entry != null) {
-            player.incrementStat(Stats.BROKEN.getOrCreateStat(this.entry.value()));
+            player.incrementStat(Stats.BROKEN.itematic$getOrCreateStat(this.entry));
         }
         this.setDamage(0);
     }

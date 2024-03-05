@@ -15,6 +15,8 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.stat.Stat;
+import net.minecraft.stat.StatType;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -994,5 +996,17 @@ public interface CauldronBehaviorExtender {
     )
     private static Object yellowShulkerBoxUseRegistryKey(Object key) {
         return ItemKeys.YELLOW_SHULKER_BOX;
+    }
+
+    @Redirect(
+        method = { "method_32219", "method_32220", "method_32222", "emptyCauldron", "fillCauldron" },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+        )
+    )
+    @SuppressWarnings("unchecked")
+    private static <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local(argsOnly = true, ordinal = 0) ItemStack stack) {
+        return instance.itematic$getOrCreateStat(stack.getRegistryEntry());
     }
 }

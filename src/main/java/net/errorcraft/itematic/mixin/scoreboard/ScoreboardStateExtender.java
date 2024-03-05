@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.scoreboard;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.scoreboard.ScoreboardAccess;
 import net.errorcraft.itematic.access.scoreboard.ScoreboardStateAccess;
+import net.errorcraft.itematic.scoreboard.ScoreboardCriterionUtil;
 import net.errorcraft.itematic.text.TextUtil;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.RegistryWrapper;
@@ -13,7 +14,9 @@ import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ScoreboardState.class)
 public class ScoreboardStateExtender implements ScoreboardStateAccess {
@@ -62,6 +65,22 @@ public class ScoreboardStateExtender implements ScoreboardStateAccess {
     )
     private MutableText fromJsonUseDynamicRegistry(String json) {
         return TextUtil.fromJsonString(json, this.lookup);
+    }
+
+    @Inject(
+        method = "readObjectivesNbt",
+        at = @At("HEAD")
+    )
+    private void setLookup(NbtList nbt, CallbackInfo info) {
+        ScoreboardCriterionUtil.setLookup(this.lookup);
+    }
+
+    @Inject(
+        method = "readObjectivesNbt",
+        at = @At("RETURN")
+    )
+    private void resetLookup(NbtList nbt, CallbackInfo info) {
+        ScoreboardCriterionUtil.setLookup(null);
     }
 
     @Override

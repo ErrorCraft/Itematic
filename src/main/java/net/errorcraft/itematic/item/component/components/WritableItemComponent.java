@@ -35,7 +35,7 @@ public record WritableItemComponent(RegistryEntry<Item> transformsInto) implemen
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         user.useBook(stack, hand);
-        user.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+        user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         return ActionResult.success(world.isClient());
     }
 

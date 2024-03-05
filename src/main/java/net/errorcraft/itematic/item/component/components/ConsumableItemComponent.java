@@ -68,7 +68,7 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem) 
             stack.itematic$invokeEvent(ItemEvents.CONSUME_ITEM, context);
         }
 
-        player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+        player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
     }
 
     public static ConsumableItemComponent of(RegistryEntry<Item> resultItem) {

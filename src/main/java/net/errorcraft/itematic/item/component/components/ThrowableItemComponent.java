@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.dynamic.Codecs;
@@ -56,6 +57,9 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
         this.drawDuration.ifPresent(drawDuration -> {
             if (drawDuration.test(usedTicks)) {
                 this.createEntity(world, user, stack, resultStackConsumer);
+                if (user instanceof PlayerEntity player) {
+                    player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+                }
             }
         });
     }

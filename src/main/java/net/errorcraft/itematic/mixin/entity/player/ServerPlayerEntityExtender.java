@@ -8,11 +8,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.NetworkSyncedItem;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.stat.Stat;
+import net.minecraft.stat.StatType;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
 public class ServerPlayerEntityExtender {
@@ -61,5 +65,28 @@ public class ServerPlayerEntityExtender {
     )
     private boolean isOfForWrittenBookUseItemComponentCheck(ItemStack instance, Item item) {
         return instance.itematic$hasComponent(ItemComponentTypes.TEXT_HOLDER);
+    }
+
+    @Inject(
+        method = "increaseStat",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void checkNullForInvalidStat(Stat<?> stat, int amount, CallbackInfo info) {
+        if (stat == null) {
+            info.cancel();
+        }
+    }
+
+    @Redirect(
+        method = "dropItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+        )
+    )
+    @SuppressWarnings("unchecked")
+    private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, ItemStack stack) {
+        return instance.itematic$getOrCreateStat(stack.getRegistryEntry());
     }
 }

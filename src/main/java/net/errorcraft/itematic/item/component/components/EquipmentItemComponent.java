@@ -22,6 +22,7 @@ import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -60,6 +61,9 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
         }
         if (result.getResult() == ActionResult.FAIL) {
             return ActionResult.PASS;
+        }
+        if (result.getResult().isAccepted() && !world.isClient()) {
+            user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         }
         return result.getResult();
     }

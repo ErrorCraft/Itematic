@@ -1,6 +1,13 @@
 package net.errorcraft.itematic.access.registry.entry;
 
-public interface RegistryEntryAccess {
+import net.minecraft.registry.entry.RegistryEntry;
+
+public interface RegistryEntryAccess<T> extends Comparable<RegistryEntry<T>> {
+    @Override
+    default int compareTo(RegistryEntry<T> o) {
+        return 0;
+    }
+
     default int itematic$rawId() {
         return -1;
     }

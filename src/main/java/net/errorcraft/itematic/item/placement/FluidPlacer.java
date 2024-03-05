@@ -92,7 +92,7 @@ public class FluidPlacer extends Placer {
             return;
         }
 
-        this.player.incrementStat(Stats.USED.getOrCreateStat(this.stack.getItem()));
+        this.player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         fluidDrainable.getBucketFillSound().ifPresent(sound -> this.player.playSound(sound, 1.0f, 1.0f));
         if (this.player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.FILLED_BUCKET.trigger(serverPlayer, drainedItemStack);

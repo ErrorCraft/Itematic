@@ -6,9 +6,8 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.minecraft.entity.player.PlayerEntity;
-
-import java.util.Optional;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stat.Stats;
 
 public record OpenBookFromItemAction() implements Action<OpenBookFromItemAction> {
     public static final OpenBookFromItemAction INSTANCE = new OpenBookFromItemAction();
@@ -21,11 +20,13 @@ public record OpenBookFromItemAction() implements Action<OpenBookFromItemAction>
 
     @Override
     public boolean execute(ActionContext context) {
-        Optional<PlayerEntity> player = context.player(ActionContextParameter.THIS);
-        if (player.isPresent()) {
-            player.get().useBook(context.stack(), context.hand());
-            return true;
-        }
-        return false;
+        return context.player(ActionContextParameter.THIS)
+            .map(player -> {
+                ItemStack stack = context.stack();
+                player.useBook(stack, context.hand());
+                player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+                return true;
+            })
+            .orElse(false);
     }
 }

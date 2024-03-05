@@ -41,7 +41,7 @@ public record MappableItemComponent(RegistryEntry<Item> transformsInto) implemen
         if (world.isClient()) {
             return ActionResult.SUCCESS;
         }
-        user.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+        user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         user.getWorld().playSoundFromEntity(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundCategory(), 1.0f, 1.0f);
         ItemStack resultStack = this.createStack(world, user.getBlockX(), user.getBlockZ(), 0, true, false);
         resultStackConsumer.set(ItemUsageUtil.exchangeStack(stack, user, resultStack, true, true));

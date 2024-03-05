@@ -6,10 +6,11 @@ import net.minecraft.block.PumpkinBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stat.Stat;
+import net.minecraft.stat.StatType;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PumpkinBlock.class)
@@ -25,7 +26,7 @@ public class PumpkinBlockExtender {
         return instance.itematic$isOf(ItemKeys.SHEARS);
     }
 
-    @ModifyArg(
+    @Redirect(
         method = "onUseWithItem",
         at = @At(
             value = "INVOKE",
@@ -33,8 +34,8 @@ public class PumpkinBlockExtender {
         )
     )
     @SuppressWarnings("unchecked")
-    private <T> T getShearsUseDynamicRegistry(T key, @Local(argsOnly = true) World world) {
-        return (T) world.itematic$getItem(ItemKeys.SHEARS).value();
+    private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local(argsOnly = true) World world) {
+        return instance.itematic$getOrCreateStat(world.itematic$getItem(ItemKeys.SHEARS));
     }
 
     @Redirect(

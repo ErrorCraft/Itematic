@@ -27,6 +27,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.stat.Stat;
+import net.minecraft.stat.StatType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -254,7 +256,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         return optionalComponent.isPresent();
     }
 
-    @ModifyArg(
+    @Redirect(
         method = "tryUseTotem",
         at = @At(
             value = "INVOKE",
@@ -262,8 +264,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     @SuppressWarnings("unchecked")
-    private <T> T getTotemOfUndyingUseExistingStack(T key, @Local(ordinal = 0) ItemStack stack) {
-        return (T) stack.getItem();
+    private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local(ordinal = 0) ItemStack stack) {
+        return instance.itematic$getOrCreateStat(stack.getRegistryEntry());
     }
 
     @Inject(

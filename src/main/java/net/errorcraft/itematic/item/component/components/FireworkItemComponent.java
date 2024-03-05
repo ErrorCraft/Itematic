@@ -56,7 +56,7 @@ public record FireworkItemComponent() implements ItemComponent<FireworkItemCompo
         FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(world, stack, user);
         world.spawnEntity(fireworkRocketEntity);
         stack.decrementUnlessCreative(1, user);
-        user.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+        user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         return ActionResult.CONSUME;
     }
 
