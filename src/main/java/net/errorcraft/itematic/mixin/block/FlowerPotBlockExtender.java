@@ -18,6 +18,6 @@ public class FlowerPotBlockExtender extends BlockExtender {
         )
     )
     private ItemStack newItemStackUseCreateStack(ItemConvertible item, WorldView world) {
-        return world.itematic$createStack(this.itematic$pickBlockKey());
+        return world.itematic$createStack(this.itematic$asItemKey());
     }
 }

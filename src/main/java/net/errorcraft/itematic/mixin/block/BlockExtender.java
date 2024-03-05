@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(Block.class)
 public abstract class BlockExtender implements BlockAccess {
     @Unique
-    private RegistryKey<Item> pickBlockKey;
+    private RegistryKey<Item> itemKey;
 
     @Redirect(
         method = "getPickStack",
@@ -26,24 +26,19 @@ public abstract class BlockExtender implements BlockAccess {
         )
     )
     private ItemStack newItemStackUseCreateStack(ItemConvertible item, WorldView world) {
-        return world.itematic$createStack(this.pickBlockKey());
+        return world.itematic$createStack(this.itematic$asItemKey());
     }
 
     @Override
-    public RegistryKey<Item> itematic$pickBlockKey() {
-        return this.pickBlockKey;
-    }
-
-    @Override
-    public void itematic$setPickBlockKey(RegistryKey<Item> pickBlockKey) {
-        this.pickBlockKey = pickBlockKey;
-    }
-
-    @Unique
-    private RegistryKey<Item> pickBlockKey() {
-        if (this.pickBlockKey != null) {
-            return this.pickBlockKey;
+    public RegistryKey<Item> itematic$asItemKey() {
+        if (this.itemKey != null) {
+            return this.itemKey;
         }
         return ItemUtil.keyFromBlock((Block)(Object) this);
+    }
+
+    @Override
+    public void itematic$setAsItemKey(RegistryKey<Item> pickBlockKey) {
+        this.itemKey = pickBlockKey;
     }
 }

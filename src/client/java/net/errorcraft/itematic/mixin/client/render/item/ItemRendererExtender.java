@@ -1,20 +1,15 @@
 package net.errorcraft.itematic.mixin.client.render.item;
 
-import net.errorcraft.itematic.access.client.render.item.ItemRendererAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.color.ItemColor;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.TintedItemComponent;
 import net.minecraft.client.color.item.ItemColors;
-import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.DefaultedRegistry;
-import net.minecraft.registry.Registry;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
@@ -23,11 +18,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 @Mixin(ItemRenderer.class)
-public class ItemRendererExtender implements ItemRendererAccess {
-    @Shadow
-    @Final
-    private ItemModels models;
-
+public class ItemRendererExtender {
     @Redirect(
         method = "<init>",
         at = @At(
@@ -116,10 +107,5 @@ public class ItemRendererExtender implements ItemRendererAccess {
             .map(TintedItemComponent::tint)
             .map(c -> c.getColor(item, tintIndex))
             .orElse(ItemColor.DEFAULT_COLOR);
-    }
-
-    @Override
-    public void itematic$reloadModelIds(Registry<Item> registry) {
-        this.models.itematic$reloadModelIds(registry);
     }
 }

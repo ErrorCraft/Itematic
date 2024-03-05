@@ -25,7 +25,7 @@ public class ModelOverrideListExtender {
     )
     @Nullable
     @SuppressWarnings("deprecation")
-    private ModelPredicateProvider getModelOverride(Item item, Identifier id, @Local ItemStack stack) {
+    private ModelPredicateProvider getModelOverride(Item item, Identifier id, @Local(argsOnly = true) ItemStack stack) {
         ModelOverride override = ItematicRegistries.MODEL_OVERRIDE.get(id);
         if (override == null) {
             return null;

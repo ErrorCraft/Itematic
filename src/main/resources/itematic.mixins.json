@@ -261,7 +261,6 @@
     "network.PacketByteBufExtender",
     "network.RegistryByteBufExtender",
     "network.packet.PlayPacketsAccessor",
-    "network.packet.s2c.config.ReadyS2CPacketExtender",
     "network.state.PlayStateFactoriesExtender",
     "predicate.entity.EntityPredicateExtender",
     "predicate.entity.EntityPredicateExtender$BuilderExtender",

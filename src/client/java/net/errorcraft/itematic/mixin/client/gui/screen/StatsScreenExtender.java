@@ -139,7 +139,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     if (this.hasNoStatFor(statType, entry)) {
                         continue;
                     }
-                    RegistryKey<Item> itemKey = entry.value().itematic$pickBlockKey();
+                    RegistryKey<Item> itemKey = entry.value().itematic$asItemKey();
                     items.getEntry(itemKey).ifPresent(entries::add);
                     break;
                 }

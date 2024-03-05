@@ -5,10 +5,10 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.RegistryKey;
 
 public interface BlockAccess {
-    default RegistryKey<Item> itematic$pickBlockKey() {
+    default RegistryKey<Item> itematic$asItemKey() {
         return null;
     }
-    default void itematic$setPickBlockKey(RegistryKey<Item> pickBlockKey) {}
+    default void itematic$setAsItemKey(RegistryKey<Item> pickBlockKey) {}
     default ItemPlacementContext itematic$placementContext(ItemPlacementContext context) {
         return context;
     }

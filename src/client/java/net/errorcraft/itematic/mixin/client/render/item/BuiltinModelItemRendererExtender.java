@@ -31,7 +31,7 @@ public class BuiltinModelItemRendererExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfBlockItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, @Local ItemStack itemStack, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
+    private boolean instanceOfBlockItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, @Local(argsOnly = true) ItemStack itemStack, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
         Optional<BlockItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.BLOCK);
         optionalComponent.ifPresent(blockItemComponent::set);
         return optionalComponent.isPresent();
