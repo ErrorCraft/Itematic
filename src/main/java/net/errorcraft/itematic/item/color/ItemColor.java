@@ -5,9 +5,9 @@ import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.minecraft.item.ItemStack;
 
 public interface ItemColor {
-    Codec<ItemColor> CODEC = ItematicRegistries.ITEM_COLOR_TYPE.getCodec().dispatch(ItemColor::getType, ItemColorType::codec);
-    int DEFAULT_COLOR = -1;
+    Codec<ItemColor> CODEC = ItematicRegistries.ITEM_COLOR_TYPE.getCodec().dispatch(ItemColor::type, ItemColorType::codec);
+    int DEFAULT_COLOR = 0xffffffff;
 
-    int getColor(ItemStack stack, int tintIndex);
-    ItemColorType<?> getType();
+    int color(ItemStack stack, int tintIndex);
+    ItemColorType<?> type();
 }

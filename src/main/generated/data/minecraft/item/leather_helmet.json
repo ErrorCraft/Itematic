@@ -16,7 +16,7 @@
       "behavior": "minecraft:equipment"
     },
     "minecraft:dyeable": {
-      "default_color": 10511680
+      "default_color": -6265536
     },
     "minecraft:enchantable": {
       "enchantability": 15,

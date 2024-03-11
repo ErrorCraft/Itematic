@@ -2,13 +2,15 @@ package net.errorcraft.itematic.mixin.recipe;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.recipe.BrewingRecipeRegistryAccess;
+import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.recipe.BrewingRecipe;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
 import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.registry.RegistryKey;
@@ -24,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 @Mixin(BrewingRecipeRegistry.class)
@@ -93,12 +96,13 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
         method = "hasPotionRecipe",
         at = @At(
             value = "INVOKE_ASSIGN",
-            target = "Lnet/minecraft/potion/PotionUtil;getPotion(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/registry/entry/RegistryEntry;",
-            shift = At.Shift.AFTER
+            target = "Ljava/util/List;iterator()Ljava/util/Iterator;"
         ),
         cancellable = true
     )
-    private static void hasPotionRecipeUseItemKeys(ItemStack input, ItemStack ingredient, CallbackInfoReturnable<Boolean> info, @Local RegistryEntry<Potion> potion) {
+    @SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "OptionalGetWithoutIsPresent"})
+    private static void hasPotionRecipeUseItemKeys(ItemStack input, ItemStack ingredient, CallbackInfoReturnable<Boolean> info, @Local Optional<RegistryEntry<Potion>> optional) {
+        RegistryEntry<Potion> potion = optional.get();
         for (BrewingRecipe<RegistryEntry<Potion>> recipe : POTION_RECIPES) {
             if (recipe.input() == potion && ingredient.itematic$isOf(recipe.ingredient())) {
                 info.setReturnValue(true);
@@ -194,15 +198,20 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
         if (input.isEmpty()) {
             return input;
         }
-        RegistryEntry<Potion> potion = PotionUtil.getPotion(input);
+        Optional<RegistryEntry<Potion>> optionalPotion = input.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT)
+            .potion();
+        if (optionalPotion.isEmpty()) {
+            return input;
+        }
+        RegistryEntry<Potion> potion = optionalPotion.get();
         for (BrewingRecipe<RegistryKey<Item>> recipe : ITEM_RECIPES) {
             if (input.itematic$isOf(recipe.input()) && ingredient.itematic$isOf(recipe.ingredient())) {
-                return PotionUtil.setPotion(world.itematic$createStack(recipe.output()), potion);
+                return PotionContentsComponentUtil.setPotion(world.itematic$createStack(recipe.output()), potion);
             }
         }
         for (BrewingRecipe<RegistryEntry<Potion>> recipe : POTION_RECIPES) {
             if (recipe.input() == potion && ingredient.itematic$isOf(recipe.ingredient())) {
-                return PotionUtil.setPotion(new ItemStack(input.getRegistryEntry()), recipe.output());
+                return PotionContentsComponentUtil.setPotion(new ItemStack(input.getRegistryEntry()), recipe.output());
             }
         }
         return input;

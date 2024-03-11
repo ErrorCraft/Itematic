@@ -59,7 +59,8 @@ public class HeldItemRendererExtender {
     private boolean isOfForCrossbowUseItemComponent(ItemStack instance, Item item, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
         Optional<ShooterItemComponent> optionalComponent = instance.itematic$getComponent(ItemComponentTypes.SHOOTER);
         optionalComponent.ifPresent(shooterItemComponent::set);
-        return optionalComponent.map(ShooterItemComponent::chargeable).orElse(false);
+        return optionalComponent.map(ShooterItemComponent::isChargeable)
+            .orElse(false);
     }
 
     @Redirect(

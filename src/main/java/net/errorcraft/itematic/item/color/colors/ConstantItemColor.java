@@ -6,6 +6,7 @@ import net.errorcraft.itematic.item.color.ItemColor;
 import net.errorcraft.itematic.item.color.ItemColorType;
 import net.errorcraft.itematic.item.color.ItemColorTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.ColorHelper;
 
 public record ConstantItemColor(int color) implements ItemColor {
     public static final Codec<ConstantItemColor> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -13,12 +14,12 @@ public record ConstantItemColor(int color) implements ItemColor {
     ).apply(instance, ConstantItemColor::new));
 
     @Override
-    public int getColor(ItemStack stack, int tintIndex) {
-        return this.color;
+    public int color(ItemStack stack, int tintIndex) {
+        return ColorHelper.Argb.fullAlpha(this.color);
     }
 
     @Override
-    public ItemColorType<?> getType() {
+    public ItemColorType<?> type() {
         return ItemColorTypes.CONSTANT;
     }
 }

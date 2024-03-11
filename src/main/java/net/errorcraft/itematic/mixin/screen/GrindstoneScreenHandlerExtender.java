@@ -55,12 +55,12 @@ public class GrindstoneScreenHandlerExtender {
     @Redirect(
         method = "grind",
         at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForBookUseItemComponent(ItemConvertible item, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
-        return new ItemStack(transformsInto.get());
+    private ItemStack copyComponentsToNewStackForBookUseItemComponent(ItemStack instance, ItemConvertible item, int count, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
+        return instance.itematic$copyComponentsToNewStack(transformsInto.get(), count);
     }
 
     @Mixin(targets = { "net/minecraft/screen/GrindstoneScreenHandler$2", "net/minecraft/screen/GrindstoneScreenHandler$3" })

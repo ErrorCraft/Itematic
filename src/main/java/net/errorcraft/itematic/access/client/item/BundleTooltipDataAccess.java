@@ -1,6 +1,8 @@
 package net.errorcraft.itematic.access.client.item;
 
 public interface BundleTooltipDataAccess {
-    int itematic$capacity();
-    void itematic$setCapacity(int capacity);
+    default int itematic$capacity() {
+        return 0;
+    }
+    default void itematic$setCapacity(int capacity) {}
 }

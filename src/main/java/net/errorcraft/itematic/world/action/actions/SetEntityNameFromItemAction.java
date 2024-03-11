@@ -7,10 +7,11 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 
 public record SetEntityNameFromItemAction(ActionContextParameter entity) implements Action<SetEntityNameFromItemAction> {
     public static final Codec<SetEntityNameFromItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -24,8 +25,8 @@ public record SetEntityNameFromItemAction(ActionContextParameter entity) impleme
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.stack();
-        if (!stack.hasCustomName()) {
+        Text customName = context.stack().get(DataComponentTypes.CUSTOM_NAME);
+        if (customName == null) {
             return false;
         }
         Entity entity = context.entity(this.entity).orElse(null);
@@ -33,7 +34,7 @@ public record SetEntityNameFromItemAction(ActionContextParameter entity) impleme
             return false;
         }
         if (entity.isAlive()) {
-            entity.setCustomName(stack.getName());
+            entity.setCustomName(customName);
             if (entity instanceof MobEntity mobEntity) {
                 mobEntity.setPersistent();
             }

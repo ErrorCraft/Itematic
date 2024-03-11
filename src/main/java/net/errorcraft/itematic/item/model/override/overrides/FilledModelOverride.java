@@ -10,11 +10,8 @@ import org.jetbrains.annotations.Nullable;
 public class FilledModelOverride implements ClampedModelOverride {
     @Override
     public float applyUnclamped(ItemStack stack, @Nullable World world, @Nullable LivingEntity target, int seed) {
-        if (world == null) {
-            return 0.0f;
-        }
         return stack.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
-            .map(c -> (float)c.fullness(stack, world.getRegistryManager()))
+            .map(c -> (float)c.fullness(stack))
             .orElse(0.0f);
     }
 

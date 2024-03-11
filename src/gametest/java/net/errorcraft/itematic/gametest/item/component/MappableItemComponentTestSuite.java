@@ -1,0 +1,29 @@
+package net.errorcraft.itematic.gametest.item.component;
+
+import net.errorcraft.itematic.gametest.Assert;
+import net.errorcraft.itematic.item.ItemKeys;
+import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.test.GameTest;
+import net.minecraft.test.TestContext;
+import net.minecraft.util.Hand;
+import net.minecraft.world.GameMode;
+
+public class MappableItemComponentTestSuite {
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+    public void usingMapFillsMap(TestContext context) {
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
+        ServerWorld world = context.getWorld();
+        ItemStack stack = world.itematic$createStack(ItemKeys.MAP);
+        player.setStackInHand(Hand.MAIN_HAND, stack);
+        world.spawnEntity(player);
+        ItemStack resultStack = stack.use(world, player, Hand.MAIN_HAND).getValue();
+        context.addInstantFinalTask(() -> {
+            Assert.itemStackIsOf(resultStack, ItemKeys.FILLED_MAP);
+            Assert.itemStackHasComponent(resultStack, DataComponentTypes.MAP_ID);
+        });
+    }
+}

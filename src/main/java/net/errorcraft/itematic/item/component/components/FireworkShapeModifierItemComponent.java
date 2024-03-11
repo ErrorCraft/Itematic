@@ -5,12 +5,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.item.FireworkRocketItem;
+import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.util.StringIdentifiable;
 
-public record FireworkShapeModifierItemComponent(FireworkRocketItem.Type shape) implements ItemComponent<FireworkShapeModifierItemComponent> {
+public record FireworkShapeModifierItemComponent(FireworkExplosionComponent.Type shape) implements ItemComponent<FireworkShapeModifierItemComponent> {
     public static final Codec<FireworkShapeModifierItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        StringIdentifiable.createCodec(FireworkRocketItem.Type::values).fieldOf("shape").forGetter(FireworkShapeModifierItemComponent::shape)
+        StringIdentifiable.createCodec(FireworkExplosionComponent.Type::values).fieldOf("shape").forGetter(FireworkShapeModifierItemComponent::shape)
     ).apply(instance, FireworkShapeModifierItemComponent::new));
 
     @Override
@@ -23,7 +23,7 @@ public record FireworkShapeModifierItemComponent(FireworkRocketItem.Type shape) 
         return CODEC;
     }
 
-    public static FireworkShapeModifierItemComponent of(FireworkRocketItem.Type shape) {
+    public static FireworkShapeModifierItemComponent of(FireworkExplosionComponent.Type shape) {
         return new FireworkShapeModifierItemComponent(shape);
     }
 }

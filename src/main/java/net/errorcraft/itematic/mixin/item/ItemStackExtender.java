@@ -3,11 +3,8 @@ package net.errorcraft.itematic.mixin.item;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.item.ItemBase;
 import net.errorcraft.itematic.item.ItemKeys;
@@ -23,7 +20,8 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.minecraft.advancement.criterion.ItemDurabilityChangedCriterion;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.item.TooltipData;
+import net.minecraft.component.*;
+import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,14 +30,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.entry.RegistryFixedCodec;
@@ -51,7 +44,6 @@ import net.minecraft.stat.StatType;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
@@ -71,27 +63,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackExtender implements ItemStackAccess {
+public abstract class ItemStackExtender implements ComponentHolder, ItemStackAccess {
     @Shadow
     @Final
     public static ItemStack EMPTY;
 
     @Shadow
-    @Final
-    private static String UNBREAKABLE_KEY;
-
-    @Shadow
     private int count;
-
-    @Shadow
-    @Nullable
-    private NbtCompound nbt;
 
     @Shadow
     public abstract boolean isEmpty();
@@ -109,12 +91,9 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     public abstract void decrement(int amount);
 
     @Shadow
-    private static String method_55061() {
-        return null;
-    }
-
-    @Unique
-    private static Codec<RegistryEntry<Item>> ITEM_ENTRY_CODEC;
+    @Final
+    @Mutable
+    ComponentMapImpl components;
 
     @Unique
     private final Set<ItemEvent> activeEvents = new HashSet<>();
@@ -125,132 +104,96 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     @Unique
     private ActionContext context;
 
-    @Inject(
-        method = "<clinit>",
-        at = @At("HEAD")
-    )
-    private static void initializeItemEntryCodec(CallbackInfo info) {
-        ITEM_ENTRY_CODEC = Codecs.validate(RegistryFixedCodec.of(RegistryKeys.ITEM), entry -> entry.matchesKey(ItemKeys.AIR) ? DataResult.error(ItemStackExtender::method_55061) : DataResult.success(entry));
-    }
-
     @Redirect(
-        method = { "method_28376", "method_55067" },
+        method = "<clinit>",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/registry/DefaultedRegistry;getEntryCodec()Lcom/mojang/serialization/Codec;"
         )
     )
-    private static Codec<RegistryEntry<Item>> doNotUseStaticItemRegistry(DefaultedRegistry<Item> instance) {
+    private static Codec<RegistryEntry<Item>> registryEntryCodecDoNotUseStaticItemRegistry(DefaultedRegistry<Item> instance) {
         return RegistryFixedCodec.of(RegistryKeys.ITEM);
-    }
-
-    @Redirect(
-        method = "method_55063",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/registry/DefaultedRegistry;getCodec()Lcom/mojang/serialization/Codec;"
-        )
-    )
-    private static Codec<RegistryEntry<Item>> valueDoNotUseStaticItemRegistry(DefaultedRegistry<Item> instance) {
-        return RegistryFixedCodec.of(RegistryKeys.ITEM);
-    }
-
-    @Redirect(
-        method = "method_55066",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/item/ItemStack;ITEM_CODEC:Lcom/mojang/serialization/Codec;",
-            opcode = Opcodes.GETSTATIC
-        )
-    )
-    private static Codec<RegistryEntry<Item>> getItemCodecUseRegistryEntryCodec() {
-        return ITEM_ENTRY_CODEC;
-    }
-
-    @ModifyArg(
-        method = { "method_55063", "method_55066" },
-        at = @At(
-            value = "INVOKE",
-            target = "Lcom/mojang/serialization/MapCodec;forGetter(Ljava/util/function/Function;)Lcom/mojang/serialization/codecs/RecordCodecBuilder;",
-            ordinal = 0,
-            remap = false
-        )
-    )
-    private static Function<ItemStack, RegistryEntry<Item>> forGetterUseRegistryEntry(Function<ItemStack, Item> getter) {
-        return ItemStack::getRegistryEntry;
-    }
-
-    @ModifyArg(
-        method = { "method_55063", "method_55066" },
-        at = @At(
-            value = "INVOKE",
-            target = "Lcom/mojang/datafixers/Products$P2;apply(Lcom/mojang/datafixers/kinds/Applicative;Ljava/util/function/BiFunction;)Lcom/mojang/datafixers/kinds/App;",
-            remap = false
-        )
-    )
-    private static BiFunction<RegistryEntry<Item>, Integer, ItemStack> applyUseRegistryEntryItemStackConstructor(BiFunction<Item, Integer, ItemStack> function) {
-        return ItemStack::new;
-    }
-
-    @Redirect(
-        method = "<clinit>",
-        at = @At(
-            value = "INVOKE",
-            target = "Lcom/mojang/serialization/Codec;xmap(Ljava/util/function/Function;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
-            remap = false
-        )
-    )
-    private static Codec<ItemStack> ingredientEntryCodecUseRegistryEntryVersion(Codec<Item> instance, Function<? super Item, ? extends ItemStack> to, Function<? super ItemStack, ? extends Item> from) {
-        return ITEM_ENTRY_CODEC.xmap(ItemStack::new, ItemStack::getRegistryEntry);
     }
 
     @Inject(
         method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V",
         at = @At("TAIL")
     )
-    private void constructorSetRegistryEntry(RegistryEntry<Item> entry, CallbackInfo info) {
-        this.entry = entry;
+    private void registryEntryConstructorSetFields(RegistryEntry<Item> entry, CallbackInfo info) {
+        this.setFields(entry);
     }
 
     @Inject(
         method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V",
         at = @At("TAIL")
     )
-    private void constructorSetRegistryEntry(RegistryEntry<Item> entry, int count, CallbackInfo info) {
-        this.entry = entry;
+    private void registryEntryConstructorSetFields(RegistryEntry<Item> entry, int count, CallbackInfo info) {
+        this.setFields(entry);
+    }
+
+    @Inject(
+        method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V",
+        at = @At("TAIL")
+    )
+    private void componentChangesConstructorSetFields(RegistryEntry<Item> item, int count, ComponentChanges changes, CallbackInfo info) {
+        this.entry = item;
+        this.components = ComponentMapImpl.create(item.value().getComponents(), changes);
+        item.value().postProcessComponents((ItemStack)(Object) this);
     }
 
     @Redirect(
-        method = { "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V", "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V" },
+        method = { "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V", "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V", "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/registry/entry/RegistryEntry;value()Ljava/lang/Object;"
         )
     )
-    private static <T> T constructorValueReturnNullToPreventUnboundRegistryEntryIssues(RegistryEntry<T> instance) {
+    private static <T> T registryEntryValueReturnNullToPreventUnboundRegistryEntryIssues(RegistryEntry<T> instance) {
         return null;
     }
 
     @Redirect(
-        method = "<init>(Lnet/minecraft/item/ItemConvertible;I)V",
+        method = { "<init>(Lnet/minecraft/item/ItemConvertible;I)V" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemConvertible;asItem()Lnet/minecraft/item/Item;"
         )
     )
-    private Item constructorAsItemReturnNullToPreventNullPointerException(ItemConvertible instance) {
+    private static Item asItemReturnNullToPreventNullPointerExceptionStatic(ItemConvertible instance) {
         return null;
     }
 
     @Redirect(
-        method = { "<init>(Lnet/minecraft/item/ItemConvertible;I)V", "setNbt" },
+        method = "<init>(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/ComponentMapImpl;)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;isDamageable()Z"
+            target = "Lnet/minecraft/item/ItemConvertible;asItem()Lnet/minecraft/item/Item;"
         )
     )
-    private boolean isDamageableUseItemStackVersion(Item instance) {
-        return this.isDamageable();
+    private Item asItemReturnNullToPreventNullPointerException(ItemConvertible instance) {
+        return null;
+    }
+
+    @Redirect(
+        method = { "<init>(Lnet/minecraft/item/ItemConvertible;I)V", "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V" },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/Item;getComponents()Lnet/minecraft/component/ComponentMap;"
+        )
+    )
+    private static ComponentMap getComponentsReturnNullToPreventNullPointerException(Item instance) {
+        return null;
+    }
+
+    @Redirect(
+        method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/component/ComponentMapImpl;create(Lnet/minecraft/component/ComponentMap;Lnet/minecraft/component/ComponentChanges;)Lnet/minecraft/component/ComponentMapImpl;"
+        )
+    )
+    private static ComponentMapImpl createComponentMapReturnNullToPreventNullPointerException(ComponentMap baseComponents, ComponentChanges changes) {
+        return null;
     }
 
     @Inject(
@@ -297,26 +240,27 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Redirect(
-        method = "writeNbt",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/registry/DefaultedRegistry;getId(Ljava/lang/Object;)Lnet/minecraft/util/Identifier;"
-        )
-    )
-    @NotNull
-    private <T> Identifier getIdUseEntry(DefaultedRegistry<T> instance, T value) {
-        return this.itematic$key().getValue();
-    }
-
-    @Redirect(
         method = "copy",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/ComponentMapImpl;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, int count) {
-        return new ItemStack(this.entry, count);
+    private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, int count, ComponentMapImpl components) {
+        ItemStack copy = new ItemStack(this.entry, count);
+        copy.itematic$setComponents(components);
+        return copy;
+    }
+
+    @ModifyArg(
+        method = "copyComponentsToNewStackIgnoreEmpty",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V"
+        )
+    )
+    private RegistryEntry<Item> getEntryUseField(RegistryEntry<Item> item) {
+        return this.entry;
     }
 
     /**
@@ -370,7 +314,6 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     private boolean checkNullEntryForEmptyStack(boolean original) {
         return original
             || this.entry == null
-            || !this.entry.hasKeyAndValue()
             || this.itematic$isOf(ItemKeys.AIR);
     }
 
@@ -384,21 +327,6 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             return false;
         }
         return this.entry.isIn(tag);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses a null check instead of a default air item.
-     */
-    @Overwrite
-    public boolean isDamageable() {
-        if (this.isEmpty()) {
-            return false;
-        }
-        if (!this.entry.value().isDamageable()) {
-            return false;
-        }
-        return this.nbt == null || !this.nbt.getBoolean(UNBREAKABLE_KEY);
     }
 
     /**
@@ -445,7 +373,7 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Redirect(
-        method = { "areItemsEqual", "areItemsAndNbtEqual" },
+        method = { "areItemsEqual", "areItemsAndComponentsEqual" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
@@ -484,10 +412,21 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         method = "getTooltip",
         at = @At(
             value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
+        return this.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
+    }
+
+    @Redirect(
+        method = "getTooltip",
+        at = @At(
+            value = "INVOKE",
             target = "Lnet/minecraft/item/Item;appendTooltip(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Ljava/util/List;Lnet/minecraft/client/item/TooltipContext;)V"
         )
     )
-    private void getTooltipAppendTooltipUseRegistryEntry(Item instance, ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    private void appendTooltipUseRegistryEntry(Item instance, ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if (this.entry != null) {
             this.entry.value().appendTooltip(stack, world, tooltip, context);
         }
@@ -501,11 +440,8 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         )
     )
     @NotNull
-    private <T> Identifier getTooltipGetIdUseRegistryEntry(DefaultedRegistry<T> instance, T t) {
-        if (this.entry == null) {
-            return ItemKeys.AIR.getValue();
-        }
-        return this.entry.getKey().map(RegistryKey::getValue).orElse(ItemKeys.AIR.getValue());
+    private <T> Identifier getIdUseRegistryEntry(DefaultedRegistry<T> instance, T t) {
+        return this.itematic$key().getValue();
     }
 
     @Inject(
@@ -596,6 +532,15 @@ public abstract class ItemStackExtender implements ItemStackAccess {
         return instance.itematic$getOrCreateStat(this.entry);
     }
 
+    /**
+     * @author ErrorCraft
+     * @reason Uses a registry entry on the item stack for data-driven items.
+     */
+    @Overwrite
+    public String toString() {
+        return this.count + " " + this.itematic$key().getValue().toString();
+    }
+
     @Override
     public RegistryKey<Item> itematic$key() {
         if (this.entry == null) {
@@ -605,8 +550,8 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
-    public Optional<NbtCompound> itematic$nbt() {
-        return Optional.ofNullable(this.nbt);
+    public void itematic$setComponents(ComponentMapImpl components) {
+        this.components = components;
     }
 
     @Override
@@ -619,29 +564,25 @@ public abstract class ItemStackExtender implements ItemStackAccess {
 
     @Override
     public ItemStack itematic$copyWithItem(RegistryEntry<Item> item) {
-        return this.itematic$copyNbtToNewStack(item, this.count);
+        return this.itematic$copyComponentsToNewStack(item, this.count);
     }
 
     @Override
-    public ItemStack itematic$copyNbtToNewStack(RegistryEntry<Item> item, int count) {
+    public ItemStack itematic$copyComponentsToNewStack(RegistryEntry<Item> item, int count) {
         if (this.isEmpty()) {
             return EMPTY;
         }
-        return this.itematic$copyNbtToNewStackIgnoreEmpty(item, count);
+        return this.itematic$copyComponentsToNewStackIgnoreEmpty(item, count);
     }
 
     @Override
-    public ItemStack itematic$copyNbtToNewStackIgnoreEmpty(RegistryEntry<Item> item, int count) {
-        ItemStack stack = new ItemStack(item, count);
-        if (this.nbt != null) {
-            stack.setNbt(this.nbt.copy());
-        }
-        return stack;
+    public ItemStack itematic$copyComponentsToNewStackIgnoreEmpty(RegistryEntry<Item> item, int count) {
+        return new ItemStack(item, this.count, this.components.getChanges());
     }
 
     @Override
     public boolean itematic$isOf(RegistryKey<Item> key) {
-        return this.entry != null && this.entry.matchesKey(key);
+        return this.entry != null && this.entry.hasKeyAndValue() && this.entry.matchesKey(key);
     }
 
     @Override
@@ -683,22 +624,6 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
-    public boolean itematic$isItemBarVisible(RegistryWrapper.WrapperLookup lookup) {
-        if (this.entry == null) {
-            return false;
-        }
-        return this.entry.value().itematic$isItemBarVisible((ItemStack)(Object) this, lookup);
-    }
-
-    @Override
-    public int itematic$itemBarStep(RegistryWrapper.WrapperLookup lookup) {
-        if (this.entry == null) {
-            return 0;
-        }
-        return this.entry.value().itematic$itemBarStep((ItemStack)(Object) this, lookup);
-    }
-
-    @Override
     public boolean itematic$canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
         if (this.entry == null) {
             return true;
@@ -726,28 +651,26 @@ public abstract class ItemStackExtender implements ItemStackAccess {
     }
 
     @Override
-    public Optional<TooltipData> itematic$tooltipData(@Nullable RegistryWrapper.WrapperLookup lookup) {
-        if (this.entry == null) {
-            return Optional.empty();
+    public double itematic$occupancy() {
+        BundleContentsComponent bundleContents = this.get(DataComponentTypes.BUNDLE_CONTENTS);
+        if (bundleContents != null) {
+            return ItemHolderItemComponent.NESTED_ITEM_HOLDER_OCCUPANCY + bundleContents.itematic$occupancy();
         }
-        return this.entry.value().itematic$tooltipData((ItemStack)(Object) this, lookup);
+        if (!this.getOrDefault(DataComponentTypes.BEES, List.of()).isEmpty()) {
+            return ItemBase.MAX_MAX_COUNT;
+        }
+        return (double)ItemBase.MAX_MAX_COUNT / this.getMaxCount();
     }
 
-    @Override
-    public boolean itematic$canBeNested() {
-        if (this.entry == null) {
-            return true;
+    @Unique
+    private void setFields(RegistryEntry<Item> entry) {
+        this.entry = entry;
+        if (entry.hasKeyAndValue()) {
+            this.components = new ComponentMapImpl(entry.value().getComponents());
+            entry.value().postProcessComponents((ItemStack)(Object) this);
+        } else {
+            this.components = new ComponentMapImpl(ComponentMap.EMPTY);
         }
-        return this.entry.value().canBeNested();
-    }
-
-    @Override
-    public double itematic$occupancy(RegistryWrapper.WrapperLookup lookup) {
-        return this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
-            .map(c -> ItemHolderItemComponent.ITEM_HOLDER_OCCUPANCY + c.getHolderOccupancy((ItemStack)(Object) this, lookup))
-            .orElseGet(() -> this.itematic$getComponent(ItemComponentTypes.BLOCK)
-                .map(c -> (double)ItemBase.MAX_MAX_COUNT / c.modifiedMaxCountForOccupancy((ItemStack)(Object) this))
-                .orElseGet(() -> (double)ItemBase.MAX_MAX_COUNT / this.getMaxCount()));
     }
 
     @Unique
@@ -761,45 +684,5 @@ public abstract class ItemStackExtender implements ItemStackAccess {
             player.incrementStat(Stats.BROKEN.itematic$getOrCreateStat(this.entry));
         }
         this.setDamage(0);
-    }
-
-    @Mixin(targets = "net/minecraft/item/ItemStack$1")
-    public static class PacketCodecExtender {
-        @Unique
-        private static final PacketCodec<RegistryByteBuf, RegistryEntry<Item>> REGISTRY_ENTRY_PACKET_CODEC = PacketCodecs.registryEntry(RegistryKeys.ITEM);
-
-        @Redirect(
-            method = "decode(Lnet/minecraft/network/RegistryByteBuf;)Lnet/minecraft/item/ItemStack;",
-            at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/network/codec/PacketCodec;decode(Ljava/lang/Object;)Ljava/lang/Object;"
-            )
-        )
-        private Object decodeUseRegistryEntry(PacketCodec<RegistryByteBuf, Item> instance, Object byteBuf, RegistryByteBuf registryByteBuf, @Share("itemEntry") LocalRef<RegistryEntry<Item>> itemEntry) {
-            itemEntry.set(REGISTRY_ENTRY_PACKET_CODEC.decode(registryByteBuf));
-            return null;
-        }
-
-        @Redirect(
-            method = "decode(Lnet/minecraft/network/RegistryByteBuf;)Lnet/minecraft/item/ItemStack;",
-            at = @At(
-                value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
-            )
-        )
-        private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, int count, @Share("itemEntry") LocalRef<RegistryEntry<Item>> itemEntry) {
-            return new ItemStack(itemEntry.get(), count);
-        }
-
-        @Redirect(
-            method = "encode(Lnet/minecraft/network/RegistryByteBuf;Lnet/minecraft/item/ItemStack;)V",
-            at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/network/codec/PacketCodec;encode(Ljava/lang/Object;Ljava/lang/Object;)V"
-            )
-        )
-        private void encodeUseRegistryEntry(PacketCodec<RegistryByteBuf, Item> instance, Object byteBuf, Object item, RegistryByteBuf registryByteBuf, ItemStack stack) {
-            REGISTRY_ENTRY_PACKET_CODEC.encode(registryByteBuf, stack.getRegistryEntry());
-        }
     }
 }

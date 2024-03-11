@@ -8,11 +8,10 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.item.GoatHornItemAccessor;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Instrument;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -21,20 +20,21 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public record PlayableItemComponent(TagKey<Instrument> instruments) implements ItemComponent<PlayableItemComponent> {
     public static final Codec<PlayableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         TagKey.unprefixedCodec(RegistryKeys.INSTRUMENT).fieldOf("instruments").forGetter(PlayableItemComponent::instruments)
     ).apply(instance, PlayableItemComponent::new));
-    private static final String INSTRUMENT_KEY = GoatHornItemAccessor.instrumentKey();
 
     @Override
     public ItemComponentType<PlayableItemComponent> type() {
@@ -64,7 +64,7 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
         this.instrument(stack)
             .flatMap(RegistryEntry::getKey)
             .map(RegistryKey::getValue)
-            .ifPresent(id -> tooltip.add(Text.translatable(Util.createTranslationKey(INSTRUMENT_KEY, id)).formatted(Formatting.GRAY)));
+            .ifPresent(id -> tooltip.add(Text.translatable(Util.createTranslationKey("instrument", id)).formatted(Formatting.GRAY)));
     }
 
     public static PlayableItemComponent of(TagKey<Instrument> instruments) {
@@ -72,25 +72,12 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
     }
 
     private Optional<? extends RegistryEntry<Instrument>> instrument(ItemStack stack) {
-        return this.instrumentFromNbt(stack.getNbt())
-            .or(() -> Registries.INSTRUMENT.getEntryList(this.instruments)
-                .map(RegistryEntryList::stream)
-                .flatMap(Stream::findFirst)
-            );
-    }
-
-    private Optional<RegistryEntry<Instrument>> instrumentFromNbt(NbtCompound nbt) {
-        if (nbt == null) {
-            return Optional.empty();
+        RegistryEntry<Instrument> instrument = stack.get(DataComponentTypes.INSTRUMENT);
+        if (instrument != null) {
+            return Optional.of(instrument);
         }
-        if (!nbt.contains(INSTRUMENT_KEY, NbtElement.STRING_TYPE)) {
-            return Optional.empty();
-        }
-        Identifier instrument = Identifier.tryParse(nbt.getString(INSTRUMENT_KEY));
-        if (instrument == null) {
-            return Optional.empty();
-        }
-        return Registries.INSTRUMENT.getEntry(RegistryKey.of(RegistryKeys.INSTRUMENT, instrument))
-            .map(Function.identity());
+        return Registries.INSTRUMENT.getEntryList(this.instruments)
+            .map(RegistryEntryList::stream)
+            .flatMap(Stream::findFirst);
     }
 }

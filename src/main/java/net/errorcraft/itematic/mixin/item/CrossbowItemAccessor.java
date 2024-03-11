@@ -7,12 +7,20 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-import java.util.List;
-
 @Mixin(CrossbowItem.class)
 public interface CrossbowItemAccessor {
     @Accessor("DEFAULT_PULL_TIME")
     static int defaultPullTime() {
+        throw new AssertionError();
+    }
+
+    @Accessor("CHARGE_PROGRESS")
+    static float chargeProgress() {
+        throw new AssertionError();
+    }
+
+    @Accessor("LOAD_PROGRESS")
+    static float loadProgress() {
         throw new AssertionError();
     }
 
@@ -28,11 +36,6 @@ public interface CrossbowItemAccessor {
 
     @Invoker("loadProjectiles")
     static boolean loadProjectiles(LivingEntity shooter, ItemStack crossbow) {
-        throw new AssertionError();
-    }
-
-    @Invoker("getProjectiles")
-    static List<ItemStack> getProjectiles(ItemStack crossbow) {
         throw new AssertionError();
     }
 }

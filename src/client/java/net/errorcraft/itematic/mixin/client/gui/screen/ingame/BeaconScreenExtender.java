@@ -27,11 +27,11 @@ public abstract class BeaconScreenExtender extends HandledScreen<BeaconScreenHan
         method = "drawBackground",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
             ordinal = 0
         )
     )
-    private ItemStack newItemStackForNetheriteIngotUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForNetheriteIngotUseCreateStack(ItemConvertible item) {
         return this.createStack(ItemKeys.NETHERITE_INGOT);
     }
 
@@ -39,7 +39,7 @@ public abstract class BeaconScreenExtender extends HandledScreen<BeaconScreenHan
         method = "drawBackground",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -50,7 +50,7 @@ public abstract class BeaconScreenExtender extends HandledScreen<BeaconScreenHan
             )
         )
     )
-    private ItemStack newItemStackForEmeraldUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForEmeraldUseCreateStack(ItemConvertible item) {
         return this.createStack(ItemKeys.EMERALD);
     }
 
@@ -58,7 +58,7 @@ public abstract class BeaconScreenExtender extends HandledScreen<BeaconScreenHan
         method = "drawBackground",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -69,7 +69,7 @@ public abstract class BeaconScreenExtender extends HandledScreen<BeaconScreenHan
             )
         )
     )
-    private ItemStack newItemStackForDiamondUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForDiamondUseCreateStack(ItemConvertible item) {
         return this.createStack(ItemKeys.DIAMOND);
     }
 
@@ -77,7 +77,7 @@ public abstract class BeaconScreenExtender extends HandledScreen<BeaconScreenHan
         method = "drawBackground",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -88,7 +88,7 @@ public abstract class BeaconScreenExtender extends HandledScreen<BeaconScreenHan
             )
         )
     )
-    private ItemStack newItemStackForGoldIngotUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForGoldIngotUseCreateStack(ItemConvertible item) {
         return this.createStack(ItemKeys.GOLD_INGOT);
     }
 
@@ -96,7 +96,7 @@ public abstract class BeaconScreenExtender extends HandledScreen<BeaconScreenHan
         method = "drawBackground",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -107,7 +107,7 @@ public abstract class BeaconScreenExtender extends HandledScreen<BeaconScreenHan
             )
         )
     )
-    private ItemStack newItemStackForIronIngotUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForIronIngotUseCreateStack(ItemConvertible item) {
         return this.createStack(ItemKeys.IRON_INGOT);
     }
 

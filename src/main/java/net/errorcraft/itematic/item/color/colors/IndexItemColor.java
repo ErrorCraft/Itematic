@@ -7,6 +7,7 @@ import net.errorcraft.itematic.item.color.ItemColor;
 import net.errorcraft.itematic.item.color.ItemColorType;
 import net.errorcraft.itematic.item.color.ItemColorTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.ColorHelper;
 
 import java.util.List;
 
@@ -16,15 +17,15 @@ public record IndexItemColor(List<Integer> indices) implements ItemColor {
     ).apply(instance, IndexItemColor::new));
 
     @Override
-    public int getColor(ItemStack stack, int tintIndex) {
+    public int color(ItemStack stack, int tintIndex) {
         if (tintIndex < 0 || tintIndex >= indices.size()) {
             return DEFAULT_COLOR;
         }
-        return this.indices.get(tintIndex);
+        return ColorHelper.Argb.fullAlpha(this.indices.get(tintIndex));
     }
 
     @Override
-    public ItemColorType<?> getType() {
+    public ItemColorType<?> type() {
         return ItemColorTypes.INDEX;
     }
 

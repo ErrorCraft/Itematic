@@ -10,8 +10,12 @@ import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
+import net.minecraft.predicate.ComponentPredicate;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.village.TradedItem;
+
+import java.util.Optional;
 
 public record EnchantWithLevelsTradeModifier(int index, Range.IntegerRange level, boolean treasure) implements TradeModifier<EnchantWithLevelsTradeModifier> {
     public static final Codec<EnchantWithLevelsTradeModifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -26,12 +30,12 @@ public record EnchantWithLevelsTradeModifier(int index, Range.IntegerRange level
     }
 
     @Override
-    public ItemStack apply(Trade.Input wants, ItemStack gives, LootContext context) {
+    public Optional<TradedItem> apply(Trade.Input wants, ItemStack gives, LootContext context) {
         Random random = context.getRandom();
         int level = this.level.get(random);
         ItemStack givesActual = EnchantmentHelper.enchant(random, gives, level, this.treasure);
-        wants.get(this.index).itematic$tryIncrement(level);
-        return givesActual;
+        wants.getStack(this.index).itematic$tryIncrement(level);
+        return Optional.of(new TradedItem(givesActual.getRegistryEntry(), givesActual.getCount(), ComponentPredicate.of(givesActual.getComponents())));
     }
 
     public static EnchantWithLevelsTradeModifier of(int index, int minLevel, int maxLevel) {

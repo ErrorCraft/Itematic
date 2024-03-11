@@ -28,18 +28,30 @@
     "minecraft:crossbow",
     {
       "type": "stack",
-      "item": "minecraft:firework_rocket",
-      "nbt": "{Fireworks:{Flight:1b}}"
+      "components": {
+        "minecraft:fireworks": {
+          "flight_duration": 1
+        }
+      },
+      "item": "minecraft:firework_rocket"
     },
     {
       "type": "stack",
-      "item": "minecraft:firework_rocket",
-      "nbt": "{Fireworks:{Flight:2b}}"
+      "components": {
+        "minecraft:fireworks": {
+          "flight_duration": 2
+        }
+      },
+      "item": "minecraft:firework_rocket"
     },
     {
       "type": "stack",
-      "item": "minecraft:firework_rocket",
-      "nbt": "{Fireworks:{Flight:3b}}"
+      "components": {
+        "minecraft:fireworks": {
+          "flight_duration": 3
+        }
+      },
+      "item": "minecraft:firework_rocket"
     },
     "minecraft:arrow",
     "minecraft:spectral_arrow",

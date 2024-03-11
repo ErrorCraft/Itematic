@@ -6,10 +6,10 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.FoodItemComponent;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
-import net.minecraft.block.SuspiciousStewIngredient;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.SuspiciousStewEffectsComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SuspiciousStewItem;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
@@ -47,9 +47,9 @@ public class FoodItemComponentTestSuite {
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.SUSPICIOUS_STEW);
-        List<SuspiciousStewIngredient.StewEffect> effects = TestUtil.getItemComponent(world.itematic$createStack(ItemKeys.DANDELION), ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT)
+        List<SuspiciousStewEffectsComponent.StewEffect> effects = TestUtil.getItemComponent(world.itematic$createStack(ItemKeys.DANDELION), ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT)
             .effects();
-        SuspiciousStewItem.writeEffectsToStew(stack, effects);
+        stack.set(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS, new SuspiciousStewEffectsComponent(effects));
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
         stack.use(world, player, Hand.MAIN_HAND);

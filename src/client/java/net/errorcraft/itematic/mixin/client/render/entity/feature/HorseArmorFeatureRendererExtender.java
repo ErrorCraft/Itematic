@@ -120,30 +120,15 @@ public class HorseArmorFeatureRendererExtender implements HorseArmorFeatureRende
         return optionalComponent.isPresent();
     }
 
-    @ModifyVariable(
-        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/HorseEntity;FFFFFF)V",
-        at = @At("LOAD"),
-        slice = @Slice(
-            from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/render/entity/model/HorseEntityModel;setAngles(Lnet/minecraft/entity/passive/AbstractHorseEntity;FFFFF)V"
-            )
-        ),
-        ordinal = 0
-    )
-    private AnimalArmorItem castToDyeableAnimalArmorItemUseNull(AnimalArmorItem instance) {
-        return null;
-    }
-
     @Redirect(
         method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/HorseEntity;FFFFFF)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/DyeableItem;getColor(Lnet/minecraft/item/ItemStack;)I"
+            target = "Lnet/minecraft/component/type/DyedColorComponent;getColor(Lnet/minecraft/item/ItemStack;I)I"
         )
     )
-    private int getColorUseItemComponent(ItemStack stack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
-        return tintedItemComponent.get().tint().getColor(stack, 0);
+    private int getColorUseItemComponent(ItemStack stack, int defaultColor, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
+        return tintedItemComponent.get().tint().color(stack, 0);
     }
 
     @Override

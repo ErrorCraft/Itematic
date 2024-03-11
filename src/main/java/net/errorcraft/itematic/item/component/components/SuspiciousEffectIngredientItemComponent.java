@@ -6,12 +6,13 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.block.SuspiciousStewIngredient;
+import net.minecraft.component.type.SuspiciousStewEffectsComponent;
 
 import java.util.List;
 
-public record SuspiciousEffectIngredientItemComponent(List<SuspiciousStewIngredient.StewEffect> effects) implements ItemComponent<SuspiciousEffectIngredientItemComponent>, SuspiciousStewIngredient {
+public record SuspiciousEffectIngredientItemComponent(List<SuspiciousStewEffectsComponent.StewEffect> effects) implements ItemComponent<SuspiciousEffectIngredientItemComponent>, SuspiciousStewIngredient {
     public static final Codec<SuspiciousEffectIngredientItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        SuspiciousStewIngredient.StewEffect.LIST_CODEC.fieldOf("effects").forGetter(SuspiciousEffectIngredientItemComponent::effects)
+        SuspiciousStewEffectsComponent.StewEffect.CODEC.listOf().fieldOf("effects").forGetter(SuspiciousEffectIngredientItemComponent::effects)
     ).apply(instance, SuspiciousEffectIngredientItemComponent::new));
 
     @Override
@@ -25,11 +26,11 @@ public record SuspiciousEffectIngredientItemComponent(List<SuspiciousStewIngredi
     }
 
     @Override
-    public List<StewEffect> getStewEffects() {
-        return this.effects;
+    public SuspiciousStewEffectsComponent getStewEffects() {
+        return new SuspiciousStewEffectsComponent(this.effects);
     }
 
-    public static SuspiciousEffectIngredientItemComponent of(SuspiciousStewIngredient.StewEffect... effects) {
+    public static SuspiciousEffectIngredientItemComponent of(SuspiciousStewEffectsComponent.StewEffect... effects) {
         return new SuspiciousEffectIngredientItemComponent(List.of(effects));
     }
 }

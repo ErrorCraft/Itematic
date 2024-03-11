@@ -7,7 +7,6 @@ import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.ArrowItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,16 +31,5 @@ public class ProjectileUtilExtender {
             return persistentProjectileEntity;
         }
         return new ArrowEntity(world, shooter, projectile.copyWithCount(1));
-    }
-
-    @Redirect(
-        method = "createArrowProjectile",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private static boolean isOfAlwaysReturnTrue(ItemStack instance, Item item) {
-        return true;
     }
 }

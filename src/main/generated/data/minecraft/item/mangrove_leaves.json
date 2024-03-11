@@ -15,7 +15,7 @@
     "minecraft:tinted": {
       "tint": {
         "type": "minecraft:constant",
-        "color": 9619016
+        "color": -7158200
       }
     }
   }

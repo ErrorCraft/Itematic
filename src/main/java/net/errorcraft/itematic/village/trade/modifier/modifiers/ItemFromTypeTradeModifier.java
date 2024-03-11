@@ -10,14 +10,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.predicate.ComponentPredicate;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.minecraft.village.TradedItem;
 import net.minecraft.village.VillagerDataContainer;
 import net.minecraft.village.VillagerType;
 
 import java.util.Map;
+import java.util.Optional;
 
 public record ItemFromTypeTradeModifier(Map<VillagerType, RegistryEntry<Item>> types) implements TradeModifier<ItemFromTypeTradeModifier> {
     public static final Codec<ItemFromTypeTradeModifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -30,15 +33,16 @@ public record ItemFromTypeTradeModifier(Map<VillagerType, RegistryEntry<Item>> t
     }
 
     @Override
-    public ItemStack apply(Trade.Input wants, ItemStack gives, LootContext context) {
+    public Optional<TradedItem> apply(Trade.Input wants, ItemStack gives, LootContext context) {
         if (!(context.get(LootContextParameters.THIS_ENTITY) instanceof VillagerDataContainer container)) {
-            return gives;
+            return Optional.empty();
         }
         VillagerType type = container.getVillagerData().getType();
         if (!this.types.containsKey(type)) {
-            return gives;
+            return Optional.empty();
         }
-        return gives.itematic$copyWithItem(this.types.get(type));
+        ItemStack givesActual = gives.itematic$copyWithItem(this.types.get(type));
+        return Optional.of(new TradedItem(givesActual.getRegistryEntry(), givesActual.getCount(), ComponentPredicate.of(givesActual.getComponents())));
     }
 
     public static ItemFromTypeTradeModifier of(Map<VillagerType, RegistryEntry<Item>> types) {

@@ -101,9 +101,7 @@
             "condition": "minecraft:location_check",
             "predicate": {
               "block": {
-                "blocks": [
-                  "minecraft:end_portal_frame"
-                ],
+                "blocks": "minecraft:end_portal_frame",
                 "state": {
                   "eye": "false"
                 }

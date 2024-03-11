@@ -1,17 +1,23 @@
 package net.errorcraft.itematic.mixin.recipe;
 
-import net.errorcraft.itematic.block.entity.DecoratedPotBlockEntityUtil;
+import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.mixin.block.entity.SherdsAccessor;
+import net.minecraft.block.entity.Sherds;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingDecoratedPotRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.Optional;
 
 @Mixin(CraftingDecoratedPotRecipe.class)
 public class CraftingDecoratedPotRecipeExtender {
@@ -43,12 +49,20 @@ public class CraftingDecoratedPotRecipeExtender {
      */
     @Overwrite
     public ItemStack craft(RecipeInputInventory recipeInputInventory, DynamicRegistryManager registryManager) {
-        DecoratedPotBlockEntityUtil.Sherds sherds = new DecoratedPotBlockEntityUtil.Sherds(
-            recipeInputInventory.getStack(1).getRegistryEntry(),
-            recipeInputInventory.getStack(3).getRegistryEntry(),
-            recipeInputInventory.getStack(5).getRegistryEntry(),
-            recipeInputInventory.getStack(7).getRegistryEntry()
+        ItemStack stack = registryManager.get(RegistryKeys.ITEM)
+            .getEntry(ItemKeys.DECORATED_POT)
+            .map(ItemStack::new)
+            .orElse(ItemStack.EMPTY);
+        if (stack.isEmpty()) {
+            return stack;
+        }
+        Sherds sherds = SherdsAccessor.create(
+            Optional.of(recipeInputInventory.getStack(1).getRegistryEntry()),
+            Optional.of(recipeInputInventory.getStack(3).getRegistryEntry()),
+            Optional.of(recipeInputInventory.getStack(5).getRegistryEntry()),
+            Optional.of(recipeInputInventory.getStack(7).getRegistryEntry())
         );
-        return DecoratedPotBlockEntityUtil.createStack(registryManager, sherds);
+        stack.set(DataComponentTypes.POT_DECORATIONS, sherds);
+        return stack;
     }
 }

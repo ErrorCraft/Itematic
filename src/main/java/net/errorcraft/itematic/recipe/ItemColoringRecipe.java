@@ -56,20 +56,15 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
     }
 
     @Override
-    @SuppressWarnings("DataFlowIssue")
     public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
-        ItemStack result = this.result.copy();
-        for (int i = 0; i < inventory.size(); ++i) {
+        for (int i = 0; i < inventory.size(); i++) {
             ItemStack stack = inventory.getStack(i);
             if (!this.ingredient.test(stack)) {
                 continue;
             }
-            if (stack.hasNbt()) {
-                result.setNbt(stack.getNbt().copy());
-            }
-            break;
+            return stack.itematic$copyComponentsToNewStack(this.result.getRegistryEntry(), 1);
         }
-        return result;
+        return ItemStack.EMPTY;
     }
 
     @Override

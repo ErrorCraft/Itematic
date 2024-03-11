@@ -16,7 +16,7 @@ public abstract class AbstractCauldronBlockExtender {
             target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"
         )
     )
-    private Object useRegistryKey(Object key, @Local ItemStack stack) {
+    private Object useRegistryKey(Object key, @Local(argsOnly = true) ItemStack stack) {
         return stack.itematic$key();
     }
 }

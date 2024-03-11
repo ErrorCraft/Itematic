@@ -1,119 +1,82 @@
 package net.errorcraft.itematic.mixin.block;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.access.block.entity.DecoratedPotBlockEntityAccess;
-import net.errorcraft.itematic.block.entity.DecoratedPotBlockEntityUtil;
+import net.errorcraft.itematic.access.block.BlockAccess;
 import net.minecraft.block.DecoratedPotBlock;
 import net.minecraft.block.entity.DecoratedPotBlockEntity;
-import net.minecraft.item.BlockItem;
+import net.minecraft.block.entity.Sherds;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 @Mixin(DecoratedPotBlock.class)
-public class DecoratedPotBlockExtender {
-    @Redirect(
+public class DecoratedPotBlockExtender implements BlockAccess {
+    @ModifyExpressionValue(
         method = "appendTooltip",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/entity/DecoratedPotBlockEntity$Sherds;fromNbt(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/block/entity/DecoratedPotBlockEntity$Sherds;"
+            target = "Lnet/minecraft/block/entity/Sherds;equals(Ljava/lang/Object;)Z"
         )
     )
-    private DecoratedPotBlockEntity.Sherds fromNbtUseDefault(NbtCompound nbt) {
-        return DecoratedPotBlockEntity.Sherds.DEFAULT;
-    }
-
-    @Redirect(
-        method = "appendTooltip",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/block/entity/DecoratedPotBlockEntity$Sherds;equals(Ljava/lang/Object;)Z"
-        )
-    )
-    private boolean sherdsAreEqualUseNullCheck(DecoratedPotBlockEntity.Sherds instance, Object object, ItemStack stack, @Nullable BlockView world, @Share("sherds") LocalRef<DecoratedPotBlockEntityUtil.Sherds> sherdsRef) {
-        if (!(world instanceof WorldView worldView)) {
-            return true;
+    private boolean defaultSherdsAlwaysTrue(boolean original, @Local(argsOnly = true) List<Text> tooltip, @Local(argsOnly = true) DynamicRegistryManager registryManager, @Local Sherds sherds) {
+        if (!original && registryManager != null) {
+            tooltip.add(ScreenTexts.EMPTY);
+            for (RegistryEntry<Item> entry : sherds.itematic$entriesForwards(registryManager)) {
+                tooltip.add(new ItemStack(entry).getName().copyContentOnly().formatted(Formatting.GRAY));
+            }
         }
-        DecoratedPotBlockEntityUtil.Sherds sherds = DecoratedPotBlockEntityUtil.fromNbt(worldView.getRegistryManager(), BlockItem.getBlockEntityNbt(stack));
-        if (sherds == null) {
-            return true;
-        }
-        sherdsRef.set(sherds);
-        return false;
-    }
-
-    @Redirect(
-        method = "appendTooltip",
-        at = @At(
-            value = "INVOKE",
-            target = "Ljava/util/stream/Stream;of([Ljava/lang/Object;)Ljava/util/stream/Stream;"
-        )
-    )
-    private <T> Stream<RegistryEntry<Item>> streamForwardsSherdsUseRegistryEntry(T[] values, @Share("sherds") LocalRef<DecoratedPotBlockEntityUtil.Sherds> sherdsRef) {
-        return sherdsRef.get().streamForwards();
-    }
-
-    @ModifyArg(
-        method = "appendTooltip",
-        at = @At(
-            value = "INVOKE",
-            target = "Ljava/util/stream/Stream;forEach(Ljava/util/function/Consumer;)V"
-        )
-    )
-    private <T> Consumer<RegistryEntry<Item>> streamOfUseRegistryEntry(Consumer<? super T> action, @Local(argsOnly = true) List<Text> tooltip) {
-        return sherd -> tooltip.add(new ItemStack(sherd).getName().copyContentOnly().formatted(Formatting.GRAY));
+        return true;
     }
 
     @Redirect(
         method = "method_49815",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/entity/DecoratedPotBlockEntity$Sherds;stream()Ljava/util/stream/Stream;"
+            target = "Lnet/minecraft/block/entity/Sherds;stream()Ljava/util/List;"
         )
     )
-    private static Stream<RegistryEntry<Item>> streamSherdsUseRegistryEntry(DecoratedPotBlockEntity.Sherds instance, DecoratedPotBlockEntity blockEntity) {
-        return ((DecoratedPotBlockEntityAccess) blockEntity).itematic$sherds()
-            .map(DecoratedPotBlockEntityUtil.Sherds::stream)
-            .orElseGet(Stream::empty);
+    @SuppressWarnings("DataFlowIssue")
+    private static List<RegistryEntry<Item>> streamSherdsUseRegistryEntry(Sherds instance, DecoratedPotBlockEntity blockEntity) {
+        return instance.itematic$entries(blockEntity.getWorld().getRegistryManager());
     }
 
     @Redirect(
         method = "method_49815",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/util/stream/Stream;map(Ljava/util/function/Function;)Ljava/util/stream/Stream;"
+            target = "Ljava/util/Iterator;next()Ljava/lang/Object;"
         )
     )
-    private static <T, R> Stream<ItemStack> mapToItemStackUseRegistryEntry(Stream<RegistryEntry<Item>> instance, Function<? super T, ? extends R> function) {
-        return instance.map(ItemStack::new);
+    private static <E> E nextItemReturnNull(Iterator<E> instance) {
+        return null;
     }
 
-    @ModifyArg(
-        method = "onPlaced",
+    @Redirect(
+        method = "method_49815",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/util/Optional;ifPresent(Ljava/util/function/Consumer;)V"
+            target = "Lnet/minecraft/item/Item;getDefaultStack()Lnet/minecraft/item/ItemStack;"
         )
     )
-    private <T> Consumer<DecoratedPotBlockEntityAccess> readNbtFromStackUseRegistryEntry(Consumer<? super T> action, @Local(argsOnly = true) World world, @Local(argsOnly = true) ItemStack stack) {
-        return blockEntity -> blockEntity.itematic$readNbtFromStack(world, stack);
+    private static ItemStack newItemStackUseRegistryEntry(Item instance, @Local Iterator<RegistryEntry<Item>> iterator) {
+        return new ItemStack(iterator.next());
+    }
+
+    @Override
+    public void itematic$addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.POT_DECORATIONS, Sherds.DEFAULT);
     }
 }

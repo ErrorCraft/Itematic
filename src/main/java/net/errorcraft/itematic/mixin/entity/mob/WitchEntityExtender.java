@@ -1,12 +1,14 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
+import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.WitchEntity;
 import net.minecraft.entity.raid.RaiderEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,22 +34,22 @@ public abstract class WitchEntityExtender extends RaiderEntity {
     @Redirect(
         method = "tickMovement",
         at = @At(
-            value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            value = "INVOKE",
+            target = "Lnet/minecraft/component/type/PotionContentsComponent;createStack(Lnet/minecraft/item/Item;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForPotionUseRegistryEntry(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.POTION);
+    private ItemStack newItemStackForPotionUseCreateStack(Item item, RegistryEntry<Potion> potion) {
+        return PotionContentsComponentUtil.setPotion(this.getWorld().itematic$createStack(ItemKeys.POTION), potion);
     }
 
     @Redirect(
         method = "shootAt",
         at = @At(
-            value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            value = "INVOKE",
+            target = "Lnet/minecraft/component/type/PotionContentsComponent;createStack(Lnet/minecraft/item/Item;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForSplashPotionUseRegistryEntry(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.SPLASH_POTION);
+    private ItemStack newItemStackForSplashPotionUseCreateStack(Item item, RegistryEntry<Potion> potion) {
+        return PotionContentsComponentUtil.setPotion(this.getWorld().itematic$createStack(ItemKeys.SPLASH_POTION), potion);
     }
 }

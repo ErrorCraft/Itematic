@@ -6,6 +6,7 @@ import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.serialization.SetMapCodec;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -67,6 +68,8 @@ public interface ItemComponent<T extends ItemComponent<T>> {
     }
 
     default void onCraft(ItemStack stack, World world) {}
+
+    default void addComponents(ComponentMap.Builder builder) {}
 
     default void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {}
 }

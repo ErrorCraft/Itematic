@@ -1,8 +1,11 @@
 package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.errorcraft.itematic.access.block.BlockAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.BeehiveBlock;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -13,8 +16,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
+import java.util.List;
+
 @Mixin(BeehiveBlock.class)
-public class BeehiveBlockExtender {
+public class BeehiveBlockExtender implements BlockAccess {
     @Redirect(
         method = "onUseWithItem",
         at = @At(
@@ -60,7 +65,7 @@ public class BeehiveBlockExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForHoneyBottleUseRegistryEntry(ItemConvertible item, @Local World world) {
+    private ItemStack newItemStackForHoneyBottleUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
         return world.itematic$createStack(ItemKeys.HONEY_BOTTLE);
     }
 
@@ -71,7 +76,12 @@ public class BeehiveBlockExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private static ItemStack newItemStackForHoneycombUseRegistryEntry(ItemConvertible item, int count, @Local World world) {
+    private static ItemStack newItemStackForHoneycombUseCreateStack(ItemConvertible item, int count, @Local(argsOnly = true) World world) {
         return world.itematic$createStack(ItemKeys.HONEYCOMB);
+    }
+
+    @Override
+    public void itematic$addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.BEES, List.of());
     }
 }

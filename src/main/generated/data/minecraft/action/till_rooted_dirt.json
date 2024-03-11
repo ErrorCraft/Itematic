@@ -26,9 +26,7 @@
       "condition": "minecraft:location_check",
       "predicate": {
         "block": {
-          "blocks": [
-            "minecraft:rooted_dirt"
-          ]
+          "blocks": "minecraft:rooted_dirt"
         }
       }
     },

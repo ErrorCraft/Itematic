@@ -102,10 +102,10 @@ public class ItemRendererExtender {
             target = "Lnet/minecraft/client/color/item/ItemColors;getColor(Lnet/minecraft/item/ItemStack;I)I"
         )
     )
-    private int renderBakedItemQuadsGetColorUseItemComponent(ItemColors instance, ItemStack item, int tintIndex) {
+    private int getColorUseItemComponent(ItemColors instance, ItemStack item, int tintIndex) {
         return item.itematic$getComponent(ItemComponentTypes.TINTED)
             .map(TintedItemComponent::tint)
-            .map(c -> c.getColor(item, tintIndex))
+            .map(c -> c.color(item, tintIndex))
             .orElse(ItemColor.DEFAULT_COLOR);
     }
 }

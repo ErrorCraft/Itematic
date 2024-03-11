@@ -5,13 +5,14 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.function.Supplier;
 
 @Mixin(FireworkRocketEntity.class)
 public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
@@ -32,13 +33,24 @@ public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
 
 
     @Redirect(
-        method = "initDataTracker",
+        method = { "initDataTracker", "readCustomDataFromNbt" },
         at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/projectile/FireworkRocketEntity;method_57317()Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForFireworkRocketUseCreateStack(ItemConvertible item) {
+    private ItemStack newItemStackForFireworkRocketUseCreateStack() {
         return this.getWorld().itematic$createStack(ItemKeys.FIREWORK_ROCKET);
+    }
+
+    @ModifyArg(
+        method = "readCustomDataFromNbt",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Optional;orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;"
+        )
+    )
+    private <T> Supplier<ItemStack> newItemStackSupplierForFireworkRocketUseCreateStack(Supplier<? extends T> supplier) {
+        return () -> this.getWorld().itematic$createStack(ItemKeys.FIREWORK_ROCKET);
     }
 }

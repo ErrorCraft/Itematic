@@ -17,7 +17,7 @@ public class AnvilScreenHandlerExtender {
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 1
+            ordinal = 0
         )
     )
     private boolean isOfUseRegistryEntryCheck(ItemStack instance, Item item, @Local(ordinal = 2) ItemStack secondaryInputItem) {
@@ -34,18 +34,6 @@ public class AnvilScreenHandlerExtender {
     )
     private boolean isDamageableAlwaysTrue(ItemStack instance) {
         return true;
-    }
-
-    @Redirect(
-        method = "updateResult",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 0
-        )
-    )
-    private boolean isOfForEnchantedBookHoldsEnchantmentsUseComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTMENT_HOLDER);
     }
 
     @Redirect(

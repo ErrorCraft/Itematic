@@ -8,6 +8,8 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.item.FilledMapItemAccessor;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -50,7 +52,8 @@ public record MappableItemComponent(RegistryEntry<Item> transformsInto) implemen
 
     public ItemStack createStack(World world, int x, int z, int scale, boolean showIcons, boolean unlimitedTracking) {
         ItemStack resultStack = new ItemStack(this.transformsInto);
-        FilledMapItemAccessor.createMapState(resultStack, world, x, z, scale, showIcons, unlimitedTracking, world.getRegistryKey());
+        MapIdComponent mapId = FilledMapItemAccessor.allocateMapId(world, x, z, scale, showIcons, unlimitedTracking, world.getRegistryKey());
+        resultStack.set(DataComponentTypes.MAP_ID, mapId);
         return resultStack;
     }
 

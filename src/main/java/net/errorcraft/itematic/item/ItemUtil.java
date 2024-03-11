@@ -41,9 +41,11 @@ import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPas
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.SuspiciousStewIngredient;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.client.color.world.FoliageColors;
+import net.minecraft.component.type.BundleContentsComponent;
+import net.minecraft.component.type.FireworkExplosionComponent;
+import net.minecraft.component.type.SuspiciousStewEffectsComponent;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -408,7 +410,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(ApplySuspiciousEffectsAction.of(ActionContextParameter.THIS))
+                            .add(ApplySuspiciousStewEffectsFromItemAction.of(ActionContextParameter.THIS))
                             .add(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.BOWL), true))
                     ))
                     .build()
@@ -4128,7 +4130,7 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOW).build(), 1),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.of(384))
-                    .with(ShooterItemComponent.of(ItematicItemTags.BOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, BowItem.RANGE, false))
+                    .with(ShooterItemComponent.of(ItematicItemTags.BOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, BowItem.RANGE))
                     .with(UseAnimationItemComponent.of(UseAction.BOW))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.BOW_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BOW_FORGING))
@@ -4139,7 +4141,7 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CROSSBOW).build(), 1),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.of(465))
-                    .with(ShooterItemComponent.of(ItematicItemTags.CROSSBOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, CrossbowItem.RANGE, true))
+                    .with(ShooterItemComponent.of(ItematicItemTags.CROSSBOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, CrossbowItem.RANGE, this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_LOADING_START), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_1), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_2), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_3)))
                     .with(UseAnimationItemComponent.of(UseAction.CROSSBOW))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.CROSSBOW_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.CROSSBOW_FORGING))
@@ -5222,7 +5224,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_PAD)))
                     .with(CanPlaceOnFluidsItemComponent.of(RaycastContext.FluidHandling.SOURCE_ONLY, false, Direction.UP.getVector()))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new ConstantItemColor(0x71c35c)))
+                    .with(TintedItemComponent.of(new ConstantItemColor(0xff71c35c)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_WART, create(
@@ -5286,7 +5288,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DANDELION)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.SATURATION), 140)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.SATURATION), 140)
                     ))
                     .build()
             ));
@@ -5296,7 +5298,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POPPY)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.NIGHT_VISION), 100)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.NIGHT_VISION), 100)
                     ))
                     .build()
             ));
@@ -5306,7 +5308,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_ORCHID)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.SATURATION), 140)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.SATURATION), 140)
                     ))
                     .build()
             ));
@@ -5316,7 +5318,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ALLIUM)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 80)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 80)
                     ))
                     .build()
             ));
@@ -5326,7 +5328,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AZURE_BLUET)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.BLINDNESS), 160)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.BLINDNESS), 160)
                     ))
                     .build()
             ));
@@ -5336,7 +5338,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_TULIP)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
                     ))
                     .build()
             ));
@@ -5346,7 +5348,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_TULIP)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
                     ))
                     .build()
             ));
@@ -5356,7 +5358,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_TULIP)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
                     ))
                     .build()
             ));
@@ -5366,7 +5368,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_TULIP)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
                     ))
                     .build()
             ));
@@ -5376,7 +5378,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXEYE_DAISY)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 160)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 160)
                     ))
                     .build()
             ));
@@ -5386,7 +5388,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CORNFLOWER)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.JUMP_BOOST), 120)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.JUMP_BOOST), 120)
                     ))
                     .build()
             ));
@@ -5396,7 +5398,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_OF_THE_VALLEY)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 240)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 240)
                     ))
                     .build()
             ));
@@ -5406,7 +5408,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WITHER_ROSE)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WITHER), 160)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WITHER), 160)
                     ))
                     .build()
             ));
@@ -5559,7 +5561,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TORCHFLOWER)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewIngredient.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.NIGHT_VISION), 100)
+                        new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.NIGHT_VISION), 100)
                     ))
                     .build()
             ));
@@ -7432,7 +7434,7 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.FIRE_CHARGE, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FIRE_CHARGE).build()),
                 ItemComponentSet.builder()
-                    .with(FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.LARGE_BALL))
+                    .with(FireworkShapeModifierItemComponent.of(FireworkExplosionComponent.Type.LARGE_BALL))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.SMALL_FIREBALL)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                     .build(),
@@ -8263,7 +8265,7 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.FEATHER, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FEATHER).build()),
                 ItemComponentSet.builder()
-                    .with(FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.BURST))
+                    .with(FireworkShapeModifierItemComponent.of(FireworkExplosionComponent.Type.BURST))
                     .build()
             ));
             this.registerable.register(ItemKeys.GUNPOWDER, create(
@@ -8320,7 +8322,7 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.BUNDLE, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUNDLE).build(), 1),
                 ItemComponentSet.builder()
-                    .with(ItemHolderItemComponent.of(BundleItem.MAX_STORAGE, this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
+                    .with(ItemHolderItemComponent.of(BundleContentsComponent.MAX_SIZE, this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CLOCK, create(
@@ -8329,7 +8331,7 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.SPYGLASS, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPYGLASS).build(), 1),
                 ItemComponentSet.builder()
-                    .with(ZoomItemComponent.of(SpyglassItem.field_30922, this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
+                    .with(ZoomItemComponent.of(SpyglassItem.FOV_MULTIPLIER, this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
                     .with(UseDurationItemComponent.of(SpyglassItem.MAX_USE_TIME))
                     .with(UseAnimationItemComponent.of(UseAction.SPYGLASS))
                     .build()
@@ -8386,7 +8388,7 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GOLD_NUGGET, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLD_NUGGET).build()),
                 ItemComponentSet.builder()
-                    .with(FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.STAR))
+                    .with(FireworkShapeModifierItemComponent.of(FireworkExplosionComponent.Type.STAR))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLASS_BOTTLE, create(

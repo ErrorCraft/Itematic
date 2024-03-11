@@ -12,12 +12,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionTypes;
+import net.minecraft.predicate.ComponentPredicate;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.village.TradeOffer;
+import net.minecraft.village.TradedItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +38,8 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
 
     public TradeOffer createTradeOffer(LootContext context) {
         Input wants = this.createWantedStacks(context);
-        ItemStack gives = this.createGivenStack(wants, context);
-        return new TradeOffer(wants.get(0), wants.get(1), gives, this.maxUses, this.tradeExperience, this.priceMultiplier);
+        TradedItem gives = this.createGivenStack(wants, context);
+        return new TradeOffer(wants.getTradedItem(0).orElseThrow(), wants.getTradedItem(1), gives.itemStack(), this.maxUses, this.tradeExperience, this.priceMultiplier);
     }
 
     private Input createWantedStacks(LootContext context) {
@@ -45,10 +47,10 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         return new Input(stacks);
     }
 
-    private ItemStack createGivenStack(Input wants, LootContext context) {
+    private TradedItem createGivenStack(Input wants, LootContext context) {
         ItemStack gives = this.gives.createStack(context);
-        return this.tradeModifier.map(tradeModifier -> tradeModifier.apply(wants, gives, context))
-            .orElse(gives);
+        return this.tradeModifier.flatMap(tradeModifier -> tradeModifier.apply(wants, gives, context))
+            .orElseGet(() -> new TradedItem(gives.getRegistryEntry(), gives.getCount(), ComponentPredicate.of(gives.getComponents())));
     }
 
     public static Builder builder(Entry gives) {
@@ -122,7 +124,15 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
             this.stacks = stacks;
         }
 
-        public ItemStack get(int index) {
+        public Optional<TradedItem> getTradedItem(int index) {
+            if (index < 0 || index >= this.stacks.size()) {
+                return Optional.empty();
+            }
+            ItemStack stack = this.stacks.get(index);
+            return Optional.of(new TradedItem(stack.getRegistryEntry(), stack.getCount(), ComponentPredicate.of(stack.getComponents())));
+        }
+
+        public ItemStack getStack(int index) {
             if (index < 0 || index >= this.stacks.size()) {
                 return ItemStack.EMPTY;
             }

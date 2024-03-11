@@ -1,28 +1,16 @@
 package net.errorcraft.itematic.mixin.client.gui.tooltip;
 
-import net.errorcraft.itematic.access.client.item.BundleTooltipDataAccess;
+import net.errorcraft.itematic.access.client.gui.tooltip.BundleTooltipComponentAccess;
 import net.minecraft.client.gui.tooltip.BundleTooltipComponent;
-import net.minecraft.client.item.BundleTooltipData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BundleTooltipComponent.class)
-public class BundleTooltipComponentExtender {
+public class BundleTooltipComponentExtender implements BundleTooltipComponentAccess {
     @Unique
     private int capacity;
-
-    @Inject(
-        method = "<init>",
-        at = @At("TAIL")
-    )
-    private void setCapacity(BundleTooltipData data, CallbackInfo info) {
-        this.capacity = ((BundleTooltipDataAccess) data).itematic$capacity();
-    }
 
     @ModifyConstant(
         method = "drawItems",
@@ -32,5 +20,10 @@ public class BundleTooltipComponentExtender {
     )
     private int getCapacity(int constant) {
         return this.capacity;
+    }
+
+    @Override
+    public void itematic$setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 }

@@ -59,16 +59,10 @@
       "net/minecraft/class_1391": [
         "net/errorcraft/itematic/access/entity/ai/goal/TemptGoalAccess"
       ],
-      "net/minecraft/class_1730": [
-        "net/errorcraft/itematic/access/inventory/EnderChestInventoryAccess"
-      ],
       "net/minecraft/class_1761": [
         "net/errorcraft/itematic/access/item/ItemGroupAccess"
       ],
       "net/minecraft/class_1761\u0024class_7705": [
-        "net/minecraft/util/StringIdentifiable"
-      ],
-      "net/minecraft/class_1781\u0024class_1782": [
         "net/minecraft/util/StringIdentifiable"
       ],
       "net/minecraft/class_1792": [
@@ -149,11 +143,29 @@
       "net/minecraft/class_5289\u0024class_5290": [
         "net/errorcraft/itematic/access/client/gui/screen/GameModeSelectionScreenGameModeSelectionAccess"
       ],
+      "net/minecraft/class_5631": [
+        "net/errorcraft/itematic/access/client/item/BundleTooltipDataAccess"
+      ],
       "net/minecraft/class_5760": [
         "net/errorcraft/itematic/access/entity/ai/brain/sensor/TemptationsSensorAccess"
       ],
       "net/minecraft/class_6880": [
         "net/errorcraft/itematic/access/registry/entry/RegistryEntryAccess"
+      ],
+      "net/minecraft/class_8526": [
+        "net/errorcraft/itematic/access/block/entity/SherdsAccess"
+      ],
+      "net/minecraft/class_9085": [
+        "net/errorcraft/itematic/access/client/render/entity/feature/WolfArmorFeatureRendererAccess"
+      ],
+      "net/minecraft/class_9276": [
+        "net/errorcraft/itematic/access/component/type/BundleContentsComponentAccess"
+      ],
+      "net/minecraft/class_9276\u0024class_9277": [
+        "net/errorcraft/itematic/access/component/type/BundleContentsComponentBuilderAccess"
+      ],
+      "net/minecraft/class_9278": [
+        "net/errorcraft/itematic/access/component/type/ChargedProjectilesComponentAccess"
       ]
     }
   },

@@ -1,9 +1,10 @@
 package net.errorcraft.itematic.gametest;
 
+import net.minecraft.component.DataComponentType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.test.GameTestException;
@@ -25,11 +26,22 @@ public class Assert {
         }
     }
 
+    public static <T> void itemStackHasComponent(ItemStack value, DataComponentType<T> type) {
+        TestUtil.getComponent(value, type);
+    }
+
+    public static <T> void itemStackHasComponent(ItemStack value, DataComponentType<T> type, Consumer<T> assertion) {
+        assertion.accept(TestUtil.getComponent(value, type));
+    }
+
     public static void itemStackHasPotion(ItemStack value, RegistryEntry<Potion> expected) {
-        RegistryEntry<Potion> valuePotion = PotionUtil.getPotion(value);
-        if (expected != valuePotion) {
-            throw new GameTestException("Expected item stack to have potion " + expected.getKey().orElseThrow() + ", got " + valuePotion.getKey().orElseThrow() + " instead");
-        }
+        itemStackHasComponent(value, DataComponentTypes.POTION_CONTENTS, component -> {
+            RegistryEntry<Potion> potion = component.potion()
+                .orElseThrow(() -> new GameTestException("Expected item stack to have potion " + expected.getKey().orElseThrow()));
+            if (expected != potion) {
+                throw new GameTestException("Expected item stack to have potion " + expected.getKey().orElseThrow() + ", got " + potion.getKey().orElseThrow() + " instead");
+            }
+        });
     }
 
     public static void areIntsEqual(int value, int expected) {

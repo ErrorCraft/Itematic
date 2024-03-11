@@ -1,8 +1,9 @@
 package net.errorcraft.itematic.mixin.recipe;
 
-import net.errorcraft.itematic.item.ItemStackUtil;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeMatcher;
+import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -14,6 +15,10 @@ public class RecipeMatcherExtender {
      */
     @Overwrite
     public static int getItemId(ItemStack stack) {
-        return ItemStackUtil.getRawId(stack.getRegistryEntry());
+        RegistryEntry<Item> entry = stack.getRegistryEntry();
+        if (entry == null) {
+            return -1;
+        }
+        return entry.itematic$rawId();
     }
 }

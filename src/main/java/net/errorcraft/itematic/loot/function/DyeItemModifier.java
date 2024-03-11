@@ -3,8 +3,8 @@ package net.errorcraft.itematic.loot.function;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.item.DyeItem;
-import net.minecraft.item.DyeableItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
@@ -47,7 +47,7 @@ public class DyeItemModifier extends ConditionalLootFunction {
         if (dyes.isEmpty()) {
             return stack;
         }
-        return DyeableItem.blendAndSetColor(stack, dyes);
+        return DyedColorComponent.setColor(stack, dyes);
     }
 
     @Override

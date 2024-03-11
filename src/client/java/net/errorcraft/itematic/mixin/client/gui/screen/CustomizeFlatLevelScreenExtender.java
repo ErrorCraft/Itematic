@@ -30,7 +30,7 @@ public class CustomizeFlatLevelScreenExtender implements CustomizeFlatLevelScree
         this.itemLookup = itemLookup;
     }
 
-    @Mixin(targets = "net.minecraft.client.gui.screen.world.CustomizeFlatLevelScreen$SuperflatLayersListWidget")
+    @Mixin(CustomizeFlatLevelScreen.SuperflatLayersListWidget.class)
     public static class SuperflatLayersListWidgetExtender implements CustomizeFlatLevelScreenSuperflatLayersListWidgetAccess {
         @Shadow
         @Final

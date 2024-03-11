@@ -5,8 +5,9 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.WrittenBookItem;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.StringHelper;
@@ -31,12 +32,13 @@ public record TextHolderItemComponent() implements ItemComponent<TextHolderItemC
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        stack.itematic$nbt().ifPresent(nbt -> {
-            String author = nbt.getString(WrittenBookItem.AUTHOR_KEY);
-            if (!StringHelper.isEmpty(author)) {
-                tooltip.add(Text.translatable("book.byAuthor", author).formatted(Formatting.GRAY));
-            }
-            tooltip.add(Text.translatable("book.generation." + nbt.getInt(WrittenBookItem.GENERATION_KEY)).formatted(Formatting.GRAY));
-        });
+        WrittenBookContentComponent writtenBookContent = stack.get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
+        if (writtenBookContent == null) {
+            return;
+        }
+        if (!StringHelper.isBlank(writtenBookContent.author())) {
+            tooltip.add(Text.translatable("book.byAuthor", writtenBookContent.author()).formatted(Formatting.GRAY));
+        }
+        tooltip.add(Text.translatable("book.generation." + writtenBookContent.generation()).formatted(Formatting.GRAY));
     }
 }

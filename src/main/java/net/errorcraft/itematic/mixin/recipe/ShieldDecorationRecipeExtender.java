@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.ShieldDecorationRecipe;
 import net.minecraft.util.DyeColor;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 
@@ -47,8 +48,9 @@ public class ShieldDecorationRecipeExtender {
         ),
         slice = @Slice(
             from = @At(
-                value = "CONSTANT",
-                args = "stringValue=Base"
+                value = "FIELD",
+                target = "Lnet/minecraft/component/DataComponentTypes;BASE_COLOR:Lnet/minecraft/component/DataComponentType;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )

@@ -7,6 +7,9 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.item.DebugStickItemAccessor;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.DebugStickStateComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DebugStickItem;
 import net.minecraft.item.Item;
@@ -47,6 +50,11 @@ public record DebugStickItemComponent() implements ItemComponent<DebugStickItemC
             return ActionResult.PASS;
         }
         return ActionResult.success(world.isClient());
+    }
+
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.DEBUG_STICK_STATE, DebugStickStateComponent.DEFAULT);
     }
 
     public void use(PlayerEntity miner, BlockState state, WorldAccess world, BlockPos pos) {

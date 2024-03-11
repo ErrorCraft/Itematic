@@ -5,7 +5,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
-import net.minecraft.item.*;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemStackSet;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
@@ -41,11 +45,10 @@ public class SuspiciousEffectIngredientItemGroupEntry extends ItemGroupEntry {
             .streamEntries()
             .map(RegistryEntry::value)
             .map(item -> item.itematic$getComponent(ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+            .flatMap(Optional::stream)
             .forEach(c -> {
                 ItemStack stack = new ItemStack(this.item);
-                SuspiciousStewItem.writeEffectsToStew(stack, c.effects());
+                stack.set(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS, c.getStewEffects());
                 set.add(stack);
             });
         return set;

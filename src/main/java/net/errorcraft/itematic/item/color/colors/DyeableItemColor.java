@@ -12,7 +12,7 @@ public record DyeableItemColor() implements ItemColor {
     public static final Codec<DyeableItemColor> CODEC = Codec.unit(INSTANCE);
 
     @Override
-    public int getColor(ItemStack stack, int tintIndex) {
+    public int color(ItemStack stack, int tintIndex) {
         if (tintIndex > 0) {
             return DEFAULT_COLOR;
         }
@@ -22,7 +22,7 @@ public record DyeableItemColor() implements ItemColor {
     }
 
     @Override
-    public ItemColorType<?> getType() {
+    public ItemColorType<?> type() {
         return ItemColorTypes.DYEABLE;
     }
 }

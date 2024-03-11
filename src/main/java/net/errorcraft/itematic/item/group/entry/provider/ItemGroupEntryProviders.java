@@ -1,15 +1,17 @@
 package net.errorcraft.itematic.item.group.entry.provider;
 
 import net.errorcraft.itematic.enchantment.EnchantmentKeys;
-import net.errorcraft.itematic.enchantment.EnchantmentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.entries.*;
 import net.errorcraft.itematic.village.raid.RaidUtil;
 import net.minecraft.block.LightBlock;
+import net.minecraft.component.ComponentChanges;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FireworksComponent;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -486,11 +488,13 @@ public class ItemGroupEntryProviders {
     }
 
     private static ItemGroupEntry[] flightDuration(RegistryEntry<Item> item) {
-        List<ItemGroupEntry> entries = new ArrayList<>(LightBlock.field_33722);
+        List<ItemGroupEntry> entries = new ArrayList<>();
         for (byte flight : FireworkRocketItem.FLIGHT_VALUES) {
-            ItemStack stack = new ItemStack(item);
-            FireworkRocketItem.setFlight(stack, flight);
-            entries.add(StackItemGroupEntry.fromStack(stack));
+            entries.add(StackItemGroupEntry.builder(item)
+                .components(ComponentChanges.builder()
+                    .add(DataComponentTypes.FIREWORKS, new FireworksComponent(flight, List.of())))
+                .build()
+            );
         }
         return entries.toArray(ItemGroupEntry[]::new);
     }
@@ -500,7 +504,15 @@ public class ItemGroupEntryProviders {
         RegistryEntry.Reference<Item> enchantedBook = items.getOrThrow(ItemKeys.ENCHANTED_BOOK);
         return Stream.of(enchantments).map(RegistryEntry::value)
             .flatMap(enchantment -> IntStream.rangeClosed(enchantment.getMinLevel(), enchantment.getMaxLevel())
-                .mapToObj(level -> StackItemGroupEntry.fromStack(EnchantmentUtil.addEnchantment(new ItemStack(enchantedBook), new EnchantmentLevelEntry(enchantment, level)), getStackVisibility(enchantment, level))))
+                .mapToObj(level -> {
+                    ItemEnchantmentsComponent.Builder itemEnchantmentsBuilder = new ItemEnchantmentsComponent.Builder(ItemEnchantmentsComponent.DEFAULT);
+                    itemEnchantmentsBuilder.add(enchantment, level);
+                    return StackItemGroupEntry.builder(enchantedBook)
+                        .components(ComponentChanges.builder()
+                            .add(DataComponentTypes.ENCHANTMENTS, itemEnchantmentsBuilder.build()))
+                        .visibility(getStackVisibility(enchantment, level))
+                        .build();
+                }))
             .toArray(ItemGroupEntry[]::new);
     }
 

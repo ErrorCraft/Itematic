@@ -3,6 +3,8 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.AbstractDecorationEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
@@ -30,7 +32,7 @@ public record DecorationEntityInitializer<T extends AbstractDecorationEntity>(En
         if (entity == null) {
             return null;
         }
-        EntityType.loadFromEntityNbt(world, player, entity, stack.getNbt());
+        EntityType.loadFromEntityNbt(world, player, entity, stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT));
         if (!entity.canStayAttached()) {
             return null;
         }

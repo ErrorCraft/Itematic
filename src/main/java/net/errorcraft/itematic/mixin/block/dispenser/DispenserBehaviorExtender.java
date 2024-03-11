@@ -2,10 +2,14 @@ package net.errorcraft.itematic.mixin.block.dispenser;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.block.dispenser.DispenserBehaviorUtil;
+import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.dispenser.DispenserBehavior;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -87,20 +91,19 @@ public interface DispenserBehaviorExtender {
         @Redirect(
             method = "dispenseSilently",
             at = @At(
-                value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
-                ordinal = 0
+                value = "INVOKE",
+                target = "Lnet/minecraft/component/type/PotionContentsComponent;createStack(Lnet/minecraft/item/Item;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
             ),
             slice = @Slice(
                 from = @At(
                     value = "FIELD",
-                    target = "Lnet/minecraft/item/Items;HONEY_BOTTLE:Lnet/minecraft/item/Item;",
+                    target = "Lnet/minecraft/item/Items;POTION:Lnet/minecraft/item/Item;",
                     opcode = Opcodes.GETSTATIC
                 )
             )
         )
-        private ItemStack newItemStackForPotionUseCreateStack(ItemConvertible item, @Local ServerWorld serverWorld) {
-            return serverWorld.itematic$createStack(ItemKeys.POTION);
+        private ItemStack newItemStackForPotionUseCreateStack(Item item, RegistryEntry<Potion> potion, @Local ServerWorld serverWorld) {
+            return PotionContentsComponentUtil.setPotion(serverWorld.itematic$createStack(ItemKeys.POTION), potion);
         }
     }
 

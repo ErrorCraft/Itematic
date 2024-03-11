@@ -21,7 +21,16 @@
     },
     "minecraft:shooter": {
       "ammunition": "minecraft:bow_ammunition",
-      "chargeable": true,
+      "chargeable": {
+        "quick_charge_sounds": {
+          "default": "minecraft:item.crossbow.loading_start",
+          "levels": [
+            "minecraft:item.crossbow.quick_charge_1",
+            "minecraft:item.crossbow.quick_charge_2",
+            "minecraft:item.crossbow.quick_charge_3"
+          ]
+        }
+      },
       "held_ammunition": "minecraft:crossbow_ammunition",
       "range": 8
     },

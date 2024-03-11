@@ -5,15 +5,14 @@ import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
-
-import java.util.List;
 
 public record PotionItemComponent() implements ItemComponent<PotionItemComponent> {
     public static final PotionItemComponent INSTANCE = new PotionItemComponent();
@@ -39,8 +38,7 @@ public record PotionItemComponent() implements ItemComponent<PotionItemComponent
 
     private void applyEffects(LivingEntity target, ItemStack stack) {
         PlayerEntity player = target instanceof PlayerEntity playerEntity ? playerEntity : null;
-        List<StatusEffectInstance> effectInstances = PotionUtil.getPotionEffects(stack);
-        for (StatusEffectInstance effectInstance : effectInstances) {
+        for (StatusEffectInstance effectInstance : stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).getEffects()) {
             if (effectInstance.getEffectType().value().isInstant()) {
                 effectInstance.getEffectType().value().applyInstantEffect(player, player, target, effectInstance.getAmplifier(), 1.0d);
                 continue;

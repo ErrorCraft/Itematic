@@ -33,7 +33,7 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> PLACE_BLOCK_FROM_ITEM = of("place_block_from_item");
     public static final RegistryKey<ActionType<?>> MARK_BANNER_ON_ITEM = of("mark_banner_on_item");
     public static final RegistryKey<ActionType<?>> TWIRL_PLAYER = of("twirl_player");
-    public static final RegistryKey<ActionType<?>> APPLY_SUSPICIOUS_EFFECTS = of("apply_suspicious_effects");
+    public static final RegistryKey<ActionType<?>> APPLY_SUSPICIOUS_STEW_EFFECTS_FROM_ITEM = of("apply_suspicious_stew_effects_from_item");
 
     private ActionTypeKeys() {}
 

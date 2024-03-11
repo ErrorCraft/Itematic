@@ -34,7 +34,7 @@ public class ActionTypes {
     public static final ActionType<PlaceBlockFromItemAction> PLACE_BLOCK_FROM_ITEM = register(ActionTypeKeys.PLACE_BLOCK_FROM_ITEM, new ActionType<>(PlaceBlockFromItemAction.CODEC));
     public static final ActionType<MarkBannerOnItemAction> MARK_BANNER_ON_ITEM = register(ActionTypeKeys.MARK_BANNER_ON_ITEM, new ActionType<>(MarkBannerOnItemAction.CODEC));
     public static final ActionType<TwirlPlayerAction> TWIRL_PLAYER = register(ActionTypeKeys.TWIRL_PLAYER, new ActionType<>(TwirlPlayerAction.CODEC));
-    public static final ActionType<ApplySuspiciousEffectsAction> APPLY_SUSPICIOUS_EFFECTS = register(ActionTypeKeys.APPLY_SUSPICIOUS_EFFECTS, new ActionType<>(ApplySuspiciousEffectsAction.CODEC));
+    public static final ActionType<ApplySuspiciousStewEffectsFromItemAction> APPLY_SUSPICIOUS_STEW_EFFECTS_FROM_ITEM = register(ActionTypeKeys.APPLY_SUSPICIOUS_STEW_EFFECTS_FROM_ITEM, new ActionType<>(ApplySuspiciousStewEffectsFromItemAction.CODEC));
 
     private ActionTypes() {}
 

@@ -5,6 +5,10 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.MapColorComponent;
+import net.minecraft.component.type.MapDecorationsComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FilledMapItem;
@@ -30,6 +34,12 @@ public record MapHolderItemComponent() implements ItemComponent<MapHolderItemCom
     @Override
     public Codec<MapHolderItemComponent> codec() {
         return CODEC;
+    }
+
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.MAP_COLOR, MapColorComponent.DEFAULT);
+        builder.add(DataComponentTypes.MAP_DECORATIONS, MapDecorationsComponent.DEFAULT);
     }
 
     @Override

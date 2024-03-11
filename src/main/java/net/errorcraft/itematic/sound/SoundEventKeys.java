@@ -24,6 +24,10 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> BUNDLE_DROP_CONTENTS = of("item.bundle.drop_contents");
     public static final RegistryKey<SoundEvent> BUNDLE_INSERT = of("item.bundle.insert");
     public static final RegistryKey<SoundEvent> BUNDLE_REMOVE_ONE = of("item.bundle.remove_one");
+    public static final RegistryKey<SoundEvent> CROSSBOW_LOADING_START = of("item.crossbow.loading_start");
+    public static final RegistryKey<SoundEvent> CROSSBOW_QUICK_CHARGE_1 = of("item.crossbow.quick_charge_1");
+    public static final RegistryKey<SoundEvent> CROSSBOW_QUICK_CHARGE_2 = of("item.crossbow.quick_charge_2");
+    public static final RegistryKey<SoundEvent> CROSSBOW_QUICK_CHARGE_3 = of("item.crossbow.quick_charge_3");
     public static final RegistryKey<SoundEvent> ENDER_EYE_LAUNCH = of("entity.ender_eye.launch");
     public static final RegistryKey<SoundEvent> END_PORTAL_FRAME_FILL = of("block.end_portal_frame.fill");
     public static final RegistryKey<SoundEvent> FIRE_CHARGE_USE = of("item.firecharge.use");

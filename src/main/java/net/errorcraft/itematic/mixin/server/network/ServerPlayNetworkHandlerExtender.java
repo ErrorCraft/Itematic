@@ -44,10 +44,10 @@ public class ServerPlayNetworkHandlerExtender {
         method = "addBook",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;copyNbtToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack copyWithItemForWrittenBookUseItemComponent(ItemStack instance, ItemConvertible itemConvertible, int count, @Share("writableItemComponent") LocalRef<WritableItemComponent> writableItemComponent) {
-        return instance.itematic$copyNbtToNewStack(writableItemComponent.get().transformsInto(), count);
+    private ItemStack copyComponentsToNewStackForWrittenBookUseItemComponent(ItemStack instance, ItemConvertible itemConvertible, int count, @Share("writableItemComponent") LocalRef<WritableItemComponent> writableItemComponent) {
+        return instance.itematic$copyComponentsToNewStack(writableItemComponent.get().transformsInto(), count);
     }
 }

@@ -55,17 +55,17 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem) 
             return;
         }
 
-        this.resultItem.map(ItemStack::new)
-            .map(resultStack -> ItemUsage.exchangeStack(stack, player, resultStack))
-            .ifPresentOrElse(resultStackConsumer::set, () -> stack.decrementUnlessCreative(1, user));
-        if (player instanceof ServerPlayerEntity serverPlayer) {
-            Criteria.CONSUME_ITEM.trigger(serverPlayer, stack);
-        }
         if (world instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, hand)
                 .entityPosition(ActionContextParameter.THIS, user)
                 .build();
             stack.itematic$invokeEvent(ItemEvents.CONSUME_ITEM, context);
+        }
+        this.resultItem.map(ItemStack::new)
+            .map(resultStack -> ItemUsage.exchangeStack(stack, player, resultStack))
+            .ifPresentOrElse(resultStackConsumer::set, () -> stack.decrementUnlessCreative(1, user));
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            Criteria.CONSUME_ITEM.trigger(serverPlayer, stack);
         }
 
         player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));

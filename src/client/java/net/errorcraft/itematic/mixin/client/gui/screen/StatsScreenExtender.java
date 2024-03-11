@@ -3,14 +3,12 @@ package net.errorcraft.itematic.mixin.client.gui.screen;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.access.client.gui.screen.StatsScreenAccess;
-import net.errorcraft.itematic.access.client.gui.screen.StatsScreenItemStatsListWidgetAccess;
 import net.errorcraft.itematic.access.client.gui.screen.StatsScreenItemStatsListWidgetEntryAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.StatsScreen;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.item.BlockItem;
@@ -21,7 +19,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatHandler;
 import net.minecraft.stat.StatType;
-import net.minecraft.util.Identifier;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
@@ -33,28 +30,15 @@ import java.util.*;
 public abstract class StatsScreenExtender implements StatsScreenAccess {
     @Shadow
     @Final
-    static Identifier SLOT_TEXTURE;
-
-    @Shadow
-    @Final
     StatHandler statHandler;
-
-    @Shadow
-    abstract void renderIcon(DrawContext context, int x, int y, Identifier texture);
 
     @Override
     public StatHandler itematic$statHandler() {
         return this.statHandler;
     }
 
-    @Override
-    public void itematic$renderStatItem(DrawContext context, int x, int y, RegistryEntry<Item> entry) {
-        this.renderIcon(context, x + 1, y + 1, SLOT_TEXTURE);
-        context.drawItemWithoutEntity(new ItemStack(entry), x + 2, y + 2);
-    }
-
     @Mixin(StatsScreen.ItemStatsListWidget.class)
-    public static class ItemStatsListWidgetExtender extends AlwaysSelectedEntryListWidget<StatsScreen.ItemStatsListWidget.Entry> implements StatsScreenItemStatsListWidgetAccess {
+    public static class ItemStatsListWidgetExtender extends AlwaysSelectedEntryListWidget<StatsScreen.ItemStatsListWidget.Entry> {
         @Shadow
         @Final
         StatsScreen field_18752;
@@ -78,7 +62,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             method = "<init>",
             at = @At(
                 value = "INVOKE",
-                target = "Lcom/google/common/collect/Sets;newIdentityHashSet()Ljava/util/Set;"
+                target = "Lcom/google/common/collect/Sets;newIdentityHashSet()Ljava/util/Set;",
+                remap = false
             )
         )
         private void storeItemsSet(StatsScreen statsScreen, MinecraftClient client, CallbackInfo info, @Share("items") LocalRef<Set<RegistryEntry<Item>>> items) {
@@ -113,11 +98,6 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 ((StatsScreenItemStatsListWidgetEntryAccess)itemEntry).itematic$setRegistryEntry(entry);
                 this.addEntry(itemEntry);
             }
-        }
-
-        @Override
-        public void itematic$renderStatItem(DrawContext context, int x, int y, RegistryEntry<Item> entry) {
-            ((StatsScreenAccess) this.field_18752).itematic$renderStatItem(context, x, y, entry);
         }
 
         @Unique
@@ -327,10 +307,6 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
         public static class EntryExtender implements StatsScreenItemStatsListWidgetEntryAccess {
             @Shadow
             @Final
-            StatsScreen.ItemStatsListWidget field_18751;
-
-            @Shadow
-            @Final
             @Mutable
             private Item item;
 
@@ -341,11 +317,11 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 method = "render(Lnet/minecraft/client/gui/DrawContext;IIIIIIIZF)V",
                 at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/screen/StatsScreen;renderStatItem(Lnet/minecraft/client/gui/DrawContext;IILnet/minecraft/item/Item;)V"
+                    target = "Lnet/minecraft/item/Item;getDefaultStack()Lnet/minecraft/item/ItemStack;"
                 )
             )
-            private void renderStatItemUseRegistryEntry(StatsScreen instance, DrawContext context, int x, int y, Item item) {
-                ((StatsScreenItemStatsListWidgetAccess) this.field_18751).itematic$renderStatItem(context, x, y, this.entry);
+            private ItemStack newItemStackUseRegistryEntry(Item instance) {
+                return new ItemStack(this.entry);
             }
 
             @ModifyConstant(

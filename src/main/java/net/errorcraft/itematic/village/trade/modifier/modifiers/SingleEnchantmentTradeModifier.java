@@ -10,11 +10,15 @@ import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
+import net.minecraft.predicate.ComponentPredicate;
 import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.village.TradedItem;
+
+import java.util.Optional;
 
 public record SingleEnchantmentTradeModifier(int index, int baseRandomCost, int perLevelRandomCost, int perLevelCost, RegistryEntryList<Enchantment> enchantments, Range.IntegerRange levels) implements TradeModifier<SingleEnchantmentTradeModifier> {
     public static final Codec<SingleEnchantmentTradeModifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -33,18 +37,18 @@ public record SingleEnchantmentTradeModifier(int index, int baseRandomCost, int 
     }
 
     @Override
-    public ItemStack apply(Trade.Input wants, ItemStack gives, LootContext context) {
-        this.enchantments.getRandom(context.getRandom())
-            .ifPresent(entry -> this.apply(wants.get(this.index), gives, context, entry.value()));
-        return gives;
+    public Optional<TradedItem> apply(Trade.Input wants, ItemStack gives, LootContext context) {
+        Random random = context.getRandom();
+        this.enchantments.getRandom(random)
+            .ifPresent(entry -> this.apply(wants.getStack(this.index), gives, random, entry.value()));
+        return Optional.of(new TradedItem(gives.getRegistryEntry(), gives.getCount(), ComponentPredicate.of(gives.getComponents())));
     }
 
     public static SingleEnchantmentTradeModifier of(int index, int baseRandomCost, int perLevelRandomCost, int perLevelCost, RegistryEntryList<Enchantment> enchantments) {
         return new SingleEnchantmentTradeModifier(index, baseRandomCost, perLevelRandomCost, perLevelCost, enchantments, Range.IntegerRange.atLeast(1));
     }
 
-    private void apply(ItemStack wants, ItemStack gives, LootContext context, Enchantment enchantment) {
-        Random random = context.getRandom();
+    private void apply(ItemStack wants, ItemStack gives, Random random, Enchantment enchantment) {
         int minLevel = Math.max(enchantment.getMinLevel(), this.levels.min());
         int maxLevel = Math.min(enchantment.getMaxLevel(), this.levels.max());
         int level = MathHelper.nextInt(random, minLevel, maxLevel);

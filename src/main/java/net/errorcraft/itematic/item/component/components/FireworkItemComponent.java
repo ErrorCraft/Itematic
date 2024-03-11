@@ -6,34 +6,27 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FireworksComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.item.FireworkRocketItem;
-import net.minecraft.item.FireworkStarItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.screen.ScreenTexts;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public record FireworkItemComponent() implements ItemComponent<FireworkItemComponent> {
     public static final FireworkItemComponent INSTANCE = new FireworkItemComponent();
     public static final Codec<FireworkItemComponent> CODEC = Codec.unit(INSTANCE);
-    private static final String FLIGHT_TRANSLATION_KEY = "item.minecraft.firework_rocket.flight";
-    private static final String EXPLOSION_INDENTATION = "  ";
 
     @Override
     public ItemComponentType<FireworkItemComponent> type() {
@@ -75,20 +68,10 @@ public record FireworkItemComponent() implements ItemComponent<FireworkItemCompo
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        NbtCompound fireworks = stack.getSubNbt(FireworkRocketItem.FIREWORKS_KEY);
-        if (fireworks == null) {
-            return;
+        FireworksComponent fireworks = stack.get(DataComponentTypes.FIREWORKS);
+        if (fireworks != null) {
+            fireworks.appendTooltip(tooltip::add, context);
         }
-        if (fireworks.contains(FireworkRocketItem.FLIGHT_KEY, NbtElement.NUMBER_TYPE)) {
-            tooltip.add(
-                Text.translatable(FLIGHT_TRANSLATION_KEY)
-                    .append(ScreenTexts.SPACE)
-                    .append(String.valueOf(fireworks.getByte(FireworkRocketItem.FLIGHT_KEY)))
-                    .formatted(Formatting.GRAY)
-            );
-        }
-        NbtList explosions = fireworks.getList(FireworkRocketItem.EXPLOSIONS_KEY, NbtElement.COMPOUND_TYPE);
-        appendExplosionsTooltip(explosions, tooltip);
     }
 
     private static FireworkRocketEntity createFireworkEntity(World world, ItemStack stack, ItemUsageContext context) {
@@ -99,25 +82,5 @@ public record FireworkItemComponent() implements ItemComponent<FireworkItemCompo
             direction.getOffsetZ() * FireworkRocketItem.OFFSET_POS_MULTIPLIER
         );
         return new FireworkRocketEntity(world, context.getPlayer(), position.getX(), position.getY(), position.getZ(), stack);
-    }
-
-    private static void appendExplosionsTooltip(NbtList explosions, List<Text> tooltip) {
-        if (explosions.isEmpty()) {
-            return;
-        }
-        for (int i = 0; i < explosions.size(); i++) {
-            ArrayList<Text> explosionText = new ArrayList<>();
-            FireworkStarItem.appendFireworkTooltip(explosions.getCompound(i), explosionText);
-            if (explosionText.isEmpty()) {
-                continue;
-            }
-            for (int j = 1; j < explosionText.size(); ++j) {
-                tooltip.add(
-                    Text.literal(EXPLOSION_INDENTATION)
-                        .append(explosionText.get(j))
-                        .formatted(Formatting.GRAY)
-                );
-            }
-        }
     }
 }

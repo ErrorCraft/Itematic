@@ -20,8 +20,8 @@ public class EndCityGeneratorExtender {
                 target = "net/minecraft/item/ItemStack"
             )
         )
-        private static ItemStack newItemStackForElytraUseRegistryEntry(ItemConvertible item, @Local ServerWorldAccess world) {
-            return new ItemStack(world.itematic$getItem(ItemKeys.ELYTRA));
+        private ItemStack newItemStackForElytraUseCreateStack(ItemConvertible item, @Local(argsOnly = true) ServerWorldAccess world) {
+            return world.itematic$createStack(ItemKeys.ELYTRA);
         }
     }
 }

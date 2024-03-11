@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
@@ -13,7 +14,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
+import net.minecraft.potion.Potion;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Util;
 import net.minecraft.world.World;
@@ -38,13 +41,12 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
     @Redirect(
         method = "initGoals",
         at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
-            ordinal = 0
+            value = "INVOKE",
+            target = "Lnet/minecraft/component/type/PotionContentsComponent;createStack(Lnet/minecraft/item/Item;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForPotionUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.POTION);
+    private ItemStack newItemStackForPotionUseCreateStack(Item item, RegistryEntry<Potion> potion) {
+        return PotionContentsComponentUtil.setPotion(this.getWorld().itematic$createStack(ItemKeys.POTION), potion);
     }
 
     @Redirect(

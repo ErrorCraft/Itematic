@@ -2,13 +2,12 @@ package net.errorcraft.itematic.item.group.entry.entries;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionUtil;
-import net.minecraft.potion.Potions;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
@@ -44,8 +43,7 @@ public class PotionItemGroupEntry extends ItemGroupEntry {
         return context.lookup()
             .getWrapperOrThrow(RegistryKeys.POTION)
             .streamEntries()
-            .filter(entry -> !entry.matchesKey(Potions.EMPTY_KEY))
-            .map(entry -> PotionUtil.setPotion(new ItemStack(this.item), entry))
+            .map(entry -> PotionContentsComponentUtil.setPotion(new ItemStack(this.item), entry))
             .toList();
     }
 

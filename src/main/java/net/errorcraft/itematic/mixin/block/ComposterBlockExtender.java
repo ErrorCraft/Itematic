@@ -37,7 +37,7 @@ public class ComposterBlockExtender {
             remap = false
         )
     )
-    private static boolean containsKeyUseItemComponentCheckStatic(Object2FloatMap<ItemConvertible> instance, Object o, @Local ItemStack stack) {
+    private static boolean containsKeyUseItemComponentCheckStatic(Object2FloatMap<ItemConvertible> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
         return stack.itematic$hasComponent(ItemComponentTypes.COMPOSTABLE);
     }
 
@@ -49,7 +49,7 @@ public class ComposterBlockExtender {
             remap = false
         )
     )
-    private static float getFloatUseItemComponent(Object2FloatMap<ItemConvertible> instance, Object o, @Local ItemStack stack) {
+    private static float getFloatUseItemComponent(Object2FloatMap<ItemConvertible> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
         return stack.itematic$getComponent(ItemComponentTypes.COMPOSTABLE)
             .map(CompostableItemComponent::levelIncreaseChance)
             .orElse(0.0f);
@@ -62,7 +62,7 @@ public class ComposterBlockExtender {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForBoneMealUseRegistryEntry(ItemConvertible item, @Local World world) {
+    private static ItemStack newItemStackForBoneMealUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
         return world.itematic$createStack(ItemKeys.BONE_MEAL);
     }
 
@@ -73,7 +73,7 @@ public class ComposterBlockExtender {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForBoneMealUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
+    private ItemStack newItemStackForBoneMealUseCreateStack(ItemConvertible item, @Local(argsOnly = true) WorldAccess world) {
         return world.itematic$createStack(ItemKeys.BONE_MEAL);
     }
 

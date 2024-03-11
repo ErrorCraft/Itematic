@@ -36,11 +36,11 @@ public class EnchantmentScreenHandlerExtender {
         method = "method_17410",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;copyNbtToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack copyWithItemForEnchantedBookUseItemComponent(ItemStack instance, ItemConvertible itemConvertible, int count, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
-        return instance.itematic$copyNbtToNewStack(transformsInto.get(), count);
+    private ItemStack copyComponentsToNewStackForEnchantedBookUseItemComponent(ItemStack instance, ItemConvertible itemConvertible, int count, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
+        return instance.itematic$copyComponentsToNewStack(transformsInto.get(), count);
     }
 
     @Redirect(

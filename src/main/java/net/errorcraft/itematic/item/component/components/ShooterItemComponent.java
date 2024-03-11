@@ -2,30 +2,31 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.component.type.ChargeablePullProgressComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.util.ShooterUtil;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -35,21 +36,24 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
-public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, boolean chargeable) implements ItemComponent<ShooterItemComponent> {
+public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, Optional<Chargeable> chargeable) implements ItemComponent<ShooterItemComponent> {
     public static final Codec<ShooterItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("held_ammunition").forGetter(ShooterItemComponent::heldAmmunition),
         TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("ammunition").forGetter(ShooterItemComponent::ammunition),
         Codec.INT.fieldOf("range").forGetter(ShooterItemComponent::range),
-        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "chargeable", false).forGetter(ShooterItemComponent::chargeable)
+        Codecs.createStrictOptionalFieldCodec(Chargeable.CODEC, "chargeable").forGetter(ShooterItemComponent::chargeable)
     ).apply(instance, ShooterItemComponent::new));
+    private static final float CHARGE_PROGRESS = CrossbowItemAccessor.chargeProgress();
+    private static final float LOAD_PROGRESS = CrossbowItemAccessor.loadProgress();
     private static final int DEFAULT_CHARGE_TIME = CrossbowItemAccessor.defaultPullTime();
     private static final int EXTRA_USE_TIME = 3;
     private static final int CHARGE_TIME_PER_QUICK_CHARGE_LEVEL = 5;
-    private static final String STARTED_KEY = "started";
-    private static final String LOADED_KEY = "loaded";
+    private static final CrossbowItem DUMMY = new CrossbowItem(new Item.Settings());
 
     @Override
     public ItemComponentType<ShooterItemComponent> type() {
@@ -64,8 +68,9 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (this.isCharged(stack)) {
-            CrossbowItem.shootAll(world, user, hand, stack, getSpeed(stack), 1.0f);
-            CrossbowItem.setCharged(stack, false);
+            float chargedSpeed = stack.getOrDefault(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)
+                .itematic$getChargedSpeed();
+            DUMMY.shootAll(world, user, hand, stack, chargedSpeed, 1.0f, null);
             return ActionResult.CONSUME;
         }
         if (!user.itematic$getAmmunition(this).isEmpty()) {
@@ -77,16 +82,13 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
 
     @Override
     public void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {
-        if (!this.chargeable) {
-            return;
-        }
-        this.tryLoad(stack, world, user, this.getPullProgress(stack, usedTicks));
+        this.chargeable.ifPresent(chargeable -> this.tryLoad(stack, world, user, this.getPullProgress(stack, usedTicks), chargeable));
     }
 
     @Override
     public void stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
         float pullProgress = this.getPullProgress(stack, usedTicks);
-        if (this.chargeable) {
+        if (this.isChargeable()) {
             this.charge(stack, world, user, pullProgress);
             return;
         }
@@ -96,8 +98,20 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         this.shoot(stack, world, player, pullProgress, resultStackConsumer);
     }
 
-    public static ShooterItemComponent of(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, boolean chargeable) {
-        return new ShooterItemComponent(heldAmmunition, ammunition, range, chargeable);
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        if (this.isChargeable()) {
+            builder.add(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT);
+        }
+    }
+
+    public static ShooterItemComponent of(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range) {
+        return new ShooterItemComponent(heldAmmunition, ammunition, range, Optional.empty());
+    }
+
+    @SafeVarargs
+    public static ShooterItemComponent of(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, RegistryEntry<SoundEvent> defaultSound, RegistryEntry<SoundEvent>... levelSounds) {
+        return new ShooterItemComponent(heldAmmunition, ammunition, range, Optional.of(Chargeable.of(QuickChargeSounds.of(defaultSound, levelSounds))));
     }
 
     public static int useDuration(ItemStack stack) {
@@ -109,6 +123,10 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         return DEFAULT_CHARGE_TIME - CHARGE_TIME_PER_QUICK_CHARGE_LEVEL * quickChargeLevel;
     }
 
+    public void shootAll(World world, LivingEntity shooter, Hand hand, ItemStack stack, float speed, float divergence, @Nullable LivingEntity target) {
+        DUMMY.shootAll(world, shooter, hand, stack, speed, divergence, target);
+    }
+
     public boolean isHeldAmmunition(ItemStack stack) {
         return stack.isIn(this.heldAmmunition);
     }
@@ -118,22 +136,23 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
     }
 
     public float getPullProgress(ItemStack stack, int usedTicks) {
-        if (this.chargeable) {
+        if (this.isChargeable()) {
             float progress = (float)usedTicks / getPullTime(stack);
             return Math.min(progress, 1.0f);
         }
         return BowItem.getPullProgress(usedTicks);
     }
 
+    public boolean isChargeable() {
+        return this.chargeable.isPresent();
+    }
+
     public boolean isCharged(ItemStack stack) {
-        return this.chargeable && CrossbowItem.isCharged(stack);
+        return this.isChargeable() && !stack.getOrDefault(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT).isEmpty();
     }
 
-    public boolean hasLoadedAmmunition(ItemStack stack, DynamicRegistryManager registryManager, RegistryKey<Item> key) {
-        return ShooterUtil.getLoadedAmmunition(stack, registryManager).stream().anyMatch(s -> s.itematic$isOf(key));
-    }
-
-    private void tryLoad(ItemStack stack, World world, LivingEntity user, float pullProgress) {
+    @SuppressWarnings("DataFlowIssue")
+    private void tryLoad(ItemStack stack, World world, LivingEntity user, float pullProgress, Chargeable chargeable) {
         if (world.isClient()) {
             return;
         }
@@ -141,22 +160,20 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
             return;
         }
         int quickChargeLevel = EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack);
-        if (pullProgress >= 0.2f && !isStarted(stack)) {
-            setStarted(stack, true);
-            world.playSound(null, user.getX(), user.getY(), user.getZ(), getQuickChargeSound(quickChargeLevel), SoundCategory.PLAYERS, 0.5f, 1.0f);
+        if (pullProgress >= CHARGE_PROGRESS && stack.get(ItematicDataComponentTypes.CHARGEABLE_PULL_PROGRESS) == null) {
+            stack.set(ItematicDataComponentTypes.CHARGEABLE_PULL_PROGRESS, new ChargeablePullProgressComponent(ChargeablePullProgressComponent.State.STARTED));
+            world.playSound(null, user.getX(), user.getY(), user.getZ(), chargeable.quickChargeSounds.get(quickChargeLevel).value(), SoundCategory.PLAYERS, 0.5f, 1.0f);
         }
-        if (pullProgress >= 0.5f && quickChargeLevel == 0 && !isLoaded(stack)) {
-            setLoaded(stack, true);
+        if (pullProgress >= LOAD_PROGRESS && quickChargeLevel == 0 && stack.get(ItematicDataComponentTypes.CHARGEABLE_PULL_PROGRESS).state() == ChargeablePullProgressComponent.State.STARTED) {
+            stack.set(ItematicDataComponentTypes.CHARGEABLE_PULL_PROGRESS, new ChargeablePullProgressComponent(ChargeablePullProgressComponent.State.LOADED));
             world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE, SoundCategory.PLAYERS, 0.5f, 1.0f);
         }
     }
 
     @SuppressWarnings("ConstantConditions")
     private void charge(ItemStack stack, World world, LivingEntity user, float pullProgress) {
-        setStarted(stack, false);
-        setLoaded(stack, false);
+        stack.remove(ItematicDataComponentTypes.CHARGEABLE_PULL_PROGRESS);
         if (pullProgress == 1.0f && !this.isCharged(stack) && CrossbowItemAccessor.loadProjectiles(user, stack)) {
-            CrossbowItem.setCharged(stack, true);
             SoundCategory soundCategory = user instanceof PlayerEntity ? SoundCategory.PLAYERS : SoundCategory.HOSTILE;
             world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_CROSSBOW_LOADING_END, soundCategory, 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.5f + 1.0f) + 0.2f);
         }
@@ -193,9 +210,6 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         }
 
         Entity entity = optionalEntity.get();
-        if (entity instanceof ArrowEntity arrowEntity) {
-            arrowEntity.initFromStack(stack);
-        }
         if (entity instanceof PersistentProjectileEntity persistentProjectileEntity) {
             this.initProjectile(persistentProjectileEntity, stack, pullProgress);
 
@@ -228,36 +242,32 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         }
     }
 
-    private static float getSpeed(ItemStack stack) {
-        return stack.itematic$getComponent(ItemComponentTypes.PROJECTILE)
-            .map(ProjectileItemComponent::chargedSpeed)
-            .orElse(CrossbowItemAccessor.defaultSpeed());
+    public record Chargeable(QuickChargeSounds quickChargeSounds) {
+        public static final Codec<Chargeable> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            QuickChargeSounds.CODEC.fieldOf("quick_charge_sounds").forGetter(Chargeable::quickChargeSounds)
+        ).apply(instance, Chargeable::new));
+
+        public static Chargeable of(QuickChargeSounds quickChargeSounds) {
+            return new Chargeable(quickChargeSounds);
+        }
     }
 
-    private static SoundEvent getQuickChargeSound(int level) {
-        return switch (level) {
-            case 1 -> SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_1;
-            case 2 -> SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_2;
-            case 3 -> SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_3;
-            default -> SoundEvents.ITEM_CROSSBOW_LOADING_START;
-        };
-    }
+    public record QuickChargeSounds(List<RegistryEntry<SoundEvent>> levels, RegistryEntry<SoundEvent> defaultSound) {
+        public static final Codec<QuickChargeSounds> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            SoundEvent.ENTRY_CODEC.listOf().fieldOf("levels").forGetter(QuickChargeSounds::levels),
+            SoundEvent.ENTRY_CODEC.fieldOf("default").forGetter(QuickChargeSounds::defaultSound)
+        ).apply(instance, QuickChargeSounds::new));
 
-    private static void setStarted(ItemStack stack, boolean started) {
-        stack.getOrCreateNbt().putBoolean(STARTED_KEY, started);
-    }
+        public RegistryEntry<SoundEvent> get(int level) {
+            if (level < 0 || level >= this.levels.size()) {
+                return this.defaultSound;
+            }
+            return this.levels.get(level);
+        }
 
-    private static boolean isStarted(ItemStack stack) {
-        NbtCompound nbt = stack.getNbt();
-        return nbt != null && nbt.getBoolean(STARTED_KEY);
-    }
-
-    private static void setLoaded(ItemStack stack, boolean loaded) {
-        stack.getOrCreateNbt().putBoolean(LOADED_KEY, loaded);
-    }
-
-    private static boolean isLoaded(ItemStack stack) {
-        NbtCompound nbt = stack.getNbt();
-        return nbt != null && nbt.getBoolean(LOADED_KEY);
+        @SafeVarargs
+        public static QuickChargeSounds of(RegistryEntry<SoundEvent> defaultSound, RegistryEntry<SoundEvent>... levelSounds) {
+            return new QuickChargeSounds(List.of(levelSounds), defaultSound);
+        }
     }
 }

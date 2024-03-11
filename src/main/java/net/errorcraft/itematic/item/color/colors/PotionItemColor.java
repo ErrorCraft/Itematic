@@ -4,22 +4,24 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.color.ItemColor;
 import net.errorcraft.itematic.item.color.ItemColorType;
 import net.errorcraft.itematic.item.color.ItemColorTypes;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionUtil;
+import net.minecraft.util.math.ColorHelper;
 
 public record PotionItemColor() implements ItemColor {
     public static final Codec<PotionItemColor> CODEC = Codec.unit(new PotionItemColor());
 
     @Override
-    public int getColor(ItemStack stack, int tintIndex) {
+    public int color(ItemStack stack, int tintIndex) {
         if (tintIndex != 0) {
             return DEFAULT_COLOR;
         }
-        return PotionUtil.getColor(stack);
+        return ColorHelper.Argb.fullAlpha(stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).getColor());
     }
 
     @Override
-    public ItemColorType<?> getType() {
+    public ItemColorType<?> type() {
         return ItemColorTypes.POTION;
     }
 }

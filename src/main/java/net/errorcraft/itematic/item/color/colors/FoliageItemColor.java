@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.biome.Biome;
 
 public record FoliageItemColor(RegistryEntry<Biome> biome) implements ItemColor {
@@ -17,12 +18,12 @@ public record FoliageItemColor(RegistryEntry<Biome> biome) implements ItemColor 
     ).apply(instance, FoliageItemColor::new));
 
     @Override
-    public int getColor(ItemStack stack, int tintIndex) {
-        return this.biome.value().getFoliageColor();
+    public int color(ItemStack stack, int tintIndex) {
+        return ColorHelper.Argb.fullAlpha(this.biome.value().getFoliageColor());
     }
 
     @Override
-    public ItemColorType<?> getType() {
+    public ItemColorType<?> type() {
         return ItemColorTypes.FOLIAGE;
     }
 }

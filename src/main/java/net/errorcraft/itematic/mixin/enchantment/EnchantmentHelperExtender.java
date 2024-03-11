@@ -22,17 +22,6 @@ import java.util.Optional;
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperExtender {
     @Redirect(
-        method = { "get", "set" },
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private static boolean isOfUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTMENT_HOLDER);
-    }
-
-    @Redirect(
         method = "getPossibleEntries",
         at = @At(
             value = "INVOKE",

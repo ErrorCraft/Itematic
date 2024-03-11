@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.block.cauldron;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
@@ -13,6 +14,7 @@ import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.stat.Stat;
@@ -45,11 +47,11 @@ public interface CauldronBehaviorExtender {
         method = "method_32215",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;copyNbtToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack copyNbtToNewStackForShulkerBoxUseRegistryEntry(ItemStack instance, ItemConvertible itemConvertible, int i, @Local(argsOnly = true) World world) {
-        return instance.itematic$copyNbtToNewStack(world.itematic$getItem(ItemKeys.SHULKER_BOX), 1);
+    private static ItemStack copyComponentsToNewStackForShulkerBoxUseRegistryEntry(ItemStack instance, ItemConvertible itemConvertible, int count, @Local(argsOnly = true) World world) {
+        return instance.itematic$copyComponentsToNewStack(world.itematic$getItem(ItemKeys.SHULKER_BOX), count);
     }
 
     @Redirect(
@@ -77,12 +79,12 @@ public interface CauldronBehaviorExtender {
     @Redirect(
         method = "method_32220",
         at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            value = "INVOKE",
+            target = "Lnet/minecraft/component/type/PotionContentsComponent;createStack(Lnet/minecraft/item/Item;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForPotionUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
-        return world.itematic$createStack(ItemKeys.POTION);
+    private static ItemStack newItemStackForPotionUseCreateStack(Item item, RegistryEntry<Potion> potion, @Local(argsOnly = true) World world) {
+        return PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), potion);
     }
 
     @Redirect(

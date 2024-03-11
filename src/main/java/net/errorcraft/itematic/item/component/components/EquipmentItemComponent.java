@@ -13,10 +13,10 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.dispenser.DispenserBehavior;
+import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Equipment;
-import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -87,7 +87,7 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
             BlockItemComponent.attachedToSide(attachedBlock, otherBlock, Direction.DOWN),
             of(EquipmentSlot.HEAD, false, soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)),
-            FireworkShapeModifierItemComponent.of(FireworkRocketItem.Type.CREEPER)
+            FireworkShapeModifierItemComponent.of(FireworkExplosionComponent.Type.CREEPER)
         };
     }
 }

@@ -5,6 +5,7 @@ import net.errorcraft.itematic.access.item.AnimalArmorItemTypeAccess;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -21,6 +22,7 @@ public class AnimalArmorItemExtender {
     public static class TypeExtender implements AnimalArmorItemTypeAccess {
         @Unique
         private String name;
+
         @Unique
         private Function<RegistryEntry<ArmorMaterial>, Identifier> materialToTextureIdMapper;
 
@@ -28,7 +30,7 @@ public class AnimalArmorItemExtender {
             method = "<clinit>",
             at = @At(
                 value = "NEW",
-                target = "(Ljava/lang/String;ILjava/util/function/Function;)Lnet/minecraft/item/AnimalArmorItem$Type;",
+                target = "(Ljava/lang/String;ILjava/util/function/Function;Lnet/minecraft/sound/SoundEvent;)Lnet/minecraft/item/AnimalArmorItem$Type;",
                 ordinal = 0
             )
         )
@@ -41,7 +43,7 @@ public class AnimalArmorItemExtender {
             method = "<clinit>",
             at = @At(
                 value = "NEW",
-                target = "(Ljava/lang/String;ILjava/util/function/Function;)Lnet/minecraft/item/AnimalArmorItem$Type;",
+                target = "(Ljava/lang/String;ILjava/util/function/Function;Lnet/minecraft/sound/SoundEvent;)Lnet/minecraft/item/AnimalArmorItem$Type;",
                 ordinal = 0
             ),
             slice = @Slice(
@@ -60,7 +62,7 @@ public class AnimalArmorItemExtender {
             method = "<init>",
             at = @At("TAIL")
         )
-        private void initSetNameField(String string, int i, Function<String, Identifier> textureIdFunction, CallbackInfo info) {
+        private void initSetNameField(String string, int i, Function<String, Identifier> textureIdFunction, SoundEvent breakSound, CallbackInfo info) {
             this.name = string.toLowerCase(Locale.ROOT);
         }
 

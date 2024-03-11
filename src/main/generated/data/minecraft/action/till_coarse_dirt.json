@@ -14,9 +14,7 @@
           "condition": "minecraft:location_check",
           "predicate": {
             "block": {
-              "blocks": [
-                "minecraft:coarse_dirt"
-              ]
+              "blocks": "minecraft:coarse_dirt"
             }
           }
         },
@@ -34,7 +32,7 @@
           "offsetY": 1,
           "predicate": {
             "block": {
-              "tag": "minecraft:air"
+              "blocks": "#minecraft:air"
             }
           }
         }

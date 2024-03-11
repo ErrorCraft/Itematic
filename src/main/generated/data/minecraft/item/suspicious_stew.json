@@ -30,7 +30,7 @@
           "entries": [
             {
               "action": {
-                "type": "minecraft:apply_suspicious_effects",
+                "type": "minecraft:apply_suspicious_stew_effects_from_item",
                 "entity": "this"
               }
             },

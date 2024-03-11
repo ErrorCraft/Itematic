@@ -1,58 +1,49 @@
 package net.errorcraft.itematic.item.color.colors;
 
 import com.mojang.serialization.Codec;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.errorcraft.itematic.item.color.ItemColor;
 import net.errorcraft.itematic.item.color.ItemColorType;
 import net.errorcraft.itematic.item.color.ItemColorTypes;
-import net.minecraft.item.FireworkRocketItem;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.util.math.ColorHelper;
 
 public record FireworkItemColor() implements ItemColor {
     public static final Codec<FireworkItemColor> CODEC = Codec.unit(new FireworkItemColor());
-    private static final int DEFAULT_FIREWORK_COLOR = 0x8a8a8a;
+    private static final int DEFAULT_FIREWORK_COLOR = 0xff8a8a8a;
 
     @Override
-    public int getColor(ItemStack stack, int tintIndex) {
+    public int color(ItemStack stack, int tintIndex) {
         if (tintIndex != 1) {
             return DEFAULT_COLOR;
         }
 
-        int[] colors = getExplosionColors(stack);
-        if (colors == null || colors.length == 0) {
+        IntList colors = stack.getOrDefault(DataComponentTypes.FIREWORK_EXPLOSION, FireworkExplosionComponent.DEFAULT).colors();
+        if (colors.isEmpty()) {
             return DEFAULT_FIREWORK_COLOR;
         }
 
-        if (colors.length == 1) {
-            return colors[0];
+        int size = colors.size();
+        if (size == 1) {
+            return ColorHelper.Argb.fullAlpha(colors.getInt(0));
         }
 
         int red = 0;
         int green = 0;
         int blue = 0;
         for (int color : colors) {
-            red += (color & 0xff0000) >> 16;
-            green += (color & 0x00ff00) >> 8;
-            blue += (color & 0x0000ff);
+            red += ColorHelper.Argb.getRed(color);
+            green += ColorHelper.Argb.getGreen(color);
+            blue += ColorHelper.Argb.getBlue(color);
         }
 
-        red /= colors.length;
-        green /= colors.length;
-        blue /= colors.length;
-        return red << 16 | green << 8 | blue;
+        return ColorHelper.Argb.getArgb(red / size, green / size, blue / size);
     }
 
     @Override
-    public ItemColorType<?> getType() {
+    public ItemColorType<?> type() {
         return ItemColorTypes.FIREWORK;
-    }
-
-    private static int[] getExplosionColors(ItemStack stack) {
-        NbtCompound nbt = stack.getSubNbt(FireworkRocketItem.EXPLOSION_KEY);
-        if (nbt == null || !nbt.contains(FireworkRocketItem.COLORS_KEY, NbtElement.INT_ARRAY_TYPE)) {
-            return null;
-        }
-        return nbt.getIntArray(FireworkRocketItem.COLORS_KEY);
     }
 }

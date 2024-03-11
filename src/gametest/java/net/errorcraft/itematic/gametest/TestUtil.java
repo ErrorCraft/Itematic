@@ -5,6 +5,7 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.component.DataComponentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,6 +28,14 @@ public class TestUtil {
     public static <T extends ItemComponent<T>> T getItemComponent(ItemStack stack, ItemComponentType<T> type) {
         return stack.itematic$getComponent(type)
             .orElseThrow(() -> new GameTestException("Item " + stack.itematic$key() + " does not contain the " + ItematicRegistries.ITEM_COMPONENT_TYPE.getKey(type).orElseThrow() + " item component"));
+    }
+
+    public static <T> T getComponent(ItemStack stack, DataComponentType<T> type) {
+        T component = stack.get(type);
+        if (component == null) {
+            throw new GameTestException("Item stack does not contain the " + type + " component");
+        }
+        return component;
     }
 
     public static <T extends BlockEntity> T getBlockEntity(TestContext context, BlockPos pos, BlockEntityType<T> type) {

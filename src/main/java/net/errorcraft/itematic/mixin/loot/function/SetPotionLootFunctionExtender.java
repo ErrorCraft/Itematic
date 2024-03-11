@@ -6,12 +6,13 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.loot.function.SetPotionLootFunctionAccess;
+import net.minecraft.component.DataComponentType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.function.SetPotionLootFunction;
 import net.minecraft.potion.Potion;
-import net.minecraft.registry.DefaultedRegistry;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -36,10 +37,10 @@ public class SetPotionLootFunctionExtender implements SetPotionLootFunctionAcces
         method = "method_53394",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/DefaultedRegistry;getEntryCodec()Lcom/mojang/serialization/Codec;"
+            target = "Lnet/minecraft/registry/Registry;getEntryCodec()Lcom/mojang/serialization/Codec;"
         )
     )
-    private static Codec<RegistryEntryList<Potion>> getEntryCodecUseRegistryEntryListCodec(DefaultedRegistry<Potion> instance) {
+    private static Codec<RegistryEntryList<Potion>> getEntryCodecUseRegistryEntryListCodec(Registry<Potion> instance) {
         return RegistryCodecs.entryList(RegistryKeys.POTION);
     }
 
@@ -75,12 +76,12 @@ public class SetPotionLootFunctionExtender implements SetPotionLootFunctionAcces
         method = "process",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/potion/PotionUtil;setPotion(Lnet/minecraft/item/ItemStack;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/item/ItemStack;apply(Lnet/minecraft/component/DataComponentType;Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;"
         )
     )
-    private boolean setPotionCheckForRegistryEntryFromRegistryEntryList(ItemStack stack, RegistryEntry<Potion> potion, @Local(argsOnly = true) LootContext context, @Share("potion") LocalRef<RegistryEntry<Potion>> potionRef) {
+    private <T, U> boolean applyPotionContentComponentCheckForRegistryEntryFromRegistryEntryList(ItemStack instance, DataComponentType<T> type, T defaultValue, U change, BiFunction<T, U, T> applier, @Local(argsOnly = true) LootContext context, @Share("potion") LocalRef<RegistryEntry<Potion>> potion) {
         Optional<RegistryEntry<Potion>> optionalEntry = this.potions.getRandom(context.getRandom());
-        optionalEntry.ifPresent(potionRef::set);
+        optionalEntry.ifPresent(potion::set);
         return optionalEntry.isPresent();
     }
 
@@ -88,11 +89,13 @@ public class SetPotionLootFunctionExtender implements SetPotionLootFunctionAcces
         method = "process",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/potion/PotionUtil;setPotion(Lnet/minecraft/item/ItemStack;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
-        )
+            target = "Lnet/minecraft/item/ItemStack;apply(Lnet/minecraft/component/DataComponentType;Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;"
+        ),
+        index = 1
     )
-    private RegistryEntry<Potion> setPotionUseRegistryEntryFromRegistryEntryList(RegistryEntry<Potion> potion, @Share("potion") LocalRef<RegistryEntry<Potion>> potionRef) {
-        return potionRef.get();
+    @SuppressWarnings("unchecked")
+    private <U> U applyPotionContentComponentUseRegistryEntryFromRegistryEntryList(U change, @Share("potion") LocalRef<RegistryEntry<Potion>> potion) {
+        return (U) potion.get();
     }
 
     @Override

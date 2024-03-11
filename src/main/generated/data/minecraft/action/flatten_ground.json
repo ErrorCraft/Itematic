@@ -32,7 +32,7 @@
           "condition": "minecraft:location_check",
           "predicate": {
             "block": {
-              "tag": "minecraft:flattenable_into_dirt_path"
+              "blocks": "#minecraft:flattenable_into_dirt_path"
             }
           }
         },
@@ -50,7 +50,7 @@
           "offsetY": 1,
           "predicate": {
             "block": {
-              "tag": "minecraft:air"
+              "blocks": "#minecraft:air"
             }
           }
         }

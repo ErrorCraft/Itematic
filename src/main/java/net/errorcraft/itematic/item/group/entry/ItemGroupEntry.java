@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.group.entry.entries.StackItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.entries.TagItemGroupEntry;
+import net.minecraft.component.ComponentChanges;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,6 @@ import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.function.Function;
 
 public abstract class ItemGroupEntry {
@@ -63,7 +63,7 @@ public abstract class ItemGroupEntry {
     }
 
     public static ItemGroupEntry requiresPermissions(RegistryEntry<Item> item) {
-        return new StackItemGroupEntry(ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS, true, item, Optional.empty());
+        return new StackItemGroupEntry(ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS, true, item, ComponentChanges.EMPTY);
     }
 
     public static ItemGroupEntry tag(TagKey<Item> tag) {

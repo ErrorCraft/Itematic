@@ -8,6 +8,7 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
 import net.minecraft.block.dispenser.DispenserBehavior;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -16,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 
@@ -51,8 +53,9 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
             return Optional.empty();
         }
         mobEntity.refreshPositionAfterTeleport(pos);
-        if (stack.hasCustomName()) {
-            mobEntity.setCustomName(stack.getName());
+        Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (customName != null) {
+            mobEntity.setCustomName(customName);
         }
         world.spawnEntityAndPassengers(mobEntity);
         stack.decrementUnlessCreative(1, user);

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.player;
 
-import com.mojang.authlib.GameProfile;
+import net.errorcraft.itematic.access.entity.LivingEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
@@ -9,30 +9,26 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.EnderChestInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityExtender extends LivingEntity {
+public abstract class PlayerEntityExtender extends LivingEntity implements LivingEntityAccess {
     @Shadow
     @Final
     private PlayerInventory inventory;
-
-    @Shadow
-    protected EnderChestInventory enderChestInventory;
 
     @Shadow
     @Final
@@ -40,19 +36,6 @@ public abstract class PlayerEntityExtender extends LivingEntity {
 
     protected PlayerEntityExtender(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
-    }
-
-    @Inject(
-        method = "<init>",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/entity/player/PlayerEntity;enderChestInventory:Lnet/minecraft/inventory/EnderChestInventory;",
-            opcode = Opcodes.PUTFIELD,
-            shift = At.Shift.AFTER
-        )
-    )
-    private void setPlayer(World world, BlockPos pos, float yaw, GameProfile gameProfile, CallbackInfo info) {
-        this.enderChestInventory.itematic$setPlayer((PlayerEntity)(Object) this);
     }
 
     @Redirect(
@@ -64,23 +47,6 @@ public abstract class PlayerEntityExtender extends LivingEntity {
     )
     private boolean isOfForTurtleHelmetUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.TURTLE_HELMET);
-    }
-
-    @Override
-    public ItemStack itematic$getAmmunition(ShooterItemComponent itemComponent) {
-        ItemStack heldStack = RangedWeaponItem.getHeldProjectile(this, itemComponent::isHeldAmmunition);
-        if (!heldStack.isEmpty()) {
-            return heldStack;
-        }
-
-        for (int i = 0; i < this.inventory.size(); ++i) {
-            ItemStack stack = this.inventory.getStack(i);
-            if (itemComponent.isAmmunition(stack)) {
-                return stack;
-            }
-        }
-
-        return this.abilities.creativeMode ? this.getWorld().itematic$createStack(ItemKeys.ARROW) : ItemStack.EMPTY;
     }
 
     @Redirect(
@@ -164,5 +130,22 @@ public abstract class PlayerEntityExtender extends LivingEntity {
     )
     private boolean isOfUseItemComponentCheck(ItemStack instance, Item item) {
         return instance.itematic$hasComponent(ItemComponentTypes.ZOOM);
+    }
+
+    @Override
+    public ItemStack itematic$getAmmunition(ShooterItemComponent itemComponent) {
+        ItemStack heldStack = RangedWeaponItem.getHeldProjectile(this, itemComponent::isHeldAmmunition);
+        if (!heldStack.isEmpty()) {
+            return heldStack;
+        }
+
+        for (int i = 0; i < this.inventory.size(); ++i) {
+            ItemStack stack = this.inventory.getStack(i);
+            if (itemComponent.isAmmunition(stack)) {
+                return stack;
+            }
+        }
+
+        return this.abilities.creativeMode ? this.getWorld().itematic$createStack(ItemKeys.ARROW) : ItemStack.EMPTY;
     }
 }

@@ -17,7 +17,7 @@
           "condition": "minecraft:location_check",
           "predicate": {
             "block": {
-              "tag": "minecraft:tillable_into_farmland"
+              "blocks": "#minecraft:tillable_into_farmland"
             }
           }
         },
@@ -35,7 +35,7 @@
           "offsetY": 1,
           "predicate": {
             "block": {
-              "tag": "minecraft:air"
+              "blocks": "#minecraft:air"
             }
           }
         }

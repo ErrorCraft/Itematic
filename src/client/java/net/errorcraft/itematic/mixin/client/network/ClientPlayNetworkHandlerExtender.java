@@ -51,17 +51,6 @@ public abstract class ClientPlayNetworkHandlerExtender extends ClientCommonNetwo
         return player.getWorld().itematic$createStack(ItemKeys.TOTEM_OF_UNDYING);
     }
 
-    @Redirect(
-        method = "onOpenWrittenBook",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForWrittenBookUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.TEXT_HOLDER);
-    }
-
     @Override
     @SuppressWarnings("DataFlowIssue")
     public void itematic$onTwirl(TwirlS2CPacket packet) {

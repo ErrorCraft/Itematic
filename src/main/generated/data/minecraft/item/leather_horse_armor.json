@@ -14,7 +14,7 @@
       "behavior": "minecraft:equipment"
     },
     "minecraft:dyeable": {
-      "default_color": 10511680
+      "default_color": -6265536
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_leather",

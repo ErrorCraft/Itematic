@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class BrushingModelOverride implements ModelOverride {
-    private static final float DURATION = BrushItem.field_43390;
+    private static final float DURATION = BrushItem.ANIMATION_DURATION;
 
     @Override
     public float apply(ItemStack stack, @Nullable World world, @Nullable LivingEntity target, int seed) {

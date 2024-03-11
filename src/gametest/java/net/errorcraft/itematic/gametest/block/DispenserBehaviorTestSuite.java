@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.gametest.block;
 
+import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.gametest.Assert;
 import net.errorcraft.itematic.gametest.TestUtil;
 import net.errorcraft.itematic.item.ItemKeys;
@@ -13,7 +14,6 @@ import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.passive.LlamaEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
@@ -75,7 +75,7 @@ public class DispenserBehaviorTestSuite {
     public void dispensingWaterBottleConvertsBlockToMud(TestContext context) {
         DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
         ServerWorld world = context.getWorld();
-        ItemStack stack = PotionUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER);
+        ItemStack stack = PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER);
         blockEntity.addToFirstFreeSlot(stack);
         context.pushButton(BUTTON_POSITION);
         context.addInstantFinalTask(() -> {

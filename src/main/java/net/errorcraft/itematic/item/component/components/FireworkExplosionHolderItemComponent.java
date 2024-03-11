@@ -5,10 +5,11 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.item.FireworkRocketItem;
-import net.minecraft.item.FireworkStarItem;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FireworkExplosionComponent;
+import net.minecraft.component.type.FireworksComponent;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,7 @@ import java.util.List;
 public record FireworkExplosionHolderItemComponent() implements ItemComponent<FireworkExplosionHolderItemComponent> {
     public static final FireworkExplosionHolderItemComponent INSTANCE = new FireworkExplosionHolderItemComponent();
     public static final Codec<FireworkExplosionHolderItemComponent> CODEC = Codec.unit(INSTANCE);
+    private static final FireworksComponent DEFAULT_COMPONENT = new FireworksComponent(1, List.of());
 
     @Override
     public ItemComponentType<FireworkExplosionHolderItemComponent> type() {
@@ -30,10 +32,15 @@ public record FireworkExplosionHolderItemComponent() implements ItemComponent<Fi
     }
 
     @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.FIREWORKS, DEFAULT_COMPONENT);
+    }
+
+    @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        NbtCompound explosion = stack.getSubNbt(FireworkRocketItem.EXPLOSION_KEY);
+        FireworkExplosionComponent explosion = stack.get(DataComponentTypes.FIREWORK_EXPLOSION);
         if (explosion != null) {
-            FireworkStarItem.appendFireworkTooltip(explosion, tooltip);
+            explosion.appendTooltip(tooltip::add, context);
         }
     }
 }

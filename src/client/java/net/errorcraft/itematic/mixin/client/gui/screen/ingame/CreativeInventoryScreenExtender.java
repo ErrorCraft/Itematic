@@ -36,7 +36,7 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
         )
     )
     @SuppressWarnings("ConstantConditions")
-    private void setSelectedTabStorePaperRegistryEntry(ItemGroup group, CallbackInfo info, @Share("paper") LocalRef<RegistryEntry<Item>> paper) {
+    private void storePaperRegistryEntry(ItemGroup group, CallbackInfo info, @Share("paper") LocalRef<RegistryEntry<Item>> paper) {
         paper.set(this.client.world.itematic$getItem(ItemKeys.PAPER));
     }
 
@@ -47,7 +47,7 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack setSelectedTabNewItemStackUseRegistryEntry(ItemConvertible item, @Share("paper") LocalRef<RegistryEntry<Item>> paper) {
+    private ItemStack newItemStackForPaperUseRegistryEntry(ItemConvertible item, @Share("paper") LocalRef<RegistryEntry<Item>> paper) {
         return new ItemStack(paper.get());
     }
 
@@ -59,7 +59,7 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
         )
     )
     @SuppressWarnings("ConstantConditions")
-    private ItemStack renderTabIconUseDynamicRegistry(ItemGroup instance, DrawContext context) {
+    private ItemStack getIconUseDynamicRegistry(ItemGroup instance, DrawContext context) {
         return instance.itematic$icon(this.client.world.itematic$getItemAccess());
     }
 

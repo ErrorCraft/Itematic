@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.ingame;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.client.gui.screen.ingame.CartographyTableScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -68,24 +67,5 @@ public class CartographyTableScreenExtender {
     )
     private boolean isOfForGlassPaneUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.GLASS_PANE);
-    }
-
-    @Redirect(
-        method = "drawBackground",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/item/Items;FILLED_MAP:Lnet/minecraft/item/Item;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
     }
 }

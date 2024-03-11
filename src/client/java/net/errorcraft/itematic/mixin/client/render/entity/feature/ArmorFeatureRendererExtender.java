@@ -139,11 +139,11 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         method = "renderArmor",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/DyeableItem;getColor(Lnet/minecraft/item/ItemStack;)I"
+            target = "Lnet/minecraft/component/type/DyedColorComponent;getColor(Lnet/minecraft/item/ItemStack;I)I"
         )
     )
-    private int getColorUseItemComponent(ItemStack stack, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
-        return tintedItemComponent.get().tint().getColor(stack, 0);
+    private int getColorUseItemComponent(ItemStack stack, int defaultColor, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
+        return tintedItemComponent.get().tint().color(stack, 0);
     }
 
     @Redirect(

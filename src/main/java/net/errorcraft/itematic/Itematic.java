@@ -1,5 +1,6 @@
 package net.errorcraft.itematic;
 
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.item.color.ItemColorTypes;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
@@ -39,5 +40,6 @@ public class Itematic implements ModInitializer {
         BlockStateModifierTypes.init();
         ItematicItemModifierTypes.init();
         TradeModifierTypes.init();
+        ItematicDataComponentTypes.init();
     }
 }

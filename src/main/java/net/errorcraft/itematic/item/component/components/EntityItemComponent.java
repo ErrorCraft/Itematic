@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
@@ -10,15 +11,25 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
 import net.errorcraft.itematic.item.placement.EntityPlacer;
+import net.errorcraft.itematic.mixin.item.DecorationItemAccessor;
+import net.errorcraft.itematic.mixin.item.SpawnEggItemAccessor;
 import net.minecraft.block.dispenser.DispenserBehavior;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.item.TooltipContext;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryEntryLookup;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
 public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItemData) implements ItemComponent<EntityItemComponent> {
@@ -26,6 +37,8 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
         EntityInitializer.CODEC.fieldOf("entity").forGetter(EntityItemComponent::entity),
         Codec.BOOL.optionalFieldOf("allow_item_data", false).forGetter(EntityItemComponent::allowItemData)
     ).apply(instance, EntityItemComponent::new));
+    private static final MapCodec<EntityType<?>> ENTITY_TYPE_MAP_CODEC = SpawnEggItemAccessor.entityTypeMapCodec();
+    private static final Text RANDOM_TEXT = DecorationItemAccessor.randomText();
 
     @Override
     public ItemComponentType<EntityItemComponent> type() {
@@ -35,6 +48,30 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
     @Override
     public Codec<EntityItemComponent> codec() {
         return CODEC;
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        if (this.entity.type() != EntityType.PAINTING) {
+            return;
+        }
+        NbtComponent entityData = stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT);
+        if (!entityData.isEmpty()) {
+            entityData.get(PaintingEntity.VARIANT_MAP_CODEC).result().ifPresentOrElse(
+                variant -> {
+                    variant.getKey().ifPresent((key) -> {
+                        tooltip.add(Text.translatable(key.getValue().toTranslationKey("painting", "title")).formatted(Formatting.YELLOW));
+                        tooltip.add(Text.translatable(key.getValue().toTranslationKey("painting", "author")).formatted(Formatting.GRAY));
+                    });
+                    tooltip.add(Text.translatable("painting.dimensions", MathHelper.ceilDiv(variant.value().getWidth(), 16), MathHelper.ceilDiv(variant.value().getHeight(), 16)));
+                },
+                () -> tooltip.add(RANDOM_TEXT)
+            );
+            return;
+        }
+        if (context.isCreative()) {
+            tooltip.add(RANDOM_TEXT);
+        }
     }
 
     public static EntityItemComponent of(EntityInitializer<?> entity) {
@@ -70,14 +107,9 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
         if (!this.allowItemData) {
             return this.entity;
         }
-        NbtCompound nbt = stack.getSubNbt(EntityType.ENTITY_TAG_KEY);
-        if (nbt == null) {
-            return this.entity;
-        }
-        if (!nbt.contains(Entity.ID_KEY)) {
-            return this.entity;
-        }
-        Optional<EntityInitializer<?>> initializer = EntityType.get(nbt.getString(Entity.ID_KEY))
+        NbtComponent entityData = stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT);
+        Optional<EntityInitializer<?>> initializer = entityData.get(ENTITY_TYPE_MAP_CODEC)
+            .result()
             .map(SimpleEntityInitializer::new);
         return initializer.orElse(this.entity);
     }

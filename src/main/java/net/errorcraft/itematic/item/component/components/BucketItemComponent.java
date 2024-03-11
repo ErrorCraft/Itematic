@@ -19,6 +19,9 @@ import net.errorcraft.itematic.item.placement.block.modifier.modifiers.SimpleBlo
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
 import net.errorcraft.itematic.util.ActionResultUtil;
 import net.minecraft.block.Block;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Bucketable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -70,6 +73,13 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         return this.place(world, user, hand, stack, resultStackConsumer, blockHitResult);
     }
 
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        if (this.entity.isPresent()) {
+            builder.add(DataComponentTypes.BUCKET_ENTITY_DATA, NbtComponent.DEFAULT);
+        }
+    }
+
     public ActionResult place(World world, @Nullable PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer, BlockHitResult blockHitResult) {
         StackReference stackReference = StackReferenceUtil.of(stack);
         ActionResult result = ActionResult.PASS;
@@ -114,7 +124,7 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
 
     public static void initializeBucketEntity(Entity entity, ItemStack stack) {
         if (entity instanceof Bucketable bucketable) {
-            bucketable.copyDataFromNbt(stack.getOrCreateNbt());
+            bucketable.copyDataFromNbt(stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT).copyNbt());
             bucketable.setFromBucket(true);
         }
     }

@@ -5,18 +5,20 @@ import net.errorcraft.itematic.block.ShapeContextUtil;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.placement.block.modifier.BlockStateModifier;
+import net.errorcraft.itematic.mixin.block.BlockItemAccessor;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.BlockStateComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
@@ -27,6 +29,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 public class BlockPlacer extends Placer {
     private final BlockStateModifier<?> block;
@@ -77,6 +81,7 @@ public class BlockPlacer extends Placer {
     private void placed(BlockState blockState) {
         blockState = this.placeFromNbt(blockState);
         BlockItem.writeNbtToBlockEntity(this.world, this.player, this.blockPos, this.stack);
+        BlockItemAccessor.copyComponentsToBlockEntity(world, blockPos, this.stack);
         blockState.getBlock().onPlaced(this.world, this.blockPos, blockState, this.player, this.stack);
         if (this.player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.PLACED_BLOCK.trigger(serverPlayer, this.blockPos, this.stack);
@@ -114,16 +119,14 @@ public class BlockPlacer extends Placer {
 
     private BlockState placeFromNbt(BlockState state) {
         BlockState blockState = state;
-        NbtCompound nbtCompound = this.stack.getNbt();
-        if (nbtCompound != null) {
-            NbtCompound nbtCompound2 = nbtCompound.getCompound(BlockItem.BLOCK_STATE_TAG_KEY);
+        BlockStateComponent blockStates = this.stack.get(DataComponentTypes.BLOCK_STATE);
+        if (blockStates != null) {
             StateManager<Block, BlockState> stateManager = state.getBlock().getStateManager();
 
-            for (String key : nbtCompound2.getKeys()) {
-                Property<?> property = stateManager.getProperty(key);
+            for (Map.Entry<String, String> entry : blockStates.properties().entrySet()) {
+                Property<?> property = stateManager.getProperty(entry.getKey());
                 if (property != null) {
-                    String value = nbtCompound2.getString(key);
-                    blockState = BlockStateUtil.with(blockState, property, value);
+                    blockState = BlockStateUtil.with(blockState, property, entry.getValue());
                 }
             }
         }

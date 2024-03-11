@@ -8,6 +8,8 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.block.Block;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,6 +31,11 @@ public record DamageableItemComponent(int durability, boolean preserveItem) impl
     @Override
     public Codec<DamageableItemComponent> codec() {
         return CODEC;
+    }
+
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.DAMAGE, 0);
     }
 
     public int maximumDamage() {

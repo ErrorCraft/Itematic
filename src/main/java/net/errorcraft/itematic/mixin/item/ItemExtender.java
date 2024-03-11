@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.item;
 
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Interner;
 import com.google.common.collect.Multimap;
 import net.errorcraft.itematic.access.item.ItemAccess;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
@@ -20,6 +21,9 @@ import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
@@ -30,8 +34,9 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
-import net.minecraft.item.*;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
@@ -56,18 +61,14 @@ import java.util.UUID;
 public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Shadow
     @Final
-    protected static UUID ATTACK_DAMAGE_MODIFIER_ID;
+    public static UUID ATTACK_DAMAGE_MODIFIER_ID;
 
     @Shadow
     @Final
-    protected static UUID ATTACK_SPEED_MODIFIER_ID;
+    public static UUID ATTACK_SPEED_MODIFIER_ID;
 
-    @Shadow
-    public abstract boolean isItemBarVisible(ItemStack stack);
-
-    @Shadow
-    public abstract int getItemBarStep(ItemStack stack);
-
+    @Unique
+    private static final Interner<ComponentMap> COMPONENT_INTERNER = ItemAccessor.SettingsAccessor.componentInterner();
     @Unique
     private ItemBase base;
     @Unique
@@ -420,6 +421,24 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
+    public ComponentMap getComponents() {
+        if (this.components == null) {
+            return ComponentMap.EMPTY;
+        }
+        ComponentMap.Builder builder = ComponentMap.builder()
+            .addAll(DataComponentTypes.DEFAULT_ITEM_COMPONENTS);
+        for (ItemComponent<?> component : this.components) {
+            component.addComponents(builder);
+        }
+        return COMPONENT_INTERNER.intern(builder.build());
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    @Deprecated
     public Multimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
         if (this.components == null) {
             return ImmutableMultimap.of();
@@ -448,7 +467,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return this.itematic$getComponent(ItemComponentTypes.GLINT)
             .map(GlintItemComponent::glint)
             .orElseGet(() -> {
-                if (this.itematic$hasComponent(ItemComponentTypes.POINTABLE) && CompassItem.hasLodestone(stack)) {
+                if (this.itematic$hasComponent(ItemComponentTypes.POINTABLE) && stack.contains(DataComponentTypes.LODESTONE_TARGET)) {
                     return true;
                 }
                 return stack.hasEnchantments();
@@ -599,19 +618,58 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .orElseGet(this::getTranslationKey);
     }
 
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public Optional<TooltipData> getTooltipData(ItemStack stack) {
+        return this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+            .flatMap(c -> c.tooltipData(stack));
+    }
+
+    @Inject(
+        method = "isItemBarVisible",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void isItemBarVisibleCheckItemHolderItemComponent(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
+        this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+            .map(c -> c.itemBarVisible(stack))
+            .ifPresent(info::setReturnValue);
+    }
+
+    @Inject(
+        method = "getItemBarStep",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void getItemBarStepCheckItemHolderItemComponent(ItemStack stack, CallbackInfoReturnable<Integer> info) {
+        this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+            .map(c -> c.itemBarStep(stack))
+            .ifPresent(info::setReturnValue);
+    }
+
     @Inject(
         method = "getName(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/text/Text;",
         at = @At("HEAD"),
         cancellable = true
     )
     private void checkTextHolderItemComponent(ItemStack stack, CallbackInfoReturnable<Text> info) {
-        if (stack.itematic$hasComponent(ItemComponentTypes.TEXT_HOLDER)) {
-            stack.itematic$nbt()
-                .map(nbt -> nbt.getString(WrittenBookItem.TITLE_KEY))
-                .filter(title -> !StringHelper.isEmpty(title))
-                .map(Text::literal)
-                .ifPresent(info::setReturnValue);
+        if (!stack.itematic$hasComponent(ItemComponentTypes.TEXT_HOLDER)) {
+            return;
         }
+
+        WrittenBookContentComponent writtenBookContent = stack.get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
+        if (writtenBookContent == null) {
+            return;
+        }
+
+        String title = writtenBookContent.title().raw();
+        if (StringHelper.isBlank(title)) {
+            return;
+        }
+        info.setReturnValue(Text.literal(title));
     }
 
     @Override
@@ -666,33 +724,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
-    public boolean itematic$isItemBarVisible(ItemStack stack, RegistryWrapper.WrapperLookup lookup) {
-        return this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
-            .map(c -> c.itemBarVisible(stack, lookup))
-            .orElseGet(() -> this.isItemBarVisible(stack));
-    }
-
-    @Override
-    public int itematic$itemBarStep(ItemStack stack, RegistryWrapper.WrapperLookup lookup) {
-        return this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
-            .map(c -> c.itemBarStep(stack, lookup))
-            .orElseGet(() -> this.getItemBarStep(stack));
-    }
-
-    @Override
     public boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return this.itematic$getComponent(ItemComponentTypes.FOOD)
             .map(c -> c.mayStartUsing(user))
             .orElse(true);
-    }
-
-    @Override
-    public Optional<TooltipData> itematic$tooltipData(ItemStack stack, @Nullable RegistryWrapper.WrapperLookup lookup) {
-        if (lookup == null) {
-            return Optional.empty();
-        }
-        return this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
-            .map(c -> c.tooltipData(stack, lookup));
     }
 
     @Override

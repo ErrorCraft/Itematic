@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
-import net.errorcraft.itematic.mixin.item.GoatHornItemAccessor;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Instrument;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -55,7 +55,7 @@ public class InstrumentItemGroupEntry extends ItemGroupEntry {
             .stream()
             .map(instrument -> {
                 ItemStack stack = new ItemStack(this.item);
-                GoatHornItemAccessor.setInstrument(stack, instrument);
+                stack.set(DataComponentTypes.INSTRUMENT, instrument);
                 return stack;
             })
             .toList();

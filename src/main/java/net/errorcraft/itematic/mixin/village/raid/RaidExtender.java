@@ -33,7 +33,7 @@ public abstract class RaidExtender {
         method = "getOminousBanner",
         at = @At(
             value = "NEW",
-            target = "()Lnet/minecraft/nbt/NbtCompound;"
+            target = "()Lnet/minecraft/component/type/BannerPatternsComponent$Builder;"
         ),
         cancellable = true
     )

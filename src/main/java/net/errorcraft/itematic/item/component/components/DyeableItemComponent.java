@@ -5,12 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.item.DyeableItem;
+import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 
-public record DyeableItemComponent(int defaultColor) implements ItemComponent<DyeableItemComponent>, DyeableItem {
+public record DyeableItemComponent(int defaultColor) implements ItemComponent<DyeableItemComponent> {
     public static final Codec<DyeableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.INT.fieldOf("default_color").forGetter(DyeableItemComponent::defaultColor)
     ).apply(instance, DyeableItemComponent::new));
@@ -26,15 +24,11 @@ public record DyeableItemComponent(int defaultColor) implements ItemComponent<Dy
     }
 
     public int getColor(ItemStack stack) {
-        NbtCompound display = stack.getSubNbt(DyeableItem.DISPLAY_KEY);
-        if (display != null && display.contains(DyeableItem.COLOR_KEY, NbtElement.NUMBER_TYPE)) {
-            return display.getInt(DyeableItem.COLOR_KEY);
-        }
-        return this.defaultColor;
+        return DyedColorComponent.getColor(stack, this.defaultColor);
     }
 
     public static DyeableItemComponent of() {
-        return of(DyeableItem.DEFAULT_COLOR);
+        return of(DyedColorComponent.field_49314);
     }
 
     public static DyeableItemComponent of(int defaultColor) {
