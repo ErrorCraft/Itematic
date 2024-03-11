@@ -14,7 +14,7 @@ public class CastModelOverride implements ModelOverride {
         if (target == null) {
             return 0.0f;
         }
-        if (!target.itematic$isHolding(stack)) {
+        if (!this.isValidStack(stack, target)) {
             return 0.0f;
         }
         if (!(target instanceof PlayerEntity player)) {
@@ -24,6 +24,17 @@ public class CastModelOverride implements ModelOverride {
             return 0.0f;
         }
         return 1.0f;
+    }
+
+    private boolean isValidStack(ItemStack stack, LivingEntity target) {
+        ItemStack mainHandStack = target.getMainHandStack();
+        if (mainHandStack == stack) {
+            return true;
+        }
+        if (target.getOffHandStack() == stack) {
+            return !this.isApplicable(mainHandStack);
+        }
+        return false;
     }
 
     @Override

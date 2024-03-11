@@ -18,6 +18,7 @@
       "net.errorcraft.itematic.gametest.entity.passive.GoatEntitySuite",
       "net.errorcraft.itematic.gametest.entity.passive.SnifferEntitySuite",
       "net.errorcraft.itematic.gametest.entity.passive.WolfEntitySuite",
+      "net.errorcraft.itematic.gametest.item.FishingRodTestSuite",
       "net.errorcraft.itematic.gametest.item.component.BlockItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.ConsumableItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.EquipmentItemComponentTestSuite",

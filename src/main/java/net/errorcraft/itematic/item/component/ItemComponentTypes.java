@@ -62,6 +62,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<DebugStickItemComponent> DEBUG_STICK = register("debug_stick", new ItemComponentType<>(DebugStickItemComponent.CODEC));
     public static final ItemComponentType<SuspiciousEffectIngredientItemComponent> SUSPICIOUS_EFFECT_INGREDIENT = register("suspicious_effect_ingredient", new ItemComponentType<>(SuspiciousEffectIngredientItemComponent.CODEC));
     public static final ItemComponentType<RecipeRemainderItemComponent> RECIPE_REMAINDER = register("recipe_remainder", new ItemComponentType<>(RecipeRemainderItemComponent.CODEC));
+    public static final ItemComponentType<CastableItemComponent> CASTABLE = register("castable", new ItemComponentType<>(CastableItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

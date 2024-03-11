@@ -402,11 +402,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Override
-    public boolean itematic$isHolding(ItemStack stack) {
-        return this.isHolding(s -> s == stack);
-    }
-
-    @Override
     public void itematic$eatFood(World world, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         this.eatFood(world, stack);
         if (world instanceof ServerWorld serverWorld) {

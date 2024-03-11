@@ -4112,6 +4112,7 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.FISHING_ROD, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FISHING_ROD).build(), 1),
                 ItemComponentSet.builder()
+                    .with(CastableItemComponent.INSTANCE)
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .build()
             ));

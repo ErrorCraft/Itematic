@@ -12,9 +12,6 @@ public interface LivingEntityAccess {
     default boolean itematic$isHolding(RegistryKey<Item> key) {
         return false;
     }
-    default boolean itematic$isHolding(ItemStack stack) {
-        return false;
-    }
     default ItemStack itematic$getAmmunition(ShooterItemComponent itemComponent) {
         return ItemStack.EMPTY;
     }
