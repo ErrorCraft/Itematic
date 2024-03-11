@@ -447,8 +447,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         if (slot == EquipmentSlot.MAINHAND) {
             this.itematic$getComponent(ItemComponentTypes.WEAPON)
                 .ifPresent(c -> {
-                    attributeModifiers.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", c.attackDamage(), EntityAttributeModifier.Operation.ADDITION));
-                    attributeModifiers.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", c.attackSpeed(), EntityAttributeModifier.Operation.ADDITION));
+                    attributeModifiers.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", c.attackDamage(), EntityAttributeModifier.Operation.ADD_VALUE));
+                    attributeModifiers.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", c.attackSpeed(), EntityAttributeModifier.Operation.ADD_VALUE));
                 });
         }
         if (slot == this.itematic$getComponent(ItemComponentTypes.EQUIPMENT).map(EquipmentItemComponent::slot).orElse(null)) {
@@ -467,7 +467,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return this.itematic$getComponent(ItemComponentTypes.GLINT)
             .map(GlintItemComponent::glint)
             .orElseGet(() -> {
-                if (this.itematic$hasComponent(ItemComponentTypes.POINTABLE) && stack.contains(DataComponentTypes.LODESTONE_TARGET)) {
+                if (this.itematic$hasComponent(ItemComponentTypes.POINTABLE) && stack.contains(DataComponentTypes.LODESTONE_TRACKER)) {
                     return true;
                 }
                 return stack.hasEnchantments();

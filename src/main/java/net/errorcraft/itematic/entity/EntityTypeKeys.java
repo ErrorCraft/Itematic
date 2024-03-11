@@ -46,6 +46,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> MOOSHROOM = of("mooshroom");
     public static final RegistryKey<EntityType<?>> MULE = of("mule");
     public static final RegistryKey<EntityType<?>> OCELOT = of("ocelot");
+    public static final RegistryKey<EntityType<?>> PAINTING = of("painting");
     public static final RegistryKey<EntityType<?>> PANDA = of("panda");
     public static final RegistryKey<EntityType<?>> PARROT = of("parrot");
     public static final RegistryKey<EntityType<?>> PHANTOM = of("phantom");

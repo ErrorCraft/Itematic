@@ -7,7 +7,7 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.LodestoneTargetComponent;
+import net.minecraft.component.type.LodestoneTrackerComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -41,14 +41,18 @@ public record PointableItemComponent(RegistryEntry<Pointer> pointsTo, Optional<S
         if (!(world instanceof ServerWorld serverWorld)) {
             return;
         }
-        LodestoneTargetComponent lodestoneTarget = stack.get(DataComponentTypes.LODESTONE_TARGET);
-        if (lodestoneTarget != null && lodestoneTarget.isInvalid(serverWorld)) {
-            stack.remove(DataComponentTypes.LODESTONE_TARGET);
+        LodestoneTrackerComponent lodestoneTracker = stack.get(DataComponentTypes.LODESTONE_TRACKER);
+        if (lodestoneTracker == null) {
+            return;
+        }
+        LodestoneTrackerComponent lodestoneTrackerForCurrentWorld = lodestoneTracker.forWorld(serverWorld);
+        if (lodestoneTrackerForCurrentWorld != lodestoneTracker) {
+            stack.set(DataComponentTypes.LODESTONE_TRACKER, lodestoneTrackerForCurrentWorld);
         }
     }
 
     public Optional<String> lodestoneTranslationKey(ItemStack stack) {
-        if (stack.contains(DataComponentTypes.LODESTONE_TARGET)) {
+        if (stack.contains(DataComponentTypes.LODESTONE_TRACKER)) {
             return this.lodestoneTranslationKey;
         }
         return Optional.empty();

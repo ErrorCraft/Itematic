@@ -3,11 +3,13 @@ package net.errorcraft.itematic.item.group.entry.entries;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.mixin.item.ItemGroupsAccessor;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.item.Item;
@@ -70,6 +72,7 @@ public class PaintingVariantItemGroupEntry extends ItemGroupEntry {
             .sorted(PAINTING_VARIANT_COMPARATOR)
             .map(variant -> NbtComponent.DEFAULT.with(PaintingEntity.VARIANT_MAP_CODEC, variant).resultOrPartial(LOGGER::error))
             .flatMap(Optional::stream)
+            .map(nbt -> nbt.apply(newNbt -> newNbt.putString(Entity.ID_KEY, EntityTypeKeys.PAINTING.getValue().toString())))
             .map(nbt -> {
                 ItemStack stack = new ItemStack(this.item);
                 stack.set(DataComponentTypes.ENTITY_DATA, nbt);

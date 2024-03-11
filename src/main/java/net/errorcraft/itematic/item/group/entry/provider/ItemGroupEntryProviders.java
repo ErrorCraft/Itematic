@@ -7,6 +7,7 @@ import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.entries.*;
 import net.errorcraft.itematic.village.raid.RaidUtil;
 import net.minecraft.block.LightBlock;
+import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FireworksComponent;
@@ -35,6 +36,7 @@ public class ItemGroupEntryProviders {
     public static void bootstrap(Registerable<ItemGroupEntryProvider> registerable) {
         RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
         RegistryEntryLookup<Enchantment> enchantments = registerable.getRegistryLookup(RegistryKeys.ENCHANTMENT);
+        RegistryEntryLookup<BannerPattern> bannerPatterns = registerable.getRegistryLookup(RegistryKeys.BANNER_PATTERN);
 
         registerable.register(ItemGroupEntryProviderKeys.BUILDING_BLOCKS, ItemGroupEntryProvider.of(
             ItemGroupEntry.tag(ItematicItemTags.WOODEN_BUILDING_BLOCKS),
@@ -160,7 +162,7 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.tag(ItematicItemTags.BEDS),
             ItemGroupEntry.tag(ItematicItemTags.CANDLES),
             ItemGroupEntry.tag(ItematicItemTags.BANNERS),
-            StackItemGroupEntry.fromStack(RaidUtil.createOminousBanner(items)),
+            StackItemGroupEntry.fromStack(RaidUtil.createOminousBanner(items, bannerPatterns)),
             ItemGroupEntry.tag(ItematicItemTags.HEADS),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.DRAGON_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.END_PORTAL_FRAME)),

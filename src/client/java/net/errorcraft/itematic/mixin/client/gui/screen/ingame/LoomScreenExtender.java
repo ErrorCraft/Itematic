@@ -10,6 +10,7 @@ import net.minecraft.item.BannerItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.LoomScreenHandler;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +24,7 @@ public abstract class LoomScreenExtender extends HandledScreen<LoomScreenHandler
     }
 
     @Redirect(
-        method = "onInventoryChanged",
+        method = "drawBackground",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
@@ -34,14 +35,15 @@ public abstract class LoomScreenExtender extends HandledScreen<LoomScreenHandler
     }
 
     @Redirect(
-        method = "onInventoryChanged",
+        method = "drawBackground",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/BannerItem;getColor()Lnet/minecraft/util/DyeColor;"
         )
     )
-    private DyeColor getColorUseItemComponent(BannerItem instance, @Local(ordinal = 0) ItemStack outputStack) {
-        return outputStack.itematic$getComponent(ItemComponentTypes.BANNER_PATTERN_HOLDER)
+    private DyeColor getColorUseItemComponent(BannerItem instance, @Local(ordinal = 3) Slot outputSlot) {
+        return outputSlot.getStack()
+            .itematic$getComponent(ItemComponentTypes.BANNER_PATTERN_HOLDER)
             .flatMap(BannerPatternHolderItemComponent::color)
             .orElse(DyeColor.WHITE);
     }

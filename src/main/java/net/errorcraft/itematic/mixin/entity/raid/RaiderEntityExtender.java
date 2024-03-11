@@ -1,10 +1,12 @@
 package net.errorcraft.itematic.mixin.entity.raid;
 
 import net.errorcraft.itematic.village.raid.RaidUtil;
+import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.PatrolEntity;
 import net.minecraft.entity.raid.RaiderEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,11 +24,11 @@ public class RaiderEntityExtender extends PatrolEntity {
         method = { "onDeath", "loot" },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/village/raid/Raid;getOminousBanner()Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/village/raid/Raid;getOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack getOminousBannerUseRegistryEntry() {
-        return RaidUtil.createOminousBanner(this.getWorld());
+    private ItemStack getOminousBannerUseRegistryEntry(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
+        return RaidUtil.createOminousBanner(this.getWorld(), bannerPatternLookup);
     }
 
     @Mixin(RaiderEntity.PickupBannerAsLeaderGoal.class)
@@ -39,11 +41,11 @@ public class RaiderEntityExtender extends PatrolEntity {
             method = "canStart",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/village/raid/Raid;getOminousBanner()Lnet/minecraft/item/ItemStack;"
+                target = "Lnet/minecraft/village/raid/Raid;getOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
             )
         )
-        private ItemStack getOminousBannerUseRegistryEntry() {
-            return RaidUtil.createOminousBanner(this.actor.getWorld());
+        private ItemStack getOminousBannerUseRegistryEntry(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
+            return RaidUtil.createOminousBanner(this.actor.getWorld(), bannerPatternLookup);
         }
     }
 }

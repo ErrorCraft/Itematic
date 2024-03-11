@@ -2,8 +2,10 @@ package net.errorcraft.itematic.mixin.village.raid;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.village.raid.RaidUtil;
+import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.village.raid.Raid;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,10 +49,10 @@ public abstract class RaidExtender {
         method = "setWaveCaptain",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/village/raid/Raid;getOminousBanner()Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/village/raid/Raid;getOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack getOminousBannerUseRegistryEntry() {
-        return RaidUtil.createOminousBanner(this.getWorld());
+    private ItemStack getOminousBannerUseRegistryEntry(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
+        return RaidUtil.createOminousBanner(this.getWorld(), bannerPatternLookup);
     }
 }

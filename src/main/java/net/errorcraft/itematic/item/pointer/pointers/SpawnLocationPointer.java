@@ -2,7 +2,7 @@ package net.errorcraft.itematic.item.pointer.pointers;
 
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.LodestoneTargetComponent;
+import net.minecraft.component.type.LodestoneTrackerComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.CompassItem;
 import net.minecraft.item.ItemStack;
@@ -13,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
 public class SpawnLocationPointer implements Pointer {
     @Override
     public @Nullable GlobalPos createPos(ItemStack stack, World world, Entity target) {
-        LodestoneTargetComponent lodestoneTarget = stack.get(DataComponentTypes.LODESTONE_TARGET);
-        if (lodestoneTarget != null) {
-            return lodestoneTarget.pos();
+        LodestoneTrackerComponent lodestoneTracker = stack.get(DataComponentTypes.LODESTONE_TRACKER);
+        if (lodestoneTracker != null) {
+            return lodestoneTracker.target().orElse(null);
         }
         return CompassItem.createSpawnPos(world);
     }

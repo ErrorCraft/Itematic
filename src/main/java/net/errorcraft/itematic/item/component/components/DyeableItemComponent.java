@@ -28,7 +28,7 @@ public record DyeableItemComponent(int defaultColor) implements ItemComponent<Dy
     }
 
     public static DyeableItemComponent of() {
-        return of(DyedColorComponent.field_49314);
+        return of(DyedColorComponent.DEFAULT_COLOR);
     }
 
     public static DyeableItemComponent of(int defaultColor) {

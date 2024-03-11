@@ -263,7 +263,6 @@
     "recipe.BannerDuplicateRecipeExtender",
     "recipe.BookCloningRecipeExtender",
     "recipe.BrewingRecipeRegistryExtender",
-    "recipe.CookingRecipeSerializerExtender",
     "recipe.CraftingDecoratedPotRecipeExtender",
     "recipe.FireworkRocketRecipeExtender",
     "recipe.FireworkStarFadeRecipeExtender",
