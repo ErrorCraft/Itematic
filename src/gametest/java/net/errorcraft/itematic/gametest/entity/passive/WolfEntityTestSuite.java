@@ -14,7 +14,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
-public class WolfEntitySuite {
+public class WolfEntityTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 2, 1);
 
     @GameTest(templateName = "itematic:entity.platform")

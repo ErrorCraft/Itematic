@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.Optional;
 
-public class CamelEntitySuite {
+public class CamelEntityTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 2, 1);
 
     @GameTest(templateName = "itematic:entity.platform")

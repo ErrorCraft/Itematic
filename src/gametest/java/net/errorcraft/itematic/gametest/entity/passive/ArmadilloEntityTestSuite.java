@@ -4,7 +4,7 @@ import net.errorcraft.itematic.gametest.TestUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.passive.GoatEntity;
+import net.minecraft.entity.passive.ArmadilloEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -17,25 +17,25 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.Optional;
 
-public class GoatEntitySuite {
+public class ArmadilloEntityTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 2, 1);
 
     @GameTest(templateName = "itematic:entity.platform")
     @SuppressWarnings("removal")
-    public void holdingWheatTemptsGoat(TestContext context) {
-        GoatEntity goat = context.spawnEntity(EntityType.GOAT, SPAWN_POSITION);
+    public void holdingSpiderEyeTemptsArmadillo(TestContext context) {
+        ArmadilloEntity armadillo = context.spawnEntity(EntityType.ARMADILLO, SPAWN_POSITION);
         ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.WHEAT);
+        ItemStack stack = world.itematic$createStack(ItemKeys.SPIDER_EYE);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
         context.addInstantFinalTask(() -> {
-            Optional<PlayerEntity> temptingPlayer = goat.getBrain().getOptionalRegisteredMemory(MemoryModuleType.TEMPTING_PLAYER);
+            Optional<PlayerEntity> temptingPlayer = armadillo.getBrain().getOptionalRegisteredMemory(MemoryModuleType.TEMPTING_PLAYER);
             if (temptingPlayer.isEmpty()) {
-                throw new GameTestException("Goat was not tempted by a player");
+                throw new GameTestException("Armadillo was not tempted by a player");
             }
             if (temptingPlayer.get() != player) {
-                throw new GameTestException("Goat was not tempted by the expected player");
+                throw new GameTestException("Armadillo was not tempted by the expected player");
             }
         });
     }
