@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
@@ -385,6 +386,17 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     )
     private ItemStack newItemStackForWitherRoseUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.WITHER_ROSE);
+    }
+
+    @ModifyReturnValue(
+        method = "getItemUseTime",
+        at = @At(
+            value = "RETURN",
+            ordinal = 0
+        )
+    )
+    private int getItemUseTimeUseField(int original) {
+        return this.itemUsedTicks;
     }
 
     /**
