@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(PiglinBrain.class)
 public class PiglinBrainExtender {
     @Redirect(
-        method = { "loot", "canGather", "acceptsForBarter" },
+        method = { "loot", "canGather" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
@@ -20,6 +20,17 @@ public class PiglinBrainExtender {
     )
     private static boolean isOfForGoldNuggetUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.GOLD_NUGGET);
+    }
+
+    @Redirect(
+        method = "acceptsForBarter",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private static boolean isOfForGoldIngotUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.GOLD_INGOT);
     }
 
     @Redirect(

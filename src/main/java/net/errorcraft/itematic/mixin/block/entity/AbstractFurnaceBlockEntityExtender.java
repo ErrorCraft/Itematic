@@ -49,6 +49,25 @@ public class AbstractFurnaceBlockEntityExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
+                target = "Lnet/minecraft/block/Blocks;WET_SPONGE:Lnet/minecraft/block/Block;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private static boolean isOfForWetSpongeUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.WET_SPONGE);
+    }
+
+    @Redirect(
+        method = "craftRecipe",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
                 target = "Lnet/minecraft/item/Items;BUCKET:Lnet/minecraft/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )

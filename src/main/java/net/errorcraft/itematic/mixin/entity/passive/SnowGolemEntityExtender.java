@@ -2,10 +2,10 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,11 +32,11 @@ public class SnowGolemEntityExtender extends GolemEntity {
     @Redirect(
         method = "sheared",
         at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/SnowGolemEntity;dropStack(Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;"
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemEntity dropStackForCarvedPumpkinUseRegistryKey(SnowGolemEntity instance, ItemStack stack, float yOffset) {
-        return this.itematic$dropItem(ItemKeys.CARVED_PUMPKIN, yOffset);
+    private ItemStack newItemStackForCarvedPumpkinUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.CARVED_PUMPKIN);
     }
 }

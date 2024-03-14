@@ -19,7 +19,7 @@ public interface WaterloggableExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack tryDrainFluidNewItemStackUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
-        return new ItemStack(world.itematic$getItem(ItemKeys.WATER_BUCKET));
+    private ItemStack newItemStackForWaterBucketUseCreateStack(ItemConvertible item, @Local(argsOnly = true) WorldAccess world) {
+        return world.itematic$createStack(ItemKeys.WATER_BUCKET);
     }
 }

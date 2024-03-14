@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(BoatEntity.class)
 public abstract class BoatEntityExtender extends VehicleEntityExtender {
@@ -38,7 +39,14 @@ public abstract class BoatEntityExtender extends VehicleEntityExtender {
         method = "fall",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/vehicle/BoatEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+            target = "Lnet/minecraft/entity/vehicle/BoatEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;STICK:Lnet/minecraft/item/Item;"
+            )
         )
     )
     private ItemEntity dropItemForStickUseRegistryKey(BoatEntity instance, ItemConvertible itemConvertible) {

@@ -24,7 +24,7 @@ public abstract class TropicalFishEntityExtender extends SchoolingFishEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getBucketItemNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.TROPICAL_FISH_BUCKET));
+    private ItemStack newItemStackForTropicalFishBucketUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.TROPICAL_FISH_BUCKET);
     }
 }

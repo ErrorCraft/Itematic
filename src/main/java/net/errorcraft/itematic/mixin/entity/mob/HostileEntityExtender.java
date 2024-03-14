@@ -36,7 +36,7 @@ public class HostileEntityExtender extends PathAwareEntity {
             ordinal = 0
         )
     )
-    private boolean getProjectileTypeInstanceOfRangedWeaponItemUseItemComponentCheck(Object reference, Class<RangedWeaponItem> clazz, @Local(ordinal = 0) ItemStack itemStack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
+    private boolean instanceOfRangedWeaponItemUseItemComponentCheck(Object reference, Class<RangedWeaponItem> clazz, @Local(ordinal = 0) ItemStack itemStack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
         Optional<ShooterItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.SHOOTER);
         optionalComponent.ifPresent(shooterItemComponent::set);
         return optionalComponent.isPresent();
@@ -50,7 +50,7 @@ public class HostileEntityExtender extends PathAwareEntity {
             ordinal = 1
         )
     )
-    private Item getProjectileTypeCastToRangedWeaponItemUseNull(ItemStack instance) {
+    private Item castToRangedWeaponItemUseNull(ItemStack instance) {
         return null;
     }
 
@@ -61,7 +61,7 @@ public class HostileEntityExtender extends PathAwareEntity {
             target = "Lnet/minecraft/item/RangedWeaponItem;getHeldProjectiles()Ljava/util/function/Predicate;"
         )
     )
-    private Predicate<ItemStack> getProjectileTypeGetHeldProjectilesUseItemComponent(RangedWeaponItem instance, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
+    private Predicate<ItemStack> getHeldProjectilesUseItemComponent(RangedWeaponItem instance, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
         return shooterItemComponent.get()::isHeldAmmunition;
     }
 
@@ -72,7 +72,7 @@ public class HostileEntityExtender extends PathAwareEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForArrowUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForArrowUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.ARROW);
     }
 }

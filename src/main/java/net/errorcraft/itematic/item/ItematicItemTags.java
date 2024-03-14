@@ -57,6 +57,9 @@ public class ItematicItemTags {
     public static final TagKey<Item> SNIFFER_TEMPT_ITEMS = of("sniffer_tempt_items");
     public static final TagKey<Item> WOLF_FOOD = of("wolf_food");
     public static final TagKey<Item> WOLF_TEMPT_ITEMS = of("wolf_tempt_items");
+    public static final TagKey<Item> PANDA_FOOD = of("panda_food");
+    public static final TagKey<Item> PANDA_EAT_ITEMS = of("panda_eat_items");
+    public static final TagKey<Item> TURTLE_FOOD = of("turtle_food");
     public static final TagKey<Item> VILLAGER_GATHERABLE_ITEMS = of("villager_gatherable_items");
     public static final TagKey<Item> FARMER_VILLAGER_GATHERABLE_ITEMS = of("farmer_villager_gatherable_items");
 

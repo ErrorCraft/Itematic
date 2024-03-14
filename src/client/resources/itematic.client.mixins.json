@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "MinecraftClientExtender",
+    "gui.hud.InGameHudExtender",
     "gui.screen.CustomizeFlatLevelScreenExtender",
     "gui.screen.CustomizeFlatLevelScreenExtender$SuperflatLayersListWidgetExtender",
     "gui.screen.CustomizeFlatLevelScreenExtender$SuperflatLayersListWidgetExtender$SuperflatLayerEntryExtender",

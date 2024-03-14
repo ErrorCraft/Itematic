@@ -19,7 +19,7 @@ public class StepAndDestroyBlockGoalExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack tickNewItemStackUseRegistryEntry(ItemConvertible item, @Local World world) {
-        return new ItemStack(world.itematic$getItem(ItemKeys.EGG));
+    private ItemStack newItemStackForEggUseCreateStack(ItemConvertible item, @Local World world) {
+        return world.itematic$createStack(ItemKeys.EGG);
     }
 }

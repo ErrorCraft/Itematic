@@ -31,7 +31,7 @@ public class PowderSnowBlockExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForPowderSnowBucketUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
+    private ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemConvertible item, @Local(argsOnly = true) WorldAccess world) {
         return world.itematic$createStack(ItemKeys.POWDER_SNOW_BUCKET);
     }
 }

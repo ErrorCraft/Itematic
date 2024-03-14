@@ -24,7 +24,7 @@ public abstract class SalmonEntityExtender extends SchoolingFishEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getBucketItemNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.SALMON_BUCKET));
+    private ItemStack newItemStackForSalmonBucketUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.SALMON_BUCKET);
     }
 }

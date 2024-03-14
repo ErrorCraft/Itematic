@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
+import net.errorcraft.itematic.access.entity.mob.MobEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.minecraft.entity.EntityType;
@@ -15,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(PiglinEntity.class)
-public abstract class PiglinEntityExtender extends AbstractPiglinEntity {
+public abstract class PiglinEntityExtender extends AbstractPiglinEntity implements MobEntityAccess {
     public PiglinEntityExtender(EntityType<? extends AbstractPiglinEntity> entityType, World world) {
         super(entityType, world);
     }

@@ -25,7 +25,7 @@ public abstract class ArmorStandEntityExtender extends LivingEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getPickBlockStackNewItemStackUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForArmorStandUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.ARMOR_STAND);
     }
 

@@ -32,7 +32,7 @@ public class BoneMealTaskExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForBoneMealUseRegistryEntry(ItemConvertible item, ServerWorld world) {
+    private ItemStack newItemStackForBoneMealUseCreateStack(ItemConvertible item, ServerWorld world) {
         return world.itematic$createStack(ItemKeys.BONE_MEAL);
     }
 

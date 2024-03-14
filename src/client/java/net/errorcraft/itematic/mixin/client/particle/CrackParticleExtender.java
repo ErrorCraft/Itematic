@@ -20,7 +20,7 @@ public class CrackParticleExtender {
                 target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
             )
         )
-        private ItemStack newItemStackForSnowballUseRegistryEntry(ItemConvertible item, @Local ClientWorld clientWorld) {
+        private ItemStack newItemStackForSnowballUseCreateStack(ItemConvertible item, @Local(argsOnly = true) ClientWorld clientWorld) {
             return clientWorld.itematic$createStack(ItemKeys.SNOWBALL);
         }
     }
@@ -34,7 +34,7 @@ public class CrackParticleExtender {
                 target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
             )
         )
-        private ItemStack newItemStackForSlimeBallUseRegistryEntry(ItemConvertible item, @Local ClientWorld clientWorld) {
+        private ItemStack newItemStackForSlimeBallUseCreateStack(ItemConvertible item, @Local(argsOnly = true) ClientWorld clientWorld) {
             return clientWorld.itematic$createStack(ItemKeys.SLIME_BALL);
         }
     }

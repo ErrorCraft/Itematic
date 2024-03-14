@@ -24,7 +24,7 @@ public abstract class EndCrystalEntityExtender extends Entity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getPickBlockStackNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.END_CRYSTAL));
+    private ItemStack newItemStackForEndCrystalUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.END_CRYSTAL);
     }
 }

@@ -19,7 +19,7 @@ public interface CaveVinesExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private static ItemStack pickBerriesNewItemStackUseRegistryEntry(ItemConvertible item, int count, @Local World world) {
-        return new ItemStack(world.itematic$getItem(ItemKeys.GLOW_BERRIES), count);
+    private static ItemStack newItemStackForGlowBerriesUseCreateStack(ItemConvertible item, int count, @Local(argsOnly = true) World world) {
+        return world.itematic$createStack(ItemKeys.GLOW_BERRIES, count);
     }
 }

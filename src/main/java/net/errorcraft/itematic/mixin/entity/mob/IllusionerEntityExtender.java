@@ -28,8 +28,8 @@ public abstract class IllusionerEntityExtender extends SpellcastingIllagerEntity
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack initializeNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.BOW));
+    private ItemStack newItemStackForBowUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.BOW);
     }
 
     @Redirect(

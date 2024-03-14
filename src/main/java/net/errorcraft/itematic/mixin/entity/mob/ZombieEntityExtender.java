@@ -37,7 +37,7 @@ public class ZombieEntityExtender extends HostileEntity {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForZombieHeadUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForZombieHeadUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.ZOMBIE_HEAD);
     }
 

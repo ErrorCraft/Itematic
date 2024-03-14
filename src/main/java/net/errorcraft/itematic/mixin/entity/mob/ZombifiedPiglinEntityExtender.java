@@ -24,7 +24,7 @@ public class ZombifiedPiglinEntityExtender extends ZombieEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForGoldenSwordUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.GOLDEN_SWORD));
+    private ItemStack newItemStackForGoldenSwordUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
     }
 }

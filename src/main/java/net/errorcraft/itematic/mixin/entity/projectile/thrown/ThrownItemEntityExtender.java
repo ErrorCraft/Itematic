@@ -21,7 +21,7 @@ public abstract class ThrownItemEntityExtender extends ThrownEntity {
     }
 
     @Redirect(
-        method = { "initDataTracker", "readCustomDataFromNbt" },
+        method = { "initDataTracker", "readCustomDataFromNbt", "method_57319" },
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"

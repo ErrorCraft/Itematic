@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
+import net.errorcraft.itematic.access.entity.mob.MobEntityAccess;
 import net.errorcraft.itematic.entity.projectile.ItematicProjectileUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
@@ -17,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(AbstractSkeletonEntity.class)
-public class AbstractSkeletonEntityExtender extends HostileEntity {
+public class AbstractSkeletonEntityExtender extends HostileEntity implements MobEntityAccess {
     protected AbstractSkeletonEntityExtender(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -29,7 +30,7 @@ public class AbstractSkeletonEntityExtender extends HostileEntity {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForBowUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForBowUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.BOW);
     }
 

@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
+import net.errorcraft.itematic.access.entity.mob.MobEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.minecraft.entity.EntityType;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PillagerEntity.class)
-public abstract class PillagerEntityExtender extends IllagerEntity {
+public abstract class PillagerEntityExtender extends IllagerEntity implements MobEntityAccess {
     protected PillagerEntityExtender(EntityType<? extends IllagerEntity> entityType, World world) {
         super(entityType, world);
     }

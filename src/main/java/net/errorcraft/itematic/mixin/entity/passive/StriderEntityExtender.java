@@ -66,7 +66,7 @@ public abstract class StriderEntityExtender extends AnimalEntity {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForWarpedFungusOnAStickUseCreateStack(ItemConvertible item, @Local ServerWorldAccess world) {
+    private ItemStack newItemStackForWarpedFungusOnAStickUseCreateStack(ItemConvertible item, @Local(argsOnly = true) ServerWorldAccess world) {
         return world.itematic$createStack(ItemKeys.WARPED_FUNGUS_ON_A_STICK);
     }
 

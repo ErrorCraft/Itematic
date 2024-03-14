@@ -30,7 +30,7 @@ public class FarmerWorkTaskExtender {
             ordinal = 0
         )
     )
-    private Item getBreadUseDynamicRegistry(@Local VillagerEntity entity) {
+    private Item getBreadUseDynamicRegistry(@Local(argsOnly = true) VillagerEntity entity) {
         return entity.getWorld().itematic$getItem(ItemKeys.BREAD).value();
     }
 
@@ -41,7 +41,7 @@ public class FarmerWorkTaskExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForBreadUseRegistryEntry(ItemConvertible item, int count, VillagerEntity entity) {
+    private ItemStack newItemStackForBreadUseCreateStack(ItemConvertible item, int count, VillagerEntity entity) {
         return entity.getWorld().itematic$createStack(ItemKeys.BREAD, count);
     }
 
@@ -64,7 +64,7 @@ public class FarmerWorkTaskExtender {
             opcode = Opcodes.GETSTATIC
         )
     )
-    private Item getWheatUseDynamicRegistry(@Local VillagerEntity entity) {
+    private Item getWheatUseDynamicRegistry(@Local(argsOnly = true) VillagerEntity entity) {
         return entity.getWorld().itematic$getItem(ItemKeys.WHEAT).value();
     }
 }

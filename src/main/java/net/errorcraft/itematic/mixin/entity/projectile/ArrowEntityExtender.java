@@ -18,7 +18,7 @@ public abstract class ArrowEntityExtender extends PersistentProjectileEntity {
     }
 
     @Redirect(
-        method = "getDefaultItemStack",
+        method = { "getDefaultItemStack", "tick" },
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"

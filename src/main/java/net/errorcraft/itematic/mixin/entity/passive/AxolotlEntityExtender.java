@@ -36,7 +36,7 @@ public abstract class AxolotlEntityExtender extends AnimalEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForWaterBucketUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForWaterBucketUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.WATER_BUCKET);
     }
 
@@ -47,7 +47,7 @@ public abstract class AxolotlEntityExtender extends AnimalEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForAxolotlBucketUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForAxolotlBucketUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.AXOLOTL_BUCKET);
     }
 }

@@ -26,7 +26,7 @@ public class AbstractDonkeyEntityExtender {
 
     @Mixin(targets = "net/minecraft/entity/passive/AbstractDonkeyEntity$1")
     public static class StackReferenceExtender {
-        @Shadow(remap = false)
+        @Shadow
         @Final
         AbstractDonkeyEntity field_27867;
 
@@ -37,7 +37,7 @@ public class AbstractDonkeyEntityExtender {
                 target = "net/minecraft/item/ItemStack"
             )
         )
-        private ItemStack newItemStackForChestUseRegistryEntry(ItemConvertible item) {
+        private ItemStack newItemStackForChestUseCreateStack(ItemConvertible item) {
             return this.field_27867.getWorld().itematic$createStack(ItemKeys.CHEST);
         }
 

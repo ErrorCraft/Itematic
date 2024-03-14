@@ -24,7 +24,7 @@ public abstract class CodEntityExtender extends SchoolingFishEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getBucketItemNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.COD_BUCKET));
+    private ItemStack newItemStackForCodBucketUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.COD_BUCKET);
     }
 }

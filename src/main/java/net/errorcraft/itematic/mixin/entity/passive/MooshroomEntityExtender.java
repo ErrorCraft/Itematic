@@ -40,7 +40,7 @@ public abstract class MooshroomEntityExtender extends AnimalEntity {
             ordinal = 0
         )
     )
-    private ItemStack newItemStackForSuspiciousStewUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForSuspiciousStewUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.SUSPICIOUS_STEW);
     }
 
@@ -59,7 +59,7 @@ public abstract class MooshroomEntityExtender extends AnimalEntity {
             )
         )
     )
-    private ItemStack newItemStackForMushroomStewUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForMushroomStewUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.MUSHROOM_STEW);
     }
 

@@ -36,7 +36,7 @@ public abstract class PaintingEntityExtender extends AbstractDecorationEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForPaintingUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.PAINTING));
+    private ItemStack newItemStackForPaintingUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.PAINTING);
     }
 }

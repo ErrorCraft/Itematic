@@ -164,6 +164,13 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
         this.getOrCreateTagBuilder(ItematicItemTags.WOLF_TEMPT_ITEMS)
             .addTag(ItematicItemTags.WOLF_FOOD)
             .add(ItemKeys.BONE);
+        this.getOrCreateTagBuilder(ItematicItemTags.PANDA_FOOD)
+            .add(ItemKeys.BAMBOO);
+        this.getOrCreateTagBuilder(ItematicItemTags.PANDA_EAT_ITEMS)
+            .addTag(ItematicItemTags.PANDA_FOOD)
+            .add(ItemKeys.CAKE);
+        this.getOrCreateTagBuilder(ItematicItemTags.TURTLE_FOOD)
+            .add(ItemKeys.SEAGRASS);
         this.getOrCreateTagBuilder(ItematicItemTags.OAK_BUILDING_BLOCKS)
             .add(ItemKeys.OAK_LOG)
             .add(ItemKeys.OAK_WOOD)

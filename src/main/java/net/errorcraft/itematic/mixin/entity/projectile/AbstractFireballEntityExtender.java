@@ -24,7 +24,7 @@ public class AbstractFireballEntityExtender extends ExplosiveProjectileEntity {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForFireChargeUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForFireChargeUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.FIRE_CHARGE);
     }
 }

@@ -48,7 +48,7 @@ public class WorldRendererExtender {
             )
         )
     )
-    private ItemStack newItemStackForSplashPotionUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForSplashPotionUseCreateStack(ItemConvertible item) {
         return this.world.itematic$createStack(ItemKeys.SPLASH_POTION);
     }
 
@@ -59,7 +59,7 @@ public class WorldRendererExtender {
             target = "Lnet/minecraft/item/Item;byRawId(I)Lnet/minecraft/item/Item;"
         )
     )
-    private Item processWorldEventByRawIdUseDynamicRegistry(int id) {
+    private Item byRawIdUseDynamicRegistry(int id) {
         return this.world.itematic$getItemAccess().get(id);
     }
 
@@ -70,7 +70,7 @@ public class WorldRendererExtender {
             ordinal = 0
         )
     )
-    private boolean processWorldEventInstanceOfMusicDiscItemUseItemComponentCheck(Object reference, Class<MusicDiscItem> clazz) {
+    private boolean instanceOfMusicDiscItemUseItemComponentCheck(Object reference, Class<MusicDiscItem> clazz) {
         Optional<RecordItemComponent> optionalComponent = ((Item) reference).itematic$getComponent(ItemComponentTypes.RECORD);
         optionalComponent.ifPresent(component -> this.recordItemComponent = component);
         return optionalComponent.isPresent();
@@ -87,7 +87,7 @@ public class WorldRendererExtender {
         ),
         ordinal = 0
     )
-    private Item processWorldEventCastToMusicDiscItemUseNull(Item instance) {
+    private Item castToMusicDiscItemUseNull(Item instance) {
         return null;
     }
 
@@ -98,7 +98,7 @@ public class WorldRendererExtender {
             target = "Lnet/minecraft/item/MusicDiscItem;getSound()Lnet/minecraft/sound/SoundEvent;"
         )
     )
-    private SoundEvent processWorldEventGetSoundUseItemComponent(MusicDiscItem instance) {
+    private SoundEvent getSoundUseItemComponent(MusicDiscItem instance) {
         return this.recordItemComponent.soundEvent().value();
     }
 
@@ -118,7 +118,7 @@ public class WorldRendererExtender {
             )
         )
     )
-    private ItemStack newItemStackForEnderEyeUseRegistryEntry(ItemConvertible item) {
+    private ItemStack newItemStackForEnderEyeUseCreateStack(ItemConvertible item) {
         return this.world.itematic$createStack(ItemKeys.ENDER_EYE);
     }
 
@@ -129,7 +129,7 @@ public class WorldRendererExtender {
             target = "Lnet/minecraft/item/MusicDiscItem;bySound(Lnet/minecraft/sound/SoundEvent;)Lnet/minecraft/item/MusicDiscItem;"
         )
     )
-    private MusicDiscItem playSongBySoundReturnNull(SoundEvent sound) {
+    private MusicDiscItem bySoundReturnNull(SoundEvent sound) {
         return null;
     }
 
@@ -140,7 +140,7 @@ public class WorldRendererExtender {
             target = "Lnet/minecraft/client/sound/PositionedSoundInstance;record(Lnet/minecraft/sound/SoundEvent;Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/client/sound/PositionedSoundInstance;"
         )
     )
-    private void playSongSetRecordPlayingOverlay(SoundEvent song, BlockPos songPosition, CallbackInfo info) {
+    private void setRecordPlayingOverlay(SoundEvent song, BlockPos songPosition, CallbackInfo info) {
         if (this.recordItemComponent != null) {
             this.client.inGameHud.setRecordPlayingOverlay(this.recordItemComponent.getDescription());
             this.recordItemComponent = null;

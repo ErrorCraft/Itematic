@@ -43,7 +43,7 @@ public class SweetBerryBushBlockExtender {
             target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemConvertible item, int count, @Local World world) {
+    private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemConvertible item, int count, @Local(argsOnly = true) World world) {
         return world.itematic$createStack(ItemKeys.SWEET_BERRIES, count);
     }
 }

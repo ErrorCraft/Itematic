@@ -24,7 +24,7 @@ public abstract class PufferfishEntityExtender extends FishEntity {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack getBucketItemNewItemStackUseRegistryEntry(ItemConvertible item) {
-        return new ItemStack(this.getWorld().itematic$getItem(ItemKeys.PUFFERFISH_BUCKET));
+    private ItemStack newItemStackForPufferfishBucketUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.PUFFERFISH_BUCKET);
     }
 }
