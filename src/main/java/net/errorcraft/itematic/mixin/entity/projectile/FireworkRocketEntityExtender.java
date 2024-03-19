@@ -36,7 +36,7 @@ public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
         method = { "initDataTracker", "readCustomDataFromNbt" },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/projectile/FireworkRocketEntity;method_57317()Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/entity/projectile/FireworkRocketEntity;getDefaultStack()Lnet/minecraft/item/ItemStack;"
         )
     )
     private ItemStack newItemStackForFireworkRocketUseCreateStack() {

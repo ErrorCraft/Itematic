@@ -6,7 +6,8 @@
   "mixins": [
     "GameTestStateExtender",
     "StructureTestListenerExtender",
-    "TestContextExtender"
+    "TestContextExtender",
+    "TestServerExtender"
   ],
   "injectors": {
     "defaultRequire": 1

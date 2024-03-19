@@ -57,6 +57,6 @@ public record ArmorMaterial(Identifier assetId, Map<ArmorItem.Type, Integer> def
     }
 
     public static ArmorMaterial from(Identifier assetId, RegistryEntry<net.minecraft.item.ArmorMaterial> material) {
-        return new ArmorMaterial(assetId, material.value().defense(), material.value().getToughness(), material.value().getKnockbackResistance());
+        return new ArmorMaterial(assetId, material.value().defense(), material.value().toughness(), material.value().knockbackResistance());
     }
 }

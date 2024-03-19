@@ -82,11 +82,13 @@
               {
                 "condition": "minecraft:match_tool",
                 "predicate": {
-                  "enchantments": [
-                    {
-                      "enchantment": "minecraft:riptide"
-                    }
-                  ]
+                  "predicates": {
+                    "minecraft:enchantments": [
+                      {
+                        "enchantment": "minecraft:riptide"
+                      }
+                    ]
+                  }
                 }
               }
             ]

@@ -34,7 +34,7 @@ public record EnchantableItemComponent(int enchantability, Optional<TagKey<Encha
     }
 
     public static EnchantableItemComponent enchants(RegistryEntry<ArmorMaterial> material, TagKey<Enchantment> enchantments) {
-        return enchants(material.value().getEnchantability(), enchantments);
+        return enchants(material.value().enchantability(), enchantments);
     }
 
     public static EnchantableItemComponent enchants(ToolMaterial material, TagKey<Enchantment> enchantments) {

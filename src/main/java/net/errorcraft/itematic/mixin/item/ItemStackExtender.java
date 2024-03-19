@@ -577,7 +577,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     @Override
     public ItemStack itematic$copyComponentsToNewStackIgnoreEmpty(RegistryEntry<Item> item, int count) {
-        return new ItemStack(item, this.count, this.components.getChanges());
+        return new ItemStack(item, count, this.components.getChanges());
     }
 
     @Override

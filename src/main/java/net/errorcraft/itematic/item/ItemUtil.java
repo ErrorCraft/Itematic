@@ -70,7 +70,9 @@ import net.minecraft.predicate.StatePredicate;
 import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.entity.LocationPredicate;
 import net.minecraft.predicate.item.EnchantmentPredicate;
+import net.minecraft.predicate.item.EnchantmentsPredicate;
 import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.predicate.item.ItemSubPredicateTypes;
 import net.minecraft.registry.*;
 import net.minecraft.registry.tag.BannerPatternTags;
 import net.minecraft.registry.tag.DamageTypeTags;
@@ -84,6 +86,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
+
+import java.util.List;
 
 public class ItemUtil {
     public static final Codec<Item> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
@@ -4175,7 +4179,9 @@ public class ItemUtil {
                                 ),
                                 MatchToolLootCondition.builder(
                                     ItemPredicate.Builder.create()
-                                        .enchantment(new EnchantmentPredicate(Enchantments.RIPTIDE, NumberRange.IntRange.ANY)))
+                                        .subPredicate(ItemSubPredicateTypes.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.of(
+                                            new EnchantmentPredicate(Enchantments.RIPTIDE, NumberRange.IntRange.ANY)
+                                        ))))
                             ).build()
                         ),
                         PassingSequenceHandler.builder()

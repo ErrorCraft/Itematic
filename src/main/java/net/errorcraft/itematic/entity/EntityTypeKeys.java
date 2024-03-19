@@ -13,8 +13,8 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> BAT = of("bat");
     public static final RegistryKey<EntityType<?>> BEE = of("bee");
     public static final RegistryKey<EntityType<?>> BLAZE = of("blaze");
-    public static final RegistryKey<EntityType<?>> CAT = of("cat");
     public static final RegistryKey<EntityType<?>> CAMEL = of("camel");
+    public static final RegistryKey<EntityType<?>> CAT = of("cat");
     public static final RegistryKey<EntityType<?>> CAVE_SPIDER = of("cave_spider");
     public static final RegistryKey<EntityType<?>> CHICKEN = of("chicken");
     public static final RegistryKey<EntityType<?>> COD = of("cod");
@@ -25,10 +25,10 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> DROWNED = of("drowned");
     public static final RegistryKey<EntityType<?>> EGG = of("egg");
     public static final RegistryKey<EntityType<?>> ELDER_GUARDIAN = of("elder_guardian");
-    public static final RegistryKey<EntityType<?>> ENDER_DRAGON = of("ender_dragon");
-    public static final RegistryKey<EntityType<?>> ENDER_PEARL = of("ender_pearl");
     public static final RegistryKey<EntityType<?>> ENDERMAN = of("enderman");
     public static final RegistryKey<EntityType<?>> ENDERMITE = of("endermite");
+    public static final RegistryKey<EntityType<?>> ENDER_DRAGON = of("ender_dragon");
+    public static final RegistryKey<EntityType<?>> ENDER_PEARL = of("ender_pearl");
     public static final RegistryKey<EntityType<?>> EVOKER = of("evoker");
     public static final RegistryKey<EntityType<?>> EXPERIENCE_BOTTLE = of("experience_bottle");
     public static final RegistryKey<EntityType<?>> FOX = of("fox");
@@ -68,8 +68,8 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> SLIME = of("slime");
     public static final RegistryKey<EntityType<?>> SMALL_FIREBALL = of("small_fireball");
     public static final RegistryKey<EntityType<?>> SNIFFER = of("sniffer");
-    public static final RegistryKey<EntityType<?>> SNOW_GOLEM = of("snow_golem");
     public static final RegistryKey<EntityType<?>> SNOWBALL = of("snowball");
+    public static final RegistryKey<EntityType<?>> SNOW_GOLEM = of("snow_golem");
     public static final RegistryKey<EntityType<?>> SPIDER = of("spider");
     public static final RegistryKey<EntityType<?>> SQUID = of("squid");
     public static final RegistryKey<EntityType<?>> STRAY = of("stray");
