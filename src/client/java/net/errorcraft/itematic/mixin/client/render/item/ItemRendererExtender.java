@@ -1,10 +1,6 @@
 package net.errorcraft.itematic.mixin.client.render.item;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.color.ItemColor;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.TintedItemComponent;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -93,19 +89,5 @@ public class ItemRendererExtender {
     )
     private static boolean isOfForClockUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.CLOCK);
-    }
-
-    @Redirect(
-        method = "renderBakedItemQuads",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/color/item/ItemColors;getColor(Lnet/minecraft/item/ItemStack;I)I"
-        )
-    )
-    private int getColorUseItemComponent(ItemColors instance, ItemStack item, int tintIndex) {
-        return item.itematic$getComponent(ItemComponentTypes.TINTED)
-            .map(TintedItemComponent::tint)
-            .map(c -> c.color(item, tintIndex))
-            .orElse(ItemColor.DEFAULT_COLOR);
     }
 }

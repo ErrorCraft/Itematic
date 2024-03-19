@@ -24,7 +24,7 @@ public class MinecraftClientExtender {
         remap = false
     )
     @NotNull
-    private static <T> Identifier initializeSearchProvidersUseRegistryEntry(DefaultedRegistry<T> instance, T t, ItemStack stack) {
+    private static <T> Identifier initializeItemTooltipSearchProviderUseRegistryEntry(DefaultedRegistry<T> instance, T t, ItemStack stack) {
         return stack.itematic$key().getValue();
     }
 

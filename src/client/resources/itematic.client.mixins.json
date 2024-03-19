@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "MinecraftClientExtender",
+    "color.item.ItemColorsExtender",
     "gui.hud.InGameHudExtender",
     "gui.screen.CustomizeFlatLevelScreenExtender",
     "gui.screen.CustomizeFlatLevelScreenExtender$SuperflatLayersListWidgetExtender",
@@ -44,6 +45,7 @@
     "render.block.entity.DecoratedPotBlockEntityRendererExtender",
     "render.entity.FishingBobberEntityRendererExtender",
     "render.entity.HorseEntityRendererExtender",
+    "render.entity.ItemEntityRendererExtender",
     "render.entity.ItemFrameEntityRendererExtender",
     "render.entity.PlayerEntityRendererExtender",
     "render.entity.WolfEntityRendererExtender",

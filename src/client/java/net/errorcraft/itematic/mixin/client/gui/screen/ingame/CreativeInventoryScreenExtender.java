@@ -13,7 +13,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.DefaultedRegistry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,6 +24,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.stream.Stream;
 
 @Mixin(CreativeInventoryScreen.class)
 public abstract class CreativeInventoryScreenExtender extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeScreenHandler> {
@@ -61,6 +66,20 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
     @SuppressWarnings("ConstantConditions")
     private ItemStack getIconUseDynamicRegistry(ItemGroup instance, DrawContext context) {
         return instance.itematic$icon(this.client.world.itematic$getItemAccess());
+    }
+
+    @Redirect(
+        method = "searchForTags",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/registry/DefaultedRegistry;streamTags()Ljava/util/stream/Stream;"
+        )
+    )
+    @SuppressWarnings("ConstantConditions")
+    private Stream<TagKey<Item>> streamTagsUseDynamicRegistry(DefaultedRegistry<Item> instance) {
+        return this.client.world.getRegistryManager()
+            .get(RegistryKeys.ITEM)
+            .streamTags();
     }
 
     @Inject(
