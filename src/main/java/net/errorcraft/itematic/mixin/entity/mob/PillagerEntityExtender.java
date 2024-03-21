@@ -9,13 +9,15 @@ import net.minecraft.entity.mob.PillagerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PillagerEntity.class)
-public abstract class PillagerEntityExtender extends IllagerEntity implements MobEntityAccess {
+public abstract class PillagerEntityExtender extends MobEntityExtender implements MobEntityAccess {
     protected PillagerEntityExtender(EntityType<? extends IllagerEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -67,5 +69,10 @@ public abstract class PillagerEntityExtender extends IllagerEntity implements Mo
     @Override
     public boolean itematic$canUseShooter(ItemStack stack, ShooterItemComponent component) {
         return stack.itematic$isOf(ItemKeys.CROSSBOW);
+    }
+
+    @Override
+    protected @Nullable RegistryKey<Item> pickBlockKey() {
+        return ItemKeys.PILLAGER_SPAWN_EGG;
     }
 }

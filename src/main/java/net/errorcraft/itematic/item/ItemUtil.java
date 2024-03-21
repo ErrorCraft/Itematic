@@ -7217,7 +7217,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_CARPET, create(
@@ -7226,7 +7226,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_CARPET, create(
@@ -7235,7 +7235,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_CARPET, create(
@@ -7244,7 +7244,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_CARPET, create(
@@ -7253,7 +7253,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_CARPET, create(
@@ -7262,7 +7262,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_CARPET, create(
@@ -7271,7 +7271,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_CARPET, create(
@@ -7280,7 +7280,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_CARPET, create(
@@ -7289,7 +7289,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_CARPET, create(
@@ -7298,7 +7298,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_CARPET, create(
@@ -7307,7 +7307,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_CARPET, create(
@@ -7316,7 +7316,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_CARPET, create(
@@ -7325,7 +7325,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_CARPET, create(
@@ -7334,7 +7334,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_CARPET, create(
@@ -7343,7 +7343,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_CARPET, create(
@@ -7352,7 +7352,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
         }

@@ -80,6 +80,17 @@ public class BeehiveBlockExtender implements BlockAccess {
         return world.itematic$createStack(ItemKeys.HONEYCOMB);
     }
 
+    @Redirect(
+        method = "onBreak",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private ItemStack newItemStackUseCreateStack(ItemConvertible item, World world) {
+        return world.itematic$createStack(this.itematic$asItemKey());
+    }
+
     @Override
     public void itematic$addComponents(ComponentMap.Builder builder) {
         builder.add(DataComponentTypes.BEES, List.of());

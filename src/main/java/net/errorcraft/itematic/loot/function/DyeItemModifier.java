@@ -60,7 +60,7 @@ public class DyeItemModifier extends ConditionalLootFunction {
     }
 
     private DyeItem dye(Random random) {
-        // Using DyeItem is intended, so we don't have to copy the entire DyeableItem::blendAndSetColor method
+        // Using DyeItem is intended, so we don't have to copy the entire DyedColorComponent::setColor method
         DyeColor dye = DyeColor.values()[random.nextInt(DyeColor.values().length)];
         return DyeItem.byColor(dye);
     }

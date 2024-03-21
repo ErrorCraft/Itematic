@@ -16,10 +16,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.potion.Potion;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Util;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -95,5 +97,10 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
         for (TagKey<Trade> trade : TRADE_TO_AMOUNT.keySet()) {
             this.fillRecipesFromPool(trades.getOrCreateEntryList(trade), TRADE_TO_AMOUNT.getInt(trade), context);
         }
+    }
+
+    @Override
+    protected @Nullable RegistryKey<Item> pickBlockKey() {
+        return ItemKeys.WANDERING_TRADER_SPAWN_EGG;
     }
 }

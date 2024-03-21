@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.entity.passive;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
+import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -15,14 +16,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(PigEntity.class)
-public abstract class PigEntityExtender extends AnimalEntity {
+public abstract class PigEntityExtender extends MobEntityExtender {
     protected PigEntityExtender(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -109,5 +112,10 @@ public abstract class PigEntityExtender extends AnimalEntity {
     )
     private boolean isHoldingForCarrotOnAStickUseRegistryKeyCheck(PlayerEntity instance, Item item) {
         return instance.itematic$isHolding(ItemKeys.CARROT_ON_A_STICK);
+    }
+
+    @Override
+    protected @Nullable RegistryKey<Item> pickBlockKey() {
+        return ItemKeys.PIG_SPAWN_EGG;
     }
 }

@@ -25,7 +25,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,6 +40,9 @@ import java.util.Optional;
 
 @Mixin(MobEntity.class)
 public abstract class MobEntityExtender extends LivingEntity implements MobEntityAccess {
+    @Shadow
+    public abstract void setBaby(boolean baby);
+
     @Unique
     private static final Int2ObjectMap<Map<EquipmentSlot, RegistryKey<Item>>> LEVEL_TO_EQUIPMENT = Util.make(new Int2ObjectOpenHashMap<>(), map -> {
         map.defaultReturnValue(Map.of());
@@ -77,9 +82,6 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
         super(entityType, world);
     }
 
-    @Shadow
-    public abstract void setBaby(boolean baby);
-
     @ModifyConstant(
         method = "interactWithItem",
         constant = @Constant(
@@ -87,7 +89,7 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
             ordinal = 0
         )
     )
-    private boolean interactWithItemInstanceOfSpawnEggItemUseItemComponentCheck(Object reference, Class<SpawnEggItem> clazz, @Local ItemStack itemStack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
+    private boolean instanceOfSpawnEggItemUseItemComponentCheck(Object reference, Class<SpawnEggItem> clazz, @Local ItemStack itemStack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
         Optional<SpawnEggItemComponent> optionalSpawnEggItemComponent = itemStack.itematic$getComponent(ItemComponentTypes.SPAWN_EGG);
         optionalSpawnEggItemComponent.ifPresent(spawnEggItemComponent::set);
         return optionalSpawnEggItemComponent.isPresent();
@@ -101,7 +103,7 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
             ordinal = 1
         )
     )
-    private Item interactWithItemGetItemReturnNull(ItemStack instance) {
+    private Item getItemReturnNull(ItemStack instance) {
         return null;
     }
 
@@ -112,7 +114,7 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
             target = "Lnet/minecraft/item/SpawnEggItem;spawnBaby(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/mob/MobEntity;Lnet/minecraft/entity/EntityType;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/item/ItemStack;)Ljava/util/Optional;"
         )
     )
-    private Optional<MobEntity> interactWithItemSpawnBabyUseItemComponent(SpawnEggItem instance, PlayerEntity user, MobEntity entity, EntityType<? extends MobEntity> entityType, ServerWorld world, Vec3d pos, ItemStack stack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
+    private Optional<MobEntity> spawnBabyUseItemComponent(SpawnEggItem instance, PlayerEntity user, MobEntity entity, EntityType<? extends MobEntity> entityType, ServerWorld world, Vec3d pos, ItemStack stack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
         return spawnEggItemComponent.get().spawnBaby(user, entity, entityType, world, pos, stack);
     }
 
@@ -165,6 +167,26 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
     )
     private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, @Share("item") LocalRef<RegistryEntry<Item>> itemEntry) {
         return new ItemStack(itemEntry.get());
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses item keys instead of direct items.
+     */
+    @Overwrite
+    @Nullable
+    public ItemStack getPickBlockStack() {
+        RegistryKey<Item> key = this.pickBlockKey();
+        if (key == null) {
+            return null;
+        }
+        return this.getWorld().itematic$createStack(key);
+    }
+
+    @Unique
+    @Nullable
+    protected RegistryKey<Item> pickBlockKey() {
+        return null;
     }
 
     @Override

@@ -15,6 +15,9 @@ public class Assert {
     private Assert() {}
 
     public static void itemStackIsOf(ItemStack value, RegistryKey<Item> expected) {
+        if (value == null) {
+            throw new GameTestException("Expected item stack to be of " + expected + ", but the item stack was null");
+        }
         if (!value.itematic$isOf(expected)) {
             throw new GameTestException("Expected item stack to be of " + expected + ", got " + value.itematic$key() + " instead");
         }

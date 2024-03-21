@@ -9,14 +9,16 @@ import net.minecraft.entity.mob.PiglinEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(PiglinEntity.class)
-public abstract class PiglinEntityExtender extends AbstractPiglinEntity implements MobEntityAccess {
+public abstract class PiglinEntityExtender extends MobEntityExtender implements MobEntityAccess {
     public PiglinEntityExtender(EntityType<? extends AbstractPiglinEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -169,5 +171,10 @@ public abstract class PiglinEntityExtender extends AbstractPiglinEntity implemen
     @Override
     public boolean itematic$canUseShooter(ItemStack stack, ShooterItemComponent component) {
         return stack.itematic$isOf(ItemKeys.CROSSBOW);
+    }
+
+    @Override
+    protected @Nullable RegistryKey<Item> pickBlockKey() {
+        return ItemKeys.PIGLIN_SPAWN_EGG;
     }
 }

@@ -14,9 +14,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.village.VillagerData;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -121,5 +123,10 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
         }
         Registry<Trade> trades = context.getWorld().getRegistryManager().get(ItematicRegistryKeys.TRADE);
         this.fillRecipesFromPool(trades.getOrCreateEntryList(tag), 2, context);
+    }
+
+    @Override
+    protected @Nullable RegistryKey<Item> pickBlockKey() {
+        return ItemKeys.VILLAGER_SPAWN_EGG;
     }
 }

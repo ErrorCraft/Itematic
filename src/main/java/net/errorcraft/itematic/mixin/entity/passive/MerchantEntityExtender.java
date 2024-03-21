@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.entity.passive;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.DynamicOps;
 import net.errorcraft.itematic.loot.context.ItematicLootContextTypes;
+import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.MerchantEntity;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Mixin(MerchantEntity.class)
-public abstract class MerchantEntityExtender extends PassiveEntity {
+public abstract class MerchantEntityExtender extends MobEntityExtender {
     @Shadow
     public abstract TradeOfferList getOffers();
 

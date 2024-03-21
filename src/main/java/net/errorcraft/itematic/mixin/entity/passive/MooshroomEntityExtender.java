@@ -3,15 +3,17 @@ package net.errorcraft.itematic.mixin.entity.passive;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.block.SuspiciousStewIngredient;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.MooshroomEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(MooshroomEntity.class)
-public abstract class MooshroomEntityExtender extends AnimalEntity {
+public abstract class MooshroomEntityExtender extends MobEntityExtender {
     public MooshroomEntityExtender(EntityType<? extends MooshroomEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -32,7 +34,7 @@ public abstract class MooshroomEntityExtender extends AnimalEntity {
             ordinal = 0
         )
     )
-    private boolean isOfForBowlUseRegistryEntryCheck(ItemStack instance, Item item) {
+    private boolean isOfForBowlUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.BOWL);
     }
 
@@ -82,7 +84,7 @@ public abstract class MooshroomEntityExtender extends AnimalEntity {
             )
         )
     )
-    private boolean isOfForShearsUseRegistryEntryCheck(ItemStack instance, Item item) {
+    private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.SHEARS);
     }
 
@@ -107,5 +109,10 @@ public abstract class MooshroomEntityExtender extends AnimalEntity {
     private SuspiciousStewIngredient suspiciousStewEffectsUseItemComponent(ItemConvertible item, @Local(argsOnly = true) ItemStack stack) {
         return stack.itematic$getComponent(ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT)
             .orElse(null);
+    }
+
+    @Override
+    protected @Nullable RegistryKey<Item> pickBlockKey() {
+        return ItemKeys.MOOSHROOM_SPAWN_EGG;
     }
 }

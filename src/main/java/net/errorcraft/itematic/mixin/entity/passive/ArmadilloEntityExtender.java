@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
+import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -10,13 +11,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ArmadilloEntity.class)
-public abstract class ArmadilloEntityExtender extends AnimalEntity {
+public abstract class ArmadilloEntityExtender extends MobEntityExtender {
     protected ArmadilloEntityExtender(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -63,5 +66,10 @@ public abstract class ArmadilloEntityExtender extends AnimalEntity {
     )
     private ItemStack newItemStackForArmadilloScuteUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.ARMADILLO_SCUTE);
+    }
+
+    @Override
+    protected @Nullable RegistryKey<Item> pickBlockKey() {
+        return ItemKeys.ARMADILLO_SPAWN_EGG;
     }
 }

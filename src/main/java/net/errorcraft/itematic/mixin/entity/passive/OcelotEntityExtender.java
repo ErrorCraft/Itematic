@@ -1,16 +1,28 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
+import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.OcelotEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(OcelotEntity.class)
-public class OcelotEntityExtender {
+public abstract class OcelotEntityExtender extends MobEntityExtender {
+    protected OcelotEntityExtender(EntityType<? extends LivingEntity> entityType, World world) {
+        super(entityType, world);
+    }
+
     @Redirect(
         method = "isBreedingItem",
         at = @At(
@@ -32,5 +44,10 @@ public class OcelotEntityExtender {
     private OcelotEntity.OcelotTemptGoal newTemptGoalSetItems(OcelotEntity.OcelotTemptGoal original) {
         original.itematic$setItems(ItematicItemTags.OCELOT_TEMPT_ITEMS);
         return original;
+    }
+
+    @Override
+    protected @Nullable RegistryKey<Item> pickBlockKey() {
+        return ItemKeys.OCELOT_SPAWN_EGG;
     }
 }

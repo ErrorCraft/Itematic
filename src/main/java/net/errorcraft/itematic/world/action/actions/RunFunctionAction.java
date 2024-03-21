@@ -7,10 +7,12 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
+import net.minecraft.command.ReturnValueConsumer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.function.CommandFunction;
 import net.minecraft.server.function.CommandFunctionManager;
 import net.minecraft.util.Identifier;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import java.util.Optional;
 
@@ -32,8 +34,10 @@ public record RunFunctionAction(Identifier function, ActionContextParameters con
         if (function.isEmpty()) {
             return false;
         }
-        ServerCommandSource source = context.createCommandSource(this.context, functionManager);
+        MutableBoolean success = new MutableBoolean();
+        ServerCommandSource source = context.createCommandSource(this.context, functionManager)
+            .mergeReturnValueConsumers((successful, returnValue) -> success.setValue(successful), ReturnValueConsumer::chain);
         functionManager.execute(function.get(), source);
-        return true;
+        return success.booleanValue();
     }
 }

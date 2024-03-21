@@ -8,14 +8,16 @@ import net.minecraft.entity.raid.RaiderEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(WitchEntity.class)
-public abstract class WitchEntityExtender extends RaiderEntity {
+public abstract class WitchEntityExtender extends MobEntityExtender {
     protected WitchEntityExtender(EntityType<? extends RaiderEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -51,5 +53,10 @@ public abstract class WitchEntityExtender extends RaiderEntity {
     )
     private ItemStack newItemStackForSplashPotionUseCreateStack(Item item, RegistryEntry<Potion> potion) {
         return PotionContentsComponentUtil.setPotion(this.getWorld().itematic$createStack(ItemKeys.SPLASH_POTION), potion);
+    }
+
+    @Override
+    protected @Nullable RegistryKey<Item> pickBlockKey() {
+        return ItemKeys.WITCH_SPAWN_EGG;
     }
 }

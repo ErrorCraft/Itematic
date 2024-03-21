@@ -25,7 +25,7 @@ public class FluidBlockExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack tryDrainFluidNewItemStackUseRegistryEntry(ItemConvertible item, @Local WorldAccess world) {
-        return new ItemStack(world.itematic$getItem(this.fluid.getBucketItemKey()));
+    private ItemStack newItemStackUseCreateStack(ItemConvertible item, @Local(argsOnly = true) WorldAccess world) {
+        return world.itematic$createStack(this.fluid.getBucketItemKey());
     }
 }

@@ -1,12 +1,16 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.FoxEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(FoxEntity.class)
-public abstract class FoxEntityExtender extends AnimalEntity {
+public abstract class FoxEntityExtender extends MobEntityExtender {
     protected FoxEntityExtender(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -132,6 +136,11 @@ public abstract class FoxEntityExtender extends AnimalEntity {
     )
     private ItemStack newItemStackForFeatherUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.FEATHER);
+    }
+
+    @Override
+    protected @Nullable RegistryKey<Item> pickBlockKey() {
+        return ItemKeys.FOX_SPAWN_EGG;
     }
 
     @Mixin(FoxEntity.EatBerriesGoal.class)
