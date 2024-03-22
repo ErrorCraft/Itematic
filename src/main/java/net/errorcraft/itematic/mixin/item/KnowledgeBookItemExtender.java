@@ -44,7 +44,6 @@ public class KnowledgeBookItemExtender {
             target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
         )
     )
-    @SuppressWarnings("unchecked")
     private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local ItemStack stack) {
         return instance.itematic$getOrCreateStat(stack.getRegistryEntry());
     }

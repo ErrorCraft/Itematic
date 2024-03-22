@@ -8,6 +8,9 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:glowstone"
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:charge_respawn_anchor"
     }
   }
 }

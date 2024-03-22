@@ -11,6 +11,13 @@
     },
     "minecraft:compostable": {
       "level_increase_chance": 0.65
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:carved_pumpkin"
+    },
+    "minecraft:equipment": {
+      "equip_sound": "minecraft:item.armor.equip_generic",
+      "slot": "head"
     }
   }
 }

@@ -129,7 +129,6 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
         }
 
         @Unique
-        @SuppressWarnings("unchecked")
         private <T> boolean hasNoStatFor(StatType<T> statType, RegistryEntry<T> entry) {
             if (!statType.itematic$hasStat(entry)) {
                 return true;
@@ -211,7 +210,6 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            @SuppressWarnings("unchecked")
             private <T> int getStatForFirstBlockUseItemComponent(StatHandler instance, StatType<Block> type, T stat, @Share("blockItemComponentFirst") LocalRef<BlockItemComponent> blockItemComponentFirst) {
                 return instance.getStat(type.itematic$getOrCreateStat(blockItemComponentFirst.get().block().defaultBlock()));
             }
@@ -234,7 +232,6 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            @SuppressWarnings("unchecked")
             private <T> int getStatForSecondBlockUseItemComponent(StatHandler instance, StatType<Block> type, T stat, @Share("blockItemComponentSecond") LocalRef<BlockItemComponent> blockItemComponentSecond) {
                 return instance.getStat(type.itematic$getOrCreateStat(blockItemComponentSecond.get().block().defaultBlock()));
             }
@@ -253,7 +250,6 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            @SuppressWarnings("unchecked")
             private <T> int getStatForFirstItemUseRegistryEntry(StatHandler instance, StatType<Item> type, T stat, StatsScreen.ItemStatsListWidget.Entry first) {
                 return instance.getStat(type.itematic$getOrCreateStat(((StatsScreenItemStatsListWidgetEntryAccess) first).itematic$registryEntry()));
             }
@@ -272,7 +268,6 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            @SuppressWarnings("unchecked")
             private <T> int getStatForSecondItemUseRegistryEntry(StatHandler instance, StatType<Item> type, T stat, StatsScreen.ItemStatsListWidget.Entry first, StatsScreen.ItemStatsListWidget.Entry second) {
                 return instance.getStat(type.itematic$getOrCreateStat(((StatsScreenItemStatsListWidgetEntryAccess) second).itematic$registryEntry()));
             }
@@ -296,7 +291,6 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     ordinal = 0
                 )
             )
-            @SuppressWarnings("unchecked")
             private int compareUseRegistryKeys(int x, int y, StatsScreen.ItemStatsListWidget.Entry first, StatsScreen.ItemStatsListWidget.Entry second) {
                 return ((StatsScreenItemStatsListWidgetEntryAccess) first).itematic$registryEntry()
                     .compareTo(((StatsScreenItemStatsListWidgetEntryAccess) second).itematic$registryEntry());
@@ -374,7 +368,6 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            @SuppressWarnings("unchecked")
             private <T> Stat<Block> getOrCreateStatForBlockUseItemComponent(StatType<Block> instance, T key, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
                 return instance.itematic$getOrCreateStat(blockItemComponent.get().block().defaultBlock());
             }
@@ -393,7 +386,6 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            @SuppressWarnings("unchecked")
             private <T> Stat<Item> getOrCreateStatForItemUseItemComponent(StatType<Item> instance, T key) {
                 return instance.itematic$getOrCreateStat(this.entry);
             }

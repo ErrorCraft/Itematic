@@ -44,7 +44,6 @@ public class ServerStatHandlerExtender extends StatHandler {
             target = "Ljava/util/Optional;map(Ljava/util/function/Function;)Ljava/util/Optional;"
         )
     )
-    @SuppressWarnings("unchecked")
     private <T, U> Function<RegistryEntry.Reference<T>, Stat<T>> mapToStatUseRegistryEntry(Function<? super T, ? extends U> mapper, @Local(argsOnly = true) StatType<T> type) {
         return type::itematic$getOrCreateStat;
     }

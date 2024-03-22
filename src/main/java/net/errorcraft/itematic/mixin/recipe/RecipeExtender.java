@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.errorcraft.itematic.access.recipe.RecipeAccess;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.RecipeRemainderItemComponent;
 import net.minecraft.item.Item;
@@ -12,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Recipe.class)
-public interface RecipeExtender {
+public interface RecipeExtender extends RecipeAccess {
     @Redirect(
         method = "getRemainder",
         at = @At(

@@ -20,6 +20,11 @@ public class DispenseBehaviorKeys {
     public static final RegistryKey<DispenserBehavior> WAX_BLOCK = of("wax_block");
     public static final RegistryKey<DispenserBehavior> PLACE_BLOCK_FROM_ITEM = of("place_block_from_item");
     public static final RegistryKey<DispenserBehavior> BRUSH = of("brush");
+    public static final RegistryKey<DispenserBehavior> CHEST_EQUIPMENT = of("chest_equipment");
+    public static final RegistryKey<DispenserBehavior> TNT = of("tnt");
+    public static final RegistryKey<DispenserBehavior> CARVED_PUMPKIN = of("carved_pumpkin");
+    public static final RegistryKey<DispenserBehavior> CHARGE_RESPAWN_ANCHOR = of("charge_respawn_anchor");
+    public static final RegistryKey<DispenserBehavior> SHEAR = of("shear");
 
     private DispenseBehaviorKeys() {}
 

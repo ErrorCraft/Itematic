@@ -78,7 +78,6 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
             target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
         )
     )
-    @SuppressWarnings("unchecked")
     private <T> Stat<Item> getOrCreateStatForActiveItemUseRegistryEntry(StatType<Item> instance, T key) {
         return instance.itematic$getOrCreateStat(this.activeItemStack.getRegistryEntry());
     }

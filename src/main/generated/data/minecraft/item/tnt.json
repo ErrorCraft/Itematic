@@ -8,6 +8,9 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:tnt"
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:tnt"
     }
   }
 }

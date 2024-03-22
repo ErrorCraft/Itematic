@@ -1418,6 +1418,7 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GLOWSTONE).build()),
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GLOWSTONE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.CHARGE_RESPAWN_ANCHOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.INFESTED_STONE, create(
@@ -2456,6 +2457,7 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TNT).build()),
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TNT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.TNT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.REDSTONE_LAMP, create(
@@ -4129,6 +4131,7 @@ public class ItemUtil {
                         .miningSpeed(5.0f, ItematicBlockTags.SHEARS_SLIGHTLY_EFFICIENT, true)
                         .miningSpeed(2.0f, ItematicBlockTags.SHEARS_EFFICIENT, true)
                         .build())
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.SHEAR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BOW, create(
@@ -5267,6 +5270,8 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARVED_PUMPKIN)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(EquipmentItemComponent.of(EquipmentSlot.HEAD, false, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.CARVED_PUMPKIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MELON, create(
@@ -6784,6 +6789,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHEST)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.CHEST_EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TRAPPED_CHEST, create(

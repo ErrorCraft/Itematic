@@ -33,7 +33,6 @@ public class PumpkinBlockExtender {
             target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
         )
     )
-    @SuppressWarnings("unchecked")
     private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local(argsOnly = true) World world) {
         return instance.itematic$getOrCreateStat(world.itematic$getItem(ItemKeys.SHEARS));
     }

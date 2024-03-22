@@ -18,7 +18,6 @@ public class PlayerPredicateExtender {
                 target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
             )
         )
-        @SuppressWarnings("unchecked")
         private static <T> Stat<T> getOrCreateStatUseRegistryEntry(StatType<T> instance, T key, @Local(argsOnly = true) RegistryEntry<T> entry) {
             return instance.itematic$getOrCreateStat(entry);
         }

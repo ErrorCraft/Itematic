@@ -9,6 +9,9 @@
     "minecraft:damageable": {
       "durability": 238
     },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:shear"
+    },
     "minecraft:tool": {
       "damage": 1,
       "mining_speeds": [

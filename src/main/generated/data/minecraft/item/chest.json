@@ -9,6 +9,9 @@
     "minecraft:block": {
       "block": "minecraft:chest"
     },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:chest_equipment"
+    },
     "minecraft:fuel": {
       "ticks": 300
     }

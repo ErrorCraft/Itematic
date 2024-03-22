@@ -35,8 +35,7 @@ public class CraftPlanksTutorialStepHandlerExtender {
             target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
         )
     )
-    @SuppressWarnings("unchecked")
-    private static <T> Stat<T> getOrCreateStatUseRegistryEntry(StatType<T> instance, T key, @Local RegistryEntry<Item> entry) {
+    private static <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local RegistryEntry<Item> entry) {
         return instance.itematic$getOrCreateStat(entry);
     }
 }

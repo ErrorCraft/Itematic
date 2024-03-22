@@ -264,7 +264,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
         )
     )
-    @SuppressWarnings("unchecked")
     private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local(ordinal = 0) ItemStack stack) {
         return instance.itematic$getOrCreateStat(stack.getRegistryEntry());
     }

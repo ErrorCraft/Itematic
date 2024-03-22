@@ -10,10 +10,13 @@ import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EyeOfEnderEntity;
+import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.SpectralArrowEntity;
+import net.minecraft.entity.decoration.painting.PaintingEntity;
+import net.minecraft.entity.projectile.*;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -49,7 +52,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setBoatEntityInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<BoatEntity> setBoatEntityInitializerCodec(EntityType.Builder<BoatEntity> type) {
         type.itematic$initializerCodec(BoatEntityInitializer.CODEC);
         return type;
     }
@@ -68,7 +71,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setChestBoatEntityInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<ChestBoatEntity> setChestBoatEntityInitializerCodec(EntityType.Builder<ChestBoatEntity> type) {
         type.itematic$initializerCodec(ChestBoatEntityInitializer.CODEC);
         return type;
     }
@@ -87,7 +90,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setMinecartInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<MinecartEntity> setMinecartInitializerCodec(EntityType.Builder<MinecartEntity> type) {
         type.itematic$initializerCodec(minecartInitializerCodecCreator(MinecartEntity::new));
         return type;
     }
@@ -106,7 +109,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setChestMinecartInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<ChestMinecartEntity> setChestMinecartInitializerCodec(EntityType.Builder<ChestMinecartEntity> type) {
         type.itematic$initializerCodec(minecartInitializerCodecCreator(ChestMinecartEntity::new));
         return type;
     }
@@ -125,7 +128,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setFurnaceMinecartInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<FurnaceMinecartEntity> setFurnaceMinecartInitializerCodec(EntityType.Builder<FurnaceMinecartEntity> type) {
         type.itematic$initializerCodec(minecartInitializerCodecCreator(FurnaceMinecartEntity::new));
         return type;
     }
@@ -144,7 +147,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setTntMinecartInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<TntMinecartEntity> setTntMinecartInitializerCodec(EntityType.Builder<TntMinecartEntity> type) {
         type.itematic$initializerCodec(minecartInitializerCodecCreator(TntMinecartEntity::new));
         return type;
     }
@@ -163,7 +166,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setSpawnerMinecartInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<SpawnerMinecartEntity> setSpawnerMinecartInitializerCodec(EntityType.Builder<SpawnerMinecartEntity> type) {
         type.itematic$initializerCodec(minecartInitializerCodecCreator(SpawnerMinecartEntity::new));
         return type;
     }
@@ -182,7 +185,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setHopperMinecartInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<HopperMinecartEntity> setHopperMinecartInitializerCodec(EntityType.Builder<HopperMinecartEntity> type) {
         type.itematic$initializerCodec(minecartInitializerCodecCreator(HopperMinecartEntity::new));
         return type;
     }
@@ -201,7 +204,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setCommandBlockMinecartInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<CommandBlockMinecartEntity> setCommandBlockMinecartInitializerCodec(EntityType.Builder<CommandBlockMinecartEntity> type) {
         type.itematic$initializerCodec(minecartInitializerCodecCreator(CommandBlockMinecartEntity::new));
         return type;
     }
@@ -220,7 +223,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setEndCrystalInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<EndCrystalEntity> setEndCrystalInitializerCodec(EntityType.Builder<EndCrystalEntity> type) {
         type.itematic$initializerCodec(EndCrystalEntityInitializer.CODEC);
         return type;
     }
@@ -239,7 +242,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setArmorStandInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<ArmorStandEntity> setArmorStandInitializerCodec(EntityType.Builder<ArmorStandEntity> type) {
         type.itematic$initializerCodec(ArmorStandEntityInitializer.CODEC);
         return type;
     }
@@ -258,7 +261,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setPaintingInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<PaintingEntity> setPaintingInitializerCodec(EntityType.Builder<PaintingEntity> type) {
         type.itematic$initializerCodec(entityType -> Codec.unit(DecorationEntityInitializer.createPainting(entityType)));
         return type;
     }
@@ -277,7 +280,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setItemFrameInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<ItemFrameEntity> setItemFrameInitializerCodec(EntityType.Builder<ItemFrameEntity> type) {
         type.itematic$initializerCodec(decorationInitializerCodecCreator(ItemFrameEntity::new));
         return type;
     }
@@ -296,7 +299,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setGlowItemFrameInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<GlowItemFrameEntity> setGlowItemFrameInitializerCodec(EntityType.Builder<GlowItemFrameEntity> type) {
         type.itematic$initializerCodec(decorationInitializerCodecCreator(GlowItemFrameEntity::new));
         return type;
     }
@@ -315,7 +318,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setArrowInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<ArrowEntity> setArrowInitializerCodec(EntityType.Builder<ArrowEntity> type) {
         type.itematic$initializerCodec(entityType -> PersistentProjectileEntityInitializer.createCodec(entityType, ArrowEntity::new, ArrowEntity::new));
         return type;
     }
@@ -334,7 +337,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setSpectralArrowInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<SpectralArrowEntity> setSpectralArrowInitializerCodec(EntityType.Builder<SpectralArrowEntity> type) {
         type.itematic$initializerCodec(entityType -> PersistentProjectileEntityInitializer.createCodec(entityType, SpectralArrowEntity::new, SpectralArrowEntity::new));
         return type;
     }
@@ -353,7 +356,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setTridentInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<TridentEntity> setTridentInitializerCodec(EntityType.Builder<TridentEntity> type) {
         type.itematic$initializerCodec(TridentEntityInitializer.CODEC);
         return type;
     }
@@ -372,7 +375,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setFireworkRocketInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<FireworkRocketEntity> setFireworkRocketInitializerCodec(EntityType.Builder<FireworkRocketEntity> type) {
         type.itematic$initializerCodec(FireworkRocketEntityInitializer.CODEC);
         return type;
     }
@@ -391,7 +394,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setEyeOfEnderInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<EyeOfEnderEntity> setEyeOfEnderInitializerCodec(EntityType.Builder<EyeOfEnderEntity> type) {
         type.itematic$initializerCodec(EyeOfEnderEntityInitializer.CODEC);
         return type;
     }
@@ -410,7 +413,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<?> setSmallFireballInitializerCodec(EntityType.Builder<?> type) {
+    private static EntityType.Builder<SmallFireballEntity> setSmallFireballInitializerCodec(EntityType.Builder<SmallFireballEntity> type) {
         type.itematic$initializerCodec(SmallFireballEntityInitializer.CODEC);
         return type;
     }
@@ -474,8 +477,8 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         }
 
         @Override
-        public void itematic$initializerCodec(Codec<EntityInitializer<T>> codec) {
-            this.creator = type -> codec;
+        public void itematic$initializerCodec(Codec<? extends EntityInitializer<T>> codec) {
+            this.creator = type -> (Codec<EntityInitializer<T>>) codec;
         }
 
         @Override

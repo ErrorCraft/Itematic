@@ -24,6 +24,11 @@ public class DispenseBehaviors {
     public static final DispenserBehavior WAX_BLOCK = register(DispenseBehaviorKeys.WAX_BLOCK, new WaxBlockDispenserBehavior());
     public static final DispenserBehavior PLACE_BLOCK_FROM_ITEM = register(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM, new PlaceBlockFromItemDispenserBehavior());
     public static final DispenserBehavior BRUSH = register(DispenseBehaviorKeys.BRUSH, DispenserBehaviorUtil.BRUSH_DISPENSER_BEHAVIOR);
+    public static final DispenserBehavior CHEST_EQUIPMENT = register(DispenseBehaviorKeys.CHEST_EQUIPMENT, DispenserBehaviorUtil.CHEST_EQUIPMENT_DISPENSER_BEHAVIOR);
+    public static final DispenserBehavior TNT = register(DispenseBehaviorKeys.TNT, DispenserBehaviorUtil.TNT_DISPENSER_BEHAVIOR);
+    public static final DispenserBehavior CARVED_PUMPKIN = register(DispenseBehaviorKeys.CARVED_PUMPKIN, DispenserBehaviorUtil.CARVED_PUMPKIN_DISPENSER_BEHAVIOR);
+    public static final DispenserBehavior CHARGE_RESPAWN_ANCHOR = register(DispenseBehaviorKeys.CHARGE_RESPAWN_ANCHOR, DispenserBehaviorUtil.CHARGE_RESPAWN_ANCHOR_DISPENSER_BEHAVIOR);
+    public static final DispenserBehavior SHEAR = register(DispenseBehaviorKeys.SHEAR, DispenserBehaviorUtil.SHEAR_DISPENSER_BEHAVIOR);
 
     private DispenseBehaviors() {}
 

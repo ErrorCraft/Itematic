@@ -49,7 +49,6 @@ public class ScoreboardCriterionExtender implements ScoreboardCriterionAccess {
             target = "Ljava/util/Optional;map(Ljava/util/function/Function;)Ljava/util/Optional;"
         )
     )
-    @SuppressWarnings("unchecked")
     private static <T, U> Function<? super RegistryEntry.Reference<T>, ? extends Stat<T>> mapToStatUseRegistryEntry(Function<? super T, ? extends U> mapper, @Local(argsOnly = true) StatType<T> statType) {
         return statType::itematic$getOrCreateStat;
     }

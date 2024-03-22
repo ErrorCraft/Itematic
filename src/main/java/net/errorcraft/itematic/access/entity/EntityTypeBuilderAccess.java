@@ -6,6 +6,6 @@ import net.errorcraft.itematic.entity.initializer.EntityInitializerCodecCreator;
 import net.minecraft.entity.Entity;
 
 public interface EntityTypeBuilderAccess<T extends Entity> {
-    default void itematic$initializerCodec(Codec<EntityInitializer<T>> codec) {}
+    default void itematic$initializerCodec(Codec<? extends EntityInitializer<T>> codec) {}
     default void itematic$initializerCodec(EntityInitializerCodecCreator<T> creator) {}
 }

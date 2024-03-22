@@ -67,6 +67,7 @@
     "block.dispenser.DispenserBehaviorExtender$GlassBottleExtender",
     "block.dispenser.DispenserBehaviorExtender$PotionExtender",
     "block.dispenser.ProjectileDispenserBehaviorExtender",
+    "block.dispenser.ShearsDispenserBehaviorExtender",
     "block.entity.AbstractFurnaceBlockEntityExtender",
     "block.entity.BannerBlockEntityExtender",
     "block.entity.BrewingStandBlockEntityExtender",

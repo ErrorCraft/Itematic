@@ -20,7 +20,6 @@ public class VaultBlockEntityExtender {
                 target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
             )
         )
-        @SuppressWarnings("unchecked")
         private static <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local(argsOnly = true) ItemStack stack) {
             return instance.itematic$getOrCreateStat(stack.getRegistryEntry());
         }

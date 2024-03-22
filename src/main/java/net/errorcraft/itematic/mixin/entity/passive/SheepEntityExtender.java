@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
+import com.google.common.collect.ImmutableMap;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -11,6 +12,7 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.DyeItemComponent;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -36,6 +38,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.Map;
+
 @Mixin(SheepEntity.class)
 public abstract class SheepEntityExtender extends MobEntityExtender {
     @Shadow
@@ -43,6 +47,29 @@ public abstract class SheepEntityExtender extends MobEntityExtender {
 
     @Shadow
     protected abstract DyeColor method_17691(DyeColor par1, DyeColor par2);
+
+    @Shadow
+    public abstract DyeColor getColor();
+
+    @Unique
+    private static final Map<DyeColor, RegistryKey<Item>> DYE_TO_WOOL = new ImmutableMap.Builder<DyeColor, RegistryKey<Item>>()
+        .put(DyeColor.WHITE, ItemKeys.WHITE_WOOL)
+        .put(DyeColor.ORANGE, ItemKeys.ORANGE_WOOL)
+        .put(DyeColor.MAGENTA, ItemKeys.MAGENTA_WOOL)
+        .put(DyeColor.LIGHT_BLUE, ItemKeys.LIGHT_BLUE_WOOL)
+        .put(DyeColor.YELLOW, ItemKeys.YELLOW_WOOL)
+        .put(DyeColor.LIME, ItemKeys.LIME_WOOL)
+        .put(DyeColor.PINK, ItemKeys.PINK_WOOL)
+        .put(DyeColor.GRAY, ItemKeys.GRAY_WOOL)
+        .put(DyeColor.LIGHT_GRAY, ItemKeys.LIGHT_GRAY_WOOL)
+        .put(DyeColor.CYAN, ItemKeys.CYAN_WOOL)
+        .put(DyeColor.PURPLE, ItemKeys.PURPLE_WOOL)
+        .put(DyeColor.BLUE, ItemKeys.BLUE_WOOL)
+        .put(DyeColor.BROWN, ItemKeys.BROWN_WOOL)
+        .put(DyeColor.GREEN, ItemKeys.GREEN_WOOL)
+        .put(DyeColor.RED, ItemKeys.RED_WOOL)
+        .put(DyeColor.BLACK, ItemKeys.BLACK_WOOL)
+        .build();
 
     @Unique
     private static World world;
@@ -72,6 +99,17 @@ public abstract class SheepEntityExtender extends MobEntityExtender {
     )
     private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.SHEARS);
+    }
+
+    @Redirect(
+        method = "sheared",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/passive/SheepEntity;dropItem(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/entity/ItemEntity;"
+        )
+    )
+    private ItemEntity dropItemUseRegistryKey(SheepEntity instance, ItemConvertible item, int yOffset) {
+        return this.itematic$dropItem(DYE_TO_WOOL.get(this.getColor()), yOffset);
     }
 
     @WrapOperation(

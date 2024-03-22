@@ -48,7 +48,7 @@
         "net/errorcraft/itematic/access/entity/EntityTypeAccess"
       ],
       "net/minecraft/class_1299\u0024class_1300": [
-        "net/errorcraft/itematic/access/entity/EntityTypeBuilderAccess"
+        "net/errorcraft/itematic/access/entity/EntityTypeBuilderAccess<TT;>"
       ],
       "net/minecraft/class_1308": [
         "net/errorcraft/itematic/access/entity/mob/MobEntityAccess"
@@ -114,10 +114,10 @@
         "net/minecraft/util/StringIdentifiable"
       ],
       "net/minecraft/class_3445": [
-        "net/errorcraft/itematic/access/stat/StatAccess"
+        "net/errorcraft/itematic/access/stat/StatAccess<TT;>"
       ],
       "net/minecraft/class_3448": [
-        "net/errorcraft/itematic/access/stat/StatTypeAccess"
+        "net/errorcraft/itematic/access/stat/StatTypeAccess<TT;>"
       ],
       "net/minecraft/class_3611": [
         "net/errorcraft/itematic/access/fluid/FluidAccess"
@@ -150,7 +150,7 @@
         "net/errorcraft/itematic/access/entity/ai/brain/sensor/TemptationsSensorAccess"
       ],
       "net/minecraft/class_6880": [
-        "net/errorcraft/itematic/access/registry/entry/RegistryEntryAccess"
+        "net/errorcraft/itematic/access/registry/entry/RegistryEntryAccess<TT;>"
       ],
       "net/minecraft/class_8526": [
         "net/errorcraft/itematic/access/block/entity/SherdsAccess"

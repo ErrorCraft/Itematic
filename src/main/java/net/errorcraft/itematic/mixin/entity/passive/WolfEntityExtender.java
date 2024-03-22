@@ -29,6 +29,17 @@ public abstract class WolfEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
+        method = "applyDamage",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/Item;getDefaultStack()Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private ItemStack getDefaultStackForArmadilloScuteUseCreateStack(Item instance) {
+        return this.getWorld().itematic$createStack(ItemKeys.ARMADILLO_SCUTE);
+    }
+
+    @Redirect(
         method = "interactMob",
         at = @At(
             value = "INVOKE",

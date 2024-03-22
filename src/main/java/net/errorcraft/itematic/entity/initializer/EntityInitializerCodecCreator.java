@@ -6,5 +6,5 @@ import net.minecraft.entity.EntityType;
 
 @FunctionalInterface
 public interface EntityInitializerCodecCreator<T extends Entity> {
-    Codec<EntityInitializer<T>> create(EntityType<T> type);
+    Codec<? extends EntityInitializer<T>> create(EntityType<T> type);
 }
