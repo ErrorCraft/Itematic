@@ -9,9 +9,9 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.SharedConstants;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -67,7 +67,7 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
     public static ItemComponent<?>[] from(FoodComponent component, int useDuration, UseAction useAction, RegistryEntry<Item> resultItem) {
         return new ItemComponent<?>[] {
             UseDurationItemComponent.of(useDuration),
-            of(component.hunger(), component.saturationModifier(), component.alwaysEdible(), component.statusEffects()),
+            of(component.nutrition(), component.saturationModifier(), component.canAlwaysEat(), component.effects()),
             UseAnimationItemComponent.of(useAction),
             ConsumableItemComponent.of(resultItem)
         };

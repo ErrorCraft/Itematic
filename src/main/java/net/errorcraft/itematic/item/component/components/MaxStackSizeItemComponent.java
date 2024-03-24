@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.dynamic.Codecs;
 
 public record MaxStackSizeItemComponent(int maxStackSize) implements ItemComponent<MaxStackSizeItemComponent> {
-    public static final Codec<MaxStackSizeItemComponent> CODEC = Codecs.rangedInt(1, Item.field_49998).xmap(MaxStackSizeItemComponent::new, MaxStackSizeItemComponent::maxStackSize);
+    public static final Codec<MaxStackSizeItemComponent> CODEC = Codecs.rangedInt(1, Item.MAX_MAX_COUNT).xmap(MaxStackSizeItemComponent::new, MaxStackSizeItemComponent::maxStackSize);
 
     @Override
     public ItemComponentType<MaxStackSizeItemComponent> type() {

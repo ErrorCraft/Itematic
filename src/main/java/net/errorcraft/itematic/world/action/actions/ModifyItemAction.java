@@ -14,7 +14,7 @@ import net.minecraft.loot.function.LootFunctionTypes;
 
 public record ModifyItemAction(LootFunction itemModifier, ActionContextParameters context) implements Action<ModifyItemAction> {
     public static final Codec<ModifyItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        LootFunctionTypes.field_50023.fieldOf("item_modifier").forGetter(ModifyItemAction::itemModifier),
+        LootFunctionTypes.CODEC.fieldOf("item_modifier").forGetter(ModifyItemAction::itemModifier),
         ActionContextParameters.CODEC.fieldOf("context").forGetter(ModifyItemAction::context)
     ).apply(instance, ModifyItemAction::new));
 

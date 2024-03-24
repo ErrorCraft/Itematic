@@ -352,7 +352,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "itemMatches(Lnet/minecraft/registry/entry/RegistryEntryList;)Z",
+        method = "isIn(Lnet/minecraft/registry/entry/RegistryEntryList;)Z",
         at = @At("HEAD"),
         cancellable = true
     )

@@ -11,11 +11,11 @@ import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.EnchantWithLevelsTradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.ItemFromTypeTradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.SingleEnchantmentTradeModifier;
-import net.minecraft.class_9428;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.Item;
-import net.minecraft.item.map.Type;
+import net.minecraft.item.map.MapDecorationType;
+import net.minecraft.item.map.MapDecorationTypes;
 import net.minecraft.loot.function.AndLootFunction;
 import net.minecraft.loot.function.ExplorationMapLootFunction;
 import net.minecraft.loot.function.SetNameLootFunction;
@@ -532,9 +532,9 @@ public class Trades {
         registerable.register(SELL_NAME_TAG, sell(items, items.getOrThrow(ItemKeys.NAME_TAG), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.masterTradeExperience(), 20));
         registerable.register(SELL_MAP, sell(items, items.getOrThrow(ItemKeys.MAP), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 7));
         registerable.register(BUY_GLASS_PANE, buy(items, items.getOrThrow(ItemKeys.GLASS_PANE), 11, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeBuyTradeExperience()));
-        registerable.register(SELL_MONUMENT_MAP, sellMap(items, 13, StructureTags.ON_OCEAN_EXPLORER_MAPS, "filled_map.monument", Type.MONUMENT, TradeOffersAccessor.apprenticeSellTradeExperience()));
+        registerable.register(SELL_MONUMENT_MAP, sellMap(items, 13, StructureTags.ON_OCEAN_EXPLORER_MAPS, "filled_map.monument", MapDecorationTypes.MONUMENT, TradeOffersAccessor.apprenticeSellTradeExperience()));
         registerable.register(BUY_COMPASS, buy(items, items.getOrThrow(ItemKeys.COMPASS), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.journeymanBuyTradeExperience()));
-        registerable.register(SELL_MANSION_MAP, sellMap(items, 14, StructureTags.ON_WOODLAND_EXPLORER_MAPS, "filled_map.mansion", Type.MANSION, TradeOffersAccessor.journeymanSellTradeExperience()));
+        registerable.register(SELL_MANSION_MAP, sellMap(items, 14, StructureTags.ON_WOODLAND_EXPLORER_MAPS, "filled_map.mansion", MapDecorationTypes.MANSION, TradeOffersAccessor.journeymanSellTradeExperience()));
         registerable.register(SELL_ITEM_FRAME, sell(items, items.getOrThrow(ItemKeys.ITEM_FRAME), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 7));
         registerable.register(SELL_GLOBE_BANNER_PATTERN, sell(items, items.getOrThrow(ItemKeys.GLOBE_BANNER_PATTERN), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.masterTradeExperience(), 8));
         registerable.register(BUY_ROTTEN_FLESH, buy(items, items.getOrThrow(ItemKeys.ROTTEN_FLESH), 32, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.noviceBuyTradeExperience()));
@@ -797,11 +797,11 @@ public class Trades {
             .build();
     }
 
-    private static Trade sellMap(RegistryEntryLookup<Item> items, int price, TagKey<Structure> structure, String name, RegistryEntry<class_9428> iconType, int tradeExperience) {
+    private static Trade sellMap(RegistryEntryLookup<Item> items, int price, TagKey<Structure> structure, String name, RegistryEntry<MapDecorationType> mapDecorationType, int tradeExperience) {
         AndLootFunction itemModifier = AndLootFunction.create(List.of(
             ExplorationMapLootFunction.builder()
                 .withDestination(structure)
-                .withDecoration(iconType)
+                .withDecoration(mapDecorationType)
                 .searchRadius(100)
                 .build(),
             SetNameLootFunction.builder(Text.translatable(name)).build()

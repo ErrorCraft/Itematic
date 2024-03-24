@@ -19,6 +19,7 @@
     "block.BlockItemAccessor",
     "block.BlocksExtender",
     "block.BubbleColumnBlockExtender",
+    "block.CandleBlockExtender",
     "block.CandleCakeBlockExtender",
     "block.CanReplaceBlockExtender",
     "block.CarrotsBlockExtender",
