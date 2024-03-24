@@ -2,13 +2,13 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.lingering_potion"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:dispensable": {
       "behavior": "minecraft:projectile"
     },
+    "minecraft:max_stack_size": 1,
     "minecraft:potion_holder": {
       "duration_multiplier": 0.25
     },

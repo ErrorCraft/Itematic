@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.beetroot"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:compostable": {

@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "block.minecraft.deepslate_iron_ore"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:block": {

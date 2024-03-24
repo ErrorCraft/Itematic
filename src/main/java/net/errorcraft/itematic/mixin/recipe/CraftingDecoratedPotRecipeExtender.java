@@ -9,8 +9,8 @@ import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingDecoratedPotRecipe;
-import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -48,9 +48,9 @@ public class CraftingDecoratedPotRecipeExtender {
      * @reason Uses a registry entry for data-driven items.
      */
     @Overwrite
-    public ItemStack craft(RecipeInputInventory recipeInputInventory, DynamicRegistryManager registryManager) {
-        ItemStack stack = registryManager.get(RegistryKeys.ITEM)
-            .getEntry(ItemKeys.DECORATED_POT)
+    public ItemStack craft(RecipeInputInventory recipeInputInventory, RegistryWrapper.WrapperLookup lookup) {
+        ItemStack stack = lookup.getWrapperOrThrow(RegistryKeys.ITEM)
+            .getOptional(ItemKeys.DECORATED_POT)
             .map(ItemStack::new)
             .orElse(ItemStack.EMPTY);
         if (stack.isEmpty()) {

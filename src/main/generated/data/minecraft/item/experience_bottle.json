@@ -1,10 +1,8 @@
 {
   "base": {
     "display": {
-      "rarity": "uncommon",
       "translation_key": "item.minecraft.experience_bottle"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:dispensable": {
@@ -15,6 +13,7 @@
         "type": "minecraft:experience_bottle"
       }
     },
+    "minecraft:rarity": "uncommon",
     "minecraft:throwable": {
       "angle_offset": -20.0,
       "speed": 0.7

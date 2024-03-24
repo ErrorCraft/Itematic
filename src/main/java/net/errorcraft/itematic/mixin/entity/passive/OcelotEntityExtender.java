@@ -1,49 +1,20 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.OcelotEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(OcelotEntity.class)
 public abstract class OcelotEntityExtender extends MobEntityExtender {
     protected OcelotEntityExtender(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
-    }
-
-    @Redirect(
-        method = "isBreedingItem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
-        )
-    )
-    private boolean testForFoodItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItematicItemTags.OCELOT_FOOD);
-    }
-
-    @ModifyExpressionValue(
-        method = "initGoals",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/entity/passive/OcelotEntity;DLnet/minecraft/recipe/Ingredient;Z)Lnet/minecraft/entity/passive/OcelotEntity$OcelotTemptGoal;"
-        )
-    )
-    private OcelotEntity.OcelotTemptGoal newTemptGoalSetItems(OcelotEntity.OcelotTemptGoal original) {
-        original.itematic$setItems(ItematicItemTags.OCELOT_TEMPT_ITEMS);
-        return original;
     }
 
     @Override

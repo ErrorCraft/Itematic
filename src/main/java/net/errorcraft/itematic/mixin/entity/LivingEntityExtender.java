@@ -9,7 +9,6 @@ import net.errorcraft.itematic.access.entity.LivingEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.FoodItemComponent;
 import net.errorcraft.itematic.item.component.components.LifeSavingItemComponent;
 import net.errorcraft.itematic.item.component.components.UseDurationItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
@@ -31,7 +30,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -85,41 +83,10 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         method = "eatFood",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isFood()Z"
-        )
-    )
-    private boolean doNotCheckForFood(ItemStack instance) {
-        return true;
-    }
-
-    @Redirect(
-        method = "eatFood",
-        at = @At(
-            value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;decrementUnlessCreative(ILnet/minecraft/entity/LivingEntity;)V"
         )
     )
     private void doNotDecrementItemStack(ItemStack instance, int amount, LivingEntity entity) {}
-
-    @Inject(
-        method = "applyFoodEffects",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    private void applyEffectsUseItemComponent(ItemStack stack, World world, LivingEntity targetEntity, CallbackInfo info) {
-        info.cancel();
-        if (world.isClient()) {
-            return;
-        }
-        stack.itematic$getComponent(ItemComponentTypes.FOOD)
-            .map(FoodItemComponent::effects)
-            .ifPresent(effects -> {
-                Random random = world.getRandom();
-                for (FoodItemComponent.Effect effect : effects) {
-                    effect.tryApply(targetEntity, random);
-                }
-            });
-    }
 
     @Redirect(
         method = "getPreferredEquipmentSlot",

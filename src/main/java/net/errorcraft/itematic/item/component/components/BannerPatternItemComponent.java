@@ -24,7 +24,10 @@ public record BannerPatternItemComponent(TagKey<BannerPattern> patterns) impleme
         return CODEC;
     }
 
-    public static BannerPatternItemComponent of(TagKey<BannerPattern> patterns) {
-        return new BannerPatternItemComponent(patterns);
+    public static ItemComponent<?>[] of(TagKey<BannerPattern> patterns) {
+        return new ItemComponent<?>[] {
+            MaxStackSizeItemComponent.of(1),
+            new BannerPatternItemComponent(patterns)
+        };
     }
 }

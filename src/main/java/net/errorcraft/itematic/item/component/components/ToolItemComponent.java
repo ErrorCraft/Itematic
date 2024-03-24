@@ -1,35 +1,32 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
-import net.errorcraft.itematic.item.tool.MiningSpeedEntry;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ToolComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.predicate.TagPredicate;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds) implements ItemComponent<ToolItemComponent> {
-    public static final Codec<ToolItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("damage").forGetter(ToolItemComponent::damage),
-        Codecs.createStrictOptionalFieldCodec(MiningSpeedEntry.CODEC.listOf(), "mining_speeds", List.of()).forGetter(ToolItemComponent::miningSpeeds)
-    ).apply(instance, ToolItemComponent::new));
+public record ToolItemComponent(ToolComponent tool) implements ItemComponent<ToolItemComponent> {
+    public static final Codec<ToolItemComponent> CODEC = ToolComponent.CODEC.xmap(ToolItemComponent::new, ToolItemComponent::tool);
 
     @Override
     public ItemComponentType<ToolItemComponent> type() {
@@ -49,13 +46,9 @@ public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds)
         return true;
     }
 
-    public float getMiningSpeed(BlockState blockState) {
-        for (MiningSpeedEntry entry : this.miningSpeeds) {
-            if (entry.tag().test(blockState.getRegistryEntry())) {
-                return entry.miningSpeed();
-            }
-        }
-        return 1.0f;
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.TOOL, this.tool);
     }
 
     private void useTool(ItemStack stack, World world, BlockPos pos, LivingEntity miner, ItemStackConsumer resultStackConsumer) {
@@ -67,7 +60,11 @@ public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds)
             .position(ActionContextParameter.TARGET, pos.toCenterPos())
             .build();
         stack.itematic$invokeEvent(ItemEvents.USE_TOOL, context);
-        stack.itematic$damage(this.damage, context);
+        stack.itematic$damage(this.tool.damagePerBlock(), context);
+    }
+
+    public static ToolItemComponent of(ToolMaterial material, TagKey<Block> mineableBlocks) {
+        return new ToolItemComponent(material.createComponent(mineableBlocks));
     }
 
     public static Builder builder(int damage) {
@@ -76,20 +73,18 @@ public record ToolItemComponent(int damage, List<MiningSpeedEntry> miningSpeeds)
 
     public static class Builder {
         private final int damage;
-        private final List<MiningSpeedEntry> miningSpeeds = new ArrayList<>();
+        private final List<ToolComponent.Rule> rules = new ArrayList<>();
 
         public Builder(int damage) {
             this.damage = damage;
         }
 
         public ToolItemComponent build() {
-            return new ToolItemComponent(this.damage, this.miningSpeeds);
+            return new ToolItemComponent(new ToolComponent(this.rules, 1.0f, this.damage));
         }
 
-        public Builder miningSpeed(float miningSpeed, TagKey<Block> tag, boolean expected) {
-            if (tag != null) {
-                this.miningSpeeds.add(new MiningSpeedEntry(new TagPredicate<>(tag, expected), miningSpeed));
-            }
+        public Builder rule(ToolComponent.Rule rule) {
+            this.rules.add(rule);
             return this;
         }
     }

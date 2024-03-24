@@ -2,13 +2,13 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.fishing_rod"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:castable": {},
     "minecraft:fuel": {
       "ticks": 300
-    }
+    },
+    "minecraft:max_stack_size": 1
   }
 }

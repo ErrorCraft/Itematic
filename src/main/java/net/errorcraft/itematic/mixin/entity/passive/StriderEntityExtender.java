@@ -1,20 +1,16 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.StriderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -71,29 +67,6 @@ public abstract class StriderEntityExtender extends MobEntityExtender {
     )
     private ItemStack newItemStackForWarpedFungusOnAStickUseCreateStack(ItemConvertible item, @Local(argsOnly = true) ServerWorldAccess world) {
         return world.itematic$createStack(ItemKeys.WARPED_FUNGUS_ON_A_STICK);
-    }
-
-    @Redirect(
-        method = "isBreedingItem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
-        )
-    )
-    private boolean testForFoodItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItematicItemTags.STRIDER_FOOD);
-    }
-
-    @ModifyExpressionValue(
-        method = "initGoals",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/entity/mob/PathAwareEntity;DLnet/minecraft/recipe/Ingredient;Z)Lnet/minecraft/entity/ai/goal/TemptGoal;"
-        )
-    )
-    private TemptGoal newTemptGoalSetItems(TemptGoal original) {
-        original.itematic$setItems(ItematicItemTags.STRIDER_TEMPT_ITEMS);
-        return original;
     }
 
     @Override

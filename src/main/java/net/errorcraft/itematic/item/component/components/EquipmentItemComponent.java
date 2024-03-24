@@ -25,6 +25,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -84,6 +85,7 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
 
     public static ItemComponent<?>[] skull(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, RegistryEntryLookup<SoundEvent> soundEvents, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
+            RarityItemComponent.of(Rarity.UNCOMMON),
             BlockItemComponent.attachedToSide(attachedBlock, otherBlock, Direction.DOWN),
             of(EquipmentSlot.HEAD, false, soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)),

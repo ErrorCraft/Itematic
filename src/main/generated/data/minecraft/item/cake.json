@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "block.minecraft.cake"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:block": {
@@ -11,6 +10,7 @@
     },
     "minecraft:compostable": {
       "level_increase_chance": 1.0
-    }
+    },
+    "minecraft:max_stack_size": 1
   }
 }

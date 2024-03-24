@@ -6,8 +6,8 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.FireworkRocketRecipe;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryWrapper;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,7 +29,7 @@ public class FireworkRocketRecipeExtender {
     }
 
     @Redirect(
-        method = { "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z", "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/DynamicRegistryManager;)Lnet/minecraft/item/ItemStack;" },
+        method = { "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z", "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z",
@@ -48,7 +48,7 @@ public class FireworkRocketRecipeExtender {
     }
 
     @Redirect(
-        method = { "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z", "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/DynamicRegistryManager;)Lnet/minecraft/item/ItemStack;" },
+        method = { "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z", "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z",
@@ -67,14 +67,17 @@ public class FireworkRocketRecipeExtender {
     }
 
     @Redirect(
-        method = "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/DynamicRegistryManager;)Lnet/minecraft/item/ItemStack;",
+        method = "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForFireworkRocketUseRegistryEntry(ItemConvertible item, int count, @Local(argsOnly = true) DynamicRegistryManager registryManager) {
-        return new ItemStack(registryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.FIREWORK_ROCKET), count);
+    private ItemStack newItemStackForFireworkRocketUseRegistryEntry(ItemConvertible item, int count, @Local(argsOnly = true) RegistryWrapper.WrapperLookup lookup) {
+        return lookup.getWrapperOrThrow(RegistryKeys.ITEM)
+            .getOptional(ItemKeys.FIREWORK_ROCKET)
+            .map(entry -> new ItemStack(entry, count))
+            .orElse(ItemStack.EMPTY);
     }
 
     @Redirect(
@@ -84,7 +87,10 @@ public class FireworkRocketRecipeExtender {
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForFireworkRocketUseRegistryEntry(ItemConvertible item, DynamicRegistryManager registryManager) {
-        return new ItemStack(registryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.FIREWORK_ROCKET));
+    private ItemStack newItemStackForFireworkRocketUseRegistryEntry(ItemConvertible item, RegistryWrapper.WrapperLookup lookup) {
+        return lookup.getWrapperOrThrow(RegistryKeys.ITEM)
+            .getOptional(ItemKeys.FIREWORK_ROCKET)
+            .map(ItemStack::new)
+            .orElse(ItemStack.EMPTY);
     }
 }

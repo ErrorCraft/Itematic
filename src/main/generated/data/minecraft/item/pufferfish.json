@@ -2,34 +2,33 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.pufferfish"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "effects": [
         {
-          "chance": 1.0,
           "effect": {
             "id": "minecraft:poison",
             "amplifier": 1,
-            "duration": 1200
+            "duration": 1200,
+            "show_icon": true
           }
         },
         {
-          "chance": 1.0,
           "effect": {
             "id": "minecraft:hunger",
             "amplifier": 2,
-            "duration": 300
+            "duration": 300,
+            "show_icon": true
           }
         },
         {
-          "chance": 1.0,
           "effect": {
             "id": "minecraft:nausea",
-            "duration": 300
+            "duration": 300,
+            "show_icon": true
           }
         }
       ],

@@ -56,9 +56,6 @@
       "net/minecraft/class_1309": [
         "net/errorcraft/itematic/access/entity/LivingEntityAccess"
       ],
-      "net/minecraft/class_1391": [
-        "net/errorcraft/itematic/access/entity/ai/goal/TemptGoalAccess"
-      ],
       "net/minecraft/class_1761": [
         "net/errorcraft/itematic/access/item/ItemGroupAccess"
       ],
@@ -70,9 +67,6 @@
       ],
       "net/minecraft/class_1799": [
         "net/errorcraft/itematic/access/item/ItemStackAccess"
-      ],
-      "net/minecraft/class_1814": [
-        "net/minecraft/util/StringIdentifiable"
       ],
       "net/minecraft/class_1838": [
         "net/errorcraft/itematic/access/item/ItemUsageContextAccess"
@@ -145,9 +139,6 @@
       ],
       "net/minecraft/class_5631": [
         "net/errorcraft/itematic/access/client/item/BundleTooltipDataAccess"
-      ],
-      "net/minecraft/class_5760": [
-        "net/errorcraft/itematic/access/entity/ai/brain/sensor/TemptationsSensorAccess"
       ],
       "net/minecraft/class_6880": [
         "net/errorcraft/itematic/access/registry/entry/RegistryEntryAccess<TT;>"

@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "block.minecraft.brown_candle"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:block": {

@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.turtle_scute"
-    },
-    "max_count": 64
+    }
   },
   "components": {}
 }

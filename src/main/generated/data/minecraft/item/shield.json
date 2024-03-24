@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.shield"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:banner_pattern_holder": {},
@@ -17,6 +16,7 @@
       "equip_sound": "minecraft:item.armor.equip_generic",
       "slot": "offhand"
     },
+    "minecraft:max_stack_size": 1,
     "minecraft:repairable": {
       "items": "minecraft:repairs_shield"
     },

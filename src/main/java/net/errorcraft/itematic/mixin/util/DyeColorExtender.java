@@ -8,6 +8,7 @@ import net.minecraft.util.DyeColor;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(DyeColor.class)
 public class DyeColorExtender implements DyeColorAccess {
@@ -75,6 +76,7 @@ public class DyeColorExtender implements DyeColorAccess {
     @Final
     public static DyeColor BLACK;
 
+    @Unique
     private RegistryKey<Item> itemKey;
 
     static {

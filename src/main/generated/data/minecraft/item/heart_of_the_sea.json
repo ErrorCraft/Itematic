@@ -1,10 +1,10 @@
 {
   "base": {
     "display": {
-      "rarity": "uncommon",
       "translation_key": "item.minecraft.heart_of_the_sea"
-    },
-    "max_count": 64
+    }
   },
-  "components": {}
+  "components": {
+    "minecraft:rarity": "uncommon"
+  }
 }

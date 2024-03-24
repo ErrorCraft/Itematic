@@ -23,6 +23,7 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -69,8 +70,11 @@ public record BlockItemComponent(BlockStateModifier<?> block, boolean operatorOn
         return new BlockItemComponent(new SimpleBlockStateModifier(block), false);
     }
 
-    public static BlockItemComponent operator(RegistryEntry<Block> block) {
-        return new BlockItemComponent(new SimpleBlockStateModifier(block), true);
+    public static ItemComponent<?>[] operator(RegistryEntry<Block> block) {
+        return new ItemComponent<?>[] {
+            RarityItemComponent.of(Rarity.EPIC),
+            new BlockItemComponent(new SimpleBlockStateModifier(block), true)
+        };
     }
 
     public boolean canBeNested() {

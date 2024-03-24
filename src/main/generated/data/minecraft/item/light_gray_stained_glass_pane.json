@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "block.minecraft.light_gray_stained_glass_pane"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:block": {

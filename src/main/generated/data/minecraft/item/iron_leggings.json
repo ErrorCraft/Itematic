@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.iron_leggings"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:armor": {
@@ -27,6 +26,7 @@
     "minecraft:forgeable": {
       "enchantments": "minecraft:leggings_forging"
     },
+    "minecraft:max_stack_size": 1,
     "minecraft:repairable": {
       "items": "minecraft:repairs_iron_armor"
     }

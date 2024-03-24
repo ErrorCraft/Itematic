@@ -11,7 +11,7 @@ import net.minecraft.loot.context.LootContext;
 public record ActionRequirements(ActionContextParameters context, LootCondition conditions) {
     public static final Codec<ActionRequirements> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionContextParameters.CODEC.fieldOf("context").forGetter(ActionRequirements::context),
-        LootConditionTypes.CODEC.fieldOf("conditions").forGetter(ActionRequirements::conditions)
+        LootConditionTypes.field_50031.fieldOf("conditions").forGetter(ActionRequirements::conditions)
     ).apply(instance, ActionRequirements::new));
 
     public boolean test(ActionContext context) {

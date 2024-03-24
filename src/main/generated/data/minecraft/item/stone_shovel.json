@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.stone_shovel"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:damageable": {
@@ -16,18 +15,20 @@
     "minecraft:forgeable": {
       "enchantments": "minecraft:shovel_forging"
     },
+    "minecraft:max_stack_size": 1,
     "minecraft:repairable": {
       "items": "minecraft:repairs_stone_tool"
     },
     "minecraft:tool": {
-      "damage": 1,
-      "mining_speeds": [
+      "rules": [
         {
-          "mining_speed": 4.0,
-          "tag": {
-            "id": "minecraft:mineable/shovel",
-            "expected": true
-          }
+          "blocks": "#minecraft:incorrect_for_stone_tool",
+          "correct_for_drops": false
+        },
+        {
+          "blocks": "#minecraft:mineable/shovel",
+          "correct_for_drops": true,
+          "speed": 4.0
         }
       ]
     },

@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "block.minecraft.oxidized_cut_copper_stairs"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:block": {

@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.trident"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:damageable": {
@@ -17,6 +16,7 @@
     "minecraft:forgeable": {
       "enchantments": "minecraft:trident_forging"
     },
+    "minecraft:max_stack_size": 1,
     "minecraft:projectile": {
       "damage": 1,
       "entity": {
@@ -33,7 +33,8 @@
       "use_riptide_check": true
     },
     "minecraft:tool": {
-      "damage": 2
+      "damage_per_block": 2,
+      "rules": []
     },
     "minecraft:use_animation": {
       "animation": "spear"

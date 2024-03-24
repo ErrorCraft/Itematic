@@ -55,69 +55,9 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
         this.getOrCreateTagBuilder(ItematicItemTags.CROSSBOW_AMMUNITION)
             .addTag(ItematicItemTags.BOW_AMMUNITION)
             .add(ItemKeys.FIREWORK_ROCKET);
-        this.getOrCreateTagBuilder(ItematicItemTags.HORSE_FOOD)
-            .add(ItemKeys.GOLDEN_CARROT)
-            .add(ItemKeys.GOLDEN_APPLE)
-            .add(ItemKeys.ENCHANTED_GOLDEN_APPLE);
-        this.getOrCreateTagBuilder(ItematicItemTags.HORSE_TEMPT_ITEMS)
-            .add(ItemKeys.WHEAT)
-            .add(ItemKeys.SUGAR)
-            .add(ItemKeys.APPLE)
-            .addTag(ItematicItemTags.HORSE_FOOD);
-        this.getOrCreateTagBuilder(ItematicItemTags.CAT_FOOD)
-            .add(ItemKeys.COD)
-            .add(ItemKeys.SALMON);
-        this.getOrCreateTagBuilder(ItematicItemTags.CAT_TEMPT_ITEMS)
-            .addTag(ItematicItemTags.CAT_FOOD);
-        this.getOrCreateTagBuilder(ItematicItemTags.OCELOT_FOOD)
-            .add(ItemKeys.COD)
-            .add(ItemKeys.SALMON);
-        this.getOrCreateTagBuilder(ItematicItemTags.OCELOT_TEMPT_ITEMS)
-            .addTag(ItematicItemTags.OCELOT_FOOD);
-        this.getOrCreateTagBuilder(ItematicItemTags.PIG_FOOD)
-            .add(ItemKeys.CARROT)
-            .add(ItemKeys.POTATO)
-            .add(ItemKeys.BEETROOT);
         this.getOrCreateTagBuilder(ItematicItemTags.PIG_TEMPT_ITEMS)
-            .addTag(ItematicItemTags.PIG_FOOD)
+            .forceAddTag(ItemTags.PIG_FOOD)
             .add(ItemKeys.CARROT_ON_A_STICK);
-        this.getOrCreateTagBuilder(ItematicItemTags.RABBIT_FOOD)
-            .add(ItemKeys.CARROT)
-            .add(ItemKeys.GOLDEN_CARROT);
-        this.getOrCreateTagBuilder(ItematicItemTags.RABBIT_TEMPT_ITEMS)
-            .addTag(ItematicItemTags.RABBIT_FOOD);
-        this.getOrCreateTagBuilder(ItematicItemTags.CHICKEN_FOOD)
-            .add(ItemKeys.WHEAT_SEEDS)
-            .add(ItemKeys.MELON_SEEDS)
-            .add(ItemKeys.PUMPKIN_SEEDS)
-            .add(ItemKeys.BEETROOT_SEEDS)
-            .add(ItemKeys.TORCHFLOWER_SEEDS)
-            .add(ItemKeys.PITCHER_POD);
-        this.getOrCreateTagBuilder(ItematicItemTags.CHICKEN_TEMPT_ITEMS)
-            .addTag(ItematicItemTags.CHICKEN_FOOD);
-        this.getOrCreateTagBuilder(ItematicItemTags.PARROT_TAME_ITEMS)
-            .add(ItemKeys.WHEAT_SEEDS)
-            .add(ItemKeys.MELON_SEEDS)
-            .add(ItemKeys.PUMPKIN_SEEDS)
-            .add(ItemKeys.BEETROOT_SEEDS)
-            .add(ItemKeys.TORCHFLOWER_SEEDS)
-            .add(ItemKeys.PITCHER_POD);
-        this.getOrCreateTagBuilder(ItematicItemTags.COW_TEMPT_ITEMS)
-            .add(ItemKeys.WHEAT);
-        this.getOrCreateTagBuilder(ItematicItemTags.SHEEP_TEMPT_ITEMS)
-            .add(ItemKeys.WHEAT);
-        this.getOrCreateTagBuilder(ItematicItemTags.LLAMA_FOOD)
-            .add(ItemKeys.WHEAT)
-            .add(ItemKeys.HAY_BLOCK);
-        this.getOrCreateTagBuilder(ItematicItemTags.LLAMA_TEMPT_ITEMS)
-            .add(ItemKeys.HAY_BLOCK);
-        this.getOrCreateTagBuilder(ItematicItemTags.STRIDER_FOOD)
-            .add(ItemKeys.WARPED_FUNGUS);
-        this.getOrCreateTagBuilder(ItematicItemTags.STRIDER_TEMPT_ITEMS)
-            .addTag(ItematicItemTags.STRIDER_FOOD)
-            .add(ItemKeys.WARPED_FUNGUS_ON_A_STICK);
-        this.getOrCreateTagBuilder(ItematicItemTags.HOGLIN_FOOD)
-            .add(ItemKeys.CRIMSON_FUNGUS);
         this.getOrCreateTagBuilder(ItematicItemTags.VILLAGER_GATHERABLE_ITEMS)
             .add(ItemKeys.BREAD)
             .add(ItemKeys.POTATO)
@@ -133,44 +73,6 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WHEAT_SEEDS)
             .add(ItemKeys.BEETROOT_SEEDS)
             .add(ItemKeys.BONE_MEAL);
-        this.getOrCreateTagBuilder(ItematicItemTags.GOAT_TEMPT_ITEMS)
-            .add(ItemKeys.WHEAT);
-        this.getOrCreateTagBuilder(ItematicItemTags.FROG_FOOD)
-            .add(ItemKeys.SLIME_BALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.FROG_TEMPT_ITEMS)
-            .addTag(ItematicItemTags.FROG_FOOD);
-        this.getOrCreateTagBuilder(ItematicItemTags.CAMEL_FOOD)
-            .add(ItemKeys.CACTUS);
-        this.getOrCreateTagBuilder(ItematicItemTags.CAMEL_TEMPT_ITEMS)
-            .addTag(ItematicItemTags.CAMEL_FOOD);
-        this.getOrCreateTagBuilder(ItematicItemTags.ARMADILLO_FOOD)
-            .add(ItemKeys.SPIDER_EYE);
-        this.getOrCreateTagBuilder(ItematicItemTags.ARMADILLO_TEMPT_ITEMS)
-            .addTag(ItematicItemTags.ARMADILLO_FOOD);
-        this.getOrCreateTagBuilder(ItematicItemTags.SNIFFER_TEMPT_ITEMS)
-            .add(ItemKeys.TORCHFLOWER_SEEDS);
-        this.getOrCreateTagBuilder(ItematicItemTags.WOLF_FOOD)
-            .add(ItemKeys.BEEF)
-            .add(ItemKeys.PORKCHOP)
-            .add(ItemKeys.CHICKEN)
-            .add(ItemKeys.MUTTON)
-            .add(ItemKeys.RABBIT)
-            .add(ItemKeys.COOKED_BEEF)
-            .add(ItemKeys.COOKED_PORKCHOP)
-            .add(ItemKeys.COOKED_CHICKEN)
-            .add(ItemKeys.COOKED_MUTTON)
-            .add(ItemKeys.COOKED_RABBIT)
-            .add(ItemKeys.ROTTEN_FLESH);
-        this.getOrCreateTagBuilder(ItematicItemTags.WOLF_TEMPT_ITEMS)
-            .addTag(ItematicItemTags.WOLF_FOOD)
-            .add(ItemKeys.BONE);
-        this.getOrCreateTagBuilder(ItematicItemTags.PANDA_FOOD)
-            .add(ItemKeys.BAMBOO);
-        this.getOrCreateTagBuilder(ItematicItemTags.PANDA_EAT_ITEMS)
-            .addTag(ItematicItemTags.PANDA_FOOD)
-            .add(ItemKeys.CAKE);
-        this.getOrCreateTagBuilder(ItematicItemTags.TURTLE_FOOD)
-            .add(ItemKeys.SEAGRASS);
         this.getOrCreateTagBuilder(ItematicItemTags.OAK_BUILDING_BLOCKS)
             .add(ItemKeys.OAK_LOG)
             .add(ItemKeys.OAK_WOOD)

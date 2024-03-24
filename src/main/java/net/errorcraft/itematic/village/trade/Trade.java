@@ -144,7 +144,7 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         public static final Codec<Entry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(Entry::item),
             Codecs.createStrictOptionalFieldCodec(Range.INT_CODEC, "count", Range.IntegerRange.of(1)).forGetter(Entry::count),
-            Codecs.createStrictOptionalFieldCodec(LootFunctionTypes.CODEC, "item_modifier").forGetter(Entry::itemModifier)
+            Codecs.createStrictOptionalFieldCodec(LootFunctionTypes.field_50023, "item_modifier").forGetter(Entry::itemModifier)
         ).apply(instance, Entry::new));
 
         public ItemStack createStack(LootContext context) {

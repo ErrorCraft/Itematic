@@ -24,6 +24,7 @@ import net.minecraft.component.*;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
@@ -52,10 +53,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -76,6 +74,11 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     private int count;
 
     @Shadow
+    @Final
+    @Mutable
+    ComponentMapImpl components;
+
+    @Shadow
     public abstract boolean isEmpty();
 
     @Shadow
@@ -91,9 +94,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     public abstract void decrement(int amount);
 
     @Shadow
-    @Final
-    @Mutable
-    ComponentMapImpl components;
+    public abstract int getMaxCount();
 
     @Unique
     private final Set<ItemEvent> activeEvents = new HashSet<>();
@@ -263,13 +264,14 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         return this.entry;
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses a null check instead of a default air item.
-     */
-    @Overwrite
-    public int getMaxCount() {
-        return this.entry == null ? ItemBase.MAX_MAX_COUNT : this.entry.value().getMaxCount();
+    @ModifyConstant(
+        method = "getMaxCount",
+        constant = @Constant(
+            intValue = 1
+        )
+    )
+    private int defaultMaxCountUseField(int constant) {
+        return Item.DEFAULT_MAX_COUNT;
     }
 
     @Inject(
@@ -281,18 +283,6 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             info.setReturnValue(Rarity.COMMON);
         }
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses a null check instead of a default air item.
-     */
-    @Overwrite
-    public int getMaxDamage() {
-        if (this.entry == null) {
-            return 0;
-        }
-        return this.entry.value().getMaxDamage();
     }
 
     /**
@@ -315,6 +305,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         return original
             || this.entry == null
             || this.itematic$isOf(ItemKeys.AIR);
+    }
+
+    @Redirect(
+        method = "isStackable",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isDamageable()Z"
+        )
+    )
+    private boolean isDamageableReturnFalse(ItemStack instance) {
+        return false;
     }
 
     /**
@@ -392,6 +393,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             info.setReturnValue(false);
         }
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public boolean takesDamageFrom(DamageSource source) {
+        return this.itematic$getComponent(ItemComponentTypes.IMMUNE_TO_DAMAGE)
+            .map(c -> c.damage(source))
+            .orElse(true);
     }
 
     @Inject(

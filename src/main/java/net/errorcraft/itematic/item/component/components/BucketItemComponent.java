@@ -129,19 +129,31 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         }
     }
 
-    public static BucketItemComponent fluid(RegistryEntry<Fluid> fluid) {
-        return new BucketItemComponent(Optional.of(fluid), Optional.empty(), Optional.empty(), Optional.empty());
+    public static ItemComponent<?>[] fluid(RegistryEntry<Fluid> fluid) {
+        return new ItemComponent<?>[] {
+            MaxStackSizeItemComponent.of(16),
+            new BucketItemComponent(Optional.of(fluid), Optional.empty(), Optional.empty(), Optional.empty())
+        };
     }
 
-    public static BucketItemComponent fluid(RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound) {
-        return new BucketItemComponent(Optional.of(fluid), Optional.empty(), Optional.empty(), Optional.of(emptyingSound));
+    public static ItemComponent<?>[] fluid(RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound) {
+        return new ItemComponent<?>[] {
+            MaxStackSizeItemComponent.of(1),
+            new BucketItemComponent(Optional.of(fluid), Optional.empty(), Optional.empty(), Optional.of(emptyingSound))
+        };
     }
 
-    public static BucketItemComponent entity(RegistryEntry<Fluid> fluid, RegistryEntry<EntityType<?>> entity, RegistryEntry<SoundEvent> emptyingSound) {
-        return new BucketItemComponent(Optional.of(fluid), Optional.of(new SimpleEntityInitializer<>(entity.value())), Optional.empty(), Optional.of(emptyingSound));
+    public static ItemComponent<?>[] entity(RegistryEntry<Fluid> fluid, RegistryEntry<EntityType<?>> entity, RegistryEntry<SoundEvent> emptyingSound) {
+        return new ItemComponent[] {
+            MaxStackSizeItemComponent.of(1),
+            new BucketItemComponent(Optional.of(fluid), Optional.of(new SimpleEntityInitializer<>(entity.value())), Optional.empty(), Optional.of(emptyingSound))
+        };
     }
 
-    public static BucketItemComponent block(RegistryEntry<Block> block, RegistryEntry<SoundEvent> emptyingSound) {
-        return new BucketItemComponent(Optional.empty(), Optional.empty(), Optional.of(new SimpleBlockStateModifier(block)), Optional.of(emptyingSound));
+    public static ItemComponent<?>[] block(RegistryEntry<Block> block, RegistryEntry<SoundEvent> emptyingSound) {
+        return new ItemComponent[] {
+            MaxStackSizeItemComponent.of(1),
+            new BucketItemComponent(Optional.empty(), Optional.empty(), Optional.of(new SimpleBlockStateModifier(block)), Optional.of(emptyingSound))
+        };
     }
 }

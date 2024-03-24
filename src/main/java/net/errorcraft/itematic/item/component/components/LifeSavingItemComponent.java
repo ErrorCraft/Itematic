@@ -2,7 +2,6 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.entity.effect.StatusEffectInstanceUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public record LifeSavingItemComponent(List<StatusEffectInstance> effects) implements ItemComponent<LifeSavingItemComponent> {
     public static final Codec<LifeSavingItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        StatusEffectInstanceUtil.CODEC.listOf().fieldOf("effects").forGetter(LifeSavingItemComponent::effects)
+        StatusEffectInstance.CODEC.listOf().fieldOf("effects").forGetter(LifeSavingItemComponent::effects)
     ).apply(instance, LifeSavingItemComponent::new));
 
     @Override

@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "block.minecraft.end_portal_frame"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:block": {

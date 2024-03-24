@@ -8,18 +8,16 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.List;
-
 @Mixin(RepairItemRecipe.class)
 public class RepairItemRecipeExtender {
     @Redirect(
-        method = "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/DynamicRegistryManager;)Lnet/minecraft/item/ItemStack;",
+        method = "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, @Local List<ItemStack> stacks) {
-        return new ItemStack(stacks.get(0).getRegistryEntry());
+    private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, @Local(ordinal = 0) ItemStack firstStack) {
+        return new ItemStack(firstStack.getRegistryEntry());
     }
 }

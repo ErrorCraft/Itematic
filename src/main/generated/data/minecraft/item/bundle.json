@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.bundle"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:item_holder": {
@@ -11,6 +10,7 @@
       "empty_sound": "minecraft:item.bundle.drop_contents",
       "insert_item_sound": "minecraft:item.bundle.insert",
       "remove_item_sound": "minecraft:item.bundle.remove_one"
-    }
+    },
+    "minecraft:max_stack_size": 1
   }
 }

@@ -22,6 +22,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.entity.Entity;
@@ -31,7 +32,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
@@ -45,11 +45,8 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -67,6 +64,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Final
     public static UUID ATTACK_SPEED_MODIFIER_ID;
 
+    @Shadow
+    @Final
+    public static int DEFAULT_MAX_COUNT;
+
     @Unique
     private static final Interner<ComponentMap> COMPONENT_INTERNER = ItemAccessor.SettingsAccessor.componentInterner();
     @Unique
@@ -76,25 +77,14 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Unique
     private ItemEventMap events;
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBase implementation for data-driven items.
-     */
-    @Overwrite
-    public final int getMaxCount() {
-        return this.base.maxCount();
-    }
-
-    @Redirect(
-        method = "getRarity",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/item/Item;rarity:Lnet/minecraft/util/Rarity;",
-            opcode = Opcodes.GETFIELD
+    @ModifyConstant(
+        method = "getMaxCount",
+        constant = @Constant(
+            intValue = 1
         )
     )
-    private Rarity getRarityUseItemBaseImplementation(Item instance) {
-        return this.base.display().rarity();
+    private int defaultMaxCountUseField(int constant) {
+        return DEFAULT_MAX_COUNT;
     }
 
     @Inject(
@@ -364,31 +354,15 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean isFood() {
-        return this.itematic$hasComponent(ItemComponentTypes.FOOD);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean isDamageable() {
-        return this.itematic$hasComponent(ItemComponentTypes.DAMAGEABLE);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean isEnchantable(ItemStack stack) {
-        return stack.getCount() == 1 && this.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
+    @Redirect(
+        method = "isEnchantable",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/DataComponentType;)Z"
+        )
+    )
+    public boolean isEnchantableUseComponentCheck(ItemStack instance, DataComponentType<?> type) {
+        return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
     }
 
     @Inject(
@@ -488,17 +462,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public boolean damage(DamageSource source) {
-        return this.itematic$getComponent(ItemComponentTypes.IMMUNE_TO_DAMAGE)
-            .map(c -> c.damage(source))
-            .orElse(true);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
     public boolean canBeNested() {
         return this.itematic$getComponent(ItemComponentTypes.BLOCK)
             .map(BlockItemComponent::canBeNested)
@@ -558,40 +521,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         if (this.itematic$hasComponent(ItemComponentTypes.ITEM_HOLDER)) {
             info.setReturnValue(ItemHolderItemComponent.ITEM_BAR_COLOR);
         }
-    }
-
-    @Redirect(
-        method = { "getItemBarStep", "getItemBarColor" },
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/item/Item;maxDamage:I",
-            opcode = Opcodes.GETFIELD
-        )
-    )
-    public int maxDamageFieldUseMaxDamageMethodCall(Item instance) {
-        return this.getMaxDamage();
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public final int getMaxDamage() {
-        return this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
-            .map(DamageableItemComponent::durability)
-            .orElse(0);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public float getMiningSpeedMultiplier(ItemStack stack, BlockState state) {
-        return this.itematic$getComponent(ItemComponentTypes.TOOL)
-            .map(c -> c.getMiningSpeed(state))
-            .orElse(1.0f);
     }
 
     /**

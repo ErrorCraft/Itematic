@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.lava_bucket"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:bucket": {
@@ -16,6 +15,7 @@
     "minecraft:fuel": {
       "ticks": 20000
     },
+    "minecraft:max_stack_size": 1,
     "minecraft:recipe_remainder": {
       "item": "minecraft:bucket"
     }

@@ -1,12 +1,11 @@
 {
   "base": {
     "display": {
-      "rarity": "uncommon",
       "translation_key": "item.minecraft.dragon_breath"
-    },
-    "max_count": 64
+    }
   },
   "components": {
+    "minecraft:rarity": "uncommon",
     "minecraft:recipe_remainder": {
       "item": "minecraft:glass_bottle"
     }

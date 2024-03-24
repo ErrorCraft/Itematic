@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "block.minecraft.oak_hanging_sign"
-    },
-    "max_count": 16
+    }
   },
   "components": {
     "minecraft:block": {
@@ -16,6 +15,7 @@
     },
     "minecraft:fuel": {
       "ticks": 800
-    }
+    },
+    "minecraft:max_stack_size": 16
   }
 }

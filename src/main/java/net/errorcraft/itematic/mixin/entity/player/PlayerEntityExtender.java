@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 public abstract class PlayerEntityExtender extends LivingEntity implements LivingEntityAccess {
     @Shadow
     @Final
-    private PlayerInventory inventory;
+    PlayerInventory inventory;
 
     @Shadow
     @Final

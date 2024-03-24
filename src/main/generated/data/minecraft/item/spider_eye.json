@@ -2,18 +2,17 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.spider_eye"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "effects": [
         {
-          "chance": 1.0,
           "effect": {
             "id": "minecraft:poison",
-            "duration": 100
+            "duration": 100,
+            "show_icon": true
           }
         }
       ],

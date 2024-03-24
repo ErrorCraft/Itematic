@@ -1,10 +1,8 @@
 {
   "base": {
     "display": {
-      "rarity": "rare",
       "translation_key": "item.minecraft.golden_apple"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:consumable": {},
@@ -12,24 +10,25 @@
       "always_edible": true,
       "effects": [
         {
-          "chance": 1.0,
           "effect": {
             "id": "minecraft:regeneration",
             "amplifier": 1,
-            "duration": 100
+            "duration": 100,
+            "show_icon": true
           }
         },
         {
-          "chance": 1.0,
           "effect": {
             "id": "minecraft:absorption",
-            "duration": 2400
+            "duration": 2400,
+            "show_icon": true
           }
         }
       ],
       "nutrition": 4,
       "saturation_modifier": 1.2
     },
+    "minecraft:rarity": "rare",
     "minecraft:use_animation": {
       "animation": "eat"
     },

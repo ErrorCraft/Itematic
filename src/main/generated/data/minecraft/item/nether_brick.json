@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.nether_brick"
-    },
-    "max_count": 64
+    }
   },
   "components": {}
 }

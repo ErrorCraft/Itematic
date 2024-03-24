@@ -8,8 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.SuspiciousStewRecipe;
-import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -84,7 +84,7 @@ public class SuspiciousStewRecipeExtender {
     }
 
     @Redirect(
-        method = "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/DynamicRegistryManager;)Lnet/minecraft/item/ItemStack;",
+        method = "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/block/SuspiciousStewIngredient;of(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/block/SuspiciousStewIngredient;"
@@ -96,13 +96,16 @@ public class SuspiciousStewRecipeExtender {
     }
 
     @Redirect(
-        method = "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/DynamicRegistryManager;)Lnet/minecraft/item/ItemStack;",
+        method = "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForSuspiciousStewUseRegistryEntry(ItemConvertible item, int count, @Local(argsOnly = true) DynamicRegistryManager registryManager) {
-        return new ItemStack(registryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.SUSPICIOUS_STEW), count);
+    private ItemStack newItemStackForSuspiciousStewUseRegistryEntry(ItemConvertible item, int count, @Local(argsOnly = true) RegistryWrapper.WrapperLookup lookup) {
+        return lookup.getWrapperOrThrow(RegistryKeys.ITEM)
+            .getOptional(ItemKeys.SUSPICIOUS_STEW)
+            .map(entry -> new ItemStack(entry, count))
+            .orElse(ItemStack.EMPTY);
     }
 }

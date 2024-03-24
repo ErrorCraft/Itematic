@@ -2,13 +2,13 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.ender_pearl"
-    },
-    "max_count": 16
+    }
   },
   "components": {
     "minecraft:cooldown": {
       "ticks": 20
     },
+    "minecraft:max_stack_size": 16,
     "minecraft:projectile": {
       "entity": {
         "type": "minecraft:ender_pearl"

@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
@@ -8,15 +7,14 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.GoalSelector;
-import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,35 +37,22 @@ public abstract class PigEntityExtender extends MobEntityExtender {
         ),
         slice = @Slice(
             from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/item/Items;CARROT_ON_A_STICK:Lnet/minecraft/item/Item;"
+                value = "NEW",
+                target = "(Lnet/minecraft/entity/mob/PathAwareEntity;DLjava/util/function/Predicate;Z)Lnet/minecraft/entity/ai/goal/TemptGoal;"
             )
         )
     )
     private void doNotAddCarrotOnAStickGoalSelector(GoalSelector instance, int priority, Goal goal) {}
 
-    @ModifyExpressionValue(
-        method = "initGoals",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/entity/mob/PathAwareEntity;DLnet/minecraft/recipe/Ingredient;Z)Lnet/minecraft/entity/ai/goal/TemptGoal;",
-            ordinal = 1
-        )
-    )
-    private TemptGoal newTemptGoalSetItems(TemptGoal original) {
-        original.itematic$setItems(ItematicItemTags.PIG_TEMPT_ITEMS);
-        return original;
-    }
-
     @Redirect(
-        method = "isBreedingItem",
+        method = "method_58372",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
+            target = "Lnet/minecraft/item/ItemStack;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
         )
     )
-    private boolean testForFoodItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItematicItemTags.PIG_FOOD);
+    private static boolean isInForPigFoodItemsUsePigTemptItemsItemTagCheck(ItemStack instance, TagKey<Item> tag) {
+        return instance.isIn(ItematicItemTags.PIG_TEMPT_ITEMS);
     }
 
     @Redirect(

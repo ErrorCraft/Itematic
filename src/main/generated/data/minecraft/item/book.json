@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.book"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:enchantable": {

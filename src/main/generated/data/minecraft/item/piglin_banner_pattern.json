@@ -8,12 +8,12 @@
         }
       ],
       "translation_key": "item.minecraft.piglin_banner_pattern"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:banner_pattern": {
       "patterns": "minecraft:pattern_item/piglin"
-    }
+    },
+    "minecraft:max_stack_size": 1
   }
 }

@@ -2,10 +2,10 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.writable_book"
-    },
-    "max_count": 1
+    }
   },
   "components": {
+    "minecraft:max_stack_size": 1,
     "minecraft:writable": {
       "transforms_into": "minecraft:written_book"
     }

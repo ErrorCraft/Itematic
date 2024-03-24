@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.netherite_sword"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:damageable": {
@@ -19,25 +18,21 @@
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_fire"
     },
+    "minecraft:max_stack_size": 1,
     "minecraft:repairable": {
       "items": "minecraft:repairs_netherite_tool"
     },
     "minecraft:tool": {
-      "damage": 2,
-      "mining_speeds": [
+      "damage_per_block": 2,
+      "rules": [
         {
-          "mining_speed": 15.0,
-          "tag": {
-            "id": "minecraft:sword_super_efficient",
-            "expected": true
-          }
+          "blocks": "minecraft:cobweb",
+          "correct_for_drops": true,
+          "speed": 15.0
         },
         {
-          "mining_speed": 1.5,
-          "tag": {
-            "id": "minecraft:sword_efficient",
-            "expected": true
-          }
+          "blocks": "#minecraft:sword_efficient",
+          "speed": 1.5
         }
       ]
     },

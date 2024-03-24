@@ -1,12 +1,12 @@
 {
   "base": {
     "display": {
-      "rarity": "epic",
       "translation_key": "item.minecraft.music_disc_wait"
-    },
-    "max_count": 1
+    }
   },
   "components": {
+    "minecraft:max_stack_size": 1,
+    "minecraft:rarity": "epic",
     "minecraft:record": {
       "description_key": "item.minecraft.music_disc_wait.desc",
       "duration": 4760,

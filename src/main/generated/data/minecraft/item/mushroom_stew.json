@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.mushroom_stew"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:consumable": {
@@ -13,6 +12,7 @@
       "nutrition": 6,
       "saturation_modifier": 0.6
     },
+    "minecraft:max_stack_size": 1,
     "minecraft:use_animation": {
       "animation": "eat"
     },

@@ -1,16 +1,12 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,17 +22,6 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
 
     protected AbstractHorseEntityExtender(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
-    }
-
-    @Redirect(
-        method = "isBreedingItem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
-        )
-    )
-    private boolean testForFoodItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItematicItemTags.HORSE_FOOD);
     }
 
     @Redirect(
@@ -163,18 +148,6 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
     )
     private boolean isOfForEnchantedGoldenAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.ENCHANTED_GOLDEN_APPLE);
-    }
-
-    @ModifyExpressionValue(
-        method = "initCustomGoals",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/entity/mob/PathAwareEntity;DLnet/minecraft/recipe/Ingredient;Z)Lnet/minecraft/entity/ai/goal/TemptGoal;"
-        )
-    )
-    private TemptGoal newTemptGoalSetItems(TemptGoal original) {
-        original.itematic$setItems(ItematicItemTags.HORSE_TEMPT_ITEMS);
-        return original;
     }
 
     @Redirect(

@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.glistering_melon_slice"
-    },
-    "max_count": 64
+    }
   },
   "components": {}
 }

@@ -7,13 +7,14 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
+import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionTypes;
 
 public record ModifyItemAction(LootFunction itemModifier, ActionContextParameters context) implements Action<ModifyItemAction> {
     public static final Codec<ModifyItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        LootFunctionTypes.CODEC.fieldOf("item_modifier").forGetter(ModifyItemAction::itemModifier),
+        LootFunctionTypes.field_50023.fieldOf("item_modifier").forGetter(ModifyItemAction::itemModifier),
         ActionContextParameters.CODEC.fieldOf("context").forGetter(ModifyItemAction::context)
     ).apply(instance, ModifyItemAction::new));
 
@@ -29,7 +30,8 @@ public record ModifyItemAction(LootFunction itemModifier, ActionContextParameter
         }
         LootContext lootContext = context.createLootContext(this.context);
         lootContext.markActive(LootContext.itemModifier(this.itemModifier));
-        this.itemModifier.apply(context.stack(), lootContext);
+        ItemStack resultStack = this.itemModifier.apply(context.stack(), lootContext);
+        context.setResultStack(resultStack);
         return true;
     }
 }

@@ -2,13 +2,13 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.milk_bucket"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:consumable": {
       "result_item": "minecraft:bucket"
     },
+    "minecraft:max_stack_size": 1,
     "minecraft:recipe_remainder": {
       "item": "minecraft:bucket"
     },

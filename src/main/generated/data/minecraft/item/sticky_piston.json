@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "block.minecraft.sticky_piston"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:block": {

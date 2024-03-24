@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "block.minecraft.light_blue_shulker_box"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:block": {
@@ -11,6 +10,7 @@
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:place_block_from_item"
-    }
+    },
+    "minecraft:max_stack_size": 1
   }
 }

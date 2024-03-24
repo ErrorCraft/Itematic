@@ -1,10 +1,8 @@
 {
   "base": {
     "display": {
-      "rarity": "uncommon",
       "translation_key": "item.minecraft.totem_of_undying"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:life_saving": {
@@ -12,18 +10,23 @@
         {
           "id": "minecraft:regeneration",
           "amplifier": 1,
-          "duration": 900
+          "duration": 900,
+          "show_icon": true
         },
         {
           "id": "minecraft:absorption",
           "amplifier": 1,
-          "duration": 100
+          "duration": 100,
+          "show_icon": true
         },
         {
           "id": "minecraft:fire_resistance",
-          "duration": 800
+          "duration": 800,
+          "show_icon": true
         }
       ]
-    }
+    },
+    "minecraft:max_stack_size": 1,
+    "minecraft:rarity": "uncommon"
   }
 }

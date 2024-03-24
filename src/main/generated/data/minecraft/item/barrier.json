@@ -1,14 +1,13 @@
 {
   "base": {
     "display": {
-      "rarity": "epic",
       "translation_key": "block.minecraft.barrier"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:block": {
       "block": "minecraft:barrier"
-    }
+    },
+    "minecraft:rarity": "epic"
   }
 }

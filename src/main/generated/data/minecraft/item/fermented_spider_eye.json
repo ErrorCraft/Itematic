@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.fermented_spider_eye"
-    },
-    "max_count": 64
+    }
   },
   "components": {}
 }

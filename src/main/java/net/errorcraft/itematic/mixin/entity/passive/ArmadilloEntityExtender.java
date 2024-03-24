@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -10,7 +9,6 @@ import net.minecraft.entity.passive.ArmadilloEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -22,17 +20,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class ArmadilloEntityExtender extends MobEntityExtender {
     protected ArmadilloEntityExtender(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
-    }
-
-    @Redirect(
-        method = "isBreedingItem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
-        )
-    )
-    private boolean testForFoodItemsUseItemTagCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.isIn(ItematicItemTags.ARMADILLO_FOOD);
     }
 
     @Redirect(

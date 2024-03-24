@@ -2,19 +2,19 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.chicken"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "effects": [
         {
-          "chance": 0.3,
           "effect": {
             "id": "minecraft:hunger",
-            "duration": 600
-          }
+            "duration": 600,
+            "show_icon": true
+          },
+          "probability": 0.3
         }
       ],
       "nutrition": 2,

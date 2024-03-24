@@ -2,19 +2,19 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.poisonous_potato"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "effects": [
         {
-          "chance": 0.6,
           "effect": {
             "id": "minecraft:poison",
-            "duration": 100
-          }
+            "duration": 100,
+            "show_icon": true
+          },
+          "probability": 0.6
         }
       ],
       "nutrition": 2,

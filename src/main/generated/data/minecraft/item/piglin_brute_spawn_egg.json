@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.piglin_brute_spawn_egg"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:can_place_on_fluids": {

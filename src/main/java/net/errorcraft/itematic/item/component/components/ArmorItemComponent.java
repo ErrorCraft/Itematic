@@ -54,6 +54,7 @@ public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional
 
     public static ItemComponent<?>[] of(ArmorItem.Type type, int damageFactor, RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound) {
         return new ItemComponent<?>[] {
+            MaxStackSizeItemComponent.of(1),
             DamageableItemComponent.of(type.getMaxDamage(damageFactor)),
             EquipmentItemComponent.of(type.getEquipmentSlot(), true, equipSound),
             of(material)
@@ -62,6 +63,7 @@ public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional
 
     public static ItemComponent<?>[] of(int durability, EquipmentSlot slot, RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound) {
         return new ItemComponent<?>[] {
+            MaxStackSizeItemComponent.of(1),
             DamageableItemComponent.of(durability),
             EquipmentItemComponent.of(slot, true, equipSound),
             of(material)
@@ -70,6 +72,7 @@ public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional
 
     public static ItemComponent<?>[] ofAnimal(RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound, AnimalArmorItem.Type type) {
         return new ItemComponent<?>[] {
+            MaxStackSizeItemComponent.of(1),
             EquipmentItemComponent.of(EquipmentSlot.BODY, false, equipSound),
             of(material, type)
         };

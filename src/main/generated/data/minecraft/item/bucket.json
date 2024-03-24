@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.bucket"
-    },
-    "max_count": 16
+    }
   },
   "components": {
     "minecraft:bucket": {
@@ -11,6 +10,7 @@
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:bucket"
-    }
+    },
+    "minecraft:max_stack_size": 16
   }
 }

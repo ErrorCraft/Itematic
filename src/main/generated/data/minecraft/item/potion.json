@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.potion"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:consumable": {
@@ -12,6 +11,7 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:potion"
     },
+    "minecraft:max_stack_size": 1,
     "minecraft:potion": {},
     "minecraft:potion_holder": {
       "duration_multiplier": 1.0

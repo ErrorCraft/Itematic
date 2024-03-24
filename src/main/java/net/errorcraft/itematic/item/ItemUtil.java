@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.block.ComposterBlockUtil;
-import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
@@ -46,6 +45,7 @@ import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.component.type.SuspiciousStewEffectsComponent;
+import net.minecraft.component.type.ToolComponent;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -75,6 +75,7 @@ import net.minecraft.predicate.item.ItemPredicate;
 import net.minecraft.predicate.item.ItemSubPredicateTypes;
 import net.minecraft.registry.*;
 import net.minecraft.registry.tag.BannerPatternTags;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.InstrumentTags;
 import net.minecraft.sound.SoundCategory;
@@ -176,8 +177,9 @@ public class ItemUtil {
         private void bootstrapConsumables() {
             this.bootstrapFood();
             this.registerable.register(ItemKeys.MILK_BUCKET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MILK_BUCKET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MILK_BUCKET).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(UseDurationItemComponent.of(MilkBucketItemAccessor.getMaxUseTime()))
                     .with(UseAnimationItemComponent.of(UseAction.DRINK))
                     .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
@@ -188,8 +190,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.POTION, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POTION).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POTION).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(UseDurationItemComponent.of(PotionItemAccessor.getMaxUseTime()))
                     .with(PotionItemComponent.INSTANCE)
                     .with(PotionHolderItemComponent.of(1.0f))
@@ -389,26 +392,30 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSHROOM_STEW, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSHROOM_STEW).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSHROOM_STEW).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(FoodItemComponent.from(FoodComponents.MUSHROOM_STEW, this.items.getOrThrow(ItemKeys.BOWL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RABBIT_STEW, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_STEW).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.RABBIT_STEW).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(FoodItemComponent.from(FoodComponents.RABBIT_STEW, this.items.getOrThrow(ItemKeys.BOWL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BEETROOT_SOUP, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEETROOT_SOUP).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BEETROOT_SOUP).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(FoodItemComponent.from(FoodComponents.BEETROOT_SOUP))
                     .build()
             ));
             this.registerable.register(ItemKeys.SUSPICIOUS_STEW, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SUSPICIOUS_STEW).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SUSPICIOUS_STEW).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(FoodItemComponent.from(FoodComponents.SUSPICIOUS_STEW, this.items.getOrThrow(ItemKeys.BOWL)))
                     .build(),
                 ItemEventMap.builder()
@@ -438,14 +445,16 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_APPLE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_APPLE).rarity(Rarity.RARE).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_APPLE).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.RARE))
                     .with(FoodItemComponent.from(FoodComponents.GOLDEN_APPLE))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENCHANTED_GOLDEN_APPLE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_GOLDEN_APPLE).rarity(Rarity.EPIC).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_GOLDEN_APPLE).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.EPIC))
                     .with(FoodItemComponent.from(FoodComponents.ENCHANTED_GOLDEN_APPLE))
                     .with(GlintItemComponent.of(true))
                     .build()
@@ -464,8 +473,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.HONEY_BOTTLE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEY_BOTTLE).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEY_BOTTLE).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40, UseAction.DRINK, this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .build()
@@ -1656,8 +1666,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.DRAGON_EGG, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRAGON_EGG).rarity(Rarity.EPIC).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRAGON_EGG).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.EPIC))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DRAGON_EGG)))
                     .build()
             ));
@@ -1692,8 +1703,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.BEACON, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BEACON).rarity(Rarity.RARE).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BEACON).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.RARE))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BEACON)))
                     .build()
             ));
@@ -1878,14 +1890,16 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.BARRIER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARRIER).rarity(Rarity.EPIC).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BARRIER).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.EPIC))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BARRIER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT).rarity(Rarity.EPIC).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.EPIC))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT)))
                     .build()
             ));
@@ -1992,8 +2006,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.STRUCTURE_VOID, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRUCTURE_VOID).rarity(Rarity.EPIC).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRUCTURE_VOID).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.EPIC))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRUCTURE_VOID)))
                     .build()
             ));
@@ -2136,8 +2151,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CONDUIT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CONDUIT).rarity(Rarity.RARE).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CONDUIT).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.RARE))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CONDUIT)))
                     .build()
             ));
@@ -2921,26 +2937,30 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CRIMSON_SIGN), this.blocks.getOrThrow(BlockKeys.CRIMSON_WALL_SIGN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.WARPED_SIGN), this.blocks.getOrThrow(BlockKeys.WARPED_WALL_SIGN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_HANGING_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_HANGING_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CRIMSON_HANGING_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CRIMSON_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.CRIMSON_WALL_HANGING_SIGN), Direction.UP))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_HANGING_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_HANGING_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WARPED_HANGING_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.WARPED_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.WARPED_WALL_HANGING_SIGN), Direction.UP))
                     .build()
             ));
@@ -3525,98 +3545,114 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.WHITE_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_BED, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_BED).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_BED).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_BED)))
                     .build()
             ));
@@ -3720,120 +3756,137 @@ public class ItemUtil {
 
         private void bootstrapShulkerBoxes() {
             this.registerable.register(ItemKeys.SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHITE_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_SHULKER_BOX, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_SHULKER_BOX).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_SHULKER_BOX).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
                     .build()
@@ -3857,31 +3910,31 @@ public class ItemUtil {
 
         private void bootstrapOperatorOnlyBlocks() {
             this.registerable.register(ItemKeys.COMMAND_BLOCK, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COMMAND_BLOCK).rarity(Rarity.EPIC).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.COMMAND_BLOCK).build()),
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.COMMAND_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.REPEATING_COMMAND_BLOCK, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.REPEATING_COMMAND_BLOCK).rarity(Rarity.EPIC).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.REPEATING_COMMAND_BLOCK).build()),
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.REPEATING_COMMAND_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAIN_COMMAND_BLOCK, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHAIN_COMMAND_BLOCK).rarity(Rarity.EPIC).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHAIN_COMMAND_BLOCK).build()),
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.CHAIN_COMMAND_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STRUCTURE_BLOCK, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRUCTURE_BLOCK).rarity(Rarity.EPIC).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.STRUCTURE_BLOCK).build()),
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.STRUCTURE_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.JIGSAW, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JIGSAW).rarity(Rarity.EPIC).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JIGSAW).build()),
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.JIGSAW)))
                     .build()
@@ -3890,14 +3943,14 @@ public class ItemUtil {
 
         private void bootstrapToolsAndWeapons() {
             this.registerable.register(ItemKeys.WOODEN_SWORD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_SWORD).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_SWORD).build()),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.WOOD,ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.sword(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_SHOVEL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_SHOVEL).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_SHOVEL).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.shovel(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
@@ -3907,21 +3960,21 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_PICKAXE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_PICKAXE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_PICKAXE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.pickaxe(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_AXE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_AXE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_AXE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.axe(ToolMaterials.WOOD, 6.0d, -3.2d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_HOE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_HOE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOODEN_HOE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.hoe(ToolMaterials.WOOD, 0.0d, -3.0d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
@@ -3931,13 +3984,13 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_SWORD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_SWORD).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_SWORD).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.sword(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_SHOVEL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_SHOVEL).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_SHOVEL).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.shovel(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build(),
@@ -3946,19 +3999,19 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_PICKAXE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_PICKAXE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_PICKAXE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.pickaxe(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_AXE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_AXE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_AXE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.axe(ToolMaterials.STONE, 7.0d, -3.2d, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_HOE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_HOE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.STONE_HOE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.hoe(ToolMaterials.STONE, 1.0d, -2.0d, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build(),
@@ -3967,13 +4020,13 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_SWORD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_SWORD).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_SWORD).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.sword(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_SHOVEL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_SHOVEL).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_SHOVEL).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.shovel(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                     .build(),
@@ -3982,19 +4035,19 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_PICKAXE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_PICKAXE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_PICKAXE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.pickaxe(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_AXE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_AXE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_AXE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.axe(ToolMaterials.GOLD, 6.0d, -3.0d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_HOE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HOE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HOE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.hoe(ToolMaterials.GOLD, 0.0d, -3.0d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                     .build(),
@@ -4003,13 +4056,13 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_SWORD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_SWORD).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_SWORD).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.sword(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_SHOVEL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_SHOVEL).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_SHOVEL).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.shovel(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build(),
@@ -4018,19 +4071,19 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_PICKAXE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_PICKAXE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_PICKAXE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.pickaxe(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_AXE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_AXE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_AXE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.axe(ToolMaterials.IRON, 6.0d, -3.1d, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_HOE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HOE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HOE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.hoe(ToolMaterials.IRON, 2.0d, -1.0d, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build(),
@@ -4039,13 +4092,13 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_SWORD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_SWORD).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_SWORD).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.sword(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_SHOVEL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_SHOVEL).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_SHOVEL).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.shovel(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build(),
@@ -4054,19 +4107,19 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_PICKAXE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_PICKAXE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_PICKAXE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.pickaxe(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_AXE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_AXE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_AXE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.axe(ToolMaterials.DIAMOND, 5.0d, -3.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_HOE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HOE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HOE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.hoe(ToolMaterials.DIAMOND, 3.0d, 0.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build(),
@@ -4075,14 +4128,14 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_SWORD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SWORD).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SWORD).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.sword(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_SHOVEL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SHOVEL).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_SHOVEL).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.shovel(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
@@ -4092,21 +4145,21 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_PICKAXE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_PICKAXE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_PICKAXE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.pickaxe(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_AXE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_AXE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_AXE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.axe(ToolMaterials.NETHERITE, 5.0d, -3.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_HOE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HOE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HOE).build()),
                 ItemComponentSet.builder()
                     .with(DamageableItemComponent.hoe(ToolMaterials.NETHERITE, 4.0d, 0.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
@@ -4116,27 +4169,31 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.FISHING_ROD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FISHING_ROD).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FISHING_ROD).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(CastableItemComponent.INSTANCE)
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHEARS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHEARS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHEARS).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(DamageableItemComponent.of(238))
                     .with(ToolItemComponent.builder(1)
-                        .miningSpeed(15.0f, ItematicBlockTags.SHEARS_SUPER_EFFICIENT, true)
-                        .miningSpeed(5.0f, ItematicBlockTags.SHEARS_SLIGHTLY_EFFICIENT, true)
-                        .miningSpeed(2.0f, ItematicBlockTags.SHEARS_EFFICIENT, true)
+                        .rule(ToolComponent.Rule.ofAlwaysDropping(List.of(Blocks.COBWEB), 15.0f))
+                        .rule(ToolComponent.Rule.of(BlockTags.LEAVES, 15.0f))
+                        .rule(ToolComponent.Rule.of(BlockTags.WOOL, 5.0f))
+                        .rule(ToolComponent.Rule.of(List.of(Blocks.VINE, Blocks.GLOW_LICHEN), 2.0f))
                         .build())
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.SHEAR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BOW, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOW).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BOW).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(DamageableItemComponent.of(384))
                     .with(ShooterItemComponent.of(ItematicItemTags.BOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, BowItem.RANGE))
                     .with(UseAnimationItemComponent.of(UseAction.BOW))
@@ -4146,8 +4203,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CROSSBOW, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CROSSBOW).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CROSSBOW).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(DamageableItemComponent.of(465))
                     .with(ShooterItemComponent.of(ItematicItemTags.CROSSBOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, CrossbowItem.RANGE, this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_LOADING_START), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_1), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_2), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_3)))
                     .with(UseAnimationItemComponent.of(UseAction.CROSSBOW))
@@ -4157,8 +4215,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.TRIDENT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TRIDENT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TRIDENT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(DamageableItemComponent.of(250, true))
                     .with(ToolItemComponent.builder(2)
                         .build())
@@ -4194,8 +4253,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CARROT_ON_A_STICK, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CARROT_ON_A_STICK).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CARROT_ON_A_STICK).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(DamageableItemComponent.of(25))
                     .with(ForgeableItemComponent.of(EnchantmentTags.STEERING_FORGING))
                     .with(SteeringItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.PIG), 7))
@@ -4205,8 +4265,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_FUNGUS_ON_A_STICK, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WARPED_FUNGUS_ON_A_STICK).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WARPED_FUNGUS_ON_A_STICK).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(DamageableItemComponent.of(100))
                     .with(ForgeableItemComponent.of(EnchantmentTags.STEERING_FORGING))
                     .with(SteeringItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.STRIDER), 1))
@@ -4216,8 +4277,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.FLINT_AND_STEEL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLINT_AND_STEEL).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLINT_AND_STEEL).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(DamageableItemComponent.of(64))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.USE_ON_BLOCK)))
                     .build(),
@@ -4233,8 +4295,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.BRUSH, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BRUSH).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BRUSH).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BrushItemComponent.INSTANCE)
                     .with(UseDurationItemComponent.of(BrushItemAccessor.maxBrushTime()))
                     .with(DamageableItemComponent.of(64))
@@ -4248,163 +4311,188 @@ public class ItemUtil {
         private void bootstrapEntities() {
             this.bootstrapSpawnEggs();
             this.registerable.register(ItemKeys.MINECART, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MINECART).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MINECART).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.MINECART, MinecartEntity::new), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHEST_MINECART, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHEST_MINECART).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHEST_MINECART).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.CHEST_MINECART, ChestMinecartEntity::new), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.FURNACE_MINECART, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FURNACE_MINECART).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FURNACE_MINECART).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.FURNACE_MINECART, FurnaceMinecartEntity::new), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TNT_MINECART, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TNT_MINECART).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TNT_MINECART).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.TNT_MINECART, TntMinecartEntity::new), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOPPER_MINECART, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HOPPER_MINECART).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HOPPER_MINECART).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.HOPPER_MINECART, HopperMinecartEntity::new), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.COMMAND_BLOCK_MINECART, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COMMAND_BLOCK_MINECART).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COMMAND_BLOCK_MINECART).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.EPIC))
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.COMMAND_BLOCK_MINECART, CommandBlockMinecartEntity::new), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.OAK_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.OAK_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.OAK_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.OAK), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.OAK_CHEST_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.OAK_CHEST_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.OAK_CHEST_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.OAK), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPRUCE_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPRUCE_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPRUCE_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.SPRUCE), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPRUCE_CHEST_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPRUCE_CHEST_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPRUCE_CHEST_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.SPRUCE), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.BIRCH_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BIRCH_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BIRCH_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.BIRCH), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.BIRCH_CHEST_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BIRCH_CHEST_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BIRCH_CHEST_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.BIRCH), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.JUNGLE_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.JUNGLE_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.JUNGLE_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.JUNGLE), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.JUNGLE_CHEST_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.JUNGLE_CHEST_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.JUNGLE_CHEST_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.JUNGLE), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.ACACIA_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ACACIA_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ACACIA_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.ACACIA), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.ACACIA_CHEST_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ACACIA_CHEST_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ACACIA_CHEST_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.ACACIA), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHERRY_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHERRY_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHERRY_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.CHERRY), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHERRY_CHEST_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHERRY_CHEST_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHERRY_CHEST_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.CHERRY), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.DARK_OAK_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DARK_OAK_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DARK_OAK_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.DARK_OAK), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.DARK_OAK_CHEST_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DARK_OAK_CHEST_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DARK_OAK_CHEST_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.DARK_OAK), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.MANGROVE_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MANGROVE_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MANGROVE_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.MANGROVE), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.MANGROVE_CHEST_BOAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MANGROVE_CHEST_BOAT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MANGROVE_CHEST_BOAT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.MANGROVE), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.BAMBOO_RAFT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAMBOO_RAFT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAMBOO_RAFT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.BAMBOO), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.BAMBOO_CHEST_RAFT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAMBOO_CHEST_RAFT).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BAMBOO_CHEST_RAFT).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.BAMBOO), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
@@ -4428,14 +4516,16 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.ARMOR_STAND, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARMOR_STAND).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARMOR_STAND).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(EntityItemComponent.from(new ArmorStandEntityInitializer(), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_CRYSTAL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.END_CRYSTAL).rarity(Rarity.RARE).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.END_CRYSTAL).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.RARE))
                     .with(EntityItemComponent.of(new EndCrystalEntityInitializer()))
                     .build()
             ));
@@ -5599,8 +5689,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CAKE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CAKE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CAKE).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAKE)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.GUARANTEED_TO_COMPOST))
                     .build()
@@ -5611,8 +5702,10 @@ public class ItemUtil {
             this.bootstrapArmor();
             this.bootstrapSkulls();
             this.registerable.register(ItemKeys.ELYTRA, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ELYTRA).rarity(Rarity.UNCOMMON).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ELYTRA).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.UNCOMMON))
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(DamageableItemComponent.of(432, true))
                     .with(EquipmentItemComponent.of(EquipmentSlot.CHEST, true, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_ELYTRA)))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_ELYTRA))
@@ -5620,8 +5713,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.SHIELD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHIELD).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SHIELD).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(DamageableItemComponent.of(336))
                     .with(EquipmentItemComponent.of(EquipmentSlot.OFFHAND, false, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_SHIELD))
@@ -5637,7 +5731,7 @@ public class ItemUtil {
 
         private void bootstrapArmor() {
             this.registerable.register(ItemKeys.LEATHER_HELMET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_HELMET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_HELMET).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.HELMET_ENCHANTING))
@@ -5649,7 +5743,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.LEATHER_CHESTPLATE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_CHESTPLATE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_CHESTPLATE).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.CHESTPLATE_ENCHANTING))
@@ -5661,7 +5755,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.LEATHER_LEGGINGS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_LEGGINGS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_LEGGINGS).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.LEGGINGS_ENCHANTING))
@@ -5673,7 +5767,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.LEATHER_BOOTS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_BOOTS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_BOOTS).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.BOOTS_ENCHANTING))
@@ -5685,7 +5779,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_HELMET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_HELMET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_HELMET).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.HELMET_ENCHANTING))
@@ -5695,7 +5789,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_CHESTPLATE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_CHESTPLATE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_CHESTPLATE).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.CHESTPLATE_ENCHANTING))
@@ -5705,7 +5799,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_LEGGINGS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_LEGGINGS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_LEGGINGS).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.LEGGINGS_ENCHANTING))
@@ -5715,7 +5809,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_BOOTS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_BOOTS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CHAINMAIL_BOOTS).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.BOOTS_ENCHANTING))
@@ -5725,7 +5819,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_HELMET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.HELMET_ENCHANTING))
@@ -5735,7 +5829,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_CHESTPLATE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_CHESTPLATE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_CHESTPLATE).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.CHESTPLATE_ENCHANTING))
@@ -5745,7 +5839,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_LEGGINGS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_LEGGINGS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_LEGGINGS).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.LEGGINGS_ENCHANTING))
@@ -5755,7 +5849,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_BOOTS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_BOOTS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_BOOTS).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.BOOTS_ENCHANTING))
@@ -5765,7 +5859,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_HELMET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HELMET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HELMET).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.HELMET_ENCHANTING))
@@ -5775,7 +5869,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_CHESTPLATE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_CHESTPLATE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_CHESTPLATE).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.CHESTPLATE_ENCHANTING))
@@ -5785,7 +5879,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_LEGGINGS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_LEGGINGS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_LEGGINGS).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.LEGGINGS_ENCHANTING))
@@ -5795,7 +5889,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_BOOTS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_BOOTS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_BOOTS).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.BOOTS_ENCHANTING))
@@ -5805,7 +5899,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_HELMET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HELMET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HELMET).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.HELMET_ENCHANTING))
@@ -5815,7 +5909,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_CHESTPLATE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_CHESTPLATE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_CHESTPLATE).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.CHESTPLATE_ENCHANTING))
@@ -5825,7 +5919,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_LEGGINGS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_LEGGINGS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_LEGGINGS).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.LEGGINGS_ENCHANTING))
@@ -5835,7 +5929,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_BOOTS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_BOOTS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_BOOTS).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.BOOTS_ENCHANTING))
@@ -5845,7 +5939,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_HELMET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HELMET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_HELMET).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
@@ -5856,7 +5950,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_CHESTPLATE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_CHESTPLATE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_CHESTPLATE).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
@@ -5867,7 +5961,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_LEGGINGS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_LEGGINGS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_LEGGINGS).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
@@ -5878,7 +5972,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_BOOTS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_BOOTS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHERITE_BOOTS).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
@@ -5889,7 +5983,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.TURTLE_HELMET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TURTLE_HELMET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TURTLE_HELMET).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(275, EquipmentSlot.HEAD, this.armorMaterials.getOrThrow(ArmorMaterialKeys.TURTLE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_TURTLE)))
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.TURTLE, EnchantmentTags.HELMET_ENCHANTING))
@@ -5899,7 +5993,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.LEATHER_HORSE_ARMOR, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_HORSE_ARMOR).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_HORSE_ARMOR).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER), AnimalArmorItem.Type.EQUESTRIAN))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
@@ -5908,28 +6002,28 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_HORSE_ARMOR, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HORSE_ARMOR).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HORSE_ARMOR).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON), AnimalArmorItem.Type.EQUESTRIAN))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_HORSE_ARMOR, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HORSE_ARMOR).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HORSE_ARMOR).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD), AnimalArmorItem.Type.EQUESTRIAN))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_HORSE_ARMOR, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HORSE_ARMOR).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HORSE_ARMOR).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND), AnimalArmorItem.Type.EQUESTRIAN))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOLF_ARMOR, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOLF_ARMOR).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WOLF_ARMOR).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.ARMADILLO), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND), AnimalArmorItem.Type.CANINE))
                     .build()
@@ -5938,43 +6032,43 @@ public class ItemUtil {
 
         private void bootstrapSkulls() {
             this.registerable.register(ItemKeys.SKELETON_SKULL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SKELETON_SKULL).rarity(Rarity.UNCOMMON).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SKELETON_SKULL).build()),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.SKELETON_SKULL), this.blocks.getOrThrow(BlockKeys.SKELETON_WALL_SKULL), this.soundEvents, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WITHER_SKELETON_SKULL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WITHER_SKELETON_SKULL).rarity(Rarity.UNCOMMON).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WITHER_SKELETON_SKULL).build()),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.WITHER_SKELETON_SKULL), this.blocks.getOrThrow(BlockKeys.WITHER_SKELETON_WALL_SKULL), this.soundEvents, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PLAYER_HEAD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PLAYER_HEAD).rarity(Rarity.UNCOMMON).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PLAYER_HEAD).build()),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.PLAYER_HEAD), this.blocks.getOrThrow(BlockKeys.PLAYER_WALL_HEAD), this.soundEvents, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOMBIE_HEAD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ZOMBIE_HEAD).rarity(Rarity.UNCOMMON).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ZOMBIE_HEAD).build()),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.ZOMBIE_HEAD), this.blocks.getOrThrow(BlockKeys.ZOMBIE_WALL_HEAD), this.soundEvents, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CREEPER_HEAD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CREEPER_HEAD).rarity(Rarity.UNCOMMON).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CREEPER_HEAD).build()),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.CREEPER_HEAD), this.blocks.getOrThrow(BlockKeys.CREEPER_WALL_HEAD), this.soundEvents, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.DRAGON_HEAD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRAGON_HEAD).rarity(Rarity.UNCOMMON).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DRAGON_HEAD).build()),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.DRAGON_HEAD), this.blocks.getOrThrow(BlockKeys.DRAGON_WALL_HEAD), this.soundEvents, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PIGLIN_HEAD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PIGLIN_HEAD).rarity(Rarity.UNCOMMON).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PIGLIN_HEAD).build()),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.skull(this.blocks.getOrThrow(BlockKeys.PIGLIN_HEAD), this.blocks.getOrThrow(BlockKeys.PIGLIN_WALL_HEAD), this.soundEvents, this.dispenseBehaviors))
                     .build()
@@ -6008,127 +6102,145 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.OAK_HANGING_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_HANGING_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_HANGING_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.OAK_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPRUCE_HANGING_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_HANGING_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_HANGING_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.SPRUCE_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.SPRUCE_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.BIRCH_HANGING_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_HANGING_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_HANGING_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BIRCH_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.BIRCH_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.JUNGLE_HANGING_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_HANGING_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_HANGING_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.JUNGLE_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.JUNGLE_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.ACACIA_HANGING_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_HANGING_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_HANGING_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.ACACIA_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.ACACIA_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHERRY_HANGING_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_HANGING_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_HANGING_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CHERRY_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.CHERRY_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.DARK_OAK_HANGING_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_HANGING_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_HANGING_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DARK_OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.DARK_OAK_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.MANGROVE_HANGING_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_HANGING_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_HANGING_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.MANGROVE_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.MANGROVE_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.BAMBOO_HANGING_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_HANGING_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_HANGING_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BAMBOO_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.BAMBOO_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.HANGING_SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.OAK_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.OAK_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.OAK_SIGN), this.blocks.getOrThrow(BlockKeys.OAK_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPRUCE_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.SPRUCE_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.SPRUCE_SIGN), this.blocks.getOrThrow(BlockKeys.SPRUCE_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.BIRCH_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BIRCH_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BIRCH_SIGN), this.blocks.getOrThrow(BlockKeys.BIRCH_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.JUNGLE_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.JUNGLE_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.JUNGLE_SIGN), this.blocks.getOrThrow(BlockKeys.JUNGLE_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.ACACIA_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ACACIA_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.ACACIA_SIGN), this.blocks.getOrThrow(BlockKeys.ACACIA_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHERRY_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CHERRY_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CHERRY_SIGN), this.blocks.getOrThrow(BlockKeys.CHERRY_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.DARK_OAK_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DARK_OAK_SIGN), this.blocks.getOrThrow(BlockKeys.DARK_OAK_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.MANGROVE_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MANGROVE_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.MANGROVE_SIGN), this.blocks.getOrThrow(BlockKeys.MANGROVE_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.BAMBOO_SIGN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_SIGN).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BAMBOO_SIGN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BAMBOO_SIGN), this.blocks.getOrThrow(BlockKeys.BAMBOO_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.SIGN_FUEL_TIME))
                     .build()
@@ -7372,24 +7484,27 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.SNOWBALL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNOWBALL).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SNOWBALL).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(ThrowableItemComponent.of(1.5f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.SNOWBALL)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EGG, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EGG).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EGG).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(ThrowableItemComponent.of(1.5f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EGG)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENDER_PEARL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDER_PEARL).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENDER_PEARL).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(ThrowableItemComponent.of(1.5f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.ENDER_PEARL)))
                     .with(CooldownItemComponent.of(20))
@@ -7437,8 +7552,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPERIENCE_BOTTLE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EXPERIENCE_BOTTLE).rarity(Rarity.UNCOMMON).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.EXPERIENCE_BOTTLE).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.UNCOMMON))
                     .with(ThrowableItemComponent.of(0.7f, -20.0f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
@@ -7471,8 +7587,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.SPLASH_POTION, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPLASH_POTION).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPLASH_POTION).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(PotionHolderItemComponent.of(1.0f))
                     .with(ThrowableItemComponent.of(0.5f, -20.0f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.POTION)))
@@ -7497,8 +7614,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.LINGERING_POTION, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LINGERING_POTION).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LINGERING_POTION).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(PotionHolderItemComponent.of(0.25f))
                     .with(ThrowableItemComponent.of(0.5f, -20.0f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.POTION)))
@@ -7609,97 +7727,97 @@ public class ItemUtil {
 
         private void bootstrapRecords() {
             this.registerable.register(ItemKeys.MUSIC_DISC_13, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_13).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_13).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_13), ItemKeys.MUSIC_DISC_13, 178 * 20, 1))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CAT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CAT).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CAT).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CAT), ItemKeys.MUSIC_DISC_CAT, 185 * 20, 2))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_BLOCKS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_BLOCKS).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_BLOCKS).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_BLOCKS), ItemKeys.MUSIC_DISC_BLOCKS, 345 * 20, 3))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CHIRP, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CHIRP).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_CHIRP).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CHIRP), ItemKeys.MUSIC_DISC_CHIRP, 185 * 20, 4))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_FAR, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_FAR).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_FAR).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_FAR), ItemKeys.MUSIC_DISC_FAR, 174 * 20, 5))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_MALL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MALL).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MALL).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_MALL), ItemKeys.MUSIC_DISC_MALL, 197 * 20, 6))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_MELLOHI, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MELLOHI).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_MELLOHI).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_MELLOHI), ItemKeys.MUSIC_DISC_MELLOHI, 96 * 20, 7))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_STAL, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STAL).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STAL).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_STAL), ItemKeys.MUSIC_DISC_STAL, 150 * 20, 8))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_STRAD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STRAD).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_STRAD).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_STRAD), ItemKeys.MUSIC_DISC_STRAD, 188 * 20, 9))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_WARD, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WARD).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WARD).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_WARD), ItemKeys.MUSIC_DISC_WARD, 251 * 20, 10))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_11, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_11).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_11).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_11), ItemKeys.MUSIC_DISC_11, 71 * 20, 11))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_WAIT, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WAIT).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_WAIT).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_WAIT), ItemKeys.MUSIC_DISC_WAIT, 238 * 20, 12))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_OTHERSIDE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_OTHERSIDE).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_OTHERSIDE).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_OTHERSIDE), ItemKeys.MUSIC_DISC_OTHERSIDE, 195 * 20, 14))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_RELIC, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_RELIC).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_RELIC).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_RELIC), ItemKeys.MUSIC_DISC_RELIC, 218 * 20, 14))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_PIGSTEP, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_PIGSTEP).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_PIGSTEP).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_PIGSTEP), ItemKeys.MUSIC_DISC_PIGSTEP, 149 * 20, 13))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_5, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_5).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_5).build()),
                 ItemComponentSet.builder()
                     .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_5), ItemKeys.MUSIC_DISC_5, 178 * 20, 15))
                     .build()
@@ -7711,14 +7829,14 @@ public class ItemUtil {
 
         private void bootstrapBuckets() {
             this.registerable.register(ItemKeys.BUCKET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUCKET).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUCKET).build()),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.EMPTY)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WATER_BUCKET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build()),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.WATER), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
@@ -7726,7 +7844,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.LAVA_BUCKET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LAVA_BUCKET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LAVA_BUCKET).build()),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.LAVA), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_LAVA)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
@@ -7735,49 +7853,49 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.POWDER_SNOW_BUCKET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POWDER_SNOW_BUCKET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POWDER_SNOW_BUCKET).build()),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.block(this.blocks.getOrThrow(BlockKeys.POWDER_SNOW), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_POWDER_SNOW)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PUFFERFISH_BUCKET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUFFERFISH_BUCKET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUFFERFISH_BUCKET).build()),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SALMON_BUCKET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SALMON_BUCKET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SALMON_BUCKET).build()),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.SALMON), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COD_BUCKET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COD_BUCKET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COD_BUCKET).build()),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.COD), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TROPICAL_FISH_BUCKET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH_BUCKET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH_BUCKET).build()),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.AXOLOTL_BUCKET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.AXOLOTL_BUCKET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.AXOLOTL_BUCKET).build()),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.AXOLOTL), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_AXOLOTL)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TADPOLE_BUCKET, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TADPOLE_BUCKET).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TADPOLE_BUCKET).build()),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.TADPOLE), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_TADPOLE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
@@ -7893,128 +8011,144 @@ public class ItemUtil {
         private void bootstrapBanners() {
             this.bootstrapBannerPatterns();
             this.registerable.register(ItemKeys.WHITE_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.WHITE_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.WHITE_BANNER), this.blocks.getOrThrow(BlockKeys.WHITE_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.WHITE))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.ORANGE_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.ORANGE_BANNER), this.blocks.getOrThrow(BlockKeys.ORANGE_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.ORANGE))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.MAGENTA_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.MAGENTA_BANNER), this.blocks.getOrThrow(BlockKeys.MAGENTA_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.MAGENTA))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_BANNER), this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.LIGHT_BLUE))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.YELLOW_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.YELLOW_BANNER), this.blocks.getOrThrow(BlockKeys.YELLOW_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.YELLOW))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIME_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.LIME_BANNER), this.blocks.getOrThrow(BlockKeys.LIME_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.LIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PINK_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.PINK_BANNER), this.blocks.getOrThrow(BlockKeys.PINK_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.PINK))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GRAY_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.GRAY_BANNER), this.blocks.getOrThrow(BlockKeys.GRAY_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.GRAY))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_BANNER), this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.LIGHT_GRAY))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.CYAN_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CYAN_BANNER), this.blocks.getOrThrow(BlockKeys.CYAN_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.CYAN))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.PURPLE_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.PURPLE_BANNER), this.blocks.getOrThrow(BlockKeys.PURPLE_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.PURPLE))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLUE_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BLUE_BANNER), this.blocks.getOrThrow(BlockKeys.BLUE_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.BLUE))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BROWN_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BROWN_BANNER), this.blocks.getOrThrow(BlockKeys.BROWN_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.BROWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GREEN_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.GREEN_BANNER), this.blocks.getOrThrow(BlockKeys.GREEN_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.GREEN))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.RED_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.RED_BANNER), this.blocks.getOrThrow(BlockKeys.RED_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.RED))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_BANNER, create(
-                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_BANNER).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.BLACK_BANNER).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BLACK_BANNER), this.blocks.getOrThrow(BlockKeys.BLACK_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.BLACK))
@@ -8024,37 +8158,40 @@ public class ItemUtil {
 
         private void bootstrapBannerPatterns() {
             this.registerable.register(ItemKeys.FLOWER_BANNER_PATTERN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLOWER_BANNER_PATTERN).tooltip(ItemKeys.FLOWER_BANNER_PATTERN).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.FLOWER_BANNER_PATTERN).tooltip(ItemKeys.FLOWER_BANNER_PATTERN).build()),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.FLOWER_PATTERN_ITEM))
                     .build()
             ));
             this.registerable.register(ItemKeys.CREEPER_BANNER_PATTERN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CREEPER_BANNER_PATTERN).tooltip(ItemKeys.CREEPER_BANNER_PATTERN).rarity(Rarity.UNCOMMON).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CREEPER_BANNER_PATTERN).tooltip(ItemKeys.CREEPER_BANNER_PATTERN).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.UNCOMMON))
                     .with(BannerPatternItemComponent.of(BannerPatternTags.CREEPER_PATTERN_ITEM))
                     .build()
             ));
             this.registerable.register(ItemKeys.SKULL_BANNER_PATTERN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SKULL_BANNER_PATTERN).tooltip(ItemKeys.SKULL_BANNER_PATTERN).rarity(Rarity.UNCOMMON).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SKULL_BANNER_PATTERN).tooltip(ItemKeys.SKULL_BANNER_PATTERN).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.UNCOMMON))
                     .with(BannerPatternItemComponent.of(BannerPatternTags.SKULL_PATTERN_ITEM))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOJANG_BANNER_PATTERN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MOJANG_BANNER_PATTERN).tooltip(ItemKeys.MOJANG_BANNER_PATTERN).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.MOJANG_BANNER_PATTERN).tooltip(ItemKeys.MOJANG_BANNER_PATTERN).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.EPIC))
                     .with(BannerPatternItemComponent.of(BannerPatternTags.MOJANG_PATTERN_ITEM))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOBE_BANNER_PATTERN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOBE_BANNER_PATTERN).tooltip(ItemKeys.GLOBE_BANNER_PATTERN).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLOBE_BANNER_PATTERN).tooltip(ItemKeys.GLOBE_BANNER_PATTERN).build()),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.GLOBE_PATTERN_ITEM))
                     .build()
             ));
             this.registerable.register(ItemKeys.PIGLIN_BANNER_PATTERN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIGLIN_BANNER_PATTERN).tooltip(ItemKeys.PIGLIN_BANNER_PATTERN).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PIGLIN_BANNER_PATTERN).tooltip(ItemKeys.PIGLIN_BANNER_PATTERN).build()),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.PIGLIN_PATTERN_ITEM))
                     .build()
@@ -8218,8 +8355,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_STAR, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_STAR).rarity(Rarity.UNCOMMON).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NETHER_STAR).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.UNCOMMON))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_EXPLOSION))
                     .build()
             ));
@@ -8230,8 +8368,9 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.AIR).build())
             ));
             this.registerable.register(ItemKeys.SADDLE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SADDLE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SADDLE).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(SaddleItemComponent.INSTANCE)
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.SADDLE)))
                     .build()
@@ -8333,8 +8472,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.BUNDLE, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUNDLE).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUNDLE).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(ItemHolderItemComponent.of(BundleContentsComponent.MAX_SIZE, this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
                     .build()
             ));
@@ -8342,8 +8482,9 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.CLOCK).build())
             ));
             this.registerable.register(ItemKeys.SPYGLASS, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPYGLASS).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPYGLASS).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(ZoomItemComponent.of(SpyglassItem.FOV_MULTIPLIER, this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
                     .with(UseDurationItemComponent.of(SpyglassItem.MAX_USE_TIME))
                     .with(UseAnimationItemComponent.of(UseAction.SPYGLASS))
@@ -8423,14 +8564,16 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLISTERING_MELON_SLICE).build())
             ));
             this.registerable.register(ItemKeys.WRITABLE_BOOK, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WRITABLE_BOOK).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WRITABLE_BOOK).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(WritableItemComponent.of(this.items.getOrThrow(ItemKeys.WRITTEN_BOOK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WRITTEN_BOOK, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WRITTEN_BOOK).build(), 16),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WRITTEN_BOOK).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(16))
                     .with(TextHolderItemComponent.INSTANCE)
                     .with(GlintItemComponent.of(true))
                     .build(),
@@ -8452,8 +8595,10 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.ENCHANTED_BOOK, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_BOOK).rarity(Rarity.UNCOMMON).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ENCHANTED_BOOK).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.UNCOMMON))
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(EnchantmentHolderItemComponent.of(this.items.getOrThrow(ItemKeys.BOOK)))
                     .with(GlintItemComponent.of(true))
                     .build()
@@ -8500,14 +8645,17 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POPPED_CHORUS_FRUIT).build())
             ));
             this.registerable.register(ItemKeys.DRAGON_BREATH, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DRAGON_BREATH).rarity(Rarity.UNCOMMON).build()),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DRAGON_BREATH).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.UNCOMMON))
                     .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TOTEM_OF_UNDYING, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TOTEM_OF_UNDYING).rarity(Rarity.UNCOMMON).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TOTEM_OF_UNDYING).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
+                    .with(RarityItemComponent.of(Rarity.UNCOMMON))
                     .with(LifeSavingItemComponent.of(
                         new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 900, 1),
                         new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 100, 1),
@@ -8522,14 +8670,18 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_NUGGET).build())
             ));
             this.registerable.register(ItemKeys.KNOWLEDGE_BOOK, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.KNOWLEDGE_BOOK).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.KNOWLEDGE_BOOK).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.EPIC))
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(UnlockRecipesItemComponent.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemKeys.DEBUG_STICK, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DEBUG_STICK).rarity(Rarity.EPIC).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DEBUG_STICK).build()),
                 ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.EPIC))
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(DebugStickItemComponent.INSTANCE)
                     .with(GlintItemComponent.of(true))
                     .build()
@@ -8541,11 +8693,15 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.NAUTILUS_SHELL).build())
             ));
             this.registerable.register(ItemKeys.HEART_OF_THE_SEA, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HEART_OF_THE_SEA).rarity(Rarity.UNCOMMON).build())
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HEART_OF_THE_SEA).build()),
+                ItemComponentSet.builder()
+                    .with(RarityItemComponent.of(Rarity.UNCOMMON))
+                    .build()
             ));
             this.registerable.register(ItemKeys.GOAT_HORN, create(
-                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOAT_HORN).build(), 1),
+                new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOAT_HORN).build()),
                 ItemComponentSet.builder()
+                    .with(MaxStackSizeItemComponent.of(1))
                     .with(PlayableItemComponent.of(InstrumentTags.GOAT_HORNS))
                     .with(UseAnimationItemComponent.of(UseAction.TOOT_HORN))
                     .build()

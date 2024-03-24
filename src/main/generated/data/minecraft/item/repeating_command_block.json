@@ -1,15 +1,14 @@
 {
   "base": {
     "display": {
-      "rarity": "epic",
       "translation_key": "block.minecraft.repeating_command_block"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:block": {
       "block": "minecraft:repeating_command_block",
       "operator_only": true
-    }
+    },
+    "minecraft:rarity": "epic"
   }
 }

@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "block.minecraft.smooth_basalt"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:block": {

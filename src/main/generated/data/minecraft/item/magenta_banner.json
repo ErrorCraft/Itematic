@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "block.minecraft.magenta_banner"
-    },
-    "max_count": 16
+    }
   },
   "components": {
     "minecraft:banner_pattern_holder": {
@@ -19,6 +18,7 @@
     },
     "minecraft:fuel": {
       "ticks": 300
-    }
+    },
+    "minecraft:max_stack_size": 16
   }
 }

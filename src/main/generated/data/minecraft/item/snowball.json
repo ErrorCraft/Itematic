@@ -2,13 +2,13 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.snowball"
-    },
-    "max_count": 16
+    }
   },
   "components": {
     "minecraft:dispensable": {
       "behavior": "minecraft:projectile"
     },
+    "minecraft:max_stack_size": 16,
     "minecraft:projectile": {
       "entity": {
         "type": "minecraft:snowball"

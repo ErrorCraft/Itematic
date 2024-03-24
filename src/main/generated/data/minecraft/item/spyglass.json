@@ -2,10 +2,10 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.spyglass"
-    },
-    "max_count": 1
+    }
   },
   "components": {
+    "minecraft:max_stack_size": 1,
     "minecraft:use_animation": {
       "animation": "spyglass"
     },

@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.ender_eye"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:prevent_use_when_used_on_target": {

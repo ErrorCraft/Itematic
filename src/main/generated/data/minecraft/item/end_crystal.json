@@ -1,16 +1,15 @@
 {
   "base": {
     "display": {
-      "rarity": "rare",
       "translation_key": "item.minecraft.end_crystal"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:entity": {
       "entity": {
         "type": "minecraft:end_crystal"
       }
-    }
+    },
+    "minecraft:rarity": "rare"
   }
 }

@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.golden_horse_armor"
-    },
-    "max_count": 1
+    }
   },
   "components": {
     "minecraft:armor": {
@@ -16,6 +15,7 @@
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_gold",
       "slot": "body"
-    }
+    },
+    "minecraft:max_stack_size": 1
   }
 }

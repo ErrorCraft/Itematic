@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "block.minecraft.heavy_weighted_pressure_plate"
-    },
-    "max_count": 64
+    }
   },
   "components": {
     "minecraft:block": {

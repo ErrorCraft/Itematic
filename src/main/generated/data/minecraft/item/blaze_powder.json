@@ -2,8 +2,7 @@
   "base": {
     "display": {
       "translation_key": "item.minecraft.blaze_powder"
-    },
-    "max_count": 64
+    }
   },
   "components": {}
 }

@@ -5,7 +5,7 @@
       "function": "minecraft:sequence",
       "functions": [
         {
-          "decoration": "monument",
+          "decoration": "minecraft:monument",
           "destination": "minecraft:on_ocean_explorer_maps",
           "function": "minecraft:exploration_map",
           "search_radius": 100
