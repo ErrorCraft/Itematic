@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 @Mixin(Ingredient.class)
 public class IngredientExtender implements IngredientAccess {
@@ -47,6 +48,17 @@ public class IngredientExtender implements IngredientAccess {
             (buf, ingredient) -> instance.encode(buf, List.of(ingredient.itematic$getMatchingStacks(buf.getRegistryManager()))),
             buf -> _to.apply(instance.decode(buf))
         );
+    }
+
+    @Redirect(
+        method = "ofItems",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/Arrays;stream([Ljava/lang/Object;)Ljava/util/stream/Stream;"
+        )
+    )
+    private static <T> Stream<T> streamItemsReturnEmptyStream(T[] array) {
+        return Stream.empty();
     }
 
     @Inject(

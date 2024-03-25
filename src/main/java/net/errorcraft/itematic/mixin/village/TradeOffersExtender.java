@@ -14,6 +14,17 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(TradeOffers.class)
 public class TradeOffersExtender {
     @Redirect(
+        method = { "method_16929", "enchant" },
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+        return ItemStack.EMPTY;
+    }
+
+    @Redirect(
         method = "createPotionStack",
         at = @At(
             value = "INVOKE",
@@ -27,20 +38,65 @@ public class TradeOffersExtender {
     @Redirect(
         method = "enchant",
         at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
-        return ItemStack.EMPTY;
-    }
-
-    @Redirect(
-        method = "enchant",
-        at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;addEnchantment(Lnet/minecraft/enchantment/Enchantment;I)V"
         )
     )
     private static void doNotAddEnchantment(ItemStack instance, Enchantment enchantment, int level) {}
+
+    @Mixin(TradeOffers.SellItemFactory.class)
+    public static class SellItemFactoryExtender {
+        @Redirect(
+            method = { "<init>(Lnet/minecraft/block/Block;IIII)V", "<init>(Lnet/minecraft/item/Item;III)V", "<init>(Lnet/minecraft/item/Item;IIII)V", "<init>(Lnet/minecraft/item/Item;IIIIF)V" },
+            at = @At(
+                value = "NEW",
+                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            )
+        )
+        private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+            return ItemStack.EMPTY;
+        }
+    }
+
+    @Mixin(TradeOffers.ProcessItemFactory.class)
+    public static class ProcessItemFactoryExtender {
+        @Redirect(
+            method = "<init>(Lnet/minecraft/item/ItemConvertible;IILnet/minecraft/item/Item;IIIF)V",
+            at = @At(
+                value = "NEW",
+                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            )
+        )
+        private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+            return ItemStack.EMPTY;
+        }
+    }
+
+    @Mixin(TradeOffers.SellEnchantedToolFactory.class)
+    public static class SellEnchantedToolFactoryExtender {
+        @Redirect(
+            method = "<init>(Lnet/minecraft/item/Item;IIIF)V",
+            at = @At(
+                value = "NEW",
+                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            )
+        )
+        private ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+            return ItemStack.EMPTY;
+        }
+    }
+
+    @Mixin(TradeOffers.SellPotionHoldingItemFactory.class)
+    public static class SellPotionHoldingItemFactoryExtender {
+        @Redirect(
+            method = "<init>",
+            at = @At(
+                value = "NEW",
+                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            )
+        )
+        private ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+            return ItemStack.EMPTY;
+        }
+    }
 }

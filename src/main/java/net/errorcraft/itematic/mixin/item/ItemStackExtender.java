@@ -15,6 +15,7 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ItemHolderItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.util.Util;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.advancement.criterion.ItemDurabilityChangedCriterion;
@@ -52,6 +53,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -66,6 +68,10 @@ import java.util.stream.Stream;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackExtender implements ComponentHolder, ItemStackAccess {
+    @Shadow
+    @Final
+    private static Logger LOGGER;
+
     @Shadow
     @Final
     public static ItemStack EMPTY;
@@ -95,6 +101,9 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     @Shadow
     public abstract int getMaxCount();
+
+    @Shadow
+    public abstract int getCount();
 
     @Unique
     private final Set<ItemEvent> activeEvents = new HashSet<>();
@@ -195,6 +204,16 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     )
     private static ComponentMapImpl createComponentMapReturnNullToPreventNullPointerException(ComponentMap baseComponents, ComponentChanges changes) {
         return null;
+    }
+
+    @Inject(
+        method = "<init>(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/ComponentMapImpl;)V",
+        at = @At("TAIL")
+    )
+    private void checkItemValue(ItemConvertible item, int count, ComponentMapImpl components, CallbackInfo info) {
+        if (item != null) {
+            LOGGER.warn(Util.stackTraceMessage("Tried to create an item stack from an item or item-like value directly. This is no longer supported and should be modified to use a holder instead."));
+        }
     }
 
     @Inject(
@@ -571,6 +590,13 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
             return;
         }
         this.count = MathHelper.clamp(this.count + count, 0, this.getMaxCount());
+    }
+
+    @Override
+    public int itematic$tryDecrement(int amount) {
+        int actualAmount = Math.min(amount, this.getCount());
+        this.decrement(actualAmount);
+        return actualAmount;
     }
 
     @Override

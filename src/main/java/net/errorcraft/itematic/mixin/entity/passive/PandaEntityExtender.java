@@ -1,11 +1,13 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.PandaEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.ItemTags;
@@ -31,6 +33,17 @@ public abstract class PandaEntityExtender extends MobEntityExtender {
     )
     private static boolean isOfForBambooUseItemTagCheck(ItemStack instance, Item item) {
         return instance.isIn(ItemTags.PANDA_FOOD);
+    }
+
+    @Redirect(
+        method = "interactMob",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, int count, @Local(ordinal = 0) ItemStack stack) {
+        return new ItemStack(stack.getRegistryEntry(), count);
     }
 
     @Redirect(

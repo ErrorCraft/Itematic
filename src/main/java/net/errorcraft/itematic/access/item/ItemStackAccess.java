@@ -23,6 +23,9 @@ public interface ItemStackAccess {
     }
     default void itematic$setComponents(ComponentMapImpl components) {}
     default void itematic$tryIncrement(int count) {}
+    default int itematic$tryDecrement(int amount) {
+        return 0;
+    }
     default ItemStack itematic$copyWithItem(RegistryEntry<Item> item) {
         return ItemStack.EMPTY;
     }

@@ -1,9 +1,11 @@
 package net.errorcraft.itematic.mixin.entity.ai.brain.task;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.errorcraft.itematic.access.inventory.SimpleInventoryAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.ai.brain.task.FarmerWorkTask;
 import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -24,14 +26,13 @@ public class FarmerWorkTaskExtender {
     @Redirect(
         method = "craftAndDropBread",
         at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/item/Items;BREAD:Lnet/minecraft/item/Item;",
-            opcode = Opcodes.GETSTATIC,
-            ordinal = 0
+            value = "INVOKE",
+            target = "Lnet/minecraft/inventory/SimpleInventory;removeItem(Lnet/minecraft/item/Item;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private Item getBreadUseDynamicRegistry(@Local(argsOnly = true) VillagerEntity entity) {
-        return entity.getWorld().itematic$getItem(ItemKeys.BREAD).value();
+    private ItemStack removeItemUseRegistryKey(SimpleInventory instance, Item item, int count) {
+        ((SimpleInventoryAccess) instance).itematic$removeItem(ItemKeys.WHEAT, count);
+        return ItemStack.EMPTY;
     }
 
     @Redirect(

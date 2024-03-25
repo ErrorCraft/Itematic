@@ -4,6 +4,7 @@ import net.errorcraft.itematic.access.client.recipebook.RecipeBookGroupAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.client.recipebook.RecipeBookGroup;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -11,6 +12,8 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +114,17 @@ public class RecipeBookGroupExtender implements RecipeBookGroupAccess {
         ((RecipeBookGroupExtender)(Object) SMITHING).iconKeys = List.of(ItemKeys.NETHERITE_CHESTPLATE);
         ((RecipeBookGroupExtender)(Object) CAMPFIRE).iconKeys = List.of(ItemKeys.PORKCHOP);
         ((RecipeBookGroupExtender)(Object) UNKNOWN).iconKeys = List.of(ItemKeys.BARRIER);
+    }
+
+    @Redirect(
+        method = "<clinit>",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+        return ItemStack.EMPTY;
     }
 
     @Override

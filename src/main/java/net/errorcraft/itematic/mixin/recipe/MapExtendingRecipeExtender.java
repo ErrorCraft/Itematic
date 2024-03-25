@@ -4,6 +4,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.MapExtendingRecipe;
 import net.minecraft.recipe.ShapedRecipe;
@@ -17,6 +18,17 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class MapExtendingRecipeExtender {
     @Unique
     private static final int MAP_SLOT = 4;
+
+    @Redirect(
+        method = "<init>",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private static ItemStack newItemStackForMapReturnEmptyStack(ItemConvertible item) {
+        return ItemStack.EMPTY;
+    }
 
     @Redirect(
         method = "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z",
