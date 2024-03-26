@@ -30,10 +30,10 @@ public interface SequenceHandler {
         default S add(ActionRequirements requirements, SequenceHandler handler) {
             return this.add(requirements, SequenceAction.of(handler));
         }
-        default S add(Action action) {
+        default S add(Action<?> action) {
             return this.add(ActionEntry.of(action));
         }
-        default S add(ActionRequirements requirements, Action action) {
+        default S add(ActionRequirements requirements, Action<?> action) {
             return this.add(ActionEntry.of(requirements, action));
         }
         default S add(ActionEntry entry) {

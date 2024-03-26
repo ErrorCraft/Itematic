@@ -44,7 +44,7 @@ public record CanPlaceOnFluidsItemComponent(RaycastContext.FluidHandling handler
         }
 
         ItemUsageContext itemUsageContext = new ItemUsageContext(world, user, hand, stack, blockHitResult);
-        itemUsageContext.setIgnoresPlacementComponent(true);
+        itemUsageContext.itematic$setIgnoresPlacementComponent(true);
         return stack.useOnBlock(itemUsageContext);
     }
 

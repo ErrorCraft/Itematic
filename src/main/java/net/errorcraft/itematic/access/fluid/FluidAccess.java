@@ -4,7 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKey;
 
 public interface FluidAccess {
-    default RegistryKey<Item> getBucketItemKey() {
+    default RegistryKey<Item> itematic$getBucketItemKey() {
         return null;
     }
 }

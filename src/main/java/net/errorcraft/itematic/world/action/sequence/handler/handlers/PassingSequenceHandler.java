@@ -56,7 +56,7 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
             return this;
         }
 
-        public Builder addOptional(Action action) {
+        public Builder addOptional(Action<?> action) {
             return this.addOptional(RegistryEntry.of(ActionEntry.of(action)));
         }
 

@@ -14,7 +14,7 @@ import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Optional;
 
-public record ActionEntry(Action action, Optional<ActionRequirements> requirements) {
+public record ActionEntry(Action<?> action, Optional<ActionRequirements> requirements) {
     public static final Codec<ActionEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Action.CODEC.fieldOf("action").forGetter(ActionEntry::action),
         Codecs.createStrictOptionalFieldCodec(ActionRequirements.CODEC, "requirements").forGetter(ActionEntry::requirements)
@@ -34,7 +34,7 @@ public record ActionEntry(Action action, Optional<ActionRequirements> requiremen
             .orElse(true);
     }
 
-    public static ActionEntry of(Action action) {
+    public static ActionEntry of(Action<?> action) {
         return new ActionEntry(action, Optional.empty());
     }
 
@@ -42,7 +42,7 @@ public record ActionEntry(Action action, Optional<ActionRequirements> requiremen
         return new ActionEntry(SequenceAction.of(builder), Optional.empty());
     }
 
-    public static ActionEntry of(ActionRequirements requirements, Action action) {
+    public static ActionEntry of(ActionRequirements requirements, Action<?> action) {
         return new ActionEntry(action, Optional.of(requirements));
     }
 

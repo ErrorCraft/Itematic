@@ -78,23 +78,21 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
             ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer)
                 .entityPosition(ActionContextParameter.THIS, user)
                 .build();
-            createEntity(context, this.angleOffset, this.speed, 1.0f);
+            this.createEntity(context);
         }
         return ActionResult.success(world.isClient());
     }
 
-    public static boolean createEntity(ActionContext context, float angleOffset, float speed, float variation) {
-        return context.stack().itematic$getComponent(ItemComponentTypes.PROJECTILE)
-            .map(c -> c.createEntity(context, angleOffset, speed, variation))
-            .map(projectile -> {
+    private void createEntity(ActionContext context) {
+        context.stack().itematic$getComponent(ItemComponentTypes.PROJECTILE)
+            .map(c -> c.createEntity(context, this.angleOffset, this.speed, 1.0f))
+            .ifPresent(projectile -> {
                 context.world().spawnEntity(projectile);
                 ActionContext projectileContext = context.builderForCopy()
                     .entityPosition(ActionContextParameter.TARGET, projectile)
                     .build();
                 context.stack().itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, projectileContext);
-                return true;
-            })
-            .orElse(false);
+            });
     }
 
     public static ThrowableItemComponent of() {

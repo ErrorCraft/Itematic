@@ -24,7 +24,7 @@ public class MeleeAttackTaskExtender {
             ordinal = 0
         )
     )
-    private static boolean instanceOfRangedWeaponItemUseItemComponentCheck(Object reference, Class<RangedWeaponItem> clazz, MobEntity mob, @Local ItemStack stack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
+    private static boolean instanceOfRangedWeaponItemUseItemComponentCheck(Object reference, Class<RangedWeaponItem> clazz, MobEntity mob, @Local(argsOnly = true) ItemStack stack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
         Optional<ShooterItemComponent> optionalComponent = stack.itematic$getComponent(ItemComponentTypes.SHOOTER);
         optionalComponent.ifPresent(shooterItemComponent::set);
         return optionalComponent.isPresent();
@@ -46,7 +46,7 @@ public class MeleeAttackTaskExtender {
             target = "Lnet/minecraft/entity/mob/MobEntity;canUseRangedWeapon(Lnet/minecraft/item/RangedWeaponItem;)Z"
         )
     )
-    private static boolean canUseRangedWeaponUseItemComponent(MobEntity instance, RangedWeaponItem weapon, @Local ItemStack stack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
+    private static boolean canUseRangedWeaponUseItemComponent(MobEntity instance, RangedWeaponItem weapon, @Local(argsOnly = true) ItemStack stack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
         return instance.itematic$canUseShooter(stack, shooterItemComponent.get());
     }
 }

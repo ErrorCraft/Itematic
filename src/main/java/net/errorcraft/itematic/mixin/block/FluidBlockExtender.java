@@ -26,6 +26,6 @@ public class FluidBlockExtender {
         )
     )
     private ItemStack newItemStackUseCreateStack(ItemConvertible item, @Local(argsOnly = true) WorldAccess world) {
-        return world.itematic$createStack(this.fluid.getBucketItemKey());
+        return world.itematic$createStack(this.fluid.itematic$getBucketItemKey());
     }
 }

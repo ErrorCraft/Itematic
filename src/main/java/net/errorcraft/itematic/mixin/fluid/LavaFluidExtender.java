@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(LavaFluid.class)
 public class LavaFluidExtender implements FluidAccess {
     @Override
-    public RegistryKey<Item> getBucketItemKey() {
+    public RegistryKey<Item> itematic$getBucketItemKey() {
         return ItemKeys.LAVA_BUCKET;
     }
 }

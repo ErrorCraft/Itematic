@@ -16,6 +16,6 @@ public class RecipeBookWidgetExtender implements RecipeBookWidgetAccess {
         at = @At("TAIL")
     )
     private void initializeAllowRecipeSpecificInitialization(int parentWidth, int parentHeight, MinecraftClient client, boolean narrow, AbstractRecipeScreenHandler<?> craftingScreenHandler, CallbackInfo info) {
-        this.initializeRecipeSpecific(client.world);
+        this.itematic$initializeRecipeSpecific(client.world);
     }
 }

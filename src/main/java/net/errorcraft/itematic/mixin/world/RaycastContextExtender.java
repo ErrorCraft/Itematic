@@ -4,6 +4,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.world.RaycastContext;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -14,6 +15,7 @@ import java.util.function.Predicate;
 public class RaycastContextExtender {
     @Mixin(RaycastContext.FluidHandling.class)
     public static class FluidHandlingExtender implements StringIdentifiable {
+        @Unique
         private String name;
 
         @Inject(

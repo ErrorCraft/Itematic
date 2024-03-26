@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(EmptyFluid.class)
 public class EmptyFluidExtender implements FluidAccess {
     @Override
-    public RegistryKey<Item> getBucketItemKey() {
+    public RegistryKey<Item> itematic$getBucketItemKey() {
         return ItemKeys.AIR;
     }
 }

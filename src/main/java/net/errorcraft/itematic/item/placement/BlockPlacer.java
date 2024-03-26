@@ -81,7 +81,7 @@ public class BlockPlacer extends Placer {
     private void placed(BlockState blockState) {
         blockState = this.placeFromNbt(blockState);
         BlockItem.writeNbtToBlockEntity(this.world, this.player, this.blockPos, this.stack);
-        BlockItemAccessor.copyComponentsToBlockEntity(world, blockPos, this.stack);
+        BlockItemAccessor.copyComponentsToBlockEntity(this.world, this.blockPos, this.stack);
         blockState.getBlock().onPlaced(this.world, this.blockPos, blockState, this.player, this.stack);
         if (this.player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.PLACED_BLOCK.trigger(serverPlayer, this.blockPos, this.stack);

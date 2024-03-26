@@ -8,9 +8,9 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 
 public class TradeModifierTypes {
-    public static TradeModifierType<EnchantWithLevelsTradeModifier> ENCHANT_WITH_LEVELS = register(TradeModifierTypeKeys.ENCHANT_WITH_LEVELS, new TradeModifierType<>(EnchantWithLevelsTradeModifier.CODEC));
-    public static TradeModifierType<SingleEnchantmentTradeModifier> SINGLE_ENCHANTMENT = register(TradeModifierTypeKeys.SINGLE_ENCHANTMENT, new TradeModifierType<>(SingleEnchantmentTradeModifier.CODEC));
-    public static TradeModifierType<ItemFromTypeTradeModifier> ITEM_FROM_TYPE = register(TradeModifierTypeKeys.ITEM_FROM_TYPE, new TradeModifierType<>(ItemFromTypeTradeModifier.CODEC));
+    public static final TradeModifierType<EnchantWithLevelsTradeModifier> ENCHANT_WITH_LEVELS = register(TradeModifierTypeKeys.ENCHANT_WITH_LEVELS, new TradeModifierType<>(EnchantWithLevelsTradeModifier.CODEC));
+    public static final TradeModifierType<SingleEnchantmentTradeModifier> SINGLE_ENCHANTMENT = register(TradeModifierTypeKeys.SINGLE_ENCHANTMENT, new TradeModifierType<>(SingleEnchantmentTradeModifier.CODEC));
+    public static final TradeModifierType<ItemFromTypeTradeModifier> ITEM_FROM_TYPE = register(TradeModifierTypeKeys.ITEM_FROM_TYPE, new TradeModifierType<>(ItemFromTypeTradeModifier.CODEC));
 
     private TradeModifierTypes() {}
 

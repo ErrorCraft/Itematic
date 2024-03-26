@@ -670,7 +670,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
     @Unique
     private boolean allowsPlacement(ItemUsageContext context) {
-        return !context.ignoresPlacementComponent() && this.itematic$getComponent(ItemComponentTypes.CAN_PLACE_ON_FLUIDS)
+        return !context.itematic$ignoresPlacementComponent() && this.itematic$getComponent(ItemComponentTypes.CAN_PLACE_ON_FLUIDS)
             .map(CanPlaceOnFluidsItemComponent::allowOriginalPlacement)
             .orElse(true);
     }

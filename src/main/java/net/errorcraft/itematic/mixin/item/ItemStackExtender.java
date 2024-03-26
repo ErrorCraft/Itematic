@@ -532,7 +532,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     )
     private boolean limitDamageApplied(ItemDurabilityChangedCriterion instance, ServerPlayerEntity player, ItemStack stack, int durability, @Local(argsOnly = true) LocalIntRef amount) {
         this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
-            .map(c -> Math.min(c.maximumDamage() - this.getDamage(), amount.get()))
+            .map(c -> Math.min(c.maximumDamage((ItemStack)(Object) this) - this.getDamage(), amount.get()))
             .ifPresent(amount::set);
         return amount.get() != 0;
     }

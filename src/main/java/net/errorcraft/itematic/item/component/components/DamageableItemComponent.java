@@ -42,12 +42,12 @@ public record DamageableItemComponent(int durability, boolean preserveItem) impl
         builder.add(DataComponentTypes.DAMAGE, 0);
     }
 
-    public int maximumDamage() {
-        return this.durability - (this.preserveItem ? 1 : 0);
+    public int maximumDamage(ItemStack stack) {
+        return stack.getMaxDamage() - (this.preserveItem ? 1 : 0);
     }
 
     public boolean isUsable(ItemStack stack) {
-        return stack.getDamage() < this.maximumDamage();
+        return stack.getDamage() < this.maximumDamage(stack);
     }
 
     public static DamageableItemComponent of(int durability) {

@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(BlockItem.class)
 public interface BlockItemAccessor {
     @Invoker("copyComponentsToBlockEntity")
-    public static void copyComponentsToBlockEntity(World world, BlockPos pos, ItemStack stack) {
+    static void copyComponentsToBlockEntity(World world, BlockPos pos, ItemStack stack) {
         throw new AssertionError();
     }
 }

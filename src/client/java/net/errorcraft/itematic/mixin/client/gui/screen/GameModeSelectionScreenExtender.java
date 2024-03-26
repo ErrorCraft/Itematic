@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.GameModeSelectionScreen;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -65,6 +66,17 @@ public class GameModeSelectionScreenExtender {
             ((GameModeSelectionExtender)(Object) SURVIVAL).icon = ItemKeys.IRON_SWORD;
             ((GameModeSelectionExtender)(Object) ADVENTURE).icon = ItemKeys.MAP;
             ((GameModeSelectionExtender)(Object) SPECTATOR).icon = ItemKeys.ENDER_EYE;
+        }
+
+        @Redirect(
+            method = "<clinit>",
+            at = @At(
+                value = "NEW",
+                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            )
+        )
+        private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+            return ItemStack.EMPTY;
         }
 
         @Override
