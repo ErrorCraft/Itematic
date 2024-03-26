@@ -4,7 +4,6 @@
       "translation_key": "item.minecraft.ink_sac"
     }
   },
-  "components": {},
   "events": [
     {
       "event": "minecraft:use_on_block",

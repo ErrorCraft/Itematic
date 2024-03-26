@@ -90,7 +90,7 @@ import java.util.List;
 public class ItemUtil {
     public static final Codec<Item> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
         ItemBase.CODEC.fieldOf("base").forGetter(Item::itematic$itemBase),
-        ItemComponentSet.CODEC.fieldOf("components").forGetter(Item::itematic$components),
+        Codecs.createStrictOptionalFieldCodec(ItemComponentSet.CODEC, "components", ItemComponentSet.EMPTY).forGetter(Item::itematic$components),
         Codecs.createStrictOptionalFieldCodec(ItemEventMap.CODEC, "events", ItemEventMap.EMPTY).forGetter(Item::itematic$events)
     ).apply(instance, ItemUtil::create));
 

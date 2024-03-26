@@ -4,7 +4,6 @@
       "translation_key": "item.minecraft.name_tag"
     }
   },
-  "components": {},
   "events": [
     {
       "event": "minecraft:use_on_entity",
