@@ -16,7 +16,7 @@ import net.minecraft.server.world.ServerWorld;
 
 public record WeaponItemComponent(int damage, double attackDamage, double attackSpeed) implements ItemComponent<WeaponItemComponent> {
     public static final Codec<WeaponItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("damage").forGetter(WeaponItemComponent::damage),
+        Codec.INT.fieldOf("damage_per_hit").forGetter(WeaponItemComponent::damage),
         Codec.DOUBLE.fieldOf("attack_damage").forGetter(WeaponItemComponent::attackDamage),
         Codec.DOUBLE.fieldOf("attack_speed").forGetter(WeaponItemComponent::attackSpeed)
     ).apply(instance, WeaponItemComponent::new));

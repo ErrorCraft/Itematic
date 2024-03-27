@@ -16,13 +16,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
 import java.util.List;
 
 public record FoodItemComponent(int nutrition, float saturationModifier, boolean alwaysEdible, List<FoodComponent.StatusEffectEntry> effects) implements ItemComponent<FoodItemComponent> {
     public static final Codec<FoodItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("nutrition").forGetter(FoodItemComponent::nutrition),
+        Codecs.NONNEGATIVE_INT.fieldOf("nutrition").forGetter(FoodItemComponent::nutrition),
         Codec.FLOAT.fieldOf("saturation_modifier").forGetter(FoodItemComponent::saturationModifier),
         Codec.BOOL.optionalFieldOf("always_edible", false).forGetter(FoodItemComponent::alwaysEdible),
         FoodComponent.StatusEffectEntry.CODEC.listOf().optionalFieldOf("effects", List.of()).forGetter(FoodItemComponent::effects)
