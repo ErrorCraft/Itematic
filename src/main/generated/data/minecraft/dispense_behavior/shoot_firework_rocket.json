@@ -1,0 +1,31 @@
+{
+  "entry": {
+    "action": {
+      "type": "minecraft:sequence",
+      "entries": [
+        {
+          "action": {
+            "type": "minecraft:shoot_projectile_from_item",
+            "position": "target",
+            "power": 1.0,
+            "uncertainty": 0.5
+          }
+        },
+        {
+          "action": {
+            "type": "minecraft:decrement_item",
+            "amount": 1
+          }
+        }
+      ],
+      "handler": "minecraft:passing"
+    }
+  },
+  "offset": {
+    "side_factor": [
+      0.375,
+      0.25,
+      0.375
+    ]
+  }
+}

@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.loot.function;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.component.type.DyedColorComponent;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DyeItemModifier extends ConditionalLootFunction {
-    public static final Codec<DyeItemModifier> CODEC = RecordCodecBuilder.create(instance -> addConditionsField(instance).and(
+    public static final MapCodec<DyeItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addConditionsField(instance).and(
         Codec.floatRange(0.0f, 1.0f).listOf().fieldOf("chances").forGetter(DyeItemModifier::chances)
     ).apply(instance, DyeItemModifier::new));
 

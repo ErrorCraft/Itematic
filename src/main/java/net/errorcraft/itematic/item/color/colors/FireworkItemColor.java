@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item.color.colors;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.errorcraft.itematic.item.color.ItemColor;
 import net.errorcraft.itematic.item.color.ItemColorType;
@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.ColorHelper;
 
 public record FireworkItemColor() implements ItemColor {
-    public static final Codec<FireworkItemColor> CODEC = Codec.unit(new FireworkItemColor());
+    public static final MapCodec<FireworkItemColor> CODEC = MapCodec.unit(new FireworkItemColor());
     private static final int DEFAULT_FIREWORK_COLOR = 0xff8a8a8a;
 
     @Override

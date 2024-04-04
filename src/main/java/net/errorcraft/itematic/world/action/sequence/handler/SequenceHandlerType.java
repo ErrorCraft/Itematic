@@ -1,9 +1,10 @@
 package net.errorcraft.itematic.world.action.sequence.handler;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 
-public record SequenceHandlerType<T extends SequenceHandler>(Codec<T> codec) {
+public record SequenceHandlerType<T extends SequenceHandler>(MapCodec<T> codec) {
     public SequenceHandlerType(Codec<T> codec) {
-        this.codec = codec.fieldOf("entries").codec();
+        this(codec.fieldOf("entries"));
     }
 }

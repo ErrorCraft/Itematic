@@ -6,8 +6,8 @@ import net.errorcraft.itematic.item.color.colors.IndexItemColor;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
-import net.minecraft.block.dispenser.DispenserBehavior;
+import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
+import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
@@ -62,13 +62,13 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
         return Optional.of(mobEntity);
     }
 
-    public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, int primaryColor, int secondaryColor, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
+    public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, int primaryColor, int secondaryColor, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
-            EntityItemComponent.of(new SimpleEntityInitializer<>(entity.value()), true),
+            EntityItemComponent.of(SimpleEntityInitializer.of(entity.value()), true),
             INSTANCE,
             CanPlaceOnFluidsItemComponent.of(RaycastContext.FluidHandling.SOURCE_ONLY, true),
             TintedItemComponent.of(IndexItemColor.of(primaryColor, secondaryColor)),
-            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ENTITY))
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
         };
     }
 

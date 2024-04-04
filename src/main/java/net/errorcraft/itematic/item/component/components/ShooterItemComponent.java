@@ -34,7 +34,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +45,7 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("held_ammunition").forGetter(ShooterItemComponent::heldAmmunition),
         TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("ammunition").forGetter(ShooterItemComponent::ammunition),
         Codec.INT.fieldOf("range").forGetter(ShooterItemComponent::range),
-        Codecs.createStrictOptionalFieldCodec(Chargeable.CODEC, "chargeable").forGetter(ShooterItemComponent::chargeable)
+        Chargeable.CODEC.optionalFieldOf("chargeable").forGetter(ShooterItemComponent::chargeable)
     ).apply(instance, ShooterItemComponent::new));
     private static final float CHARGE_PROGRESS = CrossbowItemAccessor.chargeProgress();
     private static final float LOAD_PROGRESS = CrossbowItemAccessor.loadProgress();

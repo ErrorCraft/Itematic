@@ -1,0 +1,8 @@
+{
+  "entry": {
+    "action": {
+      "type": "minecraft:invoke_item_event",
+      "event": "minecraft:use_on_block"
+    }
+  }
+}

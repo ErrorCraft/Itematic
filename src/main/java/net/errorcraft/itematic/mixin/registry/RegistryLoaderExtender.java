@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
+import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.registry.ActionValidator;
@@ -42,6 +43,7 @@ public class RegistryLoaderExtender {
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.TRADE, Trade.CODEC))
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.SMITHING_TEMPLATE, SmithingTemplate.CODEC))
+            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();
     }
 
@@ -61,6 +63,7 @@ public class RegistryLoaderExtender {
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.TRADE, Trade.CODEC))
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
             .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.SMITHING_TEMPLATE, SmithingTemplate.CODEC))
+            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();
     }
 

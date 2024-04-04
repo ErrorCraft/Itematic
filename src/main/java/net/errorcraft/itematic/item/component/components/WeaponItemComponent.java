@@ -13,10 +13,11 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.dynamic.Codecs;
 
-public record WeaponItemComponent(int damage, double attackDamage, double attackSpeed) implements ItemComponent<WeaponItemComponent> {
+public record WeaponItemComponent(int damagePerHit, double attackDamage, double attackSpeed) implements ItemComponent<WeaponItemComponent> {
     public static final Codec<WeaponItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("damage_per_hit").forGetter(WeaponItemComponent::damage),
+        Codecs.NONNEGATIVE_INT.optionalFieldOf("damage_per_hit", 1).forGetter(WeaponItemComponent::damagePerHit),
         Codec.DOUBLE.fieldOf("attack_damage").forGetter(WeaponItemComponent::attackDamage),
         Codec.DOUBLE.fieldOf("attack_speed").forGetter(WeaponItemComponent::attackSpeed)
     ).apply(instance, WeaponItemComponent::new));
@@ -41,11 +42,11 @@ public record WeaponItemComponent(int damage, double attackDamage, double attack
             .entityPosition(ActionContextParameter.TARGET, target)
             .build();
         stack.itematic$invokeEvent(ItemEvents.USE_WEAPON, context);
-        stack.itematic$damage(this.damage, context);
+        stack.itematic$damage(this.damagePerHit, context);
         return true;
     }
 
-    public static WeaponItemComponent of(int damage, double attackDamage, double attackSpeed) {
-        return new WeaponItemComponent(damage, attackDamage, attackSpeed);
+    public static WeaponItemComponent of(int damagePerHit, double attackDamage, double attackSpeed) {
+        return new WeaponItemComponent(damagePerHit, attackDamage, attackSpeed);
     }
 }

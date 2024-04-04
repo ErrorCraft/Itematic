@@ -9,7 +9,7 @@
       "block": "minecraft:chest"
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:chest_equipment"
+      "behavior": "minecraft:equip_chest"
     },
     "minecraft:fuel": {
       "ticks": 300

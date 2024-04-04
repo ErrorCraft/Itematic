@@ -35,6 +35,20 @@ public class ActionTypes {
     public static final ActionType<MarkBannerOnItemAction> MARK_BANNER_ON_ITEM = register(ActionTypeKeys.MARK_BANNER_ON_ITEM, new ActionType<>(MarkBannerOnItemAction.CODEC));
     public static final ActionType<TwirlPlayerAction> TWIRL_PLAYER = register(ActionTypeKeys.TWIRL_PLAYER, new ActionType<>(TwirlPlayerAction.CODEC));
     public static final ActionType<ApplySuspiciousStewEffectsFromItemAction> APPLY_SUSPICIOUS_STEW_EFFECTS_FROM_ITEM = register(ActionTypeKeys.APPLY_SUSPICIOUS_STEW_EFFECTS_FROM_ITEM, new ActionType<>(ApplySuspiciousStewEffectsFromItemAction.CODEC));
+    public static final ActionType<BrushArmadilloAtPositionAction> BRUSH_ARMADILLO_AT_POSITION = register(ActionTypeKeys.BRUSH_ARMADILLO_AT_POSITION, new ActionType<>(BrushArmadilloAtPositionAction.CODEC));
+    public static final ActionType<ChargeRespawnAnchorAction> CHARGE_RESPAWN_ANCHOR = register(ActionTypeKeys.CHARGE_RESPAWN_ANCHOR, new ActionType<>(ChargeRespawnAnchorAction.CODEC));
+    public static final ActionType<EquipEntityAtPositionAction> EQUIP_ENTITY_AT_POSITION = register(ActionTypeKeys.EQUIP_ENTITY_AT_POSITION, new ActionType<>(EquipEntityAtPositionAction.CODEC));
+    public static final ActionType<EquipHorseWithChestAtPositionAction> EQUIP_HORSE_WITH_CHEST_AT_POSITION = register(ActionTypeKeys.EQUIP_HORSE_WITH_CHEST_AT_POSITION, new ActionType<>(EquipHorseWithChestAtPositionAction.CODEC));
+    public static final ActionType<InvokeGameEventAction> INVOKE_GAME_EVENT = register(ActionTypeKeys.INVOKE_GAME_EVENT, new ActionType<>(InvokeGameEventAction.CODEC));
+    public static final ActionType<InvokeItemEventAction> INVOKE_ITEM_EVENT = register(ActionTypeKeys.INVOKE_ITEM_EVENT, new ActionType<>(InvokeItemEventAction.CODEC));
+    public static final ActionType<PlaceCarvedPumpkinAction> PLACE_CARVED_PUMPKIN = register(ActionTypeKeys.PLACE_CARVED_PUMPKIN, new ActionType<>(PlaceCarvedPumpkinAction.CODEC));
+    public static final ActionType<SaddleEntityAtPositionAction> SADDLE_ENTITY_AT_POSITION = register(ActionTypeKeys.SADDLE_ENTITY_AT_POSITION, new ActionType<>(SaddleEntityAtPositionAction.CODEC));
+    public static final ActionType<ShearAtPositionAction> SHEAR_AT_POSITION = register(ActionTypeKeys.SHEAR_AT_POSITION, new ActionType<>(ShearAtPositionAction.CODEC));
+    public static final ActionType<ShootProjectileFromItemAction> SHOOT_PROJECTILE_FROM_ITEM = register(ActionTypeKeys.SHOOT_PROJECTILE_FROM_ITEM, new ActionType<>(ShootProjectileFromItemAction.CODEC));
+    public static final ActionType<SpawnEntityAction> SPAWN_ENTITY = register(ActionTypeKeys.SPAWN_ENTITY, new ActionType<>(SpawnEntityAction.CODEC));
+    public static final ActionType<SpawnEntityFromItemAction> SPAWN_ENTITY_FROM_ITEM = register(ActionTypeKeys.SPAWN_ENTITY_FROM_ITEM, new ActionType<>(SpawnEntityFromItemAction.CODEC));
+    public static final ActionType<TakeHoneyAction> TAKE_HONEY = register(ActionTypeKeys.TAKE_HONEY, new ActionType<>(TakeHoneyAction.CODEC));
+    public static final ActionType<UseBucketAction> USE_BUCKET = register(ActionTypeKeys.USE_BUCKET, new ActionType<>(UseBucketAction.CODEC));
 
     private ActionTypes() {}
 

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item.group.entry.entries;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
@@ -15,7 +15,7 @@ import net.minecraft.registry.entry.RegistryFixedCodec;
 import java.util.Collection;
 
 public class PotionItemGroupEntry extends ItemGroupEntry {
-    public static final Codec<PotionItemGroupEntry> CODEC = RecordCodecBuilder.create(instance -> createCodec(instance).and(
+    public static final MapCodec<PotionItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(PotionItemGroupEntry::item)
     ).apply(instance, PotionItemGroupEntry::new));
 

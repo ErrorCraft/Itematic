@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public record ArmorStandEntityInitializer() implements EntityInitializer<ArmorStandEntity> {
     public static final ArmorStandEntityInitializer INSTANCE = new ArmorStandEntityInitializer();
-    public static final Codec<ArmorStandEntityInitializer> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<ArmorStandEntityInitializer> CODEC = MapCodec.unit(INSTANCE);
 
     @Override
     public EntityType<?> type() {

@@ -804,7 +804,8 @@ public class Trades {
                 .withDecoration(mapDecorationType)
                 .searchRadius(100)
                 .build(),
-            SetNameLootFunction.builder(Text.translatable(name)).build()
+            SetNameLootFunction.builder(Text.translatable(name), SetNameLootFunction.Target.ITEM_NAME)
+                .build()
         ));
         return Trade.builder(Trade.Entry.of(items.getOrThrow(ItemKeys.MAP), 1, itemModifier))
             .wants(Trade.Entry.ofEmerald(items, price))

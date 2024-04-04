@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item.group.entry.entries;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class SuspiciousEffectIngredientItemGroupEntry extends ItemGroupEntry {
-    public static final Codec<SuspiciousEffectIngredientItemGroupEntry> CODEC = RecordCodecBuilder.create(instance -> createCodec(instance).and(
+    public static final MapCodec<SuspiciousEffectIngredientItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(SuspiciousEffectIngredientItemGroupEntry::item)
     ).apply(instance, SuspiciousEffectIngredientItemGroupEntry::new));
 

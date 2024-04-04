@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -15,10 +15,14 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 
 public record DropItemFromBlockAction(ActionContextParameter position, RegistryEntry<Item> item) implements Action<DropItemFromBlockAction> {
-    public static final Codec<DropItemFromBlockAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<DropItemFromBlockAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(DropItemFromBlockAction::position),
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(DropItemFromBlockAction::item)
     ).apply(instance, DropItemFromBlockAction::new));
+
+    public static DropItemFromBlockAction of(ActionContextParameter position, RegistryEntry<Item> item) {
+        return new DropItemFromBlockAction(position, item);
+    }
 
     @Override
     public ActionType<DropItemFromBlockAction> type() {
@@ -29,9 +33,5 @@ public record DropItemFromBlockAction(ActionContextParameter position, RegistryE
     public boolean execute(ActionContext context) {
         Block.dropStack(context.world(), context.blockPos(this.position), context.side(), new ItemStack(this.item));
         return true;
-    }
-
-    public static DropItemFromBlockAction of(ActionContextParameter position, RegistryEntry<Item> item) {
-        return new DropItemFromBlockAction(position, item);
     }
 }

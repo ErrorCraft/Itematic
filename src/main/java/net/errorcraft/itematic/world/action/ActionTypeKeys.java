@@ -34,6 +34,20 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> MARK_BANNER_ON_ITEM = of("mark_banner_on_item");
     public static final RegistryKey<ActionType<?>> TWIRL_PLAYER = of("twirl_player");
     public static final RegistryKey<ActionType<?>> APPLY_SUSPICIOUS_STEW_EFFECTS_FROM_ITEM = of("apply_suspicious_stew_effects_from_item");
+    public static final RegistryKey<ActionType<?>> BRUSH_ARMADILLO_AT_POSITION = of("brush_armadillo_at_position");
+    public static final RegistryKey<ActionType<?>> CHARGE_RESPAWN_ANCHOR = of("charge_respawn_anchor");
+    public static final RegistryKey<ActionType<?>> EQUIP_ENTITY_AT_POSITION = of("equip_entity_at_position");
+    public static final RegistryKey<ActionType<?>> EQUIP_HORSE_WITH_CHEST_AT_POSITION = of("equip_horse_with_chest_at_position");
+    public static final RegistryKey<ActionType<?>> INVOKE_GAME_EVENT = of("invoke_game_event");
+    public static final RegistryKey<ActionType<?>> INVOKE_ITEM_EVENT = of("invoke_item_event");
+    public static final RegistryKey<ActionType<?>> PLACE_CARVED_PUMPKIN = of("place_carved_pumpkin");
+    public static final RegistryKey<ActionType<?>> SADDLE_ENTITY_AT_POSITION = of("saddle_entity_at_position");
+    public static final RegistryKey<ActionType<?>> SHEAR_AT_POSITION = of("shear_at_position");
+    public static final RegistryKey<ActionType<?>> SHOOT_PROJECTILE_FROM_ITEM = of("shoot_projectile_from_item");
+    public static final RegistryKey<ActionType<?>> SPAWN_ENTITY = of("spawn_entity");
+    public static final RegistryKey<ActionType<?>> SPAWN_ENTITY_FROM_ITEM = of("spawn_entity_from_item");
+    public static final RegistryKey<ActionType<?>> TAKE_HONEY = of("take_honey");
+    public static final RegistryKey<ActionType<?>> USE_BUCKET = of("use_bucket");
 
     private ActionTypeKeys() {}
 

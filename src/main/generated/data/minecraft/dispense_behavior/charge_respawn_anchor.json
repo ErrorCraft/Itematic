@@ -1,0 +1,37 @@
+{
+  "dispense_as_item_on_failure": false,
+  "entry": {
+    "action": {
+      "type": "minecraft:sequence",
+      "entries": [
+        {
+          "action": {
+            "type": "minecraft:charge_respawn_anchor",
+            "position": "target"
+          }
+        },
+        {
+          "action": {
+            "type": "minecraft:decrement_item",
+            "amount": 1
+          }
+        }
+      ],
+      "handler": "minecraft:passing"
+    },
+    "requirements": {
+      "conditions": {
+        "condition": "minecraft:location_check",
+        "predicate": {
+          "block": {
+            "blocks": "minecraft:respawn_anchor"
+          }
+        }
+      },
+      "context": {
+        "entity": "this",
+        "position": "target"
+      }
+    }
+  }
+}

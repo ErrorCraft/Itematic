@@ -17,7 +17,6 @@ import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradedItem;
 
@@ -30,9 +29,9 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         ItematicCodecs.countRangeList(Entry.CODEC.listOf(), 1, Trade.MAX_WANTED_ENTRIES).fieldOf("wants").forGetter(Trade::wants),
         Entry.CODEC.fieldOf("gives").forGetter(Trade::gives),
         Codec.INT.fieldOf("max_uses").forGetter(Trade::maxUses),
-        Codecs.createStrictOptionalFieldCodec(Codec.INT, "trade_experience", 1).forGetter(Trade::tradeExperience),
-        Codecs.createStrictOptionalFieldCodec(Codec.FLOAT, "price_multiplier", 0.0f).forGetter(Trade::priceMultiplier),
-        Codecs.createStrictOptionalFieldCodec(TradeModifier.CODEC, "trade_modifier").forGetter(Trade::tradeModifier)
+        Codec.INT.optionalFieldOf("trade_experience", 1).forGetter(Trade::tradeExperience),
+        Codec.FLOAT.optionalFieldOf("price_multiplier", 0.0f).forGetter(Trade::priceMultiplier),
+        TradeModifier.CODEC.optionalFieldOf("trade_modifier").forGetter(Trade::tradeModifier)
     ).apply(instance, Trade::new));
     private static final int MAX_WANTED_ENTRIES = 2;
 
@@ -143,8 +142,8 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
     public record Entry(RegistryEntry<Item> item, Range.IntegerRange count, Optional<LootFunction> itemModifier) {
         public static final Codec<Entry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(Entry::item),
-            Codecs.createStrictOptionalFieldCodec(Range.INT_CODEC, "count", Range.IntegerRange.of(1)).forGetter(Entry::count),
-            Codecs.createStrictOptionalFieldCodec(LootFunctionTypes.CODEC, "item_modifier").forGetter(Entry::itemModifier)
+            Range.INT_CODEC.optionalFieldOf("count", Range.IntegerRange.of(1)).forGetter(Entry::count),
+            LootFunctionTypes.CODEC.optionalFieldOf("item_modifier").forGetter(Entry::itemModifier)
         ).apply(instance, Entry::new));
 
         public ItemStack createStack(LootContext context) {

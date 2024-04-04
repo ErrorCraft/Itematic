@@ -6,7 +6,7 @@
   },
   "components": {
     "minecraft:dispensable": {
-      "behavior": "minecraft:projectile"
+      "behavior": "minecraft:shoot_projectile"
     },
     "minecraft:potion_holder": {
       "duration_multiplier": 0.125

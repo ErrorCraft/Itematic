@@ -17,12 +17,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.dynamic.Codecs;
 
 import java.util.List;
 
 public record DamageableItemComponent(int durability, boolean preserveItem) implements ItemComponent<DamageableItemComponent> {
     public static final Codec<DamageableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("durability").forGetter(DamageableItemComponent::durability),
+        Codecs.POSITIVE_INT.fieldOf("durability").forGetter(DamageableItemComponent::durability),
         Codec.BOOL.optionalFieldOf("preserve_item", false).forGetter(DamageableItemComponent::preserveItem)
     ).apply(instance, DamageableItemComponent::new));
 

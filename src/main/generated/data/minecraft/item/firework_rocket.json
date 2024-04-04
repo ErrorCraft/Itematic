@@ -6,7 +6,7 @@
   },
   "components": {
     "minecraft:dispensable": {
-      "behavior": "minecraft:firework"
+      "behavior": "minecraft:shoot_firework_rocket"
     },
     "minecraft:firework": {},
     "minecraft:projectile": {

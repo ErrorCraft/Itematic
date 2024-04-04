@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item.smithing.template.templates;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateType;
@@ -18,7 +18,7 @@ import net.minecraft.util.Util;
 import java.util.List;
 
 public record ItemUpgradeSmithingTemplate(RegistryEntry<Item> item, Identifier translationKeyId) implements SmithingTemplate {
-    public static final Codec<ItemUpgradeSmithingTemplate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ItemUpgradeSmithingTemplate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(ItemUpgradeSmithingTemplate::item),
         Identifier.CODEC.fieldOf("translation_key_id").forGetter(ItemUpgradeSmithingTemplate::translationKeyId)
     ).apply(instance, ItemUpgradeSmithingTemplate::new));

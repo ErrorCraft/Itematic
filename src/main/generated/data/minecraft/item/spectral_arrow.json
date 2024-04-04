@@ -6,7 +6,7 @@
   },
   "components": {
     "minecraft:dispensable": {
-      "behavior": "minecraft:projectile"
+      "behavior": "minecraft:shoot_projectile"
     },
     "minecraft:projectile": {
       "damage": 1,

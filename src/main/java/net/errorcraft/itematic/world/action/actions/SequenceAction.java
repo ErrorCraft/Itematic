@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.registry.RecursionValidator;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
@@ -11,7 +11,15 @@ import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.minecraft.registry.entry.RegistryEntry;
 
 public record SequenceAction(SequenceHandler handler) implements Action<SequenceAction> {
-    public static final Codec<SequenceAction> CODEC = SequenceHandler.CODEC.xmap(SequenceAction::new, SequenceAction::handler).codec();
+    public static final MapCodec<SequenceAction> CODEC = SequenceHandler.CODEC.xmap(SequenceAction::new, SequenceAction::handler);
+
+    public static SequenceAction of(SequenceHandler.Builder<?, ?> builder) {
+        return new SequenceAction(builder.build());
+    }
+
+    public static SequenceAction of(SequenceHandler handler) {
+        return new SequenceAction(handler);
+    }
 
     @Override
     public ActionType<SequenceAction> type() {
@@ -21,14 +29,6 @@ public record SequenceAction(SequenceHandler handler) implements Action<Sequence
     @Override
     public boolean execute(ActionContext context) {
         return this.handler.handle(context);
-    }
-
-    public static SequenceAction of(SequenceHandler.Builder<?, ?> builder) {
-        return new SequenceAction(builder.build());
-    }
-
-    public static SequenceAction of(SequenceHandler handler) {
-        return new SequenceAction(handler);
     }
 
     public void validate(RecursionValidator validator) {

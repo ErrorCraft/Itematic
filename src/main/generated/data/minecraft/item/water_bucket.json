@@ -7,10 +7,11 @@
   "components": {
     "minecraft:bucket": {
       "emptying_sound_event": "minecraft:item.bucket.empty",
-      "fluid": "minecraft:water"
+      "fluid": "minecraft:water",
+      "transforms_into": "minecraft:bucket"
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:bucket"
+      "behavior": "minecraft:use_bucket"
     },
     "minecraft:max_stack_size": 1,
     "minecraft:recipe_remainder": {

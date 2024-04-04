@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.loot.predicate;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.loot.context.ItematicLootContextParameters;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
@@ -12,7 +12,7 @@ import net.minecraft.util.math.Direction;
 import java.util.Set;
 
 public record SideCheckPredicate(Set<Direction> sides) implements LootCondition {
-    public static final Codec<SideCheckPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<SideCheckPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ItematicCodecs.setCodec(Direction.CODEC).fieldOf("sides").forGetter(SideCheckPredicate::sides)
     ).apply(instance, SideCheckPredicate::new));
 

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.item.group.entry.entries;
 
 import com.mojang.datafixers.util.Either;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
@@ -12,15 +12,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Collection;
 import java.util.List;
 
 public final class StackItemGroupEntry extends ItemGroupEntry {
-    public static final Codec<StackItemGroupEntry> CODEC = RecordCodecBuilder.create(instance -> createCodec(instance).and(instance.group(
+    public static final MapCodec<StackItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(instance.group(
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(StackItemGroupEntry::item),
-        Codecs.createStrictOptionalFieldCodec(ComponentChanges.CODEC, "components", ComponentChanges.EMPTY).forGetter(StackItemGroupEntry::components)
+        ComponentChanges.CODEC.optionalFieldOf("components", ComponentChanges.EMPTY).forGetter(StackItemGroupEntry::components)
     )).apply(instance, StackItemGroupEntry::new));
 
     private final RegistryEntry<Item> item;

@@ -9,7 +9,7 @@
       "durability": 64
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:use_on_block"
+      "behavior": "minecraft:use_item_on_block"
     },
     "minecraft:max_stack_size": 1
   },

@@ -2,17 +2,37 @@ package net.errorcraft.itematic.gametest;
 
 import net.minecraft.component.DataComponentType;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.test.GameTestException;
+import net.minecraft.test.TestContext;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.function.Consumer;
 
 public class Assert {
     private Assert() {}
+
+    public static void fluidIsOf(TestContext context, Fluid fluid, BlockPos pos) {
+        FluidState state = context.getWorld().getFluidState(context.getAbsolutePos(pos));
+        if (!state.isOf(fluid)) {
+            throw new GameTestException("Expected fluid to be of " + Registries.FLUID.getId(fluid) + ", got " + Registries.FLUID.getId(state.getFluid()) + " instead");
+        }
+    }
+
+    public static void fluidIsIn(TestContext context, TagKey<Fluid> fluid, BlockPos pos) {
+        FluidState state = context.getWorld().getFluidState(context.getAbsolutePos(pos));
+        if (!state.isIn(fluid)) {
+            throw new GameTestException("Expected fluid to be in " + fluid.id() + ", got " + Registries.FLUID.getId(state.getFluid()) + " instead");
+        }
+    }
 
     public static void itemStackIsOf(ItemStack value, RegistryKey<Item> expected) {
         if (value == null) {

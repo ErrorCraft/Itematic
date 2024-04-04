@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
@@ -14,7 +14,7 @@ import net.minecraft.util.math.random.Random;
 
 public record SmallFireballEntityInitializer() implements EntityInitializer<SmallFireballEntity> {
     public static final SmallFireballEntityInitializer INSTANCE = new SmallFireballEntityInitializer();
-    public static final Codec<SmallFireballEntityInitializer> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<SmallFireballEntityInitializer> CODEC = MapCodec.unit(INSTANCE);
     private static final double VELOCITY_DEVIATION = 0.11485d;
 
     @Override

@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -10,18 +11,29 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DyeColor;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.Optional;
 
 public record ModifySignAction(ActionContextParameter position, Optional<DyeColor> color, Optional<Boolean> glow, Optional<Boolean> wax) implements Action<ModifySignAction> {
-    public static final Codec<ModifySignAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ModifySignAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(ModifySignAction::position),
-        Codecs.createStrictOptionalFieldCodec(DyeColor.CODEC, "color").forGetter(ModifySignAction::color),
-        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "glow").forGetter(ModifySignAction::glow),
-        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "wax").forGetter(ModifySignAction::wax)
+        DyeColor.CODEC.optionalFieldOf("color").forGetter(ModifySignAction::color),
+        Codec.BOOL.optionalFieldOf("glow").forGetter(ModifySignAction::glow),
+        Codec.BOOL.optionalFieldOf("wax").forGetter(ModifySignAction::wax)
     ).apply(instance, ModifySignAction::new));
+
+    public static ModifySignAction dye(ActionContextParameter position, DyeColor color) {
+        return new ModifySignAction(position, Optional.of(color), Optional.empty(), Optional.empty());
+    }
+
+    public static ModifySignAction glow(ActionContextParameter position, boolean glow) {
+        return new ModifySignAction(position, Optional.empty(), Optional.of(glow), Optional.empty());
+    }
+
+    public static ModifySignAction wax(ActionContextParameter position, boolean wax) {
+        return new ModifySignAction(position, Optional.empty(), Optional.empty(), Optional.of(wax));
+    }
 
     @Override
     public ActionType<ModifySignAction> type() {
@@ -52,17 +64,5 @@ public record ModifySignAction(ActionContextParameter position, Optional<DyeColo
         result |= this.color.map(color -> blockEntity.changeText(text -> text.withColor(color), front))
             .orElse(false);
         return result;
-    }
-
-    public static ModifySignAction dye(ActionContextParameter position, DyeColor color) {
-        return new ModifySignAction(position, Optional.of(color), Optional.empty(), Optional.empty());
-    }
-
-    public static ModifySignAction glow(ActionContextParameter position, boolean glow) {
-        return new ModifySignAction(position, Optional.empty(), Optional.of(glow), Optional.empty());
-    }
-
-    public static ModifySignAction wax(ActionContextParameter position, boolean wax) {
-        return new ModifySignAction(position, Optional.empty(), Optional.empty(), Optional.of(wax));
     }
 }

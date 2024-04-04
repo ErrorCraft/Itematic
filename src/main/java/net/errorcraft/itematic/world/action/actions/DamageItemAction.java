@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -9,16 +10,16 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.dynamic.Codecs;
 
 public record DamageItemAction(int amount, boolean ignoreGameMode) implements Action<DamageItemAction> {
-    public static final Codec<DamageItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<DamageItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.INT.fieldOf("amount").forGetter(DamageItemAction::amount),
-        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "ignore_game_mode", false).forGetter(DamageItemAction::ignoreGameMode)
+        Codec.BOOL.optionalFieldOf("ignore_game_mode", false).forGetter(DamageItemAction::ignoreGameMode)
     ).apply(instance, DamageItemAction::new));
 
-    public DamageItemAction(int amount) {
-        this(amount, false);
+
+    public static DamageItemAction of(int amount) {
+        return new DamageItemAction(amount, false);
     }
 
     @Override
@@ -39,10 +40,6 @@ public record DamageItemAction(int amount, boolean ignoreGameMode) implements Ac
             stack.itematic$damage(this.amount, context);
         }
         return true;
-    }
-
-    public static DamageItemAction of(int amount) {
-        return new DamageItemAction(amount);
     }
 
     private boolean preventDamage(ActionContext context) {

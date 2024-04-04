@@ -14,7 +14,6 @@ import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPas
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.loot.condition.AllOfLootCondition;
 import net.minecraft.loot.condition.InvertedLootCondition;
@@ -69,11 +68,11 @@ public class Actions {
             SetBlockStateAction.of(ActionContextParameter.TARGET, blocks.getOrThrow(BlockKeys.FARMLAND))
         ));
         registerable.register(TILL_COARSE_DIRT, ActionEntry.of(
-            setBlockRequirements(builder -> builder.blocks(Blocks.COARSE_DIRT), true),
+            setBlockRequirements(builder -> builder.blocks(blocks.getOrThrow(BlockKeys.COARSE_DIRT).value()), true),
             SetBlockStateAction.of(ActionContextParameter.TARGET, blocks.getOrThrow(BlockKeys.DIRT))
         ));
         registerable.register(TILL_ROOTED_DIRT, ActionEntry.of(
-            setBlockRequirements(builder -> builder.blocks(Blocks.ROOTED_DIRT), false),
+            setBlockRequirements(builder -> builder.blocks(blocks.getOrThrow(BlockKeys.ROOTED_DIRT).value()), false),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(ActionContextParameter.TARGET, blocks.getOrThrow(BlockKeys.DIRT)))
                 .add(DropItemFromBlockAction.of(ActionContextParameter.TARGET, items.getOrThrow(ItemKeys.HANGING_ROOTS)))
@@ -161,13 +160,13 @@ public class Actions {
                             LocationCheckLootCondition.builder(
                                 LocationPredicate.Builder.create()
                                     .block(BlockPredicate.Builder.create()
-                                        .blocks(Blocks.TNT)))
+                                        .blocks(blocks.getOrThrow(BlockKeys.TNT).value())))
                                 .build()
                         ),
-                        new PrimeTntAction(ActionContextParameter.TARGET)
+                        PrimeTntAction.of(ActionContextParameter.TARGET)
                     )
                     .add(PlaceBlockAction.of(blocks.getOrThrow(BlockKeys.FIRE), ActionContextParameter.TARGET, false)))
-                .add(SwingHandAction.INSTANCE)
+                .addOptional(SwingHandAction.INSTANCE)
         ));
     }
 

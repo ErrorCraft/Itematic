@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 
 public record TwirlPlayerAction() implements Action<TwirlPlayerAction> {
     public static final TwirlPlayerAction INSTANCE = new TwirlPlayerAction();
-    public static final Codec<TwirlPlayerAction> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<TwirlPlayerAction> CODEC = MapCodec.unit(INSTANCE);
 
     @Override
     public ActionType<TwirlPlayerAction> type() {

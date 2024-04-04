@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.util.Range;
 import net.errorcraft.itematic.world.action.Action;
@@ -13,19 +14,30 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 
 public record PlaySoundAction(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category, Range.FloatRange volume, Range.FloatRange pitch, boolean fromEntity) implements Action<PlaySoundAction> {
-    public static final Codec<PlaySoundAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<PlaySoundAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(PlaySoundAction::position),
         SoundEvent.ENTRY_CODEC.fieldOf("sound").forGetter(PlaySoundAction::sound),
         StringIdentifiable.createCodec(SoundCategory::values).fieldOf("category").forGetter(PlaySoundAction::category),
         Range.FLOAT_CODEC.fieldOf("volume").forGetter(PlaySoundAction::volume),
         Range.FLOAT_CODEC.fieldOf("pitch").forGetter(PlaySoundAction::pitch),
-        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "from_entity", false).forGetter(PlaySoundAction::fromEntity)
+        Codec.BOOL.optionalFieldOf("from_entity", false).forGetter(PlaySoundAction::fromEntity)
     ).apply(instance, PlaySoundAction::new));
+
+    public static Builder builder(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
+        return new Builder(position, sound, category);
+    }
+
+    public static PlaySoundAction of(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
+        return new PlaySoundAction(position, sound, category, Range.FloatRange.of(1.0f), Range.FloatRange.of(1.0f), false);
+    }
+
+    public static PlaySoundAction of(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category, float volume, float pitch) {
+        return new PlaySoundAction(position, sound, category, Range.FloatRange.of(volume), Range.FloatRange.of(pitch), false);
+    }
 
     @Override
     public ActionType<PlaySoundAction> type() {
@@ -49,22 +61,6 @@ public record PlaySoundAction(ActionContextParameter position, RegistryEntry<Sou
                 }
             );
         return true;
-    }
-
-    public static Builder builder(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
-        return new Builder(position, sound, category);
-    }
-
-    public static PlaySoundAction of(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
-        return new PlaySoundAction(position, sound, category, Range.FloatRange.of(1.0f), Range.FloatRange.of(1.0f), false);
-    }
-
-    public static PlaySoundAction fromEntity(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
-        return new PlaySoundAction(position, sound, category, Range.FloatRange.of(1.0f), Range.FloatRange.of(1.0f), true);
-    }
-
-    public static PlaySoundAction of(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category, float volume, float pitch) {
-        return new PlaySoundAction(position, sound, category, Range.FloatRange.of(volume), Range.FloatRange.of(pitch), false);
     }
 
     public static class Builder {

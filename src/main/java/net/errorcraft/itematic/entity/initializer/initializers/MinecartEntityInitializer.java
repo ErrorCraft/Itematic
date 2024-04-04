@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
@@ -23,8 +23,8 @@ public record MinecartEntityInitializer<T extends AbstractMinecartEntity>(Entity
         return this.create(context.world(), context.blockPos(ActionContextParameter.TARGET), context.stack());
     }
 
-    public static <U extends AbstractMinecartEntity> Codec<EntityInitializer<U>> createCodec(EntityType<U> type, Creator<U> creator) {
-        return Codec.unit(new MinecartEntityInitializer<>(type, creator));
+    public static <U extends AbstractMinecartEntity> MapCodec<EntityInitializer<U>> createCodec(EntityType<U> type, Creator<U> creator) {
+        return MapCodec.unit(new MinecartEntityInitializer<>(type, creator));
     }
 
     private T create(ServerWorld world, BlockPos pos, ItemStack stack) {

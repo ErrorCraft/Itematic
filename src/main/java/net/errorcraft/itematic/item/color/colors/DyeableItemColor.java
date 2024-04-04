@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item.color.colors;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.color.ItemColor;
 import net.errorcraft.itematic.item.color.ItemColorType;
 import net.errorcraft.itematic.item.color.ItemColorTypes;
@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 
 public record DyeableItemColor() implements ItemColor {
     public static final DyeableItemColor INSTANCE = new DyeableItemColor();
-    public static final Codec<DyeableItemColor> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<DyeableItemColor> CODEC = MapCodec.unit(INSTANCE);
 
     @Override
     public int color(ItemStack stack, int tintIndex) {

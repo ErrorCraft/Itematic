@@ -7,10 +7,11 @@
   "components": {
     "minecraft:bucket": {
       "block": "minecraft:powder_snow",
-      "emptying_sound_event": "minecraft:item.bucket.empty_powder_snow"
+      "emptying_sound_event": "minecraft:item.bucket.empty_powder_snow",
+      "transforms_into": "minecraft:bucket"
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:bucket"
+      "behavior": "minecraft:use_bucket"
     },
     "minecraft:max_stack_size": 1
   }

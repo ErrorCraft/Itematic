@@ -7,9 +7,9 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.placement.BlockPlacer;
-import net.errorcraft.itematic.item.placement.block.modifier.BlockStateModifier;
-import net.errorcraft.itematic.item.placement.block.modifier.modifiers.AttachedToSideBlockStateModifier;
-import net.errorcraft.itematic.item.placement.block.modifier.modifiers.SimpleBlockStateModifier;
+import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
+import net.errorcraft.itematic.item.placement.block.picker.pickers.AttachedToSideBlockPicker;
+import net.errorcraft.itematic.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.minecraft.block.Block;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.item.TooltipContext;
@@ -30,9 +30,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record BlockItemComponent(BlockStateModifier<?> block, boolean operatorOnly) implements ItemComponent<BlockItemComponent> {
+public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly) implements ItemComponent<BlockItemComponent> {
     public static final Codec<BlockItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        BlockStateModifier.CODEC.fieldOf("block").forGetter(BlockItemComponent::block),
+        BlockPicker.CODEC.fieldOf("block").forGetter(BlockItemComponent::block),
         Codec.BOOL.optionalFieldOf("operator_only", false).forGetter(BlockItemComponent::operatorOnly)
     ).apply(instance, BlockItemComponent::new));
 
@@ -63,17 +63,17 @@ public record BlockItemComponent(BlockStateModifier<?> block, boolean operatorOn
     }
 
     public static BlockItemComponent attachedToSide(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, Direction attachedSide) {
-        return new BlockItemComponent(new AttachedToSideBlockStateModifier(attachedBlock, otherBlock, attachedSide), false);
+        return new BlockItemComponent(new AttachedToSideBlockPicker(attachedBlock, otherBlock, attachedSide), false);
     }
 
     public static BlockItemComponent of(RegistryEntry<Block> block) {
-        return new BlockItemComponent(new SimpleBlockStateModifier(block), false);
+        return new BlockItemComponent(new SimpleBlockPicker(block), false);
     }
 
     public static ItemComponent<?>[] operator(RegistryEntry<Block> block) {
         return new ItemComponent<?>[] {
             RarityItemComponent.of(Rarity.EPIC),
-            new BlockItemComponent(new SimpleBlockStateModifier(block), true)
+            new BlockItemComponent(new SimpleBlockPicker(block), true)
         };
     }
 

@@ -1,0 +1,9 @@
+{
+  "dispense_as_item_on_failure": false,
+  "entry": {
+    "action": {
+      "type": "minecraft:place_block_from_item",
+      "position": "target"
+    }
+  }
+}

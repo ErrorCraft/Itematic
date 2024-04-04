@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public record BoatEntityInitializer(BoatEntity.Type variant) implements EntityInitializer<BoatEntity> {
-    public static final Codec<BoatEntityInitializer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<BoatEntityInitializer> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         StringIdentifiable.createCodec(BoatEntity.Type::values).fieldOf("variant").forGetter(BoatEntityInitializer::variant)
     ).apply(instance, BoatEntityInitializer::new));
 

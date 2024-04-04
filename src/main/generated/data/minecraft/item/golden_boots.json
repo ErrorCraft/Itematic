@@ -12,7 +12,7 @@
       "durability": 91
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:equipment"
+      "behavior": "minecraft:equip_entity"
     },
     "minecraft:enchantable": {
       "enchantability": 25,

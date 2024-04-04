@@ -8,12 +8,16 @@
     "minecraft:bucket": {
       "emptying_sound_event": "minecraft:item.bucket.empty_tadpole",
       "entity": {
-        "type": "minecraft:tadpole"
+        "entity": {
+          "type": "minecraft:tadpole"
+        },
+        "require_other_successful_placement": true
       },
-      "fluid": "minecraft:water"
+      "fluid": "minecraft:water",
+      "transforms_into": "minecraft:bucket"
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:bucket"
+      "behavior": "minecraft:use_bucket"
     },
     "minecraft:max_stack_size": 1
   }

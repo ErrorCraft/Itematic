@@ -11,7 +11,6 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.MobSpawnerBlockEntity;
 import net.minecraft.entity.Entity;
@@ -23,9 +22,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
@@ -59,9 +58,16 @@ public class EntityPlacer extends Placer {
         return new EntityPlacer(context.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), entityItemComponent.getEntityInitializer(stack), context.getSide(), true, SpawnReason.SPAWN_EGG, null, entityItemComponent.allowItemData(), context.getHand());
     }
 
-    public static EntityPlacer dispensed(BlockPointer pointer, ItemStack stack, ItemStackConsumer resultStackConsumer, EntityItemComponent entityItemComponent) {
-        BlockState state = pointer.state();
-        return new EntityPlacer(stack, resultStackConsumer, pointer.world(), pointer.pos(), state, null, entityItemComponent.getEntityInitializer(stack), state.get(DispenserBlock.FACING), false, SpawnReason.DISPENSER, null, entityItemComponent.allowItemData(), null);
+    public static EntityPlacer action(ActionContext context, ActionContextParameter position, EntityItemComponent entityItemComponent) {
+        ItemStack stack = context.stack();
+        BlockPos pos = context.blockPos(position);
+        return new EntityPlacer(stack, context.resultStackConsumer(), context.world(), pos, context.world().getBlockState(pos), context.player(ActionContextParameter.THIS).orElse(null), entityItemComponent.getEntityInitializer(stack), context.side(), false, SpawnReason.COMMAND, null, entityItemComponent.allowItemData(), context.hand());
+    }
+
+    public static EntityPlacer action(ActionContext context, ActionContextParameter position, EntityInitializer<?> entityInitializer) {
+        ItemStack stack = context.stack();
+        BlockPos pos = context.blockPos(position);
+        return new EntityPlacer(stack, context.resultStackConsumer(), context.world(), pos, context.world().getBlockState(pos), context.player(ActionContextParameter.THIS).orElse(null), entityInitializer, context.side(), false, SpawnReason.COMMAND, null, false, context.hand());
     }
 
     public static EntityPlacer bucket(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockHitResult result, PlayerEntity player, EntityInitializer<?> initializer, Hand hand) {
@@ -134,6 +140,7 @@ public class EntityPlacer extends Placer {
         }
         Entity entity = this.initializer.create(context);
         if (entity != null) {
+            entity.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(offset));
             ((ServerWorld) this.world).spawnEntityAndPassengers(entity);
         }
         return entity;

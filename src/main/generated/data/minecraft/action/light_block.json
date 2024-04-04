@@ -82,9 +82,12 @@
         }
       },
       {
-        "action": {
-          "type": "minecraft:swing_hand"
-        }
+        "entry": {
+          "action": {
+            "type": "minecraft:swing_hand"
+          }
+        },
+        "optional": true
       }
     ],
     "handler": "minecraft:passing"

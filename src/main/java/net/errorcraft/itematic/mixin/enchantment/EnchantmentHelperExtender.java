@@ -28,7 +28,7 @@ public class EnchantmentHelperExtender {
             target = "Lnet/minecraft/registry/Registry;iterator()Ljava/util/Iterator;"
         )
     )
-    private static Iterator<Enchantment> getPossibleEntriesUseEnchantmentTag(Registry<Enchantment> instance, int power, ItemStack stack) {
+    private static Iterator<Enchantment> getPossibleEntriesUseEnchantmentTag(Registry<Enchantment> instance, @Local(argsOnly = true) int power, @Local(argsOnly = true) ItemStack stack) {
         return stack.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
             .flatMap(EnchantableItemComponent::enchantments)
             .map(key -> instance.getOrCreateEntryList(key).stream().map(RegistryEntry::value).iterator())

@@ -1,0 +1,8 @@
+{
+  "entry": {
+    "action": {
+      "type": "minecraft:use_bucket",
+      "position": "target"
+    }
+  }
+}

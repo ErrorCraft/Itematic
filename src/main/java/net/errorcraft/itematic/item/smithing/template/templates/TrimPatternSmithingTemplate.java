@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item.smithing.template.templates;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateType;
@@ -19,7 +19,7 @@ import net.minecraft.util.Util;
 import java.util.List;
 
 public record TrimPatternSmithingTemplate(RegistryEntry<ArmorTrimPattern> trimPattern) implements SmithingTemplate {
-    public static final Codec<TrimPatternSmithingTemplate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<TrimPatternSmithingTemplate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.TRIM_PATTERN).fieldOf("trim_pattern").forGetter(TrimPatternSmithingTemplate::trimPattern)
     ).apply(instance, TrimPatternSmithingTemplate::new));
     private static final MutableText APPLIES_TO_TEXT = (MutableText) SmithingTemplateItemAccessor.getTrimPatternAppliesToText();

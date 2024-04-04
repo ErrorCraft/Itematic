@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockStateUtil;
 import net.errorcraft.itematic.world.action.Action;
@@ -13,18 +14,21 @@ import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Property;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public record ModifyBlockStateAction(ActionContextParameter position, Map<String, String> properties, boolean pushEntitiesUpwards) implements Action<ModifyBlockStateAction> {
-    public static final Codec<ModifyBlockStateAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ModifyBlockStateAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(ModifyBlockStateAction::position),
         Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("properties").forGetter(ModifyBlockStateAction::properties),
-        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "push_entities_upwards", false).forGetter(ModifyBlockStateAction::pushEntitiesUpwards)
+        Codec.BOOL.optionalFieldOf("push_entities_upwards", false).forGetter(ModifyBlockStateAction::pushEntitiesUpwards)
     ).apply(instance, ModifyBlockStateAction::new));
+
+    public static Builder builder(ActionContextParameter position) {
+        return new Builder(position);
+    }
 
     @Override
     public ActionType<ModifyBlockStateAction> type() {
@@ -53,10 +57,6 @@ public record ModifyBlockStateAction(ActionContextParameter position, Map<String
         }
         world.setBlockState(pos, newState);
         return true;
-    }
-
-    public static Builder builder(ActionContextParameter position) {
-        return new Builder(position);
     }
 
     public static final class Builder {

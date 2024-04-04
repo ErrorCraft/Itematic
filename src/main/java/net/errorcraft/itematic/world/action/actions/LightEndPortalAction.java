@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -16,10 +16,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldEvents;
 
 public record LightEndPortalAction(ActionContextParameter position) implements Action<LightEndPortalAction> {
-    public static final Codec<LightEndPortalAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<LightEndPortalAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(LightEndPortalAction::position)
     ).apply(instance, LightEndPortalAction::new));
     private static final int PORTAL_SIZE = 3;
+
+    public static LightEndPortalAction of(ActionContextParameter position) {
+        return new LightEndPortalAction(position);
+    }
 
     @Override
     public ActionType<LightEndPortalAction> type() {
@@ -45,9 +49,5 @@ public record LightEndPortalAction(ActionContextParameter position) implements A
 
         world.syncGlobalEvent(WorldEvents.END_PORTAL_OPENED, endPortalStartPos.add(1, 0, 1), 0);
         return true;
-    }
-
-    public static LightEndPortalAction of(ActionContextParameter position) {
-        return new LightEndPortalAction(position);
     }
 }

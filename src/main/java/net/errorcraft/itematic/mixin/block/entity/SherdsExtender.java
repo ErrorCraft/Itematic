@@ -13,7 +13,6 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.util.Util;
 import net.minecraft.util.dynamic.Codecs;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -193,7 +192,7 @@ public abstract class SherdsExtender implements SherdsAccess {
         if (this.equals(DEFAULT)) {
             return nbt;
         }
-        nbt.put("sherds", Util.getResult(CODEC.encodeStart(lookup.getOps(NbtOps.INSTANCE), (Sherds)(Object) this), IllegalStateException::new));
+        nbt.put("sherds", CODEC.encodeStart(lookup.getOps(NbtOps.INSTANCE), (Sherds)(Object) this).getOrThrow());
         return nbt;
     }
 

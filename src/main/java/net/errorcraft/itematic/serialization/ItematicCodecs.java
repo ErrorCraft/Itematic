@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import net.errorcraft.itematic.mixin.util.dynamic.CodecsAccessor;
-import net.minecraft.util.dynamic.Codecs;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,7 +16,7 @@ public class ItematicCodecs {
     private ItematicCodecs() {}
 
     public static <T> Codec<List<T>> countRangeList(Codec<List<T>> codec, int minCount, int maxCount) {
-        return Codecs.validate(codec, list -> {
+        return codec.validate(list -> {
             if (list.size() < minCount) {
                 return DataResult.error(() -> "List must contain at least " + minCount + " elements");
             }

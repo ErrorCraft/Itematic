@@ -14,14 +14,15 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.projectile.ExplosiveProjectileEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Position;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, float chargedSpeed) implements ItemComponent<ProjectileItemComponent> {
@@ -48,22 +49,22 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, f
         return this.createEntity((ServerWorld) world, user, stack, ItemStackConsumer.EMPTY, angleOffset, speed, 1.0f);
     }
 
-    public Entity createEntity(ServerWorld world, Entity user, ItemStack stack, ItemStackConsumer resultStackConsumer, float angleOffset, float speed, float variation) {
+    public Entity createEntity(ServerWorld world, Entity user, ItemStack stack, ItemStackConsumer resultStackConsumer, float angleOffset, float speed, float uncertainty) {
         ActionContext context = ActionContext.builder(world, stack, resultStackConsumer)
             .entityPosition(ActionContextParameter.THIS, user)
             .position(ActionContextParameter.TARGET, user.getEyePos().add(0.0d, -0.1d, 0.0d))
             .build();
-        return this.createEntity(context, angleOffset, speed, variation);
+        return this.createEntity(context, ActionContextParameter.TARGET, angleOffset, speed, uncertainty);
     }
 
-    public Entity createEntity(World world, Position position, ItemStack stack, float speed, float variation) {
+    public Entity createEntity(World world, Position position, ItemStack stack, float speed, float uncertainty) {
         if (world.isClient()) {
             return null;
         }
         ActionContext context = ActionContext.builder((ServerWorld) world, stack, ItemStackConsumer.EMPTY)
             .position(ActionContextParameter.TARGET, position)
             .build();
-        return this.createEntity(context, 0.0f, speed, variation);
+        return this.createEntity(context, ActionContextParameter.TARGET, 0.0f, speed, uncertainty);
     }
 
     public static ProjectileItemComponent of(EntityInitializer<?> entity, int damage, float chargedSpeed) {
@@ -75,40 +76,47 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, f
     }
 
     public static ProjectileItemComponent of(RegistryEntry<EntityType<?>> entity) {
-        return of(new SimpleEntityInitializer<>(entity.value()), 0);
+        return of(SimpleEntityInitializer.of(entity.value()), 0);
     }
 
     public static <U extends PersistentProjectileEntity> ProjectileItemComponent persistentProjectile(EntityType<U> entityType, PersistentProjectileEntityInitializer.OwnerCreator<U> ownerCreator, PersistentProjectileEntityInitializer.SimpleCreator<U> simpleCreator) {
         return of(new PersistentProjectileEntityInitializer<>(entityType, ownerCreator, simpleCreator), 1);
     }
 
-    public Entity createEntity(ActionContext context, float angleOffset, float speed, float variation) {
+    public Entity createEntity(ActionContext context, ActionContextParameter position, float angleOffset, float speed, float uncertainty) {
         Entity entity = this.entity.create(context);
         if (entity == null) {
             return null;
         }
+        entity.refreshPositionAfterTeleport(context.position(position));
         if (entity instanceof ThrownItemEntity thrownItemEntity) {
             thrownItemEntity.setItem(context.stack());
         }
         if (entity instanceof ProjectileEntity projectileEntity) {
-            this.initializeProjectile(context, projectileEntity, angleOffset, speed, variation);
+            this.initializeProjectile(context, projectileEntity, angleOffset, speed, uncertainty);
         }
         return entity;
     }
 
-    private void initializeProjectile(ActionContext context, ProjectileEntity projectileEntity, float angleOffset, float speed, float variation) {
+    private void initializeProjectile(ActionContext context, ProjectileEntity projectileEntity, float angleOffset, float speed, float uncertainty) {
         context.entity(ActionContextParameter.THIS).ifPresentOrElse(
-            user -> this.initializeProjectile(projectileEntity, user, angleOffset, speed, variation),
-            () -> this.initializeProjectile(projectileEntity, context.position(ActionContextParameter.TARGET), speed, variation)
+            user -> this.initializeProjectile(projectileEntity, user, angleOffset, speed, uncertainty),
+            () -> this.initializeProjectile(projectileEntity, context.side(), speed, uncertainty)
         );
     }
 
-    private void initializeProjectile(ProjectileEntity entity, Vec3d position, float speed, float variation) {
-        entity.setVelocity(position.getX(), position.getY() + 0.1f, position.getZ(), speed, variation);
+    private void initializeProjectile(ProjectileEntity entity, Direction side, float speed, float uncertainty) {
+        if (entity instanceof ExplosiveProjectileEntity) {
+            return;
+        }
+        entity.setVelocity(side.getOffsetX(), side.getOffsetY(), side.getOffsetZ(), speed, uncertainty);
     }
 
-    private void initializeProjectile(ProjectileEntity entity, Entity user, float angleOffset, float speed, float variation) {
+    private void initializeProjectile(ProjectileEntity entity, Entity user, float angleOffset, float speed, float uncertainty) {
         entity.setOwner(user);
-        entity.setVelocity(user, user.getPitch(), user.getYaw(), angleOffset, speed, variation);
+        if (entity instanceof ExplosiveProjectileEntity) {
+            return;
+        }
+        entity.setVelocity(user, user.getPitch(), user.getYaw(), angleOffset, speed, uncertainty);
     }
 }

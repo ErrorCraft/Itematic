@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -13,7 +13,7 @@ import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionTypes;
 
 public record ModifyItemAction(LootFunction itemModifier, ActionContextParameters context) implements Action<ModifyItemAction> {
-    public static final Codec<ModifyItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ModifyItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         LootFunctionTypes.CODEC.fieldOf("item_modifier").forGetter(ModifyItemAction::itemModifier),
         ActionContextParameters.CODEC.fieldOf("context").forGetter(ModifyItemAction::context)
     ).apply(instance, ModifyItemAction::new));

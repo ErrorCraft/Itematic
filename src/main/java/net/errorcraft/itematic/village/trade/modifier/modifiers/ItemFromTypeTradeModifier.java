@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.village.trade.modifier.modifiers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifier;
@@ -23,7 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public record ItemFromTypeTradeModifier(Map<VillagerType, RegistryEntry<Item>> types) implements TradeModifier<ItemFromTypeTradeModifier> {
-    public static final Codec<ItemFromTypeTradeModifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ItemFromTypeTradeModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.simpleMap(Registries.VILLAGER_TYPE.getCodec(), RegistryFixedCodec.of(RegistryKeys.ITEM), Registries.VILLAGER_TYPE).fieldOf("types").forGetter(ItemFromTypeTradeModifier::types)
     ).apply(instance, ItemFromTypeTradeModifier::new));
 

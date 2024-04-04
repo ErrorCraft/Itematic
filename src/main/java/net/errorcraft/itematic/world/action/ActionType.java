@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 
-public record ActionType<T extends Action<T>>(Codec<T> codec) {
+public record ActionType<T extends Action<T>>(MapCodec<T> codec) {
 }

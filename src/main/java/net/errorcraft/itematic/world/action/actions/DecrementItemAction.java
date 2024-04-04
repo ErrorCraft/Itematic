@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -8,13 +9,16 @@ import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.dynamic.Codecs;
 
 public record DecrementItemAction(int amount, boolean ignoreGameMode) implements Action<DecrementItemAction> {
-    public static final Codec<DecrementItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<DecrementItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.INT.fieldOf("amount").forGetter(DecrementItemAction::amount),
-        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "ignore_game_mode", false).forGetter(DecrementItemAction::ignoreGameMode)
+        Codec.BOOL.optionalFieldOf("ignore_game_mode", false).forGetter(DecrementItemAction::ignoreGameMode)
     ).apply(instance, DecrementItemAction::new));
+
+    public static DecrementItemAction of(int amount) {
+        return new DecrementItemAction(amount, false);
+    }
 
     @Override
     public ActionType<DecrementItemAction> type() {
@@ -33,9 +37,5 @@ public record DecrementItemAction(int amount, boolean ignoreGameMode) implements
             stack.decrementUnlessCreative(this.amount, context.livingEntity(ActionContextParameter.THIS).orElse(null));
         }
         return true;
-    }
-
-    public static DecrementItemAction of(int amount) {
-        return new DecrementItemAction(amount, false);
     }
 }

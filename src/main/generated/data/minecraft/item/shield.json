@@ -10,7 +10,7 @@
       "durability": 336
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:equipment"
+      "behavior": "minecraft:equip_entity"
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_generic",

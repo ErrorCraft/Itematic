@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.color.colors;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.color.ItemColor;
 import net.errorcraft.itematic.item.color.ItemColorType;
@@ -9,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.ColorHelper;
 
 public record ConstantItemColor(int color) implements ItemColor {
-    public static final Codec<ConstantItemColor> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ConstantItemColor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.INT.fieldOf("color").forGetter(ConstantItemColor::color)
     ).apply(instance, ConstantItemColor::new));
 

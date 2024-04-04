@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.village.trade.modifier.modifiers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.util.Range;
 import net.errorcraft.itematic.village.trade.Trade;
@@ -21,7 +22,7 @@ import net.minecraft.village.TradedItem;
 import java.util.Optional;
 
 public record SingleEnchantmentTradeModifier(int index, int baseRandomCost, int perLevelRandomCost, int perLevelCost, RegistryEntryList<Enchantment> enchantments, Range.IntegerRange levels) implements TradeModifier<SingleEnchantmentTradeModifier> {
-    public static final Codec<SingleEnchantmentTradeModifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<SingleEnchantmentTradeModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.INT.fieldOf("index").forGetter(SingleEnchantmentTradeModifier::index),
         Codec.INT.fieldOf("base_random_cost").forGetter(SingleEnchantmentTradeModifier::baseRandomCost),
         Codec.INT.fieldOf("per_level_random_cost").forGetter(SingleEnchantmentTradeModifier::perLevelRandomCost),

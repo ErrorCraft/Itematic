@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.recipe;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.DyeItemComponent;
@@ -97,7 +97,7 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
     }
 
     public static class Serializer implements RecipeSerializer<ItemColoringRecipe> {
-        private static final Codec<ItemColoringRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        private static final MapCodec<ItemColoringRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             CraftingRecipeCategory.CODEC.fieldOf("category").orElse(CraftingRecipeCategory.MISC).forGetter(ItemColoringRecipe::category),
             Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("ingredient").forGetter(ItemColoringRecipe::ingredient),
             DyeColor.CODEC.fieldOf("color").forGetter(ItemColoringRecipe::color),
@@ -112,7 +112,7 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
         );
 
         @Override
-        public Codec<ItemColoringRecipe> codec() {
+        public MapCodec<ItemColoringRecipe> codec() {
             return CODEC;
         }
 

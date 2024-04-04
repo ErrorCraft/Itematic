@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -10,11 +11,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.dynamic.Codecs;
 
 public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implements EntityInitializer<TridentEntity> {
-    public static final Codec<TridentEntityInitializer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "prevent_spawn_from_riptide", false).forGetter(TridentEntityInitializer::preventSpawnFromRiptide)
+    public static final MapCodec<TridentEntityInitializer> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Codec.BOOL.optionalFieldOf("prevent_spawn_from_riptide", false).forGetter(TridentEntityInitializer::preventSpawnFromRiptide)
     ).apply(instance, TridentEntityInitializer::new));
 
     @Override

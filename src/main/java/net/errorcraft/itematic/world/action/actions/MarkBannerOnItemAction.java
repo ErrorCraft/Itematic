@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -14,9 +14,13 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
 public record MarkBannerOnItemAction(ActionContextParameter position) implements Action<MarkBannerOnItemAction> {
-    public static final Codec<MarkBannerOnItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<MarkBannerOnItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(MarkBannerOnItemAction::position)
     ).apply(instance, MarkBannerOnItemAction::new));
+
+    public static MarkBannerOnItemAction of(ActionContextParameter position) {
+        return new MarkBannerOnItemAction(position);
+    }
 
     @Override
     public ActionType<MarkBannerOnItemAction> type() {
@@ -32,9 +36,5 @@ public record MarkBannerOnItemAction(ActionContextParameter position) implements
         }
         MapState state = FilledMapItem.getMapState(context.stack(), world);
         return state == null || state.addBanner(world, pos);
-    }
-
-    public static MarkBannerOnItemAction of(ActionContextParameter position) {
-        return new MarkBannerOnItemAction(position);
     }
 }

@@ -8,7 +8,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
 import net.errorcraft.itematic.item.component.components.DyeableItemComponent;
-import net.errorcraft.itematic.item.placement.block.modifier.BlockStateModifier;
+import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.minecraft.block.Block;
 import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.item.Item;
@@ -38,7 +38,7 @@ public interface CauldronBehaviorExtender {
     private static Block getBlockFromItemUseItemComponent(Item item) {
         return item.itematic$getComponent(ItemComponentTypes.BLOCK)
             .map(BlockItemComponent::block)
-            .map(BlockStateModifier::defaultBlock)
+            .map(BlockPicker::defaultBlock)
             .map(RegistryEntry::value)
             .orElse(null);
     }

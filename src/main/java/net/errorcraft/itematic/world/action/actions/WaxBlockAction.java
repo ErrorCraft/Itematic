@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -16,9 +16,13 @@ import net.minecraft.world.WorldEvents;
 import net.minecraft.world.event.GameEvent;
 
 public record WaxBlockAction(ActionContextParameter position) implements Action<WaxBlockAction> {
-    public static final Codec<WaxBlockAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<WaxBlockAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(WaxBlockAction::position)
     ).apply(instance, WaxBlockAction::new));
+
+    public static WaxBlockAction of(ActionContextParameter position) {
+        return new WaxBlockAction(position);
+    }
 
     @Override
     public ActionType<WaxBlockAction> type() {

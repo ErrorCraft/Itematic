@@ -35,6 +35,9 @@
     "minecraft:multishot",
     "minecraft:quick_charge",
     "minecraft:piercing",
+    "minecraft:density",
+    "minecraft:breach",
+    "minecraft:wind_burst",
     "minecraft:mending",
     "minecraft:vanishing_curse"
   ]

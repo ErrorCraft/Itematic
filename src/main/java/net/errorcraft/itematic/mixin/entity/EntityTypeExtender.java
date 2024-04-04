@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.access.entity.EntityTypeAccess;
 import net.errorcraft.itematic.access.entity.EntityTypeBuilderAccess;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @SuppressWarnings("unchecked")
 public abstract class EntityTypeExtender<T extends Entity> implements EntityTypeAccess {
     @Unique
-    private Codec<? extends EntityInitializer<?>> initializerCodec;
+    private MapCodec<? extends EntityInitializer<?>> initializerCodec;
     @Unique
     private EntityInitializer<?> initializer;
     @Unique
@@ -262,7 +262,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<PaintingEntity> setPaintingInitializerCodec(EntityType.Builder<PaintingEntity> type) {
-        type.itematic$initializerCodec(entityType -> Codec.unit(DecorationEntityInitializer.createPainting(entityType)));
+        type.itematic$initializerCodec(entityType -> MapCodec.unit(DecorationEntityInitializer.createPainting(entityType)));
         return type;
     }
 
@@ -437,12 +437,12 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     }
 
     @Override
-    public Codec<? extends EntityInitializer<?>> itematic$initializerCodec() {
+    public MapCodec<? extends EntityInitializer<?>> itematic$initializerCodec() {
         return this.initializerCodec;
     }
 
     @Override
-    public void itematic$setInitializerCodec(Codec<? extends EntityInitializer<?>> initializerCodec) {
+    public void itematic$setInitializerCodec(MapCodec<? extends EntityInitializer<?>> initializerCodec) {
         this.initializerCodec = initializerCodec;
     }
 
@@ -459,7 +459,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
 
     @Unique
     private static <T extends ItemFrameEntity> EntityInitializerCodecCreator<T> decorationInitializerCodecCreator(DecorationEntityInitializer.Creator<T> creator) {
-        return type -> Codec.unit(DecorationEntityInitializer.createItemFrame(type, creator));
+        return type -> MapCodec.unit(DecorationEntityInitializer.createItemFrame(type, creator));
     }
 
     @Mixin(EntityType.Builder.class)
@@ -477,8 +477,8 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         }
 
         @Override
-        public void itematic$initializerCodec(Codec<? extends EntityInitializer<T>> codec) {
-            this.creator = type -> (Codec<EntityInitializer<T>>) codec;
+        public void itematic$initializerCodec(MapCodec<? extends EntityInitializer<T>> codec) {
+            this.creator = type -> codec;
         }
 
         @Override

@@ -12,7 +12,7 @@ public class ItematicData implements DataGeneratorEntrypoint {
     @Override
     public void addJsonKeySortOrders(JsonKeySortOrderCallback callback) {
         callback.add("id", 0);
-        callback.add("event", 0);
+        callback.add("event", 1);
     }
 
     @Override
@@ -33,5 +33,6 @@ public class ItematicData implements DataGeneratorEntrypoint {
         pack.addProvider(SmithingTemplateProvider::new);
         pack.addProvider(RecipeProvider::new);
         pack.addProvider(PotionTagProvider::new);
+        pack.addProvider(DispenseBehaviorProvider::new);
     }
 }

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item.group.entry.entries;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class TagItemGroupEntry extends ItemGroupEntry {
-    public static final Codec<TagItemGroupEntry> CODEC = RecordCodecBuilder.create(instance -> createCodec(instance).and(
+    public static final MapCodec<TagItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(
         TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("tag").forGetter(TagItemGroupEntry::tag)
     ).apply(instance, TagItemGroupEntry::new));
 

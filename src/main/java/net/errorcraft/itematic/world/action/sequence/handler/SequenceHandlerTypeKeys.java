@@ -8,6 +8,7 @@ public class SequenceHandlerTypeKeys {
     public static final RegistryKey<SequenceHandlerType<?>> UNCHECKED = of("unchecked");
     public static final RegistryKey<SequenceHandlerType<?>> FIRST_TO_PASS_REQUIREMENTS = of("first_to_pass_requirements");
     public static final RegistryKey<SequenceHandlerType<?>> PASSING = of("passing");
+    public static final RegistryKey<SequenceHandlerType<?>> FIRST_TO_SUCCEED = of("first_to_succeed");
 
     private SequenceHandlerTypeKeys() {}
 

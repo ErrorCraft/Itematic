@@ -1,40 +1,211 @@
 package net.errorcraft.itematic.item.dispense.behavior;
 
-import net.errorcraft.itematic.block.dispenser.DispenserBehaviorUtil;
-import net.errorcraft.itematic.item.dispense.behavior.behaviors.*;
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.block.BlockKeys;
+import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
+import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.sound.SoundEventKeys;
+import net.errorcraft.itematic.world.action.Action;
+import net.errorcraft.itematic.world.action.ActionEntry;
+import net.errorcraft.itematic.world.action.ActionRequirements;
+import net.errorcraft.itematic.world.action.actions.*;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
+import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
+import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
+import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToSucceedSequenceHandler;
+import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
+import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
+import net.minecraft.block.BeehiveBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.registry.Registry;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
+import net.minecraft.loot.condition.LocationCheckLootCondition;
+import net.minecraft.predicate.BlockPredicate;
+import net.minecraft.predicate.StatePredicate;
+import net.minecraft.predicate.entity.LocationPredicate;
+import net.minecraft.registry.Registerable;
+import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 
 public class DispenseBehaviors {
-    public static final DispenserBehavior ITEM = register(DispenseBehaviorKeys.ITEM, new ItemDispenserBehavior());
-    public static final DispenserBehavior ENTITY = register(DispenseBehaviorKeys.ENTITY, new EntityItemComponentDispenserBehavior());
-    public static final DispenserBehavior PROJECTILE = register(DispenseBehaviorKeys.PROJECTILE, new ProjectileItemComponentDispenserBehavior());
-    public static final DispenserBehavior EQUIPMENT = register(DispenseBehaviorKeys.EQUIPMENT, ArmorItem.DISPENSER_BEHAVIOR);
-    public static final DispenserBehavior FIREWORK = register(DispenseBehaviorKeys.FIREWORK, new FireworkRocketDispenserBehavior());
-    public static final DispenserBehavior BUCKET = register(DispenseBehaviorKeys.BUCKET, new BucketItemComponentDispenserBehavior());
-    public static final DispenserBehavior POTION = register(DispenseBehaviorKeys.POTION, DispenserBehaviorUtil.POTION_DISPENSER_BEHAVIOR);
-    public static final DispenserBehavior BOTTLE = register(DispenseBehaviorKeys.BOTTLE, DispenserBehaviorUtil.BOTTLE_DISPENSER_BEHAVIOR);
-    public static final DispenserBehavior FERTILIZE = register(DispenseBehaviorKeys.FERTILIZE, new FertilizeDispenserBehavior());
-    public static final DispenserBehavior SADDLE = register(DispenseBehaviorKeys.SADDLE, new SaddleItemComponentDispenserBehavior());
-    public static final DispenserBehavior USE_ON_BLOCK = register(DispenseBehaviorKeys.USE_ON_BLOCK, new UseOnBlockDispenserBehavior());
-    public static final DispenserBehavior WAX_BLOCK = register(DispenseBehaviorKeys.WAX_BLOCK, new WaxBlockDispenserBehavior());
-    public static final DispenserBehavior PLACE_BLOCK_FROM_ITEM = register(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM, new PlaceBlockFromItemDispenserBehavior());
-    public static final DispenserBehavior BRUSH = register(DispenseBehaviorKeys.BRUSH, DispenserBehaviorUtil.BRUSH_DISPENSER_BEHAVIOR);
-    public static final DispenserBehavior CHEST_EQUIPMENT = register(DispenseBehaviorKeys.CHEST_EQUIPMENT, DispenserBehaviorUtil.CHEST_EQUIPMENT_DISPENSER_BEHAVIOR);
-    public static final DispenserBehavior TNT = register(DispenseBehaviorKeys.TNT, DispenserBehaviorUtil.TNT_DISPENSER_BEHAVIOR);
-    public static final DispenserBehavior CARVED_PUMPKIN = register(DispenseBehaviorKeys.CARVED_PUMPKIN, DispenserBehaviorUtil.CARVED_PUMPKIN_DISPENSER_BEHAVIOR);
-    public static final DispenserBehavior CHARGE_RESPAWN_ANCHOR = register(DispenseBehaviorKeys.CHARGE_RESPAWN_ANCHOR, DispenserBehaviorUtil.CHARGE_RESPAWN_ANCHOR_DISPENSER_BEHAVIOR);
-    public static final DispenserBehavior SHEAR = register(DispenseBehaviorKeys.SHEAR, DispenserBehaviorUtil.SHEAR_DISPENSER_BEHAVIOR);
+    public static final DispenserBehavior FALLBACK = new ItemDispenserBehavior();
+
+    public static final RegistryKey<DispenseBehavior> BRUSH = of("brush");
+    public static final RegistryKey<DispenseBehavior> CHARGE_RESPAWN_ANCHOR = of("charge_respawn_anchor");
+    public static final RegistryKey<DispenseBehavior> EQUIP_CHEST = of("equip_chest");
+    public static final RegistryKey<DispenseBehavior> EQUIP_ENTITY = of("equip_entity");
+    public static final RegistryKey<DispenseBehavior> EQUIP_ENTITY_HEAD = of("equip_entity_head");
+    public static final RegistryKey<DispenseBehavior> GLASS_BOTTLE = of("glass_bottle");
+    public static final RegistryKey<DispenseBehavior> PLACE_BLOCK_FROM_ITEM = of("place_block_from_item");
+    public static final RegistryKey<DispenseBehavior> PLACE_CARVED_PUMPKIN = of("place_carved_pumpkin");
+    public static final RegistryKey<DispenseBehavior> SADDLE = of("saddle");
+    public static final RegistryKey<DispenseBehavior> SHEAR = of("shear");
+    public static final RegistryKey<DispenseBehavior> SHOOT_BOTTLE = of("shoot_bottle");
+    public static final RegistryKey<DispenseBehavior> SHOOT_CHARGE = of("shoot_charge");
+    public static final RegistryKey<DispenseBehavior> SHOOT_FIREWORK_ROCKET = of("shoot_firework_rocket");
+    public static final RegistryKey<DispenseBehavior> SHOOT_PROJECTILE = of("shoot_projectile");
+    public static final RegistryKey<DispenseBehavior> SPAWN_ENTITY_FROM_ITEM = of("spawn_entity_from_item");
+    public static final RegistryKey<DispenseBehavior> SPAWN_TNT = of("spawn_tnt");
+    public static final RegistryKey<DispenseBehavior> USE_BUCKET = of("use_bucket");
+    public static final RegistryKey<DispenseBehavior> USE_ITEM_ON_BLOCK = of("use_item_on_block");
+    public static final RegistryKey<DispenseBehavior> USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM = of("use_item_on_block_or_dispense_item");
+    public static final RegistryKey<DispenseBehavior> WAX_BLOCK = of("wax_block");
 
     private DispenseBehaviors() {}
 
-    public static void init() {}
+    public static void bootstrap(Registerable<DispenseBehavior> registerable) {
+        RegistryEntryLookup<Block> blocks = registerable.getRegistryLookup(RegistryKeys.BLOCK);
+        RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
+        RegistryEntryLookup<SoundEvent> soundEvents = registerable.getRegistryLookup(RegistryKeys.SOUND_EVENT);
 
-    private static DispenserBehavior register(RegistryKey<DispenserBehavior> id, DispenserBehavior behavior) {
-        return Registry.register(ItematicRegistries.DISPENSE_BEHAVIOR, id, behavior);
+        registerable.register(BRUSH, DispenseBehavior.builder(
+            PassingSequenceHandler.builder()
+                .add(BrushArmadilloAtPositionAction.of(ActionContextParameter.TARGET))
+                .add(DamageItemAction.of(16)))
+            .doNotDispenseOnFailure()
+            .build()
+        );
+        registerable.register(CHARGE_RESPAWN_ANCHOR, DispenseBehavior.builder(
+            ActionEntry.of(
+                ActionRequirements.of(
+                    ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                    LocationCheckLootCondition.builder(
+                        LocationPredicate.Builder.create()
+                            .block(BlockPredicate.Builder.create()
+                                .blocks(blocks.getOrThrow(BlockKeys.RESPAWN_ANCHOR).value())))
+                        .build()
+                ),
+                decrement(ChargeRespawnAnchorAction.of(ActionContextParameter.TARGET))))
+            .doNotDispenseOnFailure()
+            .build()
+        );
+        registerable.register(EQUIP_CHEST, DispenseBehavior.builder(
+            decrement(EquipHorseWithChestAtPositionAction.of(ActionContextParameter.TARGET)))
+            .build()
+        );
+        registerable.register(EQUIP_ENTITY, DispenseBehavior.builder(
+            decrement(EquipEntityAtPositionAction.of(ActionContextParameter.TARGET)))
+            .build()
+        );
+        registerable.register(EQUIP_ENTITY_HEAD, DispenseBehavior.builder(
+            decrement(EquipEntityAtPositionAction.of(ActionContextParameter.TARGET)))
+            .doNotDispenseOnFailure()
+            .build()
+        );
+        registerable.register(GLASS_BOTTLE, DispenseBehavior.builder(
+            FirstToPassRequirementsSequenceHandler.builder()
+                .add(
+                    ActionRequirements.of(
+                        ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                        LocationCheckLootCondition.builder(
+                            LocationPredicate.Builder.create()
+                                .block(BlockPredicate.Builder.create()
+                                    .state(StatePredicate.Builder.create()
+                                        .exactMatch(BeehiveBlock.HONEY_LEVEL, BeehiveBlock.FULL_HONEY_LEVEL))))
+                            .build()
+                    ),
+                    UncheckedSequenceHandler.builder()
+                        .add(TakeHoneyAction.of(ActionContextParameter.TARGET))
+                        .add(ExchangeItemAction.of(items.getOrThrow(ItemKeys.HONEY_BOTTLE))))
+                .add(InvokeItemEventAction.of(ItemEvents.USE_ON_BLOCK)))
+            .build()
+        );
+        registerable.register(PLACE_BLOCK_FROM_ITEM, DispenseBehavior.builder(
+            PlaceBlockFromItemAction.of(ActionContextParameter.TARGET, true))
+            .doNotDispenseOnFailure()
+            .build()
+        );
+        registerable.register(PLACE_CARVED_PUMPKIN, DispenseBehavior.builder(
+            decrement(FirstToSucceedSequenceHandler.builder()
+                .add(PlaceCarvedPumpkinAction.of(ActionContextParameter.TARGET))
+                .add(EquipEntityAtPositionAction.of(ActionContextParameter.TARGET))))
+            .doNotDispenseOnFailure()
+            .build()
+        );
+        registerable.register(SADDLE, DispenseBehavior.builder(
+            SaddleEntityAtPositionAction.of(ActionContextParameter.TARGET))
+            .build()
+        );
+        registerable.register(SHEAR, DispenseBehavior.builder(
+            decrement(ShearAtPositionAction.of(ActionContextParameter.TARGET)))
+            .doNotDispenseOnFailure()
+            .build()
+        );
+        registerable.register(SHOOT_BOTTLE, DispenseBehavior.builder(
+            shootProjectile(1.1f * 1.25f, 6.0f * 0.5f))
+            .offset(DispenseBehavior.Offset.of(0.7d, 0.0d, 0.1d, 0.0d))
+            .build()
+        );
+        registerable.register(SHOOT_CHARGE, DispenseBehavior.builder(
+            shootProjectile(1.0f, 20.0f / 3.0f))
+            .build()
+        );
+        registerable.register(SHOOT_FIREWORK_ROCKET, DispenseBehavior.builder(
+            shootProjectile(1.0f, 0.5f))
+            .offset(DispenseBehavior.Offset.ofSide(
+                0.5d - EntityType.FIREWORK_ROCKET.getWidth() * 0.5d,
+                -EntityType.FIREWORK_ROCKET.getHeight() + 0.5d,
+                0.5d - EntityType.FIREWORK_ROCKET.getWidth() * 0.5d
+            ))
+            .build()
+        );
+        registerable.register(SHOOT_PROJECTILE, DispenseBehavior.builder(
+            shootProjectile(1.1f, 6.0f))
+            .offset(DispenseBehavior.Offset.of(0.7d, 0.0d, 0.1d, 0.0d))
+            .build()
+        );
+        registerable.register(SPAWN_ENTITY_FROM_ITEM, DispenseBehavior.builder(
+            SpawnEntityFromItemAction.of(ActionContextParameter.TARGET))
+            .build()
+        );
+        registerable.register(SPAWN_TNT, DispenseBehavior.builder(
+            PassingSequenceHandler.builder()
+                .add(SpawnEntityAction.of(ActionContextParameter.TARGET, SimpleEntityInitializer.of(EntityType.TNT)))
+                .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundCategory.BLOCKS)))
+            .build()
+        );
+        registerable.register(USE_BUCKET, DispenseBehavior.builder(
+            UseBucketAction.of(ActionContextParameter.TARGET))
+            .build()
+        );
+        registerable.register(USE_ITEM_ON_BLOCK, DispenseBehavior.builder(
+            InvokeItemEventAction.of(ItemEvents.USE_ON_BLOCK))
+            .doNotDispenseOnFailure()
+            .build()
+        );
+        registerable.register(USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM, DispenseBehavior.builder(
+            InvokeItemEventAction.of(ItemEvents.USE_ON_BLOCK))
+            .build()
+        );
+        registerable.register(WAX_BLOCK, DispenseBehavior.builder(
+            decrement(WaxBlockAction.of(ActionContextParameter.TARGET)))
+            .build()
+        );
+    }
+
+    private static RegistryKey<DispenseBehavior> of(String id) {
+        return RegistryKey.of(ItematicRegistryKeys.DISPENSE_BEHAVIOR, new Identifier(id));
+    }
+    
+    private static PassingSequenceHandler.Builder shootProjectile(float power, float uncertainty) {
+        return decrement(ShootProjectileFromItemAction.of(ActionContextParameter.TARGET, power, uncertainty));
+    }
+
+    private static PassingSequenceHandler.Builder decrement(Action<?> action) {
+        return PassingSequenceHandler.builder()
+            .add(action)
+            .add(DecrementItemAction.of(1));
+    }
+
+    private static PassingSequenceHandler.Builder decrement(SequenceHandler.Builder<?, ?> builder) {
+        return decrement(SequenceAction.of(builder));
     }
 }

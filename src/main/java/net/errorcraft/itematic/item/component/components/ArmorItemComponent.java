@@ -15,14 +15,13 @@ import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Optional;
 
 public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional<AnimalArmorItem.Type> armorType) implements ItemComponent<ArmorItemComponent> {
     public static final Codec<ArmorItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(ItematicRegistryKeys.ARMOR_MATERIAL).fieldOf("material").forGetter(ArmorItemComponent::material),
-        Codecs.createStrictOptionalFieldCodec(StringIdentifiable.createCodec(AnimalArmorItem.Type::values), "armor_type").forGetter(ArmorItemComponent::armorType)
+        StringIdentifiable.createCodec(AnimalArmorItem.Type::values).optionalFieldOf("armor_type").forGetter(ArmorItemComponent::armorType)
     ).apply(instance, ArmorItemComponent::new));
 
     @Override

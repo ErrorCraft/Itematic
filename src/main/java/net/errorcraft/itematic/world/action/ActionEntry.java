@@ -10,14 +10,13 @@ import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.entry.RegistryElementCodec;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Optional;
 
 public record ActionEntry(Action<?> action, Optional<ActionRequirements> requirements) {
     public static final Codec<ActionEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Action.CODEC.fieldOf("action").forGetter(ActionEntry::action),
-        Codecs.createStrictOptionalFieldCodec(ActionRequirements.CODEC, "requirements").forGetter(ActionEntry::requirements)
+        ActionRequirements.CODEC.optionalFieldOf("requirements").forGetter(ActionEntry::requirements)
     ).apply(instance, ActionEntry::new));
     public static final Codec<RegistryEntry<ActionEntry>> REGISTRY_CODEC = RegistryElementCodec.of(ItematicRegistryKeys.ACTION, CODEC);
     public static final Codec<RegistryEntryList<ActionEntry>> REGISTRY_ENTRY_LIST_CODEC = RegistryCodecs.entryList(ItematicRegistryKeys.ACTION, CODEC);

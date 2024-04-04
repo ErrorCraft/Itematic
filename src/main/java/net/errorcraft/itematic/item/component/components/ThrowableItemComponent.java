@@ -20,7 +20,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
 import java.util.Optional;
@@ -29,8 +28,8 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
     public static final Codec<ThrowableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.FLOAT.fieldOf("speed").forGetter(ThrowableItemComponent::speed),
         Codec.FLOAT.fieldOf("angle_offset").forGetter(ThrowableItemComponent::angleOffset),
-        Codecs.createStrictOptionalFieldCodec(NumberRange.IntRange.CODEC, "draw_duration").forGetter(ThrowableItemComponent::drawDuration),
-        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "use_riptide_check", false).forGetter(ThrowableItemComponent::useRiptideCheck)
+        NumberRange.IntRange.CODEC.optionalFieldOf("draw_duration").forGetter(ThrowableItemComponent::drawDuration),
+        Codec.BOOL.optionalFieldOf("use_riptide_check", false).forGetter(ThrowableItemComponent::useRiptideCheck)
     ).apply(instance, ThrowableItemComponent::new));
 
     @Override
@@ -85,7 +84,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
 
     private void createEntity(ActionContext context) {
         context.stack().itematic$getComponent(ItemComponentTypes.PROJECTILE)
-            .map(c -> c.createEntity(context, this.angleOffset, this.speed, 1.0f))
+            .map(c -> c.createEntity(context, ActionContextParameter.THIS, this.angleOffset, this.speed, 1.0f))
             .ifPresent(projectile -> {
                 context.world().spawnEntity(projectile);
                 ActionContext projectileContext = context.builderForCopy()

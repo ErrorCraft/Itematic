@@ -7,10 +7,11 @@
   "components": {
     "minecraft:bucket": {
       "emptying_sound_event": "minecraft:item.bucket.empty_lava",
-      "fluid": "minecraft:lava"
+      "fluid": "minecraft:lava",
+      "transforms_into": "minecraft:bucket"
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:bucket"
+      "behavior": "minecraft:use_bucket"
     },
     "minecraft:fuel": {
       "ticks": 20000

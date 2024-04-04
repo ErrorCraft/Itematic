@@ -6,16 +6,19 @@ import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
+import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
+import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.placement.BlockPlacer;
 import net.errorcraft.itematic.item.placement.EntityPlacer;
 import net.errorcraft.itematic.item.placement.FluidPlacer;
 import net.errorcraft.itematic.item.placement.Placer;
-import net.errorcraft.itematic.item.placement.block.modifier.BlockStateModifier;
-import net.errorcraft.itematic.item.placement.block.modifier.modifiers.SimpleBlockStateModifier;
+import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
+import net.errorcraft.itematic.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
 import net.errorcraft.itematic.util.ActionResultUtil;
 import net.minecraft.block.Block;
@@ -28,16 +31,17 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.StackReference;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.RaycastContext;
@@ -46,12 +50,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional<EntityInitializer<?>> entity, Optional<BlockStateModifier<?>> block, Optional<RegistryEntry<SoundEvent>> emptyingSound) implements ItemComponent<BucketItemComponent> {
+public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional<EntityTarget> entity, Optional<BlockPicker<?>> block, Optional<RegistryEntry<SoundEvent>> emptyingSound, Optional<RegistryEntry<Item>> transformsInto) implements ItemComponent<BucketItemComponent> {
     public static final Codec<BucketItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codecs.createStrictOptionalFieldCodec(RegistryFixedCodec.of(RegistryKeys.FLUID), "fluid").forGetter(BucketItemComponent::fluid),
-        Codecs.createStrictOptionalFieldCodec(EntityInitializer.CODEC, "entity").forGetter(BucketItemComponent::entity),
-        Codecs.createStrictOptionalFieldCodec(BlockStateModifier.CODEC, "block").forGetter(BucketItemComponent::block),
-        Codecs.createStrictOptionalFieldCodec(SoundEvent.ENTRY_CODEC, "emptying_sound_event").forGetter(BucketItemComponent::emptyingSound)
+        RegistryFixedCodec.of(RegistryKeys.FLUID).optionalFieldOf("fluid").forGetter(BucketItemComponent::fluid),
+        EntityTarget.CODEC.optionalFieldOf("entity").forGetter(BucketItemComponent::entity),
+        BlockPicker.CODEC.optionalFieldOf("block").forGetter(BucketItemComponent::block),
+        SoundEvent.ENTRY_CODEC.optionalFieldOf("emptying_sound_event").forGetter(BucketItemComponent::emptyingSound),
+        RegistryFixedCodec.of(RegistryKeys.ITEM).optionalFieldOf("transforms_into").forGetter(BucketItemComponent::transformsInto)
     ).apply(instance, BucketItemComponent::new));
 
     @Override
@@ -89,14 +94,13 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         }
         if (this.block.isPresent() && result != ActionResult.FAIL) {
             ItemUsageContext context = new ItemUsageContext(world, user, hand, stack, blockHitResult);
-            BlockPlacer blockPlacer = BlockPlacer.of(context, stackReference::set, this.block.get(), false, true);
+            BlockPlacer blockPlacer = BlockPlacer.of(context, stackReference::set, this.block.get(), false, false);
             result = place(blockPlacer, result);
         }
-        if (this.entity.isPresent() && !world.isClient() && result != ActionResult.FAIL) {
-            EntityPlacer entityPlacer = EntityPlacer.bucket(stack, stackReference::set, world, blockHitResult, user, this.entity.get(), hand);
-            result = place(entityPlacer, result);
+        result = this.tryPlaceEntity(world, user, hand, stack, blockHitResult, stackReference, result);
+        if (result.isAccepted()) {
+            resultStackConsumer.set(this.getResultStack(user, stack, stackReference.get()));
         }
-        resultStackConsumer.set(getResultStack(user, stack, stackReference.get()));
         return result;
     }
 
@@ -110,50 +114,83 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         return RaycastContext.FluidHandling.NONE;
     }
 
+    private ActionResult tryPlaceEntity(World world, @Nullable PlayerEntity user, Hand hand, ItemStack stack, BlockHitResult blockHitResult, StackReference stackReference, ActionResult currentResult) {
+        if (this.entity.isEmpty()) {
+            return currentResult;
+        }
+        if (this.entity.get().requireOtherSuccessfulPlacement && !currentResult.isAccepted()) {
+            return currentResult;
+        }
+        if (world.isClient() || currentResult == ActionResult.FAIL) {
+            return currentResult;
+        }
+        EntityPlacer entityPlacer = EntityPlacer.bucket(stack, stackReference::set, world, blockHitResult, user, this.entity.get().entity, hand);
+        return place(entityPlacer, currentResult);
+    }
+
     private static ActionResult place(Placer placer, ActionResult currentResult) {
         ActionResult result = placer.place();
         return ActionResultUtil.max(currentResult, result);
     }
 
-    private static ItemStack getResultStack(@Nullable PlayerEntity player, ItemStack currentStack, ItemStack newStack) {
-        if (player == null) {
-            return newStack;
+    private ItemStack getResultStack(@Nullable PlayerEntity player, ItemStack currentStack, ItemStack possibleNewStack) {
+        if (currentStack == possibleNewStack) {
+            possibleNewStack = this.transformsInto.map(ItemStack::new).orElse(possibleNewStack);
         }
-        return ItemUsage.exchangeStack(currentStack, player, newStack);
+        if (player == null) {
+            currentStack.decrement(1);
+            return possibleNewStack;
+        }
+        return ItemUsage.exchangeStack(currentStack, player, possibleNewStack);
     }
 
     public static void initializeBucketEntity(Entity entity, ItemStack stack) {
         if (entity instanceof Bucketable bucketable) {
-            bucketable.copyDataFromNbt(stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT).copyNbt());
+            bucketable.copyDataFromNbt(stack.getOrDefault(DataComponentTypes.BUCKET_ENTITY_DATA, NbtComponent.DEFAULT).copyNbt());
             bucketable.setFromBucket(true);
         }
     }
 
-    public static ItemComponent<?>[] fluid(RegistryEntry<Fluid> fluid) {
+    public static ItemComponent<?>[] fluid(RegistryEntry<Fluid> fluid, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             MaxStackSizeItemComponent.of(16),
-            new BucketItemComponent(Optional.of(fluid), Optional.empty(), Optional.empty(), Optional.empty())
+            new BucketItemComponent(Optional.of(fluid), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
         };
     }
 
-    public static ItemComponent<?>[] fluid(RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound) {
+    public static ItemComponent<?>[] fluid(RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound, RegistryEntryLookup<Item> items, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             MaxStackSizeItemComponent.of(1),
-            new BucketItemComponent(Optional.of(fluid), Optional.empty(), Optional.empty(), Optional.of(emptyingSound))
+            new BucketItemComponent(Optional.of(fluid), Optional.empty(), Optional.empty(), Optional.of(emptyingSound), Optional.of(items.getOrThrow(ItemKeys.BUCKET))),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
         };
     }
 
-    public static ItemComponent<?>[] entity(RegistryEntry<Fluid> fluid, RegistryEntry<EntityType<?>> entity, RegistryEntry<SoundEvent> emptyingSound) {
+    public static ItemComponent<?>[] entity(RegistryEntry<Fluid> fluid, RegistryEntry<EntityType<?>> entity, RegistryEntry<SoundEvent> emptyingSound, RegistryEntryLookup<Item> items, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent[] {
             MaxStackSizeItemComponent.of(1),
-            new BucketItemComponent(Optional.of(fluid), Optional.of(new SimpleEntityInitializer<>(entity.value())), Optional.empty(), Optional.of(emptyingSound))
+            new BucketItemComponent(Optional.of(fluid), Optional.of(EntityTarget.ofRequired(entity)), Optional.empty(), Optional.of(emptyingSound), Optional.of(items.getOrThrow(ItemKeys.BUCKET))),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
         };
     }
 
-    public static ItemComponent<?>[] block(RegistryEntry<Block> block, RegistryEntry<SoundEvent> emptyingSound) {
+    public static ItemComponent<?>[] block(RegistryEntry<Block> block, RegistryEntry<SoundEvent> emptyingSound, RegistryEntryLookup<Item> items, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent[] {
             MaxStackSizeItemComponent.of(1),
-            new BucketItemComponent(Optional.empty(), Optional.empty(), Optional.of(new SimpleBlockStateModifier(block)), Optional.of(emptyingSound))
+            new BucketItemComponent(Optional.empty(), Optional.empty(), Optional.of(new SimpleBlockPicker(block)), Optional.of(emptyingSound), Optional.of(items.getOrThrow(ItemKeys.BUCKET))),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
         };
+    }
+
+    public record EntityTarget(EntityInitializer<?> entity, boolean requireOtherSuccessfulPlacement) {
+        public static final Codec<EntityTarget> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            EntityInitializer.CODEC.fieldOf("entity").forGetter(EntityTarget::entity),
+            Codec.BOOL.optionalFieldOf("require_other_successful_placement", false).forGetter(EntityTarget::requireOtherSuccessfulPlacement)
+        ).apply(instance, EntityTarget::new));
+
+        public static EntityTarget ofRequired(RegistryEntry<EntityType<?>> entity) {
+            return new EntityTarget(SimpleEntityInitializer.of(entity.value()), true);
+        }
     }
 }

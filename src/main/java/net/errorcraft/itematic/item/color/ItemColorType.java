@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item.color;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 
-public record ItemColorType<T extends ItemColor>(Codec<T> codec) {
+public record ItemColorType<T extends ItemColor>(MapCodec<T> codec) {
 }

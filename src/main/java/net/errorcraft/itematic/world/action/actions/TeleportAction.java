@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -14,6 +14,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.event.GameEvent;
@@ -21,11 +22,15 @@ import net.minecraft.world.event.GameEvent;
 import java.util.Optional;
 
 public record TeleportAction(int distance, ActionContextParameter entity) implements Action<TeleportAction> {
-    public static final Codec<TeleportAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("distance").forGetter(TeleportAction::distance),
+    public static final MapCodec<TeleportAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Codecs.POSITIVE_INT.fieldOf("distance").forGetter(TeleportAction::distance),
         ActionContextParameter.CODEC.fieldOf("entity").forGetter(TeleportAction::entity)
     ).apply(instance, TeleportAction::new));
     private static final int MAX_TELEPORT_ATTEMPTS = 16;
+
+    public static TeleportAction of(int distance, ActionContextParameter entity) {
+        return new TeleportAction(distance, entity);
+    }
 
     @Override
     public ActionType<TeleportAction> type() {

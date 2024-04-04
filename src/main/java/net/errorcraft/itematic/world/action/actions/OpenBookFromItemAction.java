@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -11,7 +11,7 @@ import net.minecraft.stat.Stats;
 
 public record OpenBookFromItemAction() implements Action<OpenBookFromItemAction> {
     public static final OpenBookFromItemAction INSTANCE = new OpenBookFromItemAction();
-    public static final Codec<OpenBookFromItemAction> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<OpenBookFromItemAction> CODEC = MapCodec.unit(INSTANCE);
 
     @Override
     public ActionType<OpenBookFromItemAction> type() {

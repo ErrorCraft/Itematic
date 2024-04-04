@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,9 +12,9 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public abstract class Range<T extends Comparable<T>> {
-    public static final Codec<Range.IntegerRange> INT_CODEC = Codecs.createLazy(() -> createCodec(Codec.INT, Integer.MIN_VALUE, Integer.MAX_VALUE, IntegerRange::new, IntegerRange::of));
-    public static final Codec<Range.FloatRange> FLOAT_CODEC = Codecs.createLazy(() -> createCodec(Codec.FLOAT, -Float.MAX_VALUE, Float.MAX_VALUE, FloatRange::new, FloatRange::of));
-    public static final Codec<Range.DoubleRange> DOUBLE_CODEC = Codecs.createLazy(() -> createCodec(Codec.DOUBLE, -Double.MAX_VALUE, Double.MAX_VALUE, DoubleRange::new, DoubleRange::of));
+    public static final Codec<Range.IntegerRange> INT_CODEC = Codec.lazyInitialized(() -> createCodec(Codec.INT, Integer.MIN_VALUE, Integer.MAX_VALUE, IntegerRange::new, IntegerRange::of));
+    public static final Codec<Range.FloatRange> FLOAT_CODEC = Codec.lazyInitialized(() -> createCodec(Codec.FLOAT, -Float.MAX_VALUE, Float.MAX_VALUE, FloatRange::new, FloatRange::of));
+    public static final Codec<Range.DoubleRange> DOUBLE_CODEC = Codec.lazyInitialized(() -> createCodec(Codec.DOUBLE, -Double.MAX_VALUE, Double.MAX_VALUE, DoubleRange::new, DoubleRange::of));
 
     protected final T min;
     protected final T max;
@@ -67,15 +66,15 @@ public abstract class Range<T extends Comparable<T>> {
 
     private static <T extends Comparable<T>, S extends Range<T>> Codec<S> createCodec(Codec<T> codec, T min, T max, BiFunction<T, T, S> creator, Function<T, S> singleValueCreator) {
         Codec<S> elementCodec = RecordCodecBuilder.create(instance -> instance.group(
-            Codecs.createStrictOptionalFieldCodec(codec, "min", min).forGetter(Range::min),
-            Codecs.createStrictOptionalFieldCodec(codec, "max", max).forGetter(Range::max)
+            codec.optionalFieldOf("min", min).forGetter(Range::min),
+            codec.optionalFieldOf("max", max).forGetter(Range::max)
         ).apply(instance, creator));
-        return Codecs.validate(Codecs.either(codec, elementCodec).xmap(either -> either.map(singleValueCreator, s -> s), s -> {
+        return Codec.either(codec, elementCodec).xmap(either -> either.map(singleValueCreator, s -> s), s -> {
             if (s.min.compareTo(s.max) == 0) {
                 return Either.left(s.min);
             }
             return Either.right(s);
-        }), Range::validate);
+        }).validate(Range::validate);
     }
 
     private static <T extends Comparable<T>, S extends Range<T>> DataResult<S> validate(S s) {

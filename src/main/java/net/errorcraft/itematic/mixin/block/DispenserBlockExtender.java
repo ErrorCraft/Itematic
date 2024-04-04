@@ -9,6 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Unique;
+
+import java.util.Optional;
 
 @Mixin(DispenserBlock.class)
 public class DispenserBlockExtender {
@@ -18,9 +21,13 @@ public class DispenserBlockExtender {
      */
     @Overwrite
     public DispenserBehavior getBehaviorForItem(ItemStack stack) {
+        return behavior(stack).orElse(DispenseBehaviors.FALLBACK);
+    }
+
+    @Unique
+    private static Optional<DispenserBehavior> behavior(ItemStack stack) {
         return stack.itematic$getComponent(ItemComponentTypes.DISPENSABLE)
             .map(DispensableItemComponent::behavior)
-            .map(RegistryEntry::value)
-            .orElse(DispenseBehaviors.ITEM);
+            .map(RegistryEntry::value);
     }
 }

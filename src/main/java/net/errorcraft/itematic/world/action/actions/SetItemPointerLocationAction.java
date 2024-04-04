@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -22,9 +22,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public record SetItemPointerLocationAction(ActionContextParameter position) implements Action<SetItemPointerLocationAction> {
-    public static final Codec<SetItemPointerLocationAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<SetItemPointerLocationAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(SetItemPointerLocationAction::position)
     ).apply(instance, SetItemPointerLocationAction::new));
+
+    public static SetItemPointerLocationAction of(ActionContextParameter position) {
+        return new SetItemPointerLocationAction(position);
+    }
 
     @Override
     public ActionType<SetItemPointerLocationAction> type() {
@@ -49,9 +53,5 @@ public record SetItemPointerLocationAction(ActionContextParameter position) impl
             return newStack;
         }
         return ItemUsage.exchangeStack(currentStack, player, newStack);
-    }
-
-    public static SetItemPointerLocationAction of(ActionContextParameter position) {
-        return new SetItemPointerLocationAction(position);
     }
 }

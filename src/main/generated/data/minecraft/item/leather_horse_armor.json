@@ -10,7 +10,7 @@
       "material": "minecraft:leather"
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:equipment"
+      "behavior": "minecraft:equip_entity"
     },
     "minecraft:dyeable": {
       "default_color": -6265536

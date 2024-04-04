@@ -15,6 +15,10 @@ import java.util.List;
 public record UncheckedSequenceHandler(RegistryEntryList<ActionEntry> entries) implements SequenceHandler {
     public static final Codec<UncheckedSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(UncheckedSequenceHandler::new, UncheckedSequenceHandler::entries);
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public SequenceHandlerType<?> type() {
         return SequenceHandlerTypes.UNCHECKED;
@@ -32,14 +36,6 @@ public record UncheckedSequenceHandler(RegistryEntryList<ActionEntry> entries) i
     @Override
     public Iterable<RegistryEntry<ActionEntry>> iterateEntries() {
         return this.entries;
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static UncheckedSequenceHandler tag(RegistryEntryList.Named<ActionEntry> tag) {
-        return new UncheckedSequenceHandler(tag);
     }
 
     public static class Builder implements SequenceHandler.Builder<UncheckedSequenceHandler, Builder> {

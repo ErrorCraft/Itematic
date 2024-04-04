@@ -12,7 +12,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
 import java.util.Optional;
@@ -20,7 +19,7 @@ import java.util.Optional;
 public record PointableItemComponent(RegistryEntry<Pointer> pointsTo, Optional<String> lodestoneTranslationKey) implements ItemComponent<PointableItemComponent> {
     public static final Codec<PointableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Pointer.ENTRY_CODEC.fieldOf("points_to").forGetter(PointableItemComponent::pointsTo),
-        Codecs.createStrictOptionalFieldCodec(Codec.STRING,"lodestone_translation_key").forGetter(PointableItemComponent::lodestoneTranslationKey)
+        Codec.STRING.optionalFieldOf("lodestone_translation_key").forGetter(PointableItemComponent::lodestoneTranslationKey)
     ).apply(instance, PointableItemComponent::new));
 
     @Override

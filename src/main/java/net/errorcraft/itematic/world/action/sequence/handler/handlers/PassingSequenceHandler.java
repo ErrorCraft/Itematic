@@ -10,13 +10,16 @@ import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.dynamic.Codecs;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public record PassingSequenceHandler(List<Entry> entries) implements SequenceHandler {
     public static final Codec<PassingSequenceHandler> CODEC = Entry.CODEC.listOf().xmap(PassingSequenceHandler::new, PassingSequenceHandler::entries);
+
+    public static Builder builder() {
+        return new Builder();
+    }
 
     @Override
     public SequenceHandlerType<?> type() {
@@ -36,10 +39,6 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
     @Override
     public Iterable<RegistryEntry<ActionEntry>> iterateEntries() {
         return () -> this.entries.stream().map(Entry::action).iterator();
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder implements SequenceHandler.Builder<PassingSequenceHandler, Builder> {
@@ -69,9 +68,9 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
     public record Entry(RegistryEntry<ActionEntry> action, boolean optional) {
         public static final Codec<Entry> ELEMENT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ActionEntry.REGISTRY_CODEC.fieldOf("entry").forGetter(Entry::action),
-            Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "optional", false).forGetter(Entry::optional)
+            Codec.BOOL.optionalFieldOf("optional", false).forGetter(Entry::optional)
         ).apply(instance, Entry::new));
-        public static final Codec<Entry> CODEC = Codecs.either(ELEMENT_CODEC, ActionEntry.REGISTRY_CODEC)
+        public static final Codec<Entry> CODEC = Codec.either(ELEMENT_CODEC, ActionEntry.REGISTRY_CODEC)
             .xmap(either -> either.map(entry -> entry, Entry::required), entry -> entry.optional ? Either.left(entry) : Either.right(entry.action));
 
         private boolean execute(ActionContext context) {

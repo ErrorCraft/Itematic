@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item.group.entry.entries;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
@@ -17,7 +17,7 @@ import net.minecraft.registry.tag.TagKey;
 import java.util.Collection;
 
 public class InstrumentItemGroupEntry extends ItemGroupEntry {
-    public static final Codec<InstrumentItemGroupEntry> CODEC = RecordCodecBuilder.create(instance -> createCodec(instance).and(instance.group(
+    public static final MapCodec<InstrumentItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(instance.group(
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(InstrumentItemGroupEntry::item),
         TagKey.unprefixedCodec(RegistryKeys.INSTRUMENT).fieldOf("tag").forGetter(InstrumentItemGroupEntry::tag)
     )).apply(instance, InstrumentItemGroupEntry::new));

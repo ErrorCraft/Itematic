@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
@@ -21,8 +21,8 @@ public record PersistentProjectileEntityInitializer<T extends PersistentProjecti
         return this.simpleCreator.create(context.world(), pos.getX(), pos.getY(), pos.getZ(), context.stack().copyWithCount(1));
     }
 
-    public static <U extends PersistentProjectileEntity> Codec<EntityInitializer<U>> createCodec(EntityType<U> type, OwnerCreator<U> ownerCreator, SimpleCreator<U> simpleCreator) {
-        return Codec.unit(new PersistentProjectileEntityInitializer<>(type, ownerCreator, simpleCreator));
+    public static <U extends PersistentProjectileEntity> MapCodec<EntityInitializer<U>> createCodec(EntityType<U> type, OwnerCreator<U> ownerCreator, SimpleCreator<U> simpleCreator) {
+        return MapCodec.unit(new PersistentProjectileEntityInitializer<>(type, ownerCreator, simpleCreator));
     }
 
     @FunctionalInterface

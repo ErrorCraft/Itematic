@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.item.group.entry.entries;
 
 import com.mojang.logging.LogUtils;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
@@ -27,7 +27,7 @@ import java.util.Comparator;
 import java.util.Optional;
 
 public class PaintingVariantItemGroupEntry extends ItemGroupEntry {
-    public static final Codec<PaintingVariantItemGroupEntry> CODEC = RecordCodecBuilder.create(instance -> createCodec(instance).and(instance.group(
+    public static final MapCodec<PaintingVariantItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(instance.group(
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(PaintingVariantItemGroupEntry::item),
         TagPredicate.createCodec(RegistryKeys.PAINTING_VARIANT).fieldOf("tag").forGetter(PaintingVariantItemGroupEntry::tag)
     )).apply(instance, PaintingVariantItemGroupEntry::new));

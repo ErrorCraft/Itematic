@@ -10,7 +10,7 @@
       "handler": "source_only"
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:entity"
+      "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
       "allow_item_data": true,

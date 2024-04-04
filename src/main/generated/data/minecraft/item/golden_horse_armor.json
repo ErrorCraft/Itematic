@@ -10,7 +10,7 @@
       "material": "minecraft:gold"
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:equipment"
+      "behavior": "minecraft:equip_entity"
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_gold",

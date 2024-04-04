@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 
 public record AttachLeashedEntitiesOnBlockAction() implements Action<AttachLeashedEntitiesOnBlockAction> {
     public static final AttachLeashedEntitiesOnBlockAction INSTANCE = new AttachLeashedEntitiesOnBlockAction();
-    public static final Codec<AttachLeashedEntitiesOnBlockAction> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<AttachLeashedEntitiesOnBlockAction> CODEC = MapCodec.unit(INSTANCE);
 
     @Override
     public ActionType<AttachLeashedEntitiesOnBlockAction> type() {

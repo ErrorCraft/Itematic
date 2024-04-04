@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public record EndCrystalEntityInitializer() implements EntityInitializer<EndCrystalEntity> {
     public static final EndCrystalEntityInitializer INSTANCE = new EndCrystalEntityInitializer();
-    public static final Codec<EndCrystalEntityInitializer> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<EndCrystalEntityInitializer> CODEC = MapCodec.unit(INSTANCE);
     private static final double HORIZONTAL_SEARCH_DISTANCE = 1.0d;
     private static final double VERTICAL_SEARCH_DISTANCE = 2.0d;
 

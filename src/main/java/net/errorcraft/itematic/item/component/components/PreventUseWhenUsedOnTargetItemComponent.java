@@ -12,12 +12,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.dynamic.Codecs;
 
 public record PreventUseWhenUsedOnTargetItemComponent(boolean block, boolean entity) implements ItemComponent<PreventUseWhenUsedOnTargetItemComponent> {
     public static final Codec<PreventUseWhenUsedOnTargetItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "block", false).forGetter(PreventUseWhenUsedOnTargetItemComponent::block),
-        Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "entity", false).forGetter(PreventUseWhenUsedOnTargetItemComponent::entity)
+        Codec.BOOL.optionalFieldOf("block", false).forGetter(PreventUseWhenUsedOnTargetItemComponent::block),
+        Codec.BOOL.optionalFieldOf("entity", false).forGetter(PreventUseWhenUsedOnTargetItemComponent::entity)
     ).apply(instance, PreventUseWhenUsedOnTargetItemComponent::new));
 
     @Override

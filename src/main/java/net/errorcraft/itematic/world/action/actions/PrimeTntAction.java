@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -12,9 +12,13 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
 public record PrimeTntAction(ActionContextParameter position) implements Action<PrimeTntAction> {
-    public static final Codec<PrimeTntAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<PrimeTntAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(PrimeTntAction::position)
     ).apply(instance, PrimeTntAction::new));
+
+    public static PrimeTntAction of(ActionContextParameter position) {
+        return new PrimeTntAction(position);
+    }
 
     @Override
     public ActionType<PrimeTntAction> type() {

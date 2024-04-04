@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -14,9 +14,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
 public record SetEntityNameFromItemAction(ActionContextParameter entity) implements Action<SetEntityNameFromItemAction> {
-    public static final Codec<SetEntityNameFromItemAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<SetEntityNameFromItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("entity").forGetter(SetEntityNameFromItemAction::entity)
     ).apply(instance, SetEntityNameFromItemAction::new));
+
+    public static SetEntityNameFromItemAction of(ActionContextParameter entity) {
+        return new SetEntityNameFromItemAction(entity);
+    }
 
     @Override
     public ActionType<SetEntityNameFromItemAction> type() {
@@ -40,9 +44,5 @@ public record SetEntityNameFromItemAction(ActionContextParameter entity) impleme
             }
         }
         return true;
-    }
-
-    public static SetEntityNameFromItemAction of(ActionContextParameter entity) {
-        return new SetEntityNameFromItemAction(entity);
     }
 }

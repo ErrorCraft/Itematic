@@ -15,18 +15,21 @@ import net.errorcraft.itematic.item.armor.ArmorMaterialKeys;
 import net.errorcraft.itematic.item.color.colors.*;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
-import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
+import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
+import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.pointer.PointerKeys;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
+import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.block.DecoratedPotPatternsAccessor;
 import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.item.MilkBucketItemAccessor;
 import net.errorcraft.itematic.mixin.item.PotionItemAccessor;
+import net.errorcraft.itematic.potion.PotionKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.util.Vec3dProvider;
@@ -38,10 +41,12 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
+import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.client.color.world.FoliageColors;
+import net.minecraft.component.ComponentChanges;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.*;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
@@ -55,43 +60,37 @@ import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
-import net.minecraft.loot.condition.AllOfLootCondition;
-import net.minecraft.loot.condition.EntityPropertiesLootCondition;
-import net.minecraft.loot.condition.LocationCheckLootCondition;
-import net.minecraft.loot.condition.MatchToolLootCondition;
+import net.minecraft.loot.condition.*;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.potion.Potion;
 import net.minecraft.predicate.BlockPredicate;
+import net.minecraft.predicate.FluidPredicate;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.predicate.StatePredicate;
 import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.entity.LocationPredicate;
-import net.minecraft.predicate.item.EnchantmentPredicate;
-import net.minecraft.predicate.item.EnchantmentsPredicate;
-import net.minecraft.predicate.item.ItemPredicate;
-import net.minecraft.predicate.item.ItemSubPredicateTypes;
+import net.minecraft.predicate.item.*;
 import net.minecraft.registry.*;
-import net.minecraft.registry.tag.BannerPatternTags;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.registry.tag.InstrumentTags;
+import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.registry.tag.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.*;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.world.event.GameEvent;
 
 import java.util.List;
 
 public class ItemUtil {
     public static final Codec<Item> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
         ItemBase.CODEC.fieldOf("base").forGetter(Item::itematic$itemBase),
-        Codecs.createStrictOptionalFieldCodec(ItemComponentSet.CODEC, "components", ItemComponentSet.EMPTY).forGetter(Item::itematic$components),
-        Codecs.createStrictOptionalFieldCodec(ItemEventMap.CODEC, "events", ItemEventMap.EMPTY).forGetter(Item::itematic$events)
+        ItemComponentSet.CODEC.optionalFieldOf("components", ItemComponentSet.EMPTY).forGetter(Item::itematic$components),
+        ItemEventMap.CODEC.optionalFieldOf("events", ItemEventMap.EMPTY).forGetter(Item::itematic$events)
     ).apply(instance, ItemUtil::create));
 
     public static void bootstrap(Registerable<Item> registerable) {
@@ -126,7 +125,7 @@ public class ItemUtil {
         private final RegistryEntryLookup<EntityType<?>> entityTypes;
         private final RegistryEntryLookup<Biome> biomes;
         private final RegistryEntryLookup<Block> blocks;
-        private final RegistryEntryLookup<DispenserBehavior> dispenseBehaviors;
+        private final RegistryEntryLookup<DispenseBehavior> dispenseBehaviors;
         private final RegistryEntryLookup<SoundEvent> soundEvents;
         private final RegistryEntryLookup<Fluid> fluids;
         private final RegistryEntryLookup<Pointer> pointers;
@@ -134,6 +133,7 @@ public class ItemUtil {
         private final RegistryEntryLookup<SmithingTemplate> smithingTemplates;
         private final RegistryEntryLookup<String> decoratedPotPatterns;
         private final RegistryEntryLookup<StatusEffect> statusEffects;
+        private final RegistryEntryLookup<Potion> potions;
 
         private Bootstrapper(Registerable<Item> registerable) {
             this.registerable = registerable;
@@ -150,6 +150,7 @@ public class ItemUtil {
             this.smithingTemplates = registerable.getRegistryLookup(ItematicRegistryKeys.SMITHING_TEMPLATE);
             this.decoratedPotPatterns = registerable.getRegistryLookup(RegistryKeys.DECORATED_POT_PATTERN);
             this.statusEffects = registerable.getRegistryLookup(RegistryKeys.STATUS_EFFECT);
+            this.potions = registerable.getRegistryLookup(RegistryKeys.POTION);
         }
 
         private void bootstrap() {
@@ -183,7 +184,7 @@ public class ItemUtil {
                     .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(new ClearStatusEffectsAction(ActionContextParameter.THIS)))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ClearStatusEffectsAction.of(ActionContextParameter.THIS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POTION, create(
@@ -196,7 +197,45 @@ public class ItemUtil {
                     .with(UseAnimationItemComponent.of(UseAction.DRINK))
                     .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .with(TintedItemComponent.of(new PotionItemColor()))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.POTION)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM)))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                            AllOfLootCondition.builder(
+                                InvertedLootCondition.builder(
+                                    SideCheckPredicate.builder(Direction.DOWN)
+                                ),
+                                LocationCheckLootCondition.builder(
+                                    LocationPredicate.Builder.create()
+                                        .block(BlockPredicate.Builder.create()
+                                            .tag(BlockTags.CONVERTABLE_TO_MUD))
+                                ),
+                                MatchToolLootCondition.builder(
+                                    ItemPredicate.Builder.create()
+                                        .subPredicate(ItemSubPredicateTypes.POTION_CONTENTS, new PotionContentsPredicate(RegistryEntryList.of(
+                                            this.potions.getOrThrow(PotionKeys.WATER)
+                                        )))
+                                )
+                            ).build()
+                        ),
+                        UncheckedSequenceHandler.builder()
+                            .add(PlaySoundAction.of(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_SPLASH), SoundCategory.BLOCKS))
+                            .add(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
+                            .add(DisplayParticleAction.builder(ActionContextParameter.TARGET, ParticleTypes.SPLASH)
+                                .count(5)
+                                .offset(Vec3dProvider.of(
+                                    -0.5d, 0.5d,
+                                    1.0d, 1.0d,
+                                    -0.5d, 0.5d
+                                ))
+                                .speed(1.0d)
+                                .build())
+                            .add(PlaySoundAction.of(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_EMPTY), SoundCategory.BLOCKS))
+                            .add(SetBlockStateAction.of(ActionContextParameter.TARGET, this.blocks.getOrThrow(BlockKeys.MUD)))
+                            .add(SwingHandAction.INSTANCE)
+                    ))
                     .build()
             ));
         }
@@ -252,7 +291,7 @@ public class ItemUtil {
                     .with(FoodItemComponent.from(FoodComponents.CHORUS_FRUIT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(new TeleportAction(16, ActionContextParameter.THIS)))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(TeleportAction.of(16, ActionContextParameter.THIS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BEETROOT, create(
@@ -419,7 +458,7 @@ public class ItemUtil {
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         PassingSequenceHandler.builder()
                             .add(ApplySuspiciousStewEffectsFromItemAction.of(ActionContextParameter.THIS))
-                            .add(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.BOWL), true))
+                            .add(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.BOWL)))
                     ))
                     .build()
             ));
@@ -1425,7 +1464,7 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.GLOWSTONE).build()),
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GLOWSTONE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.CHARGE_RESPAWN_ANCHOR)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.CHARGE_RESPAWN_ANCHOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.INFESTED_STONE, create(
@@ -2470,7 +2509,7 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forBlock(ItemKeys.TNT).build()),
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TNT)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.TNT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_TNT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.REDSTONE_LAMP, create(
@@ -3757,7 +3796,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHITE_SHULKER_BOX, create(
@@ -3765,7 +3804,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_SHULKER_BOX, create(
@@ -3773,7 +3812,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_SHULKER_BOX, create(
@@ -3781,7 +3820,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_SHULKER_BOX, create(
@@ -3789,7 +3828,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_SHULKER_BOX, create(
@@ -3797,7 +3836,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_SHULKER_BOX, create(
@@ -3805,7 +3844,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_SHULKER_BOX, create(
@@ -3813,7 +3852,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_SHULKER_BOX, create(
@@ -3821,7 +3860,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_SHULKER_BOX, create(
@@ -3829,7 +3868,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_SHULKER_BOX, create(
@@ -3837,7 +3876,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_SHULKER_BOX, create(
@@ -3845,7 +3884,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_SHULKER_BOX, create(
@@ -3853,7 +3892,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_SHULKER_BOX, create(
@@ -3861,7 +3900,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_SHULKER_BOX, create(
@@ -3869,7 +3908,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_SHULKER_BOX, create(
@@ -3877,7 +3916,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_SHULKER_BOX, create(
@@ -3885,7 +3924,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_SHULKER_BOX)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PLACE_BLOCK_FROM_ITEM)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
         }
@@ -4184,7 +4223,7 @@ public class ItemUtil {
                         .rule(ToolComponent.Rule.of(BlockTags.WOOL, 5.0f))
                         .rule(ToolComponent.Rule.of(List.of(Blocks.VINE, Blocks.GLOW_LICHEN), 2.0f))
                         .build())
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.SHEAR)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHEAR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BOW, create(
@@ -4258,7 +4297,7 @@ public class ItemUtil {
                     .with(SteeringItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.PIG), 7))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.BREAK_ITEM, ActionEntry.of(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.FISHING_ROD), false)))
+                    .add(ItemEvents.BREAK_ITEM, ActionEntry.of(ExchangeItemAction.ofNoDecrement(this.items.getOrThrow(ItemKeys.FISHING_ROD))))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_FUNGUS_ON_A_STICK, create(
@@ -4270,7 +4309,7 @@ public class ItemUtil {
                     .with(SteeringItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.STRIDER), 1))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.BREAK_ITEM, ActionEntry.of(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.FISHING_ROD), false)))
+                    .add(ItemEvents.BREAK_ITEM, ActionEntry.of(ExchangeItemAction.ofNoDecrement(this.items.getOrThrow(ItemKeys.FISHING_ROD))))
                     .build()
             ));
             this.registerable.register(ItemKeys.FLINT_AND_STEEL, create(
@@ -4278,7 +4317,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(DamageableItemComponent.of(64))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.USE_ON_BLOCK)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
@@ -4300,7 +4339,7 @@ public class ItemUtil {
                     .with(DamageableItemComponent.of(64))
                     .with(UseAnimationItemComponent.of(UseAction.BRUSH))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BRUSH_FORGING))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BRUSH)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.BRUSH)))
                     .build()
             ));
         }
@@ -5358,7 +5397,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARVED_PUMPKIN)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(EquipmentItemComponent.of(EquipmentSlot.HEAD, false, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.CARVED_PUMPKIN)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_CARVED_PUMPKIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MELON, create(
@@ -5706,7 +5745,7 @@ public class ItemUtil {
                     .with(DamageableItemComponent.of(432, true))
                     .with(EquipmentItemComponent.of(EquipmentSlot.CHEST, true, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_ELYTRA)))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_ELYTRA))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHIELD, create(
@@ -5716,7 +5755,7 @@ public class ItemUtil {
                     .with(DamageableItemComponent.of(336))
                     .with(EquipmentItemComponent.of(EquipmentSlot.OFFHAND, false, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_SHIELD))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(UseAnimationItemComponent.of(UseAction.BLOCK))
                     .with(BannerPatternHolderItemComponent.of())
                     .build(),
@@ -5734,7 +5773,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.HELMET_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
                     .build()
@@ -5746,7 +5785,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.CHESTPLATE_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
                     .build()
@@ -5758,7 +5797,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.LEGGINGS_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
                     .build()
@@ -5770,7 +5809,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.LEATHER, EnchantmentTags.BOOTS_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
                     .build()
@@ -5782,7 +5821,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.HELMET_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_CHESTPLATE, create(
@@ -5792,7 +5831,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.CHESTPLATE_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_LEGGINGS, create(
@@ -5802,7 +5841,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.LEGGINGS_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_BOOTS, create(
@@ -5812,7 +5851,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.CHAIN, EnchantmentTags.BOOTS_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_HELMET, create(
@@ -5822,7 +5861,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.HELMET_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_CHESTPLATE, create(
@@ -5832,7 +5871,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.CHESTPLATE_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_LEGGINGS, create(
@@ -5842,7 +5881,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.LEGGINGS_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_BOOTS, create(
@@ -5852,7 +5891,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.IRON, EnchantmentTags.BOOTS_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_HELMET, create(
@@ -5862,7 +5901,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.HELMET_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_CHESTPLATE, create(
@@ -5872,7 +5911,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.CHESTPLATE_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_LEGGINGS, create(
@@ -5882,7 +5921,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.LEGGINGS_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_BOOTS, create(
@@ -5892,7 +5931,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.DIAMOND, EnchantmentTags.BOOTS_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_HELMET, create(
@@ -5902,7 +5941,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.HELMET_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_CHESTPLATE, create(
@@ -5912,7 +5951,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.CHESTPLATE_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_LEGGINGS, create(
@@ -5922,7 +5961,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.LEGGINGS_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_BOOTS, create(
@@ -5932,7 +5971,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.GOLD, EnchantmentTags.BOOTS_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_HELMET, create(
@@ -5943,7 +5982,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.HELMET_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_CHESTPLATE, create(
@@ -5954,7 +5993,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.CHESTPLATE_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.CHESTPLATE_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_LEGGINGS, create(
@@ -5965,7 +6004,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.LEGGINGS_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.LEGGINGS_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_BOOTS, create(
@@ -5976,7 +6015,7 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.NETHERITE, EnchantmentTags.BOOTS_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BOOTS_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TURTLE_HELMET, create(
@@ -5986,14 +6025,14 @@ public class ItemUtil {
                     .with(EnchantableItemComponent.enchants(ArmorMaterials.TURTLE, EnchantmentTags.HELMET_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.HELMET_FORGING))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_TURTLE_ARMOR))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LEATHER_HORSE_ARMOR, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LEATHER_HORSE_ARMOR).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER), AnimalArmorItem.Type.EQUESTRIAN))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
                     .build()
@@ -6002,21 +6041,21 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.IRON_HORSE_ARMOR).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON), AnimalArmorItem.Type.EQUESTRIAN))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_HORSE_ARMOR, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GOLDEN_HORSE_ARMOR).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD), AnimalArmorItem.Type.EQUESTRIAN))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_HORSE_ARMOR, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.DIAMOND_HORSE_ARMOR).build()),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND), AnimalArmorItem.Type.EQUESTRIAN))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOLF_ARMOR, create(
@@ -6898,7 +6937,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHEST)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.CHEST_EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_CHEST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TRAPPED_CHEST, create(
@@ -7332,7 +7371,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_CARPET, create(
@@ -7341,7 +7380,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_CARPET, create(
@@ -7350,7 +7389,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_CARPET, create(
@@ -7359,7 +7398,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_CARPET, create(
@@ -7368,7 +7407,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_CARPET, create(
@@ -7377,7 +7416,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_CARPET, create(
@@ -7386,7 +7425,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_CARPET, create(
@@ -7395,7 +7434,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_CARPET, create(
@@ -7404,7 +7443,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_CARPET, create(
@@ -7413,7 +7452,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_CARPET, create(
@@ -7422,7 +7461,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_CARPET, create(
@@ -7431,7 +7470,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_CARPET, create(
@@ -7440,7 +7479,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_CARPET, create(
@@ -7449,7 +7488,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_CARPET, create(
@@ -7458,7 +7497,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_CARPET, create(
@@ -7467,7 +7506,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_CARPET)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOL_CARPET_FUEL_TIME))
                     .with(EquipmentItemComponent.of(EquipmentSlot.BODY, false, this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.EQUIPMENT)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
         }
@@ -7477,7 +7516,7 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.ARROW).build()),
                 ItemComponentSet.builder()
                     .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNOWBALL, create(
@@ -7486,7 +7525,7 @@ public class ItemUtil {
                     .with(MaxStackSizeItemComponent.of(16))
                     .with(ThrowableItemComponent.of(1.5f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.SNOWBALL)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EGG, create(
@@ -7495,7 +7534,7 @@ public class ItemUtil {
                     .with(MaxStackSizeItemComponent.of(16))
                     .with(ThrowableItemComponent.of(1.5f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EGG)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENDER_PEARL, create(
@@ -7521,7 +7560,7 @@ public class ItemUtil {
                             LocationCheckLootCondition.builder(
                                 LocationPredicate.Builder.create()
                                     .block(BlockPredicate.Builder.create()
-                                        .blocks(Blocks.END_PORTAL_FRAME)
+                                        .blocks(this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
                                         .state(StatePredicate.Builder.create()
                                             .exactMatch(Properties.EYE, false))))
                                 .build()
@@ -7554,7 +7593,7 @@ public class ItemUtil {
                     .with(RarityItemComponent.of(Rarity.UNCOMMON))
                     .with(ThrowableItemComponent.of(0.7f, -20.0f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FIRE_CHARGE, create(
@@ -7562,7 +7601,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(FireworkShapeModifierItemComponent.of(FireworkExplosionComponent.Type.LARGE_BALL))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.SMALL_FIREBALL)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_CHARGE)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
@@ -7580,7 +7619,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(FireworkItemComponent.INSTANCE)
                     .with(ProjectileItemComponent.of(FireworkRocketEntityInitializer.INSTANCE, 3, CrossbowItemAccessor.fireworkRocketSpeed()))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.FIREWORK)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_FIREWORK_ROCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPLASH_POTION, create(
@@ -7590,7 +7629,7 @@ public class ItemUtil {
                     .with(PotionHolderItemComponent.of(1.0f))
                     .with(ThrowableItemComponent.of(0.5f, -20.0f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.POTION)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
                     .with(TintedItemComponent.of(new PotionItemColor()))
                     .build()
             ));
@@ -7598,7 +7637,7 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SPECTRAL_ARROW).build()),
                 ItemComponentSet.builder()
                     .with(ProjectileItemComponent.persistentProjectile(EntityType.SPECTRAL_ARROW, SpectralArrowEntity::new, SpectralArrowEntity::new))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TIPPED_ARROW, create(
@@ -7606,7 +7645,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(PotionHolderItemComponent.of(0.125f))
                     .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .with(TintedItemComponent.of(new PotionItemColor()))
                     .build()
             ));
@@ -7617,7 +7656,7 @@ public class ItemUtil {
                     .with(PotionHolderItemComponent.of(0.25f))
                     .with(ThrowableItemComponent.of(0.5f, -20.0f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.POTION)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.PROJECTILE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
                     .with(TintedItemComponent.of(new PotionItemColor()))
                     .build()
             ));
@@ -7828,23 +7867,21 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.BUCKET, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUCKET).build()),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.EMPTY)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.EMPTY), this.dispenseBehaviors))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WATER_BUCKET, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build()),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.WATER), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.WATER), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY), this.items, this.dispenseBehaviors))
                     .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LAVA_BUCKET, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.LAVA_BUCKET).build()),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.LAVA), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_LAVA)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.LAVA), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_LAVA), this.items, this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.LAVA_FUEL_TIME))
                     .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build()
@@ -7852,50 +7889,43 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.POWDER_SNOW_BUCKET, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.POWDER_SNOW_BUCKET).build()),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.block(this.blocks.getOrThrow(BlockKeys.POWDER_SNOW), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_POWDER_SNOW)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .with(BucketItemComponent.block(this.blocks.getOrThrow(BlockKeys.POWDER_SNOW), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_POWDER_SNOW), this.items, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PUFFERFISH_BUCKET, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.PUFFERFISH_BUCKET).build()),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SALMON_BUCKET, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.SALMON_BUCKET).build()),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.SALMON), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.SALMON), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.COD_BUCKET, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.COD_BUCKET).build()),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.COD), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.COD), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TROPICAL_FISH_BUCKET, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH_BUCKET).build()),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.AXOLOTL_BUCKET, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.AXOLOTL_BUCKET).build()),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.AXOLOTL), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_AXOLOTL)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.AXOLOTL), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_AXOLOTL), this.items, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TADPOLE_BUCKET, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.TADPOLE_BUCKET).build()),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.TADPOLE), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_TADPOLE)))
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BUCKET)))
+                    .with(BucketItemComponent.entity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.TADPOLE), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_TADPOLE), this.items, this.dispenseBehaviors))
                     .build()
             ));
         }
@@ -8369,7 +8399,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(SaddleItemComponent.INSTANCE)
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.SADDLE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SADDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TURTLE_SCUTE, create(
@@ -8453,7 +8483,7 @@ public class ItemUtil {
                             LocationCheckLootCondition.builder(
                                 LocationPredicate.Builder.create()
                                     .block(BlockPredicate.Builder.create()
-                                        .blocks(Blocks.LODESTONE)))
+                                        .blocks(this.blocks.getOrThrow(BlockKeys.LODESTONE).value())))
                                 .build()
                         ),
                         PassingSequenceHandler.builder()
@@ -8507,7 +8537,7 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.BONE_MEAL, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BONE_MEAL).build()),
                 ItemComponentSet.builder()
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.FERTILIZE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(FertilizeAction.INSTANCE))
@@ -8545,7 +8575,28 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GLASS_BOTTLE, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.GLASS_BOTTLE).build()),
                 ItemComponentSet.builder()
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.BOTTLE)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.GLASS_BOTTLE)))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                            LocationCheckLootCondition.builder(
+                                LocationPredicate.Builder.create()
+                                    .fluid(FluidPredicate.Builder.create()
+                                        .tag(this.fluids.getOrThrow(FluidTags.WATER)))
+                            ).build()
+                        ),
+                        UncheckedSequenceHandler.builder()
+                            .add(ExchangeItemAction.of(
+                                this.items.getOrThrow(ItemKeys.POTION),
+                                ComponentChanges.builder()
+                                    .add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(potions.getOrThrow(PotionKeys.WATER)))
+                                    .build()))
+                            .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, ActionContextParameter.TARGET, ActionContextParameter.THIS))
+                            .add(PlaySoundAction.of(ActionContextParameter.THIS, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundCategory.NEUTRAL))
+                            .add(SwingHandAction.INSTANCE)
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.FERMENTED_SPIDER_EYE, create(
@@ -8706,14 +8757,14 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.HONEYCOMB, create(
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.HONEYCOMB).build()),
                 ItemComponentSet.builder()
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.WAX_BLOCK)))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.WAX_BLOCK)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         FirstToPassRequirementsSequenceHandler.builder()
                             .add(Actions.waxSign(true))
                             .add(PassingSequenceHandler.builder()
-                                .add(new WaxBlockAction(ActionContextParameter.TARGET))
+                                .add(WaxBlockAction.of(ActionContextParameter.TARGET))
                                 .add(DecrementItemAction.of(1))
                                 .add(SwingHandAction.INSTANCE))))
                     .build()

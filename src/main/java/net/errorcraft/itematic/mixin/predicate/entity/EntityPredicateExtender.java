@@ -39,9 +39,9 @@ public class EntityPredicateExtender implements EntityPredicateAccess {
     )
     private static Codec<EntityPredicate> createCodecAddExtraFields(Function<RecordCodecBuilder.Instance<EntityPredicate>, ? extends App<RecordCodecBuilder.Mu<EntityPredicate>, EntityPredicate>> builder) {
         MapCodec<EntityPredicate> mapCodec = RecordCodecBuilder.mapCodec(builder);
-        return mapCodec.dependent(EntityPredicateExtraFields.MAP_CODEC, entityPredicate -> Pair.of(
+        return mapCodec.dependent(EntityPredicateExtraFields.CODEC, entityPredicate -> Pair.of(
             entityPredicate.itematic$extraFields(),
-            EntityPredicateExtraFields.MAP_CODEC
+            EntityPredicateExtraFields.CODEC
         ), (entityPredicate, extraFields) -> {
             entityPredicate.itematic$setExtraFields(extraFields);
             return entityPredicate;

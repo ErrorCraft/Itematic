@@ -125,8 +125,8 @@
             "pattern": "minecraft:border"
           }
         ],
-        "minecraft:custom_name": "{\"color\":\"gold\",\"translate\":\"block.minecraft.ominous_banner\"}",
-        "minecraft:hide_additional_tooltip": {}
+        "minecraft:hide_additional_tooltip": {},
+        "minecraft:item_name": "{\"color\":\"gold\",\"translate\":\"block.minecraft.ominous_banner\"}"
       },
       "item": "minecraft:white_banner"
     },

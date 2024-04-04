@@ -9,11 +9,11 @@ import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviorKeys;
+import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
+import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.placement.EntityPlacer;
 import net.errorcraft.itematic.mixin.item.DecorationItemAccessor;
 import net.errorcraft.itematic.mixin.item.SpawnEggItemAccessor;
-import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
@@ -82,14 +82,14 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
         return new EntityItemComponent(entity, allowItemData);
     }
 
-    public static ItemComponent<?>[] from(EntityInitializer<?> entity, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
+    public static ItemComponent<?>[] from(EntityInitializer<?> entity, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return from(entity, false, dispenseBehaviors);
     }
 
-    public static ItemComponent<?>[] from(EntityInitializer<?> entity, boolean allowItemData, RegistryEntryLookup<DispenserBehavior> dispenseBehaviors) {
+    public static ItemComponent<?>[] from(EntityInitializer<?> entity, boolean allowItemData, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             of(entity, allowItemData),
-            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviorKeys.ENTITY))
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
         };
     }
 

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item.color.colors;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.color.ItemColor;
 import net.errorcraft.itematic.item.color.ItemColorType;
@@ -13,7 +13,7 @@ import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.biome.Biome;
 
 public record GrassItemColor(RegistryEntry<Biome> biome) implements ItemColor {
-    public static final Codec<GrassItemColor> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<GrassItemColor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.BIOME).fieldOf("biome").forGetter(GrassItemColor::biome)
     ).apply(instance, GrassItemColor::new));
 

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -11,7 +11,7 @@ import net.minecraft.util.Hand;
 
 public record SwingHandAction() implements Action<SwingHandAction> {
     public static final SwingHandAction INSTANCE = new SwingHandAction();
-    public static final Codec<SwingHandAction> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<SwingHandAction> CODEC = MapCodec.unit(INSTANCE);
 
     @Override
     public ActionType<SwingHandAction> type() {

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -13,9 +13,13 @@ import net.minecraft.entity.LivingEntity;
 import java.util.Optional;
 
 public record ClearStatusEffectsAction(ActionContextParameter entity) implements Action<ClearStatusEffectsAction> {
-    public static final Codec<ClearStatusEffectsAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ClearStatusEffectsAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("entity").forGetter(ClearStatusEffectsAction::entity)
     ).apply(instance, ClearStatusEffectsAction::new));
+
+    public static ClearStatusEffectsAction of(ActionContextParameter entity) {
+        return new ClearStatusEffectsAction(entity);
+    }
 
     @Override
     public ActionType<ClearStatusEffectsAction> type() {

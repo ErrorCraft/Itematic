@@ -9,10 +9,6 @@ public record ActionContextParameters(ActionContextParameter entity, ActionConte
         ActionContextParameter.CODEC.fieldOf("position").forGetter(ActionContextParameters::position)
     ).apply(instance, ActionContextParameters::new));
 
-    public static ActionContextParameters self() {
-        return new ActionContextParameters(ActionContextParameter.THIS, ActionContextParameter.THIS);
-    }
-
     public static ActionContextParameters of(ActionContextParameter entity, ActionContextParameter position) {
         return new ActionContextParameters(entity, position);
     }

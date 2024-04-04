@@ -1,0 +1,23 @@
+{
+  "dispense_as_item_on_failure": false,
+  "entry": {
+    "action": {
+      "type": "minecraft:sequence",
+      "entries": [
+        {
+          "action": {
+            "type": "minecraft:equip_entity_at_position",
+            "position": "target"
+          }
+        },
+        {
+          "action": {
+            "type": "minecraft:decrement_item",
+            "amount": 1
+          }
+        }
+      ],
+      "handler": "minecraft:passing"
+    }
+  }
+}

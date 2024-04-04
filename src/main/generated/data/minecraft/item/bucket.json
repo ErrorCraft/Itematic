@@ -9,7 +9,7 @@
       "fluid": "minecraft:empty"
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:bucket"
+      "behavior": "minecraft:use_bucket"
     },
     "minecraft:max_stack_size": 16
   }

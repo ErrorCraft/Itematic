@@ -13,7 +13,6 @@ import net.minecraft.item.BannerItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +21,7 @@ import java.util.Optional;
 
 public record BannerPatternHolderItemComponent(Optional<DyeColor> color) implements ItemComponent<BannerPatternHolderItemComponent> {
     public static final Codec<BannerPatternHolderItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codecs.createStrictOptionalFieldCodec(DyeColor.CODEC, "color").forGetter(BannerPatternHolderItemComponent::color)
+        DyeColor.CODEC.optionalFieldOf("color").forGetter(BannerPatternHolderItemComponent::color)
     ).apply(instance, BannerPatternHolderItemComponent::new));
 
     @Override

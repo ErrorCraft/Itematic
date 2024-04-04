@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.item.placement;
 
 import net.errorcraft.itematic.fluid.FluidKeys;
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
@@ -59,7 +58,6 @@ public class FluidPlacer extends Placer {
         if (!this.tryPlaceFluid(actualBlockPos, this.allowOffset)) {
             return ActionResult.PASS;
         }
-        this.resultStackConsumer.set(this.world.itematic$createStack(ItemKeys.BUCKET));
         return ActionResult.success(this.world.isClient());
     }
 

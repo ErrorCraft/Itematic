@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item.group.entry;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.group.entry.entries.*;
 import net.minecraft.util.StringIdentifiable;
 
@@ -13,9 +13,9 @@ public enum ItemGroupEntryType implements StringIdentifiable {
     POTION("potion", PotionItemGroupEntry.CODEC);
 
     private final String name;
-    private final Codec<? extends ItemGroupEntry> codec;
+    private final MapCodec<? extends ItemGroupEntry> codec;
 
-    ItemGroupEntryType(String name, Codec<? extends ItemGroupEntry> codec) {
+    ItemGroupEntryType(String name, MapCodec<? extends ItemGroupEntry> codec) {
         this.name = name;
         this.codec = codec;
     }
@@ -25,7 +25,7 @@ public enum ItemGroupEntryType implements StringIdentifiable {
         return this.name;
     }
 
-    public Codec<? extends ItemGroupEntry> codec() {
+    public MapCodec<? extends ItemGroupEntry> codec() {
         return this.codec;
     }
 }

@@ -6,7 +6,7 @@
   },
   "components": {
     "minecraft:dispensable": {
-      "behavior": "minecraft:entity"
+      "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
       "entity": {

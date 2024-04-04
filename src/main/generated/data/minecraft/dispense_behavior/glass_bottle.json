@@ -1,0 +1,48 @@
+{
+  "entry": {
+    "action": {
+      "type": "minecraft:sequence",
+      "entries": [
+        {
+          "action": [
+            {
+              "action": {
+                "type": "minecraft:take_honey",
+                "position": "target"
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:exchange_item",
+                "item": "minecraft:honey_bottle"
+              }
+            }
+          ],
+          "requirements": {
+            "conditions": {
+              "condition": "minecraft:location_check",
+              "predicate": {
+                "block": {
+                  "state": {
+                    "honey_level": "5"
+                  }
+                }
+              }
+            },
+            "context": {
+              "entity": "this",
+              "position": "target"
+            }
+          }
+        },
+        {
+          "action": {
+            "type": "minecraft:invoke_item_event",
+            "event": "minecraft:use_on_block"
+          }
+        }
+      ],
+      "handler": "minecraft:first_to_pass_requirements"
+    }
+  }
+}

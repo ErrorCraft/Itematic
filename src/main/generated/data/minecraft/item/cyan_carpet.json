@@ -9,7 +9,7 @@
       "block": "minecraft:cyan_carpet"
     },
     "minecraft:dispensable": {
-      "behavior": "minecraft:equipment"
+      "behavior": "minecraft:equip_entity"
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:entity.horse.saddle",

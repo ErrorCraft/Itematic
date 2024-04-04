@@ -15,7 +15,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -73,7 +72,7 @@ public abstract class ItemGroupEntry {
     protected static <T extends ItemGroupEntry> Products.P2<RecordCodecBuilder.Mu<T>, ItemGroup.StackVisibility, Boolean> createCodec(RecordCodecBuilder.Instance<T> instance) {
         return instance.group(
             StringIdentifiable.createCodec(ItemGroup.StackVisibility::values).optionalFieldOf("visibility", ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS).forGetter(ItemGroupEntry::visibility),
-            Codecs.createStrictOptionalFieldCodec(Codec.BOOL, "requires_permissions", false).forGetter(ItemGroupEntry::requiresPermissions)
+            Codec.BOOL.optionalFieldOf("requires_permissions", false).forGetter(ItemGroupEntry::requiresPermissions)
         );
     }
 }

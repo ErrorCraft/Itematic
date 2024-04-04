@@ -14,7 +14,8 @@
           "function": "minecraft:set_name",
           "name": {
             "translate": "filled_map.monument"
-          }
+          },
+          "target": "item_name"
         }
       ]
     }

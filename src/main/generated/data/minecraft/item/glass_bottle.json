@@ -6,7 +6,64 @@
   },
   "components": {
     "minecraft:dispensable": {
-      "behavior": "minecraft:bottle"
+      "behavior": "minecraft:glass_bottle"
     }
-  }
+  },
+  "events": [
+    {
+      "event": "minecraft:use_on_block",
+      "entry": {
+        "action": [
+          {
+            "action": {
+              "type": "minecraft:exchange_item",
+              "components": {
+                "minecraft:potion_contents": {
+                  "potion": "minecraft:water"
+                }
+              },
+              "item": "minecraft:potion"
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:invoke_game_event",
+              "event": "minecraft:fluid_pickup",
+              "entity": "this",
+              "position": "target"
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:play_sound",
+              "category": "neutral",
+              "pitch": 1.0,
+              "position": "this",
+              "sound": "minecraft:item.bottle.fill",
+              "volume": 1.0
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:swing_hand"
+            }
+          }
+        ],
+        "requirements": {
+          "conditions": {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "fluid": {
+                "fluids": "#minecraft:water"
+              }
+            }
+          },
+          "context": {
+            "entity": "this",
+            "position": "target"
+          }
+        }
+      }
+    }
+  ]
 }

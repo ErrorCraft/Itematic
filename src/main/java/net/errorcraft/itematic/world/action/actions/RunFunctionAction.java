@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.actions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -17,7 +17,7 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 import java.util.Optional;
 
 public record RunFunctionAction(Identifier function, ActionContextParameters context) implements Action<RunFunctionAction> {
-    public static final Codec<RunFunctionAction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<RunFunctionAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Identifier.CODEC.fieldOf("function").forGetter(RunFunctionAction::function),
         ActionContextParameters.CODEC.fieldOf("context").forGetter(RunFunctionAction::context)
     ).apply(instance, RunFunctionAction::new));

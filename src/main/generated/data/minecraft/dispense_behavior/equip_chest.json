@@ -1,0 +1,22 @@
+{
+  "entry": {
+    "action": {
+      "type": "minecraft:sequence",
+      "entries": [
+        {
+          "action": {
+            "type": "minecraft:equip_horse_with_chest_at_position",
+            "position": "target"
+          }
+        },
+        {
+          "action": {
+            "type": "minecraft:decrement_item",
+            "amount": 1
+          }
+        }
+      ],
+      "handler": "minecraft:passing"
+    }
+  }
+}
