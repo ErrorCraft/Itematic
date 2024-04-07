@@ -6,13 +6,11 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
-import net.errorcraft.itematic.item.ItemBase;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.ItemHolderItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.util.Util;
@@ -20,9 +18,11 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.advancement.criterion.ItemDurabilityChangedCriterion;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.component.*;
-import net.minecraft.component.type.BundleContentsComponent;
+import net.minecraft.client.item.TooltipType;
+import net.minecraft.component.ComponentChanges;
+import net.minecraft.component.ComponentHolder;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.ComponentMapImpl;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -454,12 +454,12 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         method = "getTooltip",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;appendTooltip(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Ljava/util/List;Lnet/minecraft/client/item/TooltipContext;)V"
+            target = "Lnet/minecraft/item/Item;appendTooltip(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/List;Lnet/minecraft/client/item/TooltipType;)V"
         )
     )
-    private void appendTooltipUseRegistryEntry(Item instance, ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    private void appendTooltipUseRegistryEntry(Item instance, ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         if (this.entry != null) {
-            this.entry.value().appendTooltip(stack, world, tooltip, context);
+            this.entry.value().appendTooltip(stack, context, tooltip, type);
         }
     }
 
@@ -685,18 +685,6 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
             return false;
         }
         return this.entry.value().itematic$mayStartUsing(world, user, hand, stack);
-    }
-
-    @Override
-    public double itematic$occupancy() {
-        BundleContentsComponent bundleContents = this.get(DataComponentTypes.BUNDLE_CONTENTS);
-        if (bundleContents != null) {
-            return ItemHolderItemComponent.NESTED_ITEM_HOLDER_OCCUPANCY + bundleContents.itematic$occupancy();
-        }
-        if (!this.getOrDefault(DataComponentTypes.BEES, List.of()).isEmpty()) {
-            return ItemBase.MAX_MAX_COUNT;
-        }
-        return (double)ItemBase.MAX_MAX_COUNT / this.getMaxCount();
     }
 
     @Unique

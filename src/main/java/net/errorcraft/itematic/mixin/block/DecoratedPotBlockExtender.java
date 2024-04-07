@@ -10,7 +10,6 @@ import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
@@ -31,10 +30,10 @@ public class DecoratedPotBlockExtender implements BlockAccess {
             target = "Lnet/minecraft/block/entity/Sherds;equals(Ljava/lang/Object;)Z"
         )
     )
-    private boolean defaultSherdsAlwaysTrue(boolean original, @Local(argsOnly = true) List<Text> tooltip, @Local(argsOnly = true) DynamicRegistryManager registryManager, @Local Sherds sherds) {
-        if (!original && registryManager != null) {
+    private boolean defaultSherdsAlwaysTrue(boolean original, @Local(argsOnly = true) Item.TooltipContext context, @Local(argsOnly = true) List<Text> tooltip, @Local Sherds sherds) {
+        if (!original) {
             tooltip.add(ScreenTexts.EMPTY);
-            for (RegistryEntry<Item> entry : sherds.itematic$entriesForwards(registryManager)) {
+            for (RegistryEntry<Item> entry : sherds.itematic$entriesForwards(context.getRegistryLookup())) {
                 tooltip.add(new ItemStack(entry).getName().copyContentOnly().formatted(Formatting.GRAY));
             }
         }

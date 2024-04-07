@@ -8,15 +8,14 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.mixin.item.SmithingTemplateItemAccessor;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ public record SmithingTemplateItemComponent(RegistryEntry<SmithingTemplate> temp
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         SmithingTemplate template = this.template.value();
         tooltip.add(template.titleText().formatted(TITLE_FORMATTING));
         tooltip.add(ScreenTexts.EMPTY);

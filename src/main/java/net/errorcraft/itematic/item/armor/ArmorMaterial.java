@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.item.armor;
 
-import com.google.common.collect.ImmutableMultimap;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.EquipmentSlotUtil;
 import net.errorcraft.itematic.mixin.item.ArmorItemAccessor;
+import net.minecraft.component.type.AttributeModifierSlot;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ArmorItem;
@@ -44,15 +44,15 @@ public record ArmorMaterial(Identifier assetId, Map<ArmorItem.Type, Integer> def
         return this.assetId.withPath(path -> "models/armor/" + path + "_layer_1");
     }
 
-    public void addAttributes(EquipmentSlot slot, ImmutableMultimap.Builder<RegistryEntry<EntityAttribute>, EntityAttributeModifier> attributeModifiers) {
+    public void addAttributes(AttributeModifiersComponent.Builder builder, EquipmentSlot slot) {
         UUID uuid = EQUIPMENT_SLOT_ATTRIBUTE_UUIDS.get(slot);
         int defense = this.defense(slot);
         if (defense > 0) {
-            attributeModifiers.put(EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(uuid, "Armor modifier", defense, EntityAttributeModifier.Operation.ADD_VALUE));
+            builder.add(EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(uuid, "Armor modifier", defense, EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.forEquipmentSlot(slot));
         }
-        attributeModifiers.put(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, new EntityAttributeModifier(uuid, "Armor toughness", this.toughness, EntityAttributeModifier.Operation.ADD_VALUE));
+        builder.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, new EntityAttributeModifier(uuid, "Armor toughness", this.toughness, EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.forEquipmentSlot(slot));
         if (this.knockbackResistance > 0.0d) {
-            attributeModifiers.put(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, new EntityAttributeModifier(uuid, "Armor knockback resistance", this.knockbackResistance, EntityAttributeModifier.Operation.ADD_VALUE));
+            builder.add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, new EntityAttributeModifier(uuid, "Armor knockback resistance", this.knockbackResistance, EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.forEquipmentSlot(slot));
         }
     }
 

@@ -14,11 +14,12 @@ import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.placement.EntityPlacer;
 import net.errorcraft.itematic.mixin.item.DecorationItemAccessor;
 import net.errorcraft.itematic.mixin.item.SpawnEggItemAccessor;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.registry.RegistryEntryLookup;
@@ -26,8 +27,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +50,7 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         if (this.entity.type() != EntityType.PAINTING) {
             return;
         }
@@ -69,7 +68,7 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
             );
             return;
         }
-        if (context.isCreative()) {
+        if (type.isCreative()) {
             tooltip.add(RANDOM_TEXT);
         }
     }

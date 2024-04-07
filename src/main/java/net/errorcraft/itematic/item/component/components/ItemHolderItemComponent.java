@@ -6,11 +6,11 @@ import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
 import net.errorcraft.itematic.mixin.item.BundleItemAccessor;
+import net.errorcraft.itematic.util.Util;
 import net.minecraft.client.item.BundleTooltipData;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
+import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
@@ -31,7 +31,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
+import org.apache.commons.lang3.math.Fraction;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +44,6 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
         SoundEvent.ENTRY_CODEC.fieldOf("remove_item_sound").forGetter(ItemHolderItemComponent::removeItemSound),
         SoundEvent.ENTRY_CODEC.fieldOf("empty_sound").forGetter(ItemHolderItemComponent::emptySound)
     ).apply(instance, ItemHolderItemComponent::new));
-    public static final int NESTED_ITEM_HOLDER_OCCUPANCY = BundleContentsComponentAccessor.nestedItemHolderOccupancy();
     public static final int ITEM_BAR_COLOR = BundleItemAccessor.itemBarColor();
 
     @Override
@@ -119,10 +118,11 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
         if (bundleContents != null) {
-            tooltip.add(Text.translatable("item.minecraft.bundle.fullness", (int) bundleContents.itematic$occupancy(), this.capacity).formatted(Formatting.GRAY));
+            int occupancy = Util.multiplyFraction(bundleContents.getOccupancy(), Item.DEFAULT_MAX_COUNT);
+            tooltip.add(Text.translatable("item.minecraft.bundle.fullness", occupancy, this.capacity).formatted(Formatting.GRAY));
         }
     }
 
@@ -131,11 +131,14 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
         if (bundleContents == null) {
             return false;
         }
-        return bundleContents.itematic$occupancy() > 0.0d;
+        return bundleContents.getOccupancy().compareTo(Fraction.ZERO) > 0 ;
     }
 
     public int itemBarStep(ItemStack stack) {
-        return Math.min((int)((Item.ITEM_BAR_STEPS - 1) * this.fullness(stack) + 1), Item.ITEM_BAR_STEPS);
+        int step = this.fullness(stack)
+            .multiplyBy(Fraction.getFraction((Item.ITEM_BAR_STEPS - 1) * Item.DEFAULT_MAX_COUNT, 1))
+            .intValue();
+        return Math.min(step, Item.ITEM_BAR_STEPS);
     }
 
     public Optional<TooltipData> tooltipData(ItemStack stack) {
@@ -148,12 +151,12 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
         return Optional.of(data);
     }
 
-    public double fullness(ItemStack stack) {
+    public Fraction fullness(ItemStack stack) {
         BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
         if (bundleContents == null) {
-            return 0.0d;
+            return Fraction.ZERO;
         }
-        return bundleContents.itematic$occupancy() / this.capacity;
+        return bundleContents.getOccupancy().multiplyBy(Fraction.getFraction(1, this.capacity));
     }
 
     public void onDestroyed(ItemEntity item) {

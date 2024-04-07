@@ -4,15 +4,14 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.component.type.FireworksComponent;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -37,10 +36,10 @@ public record FireworkExplosionHolderItemComponent() implements ItemComponent<Fi
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         FireworkExplosionComponent explosion = stack.get(DataComponentTypes.FIREWORK_EXPLOSION);
         if (explosion != null) {
-            explosion.appendTooltip(tooltip::add, context);
+            explosion.appendTooltip(tooltip::add, type);
         }
     }
 }

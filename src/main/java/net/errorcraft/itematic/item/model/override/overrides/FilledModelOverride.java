@@ -11,7 +11,7 @@ public class FilledModelOverride implements ClampedModelOverride {
     @Override
     public float applyUnclamped(ItemStack stack, @Nullable World world, @Nullable LivingEntity target, int seed) {
         return stack.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
-            .map(c -> (float)c.fullness(stack))
+            .map(c -> c.fullness(stack).floatValue())
             .orElse(0.0f);
     }
 

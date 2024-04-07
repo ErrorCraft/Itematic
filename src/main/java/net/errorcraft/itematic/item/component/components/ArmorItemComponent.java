@@ -4,9 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.component.ItemComponent;
+import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.item.ArmorItem;
@@ -32,6 +34,15 @@ public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional
     @Override
     public Codec<ArmorItemComponent> codec() {
         return CODEC;
+    }
+
+    @Override
+    public void addAttributeModifiers(AttributeModifiersComponent.Builder builder, ItemComponentSet components) {
+        if (!this.material.hasKeyAndValue()) {
+            return;
+        }
+        components.get(ItemComponentTypes.EQUIPMENT)
+            .ifPresent(c -> this.material.value().addAttributes(builder, c.slot()));
     }
 
     public Identifier textureId() {

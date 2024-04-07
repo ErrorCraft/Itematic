@@ -57,7 +57,4 @@ public interface ItemStackAccess {
     default boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return false;
     }
-    default double itematic$occupancy() {
-        return 0.0d;
-    }
 }

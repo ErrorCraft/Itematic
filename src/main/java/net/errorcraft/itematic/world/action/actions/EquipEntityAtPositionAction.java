@@ -37,7 +37,7 @@ public record EquipEntityAtPositionAction(ActionContextParameter position) imple
         if (entities.isEmpty()) {
             return false;
         }
-        LivingEntity target = entities.get(0);
+        LivingEntity target = entities.getFirst();
         EquipmentSlot equipmentSlot = MobEntity.getPreferredEquipmentSlot(equipment);
         ItemStack equippedStack = equipment.copyWithCount(1);
         target.equipStack(equipmentSlot, equippedStack);

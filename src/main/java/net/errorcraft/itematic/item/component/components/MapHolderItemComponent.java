@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapColorComponent;
@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -53,8 +52,8 @@ public record MapHolderItemComponent() implements ItemComponent<MapHolderItemCom
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        DUMMY.appendTooltip(stack, world, tooltip, context);
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        DUMMY.appendTooltip(stack, context, tooltip, type);
     }
 
     public Packet<?> createSyncPacket(ItemStack stack, World world, PlayerEntity player) {

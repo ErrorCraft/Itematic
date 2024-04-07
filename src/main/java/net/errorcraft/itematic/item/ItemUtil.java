@@ -8502,7 +8502,7 @@ public class ItemUtil {
                 new ItemBase(ItemBaseDisplay.Builder.forItem(ItemKeys.BUNDLE).build()),
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
-                    .with(ItemHolderItemComponent.of(BundleContentsComponent.MAX_SIZE, this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
+                    .with(ItemHolderItemComponent.of(Item.DEFAULT_MAX_COUNT, this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CLOCK, create(

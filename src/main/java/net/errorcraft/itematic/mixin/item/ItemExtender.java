@@ -1,8 +1,6 @@
 package net.errorcraft.itematic.mixin.item;
 
-import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Interner;
-import com.google.common.collect.Multimap;
 import net.errorcraft.itematic.access.item.ItemAccess;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemBase;
@@ -19,32 +17,28 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
+import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentType;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -52,28 +46,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Mixin(Item.class)
 public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Shadow
     @Final
-    public static UUID ATTACK_DAMAGE_MODIFIER_ID;
-
-    @Shadow
-    @Final
-    public static UUID ATTACK_SPEED_MODIFIER_ID;
-
-    @Shadow
-    @Final
     public static int DEFAULT_MAX_COUNT;
+
+    @Shadow
+    @Final
+    @Mutable
+    private ComponentMap components;
 
     @Unique
     private static final Interner<ComponentMap> COMPONENT_INTERNER = ItemAccessor.SettingsAccessor.componentInterner();
     @Unique
     private ItemBase base;
     @Unique
-    private ItemComponentSet components;
+    private ItemComponentSet itemComponents;
     @Unique
     private ItemEventMap events;
 
@@ -96,7 +86,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         ItemStack stack = user.getStackInHand(hand);
         StackReference stackReference = StackReferenceUtil.of(stack);
         ActionResult result = ActionResult.PASS;
-        for (ItemComponent<?> component : this.components) {
+        for (ItemComponent<?> component : this.itemComponents) {
             ActionResult newResult = component.use(world, user, hand, stack, stackReference::set);
             if (newResult == ActionResult.FAIL) {
                 info.setReturnValue(TypedActionResult.fail(stackReference.get()));
@@ -127,7 +117,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         ItemStack stack = context.getStack();
         StackReference stackReference = StackReferenceUtil.of(stack);
         ActionResult result = ActionResult.PASS;
-        for (ItemComponent<?> component : this.components) {
+        for (ItemComponent<?> component : this.itemComponents) {
             ActionResult newResult = component.useOnBlock(context, stackReference::set);
             if (newResult == ActionResult.FAIL) {
                 return newResult;
@@ -156,7 +146,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
         StackReference stackReference = StackReferenceUtil.of(stack);
         ActionResult result = ActionResult.PASS;
-        for (ItemComponent<?> component : this.components) {
+        for (ItemComponent<?> component : this.itemComponents) {
             ActionResult newResult = component.useOnEntity(user, entity, hand, stack, stackReference::set);
             if (newResult == ActionResult.FAIL) {
                 return newResult;
@@ -184,7 +174,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         boolean result = false;
         StackReference stackReference = StackReferenceUtil.of(stack);
-        for (ItemComponent<?> component : this.components) {
+        for (ItemComponent<?> component : this.itemComponents) {
             result |= component.postHit(stack, target, attacker, stackReference::set);
         }
 
@@ -208,7 +198,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
         boolean result = false;
         StackReference stackReference = StackReferenceUtil.of(stack);
-        for (ItemComponent<?> component : this.components) {
+        for (ItemComponent<?> component : this.itemComponents) {
             result |= component.postMine(stack, world, state, pos, miner, stackReference::set);
         }
 
@@ -231,7 +221,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Overwrite
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
         int usedTicks = user.itematic$itemUsedTicks();
-        for (ItemComponent<?> component : this.components) {
+        for (ItemComponent<?> component : this.itemComponents) {
             component.using(stack, world, user, usedTicks, remainingUseTicks);
         }
     }
@@ -255,7 +245,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         int usedTicks = user.itematic$itemUsedTicks();
         StackReference stackReference = StackReferenceUtil.of(stack);
-        for (ItemComponent<?> component : this.components) {
+        for (ItemComponent<?> component : this.itemComponents) {
             component.stopUsing(stack, world, user, usedTicks, remainingUseTicks, stackReference::set);
         }
 
@@ -277,7 +267,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     public void finishUsingUseItemComponent(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> info) {
         int usedTicks = user.itematic$itemUsedTicks();
         StackReference stackReference = StackReferenceUtil.of(stack);
-        for (ItemComponent<?> component : this.components) {
+        for (ItemComponent<?> component : this.itemComponents) {
             component.finishUsing(world, user, stack, usedTicks, stackReference::set);
         }
 
@@ -299,7 +289,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        for (ItemComponent<?> component : this.components) {
+        for (ItemComponent<?> component : this.itemComponents) {
             component.inventoryTick(stack, world, entity, slot, selected);
         }
     }
@@ -311,7 +301,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Overwrite
     public boolean onStackClicked(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player) {
         boolean result = false;
-        for (ItemComponent<?> component : this.components) {
+        for (ItemComponent<?> component : this.itemComponents) {
             result |= component.clickOnSlot(stack, slot, clickType, player);
         }
         return result;
@@ -324,7 +314,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Overwrite
     public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
         boolean result = false;
-        for (ItemComponent<?> component : this.components) {
+        for (ItemComponent<?> component : this.itemComponents) {
             result |= component.clickedOnWithStack(stack, otherStack, slot, clickType, player, cursorStackReference::set);
         }
         return result;
@@ -335,7 +325,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         at = @At("HEAD")
     )
     public void onCraft(ItemStack stack, World world, CallbackInfo info) {
-        for (ItemComponent<?> component : this.components) {
+        for (ItemComponent<?> component : this.itemComponents) {
             component.onCraft(stack, world);
         }
     }
@@ -345,12 +335,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         this.base.display()
             .tooltip()
             .ifPresent(tooltip::addAll);
-        for (ItemComponent<?> component : this.components) {
-            component.appendTooltip(stack, world, tooltip, context);
+        for (ItemComponent<?> component : this.itemComponents) {
+            component.appendTooltip(stack, context, tooltip, type);
         }
     }
 
@@ -388,48 +378,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .map(RepairableItemComponent::items)
             .map(ingredient::isIn)
             .orElse(false);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public ComponentMap getComponents() {
-        if (this.components == null) {
-            return ComponentMap.EMPTY;
-        }
-        ComponentMap.Builder builder = ComponentMap.builder()
-            .addAll(DataComponentTypes.DEFAULT_ITEM_COMPONENTS);
-        for (ItemComponent<?> component : this.components) {
-            component.addComponents(builder);
-        }
-        return COMPONENT_INTERNER.intern(builder.build());
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    @Deprecated
-    public Multimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
-        if (this.components == null) {
-            return ImmutableMultimap.of();
-        }
-        ImmutableMultimap.Builder<RegistryEntry<EntityAttribute>, EntityAttributeModifier> attributeModifiers = ImmutableMultimap.builder();
-        if (slot == EquipmentSlot.MAINHAND) {
-            this.itematic$getComponent(ItemComponentTypes.WEAPON)
-                .ifPresent(c -> {
-                    attributeModifiers.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", c.attackDamage(), EntityAttributeModifier.Operation.ADD_VALUE));
-                    attributeModifiers.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", c.attackSpeed(), EntityAttributeModifier.Operation.ADD_VALUE));
-                });
-        }
-        if (slot == this.itematic$getComponent(ItemComponentTypes.EQUIPMENT).map(EquipmentItemComponent::slot).orElse(null)) {
-            this.itematic$getComponent(ItemComponentTypes.ARMOR)
-                .ifPresent(c -> c.material().value().addAttributes(slot, attributeModifiers));
-        }
-        return attributeModifiers.build();
     }
 
     /**
@@ -613,28 +561,29 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
     @Override
     public ItemComponentSet itematic$components() {
-        return this.components;
+        return this.itemComponents;
     }
 
     @Override
     public void itematic$setComponents(ItemComponentSet components) {
-        this.components = components;
+        this.itemComponents = components;
+        this.components = this.initializeComponents();
     }
 
     @Override
     public <T extends ItemComponent<T>> boolean itematic$hasComponent(ItemComponentType<T> type) {
-        if (this.components == null) {
+        if (this.itemComponents == null) {
             return false;
         }
-        return this.components.contains(type);
+        return this.itemComponents.contains(type);
     }
 
     @Override
     public <T extends ItemComponent<T>> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
-        if (this.components == null) {
+        if (this.itemComponents == null) {
             return Optional.empty();
         }
-        return this.components.get(type);
+        return this.itemComponents.get(type);
     }
 
     @Override
@@ -685,5 +634,24 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             return;
         }
         target.setStackInHand(hand, newStack);
+    }
+
+    @Unique
+    private ComponentMap initializeComponents() {
+        if (this.itemComponents == ItemComponentSet.EMPTY) {
+            return DataComponentTypes.DEFAULT_ITEM_COMPONENTS;
+        }
+        ComponentMap.Builder componentsBuilder = ComponentMap.builder()
+            .addAll(DataComponentTypes.DEFAULT_ITEM_COMPONENTS);
+        AttributeModifiersComponent.Builder attributeModifiersBuilder = AttributeModifiersComponent.builder();
+        for (ItemComponent<?> component : this.itemComponents) {
+            component.addComponents(componentsBuilder);
+            component.addAttributeModifiers(attributeModifiersBuilder, this.itemComponents);
+        }
+        AttributeModifiersComponent attributeModifiers = attributeModifiersBuilder.build();
+        if (!attributeModifiers.modifiers().isEmpty()) {
+            componentsBuilder.add(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributeModifiers);
+        }
+        return COMPONENT_INTERNER.intern(componentsBuilder.build());
     }
 }

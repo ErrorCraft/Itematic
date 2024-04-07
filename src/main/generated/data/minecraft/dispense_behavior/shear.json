@@ -6,7 +6,7 @@
       "entries": [
         {
           "action": {
-            "type": "minecraft:shear",
+            "type": "minecraft:shear_at_position",
             "position": "target"
           }
         },

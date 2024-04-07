@@ -41,10 +41,6 @@ public interface RecipeAlternativesWidgetAccessor {
 
     @Mixin(targets = "net.minecraft.client.gui.screen.recipebook.RecipeAlternativesWidget$FurnaceAlternativeButtonWidget")
     class FurnaceAlternativeButtonWidgetExtender {
-        @Shadow
-        @Final
-        RecipeAlternativesWidget field_3121;
-
         @Redirect(
             method = "alignRecipe",
             at = @At(
@@ -53,7 +49,7 @@ public interface RecipeAlternativesWidgetAccessor {
             )
         )
         private ItemStack[] getMatchingStacksUseDynamicRegistry(Ingredient instance) {
-            ClientWorld world = ((RecipeAlternativesWidgetAccessor) this.field_3121).client().world;
+            ClientWorld world = MinecraftClient.getInstance().world;
             if (world == null) {
                 return new ItemStack[0];
             }

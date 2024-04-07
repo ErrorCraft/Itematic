@@ -115,7 +115,7 @@ public class ItemGroupExtender implements ItemGroupAccess {
             cancellable = true
         )
         private void logDuplicateEntryMessageAndCancelToPreventException(ItemStack stack, ItemGroup.StackVisibility visibility, CallbackInfo info) {
-            LOGGER.warn("Accidentally adding the same item stack twice " + stack.toHoverableText().getString() + " to a Creative Mode Tab: " + this.group.getDisplayName().getString());
+            LOGGER.warn("Accidentally adding the same item stack twice {} to a Creative Mode Tab: {}", stack.toHoverableText().getString(), this.group.getDisplayName().getString());
             info.cancel();
         }
     }

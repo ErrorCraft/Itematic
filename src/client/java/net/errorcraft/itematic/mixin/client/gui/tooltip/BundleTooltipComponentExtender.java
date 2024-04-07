@@ -2,28 +2,31 @@ package net.errorcraft.itematic.mixin.client.gui.tooltip;
 
 import net.errorcraft.itematic.access.client.gui.tooltip.BundleTooltipComponentAccess;
 import net.minecraft.client.gui.tooltip.BundleTooltipComponent;
+import net.minecraft.item.Item;
+import org.apache.commons.lang3.math.Fraction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(BundleTooltipComponent.class)
 public class BundleTooltipComponentExtender implements BundleTooltipComponentAccess {
     @Unique
-    private int capacity;
+    private Fraction capacity;
 
-    @ModifyConstant(
+    @Redirect(
         method = "drawItems",
-        constant = @Constant(
-            intValue = 64
+        at = @At(
+            value = "FIELD",
+            target = "Lorg/apache/commons/lang3/math/Fraction;ONE:Lorg/apache/commons/lang3/math/Fraction;"
         )
     )
-    private int getCapacity(int constant) {
+    private Fraction getCapacity() {
         return this.capacity;
     }
 
     @Override
     public void itematic$setCapacity(int capacity) {
-        this.capacity = capacity;
+        this.capacity = Fraction.getFraction(capacity, Item.DEFAULT_MAX_COUNT);
     }
 }
