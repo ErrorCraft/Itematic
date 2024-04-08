@@ -7,6 +7,7 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -26,7 +27,7 @@ import java.util.Optional;
 
 public record ThrowableItemComponent(float speed, float angleOffset, Optional<NumberRange.IntRange> drawDuration, boolean useRiptideCheck) implements ItemComponent<ThrowableItemComponent> {
     public static final Codec<ThrowableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.FLOAT.fieldOf("speed").forGetter(ThrowableItemComponent::speed),
+        ItematicCodecs.NON_NEGATIVE_FLOAT.fieldOf("speed").forGetter(ThrowableItemComponent::speed),
         Codec.FLOAT.fieldOf("angle_offset").forGetter(ThrowableItemComponent::angleOffset),
         NumberRange.IntRange.CODEC.optionalFieldOf("draw_duration").forGetter(ThrowableItemComponent::drawDuration),
         Codec.BOOL.optionalFieldOf("use_riptide_check", false).forGetter(ThrowableItemComponent::useRiptideCheck)

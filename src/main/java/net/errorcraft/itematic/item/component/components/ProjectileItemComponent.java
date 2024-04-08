@@ -10,6 +10,7 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
+import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
@@ -21,6 +22,7 @@ import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Position;
 import net.minecraft.world.World;
@@ -28,8 +30,8 @@ import net.minecraft.world.World;
 public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, float chargedSpeed) implements ItemComponent<ProjectileItemComponent> {
     public static final Codec<ProjectileItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         EntityInitializer.CODEC.fieldOf("entity").forGetter(ProjectileItemComponent::entity),
-        Codec.INT.optionalFieldOf("damage", 0).forGetter(ProjectileItemComponent::damage),
-        Codec.FLOAT.optionalFieldOf("charged_speed", CrossbowItemAccessor.defaultSpeed()).forGetter(ProjectileItemComponent::chargedSpeed)
+        Codecs.NONNEGATIVE_INT.optionalFieldOf("damage", 0).forGetter(ProjectileItemComponent::damage),
+        ItematicCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("charged_speed", CrossbowItemAccessor.defaultSpeed()).forGetter(ProjectileItemComponent::chargedSpeed)
     ).apply(instance, ProjectileItemComponent::new));
 
     @Override

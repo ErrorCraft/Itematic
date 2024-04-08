@@ -5,9 +5,7 @@
     }
   },
   "components": {
-    "minecraft:glint": {
-      "glint": true
-    },
+    "minecraft:glint": true,
     "minecraft:max_stack_size": 16,
     "minecraft:text_holder": {}
   },

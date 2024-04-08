@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -9,9 +8,7 @@ import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 
 public record GlintItemComponent(boolean glint) implements ItemComponent<GlintItemComponent> {
-    public static final Codec<GlintItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.BOOL.fieldOf("glint").forGetter(GlintItemComponent::glint)
-    ).apply(instance, GlintItemComponent::new));
+    public static final Codec<GlintItemComponent> CODEC = Codec.BOOL.xmap(GlintItemComponent::new, GlintItemComponent::glint);
 
     @Override
     public ItemComponentType<GlintItemComponent> type() {

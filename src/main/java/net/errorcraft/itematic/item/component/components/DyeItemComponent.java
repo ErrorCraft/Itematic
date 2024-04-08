@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -15,9 +14,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 
 public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemComponent> {
-    public static final Codec<DyeItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        DyeColor.CODEC.fieldOf("color").forGetter(DyeItemComponent::color)
-    ).apply(instance, DyeItemComponent::new));
+    public static final Codec<DyeItemComponent> CODEC = DyeColor.CODEC.xmap(DyeItemComponent::new, DyeItemComponent::color);
 
     @Override
     public ItemComponentType<DyeItemComponent> type() {

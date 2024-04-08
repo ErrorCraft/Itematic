@@ -10,11 +10,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
 public record CooldownItemComponent(int ticks) implements ItemComponent<CooldownItemComponent> {
     public static final Codec<CooldownItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("ticks").forGetter(CooldownItemComponent::ticks)
+        Codecs.POSITIVE_INT.fieldOf("ticks").forGetter(CooldownItemComponent::ticks)
     ).apply(instance, CooldownItemComponent::new));
 
     @Override

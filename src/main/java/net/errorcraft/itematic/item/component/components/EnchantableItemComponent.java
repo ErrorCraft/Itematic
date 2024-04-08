@@ -13,12 +13,13 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Optional;
 
 public record EnchantableItemComponent(int enchantability, Optional<TagKey<Enchantment>> enchantments, Optional<RegistryEntry<Item>> transformsInto) implements ItemComponent<EnchantableItemComponent> {
     public static final Codec<EnchantableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("enchantability").forGetter(EnchantableItemComponent::enchantability),
+        Codecs.POSITIVE_INT.fieldOf("enchantability").forGetter(EnchantableItemComponent::enchantability),
         TagKey.unprefixedCodec(RegistryKeys.ENCHANTMENT).optionalFieldOf("enchantments").forGetter(EnchantableItemComponent::enchantments),
         RegistryFixedCodec.of(RegistryKeys.ITEM).optionalFieldOf("transforms_into").forGetter(EnchantableItemComponent::transformsInto)
     ).apply(instance, EnchantableItemComponent::new));

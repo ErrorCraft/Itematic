@@ -5,10 +5,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.util.dynamic.Codecs;
 
 public record FuelItemComponent(int ticks) implements ItemComponent<FuelItemComponent> {
     public static final Codec<FuelItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.fieldOf("ticks").forGetter(FuelItemComponent::ticks)
+        Codecs.POSITIVE_INT.fieldOf("ticks").forGetter(FuelItemComponent::ticks)
     ).apply(instance, FuelItemComponent::new));
 
     @Override

@@ -5,8 +5,6 @@
     }
   },
   "components": {
-    "minecraft:dye": {
-      "color": "gray"
-    }
+    "minecraft:dye": "gray"
   }
 }

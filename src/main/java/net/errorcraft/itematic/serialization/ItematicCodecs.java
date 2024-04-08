@@ -13,6 +13,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ItematicCodecs {
+    public static final Codec<Float> NON_NEGATIVE_FLOAT = Codec.FLOAT.validate(value -> {
+        if (value >= 0 && value <= Float.MAX_VALUE) {
+            return DataResult.success(value);
+        }
+        return DataResult.error(() -> "Value must be non-negative: " + value);
+    });
+
     private ItematicCodecs() {}
 
     public static <T> Codec<List<T>> countRangeList(Codec<List<T>> codec, int minCount, int maxCount) {

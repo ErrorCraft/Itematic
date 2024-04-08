@@ -43,9 +43,7 @@
       "nutrition": 4,
       "saturation_modifier": 1.2
     },
-    "minecraft:glint": {
-      "glint": true
-    },
+    "minecraft:glint": true,
     "minecraft:rarity": "epic",
     "minecraft:use_animation": {
       "animation": "eat"
