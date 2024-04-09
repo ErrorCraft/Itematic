@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.golden_sword"
-    }
+    "translation_key": "item.minecraft.golden_sword"
   },
   "components": {
     "minecraft:damageable": {

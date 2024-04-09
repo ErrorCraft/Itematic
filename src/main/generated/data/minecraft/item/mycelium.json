@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.mycelium"
-    }
+    "translation_key": "block.minecraft.mycelium"
   },
   "components": {
     "minecraft:block": {

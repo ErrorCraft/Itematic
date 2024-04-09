@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.diorite_wall"
-    }
+    "translation_key": "block.minecraft.diorite_wall"
   },
   "components": {
     "minecraft:block": {

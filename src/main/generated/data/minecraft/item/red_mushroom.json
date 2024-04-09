@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.red_mushroom"
-    }
+    "translation_key": "block.minecraft.red_mushroom"
   },
   "components": {
     "minecraft:block": {

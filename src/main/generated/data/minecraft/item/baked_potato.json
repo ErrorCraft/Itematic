@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.baked_potato"
-    }
+    "translation_key": "item.minecraft.baked_potato"
   },
   "components": {
     "minecraft:compostable": {

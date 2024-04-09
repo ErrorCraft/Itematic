@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.smooth_quartz"
-    }
+    "translation_key": "block.minecraft.smooth_quartz"
   },
   "components": {
     "minecraft:block": {

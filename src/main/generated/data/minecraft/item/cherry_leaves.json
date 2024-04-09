@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.cherry_leaves"
-    }
+    "translation_key": "block.minecraft.cherry_leaves"
   },
   "components": {
     "minecraft:block": {

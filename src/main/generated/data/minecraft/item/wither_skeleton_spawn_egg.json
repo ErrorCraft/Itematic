@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.wither_skeleton_spawn_egg"
-    }
+    "translation_key": "item.minecraft.wither_skeleton_spawn_egg"
   },
   "components": {
     "minecraft:can_place_on_fluids": {

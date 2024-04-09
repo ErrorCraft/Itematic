@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.powder_snow_bucket"
-    }
+    "translation_key": "item.minecraft.powder_snow_bucket"
   },
   "components": {
     "minecraft:bucket": {

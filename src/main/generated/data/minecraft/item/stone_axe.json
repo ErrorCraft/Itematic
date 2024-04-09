@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.stone_axe"
-    }
+    "translation_key": "item.minecraft.stone_axe"
   },
   "components": {
     "minecraft:damageable": {

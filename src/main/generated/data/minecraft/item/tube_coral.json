@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.tube_coral"
-    }
+    "translation_key": "block.minecraft.tube_coral"
   },
   "components": {
     "minecraft:block": {

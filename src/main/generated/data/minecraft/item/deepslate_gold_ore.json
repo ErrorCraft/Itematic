@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.deepslate_gold_ore"
-    }
+    "translation_key": "block.minecraft.deepslate_gold_ore"
   },
   "components": {
     "minecraft:block": {

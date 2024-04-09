@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.stripped_acacia_wood"
-    }
+    "translation_key": "block.minecraft.stripped_acacia_wood"
   },
   "components": {
     "minecraft:block": {

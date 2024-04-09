@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.allium"
-    }
+    "translation_key": "block.minecraft.allium"
   },
   "components": {
     "minecraft:block": {

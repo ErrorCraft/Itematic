@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.diamond_ore"
-    }
+    "translation_key": "block.minecraft.diamond_ore"
   },
   "components": {
     "minecraft:block": {

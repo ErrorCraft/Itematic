@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.bee_nest"
-    }
+    "translation_key": "block.minecraft.bee_nest"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.music_disc_strad"
-    }
+    "translation_key": "item.minecraft.music_disc_strad"
   },
   "components": {
     "minecraft:max_stack_size": 1,

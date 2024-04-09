@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.white_candle"
-    }
+    "translation_key": "block.minecraft.white_candle"
   },
   "components": {
     "minecraft:block": {

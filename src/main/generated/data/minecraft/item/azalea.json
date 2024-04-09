@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.azalea"
-    }
+    "translation_key": "block.minecraft.azalea"
   },
   "components": {
     "minecraft:block": {

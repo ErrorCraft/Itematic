@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.crimson_fungus"
-    }
+    "translation_key": "block.minecraft.crimson_fungus"
   },
   "components": {
     "minecraft:block": {

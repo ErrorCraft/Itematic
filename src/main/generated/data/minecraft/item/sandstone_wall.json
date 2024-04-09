@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.sandstone_wall"
-    }
+    "translation_key": "block.minecraft.sandstone_wall"
   },
   "components": {
     "minecraft:block": {

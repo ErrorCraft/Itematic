@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.note_block"
-    }
+    "translation_key": "block.minecraft.note_block"
   },
   "components": {
     "minecraft:block": {

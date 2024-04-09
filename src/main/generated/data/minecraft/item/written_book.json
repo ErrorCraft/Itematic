@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.written_book"
-    }
+    "translation_key": "item.minecraft.written_book"
   },
   "components": {
     "minecraft:glint": true,

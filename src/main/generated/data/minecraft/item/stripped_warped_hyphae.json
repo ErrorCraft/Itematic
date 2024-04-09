@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.stripped_warped_hyphae"
-    }
+    "translation_key": "block.minecraft.stripped_warped_hyphae"
   },
   "components": {
     "minecraft:block": {

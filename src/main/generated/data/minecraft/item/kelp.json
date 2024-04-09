@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.kelp"
-    }
+    "translation_key": "block.minecraft.kelp"
   },
   "components": {
     "minecraft:block": {

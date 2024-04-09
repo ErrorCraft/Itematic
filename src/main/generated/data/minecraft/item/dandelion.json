@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.dandelion"
-    }
+    "translation_key": "block.minecraft.dandelion"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.mangrove_fence"
-    }
+    "translation_key": "block.minecraft.mangrove_fence"
   },
   "components": {
     "minecraft:block": {

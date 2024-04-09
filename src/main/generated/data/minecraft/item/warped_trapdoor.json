@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.warped_trapdoor"
-    }
+    "translation_key": "block.minecraft.warped_trapdoor"
   },
   "components": {
     "minecraft:block": {

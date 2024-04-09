@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.deepslate_brick_slab"
-    }
+    "translation_key": "block.minecraft.deepslate_brick_slab"
   },
   "components": {
     "minecraft:block": {

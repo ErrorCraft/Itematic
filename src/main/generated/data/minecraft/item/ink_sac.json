@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.ink_sac"
-    }
+    "translation_key": "item.minecraft.ink_sac"
   },
   "events": [
     {

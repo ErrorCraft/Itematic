@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.iron_ingot"
-    }
+    "translation_key": "item.minecraft.iron_ingot"
   }
 }

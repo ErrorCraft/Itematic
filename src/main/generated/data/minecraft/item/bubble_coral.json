@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.bubble_coral"
-    }
+    "translation_key": "block.minecraft.bubble_coral"
   },
   "components": {
     "minecraft:block": {

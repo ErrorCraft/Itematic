@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.gold_ore"
-    }
+    "translation_key": "block.minecraft.gold_ore"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.crimson_fence"
-    }
+    "translation_key": "block.minecraft.crimson_fence"
   },
   "components": {
     "minecraft:block": {

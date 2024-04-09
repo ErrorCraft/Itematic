@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.cherry_door"
-    }
+    "translation_key": "block.minecraft.cherry_door"
   },
   "components": {
     "minecraft:block": {

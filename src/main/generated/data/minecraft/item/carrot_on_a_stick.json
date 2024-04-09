@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.carrot_on_a_stick"
-    }
+    "translation_key": "item.minecraft.carrot_on_a_stick"
   },
   "components": {
     "minecraft:damageable": {

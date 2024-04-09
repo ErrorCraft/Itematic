@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.chiseled_bookshelf"
-    }
+    "translation_key": "block.minecraft.chiseled_bookshelf"
   },
   "components": {
     "minecraft:block": {

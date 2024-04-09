@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.light_gray_banner"
-    }
+    "translation_key": "block.minecraft.light_gray_banner"
   },
   "components": {
     "minecraft:banner_pattern_holder": {

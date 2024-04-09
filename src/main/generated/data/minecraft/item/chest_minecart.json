@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.chest_minecart"
-    }
+    "translation_key": "item.minecraft.chest_minecart"
   },
   "components": {
     "minecraft:dispensable": {

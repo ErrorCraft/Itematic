@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.observer"
-    }
+    "translation_key": "block.minecraft.observer"
   },
   "components": {
     "minecraft:block": {

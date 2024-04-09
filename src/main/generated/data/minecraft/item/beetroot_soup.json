@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.beetroot_soup"
-    }
+    "translation_key": "item.minecraft.beetroot_soup"
   },
   "components": {
     "minecraft:consumable": {},

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.chest"
-    }
+    "translation_key": "block.minecraft.chest"
   },
   "components": {
     "minecraft:block": {

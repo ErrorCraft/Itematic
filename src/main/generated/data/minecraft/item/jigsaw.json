@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.jigsaw"
-    }
+    "translation_key": "block.minecraft.jigsaw"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.white_tulip"
-    }
+    "translation_key": "block.minecraft.white_tulip"
   },
   "components": {
     "minecraft:block": {

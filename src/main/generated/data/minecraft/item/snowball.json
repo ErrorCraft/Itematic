@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.snowball"
-    }
+    "translation_key": "item.minecraft.snowball"
   },
   "components": {
     "minecraft:dispensable": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.cobweb"
-    }
+    "translation_key": "block.minecraft.cobweb"
   },
   "components": {
     "minecraft:block": {

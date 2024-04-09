@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.light_gray_concrete_powder"
-    }
+    "translation_key": "block.minecraft.light_gray_concrete_powder"
   },
   "components": {
     "minecraft:block": {

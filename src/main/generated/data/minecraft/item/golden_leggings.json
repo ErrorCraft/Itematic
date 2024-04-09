@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.golden_leggings"
-    }
+    "translation_key": "item.minecraft.golden_leggings"
   },
   "components": {
     "minecraft:armor": {

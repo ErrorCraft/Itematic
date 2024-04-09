@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.comparator"
-    }
+    "translation_key": "block.minecraft.comparator"
   },
   "components": {
     "minecraft:block": {

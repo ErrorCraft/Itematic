@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.ochre_froglight"
-    }
+    "translation_key": "block.minecraft.ochre_froglight"
   },
   "components": {
     "minecraft:block": {

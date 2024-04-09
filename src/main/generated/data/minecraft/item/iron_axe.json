@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.iron_axe"
-    }
+    "translation_key": "item.minecraft.iron_axe"
   },
   "components": {
     "minecraft:damageable": {

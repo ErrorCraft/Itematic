@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.grindstone"
-    }
+    "translation_key": "block.minecraft.grindstone"
   },
   "components": {
     "minecraft:block": {

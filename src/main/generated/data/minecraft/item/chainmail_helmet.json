@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.chainmail_helmet"
-    }
+    "translation_key": "item.minecraft.chainmail_helmet"
   },
   "components": {
     "minecraft:armor": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.tnt_minecart"
-    }
+    "translation_key": "item.minecraft.tnt_minecart"
   },
   "components": {
     "minecraft:dispensable": {

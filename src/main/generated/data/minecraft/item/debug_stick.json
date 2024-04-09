@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.debug_stick"
-    }
+    "translation_key": "item.minecraft.debug_stick"
   },
   "components": {
     "minecraft:debug_stick": {},

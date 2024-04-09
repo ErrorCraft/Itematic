@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.flower_pot"
-    }
+    "translation_key": "block.minecraft.flower_pot"
   },
   "components": {
     "minecraft:block": {

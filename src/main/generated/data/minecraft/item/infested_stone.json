@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.infested_stone"
-    }
+    "translation_key": "block.minecraft.infested_stone"
   },
   "components": {
     "minecraft:block": {

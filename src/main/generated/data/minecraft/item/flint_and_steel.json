@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.flint_and_steel"
-    }
+    "translation_key": "item.minecraft.flint_and_steel"
   },
   "components": {
     "minecraft:damageable": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.pointed_dripstone"
-    }
+    "translation_key": "block.minecraft.pointed_dripstone"
   },
   "components": {
     "minecraft:block": {

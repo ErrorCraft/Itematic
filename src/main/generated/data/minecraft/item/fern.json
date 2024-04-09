@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.fern"
-    }
+    "translation_key": "block.minecraft.fern"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.orange_tulip"
-    }
+    "translation_key": "block.minecraft.orange_tulip"
   },
   "components": {
     "minecraft:block": {

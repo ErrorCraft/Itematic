@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.diamond_sword"
-    }
+    "translation_key": "item.minecraft.diamond_sword"
   },
   "components": {
     "minecraft:damageable": {

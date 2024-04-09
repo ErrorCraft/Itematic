@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.diamond_chestplate"
-    }
+    "translation_key": "item.minecraft.diamond_chestplate"
   },
   "components": {
     "minecraft:armor": {

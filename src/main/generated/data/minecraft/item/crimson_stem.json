@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.crimson_stem"
-    }
+    "translation_key": "block.minecraft.crimson_stem"
   },
   "components": {
     "minecraft:block": {

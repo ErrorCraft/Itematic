@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.bowl"
-    }
+    "translation_key": "item.minecraft.bowl"
   },
   "components": {
     "minecraft:fuel": {

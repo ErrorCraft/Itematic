@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.dark_oak_boat"
-    }
+    "translation_key": "item.minecraft.dark_oak_boat"
   },
   "components": {
     "minecraft:dispensable": {

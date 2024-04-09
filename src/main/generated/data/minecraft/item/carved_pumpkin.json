@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.carved_pumpkin"
-    }
+    "translation_key": "block.minecraft.carved_pumpkin"
   },
   "components": {
     "minecraft:block": {

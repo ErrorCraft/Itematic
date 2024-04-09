@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.smooth_red_sandstone"
-    }
+    "translation_key": "block.minecraft.smooth_red_sandstone"
   },
   "components": {
     "minecraft:block": {

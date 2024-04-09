@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.tadpole_bucket"
-    }
+    "translation_key": "item.minecraft.tadpole_bucket"
   },
   "components": {
     "minecraft:bucket": {

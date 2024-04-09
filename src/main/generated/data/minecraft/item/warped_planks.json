@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.warped_planks"
-    }
+    "translation_key": "block.minecraft.warped_planks"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.powered_rail"
-    }
+    "translation_key": "block.minecraft.powered_rail"
   },
   "components": {
     "minecraft:block": {

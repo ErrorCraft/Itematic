@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.end_stone_bricks"
-    }
+    "translation_key": "block.minecraft.end_stone_bricks"
   },
   "components": {
     "minecraft:block": {

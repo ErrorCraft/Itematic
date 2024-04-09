@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.acacia_planks"
-    }
+    "translation_key": "block.minecraft.acacia_planks"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.torch"
-    }
+    "translation_key": "block.minecraft.torch"
   },
   "components": {
     "minecraft:block": {

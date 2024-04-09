@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.lime_concrete"
-    }
+    "translation_key": "block.minecraft.lime_concrete"
   },
   "components": {
     "minecraft:block": {

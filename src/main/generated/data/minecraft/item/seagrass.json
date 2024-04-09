@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.seagrass"
-    }
+    "translation_key": "block.minecraft.seagrass"
   },
   "components": {
     "minecraft:block": {

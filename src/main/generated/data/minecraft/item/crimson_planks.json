@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.crimson_planks"
-    }
+    "translation_key": "block.minecraft.crimson_planks"
   },
   "components": {
     "minecraft:block": {

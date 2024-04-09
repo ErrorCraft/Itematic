@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.zombie_head"
-    }
+    "translation_key": "block.minecraft.zombie_head"
   },
   "components": {
     "minecraft:block": {

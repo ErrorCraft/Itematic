@@ -1,13 +1,11 @@
 {
   "base": {
-    "display": {
-      "tooltip": [
-        {
-          "color": "gray",
-          "translate": "item.minecraft.disc_fragment_5.desc"
-        }
-      ],
-      "translation_key": "item.minecraft.disc_fragment_5"
-    }
+    "tooltip": [
+      {
+        "color": "gray",
+        "translate": "item.minecraft.disc_fragment_5.desc"
+      }
+    ],
+    "translation_key": "item.minecraft.disc_fragment_5"
   }
 }

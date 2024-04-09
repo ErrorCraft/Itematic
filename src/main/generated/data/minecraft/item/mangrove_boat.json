@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.mangrove_boat"
-    }
+    "translation_key": "item.minecraft.mangrove_boat"
   },
   "components": {
     "minecraft:dispensable": {

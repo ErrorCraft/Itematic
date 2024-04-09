@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.twisting_vines"
-    }
+    "translation_key": "block.minecraft.twisting_vines"
   },
   "components": {
     "minecraft:block": {

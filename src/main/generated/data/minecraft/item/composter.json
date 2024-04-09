@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.composter"
-    }
+    "translation_key": "block.minecraft.composter"
   },
   "components": {
     "minecraft:block": {

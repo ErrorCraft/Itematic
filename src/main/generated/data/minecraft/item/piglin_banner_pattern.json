@@ -1,14 +1,12 @@
 {
   "base": {
-    "display": {
-      "tooltip": [
-        {
-          "color": "gray",
-          "translate": "item.minecraft.piglin_banner_pattern.desc"
-        }
-      ],
-      "translation_key": "item.minecraft.piglin_banner_pattern"
-    }
+    "tooltip": [
+      {
+        "color": "gray",
+        "translate": "item.minecraft.piglin_banner_pattern.desc"
+      }
+    ],
+    "translation_key": "item.minecraft.piglin_banner_pattern"
   },
   "components": {
     "minecraft:banner_pattern": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.acacia_log"
-    }
+    "translation_key": "block.minecraft.acacia_log"
   },
   "components": {
     "minecraft:block": {

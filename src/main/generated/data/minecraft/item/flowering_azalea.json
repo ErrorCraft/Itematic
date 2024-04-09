@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.flowering_azalea"
-    }
+    "translation_key": "block.minecraft.flowering_azalea"
   },
   "components": {
     "minecraft:block": {

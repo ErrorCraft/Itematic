@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.decorated_pot"
-    }
+    "translation_key": "block.minecraft.decorated_pot"
   },
   "components": {
     "minecraft:block": {

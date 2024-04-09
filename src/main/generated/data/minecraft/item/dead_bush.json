@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.dead_bush"
-    }
+    "translation_key": "block.minecraft.dead_bush"
   },
   "components": {
     "minecraft:block": {

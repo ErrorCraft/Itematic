@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.crimson_trapdoor"
-    }
+    "translation_key": "block.minecraft.crimson_trapdoor"
   },
   "components": {
     "minecraft:block": {

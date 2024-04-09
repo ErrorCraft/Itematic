@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.melon_slice"
-    }
+    "translation_key": "item.minecraft.melon_slice"
   },
   "components": {
     "minecraft:compostable": {

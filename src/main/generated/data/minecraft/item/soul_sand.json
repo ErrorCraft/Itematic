@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.soul_sand"
-    }
+    "translation_key": "block.minecraft.soul_sand"
   },
   "components": {
     "minecraft:block": {

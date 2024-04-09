@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.knowledge_book"
-    }
+    "translation_key": "item.minecraft.knowledge_book"
   },
   "components": {
     "minecraft:max_stack_size": 1,

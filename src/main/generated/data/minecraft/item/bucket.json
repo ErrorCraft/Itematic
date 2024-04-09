@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.bucket"
-    }
+    "translation_key": "item.minecraft.bucket"
   },
   "components": {
     "minecraft:bucket": {

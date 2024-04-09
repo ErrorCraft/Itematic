@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.verdant_froglight"
-    }
+    "translation_key": "block.minecraft.verdant_froglight"
   },
   "components": {
     "minecraft:block": {

@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.nether_brick"
-    }
+    "translation_key": "item.minecraft.nether_brick"
   }
 }

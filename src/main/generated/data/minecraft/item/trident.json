@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.trident"
-    }
+    "translation_key": "item.minecraft.trident"
   },
   "components": {
     "minecraft:damageable": {

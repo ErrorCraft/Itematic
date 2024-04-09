@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.cookie"
-    }
+    "translation_key": "item.minecraft.cookie"
   },
   "components": {
     "minecraft:compostable": {

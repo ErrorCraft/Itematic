@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.cyan_dye"
-    }
+    "translation_key": "item.minecraft.cyan_dye"
   },
   "components": {
     "minecraft:dye": "cyan"

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.bread"
-    }
+    "translation_key": "item.minecraft.bread"
   },
   "components": {
     "minecraft:compostable": {

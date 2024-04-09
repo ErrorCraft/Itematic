@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.bamboo_button"
-    }
+    "translation_key": "block.minecraft.bamboo_button"
   },
   "components": {
     "minecraft:block": {

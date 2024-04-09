@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.shears"
-    }
+    "translation_key": "item.minecraft.shears"
   },
   "components": {
     "minecraft:damageable": {

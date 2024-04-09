@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.tipped_arrow"
-    }
+    "translation_key": "item.minecraft.tipped_arrow"
   },
   "components": {
     "minecraft:dispensable": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.beacon"
-    }
+    "translation_key": "block.minecraft.beacon"
   },
   "components": {
     "minecraft:block": {

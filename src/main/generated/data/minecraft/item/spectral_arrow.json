@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.spectral_arrow"
-    }
+    "translation_key": "item.minecraft.spectral_arrow"
   },
   "components": {
     "minecraft:dispensable": {

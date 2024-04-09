@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.jungle_pressure_plate"
-    }
+    "translation_key": "block.minecraft.jungle_pressure_plate"
   },
   "components": {
     "minecraft:block": {

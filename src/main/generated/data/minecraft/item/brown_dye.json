@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.brown_dye"
-    }
+    "translation_key": "item.minecraft.brown_dye"
   },
   "components": {
     "minecraft:dye": "brown"

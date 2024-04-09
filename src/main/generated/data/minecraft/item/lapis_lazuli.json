@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.lapis_lazuli"
-    }
+    "translation_key": "item.minecraft.lapis_lazuli"
   }
 }

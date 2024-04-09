@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.lodestone"
-    }
+    "translation_key": "block.minecraft.lodestone"
   },
   "components": {
     "minecraft:block": {

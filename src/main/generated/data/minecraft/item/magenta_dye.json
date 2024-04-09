@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.magenta_dye"
-    }
+    "translation_key": "item.minecraft.magenta_dye"
   },
   "components": {
     "minecraft:dye": "magenta"

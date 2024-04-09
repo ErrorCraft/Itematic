@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.honey_bottle"
-    }
+    "translation_key": "item.minecraft.honey_bottle"
   },
   "components": {
     "minecraft:consumable": {

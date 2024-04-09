@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.acacia_boat"
-    }
+    "translation_key": "item.minecraft.acacia_boat"
   },
   "components": {
     "minecraft:dispensable": {

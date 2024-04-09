@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.stone_brick_stairs"
-    }
+    "translation_key": "block.minecraft.stone_brick_stairs"
   },
   "components": {
     "minecraft:block": {

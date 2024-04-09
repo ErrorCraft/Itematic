@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.wheat_seeds"
-    }
+    "translation_key": "item.minecraft.wheat_seeds"
   },
   "components": {
     "minecraft:block": {

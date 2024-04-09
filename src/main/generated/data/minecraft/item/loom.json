@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.loom"
-    }
+    "translation_key": "block.minecraft.loom"
   },
   "components": {
     "minecraft:block": {

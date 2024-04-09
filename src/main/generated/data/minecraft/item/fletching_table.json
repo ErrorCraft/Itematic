@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.fletching_table"
-    }
+    "translation_key": "block.minecraft.fletching_table"
   },
   "components": {
     "minecraft:block": {

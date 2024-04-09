@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.mossy_stone_brick_wall"
-    }
+    "translation_key": "block.minecraft.mossy_stone_brick_wall"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.porkchop"
-    }
+    "translation_key": "item.minecraft.porkchop"
   },
   "components": {
     "minecraft:consumable": {},

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.piston"
-    }
+    "translation_key": "block.minecraft.piston"
   },
   "components": {
     "minecraft:block": {

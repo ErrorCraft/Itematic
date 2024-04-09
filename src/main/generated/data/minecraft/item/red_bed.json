@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.red_bed"
-    }
+    "translation_key": "block.minecraft.red_bed"
   },
   "components": {
     "minecraft:block": {

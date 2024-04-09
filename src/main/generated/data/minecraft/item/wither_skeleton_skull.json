@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.wither_skeleton_skull"
-    }
+    "translation_key": "block.minecraft.wither_skeleton_skull"
   },
   "components": {
     "minecraft:block": {

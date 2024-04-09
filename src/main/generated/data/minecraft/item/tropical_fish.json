@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.tropical_fish"
-    }
+    "translation_key": "item.minecraft.tropical_fish"
   },
   "components": {
     "minecraft:consumable": {},

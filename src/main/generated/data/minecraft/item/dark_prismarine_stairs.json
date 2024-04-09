@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.dark_prismarine_stairs"
-    }
+    "translation_key": "block.minecraft.dark_prismarine_stairs"
   },
   "components": {
     "minecraft:block": {

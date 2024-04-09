@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.compass"
-    }
+    "translation_key": "item.minecraft.compass"
   },
   "components": {
     "minecraft:pointable": {

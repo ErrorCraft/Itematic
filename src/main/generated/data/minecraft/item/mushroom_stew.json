@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.mushroom_stew"
-    }
+    "translation_key": "item.minecraft.mushroom_stew"
   },
   "components": {
     "minecraft:consumable": {

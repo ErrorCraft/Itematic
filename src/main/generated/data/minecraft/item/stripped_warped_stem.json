@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.stripped_warped_stem"
-    }
+    "translation_key": "block.minecraft.stripped_warped_stem"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.emerald_ore"
-    }
+    "translation_key": "block.minecraft.emerald_ore"
   },
   "components": {
     "minecraft:block": {

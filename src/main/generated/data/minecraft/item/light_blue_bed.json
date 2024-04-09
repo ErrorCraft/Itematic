@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.light_blue_bed"
-    }
+    "translation_key": "block.minecraft.light_blue_bed"
   },
   "components": {
     "minecraft:block": {

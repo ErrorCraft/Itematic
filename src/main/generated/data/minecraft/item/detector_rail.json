@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.detector_rail"
-    }
+    "translation_key": "block.minecraft.detector_rail"
   },
   "components": {
     "minecraft:block": {

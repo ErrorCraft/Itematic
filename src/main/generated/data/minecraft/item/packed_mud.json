@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.packed_mud"
-    }
+    "translation_key": "block.minecraft.packed_mud"
   },
   "components": {
     "minecraft:block": {

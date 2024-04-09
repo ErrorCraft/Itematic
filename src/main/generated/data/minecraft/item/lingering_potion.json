@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.lingering_potion"
-    }
+    "translation_key": "item.minecraft.lingering_potion"
   },
   "components": {
     "minecraft:dispensable": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.birch_button"
-    }
+    "translation_key": "block.minecraft.birch_button"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.light_gray_stained_glass"
-    }
+    "translation_key": "block.minecraft.light_gray_stained_glass"
   },
   "components": {
     "minecraft:block": {

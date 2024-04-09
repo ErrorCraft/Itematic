@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.dark_oak_wood"
-    }
+    "translation_key": "block.minecraft.dark_oak_wood"
   },
   "components": {
     "minecraft:block": {

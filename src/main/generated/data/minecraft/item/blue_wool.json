@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.blue_wool"
-    }
+    "translation_key": "block.minecraft.blue_wool"
   },
   "components": {
     "minecraft:block": {

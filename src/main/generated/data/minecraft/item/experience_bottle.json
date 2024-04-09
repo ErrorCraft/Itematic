@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.experience_bottle"
-    }
+    "translation_key": "item.minecraft.experience_bottle"
   },
   "components": {
     "minecraft:dispensable": {

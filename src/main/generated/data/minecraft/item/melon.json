@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.melon"
-    }
+    "translation_key": "block.minecraft.melon"
   },
   "components": {
     "minecraft:block": {

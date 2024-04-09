@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.amethyst_shard"
-    }
+    "translation_key": "item.minecraft.amethyst_shard"
   }
 }

@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.blaze_powder"
-    }
+    "translation_key": "item.minecraft.blaze_powder"
   }
 }

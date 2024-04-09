@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.bamboo_stairs"
-    }
+    "translation_key": "block.minecraft.bamboo_stairs"
   },
   "components": {
     "minecraft:block": {

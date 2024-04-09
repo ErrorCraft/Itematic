@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.chainmail_boots"
-    }
+    "translation_key": "item.minecraft.chainmail_boots"
   },
   "components": {
     "minecraft:armor": {

@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.diamond"
-    }
+    "translation_key": "item.minecraft.diamond"
   }
 }

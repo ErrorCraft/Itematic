@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.chorus_flower"
-    }
+    "translation_key": "block.minecraft.chorus_flower"
   },
   "components": {
     "minecraft:block": {

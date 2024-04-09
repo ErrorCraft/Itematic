@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.spruce_chest_boat"
-    }
+    "translation_key": "item.minecraft.spruce_chest_boat"
   },
   "components": {
     "minecraft:dispensable": {

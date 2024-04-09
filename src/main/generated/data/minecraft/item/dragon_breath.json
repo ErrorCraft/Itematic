@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.dragon_breath"
-    }
+    "translation_key": "item.minecraft.dragon_breath"
   },
   "components": {
     "minecraft:rarity": "uncommon",

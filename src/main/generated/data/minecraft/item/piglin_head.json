@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.piglin_head"
-    }
+    "translation_key": "block.minecraft.piglin_head"
   },
   "components": {
     "minecraft:block": {

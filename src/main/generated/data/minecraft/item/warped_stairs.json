@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.warped_stairs"
-    }
+    "translation_key": "block.minecraft.warped_stairs"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.wooden_sword"
-    }
+    "translation_key": "item.minecraft.wooden_sword"
   },
   "components": {
     "minecraft:damageable": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.filled_map"
-    }
+    "translation_key": "item.minecraft.filled_map"
   },
   "components": {
     "minecraft:map_holder": {},

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.birch_door"
-    }
+    "translation_key": "block.minecraft.birch_door"
   },
   "components": {
     "minecraft:block": {

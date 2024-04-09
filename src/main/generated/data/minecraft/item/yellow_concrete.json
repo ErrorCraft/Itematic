@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.yellow_concrete"
-    }
+    "translation_key": "block.minecraft.yellow_concrete"
   },
   "components": {
     "minecraft:block": {

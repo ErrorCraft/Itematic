@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.jungle_sapling"
-    }
+    "translation_key": "block.minecraft.jungle_sapling"
   },
   "components": {
     "minecraft:block": {

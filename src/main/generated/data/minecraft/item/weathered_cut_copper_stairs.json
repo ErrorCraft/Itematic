@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.weathered_cut_copper_stairs"
-    }
+    "translation_key": "block.minecraft.weathered_cut_copper_stairs"
   },
   "components": {
     "minecraft:block": {

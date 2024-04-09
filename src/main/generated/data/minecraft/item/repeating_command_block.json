@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.repeating_command_block"
-    }
+    "translation_key": "block.minecraft.repeating_command_block"
   },
   "components": {
     "minecraft:block": {

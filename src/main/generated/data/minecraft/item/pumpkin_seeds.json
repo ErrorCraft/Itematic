@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.pumpkin_seeds"
-    }
+    "translation_key": "item.minecraft.pumpkin_seeds"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.donkey_spawn_egg"
-    }
+    "translation_key": "item.minecraft.donkey_spawn_egg"
   },
   "components": {
     "minecraft:can_place_on_fluids": {

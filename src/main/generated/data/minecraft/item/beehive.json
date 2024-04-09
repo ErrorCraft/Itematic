@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.beehive"
-    }
+    "translation_key": "block.minecraft.beehive"
   },
   "components": {
     "minecraft:block": {

@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.magma_cream"
-    }
+    "translation_key": "item.minecraft.magma_cream"
   }
 }

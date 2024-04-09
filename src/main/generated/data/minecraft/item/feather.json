@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.feather"
-    }
+    "translation_key": "item.minecraft.feather"
   },
   "components": {
     "minecraft:firework_shape_modifier": {

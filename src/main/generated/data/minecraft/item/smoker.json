@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.smoker"
-    }
+    "translation_key": "block.minecraft.smoker"
   },
   "components": {
     "minecraft:block": {

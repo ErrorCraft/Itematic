@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.firework_star"
-    }
+    "translation_key": "item.minecraft.firework_star"
   },
   "components": {
     "minecraft:firework_explosion_holder": {},

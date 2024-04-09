@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.mossy_cobblestone_slab"
-    }
+    "translation_key": "block.minecraft.mossy_cobblestone_slab"
   },
   "components": {
     "minecraft:block": {

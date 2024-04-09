@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.farmland"
-    }
+    "translation_key": "block.minecraft.farmland"
   },
   "components": {
     "minecraft:block": {

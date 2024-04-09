@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.turtle_helmet"
-    }
+    "translation_key": "item.minecraft.turtle_helmet"
   },
   "components": {
     "minecraft:armor": {

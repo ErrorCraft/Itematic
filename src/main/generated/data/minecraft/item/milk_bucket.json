@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.milk_bucket"
-    }
+    "translation_key": "item.minecraft.milk_bucket"
   },
   "components": {
     "minecraft:consumable": {

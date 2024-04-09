@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.jungle_boat"
-    }
+    "translation_key": "item.minecraft.jungle_boat"
   },
   "components": {
     "minecraft:dispensable": {

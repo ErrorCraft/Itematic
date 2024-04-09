@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.cod_bucket"
-    }
+    "translation_key": "item.minecraft.cod_bucket"
   },
   "components": {
     "minecraft:bucket": {

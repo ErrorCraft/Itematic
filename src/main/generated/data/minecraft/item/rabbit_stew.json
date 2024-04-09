@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.rabbit_stew"
-    }
+    "translation_key": "item.minecraft.rabbit_stew"
   },
   "components": {
     "minecraft:consumable": {

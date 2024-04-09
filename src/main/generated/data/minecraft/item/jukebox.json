@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.jukebox"
-    }
+    "translation_key": "block.minecraft.jukebox"
   },
   "components": {
     "minecraft:block": {

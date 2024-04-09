@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.pumpkin_pie"
-    }
+    "translation_key": "item.minecraft.pumpkin_pie"
   },
   "components": {
     "minecraft:compostable": {

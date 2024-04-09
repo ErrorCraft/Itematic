@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.nether_sprouts"
-    }
+    "translation_key": "block.minecraft.nether_sprouts"
   },
   "components": {
     "minecraft:block": {

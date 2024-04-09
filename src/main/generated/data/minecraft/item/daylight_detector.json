@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.daylight_detector"
-    }
+    "translation_key": "block.minecraft.daylight_detector"
   },
   "components": {
     "minecraft:block": {

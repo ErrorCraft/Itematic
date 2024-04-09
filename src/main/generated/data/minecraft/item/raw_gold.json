@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.raw_gold"
-    }
+    "translation_key": "item.minecraft.raw_gold"
   }
 }

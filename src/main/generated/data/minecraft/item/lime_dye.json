@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.lime_dye"
-    }
+    "translation_key": "item.minecraft.lime_dye"
   },
   "components": {
     "minecraft:dye": "lime"

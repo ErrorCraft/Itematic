@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.smithing_table"
-    }
+    "translation_key": "block.minecraft.smithing_table"
   },
   "components": {
     "minecraft:block": {

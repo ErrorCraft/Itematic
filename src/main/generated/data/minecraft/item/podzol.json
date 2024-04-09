@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.podzol"
-    }
+    "translation_key": "block.minecraft.podzol"
   },
   "components": {
     "minecraft:block": {

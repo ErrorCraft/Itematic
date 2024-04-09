@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.mangrove_sign"
-    }
+    "translation_key": "block.minecraft.mangrove_sign"
   },
   "components": {
     "minecraft:block": {

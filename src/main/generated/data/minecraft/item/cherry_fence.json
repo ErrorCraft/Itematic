@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.cherry_fence"
-    }
+    "translation_key": "block.minecraft.cherry_fence"
   },
   "components": {
     "minecraft:block": {

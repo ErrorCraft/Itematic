@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.cooked_chicken"
-    }
+    "translation_key": "item.minecraft.cooked_chicken"
   },
   "components": {
     "minecraft:consumable": {},

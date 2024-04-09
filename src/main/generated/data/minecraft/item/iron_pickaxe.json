@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.iron_pickaxe"
-    }
+    "translation_key": "item.minecraft.iron_pickaxe"
   },
   "components": {
     "minecraft:damageable": {

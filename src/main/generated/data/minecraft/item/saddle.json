@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.saddle"
-    }
+    "translation_key": "item.minecraft.saddle"
   },
   "components": {
     "minecraft:dispensable": {

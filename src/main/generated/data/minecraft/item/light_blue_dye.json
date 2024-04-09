@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.light_blue_dye"
-    }
+    "translation_key": "item.minecraft.light_blue_dye"
   },
   "components": {
     "minecraft:dye": "light_blue"

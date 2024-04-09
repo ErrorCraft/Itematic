@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.birch_trapdoor"
-    }
+    "translation_key": "block.minecraft.birch_trapdoor"
   },
   "components": {
     "minecraft:block": {

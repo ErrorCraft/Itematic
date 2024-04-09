@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.warped_fence"
-    }
+    "translation_key": "block.minecraft.warped_fence"
   },
   "components": {
     "minecraft:block": {

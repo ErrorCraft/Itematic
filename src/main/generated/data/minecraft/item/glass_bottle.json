@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.glass_bottle"
-    }
+    "translation_key": "item.minecraft.glass_bottle"
   },
   "components": {
     "minecraft:dispensable": {

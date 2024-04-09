@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.enchanting_table"
-    }
+    "translation_key": "block.minecraft.enchanting_table"
   },
   "components": {
     "minecraft:block": {

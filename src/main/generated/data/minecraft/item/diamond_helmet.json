@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.diamond_helmet"
-    }
+    "translation_key": "item.minecraft.diamond_helmet"
   },
   "components": {
     "minecraft:armor": {

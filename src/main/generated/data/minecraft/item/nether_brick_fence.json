@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.nether_brick_fence"
-    }
+    "translation_key": "block.minecraft.nether_brick_fence"
   },
   "components": {
     "minecraft:block": {

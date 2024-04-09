@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.blaze_rod"
-    }
+    "translation_key": "item.minecraft.blaze_rod"
   },
   "components": {
     "minecraft:fuel": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.armor_stand"
-    }
+    "translation_key": "item.minecraft.armor_stand"
   },
   "components": {
     "minecraft:dispensable": {

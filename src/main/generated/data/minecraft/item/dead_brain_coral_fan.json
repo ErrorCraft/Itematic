@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.dead_brain_coral_fan"
-    }
+    "translation_key": "block.minecraft.dead_brain_coral_fan"
   },
   "components": {
     "minecraft:block": {

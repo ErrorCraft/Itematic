@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.redstone_lamp"
-    }
+    "translation_key": "block.minecraft.redstone_lamp"
   },
   "components": {
     "minecraft:block": {

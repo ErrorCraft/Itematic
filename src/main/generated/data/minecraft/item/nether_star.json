@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.nether_star"
-    }
+    "translation_key": "item.minecraft.nether_star"
   },
   "components": {
     "minecraft:immune_to_damage": {

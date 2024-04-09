@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.blast_furnace"
-    }
+    "translation_key": "block.minecraft.blast_furnace"
   },
   "components": {
     "minecraft:block": {

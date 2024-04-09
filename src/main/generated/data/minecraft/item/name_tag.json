@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.name_tag"
-    }
+    "translation_key": "item.minecraft.name_tag"
   },
   "events": [
     {

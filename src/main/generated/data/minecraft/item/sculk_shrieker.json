@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.sculk_shrieker"
-    }
+    "translation_key": "block.minecraft.sculk_shrieker"
   },
   "components": {
     "minecraft:block": {

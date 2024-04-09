@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.spyglass"
-    }
+    "translation_key": "item.minecraft.spyglass"
   },
   "components": {
     "minecraft:max_stack_size": 1,

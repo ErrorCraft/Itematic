@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.acacia_fence"
-    }
+    "translation_key": "block.minecraft.acacia_fence"
   },
   "components": {
     "minecraft:block": {

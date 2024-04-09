@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.bell"
-    }
+    "translation_key": "block.minecraft.bell"
   },
   "components": {
     "minecraft:block": {

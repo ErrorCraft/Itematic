@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.salmon_bucket"
-    }
+    "translation_key": "item.minecraft.salmon_bucket"
   },
   "components": {
     "minecraft:bucket": {

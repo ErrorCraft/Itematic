@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.bamboo_sign"
-    }
+    "translation_key": "block.minecraft.bamboo_sign"
   },
   "components": {
     "minecraft:block": {

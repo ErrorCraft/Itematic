@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.birch_sign"
-    }
+    "translation_key": "block.minecraft.birch_sign"
   },
   "components": {
     "minecraft:block": {

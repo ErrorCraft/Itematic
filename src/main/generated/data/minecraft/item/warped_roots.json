@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.warped_roots"
-    }
+    "translation_key": "block.minecraft.warped_roots"
   },
   "components": {
     "minecraft:block": {

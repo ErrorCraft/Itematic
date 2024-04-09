@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.brain_coral_block"
-    }
+    "translation_key": "block.minecraft.brain_coral_block"
   },
   "components": {
     "minecraft:block": {

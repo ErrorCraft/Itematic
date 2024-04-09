@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.netherite_axe"
-    }
+    "translation_key": "item.minecraft.netherite_axe"
   },
   "components": {
     "minecraft:damageable": {

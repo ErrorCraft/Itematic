@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.golden_pickaxe"
-    }
+    "translation_key": "item.minecraft.golden_pickaxe"
   },
   "components": {
     "minecraft:damageable": {

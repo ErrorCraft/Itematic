@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.bundle"
-    }
+    "translation_key": "item.minecraft.bundle"
   },
   "components": {
     "minecraft:item_holder": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.sugar_cane"
-    }
+    "translation_key": "block.minecraft.sugar_cane"
   },
   "components": {
     "minecraft:block": {

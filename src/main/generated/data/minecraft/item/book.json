@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.book"
-    }
+    "translation_key": "item.minecraft.book"
   },
   "components": {
     "minecraft:enchantable": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.glow_berries"
-    }
+    "translation_key": "item.minecraft.glow_berries"
   },
   "components": {
     "minecraft:block": {

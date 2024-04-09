@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.music_disc_otherside"
-    }
+    "translation_key": "item.minecraft.music_disc_otherside"
   },
   "components": {
     "minecraft:max_stack_size": 1,

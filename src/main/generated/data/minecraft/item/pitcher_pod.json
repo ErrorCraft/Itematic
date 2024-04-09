@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.pitcher_pod"
-    }
+    "translation_key": "item.minecraft.pitcher_pod"
   },
   "components": {
     "minecraft:block": {

@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.flint"
-    }
+    "translation_key": "item.minecraft.flint"
   }
 }

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.gold_nugget"
-    }
+    "translation_key": "item.minecraft.gold_nugget"
   },
   "components": {
     "minecraft:firework_shape_modifier": {

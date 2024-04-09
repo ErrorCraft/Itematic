@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.prismarine_slab"
-    }
+    "translation_key": "block.minecraft.prismarine_slab"
   },
   "components": {
     "minecraft:block": {

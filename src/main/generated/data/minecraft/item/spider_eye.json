@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.spider_eye"
-    }
+    "translation_key": "item.minecraft.spider_eye"
   },
   "components": {
     "minecraft:consumable": {},

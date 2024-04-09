@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.phantom_membrane"
-    }
+    "translation_key": "item.minecraft.phantom_membrane"
   }
 }

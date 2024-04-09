@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.netherite_block"
-    }
+    "translation_key": "block.minecraft.netherite_block"
   },
   "components": {
     "minecraft:block": {

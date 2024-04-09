@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.budding_amethyst"
-    }
+    "translation_key": "block.minecraft.budding_amethyst"
   },
   "components": {
     "minecraft:block": {

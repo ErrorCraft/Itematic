@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.shulker_shell"
-    }
+    "translation_key": "item.minecraft.shulker_shell"
   }
 }

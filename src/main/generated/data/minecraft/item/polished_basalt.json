@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.polished_basalt"
-    }
+    "translation_key": "block.minecraft.polished_basalt"
   },
   "components": {
     "minecraft:block": {

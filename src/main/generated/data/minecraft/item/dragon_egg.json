@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.dragon_egg"
-    }
+    "translation_key": "block.minecraft.dragon_egg"
   },
   "components": {
     "minecraft:block": {

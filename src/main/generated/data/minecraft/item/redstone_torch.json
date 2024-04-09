@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.redstone_torch"
-    }
+    "translation_key": "block.minecraft.redstone_torch"
   },
   "components": {
     "minecraft:block": {

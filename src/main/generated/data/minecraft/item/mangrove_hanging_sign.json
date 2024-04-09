@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.mangrove_hanging_sign"
-    }
+    "translation_key": "block.minecraft.mangrove_hanging_sign"
   },
   "components": {
     "minecraft:block": {

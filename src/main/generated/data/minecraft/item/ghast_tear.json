@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.ghast_tear"
-    }
+    "translation_key": "item.minecraft.ghast_tear"
   }
 }

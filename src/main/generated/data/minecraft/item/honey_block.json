@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.honey_block"
-    }
+    "translation_key": "block.minecraft.honey_block"
   },
   "components": {
     "minecraft:block": {

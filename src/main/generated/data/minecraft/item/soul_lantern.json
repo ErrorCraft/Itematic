@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.soul_lantern"
-    }
+    "translation_key": "block.minecraft.soul_lantern"
   },
   "components": {
     "minecraft:block": {

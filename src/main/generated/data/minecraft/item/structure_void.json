@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.structure_void"
-    }
+    "translation_key": "block.minecraft.structure_void"
   },
   "components": {
     "minecraft:block": {

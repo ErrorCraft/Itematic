@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.warped_fungus"
-    }
+    "translation_key": "block.minecraft.warped_fungus"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.orange_concrete"
-    }
+    "translation_key": "block.minecraft.orange_concrete"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.splash_potion"
-    }
+    "translation_key": "item.minecraft.splash_potion"
   },
   "components": {
     "minecraft:dispensable": {

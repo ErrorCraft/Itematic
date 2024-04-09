@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.dune_armor_trim_smithing_template"
-    }
+    "translation_key": "item.minecraft.dune_armor_trim_smithing_template"
   },
   "components": {
     "minecraft:smithing_template": {

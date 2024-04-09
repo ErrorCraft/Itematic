@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.enchanted_book"
-    }
+    "translation_key": "item.minecraft.enchanted_book"
   },
   "components": {
     "minecraft:enchantment_holder": {

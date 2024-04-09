@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.suspicious_stew"
-    }
+    "translation_key": "item.minecraft.suspicious_stew"
   },
   "components": {
     "minecraft:consumable": {

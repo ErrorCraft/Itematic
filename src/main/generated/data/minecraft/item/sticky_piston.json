@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.sticky_piston"
-    }
+    "translation_key": "block.minecraft.sticky_piston"
   },
   "components": {
     "minecraft:block": {

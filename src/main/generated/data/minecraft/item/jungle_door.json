@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.jungle_door"
-    }
+    "translation_key": "block.minecraft.jungle_door"
   },
   "components": {
     "minecraft:block": {

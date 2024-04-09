@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.bone_meal"
-    }
+    "translation_key": "item.minecraft.bone_meal"
   },
   "components": {
     "minecraft:dispensable": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.polished_deepslate_stairs"
-    }
+    "translation_key": "block.minecraft.polished_deepslate_stairs"
   },
   "components": {
     "minecraft:block": {

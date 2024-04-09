@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.charcoal"
-    }
+    "translation_key": "item.minecraft.charcoal"
   },
   "components": {
     "minecraft:fuel": {

@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.rabbit_hide"
-    }
+    "translation_key": "item.minecraft.rabbit_hide"
   }
 }

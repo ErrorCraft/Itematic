@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.exposed_cut_copper"
-    }
+    "translation_key": "block.minecraft.exposed_cut_copper"
   },
   "components": {
     "minecraft:block": {

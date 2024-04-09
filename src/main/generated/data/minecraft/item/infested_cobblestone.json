@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.infested_cobblestone"
-    }
+    "translation_key": "block.minecraft.infested_cobblestone"
   },
   "components": {
     "minecraft:block": {

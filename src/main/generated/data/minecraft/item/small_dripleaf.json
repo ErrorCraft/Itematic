@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.small_dripleaf"
-    }
+    "translation_key": "block.minecraft.small_dripleaf"
   },
   "components": {
     "minecraft:block": {

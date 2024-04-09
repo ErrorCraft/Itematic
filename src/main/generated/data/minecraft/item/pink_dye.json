@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.pink_dye"
-    }
+    "translation_key": "item.minecraft.pink_dye"
   },
   "components": {
     "minecraft:dye": "pink"

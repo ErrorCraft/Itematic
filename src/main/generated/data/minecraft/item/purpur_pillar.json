@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.purpur_pillar"
-    }
+    "translation_key": "block.minecraft.purpur_pillar"
   },
   "components": {
     "minecraft:block": {

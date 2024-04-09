@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.honeycomb"
-    }
+    "translation_key": "item.minecraft.honeycomb"
   },
   "components": {
     "minecraft:dispensable": {

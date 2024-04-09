@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.end_crystal"
-    }
+    "translation_key": "item.minecraft.end_crystal"
   },
   "components": {
     "minecraft:entity": {

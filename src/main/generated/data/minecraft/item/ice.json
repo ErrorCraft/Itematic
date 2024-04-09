@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.ice"
-    }
+    "translation_key": "block.minecraft.ice"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.activator_rail"
-    }
+    "translation_key": "block.minecraft.activator_rail"
   },
   "components": {
     "minecraft:block": {

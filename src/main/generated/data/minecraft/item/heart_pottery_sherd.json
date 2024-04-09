@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.heart_pottery_sherd"
-    }
+    "translation_key": "item.minecraft.heart_pottery_sherd"
   },
   "components": {
     "minecraft:decorated_pot_pattern": {

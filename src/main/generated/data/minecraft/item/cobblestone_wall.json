@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.cobblestone_wall"
-    }
+    "translation_key": "block.minecraft.cobblestone_wall"
   },
   "components": {
     "minecraft:block": {

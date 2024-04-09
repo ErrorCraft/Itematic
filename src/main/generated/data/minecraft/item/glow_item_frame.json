@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.glow_item_frame"
-    }
+    "translation_key": "item.minecraft.glow_item_frame"
   },
   "components": {
     "minecraft:entity": {

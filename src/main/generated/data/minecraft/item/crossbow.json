@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.crossbow"
-    }
+    "translation_key": "item.minecraft.crossbow"
   },
   "components": {
     "minecraft:damageable": {

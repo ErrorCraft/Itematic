@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.suspicious_sand"
-    }
+    "translation_key": "block.minecraft.suspicious_sand"
   },
   "components": {
     "minecraft:block": {

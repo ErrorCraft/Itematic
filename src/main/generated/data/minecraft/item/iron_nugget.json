@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.iron_nugget"
-    }
+    "translation_key": "item.minecraft.iron_nugget"
   }
 }

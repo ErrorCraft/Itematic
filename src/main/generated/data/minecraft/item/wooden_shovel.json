@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.wooden_shovel"
-    }
+    "translation_key": "item.minecraft.wooden_shovel"
   },
   "components": {
     "minecraft:damageable": {

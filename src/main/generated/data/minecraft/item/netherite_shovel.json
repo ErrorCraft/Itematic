@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.netherite_shovel"
-    }
+    "translation_key": "item.minecraft.netherite_shovel"
   },
   "components": {
     "minecraft:damageable": {

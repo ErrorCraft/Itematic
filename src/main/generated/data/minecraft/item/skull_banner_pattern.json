@@ -1,14 +1,12 @@
 {
   "base": {
-    "display": {
-      "tooltip": [
-        {
-          "color": "gray",
-          "translate": "item.minecraft.skull_banner_pattern.desc"
-        }
-      ],
-      "translation_key": "item.minecraft.skull_banner_pattern"
-    }
+    "tooltip": [
+      {
+        "color": "gray",
+        "translate": "item.minecraft.skull_banner_pattern.desc"
+      }
+    ],
+    "translation_key": "item.minecraft.skull_banner_pattern"
   },
   "components": {
     "minecraft:banner_pattern": {

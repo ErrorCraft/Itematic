@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.dead_fire_coral"
-    }
+    "translation_key": "block.minecraft.dead_fire_coral"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.recovery_compass"
-    }
+    "translation_key": "item.minecraft.recovery_compass"
   },
   "components": {
     "minecraft:pointable": {

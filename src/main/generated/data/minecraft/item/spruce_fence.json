@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.spruce_fence"
-    }
+    "translation_key": "block.minecraft.spruce_fence"
   },
   "components": {
     "minecraft:block": {

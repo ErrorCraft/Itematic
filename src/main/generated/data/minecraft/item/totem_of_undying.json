@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.totem_of_undying"
-    }
+    "translation_key": "item.minecraft.totem_of_undying"
   },
   "components": {
     "minecraft:life_saving": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.lily_of_the_valley"
-    }
+    "translation_key": "block.minecraft.lily_of_the_valley"
   },
   "components": {
     "minecraft:block": {

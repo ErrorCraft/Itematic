@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.ender_eye"
-    }
+    "translation_key": "item.minecraft.ender_eye"
   },
   "components": {
     "minecraft:prevent_use_when_used_on_target": {

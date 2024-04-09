@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.heart_of_the_sea"
-    }
+    "translation_key": "item.minecraft.heart_of_the_sea"
   },
   "components": {
     "minecraft:rarity": "uncommon"

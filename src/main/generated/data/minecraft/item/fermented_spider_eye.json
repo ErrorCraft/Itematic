@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.fermented_spider_eye"
-    }
+    "translation_key": "item.minecraft.fermented_spider_eye"
   }
 }

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.nether_wart"
-    }
+    "translation_key": "item.minecraft.nether_wart"
   },
   "components": {
     "minecraft:block": {

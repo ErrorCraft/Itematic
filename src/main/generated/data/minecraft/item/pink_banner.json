@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.pink_banner"
-    }
+    "translation_key": "block.minecraft.pink_banner"
   },
   "components": {
     "minecraft:banner_pattern_holder": {

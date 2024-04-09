@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.ender_chest"
-    }
+    "translation_key": "block.minecraft.ender_chest"
   },
   "components": {
     "minecraft:block": {

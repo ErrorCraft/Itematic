@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.acacia_stairs"
-    }
+    "translation_key": "block.minecraft.acacia_stairs"
   },
   "components": {
     "minecraft:block": {

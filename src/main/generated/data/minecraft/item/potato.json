@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.potato"
-    }
+    "translation_key": "item.minecraft.potato"
   },
   "components": {
     "minecraft:block": {

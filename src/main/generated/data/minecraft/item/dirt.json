@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.dirt"
-    }
+    "translation_key": "block.minecraft.dirt"
   },
   "components": {
     "minecraft:block": {

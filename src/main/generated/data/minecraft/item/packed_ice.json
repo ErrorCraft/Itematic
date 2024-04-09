@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.packed_ice"
-    }
+    "translation_key": "block.minecraft.packed_ice"
   },
   "components": {
     "minecraft:block": {

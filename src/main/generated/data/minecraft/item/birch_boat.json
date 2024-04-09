@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.birch_boat"
-    }
+    "translation_key": "item.minecraft.birch_boat"
   },
   "components": {
     "minecraft:dispensable": {

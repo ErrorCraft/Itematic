@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.mangrove_door"
-    }
+    "translation_key": "block.minecraft.mangrove_door"
   },
   "components": {
     "minecraft:block": {

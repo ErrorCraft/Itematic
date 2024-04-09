@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.prismarine_crystals"
-    }
+    "translation_key": "item.minecraft.prismarine_crystals"
   }
 }

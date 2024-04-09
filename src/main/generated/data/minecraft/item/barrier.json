@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.barrier"
-    }
+    "translation_key": "block.minecraft.barrier"
   },
   "components": {
     "minecraft:block": {

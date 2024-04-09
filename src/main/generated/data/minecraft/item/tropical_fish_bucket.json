@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.tropical_fish_bucket"
-    }
+    "translation_key": "item.minecraft.tropical_fish_bucket"
   },
   "components": {
     "minecraft:bucket": {

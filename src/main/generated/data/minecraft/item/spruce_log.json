@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.spruce_log"
-    }
+    "translation_key": "block.minecraft.spruce_log"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.lava_bucket"
-    }
+    "translation_key": "item.minecraft.lava_bucket"
   },
   "components": {
     "minecraft:bucket": {

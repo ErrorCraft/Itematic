@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.cocoa_beans"
-    }
+    "translation_key": "item.minecraft.cocoa_beans"
   },
   "components": {
     "minecraft:block": {

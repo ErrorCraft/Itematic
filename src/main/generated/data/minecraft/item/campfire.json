@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.campfire"
-    }
+    "translation_key": "block.minecraft.campfire"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.magenta_bed"
-    }
+    "translation_key": "block.minecraft.magenta_bed"
   },
   "components": {
     "minecraft:block": {

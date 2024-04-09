@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.tall_grass"
-    }
+    "translation_key": "block.minecraft.tall_grass"
   },
   "components": {
     "minecraft:block": {

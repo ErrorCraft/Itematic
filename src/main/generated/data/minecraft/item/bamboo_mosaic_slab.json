@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.bamboo_mosaic_slab"
-    }
+    "translation_key": "block.minecraft.bamboo_mosaic_slab"
   },
   "components": {
     "minecraft:block": {

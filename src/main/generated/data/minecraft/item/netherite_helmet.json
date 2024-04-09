@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.netherite_helmet"
-    }
+    "translation_key": "item.minecraft.netherite_helmet"
   },
   "components": {
     "minecraft:armor": {

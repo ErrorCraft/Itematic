@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.black_terracotta"
-    }
+    "translation_key": "block.minecraft.black_terracotta"
   },
   "components": {
     "minecraft:block": {

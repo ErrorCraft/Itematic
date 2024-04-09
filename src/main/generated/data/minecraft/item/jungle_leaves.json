@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.jungle_leaves"
-    }
+    "translation_key": "block.minecraft.jungle_leaves"
   },
   "components": {
     "minecraft:block": {

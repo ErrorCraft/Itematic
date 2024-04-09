@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.salmon"
-    }
+    "translation_key": "item.minecraft.salmon"
   },
   "components": {
     "minecraft:consumable": {},

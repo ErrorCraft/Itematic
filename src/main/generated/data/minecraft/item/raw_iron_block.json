@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.raw_iron_block"
-    }
+    "translation_key": "block.minecraft.raw_iron_block"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.map"
-    }
+    "translation_key": "item.minecraft.map"
   },
   "components": {
     "minecraft:mappable": {

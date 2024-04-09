@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.stripped_mangrove_log"
-    }
+    "translation_key": "block.minecraft.stripped_mangrove_log"
   },
   "components": {
     "minecraft:block": {

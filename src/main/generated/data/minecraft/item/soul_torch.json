@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.soul_torch"
-    }
+    "translation_key": "block.minecraft.soul_torch"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.light"
-    }
+    "translation_key": "block.minecraft.light"
   },
   "components": {
     "minecraft:block": {

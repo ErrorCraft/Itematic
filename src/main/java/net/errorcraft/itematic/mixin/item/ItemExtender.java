@@ -336,8 +336,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        this.base.display()
-            .tooltip()
+        this.base.tooltip()
             .ifPresent(tooltip::addAll);
         for (ItemComponent<?> component : this.itemComponents) {
             component.appendTooltip(stack, context, tooltip, type);
@@ -477,7 +476,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public String getTranslationKey() {
-        return this.base.display().translationKey();
+        return this.base.translationKey();
     }
 
     /**

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.gold_block"
-    }
+    "translation_key": "block.minecraft.gold_block"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.red_nether_brick_slab"
-    }
+    "translation_key": "block.minecraft.red_nether_brick_slab"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.warped_nylium"
-    }
+    "translation_key": "block.minecraft.warped_nylium"
   },
   "components": {
     "minecraft:block": {

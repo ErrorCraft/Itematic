@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.warped_slab"
-    }
+    "translation_key": "block.minecraft.warped_slab"
   },
   "components": {
     "minecraft:block": {

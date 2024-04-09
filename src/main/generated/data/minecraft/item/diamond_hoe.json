@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.diamond_hoe"
-    }
+    "translation_key": "item.minecraft.diamond_hoe"
   },
   "components": {
     "minecraft:damageable": {

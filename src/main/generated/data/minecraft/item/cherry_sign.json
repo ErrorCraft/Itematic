@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.cherry_sign"
-    }
+    "translation_key": "block.minecraft.cherry_sign"
   },
   "components": {
     "minecraft:block": {

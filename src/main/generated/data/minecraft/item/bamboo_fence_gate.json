@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.bamboo_fence_gate"
-    }
+    "translation_key": "block.minecraft.bamboo_fence_gate"
   },
   "components": {
     "minecraft:block": {

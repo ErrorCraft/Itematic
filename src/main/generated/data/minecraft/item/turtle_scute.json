@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.turtle_scute"
-    }
+    "translation_key": "item.minecraft.turtle_scute"
   }
 }

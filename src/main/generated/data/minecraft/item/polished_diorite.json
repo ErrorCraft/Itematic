@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.polished_diorite"
-    }
+    "translation_key": "block.minecraft.polished_diorite"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.cyan_carpet"
-    }
+    "translation_key": "block.minecraft.cyan_carpet"
   },
   "components": {
     "minecraft:block": {

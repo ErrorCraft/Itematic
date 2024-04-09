@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.glowstone_dust"
-    }
+    "translation_key": "item.minecraft.glowstone_dust"
   }
 }

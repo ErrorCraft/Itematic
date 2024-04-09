@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.pitcher_plant"
-    }
+    "translation_key": "block.minecraft.pitcher_plant"
   },
   "components": {
     "minecraft:block": {

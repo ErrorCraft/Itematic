@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.creeper_head"
-    }
+    "translation_key": "block.minecraft.creeper_head"
   },
   "components": {
     "minecraft:block": {

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.sand"
-    }
+    "translation_key": "block.minecraft.sand"
   },
   "components": {
     "minecraft:block": {

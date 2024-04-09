@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.frogspawn"
-    }
+    "translation_key": "block.minecraft.frogspawn"
   },
   "components": {
     "minecraft:block": {

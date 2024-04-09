@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.netherite_pickaxe"
-    }
+    "translation_key": "item.minecraft.netherite_pickaxe"
   },
   "components": {
     "minecraft:damageable": {

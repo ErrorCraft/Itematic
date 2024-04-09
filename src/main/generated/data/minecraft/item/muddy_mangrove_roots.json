@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.muddy_mangrove_roots"
-    }
+    "translation_key": "block.minecraft.muddy_mangrove_roots"
   },
   "components": {
     "minecraft:block": {

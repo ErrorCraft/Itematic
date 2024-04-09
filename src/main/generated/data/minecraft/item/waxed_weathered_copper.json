@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.waxed_weathered_copper"
-    }
+    "translation_key": "block.minecraft.waxed_weathered_copper"
   },
   "components": {
     "minecraft:block": {

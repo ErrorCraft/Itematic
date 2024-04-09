@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.respawn_anchor"
-    }
+    "translation_key": "block.minecraft.respawn_anchor"
   },
   "components": {
     "minecraft:block": {

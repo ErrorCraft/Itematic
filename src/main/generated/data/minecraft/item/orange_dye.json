@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.orange_dye"
-    }
+    "translation_key": "item.minecraft.orange_dye"
   },
   "components": {
     "minecraft:dye": "orange"

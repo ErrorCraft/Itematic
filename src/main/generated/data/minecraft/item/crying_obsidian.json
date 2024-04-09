@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.crying_obsidian"
-    }
+    "translation_key": "block.minecraft.crying_obsidian"
   },
   "components": {
     "minecraft:block": {

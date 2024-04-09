@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.shroomlight"
-    }
+    "translation_key": "block.minecraft.shroomlight"
   },
   "components": {
     "minecraft:block": {

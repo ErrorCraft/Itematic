@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.jungle_planks"
-    }
+    "translation_key": "block.minecraft.jungle_planks"
   },
   "components": {
     "minecraft:block": {

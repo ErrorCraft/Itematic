@@ -1,7 +1,5 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.air"
-    }
+    "translation_key": "block.minecraft.air"
   }
 }

@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.nether_quartz_ore"
-    }
+    "translation_key": "block.minecraft.nether_quartz_ore"
   },
   "components": {
     "minecraft:block": {

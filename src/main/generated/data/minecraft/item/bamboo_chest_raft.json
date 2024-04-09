@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "item.minecraft.bamboo_chest_raft"
-    }
+    "translation_key": "item.minecraft.bamboo_chest_raft"
   },
   "components": {
     "minecraft:dispensable": {

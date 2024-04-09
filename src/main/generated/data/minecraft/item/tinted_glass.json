@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.tinted_glass"
-    }
+    "translation_key": "block.minecraft.tinted_glass"
   },
   "components": {
     "minecraft:block": {

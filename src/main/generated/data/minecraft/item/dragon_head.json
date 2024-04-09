@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.dragon_head"
-    }
+    "translation_key": "block.minecraft.dragon_head"
   },
   "components": {
     "minecraft:block": {

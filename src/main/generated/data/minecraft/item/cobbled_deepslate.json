@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.cobbled_deepslate"
-    }
+    "translation_key": "block.minecraft.cobbled_deepslate"
   },
   "components": {
     "minecraft:block": {

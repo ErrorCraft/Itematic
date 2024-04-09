@@ -1,8 +1,6 @@
 {
   "base": {
-    "display": {
-      "translation_key": "block.minecraft.sculk_sensor"
-    }
+    "translation_key": "block.minecraft.sculk_sensor"
   },
   "components": {
     "minecraft:block": {
