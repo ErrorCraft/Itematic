@@ -6,15 +6,6 @@
     "minecraft:block": {
       "block": "minecraft:lily_pad"
     },
-    "minecraft:can_place_on_fluids": {
-      "allow_original_placement": false,
-      "handler": "source_only",
-      "offset": [
-        0,
-        1,
-        0
-      ]
-    },
     "minecraft:compostable": {
       "level_increase_chance": 0.65
     },
@@ -23,6 +14,7 @@
         "type": "minecraft:constant",
         "color": -9321636
       }
-    }
+    },
+    "minecraft:useable_on_fluid": {}
   }
 }

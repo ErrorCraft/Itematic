@@ -6,14 +6,6 @@
     "minecraft:block": {
       "block": "minecraft:frogspawn"
     },
-    "minecraft:can_place_on_fluids": {
-      "allow_original_placement": false,
-      "handler": "source_only",
-      "offset": [
-        0,
-        1,
-        0
-      ]
-    }
+    "minecraft:useable_on_fluid": {}
   }
 }

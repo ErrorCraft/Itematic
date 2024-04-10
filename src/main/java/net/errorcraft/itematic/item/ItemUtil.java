@@ -79,7 +79,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.*;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.RaycastContext;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.event.GameEvent;
@@ -2888,7 +2887,7 @@ public class ItemUtil {
                 ItemBase.Builder.forBlock(ItemKeys.FROGSPAWN).build(),
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FROGSPAWN)))
-                    .with(CanPlaceOnFluidsItemComponent.of(RaycastContext.FluidHandling.SOURCE_ONLY, false, Direction.UP.getVector()))
+                    .with(UseableOnFluidItemComponent.INSTANCE)
                     .build()
             ));
         }
@@ -5358,7 +5357,7 @@ public class ItemUtil {
                 ItemBase.Builder.forBlock(ItemKeys.LILY_PAD).build(),
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_PAD)))
-                    .with(CanPlaceOnFluidsItemComponent.of(RaycastContext.FluidHandling.SOURCE_ONLY, false, Direction.UP.getVector()))
+                    .with(UseableOnFluidItemComponent.INSTANCE)
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(TintedItemComponent.of(new ConstantItemColor(0xff71c35c)))
                     .build()

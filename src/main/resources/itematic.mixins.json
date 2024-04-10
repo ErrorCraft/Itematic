@@ -59,6 +59,7 @@
     "block.TorchflowerBlockExtender",
     "block.TripwireBlockExtender",
     "block.TwistingVinesBlockExtender",
+    "block.UseableOnFluidBlockExtender",
     "block.WallHangingSignBlockExtender",
     "block.WaterloggableExtender",
     "block.WeepingVinesBlockExtender",
@@ -259,8 +260,8 @@
     "item.ItemGroupExtender$StackVisibilityExtender",
     "item.ItemGroupsAccessor",
     "item.ItemGroupsExtender",
+    "item.ItemPlacementContextExtender",
     "item.ItemStackExtender",
-    "item.ItemUsageContextExtender",
     "item.ItemUsageExtender",
     "item.KnowledgeBookItemExtender",
     "item.MilkBucketItemAccessor",
@@ -364,7 +365,6 @@
     "village.VillagerProfessionExtender",
     "village.raid.RaidExtender",
     "world.ChunkRegionExtender",
-    "world.RaycastContextExtender$FluidHandlingExtender",
     "world.WorldExtender"
   ],
   "injectors": {

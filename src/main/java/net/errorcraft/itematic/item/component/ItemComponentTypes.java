@@ -27,7 +27,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<DyeItemComponent> DYE = register("dye", new ItemComponentType<>(DyeItemComponent.CODEC));
     public static final ItemComponentType<DyeableItemComponent> DYEABLE = register("dyeable", new ItemComponentType<>(DyeableItemComponent.CODEC));
     public static final ItemComponentType<TintedItemComponent> TINTED = register("tinted", new ItemComponentType<>(TintedItemComponent.CODEC));
-    public static final ItemComponentType<CanPlaceOnFluidsItemComponent> CAN_PLACE_ON_FLUIDS = register("can_place_on_fluids", new ItemComponentType<>(CanPlaceOnFluidsItemComponent.CODEC));
+    public static final ItemComponentType<UseableOnFluidItemComponent> USEABLE_ON_FLUID = register("useable_on_fluid", new ItemComponentType<>(UseableOnFluidItemComponent.CODEC));
     public static final ItemComponentType<SpawnEggItemComponent> SPAWN_EGG = register("spawn_egg", new ItemComponentType<>(SpawnEggItemComponent.CODEC));
     public static final ItemComponentType<DispensableItemComponent> DISPENSABLE = register("dispensable", new ItemComponentType<>(DispensableItemComponent.CODEC));
     public static final ItemComponentType<ShooterItemComponent> SHOOTER = register("shooter", new ItemComponentType<>(ShooterItemComponent.CODEC));

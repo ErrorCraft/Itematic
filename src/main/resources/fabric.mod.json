@@ -68,9 +68,6 @@
       "net/minecraft/class_1799": [
         "net/errorcraft/itematic/access/item/ItemStackAccess"
       ],
-      "net/minecraft/class_1838": [
-        "net/errorcraft/itematic/access/item/ItemUsageContextAccess"
-      ],
       "net/minecraft/class_1839": [
         "net/minecraft/util/StringIdentifiable"
       ],
@@ -121,9 +118,6 @@
       ],
       "net/minecraft/class_3852": [
         "net/errorcraft/itematic/access/village/VillagerProfessionAccess"
-      ],
-      "net/minecraft/class_3959\u0024class_242": [
-        "net/minecraft/util/StringIdentifiable"
       ],
       "net/minecraft/class_4059\u0024class_9076": [
         "net/errorcraft/itematic/access/item/AnimalArmorItemTypeAccess"

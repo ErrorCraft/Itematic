@@ -3,10 +3,6 @@
     "translation_key": "item.minecraft.strider_spawn_egg"
   },
   "components": {
-    "minecraft:can_place_on_fluids": {
-      "allow_original_placement": true,
-      "handler": "source_only"
-    },
     "minecraft:dispensable": {
       "behavior": "minecraft:spawn_entity_from_item"
     },
@@ -25,6 +21,7 @@
           5065037
         ]
       }
-    }
+    },
+    "minecraft:useable_on_fluid": {}
   }
 }

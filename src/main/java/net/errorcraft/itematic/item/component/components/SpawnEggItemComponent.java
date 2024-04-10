@@ -19,7 +19,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
 
 import java.util.Optional;
 
@@ -66,7 +65,7 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
         return new ItemComponent<?>[] {
             EntityItemComponent.of(SimpleEntityInitializer.of(entity.value()), true),
             INSTANCE,
-            CanPlaceOnFluidsItemComponent.of(RaycastContext.FluidHandling.SOURCE_ONLY, true),
+            UseableOnFluidItemComponent.INSTANCE,
             TintedItemComponent.of(IndexItemColor.of(primaryColor, secondaryColor)),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
         };

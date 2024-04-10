@@ -110,10 +110,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public ActionResult useOnBlock(ItemUsageContext context) {
-        if (!this.allowsPlacement(context)) {
-            return ActionResult.PASS;
-        }
-
         ItemStack stack = context.getStack();
         StackReference stackReference = StackReferenceUtil.of(stack);
         ActionResult result = ActionResult.PASS;
@@ -614,13 +610,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .map(RecipeRemainderItemComponent::item)
             .map(ItemStack::new)
             .orElse(ItemStack.EMPTY);
-    }
-
-    @Unique
-    private boolean allowsPlacement(ItemUsageContext context) {
-        return !context.itematic$ignoresPlacementComponent() && this.itematic$getComponent(ItemComponentTypes.CAN_PLACE_ON_FLUIDS)
-            .map(CanPlaceOnFluidsItemComponent::allowOriginalPlacement)
-            .orElse(true);
     }
 
     @Unique
