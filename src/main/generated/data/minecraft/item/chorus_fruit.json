@@ -7,7 +7,7 @@
     "minecraft:food": {
       "always_edible": true,
       "nutrition": 4,
-      "saturation_modifier": 0.3
+      "saturation": 2.4
     },
     "minecraft:use_animation": {
       "animation": "eat"

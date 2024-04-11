@@ -39,7 +39,7 @@ public record FireworkExplosionHolderItemComponent() implements ItemComponent<Fi
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         FireworkExplosionComponent explosion = stack.get(DataComponentTypes.FIREWORK_EXPLOSION);
         if (explosion != null) {
-            explosion.appendTooltip(tooltip::add, type);
+            explosion.appendTooltip(context, tooltip::add, type);
         }
     }
 }

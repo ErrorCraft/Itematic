@@ -1,6 +1,9 @@
 package net.errorcraft.itematic.item.component;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import net.errorcraft.itematic.item.component.components.MaxStackSizeItemComponent;
+import net.minecraft.item.Item;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -9,7 +12,8 @@ import java.util.stream.Collectors;
 
 public class ItemComponentSet implements Iterable<ItemComponent<?>> {
     public static final ItemComponentSet EMPTY = new ItemComponentSet();
-    public static final Codec<ItemComponentSet> CODEC = ItemComponent.SET_CODEC.xmap(ItemComponentSet::new, ItemComponentSet::values);
+    public static final Codec<ItemComponentSet> CODEC = ItemComponent.SET_CODEC.xmap(ItemComponentSet::new, ItemComponentSet::values)
+        .validate(ItemComponentSet::validate);
     private final HashMap<ItemComponentType<?>, ItemComponent<?>> map;
 
     private ItemComponentSet() {
@@ -45,6 +49,13 @@ public class ItemComponentSet implements Iterable<ItemComponent<?>> {
 
     private Set<ItemComponent<?>> values() {
         return new HashSet<>(this.map.values());
+    }
+
+    private static DataResult<ItemComponentSet> validate(ItemComponentSet set) {
+        if (set.contains(ItemComponentTypes.DAMAGEABLE) && set.get(ItemComponentTypes.MAX_STACK_SIZE).map(MaxStackSizeItemComponent::maxStackSize).orElse(Item.DEFAULT_MAX_COUNT) > 1) {
+            return DataResult.error(() -> "Item cannot be both damageable and stackable");
+        }
+        return DataResult.success(set);
     }
 
     public static class Builder {

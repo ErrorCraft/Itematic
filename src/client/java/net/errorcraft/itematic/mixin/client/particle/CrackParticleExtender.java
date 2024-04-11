@@ -14,7 +14,7 @@ public class CrackParticleExtender {
     @Mixin(CrackParticle.SnowballFactory.class)
     public static class SnowballFactoryExtender {
         @Redirect(
-            method = "createParticle(Lnet/minecraft/particle/DefaultParticleType;Lnet/minecraft/client/world/ClientWorld;DDDDDD)Lnet/minecraft/client/particle/Particle;",
+            method = "createParticle(Lnet/minecraft/particle/SimpleParticleType;Lnet/minecraft/client/world/ClientWorld;DDDDDD)Lnet/minecraft/client/particle/Particle;",
             at = @At(
                 value = "NEW",
                 target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
@@ -28,7 +28,7 @@ public class CrackParticleExtender {
     @Mixin(CrackParticle.SlimeballFactory.class)
     public static class SlimeballFactoryExtender {
         @Redirect(
-            method = "createParticle(Lnet/minecraft/particle/DefaultParticleType;Lnet/minecraft/client/world/ClientWorld;DDDDDD)Lnet/minecraft/client/particle/Particle;",
+            method = "createParticle(Lnet/minecraft/particle/SimpleParticleType;Lnet/minecraft/client/world/ClientWorld;DDDDDD)Lnet/minecraft/client/particle/Particle;",
             at = @At(
                 value = "NEW",
                 target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"

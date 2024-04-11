@@ -4,11 +4,11 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.RecipeRemainderItemComponent;
-import net.errorcraft.itematic.recipe.BrewingRecipeRegistryUtil;
 import net.minecraft.block.entity.BrewingStandBlockEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -98,8 +98,8 @@ public class BrewingStandBlockEntityExtender {
             target = "Lnet/minecraft/recipe/BrewingRecipeRegistry;craft(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack craftUseDynamicRegistryManager(ItemStack ingredient, ItemStack input, World world) {
-        return BrewingRecipeRegistryUtil.INSTANCE.itematic$craft(ingredient, input, world);
+    private static ItemStack craftUseDynamicRegistryManager(BrewingRecipeRegistry instance, ItemStack ingredient, ItemStack input, World world) {
+        return instance.itematic$craft(ingredient, input, world);
     }
 
     @Redirect(

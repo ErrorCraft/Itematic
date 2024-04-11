@@ -52,7 +52,7 @@ public class DyeItemModifier extends ConditionalLootFunction {
     }
 
     @Override
-    public LootFunctionType getType() {
+    public LootFunctionType<DyeItemModifier> getType() {
         return ItematicItemModifierTypes.DYE;
     }
 

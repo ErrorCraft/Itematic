@@ -83,7 +83,7 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly) imp
     public void onDestroyed(ItemEntity item) {
         ContainerComponent container = item.getStack().set(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT);
         if (container != null) {
-            ItemUsage.spawnItemContents(item, container.stream());
+            ItemUsage.spawnItemContents(item, container.iterateNonEmptyCopy());
         }
     }
 }

@@ -12,7 +12,7 @@
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 3,
-      "saturation_modifier": 0.6
+      "saturation": 3.6000001
     },
     "minecraft:use_animation": {
       "animation": "eat"

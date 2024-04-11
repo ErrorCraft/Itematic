@@ -12,7 +12,6 @@ import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
-import net.errorcraft.itematic.util.ActionResultUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
@@ -92,7 +91,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 info.setReturnValue(TypedActionResult.fail(stackReference.get()));
                 return;
             }
-            result = ActionResultUtil.max(result, newResult);
+            result = result.itematic$merge(newResult);
         }
 
         if (world instanceof ServerWorld serverWorld) {
@@ -118,7 +117,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             if (newResult == ActionResult.FAIL) {
                 return newResult;
             }
-            result = ActionResultUtil.max(result, newResult);
+            result = result.itematic$merge(newResult);
         }
 
         if (context.getWorld() instanceof ServerWorld serverWorld) {
@@ -147,7 +146,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             if (newResult == ActionResult.FAIL) {
                 return newResult;
             }
-            result = ActionResultUtil.max(result, newResult);
+            result = result.itematic$merge(newResult);
         }
 
         if (user.getWorld() instanceof ServerWorld serverWorld) {

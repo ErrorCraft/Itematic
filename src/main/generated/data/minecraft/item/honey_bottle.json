@@ -8,7 +8,7 @@
     },
     "minecraft:food": {
       "nutrition": 6,
-      "saturation_modifier": 0.1
+      "saturation": 1.2
     },
     "minecraft:max_stack_size": 16,
     "minecraft:recipe_remainder": {

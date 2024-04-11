@@ -21,10 +21,10 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public record FoodItemComponent(int nutrition, float saturationModifier, boolean alwaysEdible, List<FoodComponent.StatusEffectEntry> effects) implements ItemComponent<FoodItemComponent> {
+public record FoodItemComponent(int nutrition, float saturation, boolean alwaysEdible, List<FoodComponent.StatusEffectEntry> effects) implements ItemComponent<FoodItemComponent> {
     public static final Codec<FoodItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.NONNEGATIVE_INT.fieldOf("nutrition").forGetter(FoodItemComponent::nutrition),
-        Codec.FLOAT.fieldOf("saturation_modifier").forGetter(FoodItemComponent::saturationModifier),
+        Codec.FLOAT.fieldOf("saturation").forGetter(FoodItemComponent::saturation),
         Codec.BOOL.optionalFieldOf("always_edible", false).forGetter(FoodItemComponent::alwaysEdible),
         FoodComponent.StatusEffectEntry.CODEC.listOf().optionalFieldOf("effects", List.of()).forGetter(FoodItemComponent::effects)
     ).apply(instance, FoodItemComponent::new));
@@ -46,7 +46,7 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.FOOD, new FoodComponent(this.nutrition, this.saturationModifier, false, 1.0f, this.effects));
+        builder.add(DataComponentTypes.FOOD, new FoodComponent(this.nutrition, this.saturation, false, 1.0f, this.effects));
     }
 
     public boolean mayStartUsing(PlayerEntity user) {
@@ -61,14 +61,14 @@ public record FoodItemComponent(int nutrition, float saturationModifier, boolean
         return from(component, (int)(component.eatSeconds() * SharedConstants.TICKS_PER_SECOND), UseAction.EAT, resultItem);
     }
 
-    public static FoodItemComponent of(int nutrition, float saturationModifier, boolean alwaysEdible, List<FoodComponent.StatusEffectEntry> effects) {
-        return new FoodItemComponent(nutrition, saturationModifier, alwaysEdible, effects);
+    public static FoodItemComponent of(int nutrition, float saturation, boolean alwaysEdible, List<FoodComponent.StatusEffectEntry> effects) {
+        return new FoodItemComponent(nutrition, saturation, alwaysEdible, effects);
     }
 
     public static ItemComponent<?>[] from(FoodComponent component, int useDuration, UseAction useAction, RegistryEntry<Item> resultItem) {
         return new ItemComponent<?>[] {
             UseDurationItemComponent.of(useDuration),
-            of(component.nutrition(), component.saturationModifier(), component.canAlwaysEat(), component.effects()),
+            of(component.nutrition(), component.saturation(), component.canAlwaysEat(), component.effects()),
             UseAnimationItemComponent.of(useAction),
             ConsumableItemComponent.of(resultItem)
         };

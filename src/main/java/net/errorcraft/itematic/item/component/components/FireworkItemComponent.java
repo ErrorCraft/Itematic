@@ -70,7 +70,7 @@ public record FireworkItemComponent() implements ItemComponent<FireworkItemCompo
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         FireworksComponent fireworks = stack.get(DataComponentTypes.FIREWORKS);
         if (fireworks != null) {
-            fireworks.appendTooltip(tooltip::add, type);
+            fireworks.appendTooltip(context, tooltip::add, type);
         }
     }
 

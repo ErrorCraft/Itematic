@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(LootFunctionTypes.class)
 public interface LootFunctionTypesAccessor {
     @Invoker("register")
-    static LootFunctionType register(String id, MapCodec<? extends LootFunction> mapCodec) {
+    static <T extends LootFunction> LootFunctionType<T> register(String id, MapCodec<T> codec) {
         throw new AssertionError();
     }
 }

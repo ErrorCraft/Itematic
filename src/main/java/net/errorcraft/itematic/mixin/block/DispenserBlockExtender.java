@@ -7,6 +7,7 @@ import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
@@ -20,7 +21,7 @@ public class DispenserBlockExtender {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public DispenserBehavior getBehaviorForItem(ItemStack stack) {
+    public DispenserBehavior getBehaviorForItem(World world, ItemStack stack) {
         return behavior(stack).orElse(DispenseBehaviors.FALLBACK);
     }
 

@@ -16,7 +16,7 @@
         }
       ],
       "nutrition": 4,
-      "saturation_modifier": 0.1
+      "saturation": 0.8
     },
     "minecraft:use_animation": {
       "animation": "eat"

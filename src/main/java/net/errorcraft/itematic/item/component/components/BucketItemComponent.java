@@ -20,7 +20,6 @@ import net.errorcraft.itematic.item.placement.Placer;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
-import net.errorcraft.itematic.util.ActionResultUtil;
 import net.minecraft.block.Block;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -130,7 +129,7 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
 
     private static ActionResult place(Placer placer, ActionResult currentResult) {
         ActionResult result = placer.place();
-        return ActionResultUtil.max(currentResult, result);
+        return currentResult.itematic$merge(result);
     }
 
     private ItemStack getResultStack(@Nullable PlayerEntity player, ItemStack currentStack, ItemStack possibleNewStack) {

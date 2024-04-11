@@ -41,6 +41,9 @@
       "net/minecraft/class_507": [
         "net/errorcraft/itematic/access/client/gui/screen/recipebook/RecipeBookWidgetAccess"
       ],
+      "net/minecraft/class_1269": [
+        "net/errorcraft/itematic/access/util/ActionResultAccess"
+      ],
       "net/minecraft/class_1297": [
         "net/errorcraft/itematic/access/entity/EntityAccess"
       ],
@@ -73,6 +76,9 @@
       ],
       "net/minecraft/class_1845": [
         "net/errorcraft/itematic/access/recipe/BrewingRecipeRegistryAccess"
+      ],
+      "net/minecraft/class_1845\u0024class_9665": [
+        "net/errorcraft/itematic/access/recipe/BrewingRecipeRegistryBuilderAccess"
       ],
       "net/minecraft/class_1856": [
         "net/errorcraft/itematic/access/recipe/IngredientAccess"

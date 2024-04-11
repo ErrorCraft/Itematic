@@ -9,6 +9,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
@@ -22,8 +23,9 @@ public class PotionTagProvider extends FabricTagProvider<Potion> {
     @Override
     protected void configure(RegistryWrapper.WrapperLookup arg) {
         RegistryWrapper.Impl<Potion> potions = arg.getWrapperOrThrow(RegistryKeys.POTION);
+        BrewingRecipeRegistry brewingRecipeRegistry = BrewingRecipeRegistry.create(FeatureFlags.VANILLA_FEATURES);
         this.getOrCreateTagBuilder(PotionTags.TRADEABLE)
-            .add(getAll(potions, potion -> !potion.value().getEffects().isEmpty() && BrewingRecipeRegistry.isBrewable(potion)));
+            .add(getAll(potions, potion -> !potion.value().getEffects().isEmpty() && brewingRecipeRegistry.isBrewable(potion)));
     }
 
     private static Identifier[] getAll(RegistryWrapper.Impl<Potion> registry, Predicate<RegistryEntry<Potion>> predicate) {

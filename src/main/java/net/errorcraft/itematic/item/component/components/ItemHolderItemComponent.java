@@ -162,7 +162,7 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
     public void onDestroyed(ItemEntity item) {
         BundleContentsComponent bundleContents = item.getStack().get(DataComponentTypes.BUNDLE_CONTENTS);
         if (bundleContents != null) {
-            ItemUsage.spawnItemContents(item, bundleContents.stream());
+            ItemUsage.spawnItemContents(item, bundleContents.iterateCopy());
         }
     }
 
