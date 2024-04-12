@@ -279,6 +279,7 @@
     "loot.function.FillPlayerHeadLootFunctionExtender",
     "loot.function.LootFunctionTypesAccessor",
     "loot.function.SetEnchantmentsLootFunctionExtender",
+    "loot.function.SetItemLootFunctionExtender",
     "loot.function.SetPotionLootFunctionAccessor",
     "loot.function.SetPotionLootFunctionExtender",
     "loot.function.SetStewEffectLootFunctionExtender",
