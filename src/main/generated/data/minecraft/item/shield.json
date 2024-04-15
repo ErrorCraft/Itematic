@@ -18,9 +18,7 @@
     "minecraft:repairable": {
       "items": "minecraft:repairs_shield"
     },
-    "minecraft:use_animation": {
-      "animation": "block"
-    }
+    "minecraft:use_animation": "block"
   },
   "events": [
     {

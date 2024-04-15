@@ -27,9 +27,7 @@
       "saturation": 9.6
     },
     "minecraft:rarity": "rare",
-    "minecraft:use_animation": {
-      "animation": "eat"
-    },
+    "minecraft:use_animation": "eat",
     "minecraft:use_duration": {
       "ticks": 32
     }

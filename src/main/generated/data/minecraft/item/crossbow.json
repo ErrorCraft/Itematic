@@ -32,8 +32,6 @@
       "held_ammunition": "minecraft:crossbow_ammunition",
       "range": 8
     },
-    "minecraft:use_animation": {
-      "animation": "crossbow"
-    }
+    "minecraft:use_animation": "crossbow"
   }
 }

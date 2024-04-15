@@ -14,9 +14,7 @@
     "minecraft:recipe_remainder": {
       "item": "minecraft:glass_bottle"
     },
-    "minecraft:use_animation": {
-      "animation": "drink"
-    },
+    "minecraft:use_animation": "drink",
     "minecraft:use_duration": {
       "ticks": 40
     }

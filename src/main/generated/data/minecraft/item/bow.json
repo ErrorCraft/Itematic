@@ -22,8 +22,6 @@
       "held_ammunition": "minecraft:bow_ammunition",
       "range": 15
     },
-    "minecraft:use_animation": {
-      "animation": "bow"
-    }
+    "minecraft:use_animation": "bow"
   }
 }

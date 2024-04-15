@@ -34,6 +34,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +45,7 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
     public static final Codec<ShooterItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("held_ammunition").forGetter(ShooterItemComponent::heldAmmunition),
         TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("ammunition").forGetter(ShooterItemComponent::ammunition),
-        Codec.INT.fieldOf("range").forGetter(ShooterItemComponent::range),
+        Codecs.POSITIVE_INT.fieldOf("range").forGetter(ShooterItemComponent::range),
         Chargeable.CODEC.optionalFieldOf("chargeable").forGetter(ShooterItemComponent::chargeable)
     ).apply(instance, ShooterItemComponent::new));
     private static final float CHARGE_PROGRESS = CrossbowItemAccessor.chargeProgress();
@@ -53,6 +54,15 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
     private static final int EXTRA_USE_TIME = 3;
     private static final int CHARGE_TIME_PER_QUICK_CHARGE_LEVEL = 5;
     private static final CrossbowItem DUMMY = new CrossbowItem(new Item.Settings());
+
+    public static ShooterItemComponent of(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range) {
+        return new ShooterItemComponent(heldAmmunition, ammunition, range, Optional.empty());
+    }
+
+    @SafeVarargs
+    public static ShooterItemComponent of(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, RegistryEntry<SoundEvent> defaultSound, RegistryEntry<SoundEvent>... levelSounds) {
+        return new ShooterItemComponent(heldAmmunition, ammunition, range, Optional.of(Chargeable.of(QuickChargeSounds.of(defaultSound, levelSounds))));
+    }
 
     @Override
     public ItemComponentType<ShooterItemComponent> type() {
@@ -102,15 +112,6 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         if (this.isChargeable()) {
             builder.add(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT);
         }
-    }
-
-    public static ShooterItemComponent of(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range) {
-        return new ShooterItemComponent(heldAmmunition, ammunition, range, Optional.empty());
-    }
-
-    @SafeVarargs
-    public static ShooterItemComponent of(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, RegistryEntry<SoundEvent> defaultSound, RegistryEntry<SoundEvent>... levelSounds) {
-        return new ShooterItemComponent(heldAmmunition, ammunition, range, Optional.of(Chargeable.of(QuickChargeSounds.of(defaultSound, levelSounds))));
     }
 
     public static int useDuration(ItemStack stack) {

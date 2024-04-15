@@ -7,8 +7,6 @@
     "minecraft:playable": {
       "instruments": "minecraft:goat_horns"
     },
-    "minecraft:use_animation": {
-      "animation": "toot_horn"
-    }
+    "minecraft:use_animation": "toot_horn"
   }
 }

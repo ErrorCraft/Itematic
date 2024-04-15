@@ -4,9 +4,7 @@
   },
   "components": {
     "minecraft:max_stack_size": 1,
-    "minecraft:use_animation": {
-      "animation": "spyglass"
-    },
+    "minecraft:use_animation": "spyglass",
     "minecraft:use_duration": {
       "ticks": 1200
     },
