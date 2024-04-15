@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.loot.function;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -13,24 +12,29 @@ import net.minecraft.loot.function.EnchantRandomlyLootFunction;
 import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
 @Mixin(EnchantRandomlyLootFunction.class)
 public class EnchantRandomlyLootFunctionExtender {
-    @Redirect(
+    @Inject(
         method = "method_53327",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/enchantment/Enchantment;isAcceptableItem(Lnet/minecraft/item/ItemStack;)Z"
-        )
+        ),
+        cancellable = true
     )
-    private static boolean isValidEnchantUseItemComponent(Enchantment instance, ItemStack stack, @Local(argsOnly = true) RegistryEntry.Reference<Enchantment> enchantment) {
-        return stack.itematic$getComponent(ItemComponentTypes.ENCHANTABLE).map(c -> c.enchantments()
-            .map(enchantment::isIn)
-            .orElse(true)
-        ).orElse(false);
+    private static void isValidEnchantUseItemComponent(boolean isBook, ItemStack stack, RegistryEntry.Reference<Enchantment> enchantment, CallbackInfoReturnable<Boolean> info) {
+        info.setReturnValue(stack.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
+            .map(c -> c.enchantments()
+                .map(enchantment::isIn)
+                .orElse(true)
+            ).orElse(false)
+        );
     }
 
     @Redirect(

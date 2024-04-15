@@ -36,17 +36,6 @@ public class EnchantmentHelperExtender {
     }
 
     @Redirect(
-        method = "getPossibleEntries",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/enchantment/Enchantment;isAcceptableItem(Lnet/minecraft/item/ItemStack;)Z"
-        )
-    )
-    private static boolean itemIsAlwaysAcceptable(Enchantment instance, ItemStack itemStack) {
-        return true;
-    }
-
-    @Redirect(
         method = "enchant",
         at = @At(
             value = "INVOKE",
