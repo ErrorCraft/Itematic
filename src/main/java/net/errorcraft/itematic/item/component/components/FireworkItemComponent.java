@@ -6,6 +6,7 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.client.item.TooltipType;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FireworksComponent;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,6 +28,7 @@ import java.util.List;
 public record FireworkItemComponent() implements ItemComponent<FireworkItemComponent> {
     public static final FireworkItemComponent INSTANCE = new FireworkItemComponent();
     public static final Codec<FireworkItemComponent> CODEC = Codec.unit(INSTANCE);
+    private static final FireworksComponent DEFAULT_DATA_COMPONENT = new FireworksComponent(1, List.of());
 
     @Override
     public ItemComponentType<FireworkItemComponent> type() {
@@ -64,6 +66,11 @@ public record FireworkItemComponent() implements ItemComponent<FireworkItemCompo
         world.spawnEntity(entity);
         stack.decrement(1);
         return ActionResult.CONSUME;
+    }
+
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.FIREWORKS, DEFAULT_DATA_COMPONENT);
     }
 
     @Override
