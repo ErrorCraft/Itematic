@@ -3,8 +3,6 @@
     "translation_key": "item.minecraft.gold_nugget"
   },
   "components": {
-    "minecraft:firework_shape_modifier": {
-      "shape": "star"
-    }
+    "minecraft:firework_shape_modifier": "star"
   }
 }

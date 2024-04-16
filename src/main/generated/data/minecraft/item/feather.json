@@ -3,8 +3,6 @@
     "translation_key": "item.minecraft.feather"
   },
   "components": {
-    "minecraft:firework_shape_modifier": {
-      "shape": "burst"
-    }
+    "minecraft:firework_shape_modifier": "burst"
   }
 }

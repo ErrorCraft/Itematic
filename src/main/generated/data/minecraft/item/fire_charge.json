@@ -6,9 +6,7 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_charge"
     },
-    "minecraft:firework_shape_modifier": {
-      "shape": "large_ball"
-    },
+    "minecraft:firework_shape_modifier": "large_ball",
     "minecraft:projectile": {
       "entity": {
         "type": "minecraft:small_fireball"

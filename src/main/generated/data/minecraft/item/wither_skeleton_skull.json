@@ -18,9 +18,7 @@
       "equip_sound": "minecraft:item.armor.equip_generic",
       "slot": "head"
     },
-    "minecraft:firework_shape_modifier": {
-      "shape": "creeper"
-    },
+    "minecraft:firework_shape_modifier": "creeper",
     "minecraft:rarity": "uncommon"
   }
 }
