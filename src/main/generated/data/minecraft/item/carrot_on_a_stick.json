@@ -11,7 +11,7 @@
     },
     "minecraft:max_stack_size": 1,
     "minecraft:steering": {
-      "damage": 7,
+      "damage_per_use": 7,
       "target": "minecraft:pig"
     }
   },

@@ -21,12 +21,13 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
-public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int damage) implements ItemComponent<SteeringItemComponent> {
+public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int damagePerUse) implements ItemComponent<SteeringItemComponent> {
     public static final Codec<SteeringItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.ENTITY_TYPE).fieldOf("target").forGetter(SteeringItemComponent::target),
-        Codec.INT.fieldOf("damage").forGetter(SteeringItemComponent::damage)
+        Codecs.NONNEGATIVE_INT.optionalFieldOf("damage_per_use", 1).forGetter(SteeringItemComponent::damagePerUse)
     ).apply(instance, SteeringItemComponent::new));
 
     @Override
@@ -69,7 +70,7 @@ public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int dam
         if (!itemSteerable.consumeOnAStickItem()) {
             return false;
         }
-        stack.itematic$damage(this.damage, context);
+        stack.itematic$damage(this.damagePerUse, context);
         return true;
     }
 
