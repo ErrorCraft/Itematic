@@ -15,48 +15,32 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.dynamic.Codecs;
 
 import java.util.List;
+import java.util.Optional;
 
-public record DamageableItemComponent(int durability, boolean preserveItem) implements ItemComponent<DamageableItemComponent> {
+public record DamageableItemComponent(int durability, Optional<RegistryEntry<SoundEvent>> breakSound, boolean preserveItem) implements ItemComponent<DamageableItemComponent> {
     public static final Codec<DamageableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.POSITIVE_INT.fieldOf("durability").forGetter(DamageableItemComponent::durability),
+        SoundEvent.ENTRY_CODEC.optionalFieldOf("break_sound").forGetter(DamageableItemComponent::breakSound),
         Codec.BOOL.optionalFieldOf("preserve_item", false).forGetter(DamageableItemComponent::preserveItem)
     ).apply(instance, DamageableItemComponent::new));
 
-    @Override
-    public ItemComponentType<DamageableItemComponent> type() {
-        return ItemComponentTypes.DAMAGEABLE;
-    }
-
-    @Override
-    public Codec<DamageableItemComponent> codec() {
-        return CODEC;
-    }
-
-    @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.MAX_DAMAGE, this.durability);
-        builder.add(DataComponentTypes.DAMAGE, 0);
-    }
-
-    public int maximumDamage(ItemStack stack) {
-        return stack.getMaxDamage() - (this.preserveItem ? 1 : 0);
-    }
-
-    public boolean isUsable(ItemStack stack) {
-        return stack.getDamage() < this.maximumDamage(stack);
-    }
-
     public static DamageableItemComponent of(int durability) {
-        return new DamageableItemComponent(durability, false);
+        return new DamageableItemComponent(durability, Optional.empty(), false);
     }
 
-    public static DamageableItemComponent of(int durability, boolean preserveItem) {
-        return new DamageableItemComponent(durability, preserveItem);
+    public static DamageableItemComponent of(int durability, RegistryEntry<SoundEvent> breakSound) {
+        return new DamageableItemComponent(durability, Optional.of(breakSound), false);
+    }
+
+    public static DamageableItemComponent ofPreserved(int durability) {
+        return new DamageableItemComponent(durability, Optional.empty(), true);
     }
 
     public static ItemComponent<?>[] sword(ToolMaterial material, TagKey<Item> repairItemsTag) {
@@ -100,5 +84,29 @@ public record DamageableItemComponent(int durability, boolean preserveItem) impl
             ForgeableItemComponent.of(toolForgingTag),
             RepairableItemComponent.of(repairItemsTag)
         };
+    }
+
+    @Override
+    public ItemComponentType<DamageableItemComponent> type() {
+        return ItemComponentTypes.DAMAGEABLE;
+    }
+
+    @Override
+    public Codec<DamageableItemComponent> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.MAX_DAMAGE, this.durability);
+        builder.add(DataComponentTypes.DAMAGE, 0);
+    }
+
+    public int maximumDamage(ItemStack stack) {
+        return stack.getMaxDamage() - (this.preserveItem ? 1 : 0);
+    }
+
+    public boolean isUsable(ItemStack stack) {
+        return stack.getDamage() < this.maximumDamage(stack);
     }
 }

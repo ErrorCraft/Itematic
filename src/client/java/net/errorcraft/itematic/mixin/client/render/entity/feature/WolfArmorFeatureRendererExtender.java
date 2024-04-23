@@ -11,9 +11,11 @@ import net.errorcraft.itematic.item.component.components.ArmorItemComponent;
 import net.errorcraft.itematic.item.component.components.TintedItemComponent;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.WolfArmorFeatureRenderer;
 import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +24,7 @@ import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
 
@@ -55,6 +58,17 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
         method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V",
         at = @At(
             value = "INVOKE",
+            target = "Lnet/minecraft/item/AnimalArmorItem;getType()Lnet/minecraft/item/AnimalArmorItem$Type;"
+        )
+    )
+    private AnimalArmorItem.Type getTypeUseItemComponent(AnimalArmorItem instance, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
+        return armorItemComponent.get().armorType().orElse(null);
+    }
+
+    @Redirect(
+        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V",
+        at = @At(
+            value = "INVOKE",
             target = "Lnet/minecraft/item/AnimalArmorItem;getEntityTexture()Lnet/minecraft/util/Identifier;"
         )
     )
@@ -63,7 +77,7 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
     }
 
     @Redirect(
-        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V",
+        method = { "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V", "renderDyed" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/render/RenderLayer;getEntityCutoutNoCull(Lnet/minecraft/util/Identifier;)Lnet/minecraft/client/render/RenderLayer;"
@@ -74,7 +88,7 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
     }
 
     @ModifyArg(
-        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V",
+        method = { "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V", "renderDyed" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/render/VertexConsumerProvider;getBuffer(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;"
@@ -85,7 +99,7 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
     }
 
     @ModifyExpressionValue(
-        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V",
+        method = { "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V", "renderDyed" },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/render/VertexConsumerProvider;getBuffer(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;"
@@ -94,6 +108,14 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
     private VertexConsumer useArmorMaterialsAtlas(VertexConsumer original, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
         return this.armorMaterialsAtlas.getSprite(armorItemComponent.get().textureId())
             .getTextureSpecificVertexConsumer(original);
+    }
+
+    @Inject(
+        method = "renderDyed",
+        at = @At("HEAD")
+    )
+    private void setArmorItemComponent(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, AnimalArmorItem item, CallbackInfo info, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
+        armorItemComponent.set(stack.itematic$getComponent(ItemComponentTypes.ARMOR).orElseThrow());
     }
 
     @Redirect(
@@ -117,7 +139,18 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
         )
     )
     private int getColorUseItemComponent(ItemStack stack, int defaultColor, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
-        return tintedItemComponent.get().tint().color(stack, 0);
+        return tintedItemComponent.get().tint().color(stack, 1);
+    }
+
+    @Redirect(
+        method = "renderDyed",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/AnimalArmorItem;getOverlayTexture()Lnet/minecraft/util/Identifier;"
+        )
+    )
+    private Identifier getOverlayTextureUseItemComponent(AnimalArmorItem instance, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
+        return armorItemComponent.get().textureId().withPath(path -> path + "_overlay");
     }
 
     @Override

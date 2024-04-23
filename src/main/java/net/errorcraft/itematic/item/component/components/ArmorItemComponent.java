@@ -26,34 +26,6 @@ public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional
         StringIdentifiable.createCodec(AnimalArmorItem.Type::values).optionalFieldOf("armor_type").forGetter(ArmorItemComponent::armorType)
     ).apply(instance, ArmorItemComponent::new));
 
-    @Override
-    public ItemComponentType<ArmorItemComponent> type() {
-        return ItemComponentTypes.ARMOR;
-    }
-
-    @Override
-    public Codec<ArmorItemComponent> codec() {
-        return CODEC;
-    }
-
-    @Override
-    public void addAttributeModifiers(AttributeModifiersComponent.Builder builder, ItemComponentSet components) {
-        if (!this.material.hasKeyAndValue()) {
-            return;
-        }
-        components.get(ItemComponentTypes.EQUIPMENT)
-            .ifPresent(c -> this.material.value().addAttributes(builder, c.slot()));
-    }
-
-    public Identifier textureId() {
-        return this.armorType.map(type -> type.itematic$textureId(this.material))
-            .orElseGet(() -> this.textureId(false));
-    }
-
-    public Identifier textureId(boolean secondLayer) {
-        return this.material.value().textureId(secondLayer);
-    }
-
     public static ArmorItemComponent of(RegistryEntry<ArmorMaterial> material) {
         return new ArmorItemComponent(material, Optional.empty());
     }
@@ -86,5 +58,42 @@ public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional
             EquipmentItemComponent.of(EquipmentSlot.BODY, false, equipSound),
             of(material, type)
         };
+    }
+
+    public static ItemComponent<?>[] ofAnimal(RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound, AnimalArmorItem.Type type, int damageFactor, RegistryEntry<SoundEvent> breakSound) {
+        return new ItemComponent<?>[] {
+            MaxStackSizeItemComponent.of(1),
+            DamageableItemComponent.of(ArmorItem.Type.BODY.getMaxDamage(damageFactor), breakSound),
+            EquipmentItemComponent.of(EquipmentSlot.BODY, false, equipSound),
+            of(material, type)
+        };
+    }
+
+    @Override
+    public ItemComponentType<ArmorItemComponent> type() {
+        return ItemComponentTypes.ARMOR;
+    }
+
+    @Override
+    public Codec<ArmorItemComponent> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public void addAttributeModifiers(AttributeModifiersComponent.Builder builder, ItemComponentSet components) {
+        if (!this.material.hasKeyAndValue()) {
+            return;
+        }
+        components.get(ItemComponentTypes.EQUIPMENT)
+            .ifPresent(c -> this.material.value().addAttributes(builder, c.slot()));
+    }
+
+    public Identifier textureId() {
+        return this.armorType.map(type -> type.itematic$textureId(this.material))
+            .orElseGet(() -> this.textureId(false));
+    }
+
+    public Identifier textureId(boolean secondLayer) {
+        return this.material.value().textureId(secondLayer);
     }
 }

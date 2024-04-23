@@ -22,7 +22,7 @@ public class ShieldDecorationRecipeExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean paperUseRegistryKeyCheck(ItemStack instance, Item item) {
+    private boolean isOfForShieldUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.SHIELD);
     }
 

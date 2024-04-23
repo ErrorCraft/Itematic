@@ -33,7 +33,8 @@
     },
     "minecraft:tinted": {
       "tint": {
-        "type": "minecraft:dyeable"
+        "type": "minecraft:dyeable",
+        "index": 0
       }
     }
   }

@@ -15,6 +15,7 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> ARMOR_EQUIP_LEATHER = of("item.armor.equip_leather");
     public static final RegistryKey<SoundEvent> ARMOR_EQUIP_NETHERITE = of("item.armor.equip_netherite");
     public static final RegistryKey<SoundEvent> ARMOR_EQUIP_TURTLE = of("item.armor.equip_turtle");
+    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_WOLF = of("item.armor.equip_wolf");
     public static final RegistryKey<SoundEvent> BOTTLE_EMPTY = of("item.bottle.empty");
     public static final RegistryKey<SoundEvent> BOTTLE_FILL = of("item.bottle.fill");
     public static final RegistryKey<SoundEvent> BUCKET_EMPTY = of("item.bucket.empty");
@@ -58,6 +59,7 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> SPYGLASS_USE = of("item.spyglass.use");
     public static final RegistryKey<SoundEvent> SPYGLASS_STOP_USING = of("item.spyglass.stop_using");
     public static final RegistryKey<SoundEvent> TNT_PRIMED = of("entity.tnt.primed");
+    public static final RegistryKey<SoundEvent> WOLF_ARMOR_BREAK = of("item.wolf_armor.break");
 
     private SoundEventKeys() {}
 

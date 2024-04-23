@@ -2,6 +2,8 @@ package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.gametest.Assert;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
@@ -23,5 +25,17 @@ public class WaterCauldronBlockTestSuite {
         world.spawnEntity(player);
         context.useBlock(WATER_CAULDRON_POSITION, player);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(player.getStackInHand(Hand.MAIN_HAND), ItemKeys.SHULKER_BOX));
+    }
+
+    @GameTest(templateName = "itematic:block.water_cauldron")
+    public void usingColoredWolfArmorOnWaterCauldronClearsColor(TestContext context) {
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
+        ServerWorld world = context.getWorld();
+        ItemStack stack = world.itematic$createStack(ItemKeys.WOLF_ARMOR);
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xffffff, true));
+        player.setStackInHand(Hand.MAIN_HAND, stack);
+        world.spawnEntity(player);
+        context.useBlock(WATER_CAULDRON_POSITION, player);
+        context.addFinalTask(() -> Assert.itemStackDoesNotHaveComponent(player.getStackInHand(Hand.MAIN_HAND), DataComponentTypes.DYED_COLOR));
     }
 }

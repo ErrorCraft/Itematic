@@ -3,9 +3,11 @@ package net.errorcraft.itematic.client.render;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.texture.atlas.AtlasSource;
 import net.minecraft.client.texture.atlas.DirectoryAtlasSource;
+import net.minecraft.client.texture.atlas.SingleAtlasSource;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class ItematicTexturedRenderLayers {
@@ -18,7 +20,9 @@ public class ItematicTexturedRenderLayers {
     public static void bootstrap(BiConsumer<Identifier, List<AtlasSource>> provider) {
         provider.accept(ARMOR_MATERIALS_ID, List.of(
             new DirectoryAtlasSource("models/armor", "models/armor/"),
-            new DirectoryAtlasSource("entity/horse/armor", "entity/horse/armor/")
+            new DirectoryAtlasSource("entity/horse/armor", "entity/horse/armor/"),
+            new SingleAtlasSource(new Identifier("entity/wolf/wolf_armor"), Optional.empty()),
+            new SingleAtlasSource(new Identifier("entity/wolf/wolf_armor_overlay"), Optional.empty())
         ));
     }
 }

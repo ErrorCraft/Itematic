@@ -50,10 +50,19 @@ public class Assert {
     }
 
     public static <T> void itemStackHasComponent(ItemStack value, DataComponentType<T> type) {
-        TestUtil.getComponent(value, type);
+        if (value.get(type) == null) {
+            throw new GameTestException("Expected item stack to contain the " + type + " component");
+        }
+    }
+
+    public static <T> void itemStackDoesNotHaveComponent(ItemStack value, DataComponentType<T> type) {
+        if (value.get(type) != null) {
+            throw new GameTestException("Expected item stack to not contain the " + type + " component");
+        }
     }
 
     public static <T> void itemStackHasComponent(ItemStack value, DataComponentType<T> type, Consumer<T> assertion) {
+        itemStackHasComponent(value, type);
         assertion.accept(TestUtil.getComponent(value, type));
     }
 

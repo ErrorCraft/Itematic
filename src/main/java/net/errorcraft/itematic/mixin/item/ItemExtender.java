@@ -34,8 +34,11 @@ import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -421,6 +424,18 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return this.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
             .map(EnchantableItemComponent::enchantability)
             .orElse(0);
+    }
+
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public SoundEvent getBreakSound() {
+        return this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
+            .flatMap(DamageableItemComponent::breakSound)
+            .map(RegistryEntry::value)
+            .orElse(SoundEvents.ENTITY_ITEM_BREAK);
     }
 
     /**

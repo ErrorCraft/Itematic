@@ -7,10 +7,23 @@
       "armor_type": "canine",
       "material": "minecraft:armadillo"
     },
+    "minecraft:damageable": {
+      "break_sound": "minecraft:item.wolf_armor.break",
+      "durability": 64
+    },
+    "minecraft:dyeable": {
+      "default_color": 0
+    },
     "minecraft:equipment": {
-      "equip_sound": "minecraft:item.armor.equip_diamond",
+      "equip_sound": "minecraft:item.armor.equip_wolf",
       "slot": "body"
     },
-    "minecraft:max_stack_size": 1
+    "minecraft:max_stack_size": 1,
+    "minecraft:tinted": {
+      "tint": {
+        "type": "minecraft:dyeable",
+        "index": 1
+      }
+    }
   }
 }

@@ -9,6 +9,14 @@
       "type": "minecraft:directory",
       "prefix": "entity/horse/armor/",
       "source": "entity/horse/armor"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:entity/wolf/wolf_armor"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:entity/wolf/wolf_armor_overlay"
     }
   ]
 }

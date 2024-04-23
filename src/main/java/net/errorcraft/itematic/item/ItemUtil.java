@@ -4253,7 +4253,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.TRIDENT).build(),
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
-                    .with(DamageableItemComponent.of(250, true))
+                    .with(DamageableItemComponent.ofPreserved(250))
                     .with(ToolItemComponent.builder(2)
                         .build())
                     .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE, -2.9d))
@@ -5741,7 +5741,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(RarityItemComponent.of(Rarity.UNCOMMON))
                     .with(MaxStackSizeItemComponent.of(1))
-                    .with(DamageableItemComponent.of(432, true))
+                    .with(DamageableItemComponent.ofPreserved(432))
                     .with(EquipmentItemComponent.of(EquipmentSlot.CHEST, true, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_ELYTRA)))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_ELYTRA))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -5774,7 +5774,7 @@ public class ItemUtil {
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
-                    .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
+                    .with(TintedItemComponent.of(DyeableItemColor.of(0)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LEATHER_CHESTPLATE, create(
@@ -5786,7 +5786,7 @@ public class ItemUtil {
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
-                    .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
+                    .with(TintedItemComponent.of(DyeableItemColor.of(0)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LEATHER_LEGGINGS, create(
@@ -5798,7 +5798,7 @@ public class ItemUtil {
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
-                    .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
+                    .with(TintedItemComponent.of(DyeableItemColor.of(0)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LEATHER_BOOTS, create(
@@ -5810,7 +5810,7 @@ public class ItemUtil {
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
-                    .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
+                    .with(TintedItemComponent.of(DyeableItemColor.of(0)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_HELMET, create(
@@ -6033,7 +6033,7 @@ public class ItemUtil {
                     .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER), AnimalArmorItem.Type.EQUESTRIAN))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
-                    .with(TintedItemComponent.of(DyeableItemColor.INSTANCE))
+                    .with(TintedItemComponent.of(DyeableItemColor.of(0)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_HORSE_ARMOR, create(
@@ -6060,7 +6060,9 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.WOLF_ARMOR, create(
                 ItemBase.Builder.forItem(ItemKeys.WOLF_ARMOR).build(),
                 ItemComponentSet.builder()
-                    .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.ARMADILLO), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND), AnimalArmorItem.Type.CANINE))
+                    .with(ArmorItemComponent.ofAnimal(this.armorMaterials.getOrThrow(ArmorMaterialKeys.ARMADILLO), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_WOLF), AnimalArmorItem.Type.CANINE, 4, this.soundEvents.getOrThrow(SoundEventKeys.WOLF_ARMOR_BREAK)))
+                    .with(DyeableItemComponent.of(0x000000))
+                    .with(TintedItemComponent.of(DyeableItemColor.of(1)))
                     .build()
             ));
         }

@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -96,6 +97,17 @@ public abstract class WolfEntityExtender extends MobEntityExtender {
     )
     private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.SHEARS);
+    }
+
+    @Redirect(
+        method = "interactMob",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
+        )
+    )
+    private boolean testForWolfArmorRepairItemUseRegistryKeyCheck(Ingredient instance, ItemStack stack) {
+        return stack.itematic$isOf(ItemKeys.ARMADILLO_SCUTE);
     }
 
     @Override
