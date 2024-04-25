@@ -6,6 +6,8 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.component.type.ImmuneToDamageComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.component.ItemComponent;
@@ -420,9 +422,8 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
      */
     @Overwrite
     public boolean takesDamageFrom(DamageSource source) {
-        return this.itematic$getComponent(ItemComponentTypes.IMMUNE_TO_DAMAGE)
-            .map(c -> c.damage(source))
-            .orElse(true);
+        ImmuneToDamageComponent immuneToDamage = this.get(ItematicDataComponentTypes.IMMUNE_TO_DAMAGE);
+        return immuneToDamage == null || immuneToDamage.damage(source);
     }
 
     @Inject(

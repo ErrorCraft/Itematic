@@ -2,10 +2,12 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.component.type.ImmuneToDamageComponent;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -14,6 +16,10 @@ public record ImmuneToDamageItemComponent(TagKey<DamageType> damage) implements 
     public static final Codec<ImmuneToDamageItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         TagKey.unprefixedCodec(RegistryKeys.DAMAGE_TYPE).fieldOf("damage").forGetter(ImmuneToDamageItemComponent::damage)
     ).apply(instance, ImmuneToDamageItemComponent::new));
+
+    public static ImmuneToDamageItemComponent of(TagKey<DamageType> damage) {
+        return new ImmuneToDamageItemComponent(damage);
+    }
 
     @Override
     public ItemComponentType<ImmuneToDamageItemComponent> type() {
@@ -25,11 +31,8 @@ public record ImmuneToDamageItemComponent(TagKey<DamageType> damage) implements 
         return CODEC;
     }
 
-    public boolean damage(DamageSource source) {
-        return !source.isIn(this.damage);
-    }
-
-    public static ImmuneToDamageItemComponent of(TagKey<DamageType> damage) {
-        return new ImmuneToDamageItemComponent(damage);
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(ItematicDataComponentTypes.IMMUNE_TO_DAMAGE, new ImmuneToDamageComponent(this.damage));
     }
 }
