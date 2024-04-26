@@ -10,9 +10,15 @@ import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.ColorHelper;
 
-public record FireworkItemColor() implements ItemColor {
-    public static final MapCodec<FireworkItemColor> CODEC = MapCodec.unit(new FireworkItemColor());
+public record FireworkItemColor() implements ItemColor<FireworkItemColor> {
+    public static final FireworkItemColor INSTANCE = new FireworkItemColor();
+    public static final MapCodec<FireworkItemColor> CODEC = MapCodec.unit(INSTANCE);
     private static final int DEFAULT_FIREWORK_COLOR = 0xff8a8a8a;
+
+    @Override
+    public ItemColorType<FireworkItemColor> type() {
+        return ItemColorTypes.FIREWORK;
+    }
 
     @Override
     public int color(ItemStack stack, int tintIndex) {
@@ -40,10 +46,5 @@ public record FireworkItemColor() implements ItemColor {
         }
 
         return ColorHelper.Argb.getArgb(red / size, green / size, blue / size);
-    }
-
-    @Override
-    public ItemColorType<?> type() {
-        return ItemColorTypes.FIREWORK;
     }
 }

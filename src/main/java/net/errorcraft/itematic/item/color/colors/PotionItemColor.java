@@ -9,8 +9,14 @@ import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.ColorHelper;
 
-public record PotionItemColor() implements ItemColor {
-    public static final MapCodec<PotionItemColor> CODEC = MapCodec.unit(new PotionItemColor());
+public record PotionItemColor() implements ItemColor<PotionItemColor> {
+    public static final PotionItemColor INSTANCE = new PotionItemColor();
+    public static final MapCodec<PotionItemColor> CODEC = MapCodec.unit(INSTANCE);
+
+    @Override
+    public ItemColorType<PotionItemColor> type() {
+        return ItemColorTypes.POTION;
+    }
 
     @Override
     public int color(ItemStack stack, int tintIndex) {
@@ -18,10 +24,5 @@ public record PotionItemColor() implements ItemColor {
             return DEFAULT_COLOR;
         }
         return ColorHelper.Argb.fullAlpha(stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).getColor());
-    }
-
-    @Override
-    public ItemColorType<?> type() {
-        return ItemColorTypes.POTION;
     }
 }

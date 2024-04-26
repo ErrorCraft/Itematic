@@ -12,18 +12,22 @@ import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.biome.Biome;
 
-public record GrassItemColor(RegistryEntry<Biome> biome) implements ItemColor {
+public record GrassItemColor(RegistryEntry<Biome> biome) implements ItemColor<GrassItemColor> {
     public static final MapCodec<GrassItemColor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.BIOME).fieldOf("biome").forGetter(GrassItemColor::biome)
     ).apply(instance, GrassItemColor::new));
 
-    @Override
-    public int color(ItemStack stack, int tintIndex) {
-        return ColorHelper.Argb.fullAlpha(this.biome.value().getGrassColorAt(0.0d, 0.0d));
+    public static GrassItemColor of(RegistryEntry<Biome> biome) {
+        return new GrassItemColor(biome);
     }
 
     @Override
-    public ItemColorType<?> type() {
+    public ItemColorType<GrassItemColor> type() {
         return ItemColorTypes.GRASS;
+    }
+
+    @Override
+    public int color(ItemStack stack, int tintIndex) {
+        return ColorHelper.Argb.fullAlpha(this.biome.value().getGrassColorAt(0.0d, 0.0d));
     }
 }

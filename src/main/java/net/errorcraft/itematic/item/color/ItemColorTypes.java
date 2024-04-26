@@ -19,7 +19,7 @@ public class ItemColorTypes {
 
     public static void init() {}
 
-    private static <T extends ItemColor> ItemColorType<T> register(RegistryKey<ItemColorType<?>> id, ItemColorType<T> itemColor) {
+    private static <T extends ItemColor<T>> ItemColorType<T> register(RegistryKey<ItemColorType<?>> id, ItemColorType<T> itemColor) {
         return Registry.register(ItematicRegistries.ITEM_COLOR_TYPE, id, itemColor);
     }
 }

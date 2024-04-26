@@ -9,13 +9,18 @@ import net.errorcraft.itematic.item.color.ItemColorTypes;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.item.ItemStack;
 
-public record DyeableItemColor(int index) implements ItemColor {
+public record DyeableItemColor(int index) implements ItemColor<DyeableItemColor> {
     public static final MapCodec<DyeableItemColor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.INT.fieldOf("index").forGetter(DyeableItemColor::index)
     ).apply(instance, DyeableItemColor::new));
 
     public static DyeableItemColor of(int index) {
         return new DyeableItemColor(index);
+    }
+
+    @Override
+    public ItemColorType<DyeableItemColor> type() {
+        return ItemColorTypes.DYEABLE;
     }
 
     @Override
@@ -26,10 +31,5 @@ public record DyeableItemColor(int index) implements ItemColor {
         return stack.itematic$getComponent(ItemComponentTypes.DYEABLE)
             .map(c -> c.getColor(stack))
             .orElse(DEFAULT_COLOR);
-    }
-
-    @Override
-    public ItemColorType<?> type() {
-        return ItemColorTypes.DYEABLE;
     }
 }

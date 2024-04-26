@@ -9,18 +9,22 @@ import net.errorcraft.itematic.item.color.ItemColorTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.ColorHelper;
 
-public record ConstantItemColor(int color) implements ItemColor {
+public record ConstantItemColor(int color) implements ItemColor<ConstantItemColor> {
     public static final MapCodec<ConstantItemColor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.INT.fieldOf("color").forGetter(ConstantItemColor::color)
     ).apply(instance, ConstantItemColor::new));
 
-    @Override
-    public int color(ItemStack stack, int tintIndex) {
-        return ColorHelper.Argb.fullAlpha(this.color);
+    public static ConstantItemColor of(int color) {
+        return new ConstantItemColor(color);
     }
 
     @Override
-    public ItemColorType<?> type() {
+    public ItemColorType<ConstantItemColor> type() {
         return ItemColorTypes.CONSTANT;
+    }
+
+    @Override
+    public int color(ItemStack stack, int tintIndex) {
+        return ColorHelper.Argb.fullAlpha(this.color);
     }
 }

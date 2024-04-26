@@ -195,7 +195,7 @@ public class ItemUtil {
                     .with(PotionHolderItemComponent.of(1.0f))
                     .with(UseAnimationItemComponent.of(UseAction.DRINK))
                     .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
-                    .with(TintedItemComponent.of(new PotionItemColor()))
+                    .with(TintedItemComponent.of(PotionItemColor.INSTANCE))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM)))
                     .build(),
                 ItemEventMap.builder()
@@ -604,7 +604,7 @@ public class ItemUtil {
                 ItemBase.Builder.forBlock(ItemKeys.GRASS_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRASS_BLOCK)))
-                    .with(TintedItemComponent.of(new GrassItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .with(TintedItemComponent.of(GrassItemColor.of(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIRT, create(
@@ -5043,7 +5043,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_LEAVES)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new FoliageItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .with(TintedItemComponent.of(FoliageItemColor.of(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPRUCE_LEAVES, create(
@@ -5051,7 +5051,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_LEAVES)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new ConstantItemColor(FoliageColors.getSpruceColor())))
+                    .with(TintedItemComponent.of(ConstantItemColor.of(FoliageColors.getSpruceColor())))
                     .build()
             ));
             this.registerable.register(ItemKeys.BIRCH_LEAVES, create(
@@ -5059,7 +5059,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_LEAVES)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new ConstantItemColor(FoliageColors.getBirchColor())))
+                    .with(TintedItemComponent.of(ConstantItemColor.of(FoliageColors.getBirchColor())))
                     .build()
             ));
             this.registerable.register(ItemKeys.JUNGLE_LEAVES, create(
@@ -5067,7 +5067,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_LEAVES)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new FoliageItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .with(TintedItemComponent.of(FoliageItemColor.of(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
                     .build()
             ));
             this.registerable.register(ItemKeys.ACACIA_LEAVES, create(
@@ -5075,7 +5075,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_LEAVES)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new FoliageItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .with(TintedItemComponent.of(FoliageItemColor.of(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHERRY_LEAVES, create(
@@ -5090,7 +5090,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_LEAVES)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new FoliageItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .with(TintedItemComponent.of(FoliageItemColor.of(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
                     .build()
             ));
             this.registerable.register(ItemKeys.MANGROVE_LEAVES, create(
@@ -5098,7 +5098,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_LEAVES)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new ConstantItemColor(FoliageColors.getMangroveColor())))
+                    .with(TintedItemComponent.of(ConstantItemColor.of(FoliageColors.getMangroveColor())))
                     .build()
             ));
             this.registerable.register(ItemKeys.AZALEA_LEAVES, create(
@@ -5177,7 +5177,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHORT_GRASS)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new GrassItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .with(TintedItemComponent.of(GrassItemColor.of(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
                     .build()
             ));
             this.registerable.register(ItemKeys.KELP, create(
@@ -5312,7 +5312,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.VINE)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new FoliageItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .with(TintedItemComponent.of(FoliageItemColor.of(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOW_LICHEN, create(
@@ -5327,7 +5327,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TALL_GRASS)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new GrassItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .with(TintedItemComponent.of(GrassItemColor.of(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
                     .build()
             ));
             this.registerable.register(ItemKeys.CACTUS, create(
@@ -5350,7 +5350,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FERN)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new GrassItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .with(TintedItemComponent.of(GrassItemColor.of(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
                     .build()
             ));
             this.registerable.register(ItemKeys.LILY_PAD, create(
@@ -5359,7 +5359,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_PAD)))
                     .with(UseableOnFluidItemComponent.INSTANCE)
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new ConstantItemColor(0xff71c35c)))
+                    .with(TintedItemComponent.of(ConstantItemColor.of(0xff71c35c)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_WART, create(
@@ -5590,7 +5590,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LARGE_FERN)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
-                    .with(TintedItemComponent.of(new GrassItemColor(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .with(TintedItemComponent.of(GrassItemColor.of(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPORE_BLOSSOM, create(
@@ -7631,7 +7631,7 @@ public class ItemUtil {
                     .with(ThrowableItemComponent.of(0.5f, -20.0f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.POTION)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
-                    .with(TintedItemComponent.of(new PotionItemColor()))
+                    .with(TintedItemComponent.of(PotionItemColor.INSTANCE))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPECTRAL_ARROW, create(
@@ -7647,7 +7647,7 @@ public class ItemUtil {
                     .with(PotionHolderItemComponent.of(0.125f))
                     .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                    .with(TintedItemComponent.of(new PotionItemColor()))
+                    .with(TintedItemComponent.of(PotionItemColor.INSTANCE))
                     .build()
             ));
             this.registerable.register(ItemKeys.LINGERING_POTION, create(
@@ -7658,7 +7658,7 @@ public class ItemUtil {
                     .with(ThrowableItemComponent.of(0.5f, -20.0f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.POTION)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
-                    .with(TintedItemComponent.of(new PotionItemColor()))
+                    .with(TintedItemComponent.of(PotionItemColor.INSTANCE))
                     .build()
             ));
         }
@@ -8640,7 +8640,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.FIREWORK_STAR).build(),
                 ItemComponentSet.builder()
                     .with(FireworkExplosionHolderItemComponent.INSTANCE)
-                    .with(TintedItemComponent.of(new FireworkItemColor()))
+                    .with(TintedItemComponent.of(FireworkItemColor.INSTANCE))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENCHANTED_BOOK, create(

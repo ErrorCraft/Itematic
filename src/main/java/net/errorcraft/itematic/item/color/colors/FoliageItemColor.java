@@ -12,18 +12,22 @@ import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.biome.Biome;
 
-public record FoliageItemColor(RegistryEntry<Biome> biome) implements ItemColor {
+public record FoliageItemColor(RegistryEntry<Biome> biome) implements ItemColor<FoliageItemColor> {
     public static final MapCodec<FoliageItemColor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.BIOME).fieldOf("biome").forGetter(FoliageItemColor::biome)
     ).apply(instance, FoliageItemColor::new));
 
-    @Override
-    public int color(ItemStack stack, int tintIndex) {
-        return ColorHelper.Argb.fullAlpha(this.biome.value().getFoliageColor());
+    public static FoliageItemColor of(RegistryEntry<Biome> biome) {
+        return new FoliageItemColor(biome);
     }
 
     @Override
-    public ItemColorType<?> type() {
+    public ItemColorType<FoliageItemColor> type() {
         return ItemColorTypes.FOLIAGE;
+    }
+
+    @Override
+    public int color(ItemStack stack, int tintIndex) {
+        return ColorHelper.Argb.fullAlpha(this.biome.value().getFoliageColor());
     }
 }
