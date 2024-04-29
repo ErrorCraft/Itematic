@@ -28,6 +28,14 @@ import java.util.List;
 public record ToolItemComponent(ToolComponent tool) implements ItemComponent<ToolItemComponent> {
     public static final Codec<ToolItemComponent> CODEC = ToolComponent.CODEC.xmap(ToolItemComponent::new, ToolItemComponent::tool);
 
+    public static ToolItemComponent of(ToolMaterial material, TagKey<Block> mineableBlocks) {
+        return new ToolItemComponent(material.createComponent(mineableBlocks));
+    }
+
+    public static Builder builder(int damage) {
+        return new Builder(damage);
+    }
+
     @Override
     public ItemComponentType<ToolItemComponent> type() {
         return ItemComponentTypes.TOOL;
@@ -55,20 +63,16 @@ public record ToolItemComponent(ToolComponent tool) implements ItemComponent<Too
         if (!(world instanceof ServerWorld serverWorld)) {
             return;
         }
+        ToolComponent tool = stack.get(DataComponentTypes.TOOL);
+        if (tool == null) {
+            return;
+        }
         ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, EquipmentSlot.MAINHAND)
             .entityPosition(ActionContextParameter.THIS, miner)
             .position(ActionContextParameter.TARGET, pos.toCenterPos())
             .build();
         stack.itematic$invokeEvent(ItemEvents.USE_TOOL, context);
-        stack.itematic$damage(this.tool.damagePerBlock(), context);
-    }
-
-    public static ToolItemComponent of(ToolMaterial material, TagKey<Block> mineableBlocks) {
-        return new ToolItemComponent(material.createComponent(mineableBlocks));
-    }
-
-    public static Builder builder(int damage) {
-        return new Builder(damage);
+        stack.itematic$damage(tool.damagePerBlock(), context);
     }
 
     public static class Builder {
