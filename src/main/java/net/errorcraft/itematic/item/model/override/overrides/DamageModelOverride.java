@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 public class DamageModelOverride implements ClampedModelOverride {
     @Override
     public float applyUnclamped(ItemStack stack, @Nullable World world, @Nullable LivingEntity target, int seed) {
-        return 0;
+        return (float)stack.getDamage() / stack.getMaxDamage();
     }
 
     @Override
