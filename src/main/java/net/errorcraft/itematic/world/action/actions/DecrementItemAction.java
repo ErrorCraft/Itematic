@@ -9,10 +9,11 @@ import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.dynamic.Codecs;
 
 public record DecrementItemAction(int amount, boolean ignoreGameMode) implements Action<DecrementItemAction> {
     public static final MapCodec<DecrementItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codec.INT.fieldOf("amount").forGetter(DecrementItemAction::amount),
+        Codecs.POSITIVE_INT.fieldOf("amount").forGetter(DecrementItemAction::amount),
         Codec.BOOL.optionalFieldOf("ignore_game_mode", false).forGetter(DecrementItemAction::ignoreGameMode)
     ).apply(instance, DecrementItemAction::new));
 

@@ -2,6 +2,7 @@
   "entry": {
     "action": {
       "type": "minecraft:sequence",
+      "handler": "minecraft:passing",
       "entries": [
         {
           "action": {
@@ -17,8 +18,7 @@
             "amount": 1
           }
         }
-      ],
-      "handler": "minecraft:passing"
+      ]
     }
   },
   "offset": {

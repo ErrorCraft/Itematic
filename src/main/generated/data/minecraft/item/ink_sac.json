@@ -8,6 +8,7 @@
       "entry": {
         "action": {
           "type": "minecraft:sequence",
+          "handler": "minecraft:passing",
           "entries": [
             {
               "action": {
@@ -27,8 +28,7 @@
                 "type": "minecraft:swing_hand"
               }
             }
-          ],
-          "handler": "minecraft:passing"
+          ]
         },
         "requirements": {
           "conditions": {

@@ -1,6 +1,7 @@
 {
   "action": {
     "type": "minecraft:sequence",
+    "handler": "minecraft:passing",
     "entries": [
       {
         "action": {
@@ -18,8 +19,7 @@
           "position": "target"
         }
       }
-    ],
-    "handler": "minecraft:passing"
+    ]
   },
   "requirements": {
     "conditions": {

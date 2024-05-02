@@ -19,6 +19,7 @@
       "entry": {
         "action": {
           "type": "minecraft:sequence",
+          "handler": "minecraft:passing",
           "entries": [
             "minecraft:light_block",
             {
@@ -40,8 +41,7 @@
                 "volume": 1.0
               }
             }
-          ],
-          "handler": "minecraft:passing"
+          ]
         }
       }
     }

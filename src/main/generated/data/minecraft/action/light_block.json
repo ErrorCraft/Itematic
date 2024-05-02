@@ -1,10 +1,12 @@
 {
   "action": {
     "type": "minecraft:sequence",
+    "handler": "minecraft:passing",
     "entries": [
       {
         "action": {
           "type": "minecraft:sequence",
+          "handler": "minecraft:first_to_pass_requirements",
           "entries": [
             {
               "action": {
@@ -77,8 +79,7 @@
                 "position": "target"
               }
             }
-          ],
-          "handler": "minecraft:first_to_pass_requirements"
+          ]
         }
       },
       {
@@ -89,7 +90,6 @@
         },
         "optional": true
       }
-    ],
-    "handler": "minecraft:passing"
+    ]
   }
 }

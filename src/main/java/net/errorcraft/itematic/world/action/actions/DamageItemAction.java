@@ -10,13 +10,13 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.dynamic.Codecs;
 
 public record DamageItemAction(int amount, boolean ignoreGameMode) implements Action<DamageItemAction> {
     public static final MapCodec<DamageItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codec.INT.fieldOf("amount").forGetter(DamageItemAction::amount),
+        Codecs.POSITIVE_INT.fieldOf("amount").forGetter(DamageItemAction::amount),
         Codec.BOOL.optionalFieldOf("ignore_game_mode", false).forGetter(DamageItemAction::ignoreGameMode)
     ).apply(instance, DamageItemAction::new));
-
 
     public static DamageItemAction of(int amount) {
         return new DamageItemAction(amount, false);

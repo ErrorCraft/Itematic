@@ -23,6 +23,7 @@
       "entry": {
         "action": {
           "type": "minecraft:sequence",
+          "handler": "minecraft:passing",
           "entries": [
             {
               "action": {
@@ -36,8 +37,7 @@
                 "item": "minecraft:bowl"
               }
             }
-          ],
-          "handler": "minecraft:passing"
+          ]
         }
       }
     }

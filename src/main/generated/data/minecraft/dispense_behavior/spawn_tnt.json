@@ -2,6 +2,7 @@
   "entry": {
     "action": {
       "type": "minecraft:sequence",
+      "handler": "minecraft:passing",
       "entries": [
         {
           "action": {
@@ -22,8 +23,7 @@
             "volume": 1.0
           }
         }
-      ],
-      "handler": "minecraft:passing"
+      ]
     }
   }
 }
