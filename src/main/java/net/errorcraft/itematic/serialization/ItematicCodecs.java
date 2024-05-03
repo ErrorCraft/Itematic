@@ -19,6 +19,12 @@ public class ItematicCodecs {
         }
         return DataResult.error(() -> "Value must be non-negative: " + value);
     });
+    public static final Codec<Double> NON_NEGATIVE_DOUBLE = Codec.DOUBLE.validate(value -> {
+        if (value >= 0 && value <= Double.MAX_VALUE) {
+            return DataResult.success(value);
+        }
+        return DataResult.error(() -> "Value must be non-negative: " + value);
+    });
 
     private ItematicCodecs() {}
 

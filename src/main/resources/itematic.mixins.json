@@ -326,6 +326,7 @@
     "registry.RegistryLoaderExtender",
     "registry.SimpleRegistryExtender",
     "registry.entry.RegistryEntryExtender$ReferenceExtender",
+    "registry.entry.RegistryEntryListExtender$ListBackedExtender",
     "scoreboard.ScoreboardCriterionExtender",
     "scoreboard.ScoreboardStateExtender",
     "screen.AnvilScreenHandlerExtender",

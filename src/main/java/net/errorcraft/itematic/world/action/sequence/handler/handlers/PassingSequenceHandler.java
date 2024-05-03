@@ -14,7 +14,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-public record PassingSequenceHandler(List<Entry> entries) implements SequenceHandler {
+public record PassingSequenceHandler(List<Entry> entries) implements SequenceHandler<PassingSequenceHandler> {
     public static final Codec<PassingSequenceHandler> CODEC = Entry.CODEC.listOf().xmap(PassingSequenceHandler::new, PassingSequenceHandler::entries);
 
     public static Builder builder() {
@@ -22,7 +22,7 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
     }
 
     @Override
-    public SequenceHandlerType<?> type() {
+    public SequenceHandlerType<PassingSequenceHandler> type() {
         return SequenceHandlerTypes.PASSING;
     }
 

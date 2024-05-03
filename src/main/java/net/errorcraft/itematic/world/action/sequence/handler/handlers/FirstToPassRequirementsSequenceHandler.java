@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record FirstToPassRequirementsSequenceHandler(RegistryEntryList<ActionEntry> entries) implements SequenceHandler {
+public record FirstToPassRequirementsSequenceHandler(RegistryEntryList<ActionEntry> entries) implements SequenceHandler<FirstToPassRequirementsSequenceHandler> {
     public static final Codec<FirstToPassRequirementsSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(FirstToPassRequirementsSequenceHandler::new, FirstToPassRequirementsSequenceHandler::entries);
 
     public static Builder builder() {
@@ -21,7 +21,7 @@ public record FirstToPassRequirementsSequenceHandler(RegistryEntryList<ActionEnt
     }
 
     @Override
-    public SequenceHandlerType<?> type() {
+    public SequenceHandlerType<FirstToPassRequirementsSequenceHandler> type() {
         return SequenceHandlerTypes.FIRST_TO_PASS_REQUIREMENTS;
     }
 

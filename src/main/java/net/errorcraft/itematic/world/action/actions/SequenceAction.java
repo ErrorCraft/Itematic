@@ -10,14 +10,14 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.minecraft.registry.entry.RegistryEntry;
 
-public record SequenceAction(SequenceHandler handler) implements Action<SequenceAction> {
+public record SequenceAction(SequenceHandler<?> handler) implements Action<SequenceAction> {
     public static final MapCodec<SequenceAction> CODEC = SequenceHandler.CODEC.xmap(SequenceAction::new, SequenceAction::handler);
 
     public static SequenceAction of(SequenceHandler.Builder<?, ?> builder) {
         return new SequenceAction(builder.build());
     }
 
-    public static SequenceAction of(SequenceHandler handler) {
+    public static SequenceAction of(SequenceHandler<?> handler) {
         return new SequenceAction(handler);
     }
 

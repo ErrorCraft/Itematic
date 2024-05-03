@@ -12,7 +12,7 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import java.util.ArrayList;
 import java.util.List;
 
-public record UncheckedSequenceHandler(RegistryEntryList<ActionEntry> entries) implements SequenceHandler {
+public record UncheckedSequenceHandler(RegistryEntryList<ActionEntry> entries) implements SequenceHandler<UncheckedSequenceHandler> {
     public static final Codec<UncheckedSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(UncheckedSequenceHandler::new, UncheckedSequenceHandler::entries);
 
     public static Builder builder() {
@@ -20,7 +20,7 @@ public record UncheckedSequenceHandler(RegistryEntryList<ActionEntry> entries) i
     }
 
     @Override
-    public SequenceHandlerType<?> type() {
+    public SequenceHandlerType<UncheckedSequenceHandler> type() {
         return SequenceHandlerTypes.UNCHECKED;
     }
 

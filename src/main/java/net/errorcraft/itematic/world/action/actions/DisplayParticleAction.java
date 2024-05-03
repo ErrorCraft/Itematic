@@ -3,6 +3,7 @@ package net.errorcraft.itematic.world.action.actions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -13,16 +14,17 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Vec3d;
 
 public record DisplayParticleAction(ActionContextParameter position, ParticleEffect particle, int count, Vec3dProvider offset, Vec3dProvider delta, double speed, boolean force) implements Action<DisplayParticleAction> {
     public static final MapCodec<DisplayParticleAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(DisplayParticleAction::position),
         ParticleTypes.TYPE_CODEC.fieldOf("particle").forGetter(DisplayParticleAction::particle),
-        Codec.INT.fieldOf("count").forGetter(DisplayParticleAction::count),
+        Codecs.NONNEGATIVE_INT.fieldOf("count").forGetter(DisplayParticleAction::count),
         Vec3dProvider.CODEC.optionalFieldOf("offset", Vec3dProvider.ZERO).forGetter(DisplayParticleAction::offset),
         Vec3dProvider.CODEC.fieldOf("delta").forGetter(DisplayParticleAction::delta),
-        Codec.DOUBLE.fieldOf("speed").forGetter(DisplayParticleAction::speed),
+        ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("speed").forGetter(DisplayParticleAction::speed),
         Codec.BOOL.optionalFieldOf("force", false).forGetter(DisplayParticleAction::force)
     ).apply(instance, DisplayParticleAction::new));
 

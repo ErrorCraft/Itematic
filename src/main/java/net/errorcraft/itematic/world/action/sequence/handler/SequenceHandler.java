@@ -9,14 +9,14 @@ import net.errorcraft.itematic.world.action.actions.SequenceAction;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.registry.entry.RegistryEntry;
 
-public interface SequenceHandler {
-    MapCodec<SequenceHandler> CODEC = ItematicRegistries.SEQUENCE_HANDLER_TYPE.getCodec().dispatchMap("handler", SequenceHandler::type, SequenceHandlerType::codec);
+public interface SequenceHandler<T extends SequenceHandler<T>> {
+    MapCodec<SequenceHandler<?>> CODEC = ItematicRegistries.SEQUENCE_HANDLER_TYPE.getCodec().dispatchMap("handler", SequenceHandler::type, SequenceHandlerType::codec);
 
-    SequenceHandlerType<?> type();
+    SequenceHandlerType<T> type();
     boolean handle(ActionContext context);
     Iterable<RegistryEntry<ActionEntry>> iterateEntries();
 
-    interface Builder<T extends SequenceHandler, S extends Builder<T, S>> {
+    interface Builder<T extends SequenceHandler<T>, S extends Builder<T, S>> {
         T build();
         default S add(Builder<?, ?> builder) {
             return this.add(SequenceAction.of(builder));
@@ -24,10 +24,10 @@ public interface SequenceHandler {
         default S add(ActionRequirements requirements, Builder<?, ?> builder) {
             return this.add(requirements, SequenceAction.of(builder));
         }
-        default S add(SequenceHandler handler) {
+        default S add(SequenceHandler<?> handler) {
             return this.add(SequenceAction.of(handler));
         }
-        default S add(ActionRequirements requirements, SequenceHandler handler) {
+        default S add(ActionRequirements requirements, SequenceHandler<?> handler) {
             return this.add(requirements, SequenceAction.of(handler));
         }
         default S add(Action<?> action) {

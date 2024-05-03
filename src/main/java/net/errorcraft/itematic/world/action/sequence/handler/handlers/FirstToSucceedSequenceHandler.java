@@ -12,7 +12,7 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import java.util.ArrayList;
 import java.util.List;
 
-public record FirstToSucceedSequenceHandler(RegistryEntryList<ActionEntry> entries) implements SequenceHandler {
+public record FirstToSucceedSequenceHandler(RegistryEntryList<ActionEntry> entries) implements SequenceHandler<FirstToSucceedSequenceHandler> {
     public static final Codec<FirstToSucceedSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(FirstToSucceedSequenceHandler::new, FirstToSucceedSequenceHandler::entries);
 
     public static Builder builder() {
@@ -20,7 +20,7 @@ public record FirstToSucceedSequenceHandler(RegistryEntryList<ActionEntry> entri
     }
 
     @Override
-    public SequenceHandlerType<?> type() {
+    public SequenceHandlerType<FirstToSucceedSequenceHandler> type() {
         return SequenceHandlerTypes.FIRST_TO_SUCCEED;
     }
 
