@@ -13,7 +13,7 @@
         },
         {
           "action": {
-            "type": "minecraft:decrement_item",
+            "type": "minecraft:damage_item",
             "amount": 1
           }
         }

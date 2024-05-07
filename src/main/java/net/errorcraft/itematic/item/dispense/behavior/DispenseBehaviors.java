@@ -135,7 +135,9 @@ public class DispenseBehaviors {
             .build()
         );
         registerable.register(SHEAR, DispenseBehavior.builder(
-            decrement(ShearAtPositionAction.of(ActionContextParameter.TARGET)))
+            PassingSequenceHandler.builder()
+                .add(ShearAtPositionAction.of(ActionContextParameter.TARGET))
+                .add(DamageItemAction.of(1)))
             .doNotDispenseOnFailure()
             .build()
         );

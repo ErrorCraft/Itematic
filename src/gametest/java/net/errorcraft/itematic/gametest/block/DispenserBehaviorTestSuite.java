@@ -640,7 +640,7 @@ public class DispenserBehaviorTestSuite {
         context.runAtTick(4, () -> context.addFinalTask(() -> {
             context.assertTrue(sheep.isSheared(), "Expected sheep to be sheared");
             context.expectItem(world.itematic$getItem(ItemKeys.WHITE_WOOL).value());
-            Assert.itemStackIsEmpty(blockEntity.getStack(0));
+            context.assertTrue(blockEntity.getStack(0).isDamaged(), "Expected item stack to be damaged");
         }));
     }
 
@@ -654,7 +654,7 @@ public class DispenserBehaviorTestSuite {
         context.runAtTick(4, () -> context.addFinalTask(() -> {
             context.expectBlockProperty(OUTPUT_POSITION, BeehiveBlock.HONEY_LEVEL, 0);
             context.expectItem(world.itematic$getItem(ItemKeys.HONEYCOMB).value());
-            Assert.itemStackIsEmpty(blockEntity.getStack(0));
+            context.assertTrue(blockEntity.getStack(0).isDamaged(), "Expected item stack to be damaged");
         }));
     }
 
@@ -668,6 +668,7 @@ public class DispenserBehaviorTestSuite {
         context.runAtTick(4, () -> context.addFinalTask(() -> {
             context.dontExpectItem(world.itematic$getItem(ItemKeys.SHEARS).value());
             Assert.itemStackIsOf(blockEntity.getStack(0), ItemKeys.SHEARS);
+            context.assertFalse(blockEntity.getStack(0).isDamaged(), "Expected item stack to not be damaged");
         }));
     }
 
@@ -739,6 +740,7 @@ public class DispenserBehaviorTestSuite {
         context.runAtTick(4, () -> context.addFinalTask(() -> {
             context.dontExpectItem(world.itematic$getItem(ItemKeys.FLINT_AND_STEEL).value());
             Assert.itemStackIsOf(blockEntity.getStack(0), ItemKeys.FLINT_AND_STEEL);
+            context.assertFalse(blockEntity.getStack(0).isDamaged(), "Expected item stack to not be damaged");
         }));
     }
 
@@ -766,6 +768,7 @@ public class DispenserBehaviorTestSuite {
         context.runAtTick(4, () -> context.addFinalTask(() -> {
             context.dontExpectItem(world.itematic$getItem(ItemKeys.BRUSH).value());
             Assert.itemStackIsOf(blockEntity.getStack(0), ItemKeys.BRUSH);
+            context.assertFalse(blockEntity.getStack(0).isDamaged(), "Expected item stack to not be damaged");
         }));
     }
 
