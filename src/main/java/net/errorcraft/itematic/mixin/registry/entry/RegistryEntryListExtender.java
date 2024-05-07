@@ -26,11 +26,13 @@ public interface RegistryEntryListExtender {
             if (count <= 0) {
                 return List.of();
             }
-            if (this.size() <= count) {
-                return this.getEntries();
-            }
 
             List<RegistryEntry<T>> copy = new ArrayList<>(this.getEntries());
+            if (this.size() <= count) {
+                Util.shuffle(copy, random);
+                return copy;
+            }
+
             List<RegistryEntry<T>> picked = new ArrayList<>(count);
             for (int i = 0; i < count; i++) {
                 RegistryEntry<T> entry = Util.getRandomOrEmpty(copy, random)

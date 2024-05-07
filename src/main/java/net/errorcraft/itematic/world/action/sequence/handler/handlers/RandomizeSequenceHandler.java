@@ -9,9 +9,11 @@ import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.util.Util;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.random.Random;
 
+import java.util.List;
 import java.util.Optional;
 
 public record RandomizeSequenceHandler(RegistryEntryList<ActionEntry> entries, Optional<Integer> count) implements SequenceHandler<RandomizeSequenceHandler> {
@@ -40,7 +42,11 @@ public record RandomizeSequenceHandler(RegistryEntryList<ActionEntry> entries, O
     }
 
     private Iterable<RegistryEntry<ActionEntry>> randomEntries(Random random) {
-        return this.count.<Iterable<RegistryEntry<ActionEntry>>>map(count -> this.entries.itematic$getRandom(random, count))
-            .orElse(this.entries);
+        return this.count.map(count -> this.entries.itematic$getRandom(random, count))
+            .orElseGet(() -> {
+                List<RegistryEntry<ActionEntry>> entries = this.entries.stream().toList();
+                Util.shuffle(entries, random);
+                return entries;
+            });
     }
 }
