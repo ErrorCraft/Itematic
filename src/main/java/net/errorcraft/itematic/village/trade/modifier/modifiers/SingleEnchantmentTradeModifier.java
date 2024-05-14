@@ -23,14 +23,18 @@ import java.util.Optional;
 
 public record SingleEnchantmentTradeModifier(int index, int baseRandomCost, int perLevelRandomCost, int perLevelCost, RegistryEntryList<Enchantment> enchantments, Range.IntegerRange levels) implements TradeModifier<SingleEnchantmentTradeModifier> {
     public static final MapCodec<SingleEnchantmentTradeModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codec.INT.fieldOf("index").forGetter(SingleEnchantmentTradeModifier::index),
+        Trade.WANTED_INDEX_CODEC.fieldOf("index").forGetter(SingleEnchantmentTradeModifier::index),
         Codec.INT.fieldOf("base_random_cost").forGetter(SingleEnchantmentTradeModifier::baseRandomCost),
         Codec.INT.fieldOf("per_level_random_cost").forGetter(SingleEnchantmentTradeModifier::perLevelRandomCost),
         Codec.INT.fieldOf("per_level_cost").forGetter(SingleEnchantmentTradeModifier::perLevelCost),
-        RegistryCodecs.entryList(RegistryKeys.ENCHANTMENT, true).fieldOf("enchantments").forGetter(SingleEnchantmentTradeModifier::enchantments),
+        RegistryCodecs.entryList(RegistryKeys.ENCHANTMENT).fieldOf("enchantments").forGetter(SingleEnchantmentTradeModifier::enchantments),
         Range.INT_CODEC.fieldOf("levels").forGetter(SingleEnchantmentTradeModifier::levels)
     ).apply(instance, SingleEnchantmentTradeModifier::new));
     private static final int TREASURE_BONUS_FACTOR = 2;
+
+    public static SingleEnchantmentTradeModifier of(int index, int baseRandomCost, int perLevelRandomCost, int perLevelCost, RegistryEntryList<Enchantment> enchantments) {
+        return new SingleEnchantmentTradeModifier(index, baseRandomCost, perLevelRandomCost, perLevelCost, enchantments, Range.IntegerRange.atLeast(1));
+    }
 
     @Override
     public TradeModifierType<SingleEnchantmentTradeModifier> type() {
@@ -43,10 +47,6 @@ public record SingleEnchantmentTradeModifier(int index, int baseRandomCost, int 
         this.enchantments.getRandom(random)
             .ifPresent(entry -> this.apply(wants.getStack(this.index), gives, random, entry.value()));
         return Optional.of(new TradedItem(gives.getRegistryEntry(), gives.getCount(), ComponentPredicate.of(gives.getComponents())));
-    }
-
-    public static SingleEnchantmentTradeModifier of(int index, int baseRandomCost, int perLevelRandomCost, int perLevelCost, RegistryEntryList<Enchantment> enchantments) {
-        return new SingleEnchantmentTradeModifier(index, baseRandomCost, perLevelRandomCost, perLevelCost, enchantments, Range.IntegerRange.atLeast(1));
     }
 
     private void apply(ItemStack wants, ItemStack gives, Random random, Enchantment enchantment) {

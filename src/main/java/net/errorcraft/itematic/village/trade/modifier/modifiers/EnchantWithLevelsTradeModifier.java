@@ -19,10 +19,14 @@ import java.util.Optional;
 
 public record EnchantWithLevelsTradeModifier(int index, Range.IntegerRange level, boolean treasure) implements TradeModifier<EnchantWithLevelsTradeModifier> {
     public static final MapCodec<EnchantWithLevelsTradeModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codec.INT.fieldOf("index").forGetter(EnchantWithLevelsTradeModifier::index),
+        Trade.WANTED_INDEX_CODEC.fieldOf("index").forGetter(EnchantWithLevelsTradeModifier::index),
         Range.INT_CODEC.fieldOf("level").forGetter(EnchantWithLevelsTradeModifier::level),
         Codec.BOOL.optionalFieldOf("treasure", false).forGetter(EnchantWithLevelsTradeModifier::treasure)
     ).apply(instance, EnchantWithLevelsTradeModifier::new));
+
+    public static EnchantWithLevelsTradeModifier of(int index, int minLevel, int maxLevel) {
+        return new EnchantWithLevelsTradeModifier(index, Range.IntegerRange.of(minLevel, maxLevel), false);
+    }
 
     @Override
     public TradeModifierType<EnchantWithLevelsTradeModifier> type() {
@@ -32,13 +36,9 @@ public record EnchantWithLevelsTradeModifier(int index, Range.IntegerRange level
     @Override
     public Optional<TradedItem> apply(Trade.Input wants, ItemStack gives, LootContext context) {
         Random random = context.getRandom();
-        int level = this.level.get(random);
+        int level = Math.max(1, this.level.get(random));
         ItemStack givesActual = EnchantmentHelper.enchant(context.getWorld().getEnabledFeatures(), random, gives, level, this.treasure);
         wants.getStack(this.index).itematic$tryIncrement(level);
         return Optional.of(new TradedItem(givesActual.getRegistryEntry(), givesActual.getCount(), ComponentPredicate.of(givesActual.getComponents())));
-    }
-
-    public static EnchantWithLevelsTradeModifier of(int index, int minLevel, int maxLevel) {
-        return new EnchantWithLevelsTradeModifier(index, Range.IntegerRange.of(minLevel, maxLevel), false);
     }
 }

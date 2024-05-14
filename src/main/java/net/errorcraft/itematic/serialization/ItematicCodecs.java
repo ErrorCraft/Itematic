@@ -28,15 +28,15 @@ public class ItematicCodecs {
 
     private ItematicCodecs() {}
 
-    public static <T> Codec<List<T>> countRangeList(Codec<List<T>> codec, int minCount, int maxCount) {
-        return codec.validate(list -> {
-            if (list.size() < minCount) {
-                return DataResult.error(() -> "List must contain at least " + minCount + " elements");
+    public static Codec<Integer> index(int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("size must be positive: " + size);
+        }
+        return Codec.INT.validate(i -> {
+            if (i >= 0 && i <= size) {
+                return DataResult.success(i);
             }
-            if (list.size() > maxCount) {
-                return DataResult.error(() -> "List must contain at most " + maxCount + " elements");
-            }
-            return DataResult.success(list);
+            return DataResult.error(() -> "Index must be non-negative and less than " + size + ": " + i);
         });
     }
 

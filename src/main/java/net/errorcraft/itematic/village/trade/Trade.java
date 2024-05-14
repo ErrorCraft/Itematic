@@ -17,6 +17,7 @@ import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradedItem;
 
@@ -26,13 +27,14 @@ import java.util.Optional;
 
 public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperience, float priceMultiplier, Optional<TradeModifier<?>> tradeModifier) {
     public static final Codec<Trade> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        ItematicCodecs.countRangeList(Entry.CODEC.listOf(), 1, Trade.MAX_WANTED_ENTRIES).fieldOf("wants").forGetter(Trade::wants),
+        Entry.CODEC.listOf(1, Trade.MAX_WANTED_ENTRIES).fieldOf("wants").forGetter(Trade::wants),
         Entry.CODEC.fieldOf("gives").forGetter(Trade::gives),
-        Codec.INT.fieldOf("max_uses").forGetter(Trade::maxUses),
+        Codecs.POSITIVE_INT.fieldOf("max_uses").forGetter(Trade::maxUses),
         Codec.INT.optionalFieldOf("trade_experience", 1).forGetter(Trade::tradeExperience),
         Codec.FLOAT.optionalFieldOf("price_multiplier", 0.0f).forGetter(Trade::priceMultiplier),
         TradeModifier.CODEC.optionalFieldOf("trade_modifier").forGetter(Trade::tradeModifier)
     ).apply(instance, Trade::new));
+    public static final Codec<Integer> WANTED_INDEX_CODEC = ItematicCodecs.index(Trade.MAX_WANTED_ENTRIES);
     private static final int MAX_WANTED_ENTRIES = 2;
 
     public TradeOffer createTradeOffer(LootContext context) {
@@ -147,7 +149,8 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         ).apply(instance, Entry::new));
 
         public ItemStack createStack(LootContext context) {
-            ItemStack stack = new ItemStack(this.item, this.count.get(context.getRandom()));
+            int count = Math.clamp(this.count.get(context.getRandom()), 1, this.item.value().getMaxCount());
+            ItemStack stack = new ItemStack(this.item, count);
             return this.itemModifier.map(itemModifier -> {
                 context.markActive(LootContext.itemModifier(itemModifier));
                 return itemModifier.apply(stack, context);

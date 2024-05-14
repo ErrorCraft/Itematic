@@ -28,6 +28,10 @@ public record ItemFromTypeTradeModifier(Map<VillagerType, RegistryEntry<Item>> t
         Codec.simpleMap(Registries.VILLAGER_TYPE.getCodec(), RegistryFixedCodec.of(RegistryKeys.ITEM), Registries.VILLAGER_TYPE).fieldOf("types").forGetter(ItemFromTypeTradeModifier::types)
     ).apply(instance, ItemFromTypeTradeModifier::new));
 
+    public static ItemFromTypeTradeModifier of(Map<VillagerType, RegistryEntry<Item>> types) {
+        return new ItemFromTypeTradeModifier(types);
+    }
+
     @Override
     public TradeModifierType<ItemFromTypeTradeModifier> type() {
         return TradeModifierTypes.ITEM_FROM_TYPE;
@@ -44,9 +48,5 @@ public record ItemFromTypeTradeModifier(Map<VillagerType, RegistryEntry<Item>> t
         }
         ItemStack givesActual = gives.itematic$copyWithItem(this.types.get(type));
         return Optional.of(new TradedItem(givesActual.getRegistryEntry(), givesActual.getCount(), ComponentPredicate.of(givesActual.getComponents())));
-    }
-
-    public static ItemFromTypeTradeModifier of(Map<VillagerType, RegistryEntry<Item>> types) {
-        return new ItemFromTypeTradeModifier(types);
     }
 }
