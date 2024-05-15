@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.DyeItemComponent;
 import net.errorcraft.itematic.network.codec.PacketCodecUtil;
-import net.errorcraft.itematic.util.DyeColorUtil;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
@@ -106,7 +105,7 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
         private static final PacketCodec<RegistryByteBuf, ItemColoringRecipe> PACKET_CODEC = PacketCodecUtil.tuple(
             CraftingRecipeCategory.PACKET_CODEC, ItemColoringRecipe::category,
             Ingredient.PACKET_CODEC, ItemColoringRecipe::ingredient,
-            DyeColorUtil.PACKET_CODEC, ItemColoringRecipe::color,
+            DyeColor.PACKET_CODEC, ItemColoringRecipe::color,
             ItemStack.PACKET_CODEC, ItemColoringRecipe::result,
             ItemColoringRecipe::new
         );
