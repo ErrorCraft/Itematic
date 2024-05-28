@@ -90,6 +90,9 @@ public class IngredientExtender implements IngredientAccess {
         return this.matchingStacks;
     }
 
+    @Mixin(Ingredient.Entry.class)
+    public interface EntryExtender extends IngredientEntryAccess {}
+
     @Mixin(targets = "net/minecraft/recipe/Ingredient$TagEntry")
     public static class TagEntryExtender implements IngredientEntryAccess {
         @Shadow

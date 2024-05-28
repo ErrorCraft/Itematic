@@ -20,8 +20,7 @@ public class MinecraftClientExtender {
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/registry/DefaultedRegistry;getId(Ljava/lang/Object;)Lnet/minecraft/util/Identifier;"
-        ),
-        remap = false
+        )
     )
     @NotNull
     private static <T> Identifier initializeItemTooltipSearchProviderUseRegistryEntry(DefaultedRegistry<T> instance, T t, ItemStack stack) {

@@ -33,7 +33,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Map;
 
@@ -114,14 +113,13 @@ public abstract class SheepEntityExtender extends MobEntityExtender {
     @Inject(
         method = "getChildColor",
         at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/SheepEntity;getWorld()Lnet/minecraft/world/World;",
-            ordinal = 0
+            value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/entity/passive/SheepEntity;createDyeMixingCraftingInventory(Lnet/minecraft/util/DyeColor;Lnet/minecraft/util/DyeColor;)Lnet/minecraft/inventory/RecipeInputInventory;",
+            shift = At.Shift.AFTER
         ),
-        cancellable = true,
-        locals = LocalCapture.CAPTURE_FAILHARD
+        cancellable = true
     )
-    private void getColorUseItemComponent(AnimalEntity firstParent, AnimalEntity secondParent, CallbackInfoReturnable<DyeColor> info, DyeColor firstColor, DyeColor secondColor, RecipeInputInventory inventory) {
+    private void getColorUseItemComponent(AnimalEntity firstParent, AnimalEntity secondParent, CallbackInfoReturnable<DyeColor> info, @Local(ordinal = 0) DyeColor firstColor, @Local(ordinal = 1) DyeColor secondColor, @Local RecipeInputInventory inventory) {
         World world = this.getWorld();
         DyeColor color = world.getRecipeManager()
             .getFirstMatch(RecipeType.CRAFTING, inventory, world)

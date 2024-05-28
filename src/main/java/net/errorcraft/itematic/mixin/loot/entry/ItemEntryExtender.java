@@ -18,8 +18,7 @@ public class ItemEntryExtender {
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/registry/DefaultedRegistry;getEntryCodec()Lcom/mojang/serialization/Codec;"
-        ),
-        remap = false
+        )
     )
     private static Codec<RegistryEntry<Item>> doNotUseStaticItemRegistry(DefaultedRegistry<Item> instance) {
         return RegistryFixedCodec.of(RegistryKeys.ITEM);

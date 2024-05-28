@@ -18,7 +18,8 @@ public class BundleTooltipComponentExtender implements BundleTooltipComponentAcc
         method = "drawItems",
         at = @At(
             value = "FIELD",
-            target = "Lorg/apache/commons/lang3/math/Fraction;ONE:Lorg/apache/commons/lang3/math/Fraction;"
+            target = "Lorg/apache/commons/lang3/math/Fraction;ONE:Lorg/apache/commons/lang3/math/Fraction;",
+            remap = false
         )
     )
     private Fraction getCapacity() {

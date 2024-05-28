@@ -11,10 +11,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface RegistryEntryListExtender {
+@Mixin(RegistryEntryList.class)
+public interface RegistryEntryListExtender<T> extends RegistryEntryListAccess<T> {
     @Mixin(RegistryEntryList.ListBacked.class)
-    abstract
-    class ListBackedExtender<T> implements RegistryEntryListAccess<T> {
+    abstract class ListBackedExtender<T> implements RegistryEntryListAccess<T> {
         @Shadow
         public abstract int size();
 

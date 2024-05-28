@@ -106,8 +106,7 @@ public abstract class SherdsExtender implements SherdsAccess {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/network/codec/PacketCodec;xmap(Ljava/util/function/Function;Ljava/util/function/Function;)Lnet/minecraft/network/codec/PacketCodec;",
-            remap = false
+            target = "Lnet/minecraft/network/codec/PacketCodec;xmap(Ljava/util/function/Function;Ljava/util/function/Function;)Lnet/minecraft/network/codec/PacketCodec;"
         ),
         index = 0
     )
@@ -119,8 +118,7 @@ public abstract class SherdsExtender implements SherdsAccess {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/network/codec/PacketCodec;xmap(Ljava/util/function/Function;Ljava/util/function/Function;)Lnet/minecraft/network/codec/PacketCodec;",
-            remap = false
+            target = "Lnet/minecraft/network/codec/PacketCodec;xmap(Ljava/util/function/Function;Ljava/util/function/Function;)Lnet/minecraft/network/codec/PacketCodec;"
         ),
         index = 1
     )

@@ -236,6 +236,7 @@
     "entity.vehicle.TntMinecartEntityExtender",
     "entity.vehicle.VehicleEntityExtender",
     "fluid.EmptyFluidExtender",
+    "fluid.FluidExtender",
     "fluid.LavaFluidExtender",
     "fluid.WaterFluidExtender",
     "inventory.SimpleInventoryExtender",
@@ -286,6 +287,7 @@
     "loot.function.SetStewEffectLootFunctionExtender",
     "network.PacketByteBufExtender",
     "network.RegistryByteBufExtender",
+    "network.listener.ClientPlayPacketListenerExtender",
     "network.packet.PlayPacketsAccessor",
     "network.state.PlayStateFactoriesExtender",
     "predicate.entity.EntityPredicateExtender",
@@ -303,6 +305,7 @@
     "recipe.FireworkStarFadeRecipeExtender",
     "recipe.FireworkStarRecipeExtender",
     "recipe.IngredientExtender",
+    "recipe.IngredientExtender$EntryExtender",
     "recipe.IngredientExtender$StackEntryExtender",
     "recipe.IngredientExtender$TagEntryExtender",
     "recipe.InputSlotFillerExtender",
@@ -325,7 +328,9 @@
     "registry.RegistriesExtender",
     "registry.RegistryLoaderExtender",
     "registry.SimpleRegistryExtender",
+    "registry.entry.RegistryEntryExtender",
     "registry.entry.RegistryEntryExtender$ReferenceExtender",
+    "registry.entry.RegistryEntryListExtender",
     "registry.entry.RegistryEntryListExtender$ListBackedExtender",
     "scoreboard.ScoreboardCriterionExtender",
     "scoreboard.ScoreboardStateExtender",
@@ -369,7 +374,8 @@
     "village.VillagerProfessionExtender",
     "village.raid.RaidExtender",
     "world.ChunkRegionExtender",
-    "world.WorldExtender"
+    "world.WorldExtender",
+    "world.WorldViewExtender"
   ],
   "injectors": {
     "defaultRequire": 1
