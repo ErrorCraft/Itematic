@@ -4561,7 +4561,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.END_CRYSTAL).build(),
                 ItemComponentSet.builder()
                     .with(RarityItemComponent.of(Rarity.RARE))
-                    .with(EntityItemComponent.of(new EndCrystalEntityInitializer()))
+                    .with(EntityItemComponent.of(EndCrystalEntityInitializer.INSTANCE))
+                    .with(GlintItemComponent.of(true))
                     .build()
             ));
         }
@@ -7595,6 +7596,7 @@ public class ItemUtil {
                     .with(ThrowableItemComponent.of(0.7f, -20.0f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
+                    .with(GlintItemComponent.of(true))
                     .build()
             ));
             this.registerable.register(ItemKeys.FIRE_CHARGE, create(
@@ -8387,6 +8389,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(RarityItemComponent.of(Rarity.UNCOMMON))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_EXPLOSION))
+                    .with(GlintItemComponent.of(true))
                     .build()
             ));
         }

@@ -3,6 +3,7 @@
     "translation_key": "item.minecraft.nether_star"
   },
   "components": {
+    "minecraft:glint": true,
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_explosion"
     },

@@ -6,6 +6,7 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_bottle"
     },
+    "minecraft:glint": true,
     "minecraft:projectile": {
       "entity": {
         "type": "minecraft:experience_bottle"
