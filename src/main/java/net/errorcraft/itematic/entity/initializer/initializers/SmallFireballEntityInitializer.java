@@ -28,8 +28,8 @@ public record SmallFireballEntityInitializer() implements EntityInitializer<Smal
         Random random = world.getRandom();
         Direction direction = context.side();
         double velocityX = random.nextTriangular(direction.getOffsetX(), VELOCITY_DEVIATION);
-        double velocityY = random.nextTriangular(direction.getOffsetX(), VELOCITY_DEVIATION);
-        double velocityZ = random.nextTriangular(direction.getOffsetX(), VELOCITY_DEVIATION);
+        double velocityY = random.nextTriangular(direction.getOffsetY(), VELOCITY_DEVIATION);
+        double velocityZ = random.nextTriangular(direction.getOffsetZ(), VELOCITY_DEVIATION);
         if (context.entity(ActionContextParameter.THIS).orElse(null) instanceof LivingEntity owner) {
             return new SmallFireballEntity(world, owner, velocityX, velocityY, velocityZ);
         }
