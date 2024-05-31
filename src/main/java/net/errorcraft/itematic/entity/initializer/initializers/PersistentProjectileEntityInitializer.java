@@ -18,7 +18,9 @@ public record PersistentProjectileEntityInitializer<T extends PersistentProjecti
             return this.ownerCreator.create(context.world(), entity, context.stack().copyWithCount(1));
         }
         Vec3d pos = context.position(ActionContextParameter.TARGET);
-        return this.simpleCreator.create(context.world(), pos.getX(), pos.getY(), pos.getZ(), context.stack().copyWithCount(1));
+        T entity = this.simpleCreator.create(context.world(), pos.getX(), pos.getY(), pos.getZ(), context.stack().copyWithCount(1));
+        entity.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
+        return entity;
     }
 
     public static <U extends PersistentProjectileEntity> MapCodec<EntityInitializer<U>> createCodec(EntityType<U> type, OwnerCreator<U> ownerCreator, SimpleCreator<U> simpleCreator) {

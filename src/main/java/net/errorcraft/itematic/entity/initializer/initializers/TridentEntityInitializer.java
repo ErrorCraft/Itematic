@@ -8,6 +8,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
@@ -28,7 +29,9 @@ public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implemen
         if (this.preventSpawnFromRiptide && EnchantmentHelper.getRiptide(stack) > 0) {
             return null;
         }
-        return this.create(context, stack);
+        TridentEntity entity = this.create(context, stack);
+        entity.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
+        return entity;
     }
 
     public static TridentEntityInitializer of(boolean preventSpawnFromRiptide) {
