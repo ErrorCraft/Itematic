@@ -230,6 +230,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
+        method = "useOnEntity",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void useOnEntityCheckNullEntry(PlayerEntity user, LivingEntity entity, Hand hand, CallbackInfoReturnable<ActionResult> info) {
+        if (this.isEmpty()) {
+            info.setReturnValue(ActionResult.PASS);
+        }
+    }
+
+    @Inject(
         method = "usageTick",
         at = @At("HEAD"),
         cancellable = true
