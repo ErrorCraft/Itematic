@@ -2,8 +2,6 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.ChargeablePullProgressComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
@@ -91,7 +89,7 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
 
     @Override
     public void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {
-        this.chargeable.ifPresent(chargeable -> this.tryLoad(stack, world, user, this.getPullProgress(stack, usedTicks), chargeable));
+        this.chargeable.ifPresent(chargeable -> this.tryLoad(stack, world, user, usedTicks, chargeable));
     }
 
     @Override
@@ -151,28 +149,27 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         return this.isChargeable() && !stack.getOrDefault(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT).isEmpty();
     }
 
-    @SuppressWarnings("DataFlowIssue")
-    private void tryLoad(ItemStack stack, World world, LivingEntity user, float pullProgress, Chargeable chargeable) {
+    private void tryLoad(ItemStack stack, World world, LivingEntity user, int usedTicks, Chargeable chargeable) {
         if (world.isClient()) {
             return;
         }
-        if (pullProgress == 1.0f) {
+        int pullTime = getPullTime(stack);
+        if (usedTicks >= pullTime) {
             return;
         }
         int quickChargeLevel = EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack);
-        if (pullProgress >= CHARGE_PROGRESS && stack.get(ItematicDataComponentTypes.CHARGEABLE_PULL_PROGRESS) == null) {
-            stack.set(ItematicDataComponentTypes.CHARGEABLE_PULL_PROGRESS, new ChargeablePullProgressComponent(ChargeablePullProgressComponent.State.STARTED));
+        if (usedTicks == getPullTimeAt(pullTime, CHARGE_PROGRESS)) {
+            System.out.println("started");
             world.playSound(null, user.getX(), user.getY(), user.getZ(), chargeable.quickChargeSounds.get(quickChargeLevel).value(), SoundCategory.PLAYERS, 0.5f, 1.0f);
+            return;
         }
-        if (pullProgress >= LOAD_PROGRESS && quickChargeLevel == 0 && stack.get(ItematicDataComponentTypes.CHARGEABLE_PULL_PROGRESS).state() == ChargeablePullProgressComponent.State.STARTED) {
-            stack.set(ItematicDataComponentTypes.CHARGEABLE_PULL_PROGRESS, new ChargeablePullProgressComponent(ChargeablePullProgressComponent.State.LOADED));
+        if (usedTicks == getPullTimeAt(pullTime, LOAD_PROGRESS) && quickChargeLevel == 0) {
+            System.out.println("loaded");
             world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE, SoundCategory.PLAYERS, 0.5f, 1.0f);
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     private void charge(ItemStack stack, World world, LivingEntity user, float pullProgress) {
-        stack.remove(ItematicDataComponentTypes.CHARGEABLE_PULL_PROGRESS);
         if (pullProgress == 1.0f && !this.isCharged(stack) && CrossbowItemAccessor.loadProjectiles(user, stack)) {
             SoundCategory soundCategory = user instanceof PlayerEntity ? SoundCategory.PLAYERS : SoundCategory.HOSTILE;
             world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_CROSSBOW_LOADING_END, soundCategory, 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.5f + 1.0f) + 0.2f);
@@ -240,6 +237,10 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         if (EnchantmentHelper.getLevel(Enchantments.FLAME, stack) > 0) {
             entity.setOnFireFor(100);
         }
+    }
+
+    private static int getPullTimeAt(int pullTime, float progress) {
+        return (int)(progress * pullTime);
     }
 
     public record Chargeable(QuickChargeSounds quickChargeSounds) {

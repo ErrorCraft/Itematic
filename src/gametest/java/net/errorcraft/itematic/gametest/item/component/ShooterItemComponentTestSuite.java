@@ -1,7 +1,5 @@
 package net.errorcraft.itematic.gametest.item.component;
 
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.ChargeablePullProgressComponent;
 import net.errorcraft.itematic.gametest.Assert;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
@@ -29,9 +27,6 @@ public class ShooterItemComponentTestSuite {
         context.createTimedTaskRunner().expectMinDurationAndRun(
             ShooterItemComponent.getPullTime(stack),
             () -> {
-                Assert.itemStackHasComponent(player.getStackInHand(Hand.MAIN_HAND), ItematicDataComponentTypes.CHARGEABLE_PULL_PROGRESS,
-                    component -> context.assertTrue(component.state() == ChargeablePullProgressComponent.State.LOADED, "Expected shooter to be loaded")
-                );
                 stack.onStoppedUsing(world, player, player.getItemUseTimeLeft());
                 Assert.itemStackHasComponent(player.getStackInHand(Hand.MAIN_HAND), DataComponentTypes.CHARGED_PROJECTILES,
                     component -> context.assertTrue(component.itematic$contains(ItemKeys.ARROW), "Expected item stack to have an arrow as a charged projectile")
@@ -54,9 +49,6 @@ public class ShooterItemComponentTestSuite {
         context.createTimedTaskRunner().expectMinDurationAndRun(
             ShooterItemComponent.getPullTime(stack),
             () -> {
-                Assert.itemStackHasComponent(player.getStackInHand(Hand.MAIN_HAND), ItematicDataComponentTypes.CHARGEABLE_PULL_PROGRESS,
-                    component -> context.assertTrue(component.state() == ChargeablePullProgressComponent.State.LOADED, "Expected shooter to be loaded")
-                );
                 stack.onStoppedUsing(world, player, player.getItemUseTimeLeft());
                 Assert.itemStackHasComponent(player.getStackInHand(Hand.MAIN_HAND), DataComponentTypes.CHARGED_PROJECTILES,
                     component -> context.assertTrue(component.itematic$contains(ItemKeys.FIREWORK_ROCKET), "Expected item stack to have a firework rocket as a charged projectile")
