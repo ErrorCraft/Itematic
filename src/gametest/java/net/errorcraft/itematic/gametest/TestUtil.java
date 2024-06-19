@@ -19,6 +19,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameMode;
 
 import java.util.function.Consumer;
 
@@ -41,6 +42,12 @@ public class TestUtil {
     public static <T extends BlockEntity> T getBlockEntity(TestContext context, BlockPos pos, BlockEntityType<T> type) {
         return context.getWorld().getBlockEntity(context.getAbsolutePos(pos), type)
             .orElseThrow(() -> new GameTestException("Block entity at position " + pos + " was not of type " + Registries.BLOCK_ENTITY_TYPE.getKey(type).orElseThrow()));
+    }
+
+    public static PlayerEntity createMockPlayer(TestContext context, GameMode gameMode, BlockPos pos) {
+        PlayerEntity player = context.createMockPlayer(gameMode);
+        setEntityPos(context, player, pos);
+        return player;
     }
 
     public static <T extends Entity> T createEntity(TestContext context, EntityType<T> type, Consumer<T> initializer) {

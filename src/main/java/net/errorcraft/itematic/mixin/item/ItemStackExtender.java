@@ -251,6 +251,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
     }
 
+    @Inject(
+        method = "onStoppedUsing",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void onStoppedUsingCheckNullEntry(World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
+        if (this.isEmpty()) {
+            info.cancel();
+        }
+    }
+
     /**
      * @author ErrorCraft
      * @reason Uses a registry entry on the item stack instead of an intrusive registry entry.

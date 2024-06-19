@@ -33,6 +33,22 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
         Codec.BOOL.optionalFieldOf("use_riptide_check", false).forGetter(ThrowableItemComponent::useRiptideCheck)
     ).apply(instance, ThrowableItemComponent::new));
 
+    public static ThrowableItemComponent of() {
+        return new ThrowableItemComponent(0.0f, 0.0f, Optional.empty(), false);
+    }
+
+    public static ThrowableItemComponent of(float speed) {
+        return new ThrowableItemComponent(speed, 0.0f, Optional.empty(), false);
+    }
+
+    public static ThrowableItemComponent of(float speed, float angleOffset) {
+        return new ThrowableItemComponent(speed, angleOffset, Optional.empty(), false);
+    }
+
+    public static ThrowableItemComponent trident(float speed, float angleOffset, int minDrawDuration) {
+        return new ThrowableItemComponent(speed, angleOffset, Optional.of(NumberRange.IntRange.atLeast(minDrawDuration)), true);
+    }
+
     @Override
     public ItemComponentType<ThrowableItemComponent> type() {
         return ItemComponentTypes.THROWABLE;
@@ -77,6 +93,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
         if (world instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer)
                 .entityPosition(ActionContextParameter.THIS, user)
+                .position(ActionContextParameter.TARGET, user.getEyePos().add(0.0d, -0.1d, 0.0d))
                 .build();
             this.createEntity(context);
         }
@@ -85,7 +102,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
 
     private void createEntity(ActionContext context) {
         context.stack().itematic$getComponent(ItemComponentTypes.PROJECTILE)
-            .map(c -> c.createEntity(context, ActionContextParameter.THIS, this.angleOffset, this.speed, 1.0f))
+            .map(c -> c.createEntity(context, ActionContextParameter.TARGET, this.angleOffset, this.speed, 1.0f))
             .ifPresent(projectile -> {
                 context.world().spawnEntity(projectile);
                 ActionContext projectileContext = context.builderForCopy()
@@ -93,21 +110,5 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
                     .build();
                 context.stack().itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, projectileContext);
             });
-    }
-
-    public static ThrowableItemComponent of() {
-        return new ThrowableItemComponent(0.0f, 0.0f, Optional.empty(), false);
-    }
-
-    public static ThrowableItemComponent of(float speed) {
-        return new ThrowableItemComponent(speed, 0.0f, Optional.empty(), false);
-    }
-
-    public static ThrowableItemComponent of(float speed, float angleOffset) {
-        return new ThrowableItemComponent(speed, angleOffset, Optional.empty(), false);
-    }
-
-    public static ThrowableItemComponent trident(float speed, float angleOffset, int minDrawDuration) {
-        return new ThrowableItemComponent(speed, angleOffset, Optional.of(NumberRange.IntRange.atLeast(minDrawDuration)), true);
     }
 }

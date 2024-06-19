@@ -159,12 +159,10 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         }
         int quickChargeLevel = EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack);
         if (usedTicks == getPullTimeAt(pullTime, CHARGE_PROGRESS)) {
-            System.out.println("started");
             world.playSound(null, user.getX(), user.getY(), user.getZ(), chargeable.quickChargeSounds.get(quickChargeLevel).value(), SoundCategory.PLAYERS, 0.5f, 1.0f);
             return;
         }
         if (usedTicks == getPullTimeAt(pullTime, LOAD_PROGRESS) && quickChargeLevel == 0) {
-            System.out.println("loaded");
             world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE, SoundCategory.PLAYERS, 0.5f, 1.0f);
         }
     }

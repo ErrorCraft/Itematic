@@ -35,6 +35,7 @@
       "net.errorcraft.itematic.gametest.item.component.MappableItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.PotionItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.ShooterItemComponentTestSuite",
+      "net.errorcraft.itematic.gametest.item.component.ThrowableItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.UseableOnFluidItemComponentTestSuite"
     ]
   },
