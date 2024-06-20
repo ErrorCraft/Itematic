@@ -15,6 +15,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ExplosiveProjectileEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -33,6 +34,22 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, f
         Codecs.NONNEGATIVE_INT.optionalFieldOf("damage", 0).forGetter(ProjectileItemComponent::damage),
         ItematicCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("charged_speed", CrossbowItemAccessor.defaultSpeed()).forGetter(ProjectileItemComponent::chargedSpeed)
     ).apply(instance, ProjectileItemComponent::new));
+
+    public static ProjectileItemComponent of(EntityInitializer<?> entity, int damage, float chargedSpeed) {
+        return new ProjectileItemComponent(entity, damage, chargedSpeed);
+    }
+
+    public static ProjectileItemComponent of(EntityInitializer<?> entity, int damage) {
+        return of(entity, damage, CrossbowItemAccessor.defaultSpeed());
+    }
+
+    public static ProjectileItemComponent of(RegistryEntry<EntityType<?>> entity) {
+        return of(SimpleEntityInitializer.of(entity.value()), 0);
+    }
+
+    public static <U extends PersistentProjectileEntity> ProjectileItemComponent persistentProjectile(EntityType<U> entityType, PersistentProjectileEntityInitializer.OwnerCreator<U> ownerCreator, PersistentProjectileEntityInitializer.SimpleCreator<U> simpleCreator) {
+        return of(new PersistentProjectileEntityInitializer<>(entityType, ownerCreator, simpleCreator), 1);
+    }
 
     @Override
     public ItemComponentType<ProjectileItemComponent> type() {
@@ -69,22 +86,6 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, f
         return this.createEntity(context, ActionContextParameter.TARGET, 0.0f, speed, uncertainty);
     }
 
-    public static ProjectileItemComponent of(EntityInitializer<?> entity, int damage, float chargedSpeed) {
-        return new ProjectileItemComponent(entity, damage, chargedSpeed);
-    }
-
-    public static ProjectileItemComponent of(EntityInitializer<?> entity, int damage) {
-        return of(entity, damage, CrossbowItemAccessor.defaultSpeed());
-    }
-
-    public static ProjectileItemComponent of(RegistryEntry<EntityType<?>> entity) {
-        return of(SimpleEntityInitializer.of(entity.value()), 0);
-    }
-
-    public static <U extends PersistentProjectileEntity> ProjectileItemComponent persistentProjectile(EntityType<U> entityType, PersistentProjectileEntityInitializer.OwnerCreator<U> ownerCreator, PersistentProjectileEntityInitializer.SimpleCreator<U> simpleCreator) {
-        return of(new PersistentProjectileEntityInitializer<>(entityType, ownerCreator, simpleCreator), 1);
-    }
-
     public Entity createEntity(ActionContext context, ActionContextParameter position, float angleOffset, float speed, float uncertainty) {
         Entity entity = this.entity.create(context);
         if (entity == null) {
@@ -116,6 +117,9 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, f
 
     private void initializeProjectile(ProjectileEntity entity, Entity user, float angleOffset, float speed, float uncertainty) {
         entity.setOwner(user);
+        if (entity instanceof PersistentProjectileEntity persistentProjectileEntity && user instanceof PlayerEntity player && player.isInCreativeMode()) {
+            persistentProjectileEntity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+        }
         if (entity instanceof ExplosiveProjectileEntity) {
             return;
         }

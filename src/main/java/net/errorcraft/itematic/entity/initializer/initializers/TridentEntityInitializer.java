@@ -29,7 +29,9 @@ public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implemen
         if (this.preventSpawnFromRiptide && EnchantmentHelper.getRiptide(stack) > 0) {
             return null;
         }
+        stack.itematic$damage(1, context);
         TridentEntity entity = this.create(context, stack);
+        stack.decrementUnlessCreative(1, context.player(ActionContextParameter.THIS).orElse(null));
         entity.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
         return entity;
     }
@@ -39,8 +41,6 @@ public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implemen
     }
 
     private TridentEntity create(ActionContext context, ItemStack stack) {
-        stack.itematic$damage(1, context);
-        stack.decrementUnlessCreative(1, context.player(ActionContextParameter.THIS).orElse(null));
         ServerWorld world = context.world();
         return context.player(ActionContextParameter.THIS)
             .map(player -> new TridentEntity(world, player, stack))
