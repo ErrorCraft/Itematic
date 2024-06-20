@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.client.render.entity;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.item.Item;
@@ -20,19 +19,5 @@ public class PlayerEntityRendererExtender {
     )
     private static boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.CROSSBOW);
-    }
-
-    @ModifyExpressionValue(
-        method = "getArmPose",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getItemUseTimeLeft()I"
-        )
-    )
-    private static int useMaxValueWhenUseDurationIsIndefinite(int original) {
-        if (original == -1) {
-            return Integer.MAX_VALUE;
-        }
-        return original;
     }
 }

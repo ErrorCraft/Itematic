@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.client.render.item;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
@@ -90,36 +89,22 @@ public class HeldItemRendererExtender {
         method = "renderFirstPersonItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getMaxUseTime()I",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isUsingItem()Z"
-            )
+            target = "Lnet/minecraft/item/ItemStack;getMaxUseTime()I"
         )
     )
-    private int getMaxUseTimeUseUsedTicksInstead(ItemStack stack, AbstractClientPlayerEntity player) {
-        return player.itematic$itemUsedTicks() - 1;
+    private int getMaxUseTimeReturnZero(ItemStack stack, AbstractClientPlayerEntity player) {
+        return 0;
     }
 
     @Redirect(
         method = "renderFirstPersonItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/network/ClientPlayerEntity;getItemUseTimeLeft()I",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isUsingItem()Z"
-            )
+            target = "Lnet/minecraft/client/network/ClientPlayerEntity;getItemUseTimeLeft()I"
         )
     )
-    private int getUseTimeLeftReturnZero(ClientPlayerEntity instance) {
-        return 0;
+    private int getUseTimeLeftUseUsedTicks(ClientPlayerEntity instance) {
+        return -instance.itematic$itemUsedTicks();
     }
 
     @Redirect(
@@ -166,20 +151,5 @@ public class HeldItemRendererExtender {
     )
     private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
         return instance.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
-    }
-
-    @ModifyExpressionValue(
-        method = "renderFirstPersonItem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getItemUseTimeLeft()I",
-            ordinal = 1
-        )
-    )
-    private int useMaxValueWhenUseDurationIsIndefinite(int original) {
-        if (original == -1) {
-            return Integer.MAX_VALUE;
-        }
-        return original;
     }
 }

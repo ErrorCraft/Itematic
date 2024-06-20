@@ -355,6 +355,17 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @ModifyReturnValue(
+        method = "getItemUseTimeLeft",
+        at = @At("RETURN")
+    )
+    private int useMaxValueWhenUseDurationIsIndefinite(int original) {
+        if (original == -1) {
+            return Integer.MAX_VALUE;
+        }
+        return original;
+    }
+
+    @ModifyReturnValue(
         method = "getItemUseTime",
         at = @At(
             value = "RETURN",
