@@ -11,6 +11,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldEvents;
+import net.minecraft.world.event.GameEvent;
 
 public record FertilizeAction() implements Action<FertilizeAction> {
     public static final FertilizeAction INSTANCE = new FertilizeAction();
@@ -26,13 +27,15 @@ public record FertilizeAction() implements Action<FertilizeAction> {
         ServerWorld world = context.world();
         BlockPos pos = context.blockPos(ActionContextParameter.TARGET);
         if (BoneMealItem.useOnFertilizable(context.stack(), world, pos)) {
-            world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, pos, 0);
+            context.player(ActionContextParameter.THIS).ifPresent(player -> player.emitGameEvent(GameEvent.ITEM_INTERACT_FINISH));
+            world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, pos, 15);
             return true;
         }
         Direction side = context.side();
         BlockPos offsetPos = pos.offset(side);
         if (world.getBlockState(pos).isSideSolidFullSquare(world, pos, side) && BoneMealItem.useOnGround(context.stack(), world, offsetPos, side)) {
-            world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, offsetPos, 0);
+            context.player(ActionContextParameter.THIS).ifPresent(player -> player.emitGameEvent(GameEvent.ITEM_INTERACT_FINISH));
+            world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, offsetPos, 15);
             return true;
         }
         return false;
