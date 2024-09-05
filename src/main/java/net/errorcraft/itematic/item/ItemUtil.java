@@ -25,10 +25,7 @@ import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.block.DecoratedPotPatternsAccessor;
-import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
-import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
-import net.errorcraft.itematic.mixin.item.MilkBucketItemAccessor;
-import net.errorcraft.itematic.mixin.item.PotionItemAccessor;
+import net.errorcraft.itematic.mixin.item.*;
 import net.errorcraft.itematic.potion.PotionKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
@@ -177,7 +174,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.MILK_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
-                    .with(UseDurationItemComponent.of(MilkBucketItemAccessor.getMaxUseTime()))
+                    .with(UseableItemComponent.of(MilkBucketItemAccessor.getMaxUseTime()))
                     .with(UseAnimationItemComponent.of(UseAction.DRINK))
                     .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
@@ -190,7 +187,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.POTION).build(),
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
-                    .with(UseDurationItemComponent.of(PotionItemAccessor.getMaxUseTime()))
+                    .with(UseableItemComponent.of(PotionItemAccessor.getMaxUseTime()))
                     .with(PotionItemComponent.INSTANCE)
                     .with(PotionHolderItemComponent.of(1.0f))
                     .with(UseAnimationItemComponent.of(UseAction.DRINK))
@@ -511,7 +508,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.HONEY_BOTTLE).build(),
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(16))
-                    .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40, UseAction.DRINK, this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
+                    .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, HoneyBottleItemAccessor.maxUseTime(), UseAction.DRINK, this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .build(),
                 ItemEventMap.builder()
@@ -4341,8 +4338,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.BRUSH).build(),
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
-                    .with(BrushItemComponent.INSTANCE)
-                    .with(UseDurationItemComponent.of(BrushItemAccessor.maxBrushTime()))
+                    .with(BrushItemComponent.of(BrushItemAccessor.maxBrushTime()))
                     .with(DamageableItemComponent.of(64))
                     .with(UseAnimationItemComponent.of(UseAction.BRUSH))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BRUSH_FORGING))
@@ -8525,7 +8521,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(MaxStackSizeItemComponent.of(1))
                     .with(ZoomItemComponent.of(SpyglassItem.FOV_MULTIPLIER, this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
-                    .with(UseDurationItemComponent.of(SpyglassItem.MAX_USE_TIME))
+                    .with(UseableItemComponent.of(SpyglassItem.MAX_USE_TIME))
                     .with(UseAnimationItemComponent.of(UseAction.SPYGLASS))
                     .build()
             ));

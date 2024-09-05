@@ -3,7 +3,9 @@
     "translation_key": "item.minecraft.brush"
   },
   "components": {
-    "minecraft:brush": {},
+    "minecraft:brush": {
+      "ticks": 200
+    },
     "minecraft:damageable": {
       "durability": 64
     },
@@ -14,9 +16,6 @@
       "enchantments": "minecraft:brush_forging"
     },
     "minecraft:max_stack_size": 1,
-    "minecraft:use_animation": "brush",
-    "minecraft:use_duration": {
-      "ticks": 200
-    }
+    "minecraft:use_animation": "brush"
   }
 }

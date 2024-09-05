@@ -465,8 +465,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     public void getMaxUseTimeUseItemComponent(ItemStack stack, CallbackInfoReturnable<Integer> info) {
-        int maxUseTime = this.itematic$getComponent(ItemComponentTypes.USE_DURATION)
-            .map(UseDurationItemComponent::ticks)
+        int maxUseTime = this.itematic$getComponent(ItemComponentTypes.USEABLE)
+            .map(UseableItemComponent::ticks)
             .orElse(-1);
         info.setReturnValue(maxUseTime);
     }

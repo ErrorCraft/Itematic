@@ -15,7 +15,7 @@
       "saturation": 3.6000001
     },
     "minecraft:use_animation": "eat",
-    "minecraft:use_duration": {
+    "minecraft:useable": {
       "ticks": 32
     }
   }

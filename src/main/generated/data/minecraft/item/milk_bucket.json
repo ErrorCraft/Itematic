@@ -11,7 +11,7 @@
       "item": "minecraft:bucket"
     },
     "minecraft:use_animation": "drink",
-    "minecraft:use_duration": {
+    "minecraft:useable": {
       "ticks": 32
     }
   },

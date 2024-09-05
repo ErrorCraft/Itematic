@@ -254,6 +254,7 @@
     "item.EquipmentExtender",
     "item.FilledMapItemAccessor",
     "item.GoatHornItemAccessor",
+    "item.HoneyBottleItemAccessor",
     "item.ItemAccessor",
     "item.ItemAccessor$SettingsAccessor",
     "item.ItemExtender",

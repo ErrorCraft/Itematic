@@ -24,7 +24,7 @@ public class ConsumableItemComponentTestSuite {
         world.spawnEntity(player);
         stack.use(world, player, Hand.MAIN_HAND);
         context.createTimedTaskRunner().expectMinDurationAndRun(
-            TestUtil.getItemComponent(stack, ItemComponentTypes.USE_DURATION).ticks(),
+            TestUtil.getItemComponent(stack, ItemComponentTypes.USEABLE).ticks(),
             () -> Assert.itemStackIsOf(player.getStackInHand(Hand.MAIN_HAND), ItemKeys.GLASS_BOTTLE)
         ).completeIfSuccessful();
     }

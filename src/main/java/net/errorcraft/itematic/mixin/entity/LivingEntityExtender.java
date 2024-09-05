@@ -10,7 +10,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.LifeSavingItemComponent;
-import net.errorcraft.itematic.item.component.components.UseDurationItemComponent;
+import net.errorcraft.itematic.item.component.components.UseableItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
@@ -326,8 +326,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         at = @At("LOAD")
     )
     private boolean shouldSpawnConsumptionEffectsUseItemComponent(boolean value) {
-        return this.activeItemStack.itematic$getComponent(ItemComponentTypes.USE_DURATION)
-            .map(UseDurationItemComponent::ticks)
+        return this.activeItemStack.itematic$getComponent(ItemComponentTypes.USEABLE)
+            .map(UseableItemComponent::ticks)
             .map(ticks -> value || ticks <= 16)
             .orElse(false);
     }

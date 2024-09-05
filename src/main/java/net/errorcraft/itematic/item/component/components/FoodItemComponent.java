@@ -29,6 +29,27 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
         FoodComponent.StatusEffectEntry.CODEC.listOf().optionalFieldOf("effects", List.of()).forGetter(FoodItemComponent::effects)
     ).apply(instance, FoodItemComponent::new));
 
+    public static FoodItemComponent of(int nutrition, float saturation, boolean alwaysEdible, List<FoodComponent.StatusEffectEntry> effects) {
+        return new FoodItemComponent(nutrition, saturation, alwaysEdible, effects);
+    }
+
+    public static ItemComponent<?>[] from(FoodComponent component) {
+        return from(component, null);
+    }
+
+    public static ItemComponent<?>[] from(FoodComponent component, RegistryEntry<Item> resultItem) {
+        return from(component, (int)(component.eatSeconds() * SharedConstants.TICKS_PER_SECOND), UseAction.EAT, resultItem);
+    }
+
+    public static ItemComponent<?>[] from(FoodComponent component, int eatTicks, UseAction useAction, RegistryEntry<Item> resultItem) {
+        return new ItemComponent<?>[] {
+                UseableItemComponent.of(eatTicks),
+                of(component.nutrition(), component.saturation(), component.canAlwaysEat(), component.effects()),
+                UseAnimationItemComponent.of(useAction),
+                ConsumableItemComponent.of(resultItem)
+        };
+    }
+
     @Override
     public ItemComponentType<FoodItemComponent> type() {
         return ItemComponentTypes.FOOD;
@@ -51,26 +72,5 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
 
     public boolean mayStartUsing(PlayerEntity user) {
         return user.canConsume(this.alwaysEdible);
-    }
-
-    public static ItemComponent<?>[] from(FoodComponent component) {
-        return from(component, null);
-    }
-
-    public static ItemComponent<?>[] from(FoodComponent component, RegistryEntry<Item> resultItem) {
-        return from(component, (int)(component.eatSeconds() * SharedConstants.TICKS_PER_SECOND), UseAction.EAT, resultItem);
-    }
-
-    public static FoodItemComponent of(int nutrition, float saturation, boolean alwaysEdible, List<FoodComponent.StatusEffectEntry> effects) {
-        return new FoodItemComponent(nutrition, saturation, alwaysEdible, effects);
-    }
-
-    public static ItemComponent<?>[] from(FoodComponent component, int useDuration, UseAction useAction, RegistryEntry<Item> resultItem) {
-        return new ItemComponent<?>[] {
-            UseDurationItemComponent.of(useDuration),
-            of(component.nutrition(), component.saturation(), component.canAlwaysEat(), component.effects()),
-            UseAnimationItemComponent.of(useAction),
-            ConsumableItemComponent.of(resultItem)
-        };
     }
 }

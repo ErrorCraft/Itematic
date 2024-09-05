@@ -5,7 +5,7 @@ import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.minecraft.registry.Registry;
 
 public class ItemComponentTypes {
-    public static final ItemComponentType<UseDurationItemComponent> USE_DURATION = register("use_duration", new ItemComponentType<>(UseDurationItemComponent.CODEC));
+    public static final ItemComponentType<UseableItemComponent> USEABLE = register("useable", new ItemComponentType<>(UseableItemComponent.CODEC));
     public static final ItemComponentType<FoodItemComponent> FOOD = register("food", new ItemComponentType<>(FoodItemComponent.CODEC));
     public static final ItemComponentType<BlockItemComponent> BLOCK = register("block", new ItemComponentType<>(BlockItemComponent.CODEC));
     public static final ItemComponentType<DamageableItemComponent> DAMAGEABLE = register("damageable", new ItemComponentType<>(DamageableItemComponent.CODEC));
