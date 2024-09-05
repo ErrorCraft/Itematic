@@ -49,6 +49,7 @@ public class ActionTypes {
     public static final ActionType<SpawnEntityFromItemAction> SPAWN_ENTITY_FROM_ITEM = register(ActionTypeKeys.SPAWN_ENTITY_FROM_ITEM, new ActionType<>(SpawnEntityFromItemAction.CODEC));
     public static final ActionType<TakeHoneyAction> TAKE_HONEY = register(ActionTypeKeys.TAKE_HONEY, new ActionType<>(TakeHoneyAction.CODEC));
     public static final ActionType<UseBucketAction> USE_BUCKET = register(ActionTypeKeys.USE_BUCKET, new ActionType<>(UseBucketAction.CODEC));
+    public static final ActionType<RemoveStatusEffectsAction> REMOVE_STATUS_EFFECTS = register(ActionTypeKeys.REMOVE_STATUS_EFFECTS, new ActionType<>(RemoveStatusEffectsAction.CODEC));
 
     private ActionTypes() {}
 

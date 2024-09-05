@@ -48,6 +48,7 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> SPAWN_ENTITY_FROM_ITEM = of("spawn_entity_from_item");
     public static final RegistryKey<ActionType<?>> TAKE_HONEY = of("take_honey");
     public static final RegistryKey<ActionType<?>> USE_BUCKET = of("use_bucket");
+    public static final RegistryKey<ActionType<?>> REMOVE_STATUS_EFFECTS = of("remove_status_effects");
 
     private ActionTypeKeys() {}
 

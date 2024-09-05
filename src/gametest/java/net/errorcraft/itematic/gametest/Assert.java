@@ -2,6 +2,8 @@ package net.errorcraft.itematic.gametest;
 
 import net.minecraft.component.DataComponentType;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
@@ -74,6 +76,12 @@ public class Assert {
                 throw new GameTestException("Expected item stack to have potion " + expected.getKey().orElseThrow() + ", got " + potion.getKey().orElseThrow() + " instead");
             }
         });
+    }
+
+    public static void entityDoesNotHaveStatusEffect(LivingEntity entity, RegistryEntry<StatusEffect> effect) {
+        if (entity.getStatusEffect(effect) != null) {
+            throw new GameTestException("Expected entity to not have the " + effect.getKey().orElseThrow() + " status effect");
+        }
     }
 
     public static void areIntsEqual(int value, int expected) {

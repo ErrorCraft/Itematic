@@ -513,6 +513,14 @@ public class ItemUtil {
                     .with(MaxStackSizeItemComponent.of(16))
                     .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, 40, UseAction.DRINK, this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        RemoveStatusEffectsAction.of(
+                            ActionContextParameter.THIS,
+                            this.statusEffects.getOrThrow(StatusEffectKeys.POISON)
+                        )
+                    ))
                     .build()
             ));
         }
