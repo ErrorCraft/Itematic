@@ -63,7 +63,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<SuspiciousEffectIngredientItemComponent> SUSPICIOUS_EFFECT_INGREDIENT = register("suspicious_effect_ingredient", new ItemComponentType<>(SuspiciousEffectIngredientItemComponent.CODEC));
     public static final ItemComponentType<RecipeRemainderItemComponent> RECIPE_REMAINDER = register("recipe_remainder", new ItemComponentType<>(RecipeRemainderItemComponent.CODEC));
     public static final ItemComponentType<CastableItemComponent> CASTABLE = register("castable", new ItemComponentType<>(CastableItemComponent.CODEC));
-    public static final ItemComponentType<MaxStackSizeItemComponent> MAX_STACK_SIZE = register("max_stack_size", new ItemComponentType<>(MaxStackSizeItemComponent.CODEC));
+    public static final ItemComponentType<StackableItemComponent> STACKABLE = register("stackable", new ItemComponentType<>(StackableItemComponent.CODEC));
     public static final ItemComponentType<RarityItemComponent> RARITY = register("rarity", new ItemComponentType<>(RarityItemComponent.CODEC));
     public static final ItemComponentType<AttributeModifiersItemComponent> ATTRIBUTE_MODIFIERS = register("attribute_modifiers", new ItemComponentType<>(AttributeModifiersItemComponent.CODEC));
 

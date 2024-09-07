@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:dark_prismarine_stairs"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

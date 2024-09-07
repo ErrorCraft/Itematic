@@ -6,6 +6,7 @@
     "minecraft:block": {
       "block": "minecraft:conduit"
     },
-    "minecraft:rarity": "rare"
+    "minecraft:rarity": "rare",
+    "minecraft:stackable": 64
   }
 }

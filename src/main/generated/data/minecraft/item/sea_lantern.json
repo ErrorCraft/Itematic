@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:sea_lantern"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:waxed_oxidized_cut_copper"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

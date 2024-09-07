@@ -14,7 +14,6 @@
     "minecraft:forgeable": {
       "enchantments": "minecraft:trident_forging"
     },
-    "minecraft:max_stack_size": 1,
     "minecraft:projectile": {
       "damage": 1,
       "entity": {
@@ -22,6 +21,7 @@
         "prevent_spawn_from_riptide": true
       }
     },
+    "minecraft:stackable": 1,
     "minecraft:throwable": {
       "angle_offset": 0.0,
       "draw_duration": {

@@ -1,5 +1,8 @@
 {
   "base": {
     "translation_key": "item.minecraft.magma_cream"
+  },
+  "components": {
+    "minecraft:stackable": 64
   }
 }

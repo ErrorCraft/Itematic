@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:enchanting_table"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

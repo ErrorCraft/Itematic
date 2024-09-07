@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:cobblestone_slab"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

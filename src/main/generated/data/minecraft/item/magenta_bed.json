@@ -6,6 +6,6 @@
     "minecraft:block": {
       "block": "minecraft:magenta_bed"
     },
-    "minecraft:max_stack_size": 1
+    "minecraft:stackable": 1
   }
 }

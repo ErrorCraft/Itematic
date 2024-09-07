@@ -3,7 +3,7 @@
     "translation_key": "item.minecraft.writable_book"
   },
   "components": {
-    "minecraft:max_stack_size": 1,
+    "minecraft:stackable": 1,
     "minecraft:writable": {
       "transforms_into": "minecraft:written_book"
     }

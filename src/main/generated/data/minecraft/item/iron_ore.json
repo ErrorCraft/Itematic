@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:iron_ore"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

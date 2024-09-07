@@ -6,6 +6,7 @@
     "minecraft:block": {
       "block": "minecraft:light"
     },
-    "minecraft:rarity": "epic"
+    "minecraft:rarity": "epic",
+    "minecraft:stackable": 64
   }
 }

@@ -5,7 +5,8 @@
   "components": {
     "minecraft:dispensable": {
       "behavior": "minecraft:use_item_on_block"
-    }
+    },
+    "minecraft:stackable": 64
   },
   "events": [
     {

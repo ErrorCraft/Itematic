@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:spawner"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

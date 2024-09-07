@@ -8,6 +8,7 @@
     },
     "minecraft:fuel": {
       "ticks": 50
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

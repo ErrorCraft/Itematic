@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:soul_sand"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

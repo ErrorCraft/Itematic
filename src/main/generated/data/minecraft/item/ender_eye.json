@@ -11,6 +11,7 @@
         "type": "minecraft:eye_of_ender"
       }
     },
+    "minecraft:stackable": 64,
     "minecraft:throwable": {
       "angle_offset": 0.0,
       "speed": 0.0

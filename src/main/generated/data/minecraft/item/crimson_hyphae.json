@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:crimson_hyphae"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

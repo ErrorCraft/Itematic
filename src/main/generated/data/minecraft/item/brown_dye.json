@@ -3,6 +3,7 @@
     "translation_key": "item.minecraft.brown_dye"
   },
   "components": {
-    "minecraft:dye": "brown"
+    "minecraft:dye": "brown",
+    "minecraft:stackable": 64
   }
 }

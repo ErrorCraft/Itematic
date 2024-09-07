@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:chiseled_polished_blackstone"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

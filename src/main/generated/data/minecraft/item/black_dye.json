@@ -3,6 +3,7 @@
     "translation_key": "item.minecraft.black_dye"
   },
   "components": {
-    "minecraft:dye": "black"
+    "minecraft:dye": "black",
+    "minecraft:stackable": 64
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:chorus_plant"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:horn_coral"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

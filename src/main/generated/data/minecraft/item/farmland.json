@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:farmland"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

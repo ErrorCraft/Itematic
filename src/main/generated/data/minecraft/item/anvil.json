@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:anvil"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

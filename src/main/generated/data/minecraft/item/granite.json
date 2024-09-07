@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:granite"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

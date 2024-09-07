@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:smoker"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:infested_mossy_stone_bricks"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

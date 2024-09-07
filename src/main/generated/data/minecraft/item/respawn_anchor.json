@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:respawn_anchor"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

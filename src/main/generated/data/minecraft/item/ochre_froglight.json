@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:ochre_froglight"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

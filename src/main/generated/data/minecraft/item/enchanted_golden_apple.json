@@ -43,6 +43,7 @@
     },
     "minecraft:glint": true,
     "minecraft:rarity": "epic",
+    "minecraft:stackable": 64,
     "minecraft:use_animation": "eat",
     "minecraft:useable": {
       "ticks": 32

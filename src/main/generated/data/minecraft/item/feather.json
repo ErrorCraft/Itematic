@@ -3,6 +3,7 @@
     "translation_key": "item.minecraft.feather"
   },
   "components": {
-    "minecraft:firework_shape_modifier": "burst"
+    "minecraft:firework_shape_modifier": "burst",
+    "minecraft:stackable": 64
   }
 }

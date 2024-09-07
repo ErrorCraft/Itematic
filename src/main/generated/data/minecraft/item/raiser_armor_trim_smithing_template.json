@@ -5,6 +5,7 @@
   "components": {
     "minecraft:smithing_template": {
       "template": "minecraft:raiser_pattern"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

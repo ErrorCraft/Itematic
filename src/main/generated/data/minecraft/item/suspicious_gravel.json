@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:suspicious_gravel"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

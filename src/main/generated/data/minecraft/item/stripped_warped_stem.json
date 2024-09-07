@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:stripped_warped_stem"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

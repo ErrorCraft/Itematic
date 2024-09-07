@@ -5,6 +5,7 @@
   "components": {
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_fire"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

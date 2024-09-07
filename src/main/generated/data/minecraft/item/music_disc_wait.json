@@ -3,13 +3,13 @@
     "translation_key": "item.minecraft.music_disc_wait"
   },
   "components": {
-    "minecraft:max_stack_size": 1,
     "minecraft:rarity": "epic",
     "minecraft:record": {
       "description_key": "item.minecraft.music_disc_wait.desc",
       "duration": 4760,
       "output_signal": 12,
       "sound_event": "minecraft:music_disc.wait"
-    }
+    },
+    "minecraft:stackable": 1
   }
 }

@@ -1,5 +1,8 @@
 {
   "base": {
     "translation_key": "item.minecraft.lapis_lazuli"
+  },
+  "components": {
+    "minecraft:stackable": 64
   }
 }

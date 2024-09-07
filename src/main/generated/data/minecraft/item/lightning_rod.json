@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:lightning_rod"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

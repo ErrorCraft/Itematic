@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:podzol"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

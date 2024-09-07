@@ -10,7 +10,7 @@
       "nutrition": 10,
       "saturation": 12.0
     },
-    "minecraft:max_stack_size": 1,
+    "minecraft:stackable": 1,
     "minecraft:use_animation": "eat",
     "minecraft:useable": {
       "ticks": 32

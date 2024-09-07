@@ -3,6 +3,7 @@
     "translation_key": "item.minecraft.cyan_dye"
   },
   "components": {
-    "minecraft:dye": "cyan"
+    "minecraft:dye": "cyan",
+    "minecraft:stackable": 64
   }
 }

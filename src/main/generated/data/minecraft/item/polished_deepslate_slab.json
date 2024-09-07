@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:polished_deepslate_slab"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

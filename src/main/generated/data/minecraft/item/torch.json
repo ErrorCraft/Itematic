@@ -10,6 +10,7 @@
         "attached_side": "down",
         "other_block": "minecraft:wall_torch"
       }
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

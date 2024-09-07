@@ -1,5 +1,8 @@
 {
   "base": {
     "translation_key": "item.minecraft.ghast_tear"
+  },
+  "components": {
+    "minecraft:stackable": 64
   }
 }

@@ -1,5 +1,8 @@
 {
   "base": {
     "translation_key": "item.minecraft.nautilus_shell"
+  },
+  "components": {
+    "minecraft:stackable": 64
   }
 }

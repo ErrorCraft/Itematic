@@ -17,7 +17,7 @@
       "equip_sound": "minecraft:item.armor.equip_leather",
       "slot": "body"
     },
-    "minecraft:max_stack_size": 1,
+    "minecraft:stackable": 1,
     "minecraft:tinted": {
       "tint": {
         "type": "minecraft:dyeable",

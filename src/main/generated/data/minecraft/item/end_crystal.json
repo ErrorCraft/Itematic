@@ -9,6 +9,7 @@
       }
     },
     "minecraft:glint": true,
-    "minecraft:rarity": "rare"
+    "minecraft:rarity": "rare",
+    "minecraft:stackable": 64
   }
 }

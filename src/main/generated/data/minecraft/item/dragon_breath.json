@@ -6,6 +6,7 @@
     "minecraft:rarity": "uncommon",
     "minecraft:recipe_remainder": {
       "item": "minecraft:glass_bottle"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

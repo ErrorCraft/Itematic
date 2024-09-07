@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:campfire"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

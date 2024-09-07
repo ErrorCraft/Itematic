@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:coarse_dirt"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

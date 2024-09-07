@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:activator_rail"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

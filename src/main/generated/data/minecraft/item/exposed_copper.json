@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:exposed_copper"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

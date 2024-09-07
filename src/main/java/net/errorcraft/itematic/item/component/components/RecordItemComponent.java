@@ -40,6 +40,14 @@ public record RecordItemComponent(RegistryEntry<SoundEvent> soundEvent, String d
         Codec.intRange(0, 15).fieldOf("output_signal").forGetter(RecordItemComponent::outputSignal)
     ).apply(instance, RecordItemComponent::new));
 
+    public static ItemComponent<?>[] of(RegistryEntry<SoundEvent> soundEvent, RegistryKey<Item> key, int duration, int outputSignal) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(1),
+            RarityItemComponent.of(Rarity.EPIC),
+            new RecordItemComponent(soundEvent, IdentifierUtil.createTranslationKey(key, "item", "desc"), duration, outputSignal)
+        };
+    }
+
     @Override
     public ItemComponentType<RecordItemComponent> type() {
         return ItemComponentTypes.RECORD;
@@ -83,13 +91,5 @@ public record RecordItemComponent(RegistryEntry<SoundEvent> soundEvent, String d
 
     public MutableText getDescription() {
         return Text.translatable(this.descriptionKey);
-    }
-
-    public static ItemComponent<?>[] of(RegistryEntry<SoundEvent> soundEvent, RegistryKey<Item> key, int duration, int outputSignal) {
-        return new ItemComponent<?>[] {
-            MaxStackSizeItemComponent.of(1),
-            RarityItemComponent.of(Rarity.EPIC),
-            new RecordItemComponent(soundEvent, IdentifierUtil.createTranslationKey(key, "item", "desc"), duration, outputSignal)
-        };
     }
 }

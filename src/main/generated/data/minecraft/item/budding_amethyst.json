@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:budding_amethyst"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

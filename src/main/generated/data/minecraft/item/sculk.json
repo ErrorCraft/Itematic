@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:sculk"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

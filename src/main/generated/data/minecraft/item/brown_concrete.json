@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:brown_concrete"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:waxed_weathered_copper"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

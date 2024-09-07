@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:gravel"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

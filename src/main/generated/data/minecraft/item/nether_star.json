@@ -7,6 +7,7 @@
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_explosion"
     },
-    "minecraft:rarity": "uncommon"
+    "minecraft:rarity": "uncommon",
+    "minecraft:stackable": 64
   }
 }

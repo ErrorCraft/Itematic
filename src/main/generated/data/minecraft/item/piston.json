@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:piston"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

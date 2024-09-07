@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:bee_nest"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

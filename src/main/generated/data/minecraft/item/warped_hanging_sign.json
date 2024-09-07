@@ -11,6 +11,6 @@
         "other_block": "minecraft:warped_wall_hanging_sign"
       }
     },
-    "minecraft:max_stack_size": 16
+    "minecraft:stackable": 16
   }
 }

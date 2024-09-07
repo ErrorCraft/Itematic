@@ -16,12 +16,12 @@
     "minecraft:fuel": {
       "ticks": 300
     },
-    "minecraft:max_stack_size": 1,
     "minecraft:shooter": {
       "ammunition": "minecraft:bow_ammunition",
       "held_ammunition": "minecraft:bow_ammunition",
       "range": 15
     },
+    "minecraft:stackable": 1,
     "minecraft:use_animation": "bow"
   }
 }

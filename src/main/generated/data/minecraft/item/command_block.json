@@ -7,6 +7,7 @@
       "block": "minecraft:command_block",
       "operator_only": true
     },
-    "minecraft:rarity": "epic"
+    "minecraft:rarity": "epic",
+    "minecraft:stackable": 64
   }
 }

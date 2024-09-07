@@ -9,6 +9,6 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:place_block_from_item"
     },
-    "minecraft:max_stack_size": 1
+    "minecraft:stackable": 1
   }
 }

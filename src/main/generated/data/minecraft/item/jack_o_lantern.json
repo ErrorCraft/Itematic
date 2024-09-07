@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:jack_o_lantern"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

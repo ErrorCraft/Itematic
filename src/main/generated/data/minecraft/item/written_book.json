@@ -4,7 +4,7 @@
   },
   "components": {
     "minecraft:glint": true,
-    "minecraft:max_stack_size": 16,
+    "minecraft:stackable": 16,
     "minecraft:text_holder": {}
   },
   "events": [

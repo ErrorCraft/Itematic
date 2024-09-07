@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:dispenser"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:oxidized_cut_copper_stairs"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

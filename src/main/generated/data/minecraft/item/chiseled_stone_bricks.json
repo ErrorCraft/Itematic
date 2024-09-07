@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:chiseled_stone_bricks"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

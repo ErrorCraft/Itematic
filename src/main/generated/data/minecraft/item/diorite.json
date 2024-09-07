@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:diorite"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:dropper"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

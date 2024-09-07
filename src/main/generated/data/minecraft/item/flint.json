@@ -1,5 +1,8 @@
 {
   "base": {
     "translation_key": "item.minecraft.flint"
+  },
+  "components": {
+    "minecraft:stackable": 64
   }
 }

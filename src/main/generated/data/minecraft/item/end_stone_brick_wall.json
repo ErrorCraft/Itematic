@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:end_stone_brick_wall"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

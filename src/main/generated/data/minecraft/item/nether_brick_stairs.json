@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:nether_brick_stairs"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

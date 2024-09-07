@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:weathered_cut_copper_stairs"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

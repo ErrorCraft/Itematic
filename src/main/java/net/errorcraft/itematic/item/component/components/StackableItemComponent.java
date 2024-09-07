@@ -9,25 +9,25 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.util.dynamic.Codecs;
 
-public record MaxStackSizeItemComponent(int maxStackSize) implements ItemComponent<MaxStackSizeItemComponent> {
-    public static final Codec<MaxStackSizeItemComponent> CODEC = Codecs.rangedInt(1, Item.MAX_MAX_COUNT).xmap(MaxStackSizeItemComponent::new, MaxStackSizeItemComponent::maxStackSize);
+public record StackableItemComponent(int maxStackSize) implements ItemComponent<StackableItemComponent> {
+    public static final Codec<StackableItemComponent> CODEC = Codecs.rangedInt(1, Item.MAX_MAX_COUNT).xmap(StackableItemComponent::new, StackableItemComponent::maxStackSize);
 
-    @Override
-    public ItemComponentType<MaxStackSizeItemComponent> type() {
-        return ItemComponentTypes.MAX_STACK_SIZE;
+    public static StackableItemComponent of(int maxStackSize) {
+        return new StackableItemComponent(maxStackSize);
     }
 
     @Override
-    public Codec<MaxStackSizeItemComponent> codec() {
+    public ItemComponentType<StackableItemComponent> type() {
+        return ItemComponentTypes.STACKABLE;
+    }
+
+    @Override
+    public Codec<StackableItemComponent> codec() {
         return CODEC;
     }
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
         builder.add(DataComponentTypes.MAX_STACK_SIZE, this.maxStackSize);
-    }
-
-    public static MaxStackSizeItemComponent of(int maxCount) {
-        return new MaxStackSizeItemComponent(maxCount);
     }
 }

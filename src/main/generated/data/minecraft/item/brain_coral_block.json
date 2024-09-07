@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:brain_coral_block"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -9,6 +9,6 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:use_bucket"
     },
-    "minecraft:max_stack_size": 16
+    "minecraft:stackable": 16
   }
 }

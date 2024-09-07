@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:smooth_basalt"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

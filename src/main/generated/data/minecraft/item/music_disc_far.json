@@ -3,13 +3,13 @@
     "translation_key": "item.minecraft.music_disc_far"
   },
   "components": {
-    "minecraft:max_stack_size": 1,
     "minecraft:rarity": "epic",
     "minecraft:record": {
       "description_key": "item.minecraft.music_disc_far.desc",
       "duration": 3480,
       "output_signal": 5,
       "sound_event": "minecraft:music_disc.far"
-    }
+    },
+    "minecraft:stackable": 1
   }
 }

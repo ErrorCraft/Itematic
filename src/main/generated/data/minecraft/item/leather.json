@@ -1,5 +1,8 @@
 {
   "base": {
     "translation_key": "item.minecraft.leather"
+  },
+  "components": {
+    "minecraft:stackable": 64
   }
 }

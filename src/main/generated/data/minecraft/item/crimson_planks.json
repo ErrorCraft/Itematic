@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:crimson_planks"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

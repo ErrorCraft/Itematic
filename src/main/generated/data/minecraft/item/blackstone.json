@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:blackstone"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

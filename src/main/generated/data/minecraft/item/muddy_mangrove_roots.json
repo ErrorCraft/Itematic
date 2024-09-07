@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:muddy_mangrove_roots"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

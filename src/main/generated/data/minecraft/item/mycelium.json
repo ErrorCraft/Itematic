@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:mycelium"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

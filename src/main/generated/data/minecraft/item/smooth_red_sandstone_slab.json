@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:smooth_red_sandstone_slab"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

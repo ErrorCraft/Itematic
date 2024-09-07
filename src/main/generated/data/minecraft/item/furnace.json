@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:furnace"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

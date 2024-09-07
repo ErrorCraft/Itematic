@@ -19,6 +19,7 @@
       "slot": "head"
     },
     "minecraft:firework_shape_modifier": "creeper",
-    "minecraft:rarity": "uncommon"
+    "minecraft:rarity": "uncommon",
+    "minecraft:stackable": 64
   }
 }

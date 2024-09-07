@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:gray_candle"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

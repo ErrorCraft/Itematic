@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:light_gray_glazed_terracotta"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

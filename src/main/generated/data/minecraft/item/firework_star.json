@@ -4,6 +4,7 @@
   },
   "components": {
     "minecraft:firework_explosion_holder": {},
+    "minecraft:stackable": 64,
     "minecraft:tinted": {
       "tint": {
         "type": "minecraft:firework"

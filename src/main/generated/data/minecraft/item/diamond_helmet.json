@@ -24,9 +24,9 @@
     "minecraft:forgeable": {
       "enchantments": "minecraft:helmet_forging"
     },
-    "minecraft:max_stack_size": 1,
     "minecraft:repairable": {
       "items": "minecraft:repairs_diamond_armor"
-    }
+    },
+    "minecraft:stackable": 1
   }
 }

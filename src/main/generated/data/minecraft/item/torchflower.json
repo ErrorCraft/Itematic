@@ -9,6 +9,7 @@
     "minecraft:compostable": {
       "level_increase_chance": 0.85
     },
+    "minecraft:stackable": 64,
     "minecraft:suspicious_effect_ingredient": {
       "effects": [
         {

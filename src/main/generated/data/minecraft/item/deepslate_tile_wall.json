@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:deepslate_tile_wall"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -11,6 +11,6 @@
         "type": "minecraft:armor_stand"
       }
     },
-    "minecraft:max_stack_size": 16
+    "minecraft:stackable": 16
   }
 }

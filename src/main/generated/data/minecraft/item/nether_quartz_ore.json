@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:nether_quartz_ore"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:prismarine_slab"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

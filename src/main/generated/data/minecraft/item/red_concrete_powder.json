@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:red_concrete_powder"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

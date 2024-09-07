@@ -2,8 +2,8 @@ package net.errorcraft.itematic.item.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import net.errorcraft.itematic.item.component.components.MaxStackSizeItemComponent;
-import net.minecraft.item.Item;
+import net.errorcraft.itematic.item.ItemUtil;
+import net.errorcraft.itematic.item.component.components.StackableItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -52,7 +52,7 @@ public class ItemComponentSet implements Iterable<ItemComponent<?>> {
     }
 
     private static DataResult<ItemComponentSet> validate(ItemComponentSet set) {
-        if (set.contains(ItemComponentTypes.DAMAGEABLE) && set.get(ItemComponentTypes.MAX_STACK_SIZE).map(MaxStackSizeItemComponent::maxStackSize).orElse(Item.DEFAULT_MAX_COUNT) > 1) {
+        if (set.contains(ItemComponentTypes.DAMAGEABLE) && set.get(ItemComponentTypes.STACKABLE).map(StackableItemComponent::maxStackSize).orElse(ItemUtil.UNSTACKABLE_MAX_STACK_SIZE) > ItemUtil.UNSTACKABLE_MAX_STACK_SIZE) {
             return DataResult.error(() -> "Item cannot be both damageable and stackable");
         }
         return DataResult.success(set);

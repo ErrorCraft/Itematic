@@ -9,6 +9,6 @@
       "insert_item_sound": "minecraft:item.bundle.insert",
       "remove_item_sound": "minecraft:item.bundle.remove_one"
     },
-    "minecraft:max_stack_size": 1
+    "minecraft:stackable": 1
   }
 }

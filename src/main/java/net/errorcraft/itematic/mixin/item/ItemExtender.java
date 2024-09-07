@@ -4,6 +4,7 @@ import com.google.common.collect.Interner;
 import net.errorcraft.itematic.access.item.ItemAccess;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemBase;
+import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -44,7 +45,9 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -53,10 +56,6 @@ import java.util.Optional;
 
 @Mixin(Item.class)
 public abstract class ItemExtender implements ItemAccess, FabricItem {
-    @Shadow
-    @Final
-    public static int DEFAULT_MAX_COUNT;
-
     @Shadow
     @Final
     @Mutable
@@ -71,14 +70,15 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Unique
     private ItemEventMap events;
 
-    @ModifyConstant(
+    @Inject(
         method = "getMaxCount",
-        constant = @Constant(
-            intValue = 1
-        )
+        at = @At("HEAD"),
+        cancellable = true
     )
-    private int defaultMaxCountUseField(int constant) {
-        return DEFAULT_MAX_COUNT;
+    private void checkStackableItemComponent(CallbackInfoReturnable<Integer> info) {
+        if (!this.itematic$hasComponent(ItemComponentTypes.STACKABLE)) {
+            info.setReturnValue(ItemUtil.UNSTACKABLE_MAX_STACK_SIZE);
+        }
     }
 
     @Inject(

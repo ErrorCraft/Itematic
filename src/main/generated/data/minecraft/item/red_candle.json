@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:red_candle"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

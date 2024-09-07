@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:snow"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

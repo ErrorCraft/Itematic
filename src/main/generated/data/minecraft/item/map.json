@@ -5,6 +5,7 @@
   "components": {
     "minecraft:mappable": {
       "transforms_into": "minecraft:filled_map"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

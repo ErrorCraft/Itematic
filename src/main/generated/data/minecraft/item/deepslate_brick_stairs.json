@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:deepslate_brick_stairs"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

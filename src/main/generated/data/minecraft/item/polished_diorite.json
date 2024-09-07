@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:polished_diorite"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -6,6 +6,7 @@
     "minecraft:enchantable": {
       "enchantability": 1,
       "transforms_into": "minecraft:enchanted_book"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

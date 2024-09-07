@@ -11,6 +11,7 @@
       "entity": {
         "type": "minecraft:arrow"
       }
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

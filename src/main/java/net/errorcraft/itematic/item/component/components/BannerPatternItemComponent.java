@@ -14,6 +14,13 @@ public record BannerPatternItemComponent(TagKey<BannerPattern> patterns) impleme
         TagKey.unprefixedCodec(RegistryKeys.BANNER_PATTERN).fieldOf("patterns").forGetter(BannerPatternItemComponent::patterns)
     ).apply(instance, BannerPatternItemComponent::new));
 
+    public static ItemComponent<?>[] of(TagKey<BannerPattern> patterns) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(1),
+            new BannerPatternItemComponent(patterns)
+        };
+    }
+
     @Override
     public ItemComponentType<BannerPatternItemComponent> type() {
         return ItemComponentTypes.BANNER_PATTERN;
@@ -22,12 +29,5 @@ public record BannerPatternItemComponent(TagKey<BannerPattern> patterns) impleme
     @Override
     public Codec<BannerPatternItemComponent> codec() {
         return CODEC;
-    }
-
-    public static ItemComponent<?>[] of(TagKey<BannerPattern> patterns) {
-        return new ItemComponent<?>[] {
-            MaxStackSizeItemComponent.of(1),
-            new BannerPatternItemComponent(patterns)
-        };
     }
 }

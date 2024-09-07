@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:magenta_stained_glass_pane"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

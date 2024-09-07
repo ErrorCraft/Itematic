@@ -11,9 +11,9 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:use_bucket"
     },
-    "minecraft:max_stack_size": 1,
     "minecraft:recipe_remainder": {
       "item": "minecraft:bucket"
-    }
+    },
+    "minecraft:stackable": 1
   }
 }

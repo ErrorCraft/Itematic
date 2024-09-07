@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:stripped_crimson_stem"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

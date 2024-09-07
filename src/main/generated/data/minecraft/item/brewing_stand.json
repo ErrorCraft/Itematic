@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:brewing_stand"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

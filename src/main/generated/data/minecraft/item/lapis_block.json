@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:lapis_block"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

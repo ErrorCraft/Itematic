@@ -58,6 +58,38 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         RegistryFixedCodec.of(RegistryKeys.ITEM).optionalFieldOf("transforms_into").forGetter(BucketItemComponent::transformsInto)
     ).apply(instance, BucketItemComponent::new));
 
+    public static ItemComponent<?>[] fluid(RegistryEntry<Fluid> fluid, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(16),
+            new BucketItemComponent(Optional.of(fluid), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
+        };
+    }
+
+    public static ItemComponent<?>[] fluid(RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound, RegistryEntryLookup<Item> items, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(1),
+            new BucketItemComponent(Optional.of(fluid), Optional.empty(), Optional.empty(), Optional.of(emptyingSound), Optional.of(items.getOrThrow(ItemKeys.BUCKET))),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
+        };
+    }
+
+    public static ItemComponent<?>[] entity(RegistryEntry<Fluid> fluid, RegistryEntry<EntityType<?>> entity, RegistryEntry<SoundEvent> emptyingSound, RegistryEntryLookup<Item> items, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+        return new ItemComponent[] {
+            StackableItemComponent.of(1),
+            new BucketItemComponent(Optional.of(fluid), Optional.of(EntityTarget.ofRequired(entity)), Optional.empty(), Optional.of(emptyingSound), Optional.of(items.getOrThrow(ItemKeys.BUCKET))),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
+        };
+    }
+
+    public static ItemComponent<?>[] block(RegistryEntry<Block> block, RegistryEntry<SoundEvent> emptyingSound, RegistryEntryLookup<Item> items, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+        return new ItemComponent[] {
+            StackableItemComponent.of(1),
+            new BucketItemComponent(Optional.empty(), Optional.empty(), Optional.of(new SimpleBlockPicker(block)), Optional.of(emptyingSound), Optional.of(items.getOrThrow(ItemKeys.BUCKET))),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
+        };
+    }
+
     @Override
     public ItemComponentType<BucketItemComponent> type() {
         return ItemComponentTypes.BUCKET;
@@ -148,38 +180,6 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
             bucketable.copyDataFromNbt(stack.getOrDefault(DataComponentTypes.BUCKET_ENTITY_DATA, NbtComponent.DEFAULT).copyNbt());
             bucketable.setFromBucket(true);
         }
-    }
-
-    public static ItemComponent<?>[] fluid(RegistryEntry<Fluid> fluid, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
-        return new ItemComponent<?>[] {
-            MaxStackSizeItemComponent.of(16),
-            new BucketItemComponent(Optional.of(fluid), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()),
-            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
-        };
-    }
-
-    public static ItemComponent<?>[] fluid(RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound, RegistryEntryLookup<Item> items, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
-        return new ItemComponent<?>[] {
-            MaxStackSizeItemComponent.of(1),
-            new BucketItemComponent(Optional.of(fluid), Optional.empty(), Optional.empty(), Optional.of(emptyingSound), Optional.of(items.getOrThrow(ItemKeys.BUCKET))),
-            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
-        };
-    }
-
-    public static ItemComponent<?>[] entity(RegistryEntry<Fluid> fluid, RegistryEntry<EntityType<?>> entity, RegistryEntry<SoundEvent> emptyingSound, RegistryEntryLookup<Item> items, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
-        return new ItemComponent[] {
-            MaxStackSizeItemComponent.of(1),
-            new BucketItemComponent(Optional.of(fluid), Optional.of(EntityTarget.ofRequired(entity)), Optional.empty(), Optional.of(emptyingSound), Optional.of(items.getOrThrow(ItemKeys.BUCKET))),
-            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
-        };
-    }
-
-    public static ItemComponent<?>[] block(RegistryEntry<Block> block, RegistryEntry<SoundEvent> emptyingSound, RegistryEntryLookup<Item> items, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
-        return new ItemComponent[] {
-            MaxStackSizeItemComponent.of(1),
-            new BucketItemComponent(Optional.empty(), Optional.empty(), Optional.of(new SimpleBlockPicker(block)), Optional.of(emptyingSound), Optional.of(items.getOrThrow(ItemKeys.BUCKET))),
-            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
-        };
     }
 
     public record EntityTarget(EntityInitializer<?> entity, boolean requireOtherSuccessfulPlacement) {

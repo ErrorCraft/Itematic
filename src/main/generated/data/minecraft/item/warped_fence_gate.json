@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:warped_fence_gate"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

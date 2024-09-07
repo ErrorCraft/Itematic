@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:crying_obsidian"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

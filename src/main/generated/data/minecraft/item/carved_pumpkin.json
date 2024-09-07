@@ -15,6 +15,7 @@
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_generic",
       "slot": "head"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

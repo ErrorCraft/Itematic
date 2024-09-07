@@ -1,5 +1,8 @@
 {
   "base": {
     "translation_key": "item.minecraft.paper"
+  },
+  "components": {
+    "minecraft:stackable": 64
   }
 }

@@ -6,6 +6,7 @@
     "minecraft:block": {
       "block": "minecraft:dragon_egg"
     },
-    "minecraft:rarity": "epic"
+    "minecraft:rarity": "epic",
+    "minecraft:stackable": 64
   }
 }

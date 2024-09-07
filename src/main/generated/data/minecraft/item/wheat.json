@@ -5,6 +5,7 @@
   "components": {
     "minecraft:compostable": {
       "level_increase_chance": 0.65
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

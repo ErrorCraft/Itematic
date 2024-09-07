@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:crimson_stairs"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

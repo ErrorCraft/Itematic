@@ -11,6 +11,6 @@
         "type": "minecraft:furnace_minecart"
       }
     },
-    "minecraft:max_stack_size": 1
+    "minecraft:stackable": 1
   }
 }

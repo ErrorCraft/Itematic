@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:calibrated_sculk_sensor"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

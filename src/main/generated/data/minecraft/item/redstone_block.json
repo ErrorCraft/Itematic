@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:redstone_block"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

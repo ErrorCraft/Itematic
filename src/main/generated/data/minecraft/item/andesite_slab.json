@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:andesite_slab"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

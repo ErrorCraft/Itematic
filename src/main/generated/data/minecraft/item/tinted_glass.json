@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:tinted_glass"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

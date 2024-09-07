@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:white_terracotta"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

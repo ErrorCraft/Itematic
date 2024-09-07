@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:detector_rail"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

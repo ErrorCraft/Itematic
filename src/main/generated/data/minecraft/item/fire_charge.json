@@ -11,7 +11,8 @@
       "entity": {
         "type": "minecraft:small_fireball"
       }
-    }
+    },
+    "minecraft:stackable": 64
   },
   "events": [
     {

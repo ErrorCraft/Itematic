@@ -9,6 +9,7 @@ import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.ImmuneToDamageComponent;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -57,7 +58,10 @@ import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -307,14 +311,15 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         return this.entry;
     }
 
-    @ModifyConstant(
+    @Inject(
         method = "getMaxCount",
-        constant = @Constant(
-            intValue = 1
-        )
+        at = @At("HEAD"),
+        cancellable = true
     )
-    private int defaultMaxCountUseField(int constant) {
-        return Item.DEFAULT_MAX_COUNT;
+    private void checkStackableItemComponent(CallbackInfoReturnable<Integer> info) {
+        if (!this.itematic$hasComponent(ItemComponentTypes.STACKABLE)) {
+            info.setReturnValue(ItemUtil.UNSTACKABLE_MAX_STACK_SIZE);
+        }
     }
 
     @Inject(

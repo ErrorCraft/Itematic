@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:lime_glazed_terracotta"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

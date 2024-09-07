@@ -3,13 +3,13 @@
     "translation_key": "item.minecraft.music_disc_ward"
   },
   "components": {
-    "minecraft:max_stack_size": 1,
     "minecraft:rarity": "epic",
     "minecraft:record": {
       "description_key": "item.minecraft.music_disc_ward.desc",
       "duration": 5020,
       "output_signal": 10,
       "sound_event": "minecraft:music_disc.ward"
-    }
+    },
+    "minecraft:stackable": 1
   }
 }

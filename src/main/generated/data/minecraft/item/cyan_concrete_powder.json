@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:cyan_concrete_powder"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:red_nether_brick_slab"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

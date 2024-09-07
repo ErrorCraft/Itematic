@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:deepslate_coal_ore"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

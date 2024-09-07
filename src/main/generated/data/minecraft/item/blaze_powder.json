@@ -1,5 +1,8 @@
 {
   "base": {
     "translation_key": "item.minecraft.blaze_powder"
+  },
+  "components": {
+    "minecraft:stackable": 64
   }
 }

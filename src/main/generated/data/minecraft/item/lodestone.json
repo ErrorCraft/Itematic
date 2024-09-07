@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:lodestone"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

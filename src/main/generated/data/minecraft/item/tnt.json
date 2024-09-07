@@ -8,6 +8,7 @@
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:spawn_tnt"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

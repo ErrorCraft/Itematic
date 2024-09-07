@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:pearlescent_froglight"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

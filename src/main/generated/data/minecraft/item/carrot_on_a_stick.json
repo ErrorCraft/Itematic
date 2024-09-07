@@ -9,7 +9,7 @@
     "minecraft:forgeable": {
       "enchantments": "minecraft:steering_forging"
     },
-    "minecraft:max_stack_size": 1,
+    "minecraft:stackable": 1,
     "minecraft:steering": {
       "damage_per_use": 7,
       "target": "minecraft:pig"

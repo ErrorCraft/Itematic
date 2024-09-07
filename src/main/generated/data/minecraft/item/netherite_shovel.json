@@ -16,10 +16,10 @@
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_fire"
     },
-    "minecraft:max_stack_size": 1,
     "minecraft:repairable": {
       "items": "minecraft:repairs_netherite_tool"
     },
+    "minecraft:stackable": 1,
     "minecraft:tool": {
       "rules": [
         {

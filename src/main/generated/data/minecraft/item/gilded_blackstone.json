@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:gilded_blackstone"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

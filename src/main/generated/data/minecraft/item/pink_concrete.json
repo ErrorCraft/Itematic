@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:pink_concrete"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

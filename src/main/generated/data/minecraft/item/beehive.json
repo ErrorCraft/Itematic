@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:beehive"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

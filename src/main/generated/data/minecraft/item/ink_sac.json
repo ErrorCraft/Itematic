@@ -2,6 +2,9 @@
   "base": {
     "translation_key": "item.minecraft.ink_sac"
   },
+  "components": {
+    "minecraft:stackable": 64
+  },
   "events": [
     {
       "event": "minecraft:use_on_block",

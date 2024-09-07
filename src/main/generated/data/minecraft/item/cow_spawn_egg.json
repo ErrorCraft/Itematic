@@ -13,6 +13,7 @@
       }
     },
     "minecraft:spawn_egg": {},
+    "minecraft:stackable": 64,
     "minecraft:tinted": {
       "tint": {
         "type": "minecraft:index",

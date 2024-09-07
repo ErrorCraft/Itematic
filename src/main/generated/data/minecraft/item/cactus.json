@@ -8,6 +8,7 @@
     },
     "minecraft:compostable": {
       "level_increase_chance": 0.5
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

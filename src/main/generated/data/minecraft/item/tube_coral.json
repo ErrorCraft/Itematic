@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:tube_coral"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

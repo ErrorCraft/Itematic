@@ -5,7 +5,8 @@
   "components": {
     "minecraft:dispensable": {
       "behavior": "minecraft:wax_block"
-    }
+    },
+    "minecraft:stackable": 64
   },
   "events": [
     {

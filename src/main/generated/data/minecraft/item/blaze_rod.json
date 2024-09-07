@@ -5,6 +5,7 @@
   "components": {
     "minecraft:fuel": {
       "ticks": 2400
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

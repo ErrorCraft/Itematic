@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:iron_door"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

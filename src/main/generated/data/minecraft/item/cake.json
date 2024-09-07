@@ -9,6 +9,6 @@
     "minecraft:compostable": {
       "level_increase_chance": 1.0
     },
-    "minecraft:max_stack_size": 1
+    "minecraft:stackable": 1
   }
 }

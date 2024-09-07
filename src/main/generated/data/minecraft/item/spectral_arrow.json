@@ -11,6 +11,7 @@
       "entity": {
         "type": "minecraft:spectral_arrow"
       }
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

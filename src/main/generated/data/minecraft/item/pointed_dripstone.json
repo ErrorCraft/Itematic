@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:pointed_dripstone"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -3,6 +3,7 @@
     "translation_key": "item.minecraft.orange_dye"
   },
   "components": {
-    "minecraft:dye": "orange"
+    "minecraft:dye": "orange",
+    "minecraft:stackable": 64
   }
 }

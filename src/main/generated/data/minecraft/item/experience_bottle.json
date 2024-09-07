@@ -13,6 +13,7 @@
       }
     },
     "minecraft:rarity": "uncommon",
+    "minecraft:stackable": 64,
     "minecraft:throwable": {
       "angle_offset": -20.0,
       "speed": 0.7

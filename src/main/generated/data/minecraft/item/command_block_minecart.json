@@ -11,7 +11,7 @@
         "type": "minecraft:command_block_minecart"
       }
     },
-    "minecraft:max_stack_size": 1,
-    "minecraft:rarity": "epic"
+    "minecraft:rarity": "epic",
+    "minecraft:stackable": 1
   }
 }

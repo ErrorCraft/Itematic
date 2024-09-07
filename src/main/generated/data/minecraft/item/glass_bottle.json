@@ -5,7 +5,8 @@
   "components": {
     "minecraft:dispensable": {
       "behavior": "minecraft:glass_bottle"
-    }
+    },
+    "minecraft:stackable": 64
   },
   "events": [
     {

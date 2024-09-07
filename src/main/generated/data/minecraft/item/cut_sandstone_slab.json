@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:cut_sandstone_slab"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

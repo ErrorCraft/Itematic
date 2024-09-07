@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:verdant_froglight"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

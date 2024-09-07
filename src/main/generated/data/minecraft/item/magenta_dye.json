@@ -3,6 +3,7 @@
     "translation_key": "item.minecraft.magenta_dye"
   },
   "components": {
-    "minecraft:dye": "magenta"
+    "minecraft:dye": "magenta",
+    "minecraft:stackable": 64
   }
 }

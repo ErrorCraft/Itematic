@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:deepslate_redstone_ore"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

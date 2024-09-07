@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:end_stone"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

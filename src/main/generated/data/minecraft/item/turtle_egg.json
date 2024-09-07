@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:turtle_egg"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -3,13 +3,13 @@
     "translation_key": "item.minecraft.music_disc_stal"
   },
   "components": {
-    "minecraft:max_stack_size": 1,
     "minecraft:rarity": "epic",
     "minecraft:record": {
       "description_key": "item.minecraft.music_disc_stal.desc",
       "duration": 3000,
       "output_signal": 8,
       "sound_event": "minecraft:music_disc.stal"
-    }
+    },
+    "minecraft:stackable": 1
   }
 }

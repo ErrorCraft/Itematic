@@ -17,6 +17,6 @@
     "minecraft:fuel": {
       "ticks": 300
     },
-    "minecraft:max_stack_size": 16
+    "minecraft:stackable": 16
   }
 }

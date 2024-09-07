@@ -5,6 +5,7 @@
   "components": {
     "minecraft:decorated_pot_pattern": {
       "pattern": "minecraft:archer_pottery_pattern"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

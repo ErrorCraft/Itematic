@@ -5,6 +5,7 @@
   "components": {
     "minecraft:smithing_template": {
       "template": "minecraft:eye_pattern"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

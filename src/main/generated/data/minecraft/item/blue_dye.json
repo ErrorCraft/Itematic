@@ -3,6 +3,7 @@
     "translation_key": "item.minecraft.blue_dye"
   },
   "components": {
-    "minecraft:dye": "blue"
+    "minecraft:dye": "blue",
+    "minecraft:stackable": 64
   }
 }

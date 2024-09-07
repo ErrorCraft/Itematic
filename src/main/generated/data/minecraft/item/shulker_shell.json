@@ -1,5 +1,8 @@
 {
   "base": {
     "translation_key": "item.minecraft.shulker_shell"
+  },
+  "components": {
+    "minecraft:stackable": 64
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:smithing_template": {
       "template": "minecraft:netherite_upgrade"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -10,6 +10,7 @@
         "attached_side": "down",
         "other_block": "minecraft:dead_brain_coral_wall_fan"
       }
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

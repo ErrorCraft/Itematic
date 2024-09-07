@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:cauldron"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

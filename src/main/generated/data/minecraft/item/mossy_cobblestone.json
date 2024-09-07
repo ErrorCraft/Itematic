@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:mossy_cobblestone"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:mud_brick_slab"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

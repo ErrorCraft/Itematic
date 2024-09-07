@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:fire_coral"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

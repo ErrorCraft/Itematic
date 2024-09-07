@@ -6,12 +6,12 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_projectile"
     },
-    "minecraft:max_stack_size": 16,
     "minecraft:projectile": {
       "entity": {
         "type": "minecraft:snowball"
       }
     },
+    "minecraft:stackable": 16,
     "minecraft:throwable": {
       "angle_offset": 0.0,
       "speed": 1.5

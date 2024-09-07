@@ -3,6 +3,7 @@
     "translation_key": "item.minecraft.heart_of_the_sea"
   },
   "components": {
-    "minecraft:rarity": "uncommon"
+    "minecraft:rarity": "uncommon",
+    "minecraft:stackable": 64
   }
 }

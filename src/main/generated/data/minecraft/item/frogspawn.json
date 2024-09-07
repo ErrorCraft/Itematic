@@ -6,6 +6,7 @@
     "minecraft:block": {
       "block": "minecraft:frogspawn"
     },
+    "minecraft:stackable": 64,
     "minecraft:useable_on_fluid": {}
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:clay"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

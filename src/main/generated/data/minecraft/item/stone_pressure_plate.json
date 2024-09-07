@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:stone_pressure_plate"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

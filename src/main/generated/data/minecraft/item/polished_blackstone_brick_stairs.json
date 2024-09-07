@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:polished_blackstone_brick_stairs"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:polished_andesite"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

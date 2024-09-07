@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:tripwire_hook"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

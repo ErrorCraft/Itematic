@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:smooth_sandstone_stairs"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

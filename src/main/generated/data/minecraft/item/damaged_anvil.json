@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:damaged_anvil"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

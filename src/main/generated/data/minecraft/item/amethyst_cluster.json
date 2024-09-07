@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:amethyst_cluster"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

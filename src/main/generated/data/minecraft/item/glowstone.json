@@ -8,6 +8,7 @@
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:charge_respawn_anchor"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

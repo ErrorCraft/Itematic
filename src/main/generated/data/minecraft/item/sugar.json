@@ -1,5 +1,8 @@
 {
   "base": {
     "translation_key": "item.minecraft.sugar"
+  },
+  "components": {
+    "minecraft:stackable": 64
   }
 }

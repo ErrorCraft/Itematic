@@ -12,6 +12,6 @@
     "minecraft:banner_pattern": {
       "patterns": "minecraft:pattern_item/piglin"
     },
-    "minecraft:max_stack_size": 1
+    "minecraft:stackable": 1
   }
 }

@@ -5,6 +5,7 @@
   "components": {
     "minecraft:block": {
       "block": "minecraft:iron_bars"
-    }
+    },
+    "minecraft:stackable": 64
   }
 }

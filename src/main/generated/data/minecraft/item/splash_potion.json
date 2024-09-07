@@ -6,7 +6,6 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_bottle"
     },
-    "minecraft:max_stack_size": 1,
     "minecraft:potion_holder": {
       "duration_multiplier": 1.0
     },
@@ -15,6 +14,7 @@
         "type": "minecraft:potion"
       }
     },
+    "minecraft:stackable": 1,
     "minecraft:throwable": {
       "angle_offset": -20.0,
       "speed": 0.5

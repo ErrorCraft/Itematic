@@ -45,7 +45,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
 
     public static ItemComponent<?>[] sword(ToolMaterial material, TagKey<Item> repairItemsTag) {
         return new ItemComponent<?>[] {
-            MaxStackSizeItemComponent.of(1),
+            StackableItemComponent.of(1),
             DamageableItemComponent.of(material.getDurability()),
             ToolItemComponent.builder(2)
                 .rule(ToolComponent.Rule.ofAlwaysDropping(List.of(Blocks.COBWEB), 15.0f))
@@ -76,7 +76,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
 
     private static ItemComponent<?>[] tool(ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Block> mineableBlocks, TagKey<Enchantment> toolEnchantingTag, TagKey<Enchantment> toolForgingTag, TagKey<Item> repairItemsTag) {
         return new ItemComponent<?>[] {
-            MaxStackSizeItemComponent.of(1),
+            StackableItemComponent.of(1),
             DamageableItemComponent.of(material.getDurability()),
             ToolItemComponent.of(material, mineableBlocks),
             WeaponItemComponent.of(2, attackDamage + material.getAttackDamage(), attackSpeed),
