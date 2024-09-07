@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "item.minecraft.enchanted_golden_apple"
   },
   "components": {
@@ -42,7 +43,6 @@
       "saturation": 9.6
     },
     "minecraft:glint": true,
-    "minecraft:rarity": "epic",
     "minecraft:stackable": 64,
     "minecraft:use_animation": "eat",
     "minecraft:useable": {

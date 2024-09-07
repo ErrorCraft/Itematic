@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "item.minecraft.command_block_minecart"
   },
   "components": {
@@ -11,7 +12,6 @@
         "type": "minecraft:command_block_minecart"
       }
     },
-    "minecraft:rarity": "epic",
     "minecraft:stackable": 1
   }
 }

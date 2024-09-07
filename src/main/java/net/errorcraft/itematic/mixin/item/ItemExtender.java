@@ -647,11 +647,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
     @Unique
     private ComponentMap initializeComponents() {
-        if (this.itemComponents == ItemComponentSet.EMPTY) {
-            return DataComponentTypes.DEFAULT_ITEM_COMPONENTS;
-        }
         ComponentMap.Builder componentsBuilder = ComponentMap.builder()
             .addAll(DataComponentTypes.DEFAULT_ITEM_COMPONENTS);
+        this.base.addComponents(componentsBuilder);
         AttributeModifiersComponent.Builder attributeModifiersBuilder = AttributeModifiersComponent.builder();
         for (ItemComponent<?> component : this.itemComponents) {
             component.addComponents(componentsBuilder);

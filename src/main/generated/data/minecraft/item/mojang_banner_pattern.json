@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "epic",
     "tooltip": [
       {
         "color": "gray",
@@ -12,7 +13,6 @@
     "minecraft:banner_pattern": {
       "patterns": "minecraft:pattern_item/mojang"
     },
-    "minecraft:rarity": "epic",
     "minecraft:stackable": 1
   }
 }

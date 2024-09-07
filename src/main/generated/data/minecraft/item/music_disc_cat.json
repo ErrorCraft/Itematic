@@ -1,9 +1,9 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "item.minecraft.music_disc_cat"
   },
   "components": {
-    "minecraft:rarity": "epic",
     "minecraft:record": {
       "description_key": "item.minecraft.music_disc_cat.desc",
       "duration": 3700,

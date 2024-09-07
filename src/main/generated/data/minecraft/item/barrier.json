@@ -1,12 +1,12 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "block.minecraft.barrier"
   },
   "components": {
     "minecraft:block": {
       "block": "minecraft:barrier"
     },
-    "minecraft:rarity": "epic",
     "minecraft:stackable": 64
   }
 }

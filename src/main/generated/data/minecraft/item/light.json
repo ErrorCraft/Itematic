@@ -1,12 +1,12 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "block.minecraft.light"
   },
   "components": {
     "minecraft:block": {
       "block": "minecraft:light"
     },
-    "minecraft:rarity": "epic",
     "minecraft:stackable": 64
   }
 }

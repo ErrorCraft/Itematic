@@ -24,7 +24,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Rarity;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -43,7 +42,6 @@ public record RecordItemComponent(RegistryEntry<SoundEvent> soundEvent, String d
     public static ItemComponent<?>[] of(RegistryEntry<SoundEvent> soundEvent, RegistryKey<Item> key, int duration, int outputSignal) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
-            RarityItemComponent.of(Rarity.EPIC),
             new RecordItemComponent(soundEvent, IdentifierUtil.createTranslationKey(key, "item", "desc"), duration, outputSignal)
         };
     }

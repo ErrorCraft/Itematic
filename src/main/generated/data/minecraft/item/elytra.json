@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "uncommon",
     "translation_key": "item.minecraft.elytra"
   },
   "components": {
@@ -15,7 +16,6 @@
       "slot": "chest",
       "swappable": true
     },
-    "minecraft:rarity": "uncommon",
     "minecraft:repairable": {
       "items": "minecraft:repairs_elytra"
     },

@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "rare",
     "translation_key": "item.minecraft.end_crystal"
   },
   "components": {
@@ -9,7 +10,6 @@
       }
     },
     "minecraft:glint": true,
-    "minecraft:rarity": "rare",
     "minecraft:stackable": 64
   }
 }

@@ -1,12 +1,12 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "block.minecraft.dragon_egg"
   },
   "components": {
     "minecraft:block": {
       "block": "minecraft:dragon_egg"
     },
-    "minecraft:rarity": "epic",
     "minecraft:stackable": 64
   }
 }

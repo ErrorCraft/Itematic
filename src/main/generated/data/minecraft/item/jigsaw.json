@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "block.minecraft.jigsaw"
   },
   "components": {
@@ -7,7 +8,6 @@
       "block": "minecraft:jigsaw",
       "operator_only": true
     },
-    "minecraft:rarity": "epic",
     "minecraft:stackable": 64
   }
 }

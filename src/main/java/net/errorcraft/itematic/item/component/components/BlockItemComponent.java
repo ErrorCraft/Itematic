@@ -24,7 +24,6 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Rarity;
 import net.minecraft.util.math.Direction;
 
 import java.util.List;
@@ -34,6 +33,22 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly) imp
         BlockPicker.CODEC.fieldOf("block").forGetter(BlockItemComponent::block),
         Codec.BOOL.optionalFieldOf("operator_only", false).forGetter(BlockItemComponent::operatorOnly)
     ).apply(instance, BlockItemComponent::new));
+
+    public static BlockItemComponent of(BlockPicker<?> block, boolean operatorOnly) {
+        return new BlockItemComponent(block, operatorOnly);
+    }
+
+    public static BlockItemComponent of(RegistryEntry<Block> block) {
+        return of(new SimpleBlockPicker(block), false);
+    }
+
+    public static BlockItemComponent operator(RegistryEntry<Block> block) {
+        return of(new SimpleBlockPicker(block), true);
+    }
+
+    public static BlockItemComponent attachedToSide(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, Direction attachedSide) {
+        return of(new AttachedToSideBlockPicker(attachedBlock, otherBlock, attachedSide), false);
+    }
 
     @Override
     public ItemComponentType<BlockItemComponent> type() {
@@ -59,21 +74,6 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly) imp
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         this.block.defaultBlock().value().appendTooltip(stack, context, tooltip, type);
-    }
-
-    public static BlockItemComponent attachedToSide(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, Direction attachedSide) {
-        return new BlockItemComponent(new AttachedToSideBlockPicker(attachedBlock, otherBlock, attachedSide), false);
-    }
-
-    public static BlockItemComponent of(RegistryEntry<Block> block) {
-        return new BlockItemComponent(new SimpleBlockPicker(block), false);
-    }
-
-    public static ItemComponent<?>[] operator(RegistryEntry<Block> block) {
-        return new ItemComponent<?>[] {
-            RarityItemComponent.of(Rarity.EPIC),
-            new BlockItemComponent(new SimpleBlockPicker(block), true)
-        };
     }
 
     public boolean canBeNested() {

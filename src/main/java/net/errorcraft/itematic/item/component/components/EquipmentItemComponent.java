@@ -25,7 +25,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -36,6 +35,19 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
         Codec.BOOL.optionalFieldOf("swappable", false).forGetter(EquipmentItemComponent::swappable),
         SoundEvent.ENTRY_CODEC.fieldOf("equip_sound").forGetter(EquipmentItemComponent::equipSound)
     ).apply(instance, EquipmentItemComponent::new));
+
+    public static EquipmentItemComponent of(EquipmentSlot slot, boolean swappable, RegistryEntry<SoundEvent> equipSound) {
+        return new EquipmentItemComponent(slot, swappable, equipSound);
+    }
+
+    public static ItemComponent<?>[] skull(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, RegistryEntryLookup<SoundEvent> soundEvents, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+        return new ItemComponent<?>[] {
+            BlockItemComponent.attachedToSide(attachedBlock, otherBlock, Direction.DOWN),
+            of(EquipmentSlot.HEAD, false, soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY_HEAD)),
+            FireworkShapeModifierItemComponent.of(FireworkExplosionComponent.Type.CREEPER)
+        };
+    }
 
     @Override
     public ItemComponentType<EquipmentItemComponent> type() {
@@ -77,19 +89,5 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
     @Override
     public RegistryEntry<SoundEvent> getEquipSound() {
         return this.equipSound;
-    }
-
-    public static EquipmentItemComponent of(EquipmentSlot slot, boolean swappable, RegistryEntry<SoundEvent> equipSound) {
-        return new EquipmentItemComponent(slot, swappable, equipSound);
-    }
-
-    public static ItemComponent<?>[] skull(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, RegistryEntryLookup<SoundEvent> soundEvents, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
-        return new ItemComponent<?>[] {
-            RarityItemComponent.of(Rarity.UNCOMMON),
-            BlockItemComponent.attachedToSide(attachedBlock, otherBlock, Direction.DOWN),
-            of(EquipmentSlot.HEAD, false, soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)),
-            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY_HEAD)),
-            FireworkShapeModifierItemComponent.of(FireworkExplosionComponent.Type.CREEPER)
-        };
     }
 }

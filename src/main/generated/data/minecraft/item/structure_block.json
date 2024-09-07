@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "block.minecraft.structure_block"
   },
   "components": {
@@ -7,7 +8,6 @@
       "block": "minecraft:structure_block",
       "operator_only": true
     },
-    "minecraft:rarity": "epic",
     "minecraft:stackable": 64
   }
 }

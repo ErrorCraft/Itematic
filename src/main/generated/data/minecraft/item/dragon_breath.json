@@ -1,9 +1,9 @@
 {
   "base": {
+    "rarity": "uncommon",
     "translation_key": "item.minecraft.dragon_breath"
   },
   "components": {
-    "minecraft:rarity": "uncommon",
     "minecraft:recipe_remainder": {
       "item": "minecraft:glass_bottle"
     },

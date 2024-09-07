@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "uncommon",
     "translation_key": "item.minecraft.enchanted_book"
   },
   "components": {
@@ -7,7 +8,6 @@
       "grinding_transforms_into": "minecraft:book"
     },
     "minecraft:glint": true,
-    "minecraft:rarity": "uncommon",
     "minecraft:stackable": 1
   }
 }

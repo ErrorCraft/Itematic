@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "rare",
     "translation_key": "item.minecraft.golden_apple"
   },
   "components": {
@@ -26,7 +27,6 @@
       "nutrition": 4,
       "saturation": 9.6
     },
-    "minecraft:rarity": "rare",
     "minecraft:stackable": 64,
     "minecraft:use_animation": "eat",
     "minecraft:useable": {

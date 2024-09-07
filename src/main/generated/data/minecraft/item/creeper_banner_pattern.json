@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "uncommon",
     "tooltip": [
       {
         "color": "gray",
@@ -12,7 +13,6 @@
     "minecraft:banner_pattern": {
       "patterns": "minecraft:pattern_item/creeper"
     },
-    "minecraft:rarity": "uncommon",
     "minecraft:stackable": 1
   }
 }

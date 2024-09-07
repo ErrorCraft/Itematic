@@ -1,12 +1,12 @@
 {
   "base": {
+    "rarity": "rare",
     "translation_key": "block.minecraft.conduit"
   },
   "components": {
     "minecraft:block": {
       "block": "minecraft:conduit"
     },
-    "minecraft:rarity": "rare",
     "minecraft:stackable": 64
   }
 }

@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "uncommon",
     "translation_key": "item.minecraft.totem_of_undying"
   },
   "components": {
@@ -24,7 +25,6 @@
         }
       ]
     },
-    "minecraft:rarity": "uncommon",
     "minecraft:stackable": 1
   }
 }

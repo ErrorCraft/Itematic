@@ -1,9 +1,9 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "item.minecraft.knowledge_book"
   },
   "components": {
-    "minecraft:rarity": "epic",
     "minecraft:stackable": 1,
     "minecraft:unlock_recipes": {}
   }

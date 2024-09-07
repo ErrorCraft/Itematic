@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "uncommon",
     "translation_key": "block.minecraft.creeper_head"
   },
   "components": {
@@ -19,7 +20,6 @@
       "slot": "head"
     },
     "minecraft:firework_shape_modifier": "creeper",
-    "minecraft:rarity": "uncommon",
     "minecraft:stackable": 64
   }
 }

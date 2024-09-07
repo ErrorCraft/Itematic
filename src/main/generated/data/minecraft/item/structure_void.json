@@ -1,12 +1,12 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "block.minecraft.structure_void"
   },
   "components": {
     "minecraft:block": {
       "block": "minecraft:structure_void"
     },
-    "minecraft:rarity": "epic",
     "minecraft:stackable": 64
   }
 }
