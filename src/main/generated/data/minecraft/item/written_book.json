@@ -7,14 +7,11 @@
     "minecraft:stackable": 16,
     "minecraft:text_holder": {}
   },
-  "events": [
-    {
-      "event": "minecraft:use",
-      "entry": {
-        "action": {
-          "type": "minecraft:open_book_from_item"
-        }
+  "events": {
+    "minecraft:use": {
+      "action": {
+        "type": "minecraft:open_book_from_item"
       }
     }
-  ]
+  }
 }

@@ -40,61 +40,58 @@
       "attack_speed": -2.9
     }
   },
-  "events": [
-    {
-      "event": "minecraft:stopped_using",
-      "entry": {
-        "action": {
-          "type": "minecraft:sequence",
-          "handler": "minecraft:passing",
-          "entries": [
+  "events": {
+    "minecraft:stopped_using": {
+      "action": {
+        "type": "minecraft:sequence",
+        "handler": "minecraft:passing",
+        "entries": [
+          {
+            "action": {
+              "type": "minecraft:twirl_player"
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:damage_item",
+              "amount": 1
+            }
+          }
+        ]
+      },
+      "requirements": {
+        "conditions": {
+          "condition": "minecraft:all_of",
+          "terms": [
             {
-              "action": {
-                "type": "minecraft:twirl_player"
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "in_water_or_rain": true,
+                "used_item_ticks": {
+                  "min": 10
+                }
               }
             },
             {
-              "action": {
-                "type": "minecraft:damage_item",
-                "amount": 1
+              "condition": "minecraft:match_tool",
+              "predicate": {
+                "predicates": {
+                  "minecraft:enchantments": [
+                    {
+                      "enchantment": "minecraft:riptide"
+                    }
+                  ]
+                }
               }
             }
           ]
         },
-        "requirements": {
-          "conditions": {
-            "condition": "minecraft:all_of",
-            "terms": [
-              {
-                "condition": "minecraft:entity_properties",
-                "entity": "this",
-                "predicate": {
-                  "in_water_or_rain": true,
-                  "used_item_ticks": {
-                    "min": 10
-                  }
-                }
-              },
-              {
-                "condition": "minecraft:match_tool",
-                "predicate": {
-                  "predicates": {
-                    "minecraft:enchantments": [
-                      {
-                        "enchantment": "minecraft:riptide"
-                      }
-                    ]
-                  }
-                }
-              }
-            ]
-          },
-          "context": {
-            "entity": "this",
-            "position": "this"
-          }
+        "context": {
+          "entity": "this",
+          "position": "this"
         }
       }
     }
-  ]
+  }
 }

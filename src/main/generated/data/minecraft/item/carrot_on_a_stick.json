@@ -15,16 +15,13 @@
       "target": "minecraft:pig"
     }
   },
-  "events": [
-    {
-      "event": "minecraft:break_item",
-      "entry": {
-        "action": {
-          "type": "minecraft:exchange_item",
-          "decrement_count": false,
-          "item": "minecraft:fishing_rod"
-        }
+  "events": {
+    "minecraft:break_item": {
+      "action": {
+        "type": "minecraft:exchange_item",
+        "decrement_count": false,
+        "item": "minecraft:fishing_rod"
       }
     }
-  ]
+  }
 }

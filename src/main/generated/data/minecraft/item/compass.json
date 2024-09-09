@@ -9,42 +9,39 @@
     },
     "minecraft:stackable": 64
   },
-  "events": [
-    {
-      "event": "minecraft:use_on_block",
-      "entry": {
-        "action": {
-          "type": "minecraft:sequence",
-          "handler": "minecraft:passing",
-          "entries": [
-            {
-              "action": {
-                "type": "minecraft:set_item_pointer_location",
-                "position": "target"
-              }
-            },
-            {
-              "action": {
-                "type": "minecraft:swing_hand"
-              }
-            }
-          ]
-        },
-        "requirements": {
-          "conditions": {
-            "condition": "minecraft:location_check",
-            "predicate": {
-              "block": {
-                "blocks": "minecraft:lodestone"
-              }
+  "events": {
+    "minecraft:use_on_block": {
+      "action": {
+        "type": "minecraft:sequence",
+        "handler": "minecraft:passing",
+        "entries": [
+          {
+            "action": {
+              "type": "minecraft:set_item_pointer_location",
+              "position": "target"
             }
           },
-          "context": {
-            "entity": "this",
-            "position": "target"
+          {
+            "action": {
+              "type": "minecraft:swing_hand"
+            }
           }
+        ]
+      },
+      "requirements": {
+        "conditions": {
+          "condition": "minecraft:location_check",
+          "predicate": {
+            "block": {
+              "blocks": "minecraft:lodestone"
+            }
+          }
+        },
+        "context": {
+          "entity": "this",
+          "position": "target"
         }
       }
     }
-  ]
+  }
 }

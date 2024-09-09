@@ -8,82 +8,79 @@
     },
     "minecraft:stackable": 64
   },
-  "events": [
-    {
-      "event": "minecraft:use_on_block",
-      "entry": {
-        "action": {
-          "type": "minecraft:sequence",
-          "handler": "minecraft:first_to_pass_requirements",
-          "entries": [
-            {
-              "action": {
-                "type": "minecraft:sequence",
-                "handler": "minecraft:passing",
-                "entries": [
-                  {
-                    "action": {
-                      "type": "minecraft:modify_sign",
-                      "position": "target",
-                      "wax": true
-                    }
-                  },
-                  {
-                    "action": {
-                      "type": "minecraft:decrement_item",
-                      "amount": 1
-                    }
-                  },
-                  {
-                    "action": {
-                      "type": "minecraft:swing_hand"
-                    }
-                  }
-                ]
-              },
-              "requirements": {
-                "conditions": {
-                  "condition": "minecraft:location_check",
-                  "predicate": {
-                    "block": {
-                      "blocks": "#minecraft:signs"
-                    }
+  "events": {
+    "minecraft:use_on_block": {
+      "action": {
+        "type": "minecraft:sequence",
+        "handler": "minecraft:first_to_pass_requirements",
+        "entries": [
+          {
+            "action": {
+              "type": "minecraft:sequence",
+              "handler": "minecraft:passing",
+              "entries": [
+                {
+                  "action": {
+                    "type": "minecraft:modify_sign",
+                    "position": "target",
+                    "wax": true
                   }
                 },
-                "context": {
-                  "entity": "this",
-                  "position": "target"
-                }
-              }
-            },
-            {
-              "action": {
-                "type": "minecraft:sequence",
-                "handler": "minecraft:passing",
-                "entries": [
-                  {
-                    "action": {
-                      "type": "minecraft:wax_block",
-                      "position": "target"
-                    }
-                  },
-                  {
-                    "action": {
-                      "type": "minecraft:decrement_item",
-                      "amount": 1
-                    }
-                  },
-                  {
-                    "action": {
-                      "type": "minecraft:swing_hand"
-                    }
+                {
+                  "action": {
+                    "type": "minecraft:decrement_item",
+                    "amount": 1
                   }
-                ]
+                },
+                {
+                  "action": {
+                    "type": "minecraft:swing_hand"
+                  }
+                }
+              ]
+            },
+            "requirements": {
+              "conditions": {
+                "condition": "minecraft:location_check",
+                "predicate": {
+                  "block": {
+                    "blocks": "#minecraft:signs"
+                  }
+                }
+              },
+              "context": {
+                "entity": "this",
+                "position": "target"
               }
             }
-          ]
-        }
+          },
+          {
+            "action": {
+              "type": "minecraft:sequence",
+              "handler": "minecraft:passing",
+              "entries": [
+                {
+                  "action": {
+                    "type": "minecraft:wax_block",
+                    "position": "target"
+                  }
+                },
+                {
+                  "action": {
+                    "type": "minecraft:decrement_item",
+                    "amount": 1
+                  }
+                },
+                {
+                  "action": {
+                    "type": "minecraft:swing_hand"
+                  }
+                }
+              ]
+            }
+          }
+        ]
       }
     }
-  ]
+  }
 }

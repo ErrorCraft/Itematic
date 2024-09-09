@@ -20,14 +20,11 @@
     "minecraft:stackable": 1,
     "minecraft:use_animation": "block"
   },
-  "events": [
-    {
-      "event": "minecraft:use",
-      "entry": {
-        "action": {
-          "type": "minecraft:start_using_item"
-        }
+  "events": {
+    "minecraft:use": {
+      "action": {
+        "type": "minecraft:start_using_item"
       }
     }
-  ]
+  }
 }

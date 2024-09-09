@@ -15,16 +15,13 @@
       "ticks": 32
     }
   },
-  "events": [
-    {
-      "event": "minecraft:consume_item",
-      "entry": {
-        "action": {
-          "type": "minecraft:teleport",
-          "distance": 16,
-          "entity": "this"
-        }
+  "events": {
+    "minecraft:consume_item": {
+      "action": {
+        "type": "minecraft:teleport",
+        "distance": 16,
+        "entity": "this"
       }
     }
-  ]
+  }
 }

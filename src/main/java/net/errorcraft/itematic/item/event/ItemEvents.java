@@ -28,6 +28,6 @@ public class ItemEvents {
     public static void init() {}
 
     private static ItemEvent register(RegistryKey<ItemEvent> id) {
-        return Registry.register(ItematicRegistries.ITEM_EVENT, id, new ItemEvent());
+        return Registry.register(ItematicRegistries.ITEM_EVENT, id, new ItemEvent(id));
     }
 }

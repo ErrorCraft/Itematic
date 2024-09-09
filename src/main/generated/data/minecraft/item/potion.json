@@ -24,116 +24,113 @@
       "ticks": 32
     }
   },
-  "events": [
-    {
-      "event": "minecraft:use_on_block",
-      "entry": {
-        "action": [
-          {
-            "action": {
-              "type": "minecraft:play_sound",
-              "category": "block",
-              "pitch": 1.0,
-              "position": "target",
-              "sound": "minecraft:entity.generic.splash",
-              "volume": 1.0
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:exchange_item",
-              "item": "minecraft:glass_bottle"
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:display_particle",
-              "count": 5,
-              "delta": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "offset": [
-                {
-                  "max": 0.5,
-                  "min": -0.5
-                },
-                1.0,
-                {
-                  "max": 0.5,
-                  "min": -0.5
-                }
-              ],
-              "particle": {
-                "type": "minecraft:splash"
+  "events": {
+    "minecraft:use_on_block": {
+      "action": [
+        {
+          "action": {
+            "type": "minecraft:play_sound",
+            "category": "block",
+            "pitch": 1.0,
+            "position": "target",
+            "sound": "minecraft:entity.generic.splash",
+            "volume": 1.0
+          }
+        },
+        {
+          "action": {
+            "type": "minecraft:exchange_item",
+            "item": "minecraft:glass_bottle"
+          }
+        },
+        {
+          "action": {
+            "type": "minecraft:display_particle",
+            "count": 5,
+            "delta": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "offset": [
+              {
+                "max": 0.5,
+                "min": -0.5
               },
-              "position": "target",
-              "speed": 1.0
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:play_sound",
-              "category": "block",
-              "pitch": 1.0,
-              "position": "target",
-              "sound": "minecraft:item.bottle.empty",
-              "volume": 1.0
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:set_block_state",
-              "position": "target",
-              "state": {
-                "Name": "minecraft:mud"
+              1.0,
+              {
+                "max": 0.5,
+                "min": -0.5
               }
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:swing_hand"
+            ],
+            "particle": {
+              "type": "minecraft:splash"
+            },
+            "position": "target",
+            "speed": 1.0
+          }
+        },
+        {
+          "action": {
+            "type": "minecraft:play_sound",
+            "category": "block",
+            "pitch": 1.0,
+            "position": "target",
+            "sound": "minecraft:item.bottle.empty",
+            "volume": 1.0
+          }
+        },
+        {
+          "action": {
+            "type": "minecraft:set_block_state",
+            "position": "target",
+            "state": {
+              "Name": "minecraft:mud"
             }
           }
-        ],
-        "requirements": {
-          "conditions": {
-            "condition": "minecraft:all_of",
-            "terms": [
-              {
-                "condition": "minecraft:inverted",
-                "term": {
-                  "condition": "minecraft:side_check",
-                  "sides": [
-                    "down"
-                  ]
-                }
-              },
-              {
-                "condition": "minecraft:location_check",
-                "predicate": {
-                  "block": {
-                    "blocks": "#minecraft:convertable_to_mud"
-                  }
-                }
-              },
-              {
-                "condition": "minecraft:match_tool",
-                "predicate": {
-                  "predicates": {
-                    "minecraft:potion_contents": "minecraft:water"
-                  }
+        },
+        {
+          "action": {
+            "type": "minecraft:swing_hand"
+          }
+        }
+      ],
+      "requirements": {
+        "conditions": {
+          "condition": "minecraft:all_of",
+          "terms": [
+            {
+              "condition": "minecraft:inverted",
+              "term": {
+                "condition": "minecraft:side_check",
+                "sides": [
+                  "down"
+                ]
+              }
+            },
+            {
+              "condition": "minecraft:location_check",
+              "predicate": {
+                "block": {
+                  "blocks": "#minecraft:convertable_to_mud"
                 }
               }
-            ]
-          },
-          "context": {
-            "entity": "this",
-            "position": "target"
-          }
+            },
+            {
+              "condition": "minecraft:match_tool",
+              "predicate": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:water"
+                }
+              }
+            }
+          ]
+        },
+        "context": {
+          "entity": "this",
+          "position": "target"
         }
       }
     }
-  ]
+  }
 }

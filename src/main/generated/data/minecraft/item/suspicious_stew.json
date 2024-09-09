@@ -17,29 +17,26 @@
       "ticks": 32
     }
   },
-  "events": [
-    {
-      "event": "minecraft:consume_item",
-      "entry": {
-        "action": {
-          "type": "minecraft:sequence",
-          "handler": "minecraft:passing",
-          "entries": [
-            {
-              "action": {
-                "type": "minecraft:apply_suspicious_stew_effects_from_item",
-                "entity": "this"
-              }
-            },
-            {
-              "action": {
-                "type": "minecraft:exchange_item",
-                "item": "minecraft:bowl"
-              }
+  "events": {
+    "minecraft:consume_item": {
+      "action": {
+        "type": "minecraft:sequence",
+        "handler": "minecraft:passing",
+        "entries": [
+          {
+            "action": {
+              "type": "minecraft:apply_suspicious_stew_effects_from_item",
+              "entity": "this"
             }
-          ]
-        }
+          },
+          {
+            "action": {
+              "type": "minecraft:exchange_item",
+              "item": "minecraft:bowl"
+            }
+          }
+        ]
       }
     }
-  ]
+  }
 }

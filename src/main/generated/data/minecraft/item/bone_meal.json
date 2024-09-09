@@ -8,14 +8,11 @@
     },
     "minecraft:stackable": 64
   },
-  "events": [
-    {
-      "event": "minecraft:use_on_block",
-      "entry": {
-        "action": {
-          "type": "minecraft:fertilize"
-        }
+  "events": {
+    "minecraft:use_on_block": {
+      "action": {
+        "type": "minecraft:fertilize"
       }
     }
-  ]
+  }
 }

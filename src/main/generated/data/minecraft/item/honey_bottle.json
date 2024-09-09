@@ -19,16 +19,13 @@
       "ticks": 40
     }
   },
-  "events": [
-    {
-      "event": "minecraft:consume_item",
-      "entry": {
-        "action": {
-          "type": "minecraft:remove_status_effects",
-          "effects": "minecraft:poison",
-          "entity": "this"
-        }
+  "events": {
+    "minecraft:consume_item": {
+      "action": {
+        "type": "minecraft:remove_status_effects",
+        "effects": "minecraft:poison",
+        "entity": "this"
       }
     }
-  ]
+  }
 }

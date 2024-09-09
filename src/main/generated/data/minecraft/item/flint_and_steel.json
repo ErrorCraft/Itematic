@@ -11,37 +11,34 @@
     },
     "minecraft:stackable": 1
   },
-  "events": [
-    {
-      "event": "minecraft:use_on_block",
-      "entry": {
-        "action": {
-          "type": "minecraft:sequence",
-          "handler": "minecraft:passing",
-          "entries": [
-            "minecraft:light_block",
-            {
-              "action": {
-                "type": "minecraft:damage_item",
-                "amount": 1
-              }
-            },
-            {
-              "action": {
-                "type": "minecraft:play_sound",
-                "category": "block",
-                "pitch": {
-                  "max": 1.2,
-                  "min": 0.8
-                },
-                "position": "target",
-                "sound": "minecraft:item.flintandsteel.use",
-                "volume": 1.0
-              }
+  "events": {
+    "minecraft:use_on_block": {
+      "action": {
+        "type": "minecraft:sequence",
+        "handler": "minecraft:passing",
+        "entries": [
+          "minecraft:light_block",
+          {
+            "action": {
+              "type": "minecraft:damage_item",
+              "amount": 1
             }
-          ]
-        }
+          },
+          {
+            "action": {
+              "type": "minecraft:play_sound",
+              "category": "block",
+              "pitch": {
+                "max": 1.2,
+                "min": 0.8
+              },
+              "position": "target",
+              "sound": "minecraft:item.flintandsteel.use",
+              "volume": 1.0
+            }
+          }
+        ]
       }
     }
-  ]
+  }
 }

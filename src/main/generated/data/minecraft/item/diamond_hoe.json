@@ -36,10 +36,7 @@
       "damage_per_hit": 2
     }
   },
-  "events": [
-    {
-      "event": "minecraft:use_on_block",
-      "entry": "minecraft:use_hoe_on_block"
-    }
-  ]
+  "events": {
+    "minecraft:use_on_block": "minecraft:use_hoe_on_block"
+  }
 }

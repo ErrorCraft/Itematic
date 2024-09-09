@@ -1,28 +1,27 @@
 package net.errorcraft.itematic.item.event;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.registry.ItematicRegistries;
-import net.errorcraft.itematic.serialization.MultiMapCodec;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.registry.entry.RegistryEntry;
 
-import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ItemEventMap {
     public static final ItemEventMap EMPTY = new ItemEventMap();
-    public static final Codec<ItemEventMap> CODEC = MultiMapCodec.ofRegistry(ItematicRegistries.ITEM_EVENT, "event", ActionEntry.REGISTRY_CODEC, "entry").xmap(ItemEventMap::new, v -> v.events);
+    public static final Codec<ItemEventMap> CODEC = Codec.simpleMap(ItematicRegistries.ITEM_EVENT.getCodec(), ActionEntry.REGISTRY_CODEC, ItematicRegistries.ITEM_EVENT)
+        .xmap(ItemEventMap::new, v -> v.events)
+        .codec();
 
-    private final Multimap<ItemEvent, RegistryEntry<ActionEntry>> events;
+    private final Map<ItemEvent, RegistryEntry<ActionEntry>> events;
 
     private ItemEventMap() {
-        this(ImmutableMultimap.of());
+        this(Map.of());
     }
 
-    private ItemEventMap(Multimap<ItemEvent, RegistryEntry<ActionEntry>> events) {
+    private ItemEventMap(Map<ItemEvent, RegistryEntry<ActionEntry>> events) {
         this.events = events;
     }
 
@@ -31,28 +30,32 @@ public class ItemEventMap {
     }
 
     public boolean invokeEvent(ItemEvent event, ActionContext context) {
-        boolean result = false;
-        for (RegistryEntry<ActionEntry> entry : this.events.get(event)) {
-            result |= entry.value().execute(context).orElse(false);
+        RegistryEntry<ActionEntry> entry = this.events.get(event);
+        if (entry == null) {
+            return false;
         }
-        return result;
+        return entry.value()
+            .execute(context)
+            .orElse(false);
     }
 
     public static class Builder {
-        private final Multimap<ItemEvent, RegistryEntry<ActionEntry>> events = MultimapBuilder.treeKeys(Comparator.comparingInt(ItematicRegistries.ITEM_EVENT::getRawId)).arrayListValues().build();
-
-        public Builder add(ItemEvent event, ActionEntry action) {
-            this.events.put(event, RegistryEntry.of(action));
-            return this;
-        }
-
-        public Builder add(ItemEvent event, RegistryEntry.Reference<ActionEntry> action) {
-            this.events.put(event, action);
-            return this;
-        }
+        private final Map<ItemEvent, RegistryEntry<ActionEntry>> events = new HashMap<>();
 
         public ItemEventMap build() {
             return new ItemEventMap(this.events);
+        }
+
+        public Builder add(ItemEvent event, ActionEntry action) {
+            return this.add(event, RegistryEntry.of(action));
+        }
+
+        public Builder add(ItemEvent event, RegistryEntry<ActionEntry> entry) {
+            if (this.events.containsKey(event)) {
+                throw new IllegalArgumentException("Duplicate entry for item event " + event);
+            }
+            this.events.put(event, entry);
+            return this;
         }
     }
 }

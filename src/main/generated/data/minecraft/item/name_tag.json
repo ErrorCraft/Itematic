@@ -5,34 +5,31 @@
   "components": {
     "minecraft:stackable": 64
   },
-  "events": [
-    {
-      "event": "minecraft:use_on_entity",
-      "entry": {
-        "action": {
-          "type": "minecraft:sequence",
-          "handler": "minecraft:passing",
-          "entries": [
-            {
-              "action": {
-                "type": "minecraft:set_entity_name_from_item",
-                "entity": "target"
-              }
-            },
-            {
-              "action": {
-                "type": "minecraft:decrement_item",
-                "amount": 1
-              }
-            },
-            {
-              "action": {
-                "type": "minecraft:swing_hand"
-              }
+  "events": {
+    "minecraft:use_on_entity": {
+      "action": {
+        "type": "minecraft:sequence",
+        "handler": "minecraft:passing",
+        "entries": [
+          {
+            "action": {
+              "type": "minecraft:set_entity_name_from_item",
+              "entity": "target"
             }
-          ]
-        }
+          },
+          {
+            "action": {
+              "type": "minecraft:decrement_item",
+              "amount": 1
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:swing_hand"
+            }
+          }
+        ]
       }
     }
-  ]
+  }
 }

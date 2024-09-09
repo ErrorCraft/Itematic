@@ -15,15 +15,12 @@
       "ticks": 32
     }
   },
-  "events": [
-    {
-      "event": "minecraft:consume_item",
-      "entry": {
-        "action": {
-          "type": "minecraft:clear_status_effects",
-          "entity": "this"
-        }
+  "events": {
+    "minecraft:consume_item": {
+      "action": {
+        "type": "minecraft:clear_status_effects",
+        "entity": "this"
       }
     }
-  ]
+  }
 }
