@@ -32,12 +32,16 @@ public record RemoveStatusEffectsAction(RegistryEntryList<StatusEffect> effects,
 
     @Override
     public boolean execute(ActionContext context) {
-        return context.entity(this.entity).map(entity -> {
-            if (entity instanceof LivingEntity target) {
-                this.effects.forEach(target::removeStatusEffect);
-                return true;
-            }
-            return false;
-        }).orElse(false);
+        return context.livingEntity(this.entity)
+            .map(this::removeStatusEffects)
+            .orElse(false);
+    }
+
+    private boolean removeStatusEffects(LivingEntity target) {
+        boolean removedStatusEffects = false;
+        for (RegistryEntry<StatusEffect> effect : this.effects) {
+            removedStatusEffects |= target.removeStatusEffect(effect);
+        }
+        return removedStatusEffects;
     }
 }
