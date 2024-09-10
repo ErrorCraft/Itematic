@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.entity.mob;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import net.errorcraft.itematic.access.entity.LivingEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
@@ -24,7 +25,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 @Mixin(HostileEntity.class)
-public class HostileEntityExtender extends PathAwareEntity {
+public class HostileEntityExtender extends PathAwareEntity implements LivingEntityAccess {
     protected HostileEntityExtender(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -73,6 +74,15 @@ public class HostileEntityExtender extends PathAwareEntity {
         )
     )
     private ItemStack newItemStackForArrowUseCreateStack(ItemConvertible item) {
+        return this.getWorld().itematic$createStack(ItemKeys.ARROW);
+    }
+
+    @Override
+    public ItemStack itematic$getAmmunition(ShooterItemComponent component) {
+        ItemStack heldStack = RangedWeaponItem.getHeldProjectile(this, component::isHeldAmmunition);
+        if (!heldStack.isEmpty()) {
+            return heldStack;
+        }
         return this.getWorld().itematic$createStack(ItemKeys.ARROW);
     }
 }

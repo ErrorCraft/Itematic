@@ -15,10 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 
 import java.util.Optional;
 
@@ -49,6 +46,15 @@ public interface CrossbowUserExtender {
             return true;
         }
         return false;
+    }
+
+    @ModifyVariable(
+        method = "shoot",
+        at = @At("LOAD"),
+        ordinal = 0
+    )
+    private Item castToCrossbowItemUseNull(Item instance) {
+        return null;
     }
 
     @Redirect(

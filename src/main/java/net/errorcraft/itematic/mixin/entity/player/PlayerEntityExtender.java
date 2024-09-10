@@ -132,15 +132,15 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
     }
 
     @Override
-    public ItemStack itematic$getAmmunition(ShooterItemComponent itemComponent) {
-        ItemStack heldStack = RangedWeaponItem.getHeldProjectile(this, itemComponent::isHeldAmmunition);
+    public ItemStack itematic$getAmmunition(ShooterItemComponent component) {
+        ItemStack heldStack = RangedWeaponItem.getHeldProjectile(this, component::isHeldAmmunition);
         if (!heldStack.isEmpty()) {
             return heldStack;
         }
 
         for (int i = 0; i < this.inventory.size(); ++i) {
             ItemStack stack = this.inventory.getStack(i);
-            if (itemComponent.isAmmunition(stack)) {
+            if (component.isAmmunition(stack)) {
                 return stack;
             }
         }

@@ -12,7 +12,7 @@ public interface LivingEntityAccess {
     default boolean itematic$isHolding(RegistryKey<Item> key) {
         return false;
     }
-    default ItemStack itematic$getAmmunition(ShooterItemComponent itemComponent) {
+    default ItemStack itematic$getAmmunition(ShooterItemComponent component) {
         return ItemStack.EMPTY;
     }
     default void itematic$eatFood(World world, ItemStack stack, ItemStackConsumer resultStackConsumer) {}
