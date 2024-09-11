@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.mixin.item;
 
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.BrushItemComponent;
 import net.minecraft.item.BrushItem;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +17,9 @@ public class BrushItemExtender {
             target = "Lnet/minecraft/item/BrushItem;getMaxUseTime(Lnet/minecraft/item/ItemStack;)I"
         )
     )
-    private int getMaxUseTimeUseItemStackVersion(BrushItem instance, ItemStack stack) {
-        return stack.getMaxUseTime();
+    private int getMaxUseTimeUseItemComponent(BrushItem instance, ItemStack stack) {
+        return stack.itematic$getComponent(ItemComponentTypes.BRUSH)
+            .map(BrushItemComponent::brushTicks)
+            .orElseThrow();
     }
 }

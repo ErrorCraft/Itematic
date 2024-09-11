@@ -23,6 +23,10 @@ public record BrushItemComponent(int brushTicks) implements ItemComponent<BrushI
     ).apply(instance, BrushItemComponent::new));
     private static final BrushItem DUMMY = new BrushItem(new Item.Settings());
 
+    public static BrushItemComponent of(int brushTicks) {
+        return new BrushItemComponent(brushTicks);
+    }
+
     @Override
     public ItemComponentType<BrushItemComponent> type() {
         return ItemComponentTypes.BRUSH;
@@ -31,10 +35,6 @@ public record BrushItemComponent(int brushTicks) implements ItemComponent<BrushI
     @Override
     public Codec<BrushItemComponent> codec() {
         return CODEC;
-    }
-
-    public static BrushItemComponent of(int brushTicks) {
-        return new BrushItemComponent(brushTicks);
     }
 
     @Override
