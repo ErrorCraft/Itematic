@@ -520,11 +520,11 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.ENCHANTED_GOLDEN_APPLE, create(
                 ItemBase.Builder.forItem(ItemKeys.ENCHANTED_GOLDEN_APPLE)
                     .rarity(Rarity.EPIC)
+                    .glint()
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(FoodItemComponent.from(FoodComponents.ENCHANTED_GOLDEN_APPLE))
-                    .with(GlintItemComponent.of(true))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_CARROT, create(
@@ -5147,11 +5147,11 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.END_CRYSTAL, create(
                 ItemBase.Builder.forItem(ItemKeys.END_CRYSTAL)
                     .rarity(Rarity.RARE)
+                    .glint()
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EntityItemComponent.of(EndCrystalEntityInitializer.INSTANCE))
-                    .with(GlintItemComponent.of(true))
                     .build()
             ));
         }
@@ -8546,13 +8546,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.EXPERIENCE_BOTTLE, create(
                 ItemBase.Builder.forItem(ItemKeys.EXPERIENCE_BOTTLE)
                     .rarity(Rarity.UNCOMMON)
+                    .glint()
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ThrowableItemComponent.of(0.7f, -20.0f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
-                    .with(GlintItemComponent.of(true))
                     .build()
             ));
             this.registerable.register(ItemKeys.FIRE_CHARGE, create(
@@ -9446,11 +9446,11 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.NETHER_STAR, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHER_STAR)
                     .rarity(Rarity.UNCOMMON)
+                    .glint()
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_EXPLOSION))
-                    .with(GlintItemComponent.of(true))
                     .build()
             ));
         }
@@ -9780,11 +9780,12 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.WRITTEN_BOOK, create(
-                ItemBase.Builder.forItem(ItemKeys.WRITTEN_BOOK).build(),
+                ItemBase.Builder.forItem(ItemKeys.WRITTEN_BOOK)
+                    .glint()
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
                     .with(TextHolderItemComponent.INSTANCE)
-                    .with(GlintItemComponent.of(true))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE, ActionEntry.of(OpenBookFromItemAction.INSTANCE))
@@ -9808,11 +9809,11 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.ENCHANTED_BOOK, create(
                 ItemBase.Builder.forItem(ItemKeys.ENCHANTED_BOOK)
                     .rarity(Rarity.UNCOMMON)
+                    .glint()
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(EnchantmentHolderItemComponent.of(this.items.getOrThrow(ItemKeys.BOOK)))
-                    .with(GlintItemComponent.of(true))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_BRICK, create(
@@ -9924,11 +9925,11 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.DEBUG_STICK, create(
                 ItemBase.Builder.forItem(ItemKeys.DEBUG_STICK)
                     .rarity(Rarity.EPIC)
+                    .glint()
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(DebugStickItemComponent.INSTANCE)
-                    .with(GlintItemComponent.of(true))
                     .build()
             ));
             this.registerable.register(ItemKeys.PHANTOM_MEMBRANE, create(

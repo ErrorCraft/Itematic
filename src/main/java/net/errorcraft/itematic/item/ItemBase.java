@@ -17,21 +17,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record ItemBase(String translationKey, Rarity rarity, Optional<List<Text>> tooltip) {
+public record ItemBase(String translationKey, Rarity rarity, Optional<List<Text>> tooltip, Optional<Boolean> glint) {
     public static final Codec<ItemBase> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.STRING.fieldOf("translation_key").forGetter(ItemBase::translationKey),
         Rarity.CODEC.optionalFieldOf("rarity", Rarity.COMMON).forGetter(ItemBase::rarity),
-        TextCodecs.CODEC.listOf().optionalFieldOf("tooltip").forGetter(ItemBase::tooltip)
+        TextCodecs.CODEC.listOf().optionalFieldOf("tooltip").forGetter(ItemBase::tooltip),
+        Codec.BOOL.optionalFieldOf("glint").forGetter(ItemBase::glint)
     ).apply(instance, ItemBase::new));
 
     public void addComponents(ComponentMap.Builder builder) {
         builder.add(DataComponentTypes.RARITY, this.rarity);
+        this.glint.ifPresent(glint -> builder.add(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, glint));
     }
 
     public static class Builder {
         private final String translationKey;
         private Rarity rarity = Rarity.COMMON;
         private List<Text> tooltip;
+        private Boolean glint;
 
         private Builder(String name) {
             this.translationKey = name;
@@ -46,7 +49,7 @@ public record ItemBase(String translationKey, Rarity rarity, Optional<List<Text>
         }
 
         public ItemBase build() {
-            return new ItemBase(this.translationKey, this.rarity, Optional.ofNullable(this.tooltip));
+            return new ItemBase(this.translationKey, this.rarity, Optional.ofNullable(this.tooltip), Optional.ofNullable(this.glint));
         }
 
         public Builder rarity(Rarity rarity) {
@@ -63,6 +66,11 @@ public record ItemBase(String translationKey, Rarity rarity, Optional<List<Text>
                 this.tooltip = new ArrayList<>();
             }
             this.tooltip.addAll(List.of(lines));
+            return this;
+        }
+
+        public Builder glint() {
+            this.glint = true;
             return this;
         }
     }

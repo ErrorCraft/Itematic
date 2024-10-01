@@ -1,11 +1,11 @@
 {
   "base": {
+    "glint": true,
     "rarity": "epic",
     "translation_key": "item.minecraft.debug_stick"
   },
   "components": {
     "minecraft:debug_stick": {},
-    "minecraft:glint": true,
     "minecraft:stackable": 1
   }
 }

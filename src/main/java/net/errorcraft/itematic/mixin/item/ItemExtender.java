@@ -379,20 +379,15 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .orElse(false);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean hasGlint(ItemStack stack) {
-        return this.itematic$getComponent(ItemComponentTypes.GLINT)
-            .map(GlintItemComponent::glint)
-            .orElseGet(() -> {
-                if (this.itematic$hasComponent(ItemComponentTypes.POINTABLE) && stack.contains(DataComponentTypes.LODESTONE_TRACKER)) {
-                    return true;
-                }
-                return stack.hasEnchantments();
-            });
+    @Inject(
+        method = "hasGlint",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void checkPointableItemComponent(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
+        if (this.itematic$hasComponent(ItemComponentTypes.POINTABLE) && stack.contains(DataComponentTypes.LODESTONE_TRACKER)) {
+            info.setReturnValue(true);
+        }
     }
 
     /**
