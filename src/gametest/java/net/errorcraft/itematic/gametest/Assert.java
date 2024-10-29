@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.gametest;
 
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.component.DataComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.LivingEntity;
@@ -82,6 +84,10 @@ public class Assert {
         if (entity.getStatusEffect(effect) != null) {
             throw new GameTestException("Expected entity to not have the " + effect.getKey().orElseThrow() + " status effect");
         }
+    }
+
+    public static <T extends BlockEntity> void blockEntityExists(TestContext context, BlockPos pos, BlockEntityType<T> type, Consumer<T> assertion) {
+        assertion.accept(TestUtil.getBlockEntity(context, pos, type));
     }
 
     public static void areIntsEqual(int value, int expected) {

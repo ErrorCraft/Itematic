@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.item.placement;
 
+import net.errorcraft.itematic.access.block.entity.BlockEntityAccess;
 import net.errorcraft.itematic.block.BlockStateUtil;
 import net.errorcraft.itematic.block.ShapeContextUtil;
 import net.errorcraft.itematic.item.ItemStackConsumer;
@@ -12,10 +13,14 @@ import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BlockStateComponent;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.AutomaticItemPlacementContext;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
@@ -81,7 +86,10 @@ public class BlockPlacer extends Placer {
 
     private void placed(BlockState blockState) {
         blockState = this.placeFromNbt(blockState);
-        BlockItem.writeNbtToBlockEntity(this.world, this.player, this.blockPos, this.stack);
+        BlockEntity blockEntity = this.world.getBlockEntity(this.blockPos);
+        if (blockEntity != null) {
+            ((BlockEntityAccess) blockEntity).itematic$placedFromItemStack(this.world, this.player, blockState, this.blockPos, this.stack);
+        }
         BlockItemAccessor.copyComponentsToBlockEntity(this.world, this.blockPos, this.stack);
         blockState.getBlock().onPlaced(this.world, this.blockPos, blockState, this.player, this.stack);
         if (this.player instanceof ServerPlayerEntity serverPlayer) {

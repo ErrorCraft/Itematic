@@ -26,6 +26,7 @@
       "net.errorcraft.itematic.gametest.entity.passive.WolfEntityTestSuite",
       "net.errorcraft.itematic.gametest.item.FishingRodTestSuite",
       "net.errorcraft.itematic.gametest.item.HoneyBottleTestSuite",
+      "net.errorcraft.itematic.gametest.item.SignTestSuite",
       "net.errorcraft.itematic.gametest.item.component.BlockItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.ConsumableItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.EquipmentItemComponentTestSuite",
