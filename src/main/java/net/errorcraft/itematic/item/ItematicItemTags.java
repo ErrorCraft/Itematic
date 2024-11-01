@@ -156,6 +156,7 @@ public class ItematicItemTags {
     public static final TagKey<Item> SHULKER_BOXES = of("shulker_boxes");
 
     public static final TagKey<Item> PREVENT_MINING_IN_CREATIVE = of("prevent_mining_in_creative");
+    public static final TagKey<Item> PREVENTS_TAKING_POTTED_ITEM_OUT = of("prevents_taking_potted_item_out");
 
     private ItematicItemTags() {}
 

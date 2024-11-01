@@ -31,10 +31,12 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.stat.Stats;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.event.GameEvent;
 
 import java.util.function.UnaryOperator;
 
@@ -176,6 +178,25 @@ public class Actions {
 
     public static ActionEntry glowSign(boolean glow) {
         return modifySign(ModifySignAction.glow(ActionContextParameter.TARGET, glow));
+    }
+
+    public static ActionEntry potBlock(RegistryEntryLookup<Block> blocks, RegistryKey<Block> pottedBlock) {
+        return ActionEntry.of(
+            ActionRequirements.of(
+                ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
+                LocationCheckLootCondition.builder(
+                    LocationPredicate.Builder.create()
+                        .block(BlockPredicate.Builder.create()
+                            .blocks(blocks.getOrThrow(BlockKeys.FLOWER_POT).value())))
+                    .build()
+            ),
+            PassingSequenceHandler.builder()
+                .add(SetBlockStateAction.of(ActionContextParameter.TARGET, blocks.getOrThrow(pottedBlock)))
+                .add(InvokeGameEventAction.of(GameEvent.BLOCK_CHANGE, ActionContextParameter.TARGET, ActionContextParameter.THIS))
+                .add(IncrementStatAction.of(ActionContextParameter.THIS, Stats.CUSTOM.getOrCreateStat(Stats.POT_FLOWER)))
+                .add(DecrementItemAction.of(1))
+                .add(SwingHandAction.INSTANCE)
+        );
     }
 
     private static ActionEntry modifySign(ModifySignAction action) {

@@ -5792,6 +5792,9 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_SAPLING)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_OAK_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPRUCE_SAPLING, create(
@@ -5801,6 +5804,9 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_SAPLING)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_SPRUCE_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.BIRCH_SAPLING, create(
@@ -5810,6 +5816,9 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_SAPLING)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_BIRCH_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.JUNGLE_SAPLING, create(
@@ -5819,6 +5828,9 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_SAPLING)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_JUNGLE_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.ACACIA_SAPLING, create(
@@ -5828,6 +5840,9 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_SAPLING)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_ACACIA_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHERRY_SAPLING, create(
@@ -5837,6 +5852,9 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_SAPLING)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CHERRY_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.DARK_OAK_SAPLING, create(
@@ -5846,6 +5864,9 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_SAPLING)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_DARK_OAK_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.MANGROVE_PROPAGULE, create(
@@ -5855,6 +5876,9 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_PROPAGULE)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_MANGROVE_PROPAGULE))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHORT_GRASS, create(
@@ -6043,6 +6067,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CACTUS)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CACTUS))
                     .build()
             ));
             this.registerable.register(ItemKeys.DRIED_KELP_BLOCK, create(
@@ -6061,6 +6088,9 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FERN)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(TintedItemComponent.of(GrassItemColor.of(this.biomes.getOrThrow(BiomeKeys.PLAINS))))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_FERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.LILY_PAD, create(
@@ -6147,6 +6177,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.SATURATION), 140)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_DANDELION))
                     .build()
             ));
             this.registerable.register(ItemKeys.POPPY, create(
@@ -6158,6 +6191,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.NIGHT_VISION), 100)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_POPPY))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_ORCHID, create(
@@ -6169,6 +6205,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.SATURATION), 140)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_BLUE_ORCHID))
                     .build()
             ));
             this.registerable.register(ItemKeys.ALLIUM, create(
@@ -6180,6 +6219,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 80)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_ALLIUM))
                     .build()
             ));
             this.registerable.register(ItemKeys.AZURE_BLUET, create(
@@ -6191,6 +6233,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.BLINDNESS), 160)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_AZURE_BLUET))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_TULIP, create(
@@ -6202,6 +6247,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_RED_TULIP))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_TULIP, create(
@@ -6213,6 +6261,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_ORANGE_TULIP))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHITE_TULIP, create(
@@ -6224,6 +6275,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_WHITE_TULIP))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_TULIP, create(
@@ -6235,6 +6289,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_PINK_TULIP))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXEYE_DAISY, create(
@@ -6246,6 +6303,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 160)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_OXEYE_DAISY))
                     .build()
             ));
             this.registerable.register(ItemKeys.CORNFLOWER, create(
@@ -6257,6 +6317,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.JUMP_BOOST), 120)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CORNFLOWER))
                     .build()
             ));
             this.registerable.register(ItemKeys.LILY_OF_THE_VALLEY, create(
@@ -6268,6 +6331,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 240)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_LILY_OF_THE_VALLEY))
                     .build()
             ));
             this.registerable.register(ItemKeys.WITHER_ROSE, create(
@@ -6279,6 +6345,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WITHER), 160)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_WITHER_ROSE))
                     .build()
             ));
             this.registerable.register(ItemKeys.AZALEA, create(
@@ -6288,6 +6357,9 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AZALEA)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_AZALEA_BUSH))
                     .build()
             ));
             this.registerable.register(ItemKeys.SUNFLOWER, create(
@@ -6345,6 +6417,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_MUSHROOM)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_BROWN_MUSHROOM))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_MUSHROOM, create(
@@ -6353,6 +6428,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_MUSHROOM)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_RED_MUSHROOM))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_FUNGUS, create(
@@ -6361,6 +6439,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_FUNGUS)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CRIMSON_FUNGUS))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_FUNGUS, create(
@@ -6369,6 +6450,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_FUNGUS)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_WARPED_FUNGUS))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_ROOTS, create(
@@ -6377,6 +6461,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_ROOTS)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CRIMSON_ROOTS))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_ROOTS, create(
@@ -6385,6 +6472,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_ROOTS)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_WARPED_ROOTS))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOSS_BLOCK, create(
@@ -6442,6 +6532,9 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FLOWERING_AZALEA)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_FLOWERING_AZALEA_BUSH))
                     .build()
             ));
             this.registerable.register(ItemKeys.TORCHFLOWER, create(
@@ -6453,6 +6546,9 @@ public class ItemUtil {
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.NIGHT_VISION), 100)
                     ))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_TORCHFLOWER))
                     .build()
             ));
             this.registerable.register(ItemKeys.PITCHER_PLANT, create(
@@ -8071,6 +8167,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_BUSH)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.PLANT_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_DEAD_BUSH))
                     .build()
             ));
             this.registerable.register(ItemKeys.OAK_BUTTON, create(
@@ -8165,6 +8264,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BAMBOO_FUEL_TIME))
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_BAMBOO))
                     .build()
             ));
             this.registerable.register(ItemKeys.SCAFFOLDING, create(

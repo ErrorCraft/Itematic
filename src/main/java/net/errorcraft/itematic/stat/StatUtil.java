@@ -1,13 +1,17 @@
 package net.errorcraft.itematic.stat;
 
+import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.mixin.stat.StatAccessor;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Identifier;
 
 public class StatUtil {
+    public static final Codec<Stat<?>> CODEC = Registries.STAT_TYPE.getCodec()
+        .dispatch(Stat::getType, StatType::itematic$codec);
     private static final Identifier UNKNOWN = new Identifier("unknown");
 
     private StatUtil() {}

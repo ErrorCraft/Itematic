@@ -50,6 +50,7 @@ public class ActionTypes {
     public static final ActionType<TakeHoneyAction> TAKE_HONEY = register(ActionTypeKeys.TAKE_HONEY, new ActionType<>(TakeHoneyAction.CODEC));
     public static final ActionType<UseBucketAction> USE_BUCKET = register(ActionTypeKeys.USE_BUCKET, new ActionType<>(UseBucketAction.CODEC));
     public static final ActionType<RemoveStatusEffectsAction> REMOVE_STATUS_EFFECTS = register(ActionTypeKeys.REMOVE_STATUS_EFFECTS, new ActionType<>(RemoveStatusEffectsAction.CODEC));
+    public static final ActionType<IncrementStatAction> INCREMENT_STAT = register(ActionTypeKeys.INCREMENT_STAT, new ActionType<>(IncrementStatAction.CODEC));
 
     private ActionTypes() {}
 

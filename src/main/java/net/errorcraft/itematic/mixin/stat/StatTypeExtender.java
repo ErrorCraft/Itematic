@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.stat;
 
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.access.stat.StatTypeAccess;
 import net.errorcraft.itematic.util.Util;
 import net.minecraft.network.RegistryByteBuf;
@@ -10,9 +11,11 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatFormatter;
 import net.minecraft.stat.StatType;
+import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.HashMap;
@@ -40,6 +44,9 @@ public class StatTypeExtender<T> implements StatTypeAccess<T> {
 
     @Unique
     private final Map<RegistryEntry<T>, Stat<T>> entryStats = new HashMap<>();
+
+    @Unique
+    private MapCodec<Stat<T>> codec;
 
     @Redirect(
         method = "<init>",
@@ -77,6 +84,16 @@ public class StatTypeExtender<T> implements StatTypeAccess<T> {
     }
 
     @Inject(
+        method = "<init>",
+        at = @At("TAIL")
+    )
+    private void setCodec(Registry<T> registry, Text name, CallbackInfo info) {
+        this.codec = RegistryFixedCodec.of(this.registry.getKey())
+            .xmap(this::itematic$getOrCreateStat, Stat::itematic$entry)
+            .fieldOf("entry");
+    }
+
+    @Inject(
         method = "hasStat",
         at = @At("HEAD")
     )
@@ -109,6 +126,11 @@ public class StatTypeExtender<T> implements StatTypeAccess<T> {
     @SuppressWarnings("unchecked")
     private <K, V> V computeIfAbsentUseRegistryEntry(Map<K, V> instance, K k, Function<? super K, ? extends V> mappingFunction, T key, StatFormatter formatter) {
         return (V) this.itematic$getOrCreateStat(this.registry.getEntry(key), formatter);
+    }
+
+    @Override
+    public MapCodec<Stat<T>> itematic$codec() {
+        return this.codec;
     }
 
     @Override

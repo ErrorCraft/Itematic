@@ -49,6 +49,7 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> TAKE_HONEY = of("take_honey");
     public static final RegistryKey<ActionType<?>> USE_BUCKET = of("use_bucket");
     public static final RegistryKey<ActionType<?>> REMOVE_STATUS_EFFECTS = of("remove_status_effects");
+    public static final RegistryKey<ActionType<?>> INCREMENT_STAT = of("increment_stat");
 
     private ActionTypeKeys() {}
 

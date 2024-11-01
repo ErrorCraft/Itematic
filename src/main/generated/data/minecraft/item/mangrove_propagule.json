@@ -13,5 +13,67 @@
       "ticks": 100
     },
     "minecraft:stackable": 64
+  },
+  "events": {
+    "minecraft:use_on_block": {
+      "action": {
+        "type": "minecraft:sequence",
+        "handler": "minecraft:passing",
+        "entries": [
+          {
+            "action": {
+              "type": "minecraft:set_block_state",
+              "position": "target",
+              "state": {
+                "Name": "minecraft:potted_mangrove_propagule"
+              }
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:invoke_game_event",
+              "event": "minecraft:block_change",
+              "entity": "this",
+              "position": "target"
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:increment_stat",
+              "entity": "this",
+              "stat": {
+                "type": "minecraft:custom",
+                "entry": "minecraft:pot_flower"
+              }
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:decrement_item",
+              "amount": 1
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:swing_hand"
+            }
+          }
+        ]
+      },
+      "requirements": {
+        "conditions": {
+          "condition": "minecraft:location_check",
+          "predicate": {
+            "block": {
+              "blocks": "minecraft:flower_pot"
+            }
+          }
+        },
+        "context": {
+          "entity": "this",
+          "position": "target"
+        }
+      }
+    }
   }
 }
