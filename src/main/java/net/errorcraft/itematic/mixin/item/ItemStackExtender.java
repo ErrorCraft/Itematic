@@ -693,7 +693,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return true;
         }
-        if (miner.isCreative() && this.isIn(ItematicItemTags.PREVENT_MINING_IN_CREATIVE)) {
+        if (miner.isCreative() && this.isIn(ItematicItemTags.PREVENTS_MINING_IN_CREATIVE)) {
             return false;
         }
         return this.entry.value().canMine(state, world, pos, miner);
