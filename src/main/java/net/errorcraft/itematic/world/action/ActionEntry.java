@@ -19,7 +19,7 @@ public record ActionEntry(Action<?> action, Optional<ActionRequirements> require
         ActionRequirements.CODEC.optionalFieldOf("requirements").forGetter(ActionEntry::requirements)
     ).apply(instance, ActionEntry::new));
     public static final Codec<RegistryEntry<ActionEntry>> REGISTRY_CODEC = RegistryElementCodec.of(ItematicRegistryKeys.ACTION, CODEC);
-    public static final Codec<RegistryEntryList<ActionEntry>> REGISTRY_ENTRY_LIST_CODEC = RegistryCodecs.entryList(ItematicRegistryKeys.ACTION, CODEC);
+    public static final Codec<RegistryEntryList<ActionEntry>> REGISTRY_ENTRY_LIST_CODEC = RegistryCodecs.entryList(ItematicRegistryKeys.ACTION, CODEC, true);
 
     public Optional<Boolean> execute(ActionContext context) {
         if (!this.test(context)) {
