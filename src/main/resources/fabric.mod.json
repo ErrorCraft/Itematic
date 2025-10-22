@@ -9,11 +9,12 @@
     "ErrorCraft"
   ],
   "contact": {
-    "homepage": "https://github.com/ErrorCraft/Itematic",
+    "homepage": "https://itematic.errorcraft.net",
+    "issues": "https://github.com/ErrorCraft/Itematic/issues",
     "sources": "https://github.com/ErrorCraft/Itematic"
   },
 
-  "license": "CC0-1.0",
+  "license": "Apache-2.0",
   "icon": "assets/itematic/icon.png",
 
   "environment": "*",
@@ -164,7 +165,7 @@
   "depends": {
     "fabricloader": ">=0.15.0",
     "fabric-api": "*",
-    "minecraft": "~1.20.1",
+    "minecraft": "~1.20.5",
     "java": ">=21"
   },
   "suggests": {
