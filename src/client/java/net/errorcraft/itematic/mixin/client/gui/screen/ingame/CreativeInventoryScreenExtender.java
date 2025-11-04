@@ -81,17 +81,4 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
             .get(RegistryKeys.ITEM)
             .streamTags();
     }
-
-    @Inject(
-        method = "fabric_isButtonVisible",
-        at = @At("HEAD"),
-        cancellable = true,
-        remap = false
-    )
-    @SuppressWarnings({"UnstableApiUsage", "MixinAnnotationTarget", "UnresolvedMixinReference"})
-    private void fabricApiCompatibility_checkDisplayContextNull(FabricCreativeGuiComponents.Type type, CallbackInfoReturnable<Boolean> info) {
-        if (ItemGroupsAccessor.displayContext() == null) {
-            info.setReturnValue(false);
-        }
-    }
 }
