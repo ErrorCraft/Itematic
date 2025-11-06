@@ -380,11 +380,11 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     /**
      * @author ErrorCraft
-     * @reason Uses a null check instead of a default air item.
+     * @reason Uses an empty check instead of a default air item.
      */
     @Overwrite
     public boolean itemMatches(Predicate<RegistryEntry<Item>> predicate) {
-        if (this.entry == null) {
+        if (this.isEmpty()) {
             return false;
         }
         return predicate.test(this.entry);
@@ -392,10 +392,13 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     /**
      * @author ErrorCraft
-     * @reason Uses a null check instead of a default air item.
+     * @reason Uses an empty check instead of a default air item.
      */
     @Overwrite
     public boolean itemMatches(RegistryEntry<Item> itemEntry) {
+        if (this.isEmpty()) {
+            return false;
+        }
         return this.entry == itemEntry;
     }
 
