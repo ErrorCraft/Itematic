@@ -2,13 +2,14 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.dynamic.Codecs;
@@ -35,9 +36,19 @@ public record UseableItemComponent(int ticks) implements ItemComponent<UseableIt
 
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        if (stack.itematic$mayStartUsing(world, user, hand, stack)) {
-            return ItemUsage.consumeHeldItem(world, user, hand).getResult();
+        if (!stack.itematic$mayStartUsing(world, user, hand, stack)) {
+            return ActionResult.PASS;
         }
-        return ActionResult.PASS;
+        Integer useDuration = stack.get(ItematicDataComponentTypes.USE_DURATION);
+        if (useDuration == null) {
+            return ActionResult.PASS;
+        }
+        user.itematic$startUsingHand(hand, useDuration);
+        return ActionResult.CONSUME;
+    }
+
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(ItematicDataComponentTypes.USE_DURATION, this.ticks);
     }
 }
