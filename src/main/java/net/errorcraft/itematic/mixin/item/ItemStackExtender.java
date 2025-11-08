@@ -368,11 +368,11 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     /**
      * @author ErrorCraft
-     * @reason Uses a null check instead of a default air item.
+     * @reason Uses an empty check instead of a default air item.
      */
     @Overwrite
     public boolean isIn(TagKey<Item> tag) {
-        if (this.entry == null) {
+        if (this.isEmpty()) {
             return false;
         }
         return this.entry.isIn(tag);
