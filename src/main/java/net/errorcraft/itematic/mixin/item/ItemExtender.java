@@ -2,6 +2,8 @@ package net.errorcraft.itematic.mixin.item;
 
 import com.google.common.collect.Interner;
 import net.errorcraft.itematic.access.item.ItemAccess;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemBase;
 import net.errorcraft.itematic.item.ItemUtil;
@@ -460,10 +462,16 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     public void getMaxUseTimeUseItemComponent(ItemStack stack, CallbackInfoReturnable<Integer> info) {
-        int maxUseTime = this.itematic$getComponent(ItemComponentTypes.USEABLE)
-            .map(UseableItemComponent::ticks)
-            .orElse(-1);
-        info.setReturnValue(maxUseTime);
+        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+            info.setReturnValue(0);
+            return;
+        }
+        UseDurationDataComponent useDuration = stack.get(ItematicDataComponentTypes.USE_DURATION);
+        if (useDuration == null) {
+            info.setReturnValue(0);
+            return;
+        }
+        info.setReturnValue(useDuration.ticks(stack));
     }
 
     @Inject(

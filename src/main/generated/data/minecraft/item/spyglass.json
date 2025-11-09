@@ -6,7 +6,10 @@
     "minecraft:stackable": 1,
     "minecraft:use_animation": "spyglass",
     "minecraft:useable": {
-      "ticks": 1200
+      "ticks": {
+        "type": "minecraft:constant",
+        "amount": 1200
+      }
     },
     "minecraft:zoom": {
       "field_of_view_multiplier": 0.1,

@@ -14,7 +14,10 @@
     "minecraft:stackable": 64,
     "minecraft:use_animation": "eat",
     "minecraft:useable": {
-      "ticks": 16
+      "ticks": {
+        "type": "minecraft:constant",
+        "amount": 16
+      }
     }
   }
 }

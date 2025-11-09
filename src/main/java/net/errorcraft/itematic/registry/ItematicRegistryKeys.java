@@ -11,6 +11,7 @@ import net.errorcraft.itematic.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateType;
+import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
 import net.errorcraft.itematic.world.action.ActionEntry;
@@ -37,6 +38,7 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<SmithingTemplate>> SMITHING_TEMPLATE = RegistryKey.ofRegistry(new Identifier("smithing_template"));
     public static final RegistryKey<Registry<BlockPickerType<?>>> BLOCK_PICKER_TYPE = RegistryKey.ofRegistry(new Identifier("block_picker_type"));
     public static final RegistryKey<Registry<TradeModifierType<?>>> TRADE_MODIFIER_TYPE = RegistryKey.ofRegistry(new Identifier("trade_modifier_type"));
+    public static final RegistryKey<Registry<IntegerProviderType<?>>> INTEGER_PROVIDER_TYPE = RegistryKey.ofRegistry(new Identifier("integer_provider_type"));
 
     private ItematicRegistryKeys() {}
 }
