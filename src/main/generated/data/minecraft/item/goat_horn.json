@@ -7,6 +7,11 @@
       "instruments": "minecraft:goat_horns"
     },
     "minecraft:stackable": 1,
-    "minecraft:use_animation": "toot_horn"
+    "minecraft:use_animation": "toot_horn",
+    "minecraft:useable": {
+      "ticks": {
+        "type": "minecraft:playable"
+      }
+    }
   }
 }

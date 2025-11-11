@@ -2,10 +2,12 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.use.provider.providers.PlayableIntegerProvider;
 import net.errorcraft.itematic.mixin.item.GoatHornItemAccessor;
 import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.DataComponentTypes;
@@ -36,6 +38,13 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
         TagKey.unprefixedCodec(RegistryKeys.INSTRUMENT).fieldOf("instruments").forGetter(PlayableItemComponent::instruments)
     ).apply(instance, PlayableItemComponent::new));
 
+    public static ItemComponent<?>[] of(TagKey<Instrument> instruments) {
+        return new ItemComponent<?>[] {
+            new UseableItemComponent(new UseDurationDataComponent(PlayableIntegerProvider.INSTANCE)),
+            new PlayableItemComponent(instruments)
+        };
+    }
+
     @Override
     public ItemComponentType<PlayableItemComponent> type() {
         return ItemComponentTypes.PLAYABLE;
@@ -51,7 +60,6 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
         return this.instrument(stack)
             .map(RegistryEntry::value)
             .map(instrument -> {
-                user.itematic$startUsingHand(hand, instrument.useDuration());
                 GoatHornItemAccessor.playSound(world, user, instrument);
                 user.getItemCooldownManager().set(stack.getItem(), instrument.useDuration());
                 user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
@@ -67,11 +75,7 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
             .ifPresent(id -> tooltip.add(Text.translatable(Util.createTranslationKey("instrument", id)).formatted(Formatting.GRAY)));
     }
 
-    public static PlayableItemComponent of(TagKey<Instrument> instruments) {
-        return new PlayableItemComponent(instruments);
-    }
-
-    private Optional<? extends RegistryEntry<Instrument>> instrument(ItemStack stack) {
+    public Optional<? extends RegistryEntry<Instrument>> instrument(ItemStack stack) {
         RegistryEntry<Instrument> instrument = stack.get(DataComponentTypes.INSTRUMENT);
         if (instrument != null) {
             return Optional.of(instrument);
