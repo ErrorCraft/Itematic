@@ -424,6 +424,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
     }
 
+    @Inject(
+        method = { "areItemsEqual", "areItemsAndComponentsEqual" },
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private static void checkEmptyStacksPrematurely(ItemStack stack, ItemStack otherStack, CallbackInfoReturnable<Boolean> info) {
+        if (stack.isEmpty() && otherStack.isEmpty()) {
+            info.setReturnValue(true);
+        }
+    }
+
     @Redirect(
         method = { "areItemsEqual", "areItemsAndComponentsEqual" },
         at = @At(
