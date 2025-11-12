@@ -296,6 +296,14 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         this.itemUsedTicks = 0;
     }
 
+    @ModifyReturnValue(
+        method = "isBlocking",
+        at = @At("TAIL")
+    )
+    private boolean checkForUsedTicksDirectlyInsteadOfCalculating(boolean original) {
+        return this.itemUsedTicks >= 5;
+    }
+
     @Inject(
         method = "tickItemStackUsage",
         at = @At(

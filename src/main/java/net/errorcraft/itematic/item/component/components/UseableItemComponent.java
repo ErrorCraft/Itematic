@@ -25,6 +25,10 @@ public record UseableItemComponent(UseDurationDataComponent ticks) implements It
         return new UseableItemComponent(new UseDurationDataComponent(new ConstantIntegerProvider(ticks)));
     }
 
+    public static UseableItemComponent indefinite() {
+        return new UseableItemComponent(UseDurationDataComponent.INDEFINITE);
+    }
+
     @Override
     public ItemComponentType<UseableItemComponent> type() {
         return ItemComponentTypes.USEABLE;

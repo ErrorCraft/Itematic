@@ -18,13 +18,7 @@
       "items": "minecraft:repairs_shield"
     },
     "minecraft:stackable": 1,
-    "minecraft:use_animation": "block"
-  },
-  "events": {
-    "minecraft:use": {
-      "action": {
-        "type": "minecraft:start_using_item"
-      }
-    }
+    "minecraft:use_animation": "block",
+    "minecraft:useable": {}
   }
 }

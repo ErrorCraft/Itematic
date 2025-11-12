@@ -6604,15 +6604,13 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.SHIELD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
+                    .with(UseableItemComponent.indefinite())
                     .with(DamageableItemComponent.of(336))
                     .with(EquipmentItemComponent.of(EquipmentSlot.OFFHAND, false, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_SHIELD))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(UseAnimationItemComponent.of(UseAction.BLOCK))
                     .with(BannerPatternHolderItemComponent.of())
-                    .build(),
-                ItemEventMap.builder()
-                    .add(ItemEvents.USE, ActionEntry.of(StartUsingItemAction.indefinitely()))
                     .build()
             ));
         }
