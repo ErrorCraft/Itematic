@@ -118,8 +118,9 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void getAmmunitionUseItemComponent(ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
-        stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
-            .ifPresent(component -> info.setReturnValue(this.itematic$getAmmunition(component)));
+        if (stack.itematic$hasComponent(ItemComponentTypes.SHOOTER)) {
+            info.setReturnValue(this.itematic$getAmmunition(stack));
+        }
     }
 
     @Redirect(
@@ -337,7 +338,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void checkMaxUseTime(CallbackInfoReturnable<Boolean> info) {
-        if (this.activeItemStack.getMaxUseTime() <= 0) {
+        if (this.activeItemStack.itematic$useDuration((LivingEntity)(Object) this) <= 0) {
             info.setReturnValue(false);
         }
     }

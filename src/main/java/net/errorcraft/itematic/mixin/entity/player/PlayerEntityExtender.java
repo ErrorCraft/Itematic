@@ -1,9 +1,10 @@
 package net.errorcraft.itematic.mixin.entity.player;
 
 import net.errorcraft.itematic.access.entity.LivingEntityAccess;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.component.type.ItemListDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerAbilities;
@@ -132,16 +133,18 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
     }
 
     @Override
-    public ItemStack itematic$getAmmunition(ShooterItemComponent component) {
-        ItemStack heldStack = RangedWeaponItem.getHeldProjectile(this, component::isHeldAmmunition);
+    public ItemStack itematic$getAmmunition(ItemStack stack) {
+        ItemListDataComponent heldAmmunition = stack.getOrDefault(ItematicDataComponentTypes.SHOOTER_HELD_AMMUNITION, ItemListDataComponent.DEFAULT);
+        ItemStack heldStack = RangedWeaponItem.getHeldProjectile(this, heldAmmunition::isValidFor);
         if (!heldStack.isEmpty()) {
             return heldStack;
         }
 
+        ItemListDataComponent ammunition = stack.getOrDefault(ItematicDataComponentTypes.SHOOTER_AMMUNITION, ItemListDataComponent.DEFAULT);
         for (int i = 0; i < this.inventory.size(); ++i) {
-            ItemStack stack = this.inventory.getStack(i);
-            if (component.isAmmunition(stack)) {
-                return stack;
+            ItemStack inventoryStack = this.inventory.getStack(i);
+            if (ammunition.isValidFor(inventoryStack)) {
+                return inventoryStack;
             }
         }
 

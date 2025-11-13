@@ -147,6 +147,9 @@
       "net/minecraft/class_6885": [
         "net/errorcraft/itematic/access/registry/entry/RegistryEntryListAccess<TT;>"
       ],
+      "net/minecraft/class_8162": [
+        "net/errorcraft/itematic/access/item/BrushItemAccess"
+      ],
       "net/minecraft/class_8526": [
         "net/errorcraft/itematic/access/block/entity/SherdsAccess"
       ],

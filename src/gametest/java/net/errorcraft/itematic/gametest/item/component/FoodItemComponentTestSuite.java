@@ -31,7 +31,7 @@ public class FoodItemComponentTestSuite {
         FoodItemComponent component = TestUtil.getItemComponent(stack, ItemComponentTypes.FOOD);
         stack.use(world, player, Hand.MAIN_HAND);
         context.createTimedTaskRunner().expectMinDurationAndRun(
-            TestUtil.getComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack),
+            TestUtil.getComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack, player),
             () -> {
                 Assert.itemStackIsEmpty(player.getStackInHand(Hand.MAIN_HAND));
                 Assert.areIntsEqual(
@@ -55,7 +55,7 @@ public class FoodItemComponentTestSuite {
         world.spawnEntity(player);
         stack.use(world, player, Hand.MAIN_HAND);
         context.createTimedTaskRunner().expectMinDurationAndRun(
-            TestUtil.getComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack),
+            TestUtil.getComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack, player),
             () -> {
                 Assert.forAll(effects, effect -> context.expectEntityHasEffect(player, effect.effect(), effect.createStatusEffectInstance().getAmplifier()));
                 Assert.itemStackIsOf(player.getStackInHand(Hand.MAIN_HAND), ItemKeys.BOWL);

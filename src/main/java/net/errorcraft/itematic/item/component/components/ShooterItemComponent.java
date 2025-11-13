@@ -2,11 +2,14 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.component.type.ItemListDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.use.provider.providers.ShooterIntegerProvider;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
@@ -23,9 +26,10 @@ import net.minecraft.item.BowItem;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -39,10 +43,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, Optional<Chargeable> chargeable) implements ItemComponent<ShooterItemComponent> {
+public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, RegistryEntryList<Item> ammunition, int range, Optional<Chargeable> chargeable) implements ItemComponent<ShooterItemComponent> {
     public static final Codec<ShooterItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("held_ammunition").forGetter(ShooterItemComponent::heldAmmunition),
-        TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("ammunition").forGetter(ShooterItemComponent::ammunition),
+        RegistryCodecs.entryList(RegistryKeys.ITEM).fieldOf("held_ammunition").forGetter(ShooterItemComponent::heldAmmunition),
+        RegistryCodecs.entryList(RegistryKeys.ITEM).fieldOf("ammunition").forGetter(ShooterItemComponent::ammunition),
         Codecs.POSITIVE_INT.fieldOf("range").forGetter(ShooterItemComponent::range),
         Chargeable.CODEC.optionalFieldOf("chargeable").forGetter(ShooterItemComponent::chargeable)
     ).apply(instance, ShooterItemComponent::new));
@@ -53,13 +57,19 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
     private static final int CHARGE_TIME_PER_QUICK_CHARGE_LEVEL = 5;
     private static final CrossbowItem DUMMY = new CrossbowItem(new Item.Settings());
 
-    public static ShooterItemComponent of(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range) {
-        return new ShooterItemComponent(heldAmmunition, ammunition, range, Optional.empty());
+    public static ItemComponent<?>[] of(RegistryEntryList<Item> heldAmmunition, RegistryEntryList<Item> ammunition, int range) {
+        return new ItemComponent<?>[] {
+            UseableItemComponent.of(ShooterIntegerProvider.INSTANCE),
+            new ShooterItemComponent(heldAmmunition, ammunition, range, Optional.empty())
+        };
     }
 
     @SafeVarargs
-    public static ShooterItemComponent of(TagKey<Item> heldAmmunition, TagKey<Item> ammunition, int range, RegistryEntry<SoundEvent> defaultSound, RegistryEntry<SoundEvent>... levelSounds) {
-        return new ShooterItemComponent(heldAmmunition, ammunition, range, Optional.of(Chargeable.of(QuickChargeSounds.of(defaultSound, levelSounds))));
+    public static ItemComponent<?>[] of(RegistryEntryList<Item> heldAmmunition, RegistryEntryList<Item> ammunition, int range, RegistryEntry<SoundEvent> defaultSound, RegistryEntry<SoundEvent>... levelSounds) {
+        return new ItemComponent<?>[] {
+            UseableItemComponent.of(ShooterIntegerProvider.INSTANCE),
+            new ShooterItemComponent(heldAmmunition, ammunition, range, Optional.of(Chargeable.of(QuickChargeSounds.of(defaultSound, levelSounds))))
+        };
     }
 
     @Override
@@ -74,17 +84,13 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
 
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        if (this.isCharged(stack)) {
-            float chargedSpeed = stack.getOrDefault(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)
-                .itematic$getChargedSpeed();
-            DUMMY.shootAll(world, user, hand, stack, chargedSpeed, 1.0f, null);
-            return ActionResult.CONSUME;
+        if (!this.isCharged(stack)) {
+            return ActionResult.PASS;
         }
-        if (!user.itematic$getAmmunition(this).isEmpty()) {
-            user.setCurrentHand(hand);
-            return ActionResult.CONSUME;
-        }
-        return ActionResult.PASS;
+        float chargedSpeed = stack.getOrDefault(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)
+            .itematic$getChargedSpeed();
+        DUMMY.shootAll(world, user, hand, stack, chargedSpeed, 1.0f, null);
+        return ActionResult.CONSUME;
     }
 
     @Override
@@ -107,6 +113,8 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
+        builder.add(ItematicDataComponentTypes.SHOOTER_AMMUNITION, new ItemListDataComponent(this.ammunition));
+        builder.add(ItematicDataComponentTypes.SHOOTER_HELD_AMMUNITION, new ItemListDataComponent(this.heldAmmunition));
         if (this.isChargeable()) {
             builder.add(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT);
         }
@@ -123,14 +131,6 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
 
     public void shootAll(World world, LivingEntity shooter, Hand hand, ItemStack stack, float speed, float divergence, @Nullable LivingEntity target) {
         DUMMY.shootAll(world, shooter, hand, stack, speed, divergence, target);
-    }
-
-    public boolean isHeldAmmunition(ItemStack stack) {
-        return stack.isIn(this.heldAmmunition);
-    }
-
-    public boolean isAmmunition(ItemStack stack) {
-        return stack.isIn(this.ammunition);
     }
 
     public float getPullProgress(ItemStack stack, int usedTicks) {
@@ -178,7 +178,7 @@ public record ShooterItemComponent(TagKey<Item> heldAmmunition, TagKey<Item> amm
         if (pullProgress < 0.1f) {
             return;
         }
-        ItemStack ammunition = player.itematic$getAmmunition(this);
+        ItemStack ammunition = player.itematic$getAmmunition(stack);
         if (ammunition.isEmpty()) {
             return;
         }

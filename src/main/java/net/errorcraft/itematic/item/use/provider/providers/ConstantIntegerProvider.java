@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
@@ -25,7 +26,7 @@ public record ConstantIntegerProvider(int value) implements IntegerProvider {
     }
 
     @Override
-    public OptionalInt get(ItemStack stack) {
+    public OptionalInt get(ItemStack stack, LivingEntity user) {
         return OptionalInt.of(this.value);
     }
 }

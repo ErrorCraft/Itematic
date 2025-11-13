@@ -25,7 +25,7 @@ public class PotionItemComponentTestSuite {
         world.spawnEntity(player);
         stack.use(world, player, Hand.MAIN_HAND);
         context.createTimedTaskRunner().expectMinDurationAndRun(
-            TestUtil.getComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack),
+            TestUtil.getComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack, player),
             () -> Assert.forAll(
                 Potions.LEAPING.value().getEffects(),
                 effectInstance -> context.expectEntityHasEffect(player, effectInstance.getEffectType(), effectInstance.getAmplifier())

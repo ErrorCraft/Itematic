@@ -48,6 +48,7 @@ public record BrushItemComponent(int brushTicks) implements ItemComponent<BrushI
 
     @Override
     public void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {
+        DUMMY.itematic$setUsedTicks(usedTicks);
         DUMMY.usageTick(world, user, stack, remainingUseTicks);
     }
 

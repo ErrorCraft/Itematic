@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.use.provider.providers.ConstantIntegerProvider;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -23,5 +24,5 @@ public interface IntegerProvider {
         .dispatch(IntegerProvider::type, IntegerProviderType::packetCodec);
 
     IntegerProviderType<?> type();
-    OptionalInt get(ItemStack stack);
+    OptionalInt get(ItemStack stack, LivingEntity user);
 }

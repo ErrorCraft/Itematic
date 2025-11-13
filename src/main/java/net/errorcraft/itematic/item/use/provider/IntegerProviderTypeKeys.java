@@ -7,6 +7,7 @@ import net.minecraft.util.Identifier;
 public class IntegerProviderTypeKeys {
     public static final RegistryKey<IntegerProviderType<?>> CONSTANT = of("constant");
     public static final RegistryKey<IntegerProviderType<?>> PLAYABLE = of("playable");
+    public static final RegistryKey<IntegerProviderType<?>> SHOOTER = of("shooter");
 
     private IntegerProviderTypeKeys() {}
 
