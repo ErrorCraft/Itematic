@@ -40,7 +40,7 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
 
     public static ItemComponent<?>[] of(TagKey<Instrument> instruments) {
         return new ItemComponent<?>[] {
-            new UseableItemComponent(new UseDurationDataComponent(PlayableIntegerProvider.INSTANCE)),
+            UseableItemComponent.of(PlayableIntegerProvider.INSTANCE),
             new PlayableItemComponent(instruments)
         };
     }
