@@ -7,15 +7,13 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.item.use.provider.providers.TridentIntegerProvider;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
@@ -25,28 +23,30 @@ import net.minecraft.world.World;
 
 import java.util.Optional;
 
-public record ThrowableItemComponent(float speed, float angleOffset, Optional<NumberRange.IntRange> drawDuration, boolean useRiptideCheck) implements ItemComponent<ThrowableItemComponent> {
+public record ThrowableItemComponent(float speed, float angleOffset, Optional<NumberRange.IntRange> drawDuration) implements ItemComponent<ThrowableItemComponent> {
     public static final Codec<ThrowableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ItematicCodecs.NON_NEGATIVE_FLOAT.fieldOf("speed").forGetter(ThrowableItemComponent::speed),
         Codec.FLOAT.fieldOf("angle_offset").forGetter(ThrowableItemComponent::angleOffset),
-        NumberRange.IntRange.CODEC.optionalFieldOf("draw_duration").forGetter(ThrowableItemComponent::drawDuration),
-        Codec.BOOL.optionalFieldOf("use_riptide_check", false).forGetter(ThrowableItemComponent::useRiptideCheck)
+        NumberRange.IntRange.CODEC.optionalFieldOf("draw_duration").forGetter(ThrowableItemComponent::drawDuration)
     ).apply(instance, ThrowableItemComponent::new));
 
     public static ThrowableItemComponent of() {
-        return new ThrowableItemComponent(0.0f, 0.0f, Optional.empty(), false);
+        return new ThrowableItemComponent(0.0f, 0.0f, Optional.empty());
     }
 
     public static ThrowableItemComponent of(float speed) {
-        return new ThrowableItemComponent(speed, 0.0f, Optional.empty(), false);
+        return new ThrowableItemComponent(speed, 0.0f, Optional.empty());
     }
 
     public static ThrowableItemComponent of(float speed, float angleOffset) {
-        return new ThrowableItemComponent(speed, angleOffset, Optional.empty(), false);
+        return new ThrowableItemComponent(speed, angleOffset, Optional.empty());
     }
 
-    public static ThrowableItemComponent trident(float speed, float angleOffset, int minDrawDuration) {
-        return new ThrowableItemComponent(speed, angleOffset, Optional.of(NumberRange.IntRange.atLeast(minDrawDuration)), true);
+    public static ItemComponent<?>[] trident(float speed, float angleOffset, int minDrawDuration) {
+        return new ItemComponent<?>[] {
+            UseableItemComponent.of(TridentIntegerProvider.INSTANCE),
+            new ThrowableItemComponent(speed, angleOffset, Optional.of(NumberRange.IntRange.atLeast(minDrawDuration)))
+        };
     }
 
     @Override
@@ -61,32 +61,20 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
 
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        if (!this.mayStartUsing(stack, user)) {
+        if (this.drawDuration.isPresent()) {
             return ActionResult.PASS;
         }
-        return this.drawDuration.map(drawDuration -> ItemUsage.consumeHeldItem(world, user, hand).getResult())
-            .orElseGet(() -> this.createEntity(world, user, stack, resultStackConsumer));
+        return this.createEntity(world, user, stack, resultStackConsumer);
     }
 
     @Override
     public void stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
-        this.drawDuration.ifPresent(drawDuration -> {
-            if (drawDuration.test(usedTicks)) {
-                this.createEntity(world, user, stack, resultStackConsumer);
-                if (user instanceof PlayerEntity player) {
-                    player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
-                }
+        if (this.drawDuration.filter(drawDuration -> drawDuration.test(usedTicks)).isPresent()) {
+            this.createEntity(world, user, stack, resultStackConsumer);
+            if (user instanceof PlayerEntity player) {
+                player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
             }
-        });
-    }
-
-    private boolean mayStartUsing(ItemStack stack, Entity user) {
-        if (this.useRiptideCheck && EnchantmentHelper.getRiptide(stack) > 0 && !user.isTouchingWaterOrRain()) {
-            return false;
         }
-        return stack.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
-            .map(c -> c.isUsable(stack))
-            .orElse(true);
     }
 
     private ActionResult createEntity(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {
