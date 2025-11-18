@@ -43,10 +43,12 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
 
     public static ItemComponent<?>[] from(FoodComponent component, int eatTicks, UseAction useAction, RegistryEntry<Item> resultItem) {
         return new ItemComponent<?>[] {
-                UseableItemComponent.of(eatTicks),
-                of(component.nutrition(), component.saturation(), component.canAlwaysEat(), component.effects()),
-                UseAnimationItemComponent.of(useAction),
-                ConsumableItemComponent.of(resultItem)
+            UseableItemComponent.builder()
+                .ticks(eatTicks)
+                .animation(useAction)
+                .build(),
+            of(component.nutrition(), component.saturation(), component.canAlwaysEat(), component.effects()),
+            ConsumableItemComponent.of(resultItem)
         };
     }
 

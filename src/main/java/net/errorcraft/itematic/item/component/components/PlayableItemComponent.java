@@ -22,10 +22,7 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -39,7 +36,10 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
 
     public static ItemComponent<?>[] of(TagKey<Instrument> instruments) {
         return new ItemComponent<?>[] {
-            UseableItemComponent.of(PlayableIntegerProvider.INSTANCE),
+            UseableItemComponent.builder()
+                .ticks(PlayableIntegerProvider.INSTANCE)
+                .animation(UseAction.TOOT_HORN)
+                .build(),
             new PlayableItemComponent(instruments)
         };
     }

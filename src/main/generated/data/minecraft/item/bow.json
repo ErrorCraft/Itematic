@@ -22,8 +22,8 @@
       "range": 15
     },
     "minecraft:stackable": 1,
-    "minecraft:use_animation": "bow",
     "minecraft:useable": {
+      "animation": "bow",
       "ticks": {
         "type": "minecraft:shooter"
       }

@@ -9,7 +9,9 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.use.provider.IntegerProvider;
+import net.errorcraft.itematic.item.use.provider.providers.ConstantIntegerProvider;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.util.UseActionUtil;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,34 +20,20 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 import java.util.Set;
 
-public record UseableItemComponent(UseDurationDataComponent ticks, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
+public record UseableItemComponent(UseDurationDataComponent ticks, UseAction animation, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
     public static final Codec<UseableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         UseDurationDataComponent.MAP_CODEC.forGetter(UseableItemComponent::ticks),
+        UseActionUtil.CODEC.optionalFieldOf("animation", UseAction.NONE).forGetter(UseableItemComponent::animation),
         ItematicCodecs.setCodec(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(UseableItemComponent::passes)
     ).apply(instance, UseableItemComponent::new));
 
-    public static UseableItemComponent of(int ticks) {
-        return new UseableItemComponent(new UseDurationDataComponent(ticks), Pass.DEFAULT_PASSES);
-    }
-
-    public static UseableItemComponent of(int ticks, Pass... passes) {
-        return new UseableItemComponent(new UseDurationDataComponent(ticks), Set.of(passes));
-    }
-
-    public static UseableItemComponent of(IntegerProvider ticks) {
-        return new UseableItemComponent(new UseDurationDataComponent(ticks), Pass.DEFAULT_PASSES);
-    }
-
-    public static UseableItemComponent of(IntegerProvider ticks, Pass... passes) {
-        return new UseableItemComponent(new UseDurationDataComponent(ticks), Set.of(passes));
-    }
-
-    public static UseableItemComponent indefinite() {
-        return new UseableItemComponent(UseDurationDataComponent.INDEFINITE, Pass.DEFAULT_PASSES);
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -99,10 +87,47 @@ public record UseableItemComponent(UseDurationDataComponent ticks, Set<Pass> pas
     @Override
     public void addComponents(ComponentMap.Builder builder) {
         builder.add(ItematicDataComponentTypes.USE_DURATION, this.ticks);
+        builder.add(ItematicDataComponentTypes.USE_ANIMATION, this.animation);
     }
 
     private boolean isUnuseable(Pass pass) {
         return !this.passes.contains(pass);
+    }
+
+    public static class Builder {
+        private IntegerProvider ticks;
+        private UseAction animation = UseAction.NONE;
+        private Set<Pass> passes = Pass.DEFAULT_PASSES;
+
+        private Builder() {}
+
+        public UseableItemComponent build() {
+            return new UseableItemComponent(
+                this.ticks == null ? UseDurationDataComponent.INDEFINITE : new UseDurationDataComponent(this.ticks),
+                this.animation,
+                this.passes
+            );
+        }
+
+        public Builder ticks(int ticks) {
+            this.ticks = new ConstantIntegerProvider(ticks);
+            return this;
+        }
+
+        public Builder ticks(IntegerProvider ticks) {
+            this.ticks = ticks;
+            return this;
+        }
+
+        public Builder animation(UseAction animation) {
+            this.animation = animation;
+            return this;
+        }
+
+        public Builder passes(Pass... passes) {
+            this.passes = Set.of(passes);
+            return this;
+        }
     }
 
     public enum Pass implements StringIdentifiable {

@@ -32,8 +32,8 @@
       "range": 8
     },
     "minecraft:stackable": 1,
-    "minecraft:use_animation": "crossbow",
     "minecraft:useable": {
+      "animation": "crossbow",
       "ticks": {
         "type": "minecraft:shooter"
       }

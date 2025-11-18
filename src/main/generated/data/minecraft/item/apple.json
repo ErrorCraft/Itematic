@@ -12,8 +12,8 @@
       "saturation": 2.4
     },
     "minecraft:stackable": 64,
-    "minecraft:use_animation": "eat",
     "minecraft:useable": {
+      "animation": "eat",
       "ticks": {
         "type": "minecraft:constant",
         "amount": 32

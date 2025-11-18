@@ -19,6 +19,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 import java.util.Optional;
@@ -44,7 +45,10 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
 
     public static ItemComponent<?>[] trident(float speed, float angleOffset, int minDrawDuration) {
         return new ItemComponent<?>[] {
-            UseableItemComponent.of(TridentIntegerProvider.INSTANCE),
+            UseableItemComponent.builder()
+                .ticks(TridentIntegerProvider.INSTANCE)
+                .animation(UseAction.SPEAR)
+                .build(),
             new ThrowableItemComponent(speed, angleOffset, Optional.of(NumberRange.IntRange.atLeast(minDrawDuration)))
         };
     }

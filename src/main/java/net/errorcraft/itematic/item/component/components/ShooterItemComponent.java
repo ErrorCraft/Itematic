@@ -36,6 +36,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -59,7 +60,10 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
 
     public static ItemComponent<?>[] of(RegistryEntryList<Item> heldAmmunition, RegistryEntryList<Item> ammunition, int range) {
         return new ItemComponent<?>[] {
-            UseableItemComponent.of(ShooterIntegerProvider.INSTANCE),
+            UseableItemComponent.builder()
+                .ticks(ShooterIntegerProvider.INSTANCE)
+                .animation(UseAction.BOW)
+                .build(),
             new ShooterItemComponent(heldAmmunition, ammunition, range, Optional.empty())
         };
     }
@@ -67,7 +71,10 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
     @SafeVarargs
     public static ItemComponent<?>[] of(RegistryEntryList<Item> heldAmmunition, RegistryEntryList<Item> ammunition, int range, RegistryEntry<SoundEvent> defaultSound, RegistryEntry<SoundEvent>... levelSounds) {
         return new ItemComponent<?>[] {
-            UseableItemComponent.of(ShooterIntegerProvider.INSTANCE),
+            UseableItemComponent.builder()
+                .ticks(ShooterIntegerProvider.INSTANCE)
+                .animation(UseAction.CROSSBOW)
+                .build(),
             new ShooterItemComponent(heldAmmunition, ammunition, range, Optional.of(Chargeable.of(QuickChargeSounds.of(defaultSound, levelSounds))))
         };
     }

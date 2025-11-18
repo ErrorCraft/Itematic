@@ -10,8 +10,8 @@
       "item": "minecraft:bucket"
     },
     "minecraft:stackable": 1,
-    "minecraft:use_animation": "drink",
     "minecraft:useable": {
+      "animation": "drink",
       "ticks": {
         "type": "minecraft:constant",
         "amount": 32

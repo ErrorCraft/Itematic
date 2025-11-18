@@ -14,8 +14,8 @@
       "enchantments": "minecraft:brush_forging"
     },
     "minecraft:stackable": 1,
-    "minecraft:use_animation": "brush",
     "minecraft:useable": {
+      "animation": "brush",
       "passes": [
         "block"
       ],

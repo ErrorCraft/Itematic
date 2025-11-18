@@ -36,18 +36,13 @@ public record UseDurationDataComponent(Optional<IntegerProvider> ticks) {
         this(Optional.of(ticks));
     }
 
-    public UseDurationDataComponent(int ticks) {
+    private UseDurationDataComponent(int ticks) {
         this(new ConstantIntegerProvider(ticks));
     }
 
     public int ticks(ItemStack stack, LivingEntity user) {
         return this.ticks.map(useDuration -> useDuration.get(stack, user))
-            .map(useDuration -> {
-                if (useDuration.isPresent()) {
-                    return useDuration.getAsInt();
-                }
-                return 0;
-            })
+            .map(useDuration -> useDuration.orElse(0))
             .orElse(INDEFINITE_USE_DURATION);
     }
 

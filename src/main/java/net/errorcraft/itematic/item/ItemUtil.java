@@ -175,8 +175,10 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.MILK_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(UseableItemComponent.of(MilkBucketItemAccessor.getMaxUseTime()))
-                    .with(UseAnimationItemComponent.of(UseAction.DRINK))
+                    .with(UseableItemComponent.builder()
+                        .ticks(MilkBucketItemAccessor.getMaxUseTime())
+                        .animation(UseAction.DRINK)
+                        .build())
                     .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build(),
@@ -188,10 +190,12 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.POTION).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(UseableItemComponent.of(PotionItemAccessor.getMaxUseTime()))
+                    .with(UseableItemComponent.builder()
+                        .ticks(PotionItemAccessor.getMaxUseTime())
+                        .animation(UseAction.DRINK)
+                        .build())
                     .with(PotionItemComponent.INSTANCE)
                     .with(PotionHolderItemComponent.of(1.0f))
-                    .with(UseAnimationItemComponent.of(UseAction.DRINK))
                     .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .with(TintedItemComponent.of(PotionItemColor.INSTANCE))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM)))
@@ -4815,7 +4819,6 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(384))
                     .with(ShooterItemComponent.of(this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION), this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION), BowItem.RANGE))
-                    .with(UseAnimationItemComponent.of(UseAction.BOW))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.BOW_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BOW_FORGING))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
@@ -4827,7 +4830,6 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(465))
                     .with(ShooterItemComponent.of(this.items.getOrThrow(ItematicItemTags.CROSSBOW_AMMUNITION), this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION), CrossbowItem.RANGE, this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_LOADING_START), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_1), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_2), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_3)))
-                    .with(UseAnimationItemComponent.of(UseAction.CROSSBOW))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.CROSSBOW_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.CROSSBOW_FORGING))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
@@ -4843,7 +4845,6 @@ public class ItemUtil {
                     .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE, -2.9d))
                     .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
                     .with(ProjectileItemComponent.of(TridentEntityInitializer.of(true), 1))
-                    .with(UseAnimationItemComponent.of(UseAction.SPEAR))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.TRIDENT_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.TRIDENT_FORGING))
                     .build(),
@@ -4919,7 +4920,6 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(BrushItemComponent.of(BrushItemAccessor.maxBrushTime()))
                     .with(DamageableItemComponent.of(64))
-                    .with(UseAnimationItemComponent.of(UseAction.BRUSH))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BRUSH_FORGING))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.BRUSH)))
                     .build()
@@ -6604,12 +6604,13 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.SHIELD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(UseableItemComponent.indefinite())
+                    .with(UseableItemComponent.builder()
+                        .animation(UseAction.BLOCK)
+                        .build())
                     .with(DamageableItemComponent.of(336))
                     .with(EquipmentItemComponent.of(EquipmentSlot.OFFHAND, false, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_SHIELD))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(UseAnimationItemComponent.of(UseAction.BLOCK))
                     .with(BannerPatternHolderItemComponent.of())
                     .build()
             ));
@@ -9742,8 +9743,10 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(ZoomItemComponent.of(SpyglassItem.FOV_MULTIPLIER, this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
-                    .with(UseableItemComponent.of(SpyglassItem.MAX_USE_TIME))
-                    .with(UseAnimationItemComponent.of(UseAction.SPYGLASS))
+                    .with(UseableItemComponent.builder()
+                        .ticks(SpyglassItem.MAX_USE_TIME)
+                        .animation(UseAction.SPYGLASS)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOWSTONE_DUST, create(
@@ -10057,7 +10060,6 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(PlayableItemComponent.of(InstrumentTags.GOAT_HORNS))
-                    .with(UseAnimationItemComponent.of(UseAction.TOOT_HORN))
                     .build()
             ));
             this.registerable.register(ItemKeys.HONEYCOMB, create(

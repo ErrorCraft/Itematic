@@ -4,8 +4,8 @@
   },
   "components": {
     "minecraft:stackable": 1,
-    "minecraft:use_animation": "spyglass",
     "minecraft:useable": {
+      "animation": "spyglass",
       "ticks": {
         "type": "minecraft:constant",
         "amount": 1200
