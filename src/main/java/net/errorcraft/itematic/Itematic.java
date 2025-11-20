@@ -8,6 +8,7 @@ import net.errorcraft.itematic.item.model.override.ModelOverrides;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPickerTypes;
 import net.errorcraft.itematic.item.pointer.Pointers;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateTypes;
+import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
 import net.errorcraft.itematic.loot.context.ItematicLootContextParameters;
 import net.errorcraft.itematic.loot.context.ItematicLootContextTypes;
 import net.errorcraft.itematic.loot.function.ItematicItemModifierTypes;
@@ -37,5 +38,6 @@ public class Itematic implements ModInitializer {
         ItematicItemModifierTypes.init();
         TradeModifierTypes.init();
         ItematicDataComponentTypes.init();
+        IntegerProviderTypes.init();
     }
 }

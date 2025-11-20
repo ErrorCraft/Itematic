@@ -10,7 +10,6 @@ import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stats;
@@ -24,6 +23,10 @@ public record ZoomItemComponent(float fieldOfViewMultiplier, RegistryEntry<Sound
         SoundEvent.ENTRY_CODEC.fieldOf("start_using_sound").forGetter(ZoomItemComponent::startUsingSound),
         SoundEvent.ENTRY_CODEC.fieldOf("stop_using_sound").forGetter(ZoomItemComponent::stopUsingSound)
     ).apply(instance, ZoomItemComponent::new));
+
+    public static ZoomItemComponent of(float fieldOfViewMultiplier, RegistryEntry<SoundEvent> startUsingSound, RegistryEntry<SoundEvent> stopUsingSound) {
+        return new ZoomItemComponent(fieldOfViewMultiplier, startUsingSound, stopUsingSound);
+    }
 
     @Override
     public ItemComponentType<ZoomItemComponent> type() {
@@ -39,7 +42,7 @@ public record ZoomItemComponent(float fieldOfViewMultiplier, RegistryEntry<Sound
     public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         user.playSound(this.startUsingSound.value(), 1.0f, 1.0f);
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
-        return ItemUsage.consumeHeldItem(world, user, hand).getResult();
+        return ActionResult.PASS;
     }
 
     @Override
@@ -50,10 +53,6 @@ public record ZoomItemComponent(float fieldOfViewMultiplier, RegistryEntry<Sound
     @Override
     public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackConsumer resultStackConsumer) {
         this.playStopSound(user);
-    }
-
-    public static ZoomItemComponent of(float fieldOfViewMultiplier, RegistryEntry<SoundEvent> startUsingSound, RegistryEntry<SoundEvent> stopUsingSound) {
-        return new ZoomItemComponent(fieldOfViewMultiplier, startUsingSound, stopUsingSound);
     }
 
     private void playStopSound(LivingEntity target) {

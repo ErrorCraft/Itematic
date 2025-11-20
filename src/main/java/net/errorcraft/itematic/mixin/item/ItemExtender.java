@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.item;
 
 import com.google.common.collect.Interner;
 import net.errorcraft.itematic.access.item.ItemAccess;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemBase;
 import net.errorcraft.itematic.item.ItemUtil;
@@ -448,10 +449,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     public void getUseActionUseItemComponent(ItemStack stack, CallbackInfoReturnable<UseAction> info) {
-        UseAction animation = this.itematic$getComponent(ItemComponentTypes.USE_ANIMATION)
-            .map(UseAnimationItemComponent::animation)
-            .orElse(UseAction.NONE);
-        info.setReturnValue(animation);
+        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+            info.setReturnValue(UseAction.NONE);
+            return;
+        }
+        info.setReturnValue(stack.getOrDefault(ItematicDataComponentTypes.USE_ANIMATION, UseAction.NONE));
     }
 
     @Inject(
@@ -460,10 +462,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     public void getMaxUseTimeUseItemComponent(ItemStack stack, CallbackInfoReturnable<Integer> info) {
-        int maxUseTime = this.itematic$getComponent(ItemComponentTypes.USEABLE)
-            .map(UseableItemComponent::ticks)
-            .orElse(-1);
-        info.setReturnValue(maxUseTime);
+        info.setReturnValue(0);
     }
 
     @Inject(

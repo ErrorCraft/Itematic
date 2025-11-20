@@ -10,7 +10,6 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.LifeSavingItemComponent;
-import net.errorcraft.itematic.item.component.components.UseableItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
@@ -36,7 +35,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -116,8 +118,9 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void getAmmunitionUseItemComponent(ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
-        stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
-            .ifPresent(component -> info.setReturnValue(this.itematic$getAmmunition(component)));
+        if (stack.itematic$hasComponent(ItemComponentTypes.SHOOTER)) {
+            info.setReturnValue(this.itematic$getAmmunition(stack));
+        }
     }
 
     @Redirect(
@@ -294,6 +297,14 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         this.itemUsedTicks = 0;
     }
 
+    @ModifyReturnValue(
+        method = "isBlocking",
+        at = @At("TAIL")
+    )
+    private boolean checkForUsedTicksDirectlyInsteadOfCalculating(boolean original) {
+        return this.itemUsedTicks >= 5;
+    }
+
     @Inject(
         method = "tickItemStackUsage",
         at = @At(
@@ -321,15 +332,15 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         return original;
     }
 
-    @ModifyVariable(
+    @Inject(
         method = "shouldSpawnConsumptionEffects",
-        at = @At("LOAD")
+        at = @At("HEAD"),
+        cancellable = true
     )
-    private boolean shouldSpawnConsumptionEffectsUseItemComponent(boolean value) {
-        return this.activeItemStack.itematic$getComponent(ItemComponentTypes.USEABLE)
-            .map(UseableItemComponent::ticks)
-            .map(ticks -> value || ticks <= 16)
-            .orElse(false);
+    private void checkMaxUseTime(CallbackInfoReturnable<Boolean> info) {
+        if (this.activeItemStack.itematic$useDuration((LivingEntity)(Object) this) <= 0) {
+            info.setReturnValue(false);
+        }
     }
 
     @Redirect(

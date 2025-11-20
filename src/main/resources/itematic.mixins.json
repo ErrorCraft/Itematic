@@ -294,6 +294,7 @@
     "network.listener.ClientPlayPacketListenerExtender",
     "network.packet.PlayPacketsAccessor",
     "network.state.PlayStateFactoriesExtender",
+    "predicate.NumberRangeAccessor$IntRangeAccessor",
     "predicate.entity.EntityPredicateExtender",
     "predicate.entity.EntityPredicateExtender$BuilderExtender",
     "predicate.entity.PlayerPredicateExtender$StatMatcherExtender",

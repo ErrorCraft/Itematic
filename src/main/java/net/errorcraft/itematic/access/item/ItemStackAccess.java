@@ -6,6 +6,7 @@ import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMapImpl;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -56,5 +57,8 @@ public interface ItemStackAccess {
     }
     default boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return false;
+    }
+    default int itematic$useDuration(LivingEntity user) {
+        return 0;
     }
 }

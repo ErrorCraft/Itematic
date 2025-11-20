@@ -6,6 +6,7 @@ import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.use.provider.providers.PlayableIntegerProvider;
 import net.errorcraft.itematic.mixin.item.GoatHornItemAccessor;
 import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.DataComponentTypes;
@@ -21,10 +22,7 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -35,6 +33,16 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
     public static final Codec<PlayableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         TagKey.unprefixedCodec(RegistryKeys.INSTRUMENT).fieldOf("instruments").forGetter(PlayableItemComponent::instruments)
     ).apply(instance, PlayableItemComponent::new));
+
+    public static ItemComponent<?>[] of(TagKey<Instrument> instruments) {
+        return new ItemComponent<?>[] {
+            UseableItemComponent.builder()
+                .ticks(PlayableIntegerProvider.INSTANCE)
+                .animation(UseAction.TOOT_HORN)
+                .build(),
+            new PlayableItemComponent(instruments)
+        };
+    }
 
     @Override
     public ItemComponentType<PlayableItemComponent> type() {
@@ -51,7 +59,6 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
         return this.instrument(stack)
             .map(RegistryEntry::value)
             .map(instrument -> {
-                user.itematic$startUsingHand(hand, instrument.useDuration());
                 GoatHornItemAccessor.playSound(world, user, instrument);
                 user.getItemCooldownManager().set(stack.getItem(), instrument.useDuration());
                 user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
@@ -67,11 +74,7 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
             .ifPresent(id -> tooltip.add(Text.translatable(Util.createTranslationKey("instrument", id)).formatted(Formatting.GRAY)));
     }
 
-    public static PlayableItemComponent of(TagKey<Instrument> instruments) {
-        return new PlayableItemComponent(instruments);
-    }
-
-    private Optional<? extends RegistryEntry<Instrument>> instrument(ItemStack stack) {
+    public Optional<? extends RegistryEntry<Instrument>> instrument(ItemStack stack) {
         RegistryEntry<Instrument> instrument = stack.get(DataComponentTypes.INSTRUMENT);
         if (instrument != null) {
             return Optional.of(instrument);

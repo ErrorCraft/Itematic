@@ -27,14 +27,18 @@
       "draw_duration": {
         "min": 10
       },
-      "speed": 2.5,
-      "use_riptide_check": true
+      "speed": 2.5
     },
     "minecraft:tool": {
       "damage_per_block": 2,
       "rules": []
     },
-    "minecraft:use_animation": "spear",
+    "minecraft:useable": {
+      "animation": "spear",
+      "ticks": {
+        "type": "minecraft:trident"
+      }
+    },
     "minecraft:weapon": {
       "attack_damage": 8.0,
       "attack_speed": -2.9

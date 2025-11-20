@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.ImmuneToDamageComponent;
+import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.ItematicItemTags;
@@ -727,6 +728,18 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
             return false;
         }
         return this.entry.value().itematic$mayStartUsing(world, user, hand, stack);
+    }
+
+    @Override
+    public int itematic$useDuration(LivingEntity user) {
+        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+            return 0;
+        }
+        UseDurationDataComponent useDuration = this.get(ItematicDataComponentTypes.USE_DURATION);
+        if (useDuration == null) {
+            return 0;
+        }
+        return useDuration.ticks((ItemStack)(Object) this, user);
     }
 
     @Unique

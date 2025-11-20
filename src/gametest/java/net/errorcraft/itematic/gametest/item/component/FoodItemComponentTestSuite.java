@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.gametest.item.component;
 
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.gametest.Assert;
 import net.errorcraft.itematic.gametest.TestUtil;
 import net.errorcraft.itematic.item.ItemKeys;
@@ -30,7 +31,7 @@ public class FoodItemComponentTestSuite {
         FoodItemComponent component = TestUtil.getItemComponent(stack, ItemComponentTypes.FOOD);
         stack.use(world, player, Hand.MAIN_HAND);
         context.createTimedTaskRunner().expectMinDurationAndRun(
-            TestUtil.getItemComponent(stack, ItemComponentTypes.USEABLE).ticks(),
+            TestUtil.getComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack, player),
             () -> {
                 Assert.itemStackIsEmpty(player.getStackInHand(Hand.MAIN_HAND));
                 Assert.areIntsEqual(
@@ -54,7 +55,7 @@ public class FoodItemComponentTestSuite {
         world.spawnEntity(player);
         stack.use(world, player, Hand.MAIN_HAND);
         context.createTimedTaskRunner().expectMinDurationAndRun(
-            TestUtil.getItemComponent(stack, ItemComponentTypes.USEABLE).ticks(),
+            TestUtil.getComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack, player),
             () -> {
                 Assert.forAll(effects, effect -> context.expectEntityHasEffect(player, effect.effect(), effect.createStatusEffectInstance().getAmplifier()));
                 Assert.itemStackIsOf(player.getStackInHand(Hand.MAIN_HAND), ItemKeys.BOWL);
