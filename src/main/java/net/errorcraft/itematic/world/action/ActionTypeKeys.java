@@ -10,7 +10,6 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> TELEPORT = of("teleport");
     public static final RegistryKey<ActionType<?>> FERTILIZE = of("fertilize");
     public static final RegistryKey<ActionType<?>> CLEAR_STATUS_EFFECTS = of("clear_status_effects");
-    public static final RegistryKey<ActionType<?>> START_USING_ITEM = of("start_using_item");
     public static final RegistryKey<ActionType<?>> EXCHANGE_ITEM = of("exchange_item");
     public static final RegistryKey<ActionType<?>> MODIFY_BLOCK_STATE = of("modify_block_state");
     public static final RegistryKey<ActionType<?>> SEQUENCE = of("sequence");
