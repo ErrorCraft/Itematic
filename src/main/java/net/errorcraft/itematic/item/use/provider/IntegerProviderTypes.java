@@ -1,9 +1,6 @@
 package net.errorcraft.itematic.item.use.provider;
 
-import net.errorcraft.itematic.item.use.provider.providers.ConstantIntegerProvider;
-import net.errorcraft.itematic.item.use.provider.providers.PlayableIntegerProvider;
-import net.errorcraft.itematic.item.use.provider.providers.ShooterIntegerProvider;
-import net.errorcraft.itematic.item.use.provider.providers.TridentIntegerProvider;
+import net.errorcraft.itematic.item.use.provider.providers.*;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -13,6 +10,7 @@ public class IntegerProviderTypes {
     public static final IntegerProviderType<PlayableIntegerProvider> PLAYABLE = register(IntegerProviderTypeKeys.PLAYABLE, new IntegerProviderType<>(PlayableIntegerProvider.CODEC, PlayableIntegerProvider.PACKET_CODEC));
     public static final IntegerProviderType<ShooterIntegerProvider> SHOOTER = register(IntegerProviderTypeKeys.SHOOTER, new IntegerProviderType<>(ShooterIntegerProvider.CODEC, ShooterIntegerProvider.PACKET_CODEC));
     public static final IntegerProviderType<TridentIntegerProvider> TRIDENT = register(IntegerProviderTypeKeys.TRIDENT, new IntegerProviderType<>(TridentIntegerProvider.CODEC, TridentIntegerProvider.PACKET_CODEC));
+    public static final IntegerProviderType<ConditionIntegerProvider> CONDITION = register(IntegerProviderTypeKeys.CONDITION, new IntegerProviderType<>(ConditionIntegerProvider.CODEC, ConditionIntegerProvider.PACKET_CODEC));
 
     private IntegerProviderTypes() {}
 

@@ -9,6 +9,7 @@ public class IntegerProviderTypeKeys {
     public static final RegistryKey<IntegerProviderType<?>> PLAYABLE = of("playable");
     public static final RegistryKey<IntegerProviderType<?>> SHOOTER = of("shooter");
     public static final RegistryKey<IntegerProviderType<?>> TRIDENT = of("trident");
+    public static final RegistryKey<IntegerProviderType<?>> CONDITION = of("condition");
 
     private IntegerProviderTypeKeys() {}
 
