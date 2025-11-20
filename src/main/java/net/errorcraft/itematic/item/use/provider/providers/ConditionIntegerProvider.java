@@ -35,6 +35,6 @@ public record ConditionIntegerProvider(IntegerProvider amount, ItemPredicate con
         if (!this.condition.test(stack)) {
             return OptionalInt.empty();
         }
-        return this.ticks.get(stack, user);
+        return this.amount.get(stack, user);
     }
 }
