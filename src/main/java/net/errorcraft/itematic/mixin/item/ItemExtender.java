@@ -25,6 +25,7 @@ import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.component.type.ToolComponent;
 import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -366,6 +367,28 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 c.use(miner, state, world, pos);
                 info.setReturnValue(false);
             });
+    }
+
+    @Redirect(
+        method = "getMiningSpeed",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/component/type/ToolComponent;getSpeed(Lnet/minecraft/block/BlockState;)F"
+        )
+    )
+    private float getSpeedPassItemStack(ToolComponent instance, BlockState state, ItemStack stack) {
+        return instance.itematic$getSpeed(stack, state);
+    }
+
+    @Redirect(
+        method = "isCorrectForDrops",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/component/type/ToolComponent;isCorrectForDrops(Lnet/minecraft/block/BlockState;)Z"
+        )
+    )
+    private boolean isCorrectForDropsPassItemStack(ToolComponent instance, BlockState state, ItemStack stack) {
+        return instance.itematic$isCorrectForDrops(stack, state);
     }
 
     /**
