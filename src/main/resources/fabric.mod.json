@@ -161,6 +161,12 @@
       ],
       "net/minecraft/class_9278": [
         "net/errorcraft/itematic/access/component/type/ChargedProjectilesComponentAccess"
+      ],
+      "net/minecraft/class_9424": [
+        "net/errorcraft/itematic/access/component/type/ToolComponentAccess"
+      ],
+      "net/minecraft/class_9424\u0024class_9425": [
+        "net/errorcraft/itematic/access/component/type/ToolComponentRuleAccess"
       ]
     }
   },

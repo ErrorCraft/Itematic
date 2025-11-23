@@ -87,6 +87,8 @@
     "component.type.BundleContentsComponentExtender$BuilderExtender",
     "component.type.ChargedProjectilesComponentExtender",
     "component.type.DyedColorComponentExtender",
+    "component.type.ToolComponentExtender",
+    "component.type.ToolComponentExtender$RuleExtender",
     "enchantment.EnchantmentExtender",
     "enchantment.EnchantmentHelperExtender",
     "entity.BucketableExtender",
