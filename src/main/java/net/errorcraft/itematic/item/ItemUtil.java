@@ -4592,14 +4592,14 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.WOODEN_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.WOOD, 6.0d, -3.2d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.axe(ToolMaterials.WOOD, 6.0d, 0.2d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.WOOD, 0.0d, -3.0d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.hoe(ToolMaterials.WOOD, 0.0d, 0.25d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build(),
                 ItemEventMap.builder()
@@ -4630,13 +4630,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.STONE_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.STONE, 7.0d, -3.2d, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.axe(ToolMaterials.STONE, 7.0d, 0.2d, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.STONE, 1.0d, -2.0d, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.hoe(ToolMaterials.STONE, 1.0d, 0.5d, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -4666,13 +4666,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GOLDEN_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.GOLD, 6.0d, -3.0d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .with(DamageableItemComponent.axe(ToolMaterials.GOLD, 6.0d, 0.25d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.GOLD, 0.0d, -3.0d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .with(DamageableItemComponent.hoe(ToolMaterials.GOLD, 0.0d, 0.25d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -4702,13 +4702,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.IRON_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.IRON, 6.0d, -3.1d, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.axe(ToolMaterials.IRON, 6.0d, 0.225d, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.IRON, 2.0d, -1.0d, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.hoe(ToolMaterials.IRON, 2.0d, 0.75d, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -4738,13 +4738,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.DIAMOND_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.DIAMOND, 5.0d, -3.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.axe(ToolMaterials.DIAMOND, 5.0d, 0.25d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.DIAMOND, 3.0d, 0.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.hoe(ToolMaterials.DIAMOND, 3.0d, 1.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -4777,14 +4777,14 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.NETHERITE_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.NETHERITE, 5.0d, -3.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.axe(ToolMaterials.NETHERITE, 5.0d, 0.25d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.NETHERITE, 4.0d, 0.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.hoe(ToolMaterials.NETHERITE, 4.0d, 1.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build(),
                 ItemEventMap.builder()
@@ -4842,7 +4842,7 @@ public class ItemUtil {
                     .with(DamageableItemComponent.ofPreserved(250))
                     .with(ToolItemComponent.builder(2)
                         .build())
-                    .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE, -2.9d))
+                    .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE, 0.275d))
                     .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
                     .with(ProjectileItemComponent.of(TridentEntityInitializer.of(true), 1))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.TRIDENT_ENCHANTING))

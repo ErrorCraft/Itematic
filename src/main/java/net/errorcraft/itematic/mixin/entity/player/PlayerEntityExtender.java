@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.player;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.access.entity.LivingEntityAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.ItemListDataComponent;
@@ -109,6 +110,17 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
         )
     )
     private void neverSetEmptyStack(PlayerEntity instance, Hand hand, ItemStack stack) {}
+
+    @ModifyExpressionValue(
+        method = "getAttackCooldownProgressPerTick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeValue(Lnet/minecraft/registry/entry/RegistryEntry;)D"
+        )
+    )
+    private double multiplyByAttackSpeedMultiplier(double original) {
+        return this.inventory.getMainHandStack().itematic$attackSpeedMultiplier() * original;
+    }
 
     @Redirect(
         method = "eatFood",

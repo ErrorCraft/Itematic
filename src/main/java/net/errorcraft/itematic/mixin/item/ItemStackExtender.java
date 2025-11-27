@@ -742,6 +742,14 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         return useDuration.ticks((ItemStack)(Object) this, user);
     }
 
+    @Override
+    public double itematic$attackSpeedMultiplier() {
+        if (!this.itematic$hasComponent(ItemComponentTypes.WEAPON)) {
+            return 1.0d;
+        }
+        return this.getOrDefault(ItematicDataComponentTypes.ATTACK_SPEED_MULTIPLIER, 1.0d);
+    }
+
     @Unique
     private void setFields(RegistryEntry<Item> entry) {
         this.entry = entry;

@@ -51,7 +51,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                 .rule(ToolComponent.Rule.ofAlwaysDropping(List.of(Blocks.COBWEB), 15.0f))
                 .rule(ToolComponent.Rule.of(BlockTags.SWORD_EFFICIENT, 1.5f))
                 .build(),
-            WeaponItemComponent.of(1, 3.0d + material.getAttackDamage(), -2.4d),
+            WeaponItemComponent.of(1, 3.0d + material.getAttackDamage(), 0.4d),
             EnchantableItemComponent.enchants(material, EnchantmentTags.SWORD_ENCHANTING),
             ForgeableItemComponent.of(EnchantmentTags.SWORD_FORGING),
             RepairableItemComponent.of(repairItemsTag)
@@ -59,11 +59,11 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
     }
 
     public static ItemComponent<?>[] shovel(ToolMaterial material, TagKey<Item> repairItemsTag) {
-        return tool(material, 1.5d, -3.0d, BlockTags.SHOVEL_MINEABLE, EnchantmentTags.SHOVEL_ENCHANTING, EnchantmentTags.SHOVEL_FORGING, repairItemsTag);
+        return tool(material, 1.5d, 0.25d, BlockTags.SHOVEL_MINEABLE, EnchantmentTags.SHOVEL_ENCHANTING, EnchantmentTags.SHOVEL_FORGING, repairItemsTag);
     }
 
     public static ItemComponent<?>[] pickaxe(ToolMaterial material, TagKey<Item> repairItemsTag) {
-        return tool(material, 1.0d, -2.8d, BlockTags.PICKAXE_MINEABLE, EnchantmentTags.PICKAXE_ENCHANTING, EnchantmentTags.PICKAXE_FORGING, repairItemsTag);
+        return tool(material, 1.0d, 0.3d, BlockTags.PICKAXE_MINEABLE, EnchantmentTags.PICKAXE_ENCHANTING, EnchantmentTags.PICKAXE_FORGING, repairItemsTag);
     }
 
     public static ItemComponent<?>[] axe(ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItemsTag) {
