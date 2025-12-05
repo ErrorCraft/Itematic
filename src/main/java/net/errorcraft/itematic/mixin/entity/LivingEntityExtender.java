@@ -6,6 +6,9 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.access.entity.LivingEntityAccess;
+import net.errorcraft.itematic.access.entity.attribute.AttributeContainerAccess;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -16,6 +19,9 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.AttributeContainer;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -24,6 +30,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stat;
@@ -73,6 +80,10 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Shadow
     public abstract ItemStack eatFood(World world, ItemStack stack);
+
+    @Shadow public abstract AttributeContainer getAttributes();
+
+    @Shadow public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
 
     @Unique
     private int itemUsedTicks;
@@ -425,5 +436,28 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Override
     public int itematic$itemUsedTicks() {
         return this.itemUsedTicks;
+    }
+
+    @Override
+    public double itematic$getAttackDamage() {
+        Double baseAttackDamage = this.getBaseAttackDamage(this.getMainHandStack());
+        return ((AttributeContainerAccess) this.getAttributes())
+            .itematic$getValue(EntityAttributes.GENERIC_ATTACK_DAMAGE, baseAttackDamage);
+    }
+
+    @Unique
+    private Double getBaseAttackDamage(ItemStack stack) {
+        if (!stack.itematic$hasComponent(ItemComponentTypes.WEAPON)) {
+            return null;
+        }
+        WeaponAttackDamageDataComponent weaponAttackDamage = stack.get(ItematicDataComponentTypes.WEAPON_ATTACK_DAMAGE);
+        if (weaponAttackDamage == null) {
+            return null;
+        }
+        double damage = weaponAttackDamage.getDamage(stack, this);
+        if (weaponAttackDamage.shouldAddBase(stack, this)) {
+            return damage + this.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        }
+        return damage;
     }
 }

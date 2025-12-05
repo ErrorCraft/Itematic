@@ -3,33 +3,44 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
-import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.ComponentMap;
-import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.dynamic.Codecs;
 
-public record WeaponItemComponent(int damagePerHit, double attackDamage, double attackSpeed) implements ItemComponent<WeaponItemComponent> {
+import java.util.List;
+
+public record WeaponItemComponent(int damagePerHit, WeaponAttackDamageDataComponent attackDamage, double attackSpeed) implements ItemComponent<WeaponItemComponent> {
     public static final Codec<WeaponItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.NONNEGATIVE_INT.optionalFieldOf("damage_per_hit", 1).forGetter(WeaponItemComponent::damagePerHit),
-        Codec.DOUBLE.fieldOf("attack_damage").forGetter(WeaponItemComponent::attackDamage),
+        WeaponAttackDamageDataComponent.CODEC.fieldOf("attack_damage").forGetter(WeaponItemComponent::attackDamage),
         ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("attack_speed").forGetter(WeaponItemComponent::attackSpeed)
     ).apply(instance, WeaponItemComponent::new));
+
+    public static WeaponItemComponent of(int damagePerHit, double attackDamage, double attackSpeed, WeaponAttackDamageDataComponent.Rule... rules) {
+        return new WeaponItemComponent(
+            damagePerHit,
+            new WeaponAttackDamageDataComponent(List.of(rules), attackDamage),
+            attackSpeed
+        );
+    }
 
     @Override
     public ItemComponentType<WeaponItemComponent> type() {
@@ -57,16 +68,28 @@ public record WeaponItemComponent(int damagePerHit, double attackDamage, double 
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
+        builder.add(ItematicDataComponentTypes.WEAPON_ATTACK_DAMAGE, this.attackDamage);
         builder.add(ItematicDataComponentTypes.ATTACK_SPEED_MULTIPLIER, this.attackSpeed);
     }
 
     @Override
-    public void addAttributeModifiers(AttributeModifiersComponent.Builder builder, ItemComponentSet components) {
-        builder.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(Item.ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", this.attackDamage, EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND);
-//            .add(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(Item.ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", this.attackSpeed, EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND);
-    }
-
-    public static WeaponItemComponent of(int damagePerHit, double attackDamage, double attackSpeed) {
-        return new WeaponItemComponent(damagePerHit, attackDamage, attackSpeed);
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        WeaponAttackDamageDataComponent weaponAttackDamage = stack.get(ItematicDataComponentTypes.WEAPON_ATTACK_DAMAGE);
+        if (weaponAttackDamage != null) {
+            tooltip.add(
+                Text.translatable(
+                    "attribute.modifier.equals.0",
+                    AttributeModifiersComponent.DECIMAL_FORMAT.format(weaponAttackDamage.defaultDamage()),
+                    Text.translatable(EntityAttributes.GENERIC_ATTACK_DAMAGE.value().getTranslationKey())
+                ).formatted(Formatting.DARK_GREEN)
+            );
+        }
+        tooltip.add(
+            Text.translatable(
+                "attribute.modifier.equals.0",
+                AttributeModifiersComponent.DECIMAL_FORMAT.format(this.attackSpeed),
+                Text.translatable(EntityAttributes.GENERIC_ATTACK_SPEED.value().getTranslationKey())
+            ).formatted(Formatting.DARK_GREEN)
+        );
     }
 }

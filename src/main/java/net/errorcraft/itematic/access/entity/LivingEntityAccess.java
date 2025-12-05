@@ -19,4 +19,7 @@ public interface LivingEntityAccess {
     default int itematic$itemUsedTicks() {
         return 0;
     }
+    default double itematic$getAttackDamage() {
+        return 0.0d;
+    }
 }

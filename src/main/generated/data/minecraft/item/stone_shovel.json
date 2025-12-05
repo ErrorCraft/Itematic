@@ -31,7 +31,10 @@
       ]
     },
     "minecraft:weapon": {
-      "attack_damage": 2.5,
+      "attack_damage": {
+        "default_damage": 3.5,
+        "rules": []
+      },
       "attack_speed": 0.25,
       "damage_per_hit": 2
     }
