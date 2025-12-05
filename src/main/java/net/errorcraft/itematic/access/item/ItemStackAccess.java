@@ -61,4 +61,7 @@ public interface ItemStackAccess {
     default int itematic$useDuration(LivingEntity user) {
         return 0;
     }
+    default double itematic$attackSpeedMultiplier() {
+        return 0.0d;
+    }
 }
