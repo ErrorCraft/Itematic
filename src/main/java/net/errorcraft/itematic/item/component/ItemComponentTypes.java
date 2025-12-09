@@ -30,7 +30,6 @@ public class ItemComponentTypes {
     public static final ItemComponentType<SpawnEggItemComponent> SPAWN_EGG = register("spawn_egg", new ItemComponentType<>(SpawnEggItemComponent.CODEC));
     public static final ItemComponentType<DispensableItemComponent> DISPENSABLE = register("dispensable", new ItemComponentType<>(DispensableItemComponent.CODEC));
     public static final ItemComponentType<ShooterItemComponent> SHOOTER = register("shooter", new ItemComponentType<>(ShooterItemComponent.CODEC));
-    public static final ItemComponentType<UseAnimationItemComponent> USE_ANIMATION = register("use_animation", new ItemComponentType<>(UseAnimationItemComponent.CODEC));
     public static final ItemComponentType<RecordItemComponent> RECORD = register("record", new ItemComponentType<>(RecordItemComponent.CODEC));
     public static final ItemComponentType<FireworkShapeModifierItemComponent> FIREWORK_SHAPE_MODIFIER = register("firework_shape_modifier", new ItemComponentType<>(FireworkShapeModifierItemComponent.CODEC));
     public static final ItemComponentType<FireworkExplosionHolderItemComponent> FIREWORK_EXPLOSION_HOLDER = register("firework_explosion_holder", new ItemComponentType<>(FireworkExplosionHolderItemComponent.CODEC));

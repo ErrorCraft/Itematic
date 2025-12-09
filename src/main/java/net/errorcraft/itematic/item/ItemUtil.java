@@ -7,6 +7,7 @@ import net.errorcraft.itematic.block.ComposterBlockUtil;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
+import net.errorcraft.itematic.entity.ItematicEntityTypeTags;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
 import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.fluid.FluidKeys;
@@ -175,8 +176,10 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.MILK_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(UseableItemComponent.of(MilkBucketItemAccessor.getMaxUseTime()))
-                    .with(UseAnimationItemComponent.of(UseAction.DRINK))
+                    .with(UseableItemComponent.builder()
+                        .ticks(MilkBucketItemAccessor.getMaxUseTime())
+                        .animation(UseAction.DRINK)
+                        .build())
                     .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build(),
@@ -188,10 +191,12 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.POTION).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(UseableItemComponent.of(PotionItemAccessor.getMaxUseTime()))
+                    .with(UseableItemComponent.builder()
+                        .ticks(PotionItemAccessor.getMaxUseTime())
+                        .animation(UseAction.DRINK)
+                        .build())
                     .with(PotionItemComponent.INSTANCE)
                     .with(PotionHolderItemComponent.of(1.0f))
-                    .with(UseAnimationItemComponent.of(UseAction.DRINK))
                     .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .with(TintedItemComponent.of(PotionItemColor.INSTANCE))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM)))
@@ -4588,14 +4593,14 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.WOODEN_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.WOOD, 6.0d, -3.2d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.axe(ToolMaterials.WOOD, 7.0d, 0.2d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.WOOD, 0.0d, -3.0d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.hoe(ToolMaterials.WOOD, 1.0d, 0.25d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build(),
                 ItemEventMap.builder()
@@ -4626,13 +4631,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.STONE_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.STONE, 7.0d, -3.2d, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.axe(ToolMaterials.STONE, 8.0d, 0.2d, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.STONE, 1.0d, -2.0d, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.hoe(ToolMaterials.STONE, 2.0d, 0.5d, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -4641,13 +4646,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GOLDEN_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .with(DamageableItemComponent.sword(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .with(DamageableItemComponent.shovel(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -4656,19 +4661,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GOLDEN_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .with(DamageableItemComponent.pickaxe(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.GOLD, 6.0d, -3.0d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .with(DamageableItemComponent.axe(ToolMaterials.GOLD, 7.0d, 0.25d, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.GOLD, 0.0d, -3.0d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .with(DamageableItemComponent.hoe(ToolMaterials.GOLD, 1.0d, 0.25d, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -4698,13 +4703,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.IRON_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.IRON, 6.0d, -3.1d, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.axe(ToolMaterials.IRON, 7.0d, 0.225d, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.IRON, 2.0d, -1.0d, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.hoe(ToolMaterials.IRON, 3.0d, 0.75d, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -4734,13 +4739,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.DIAMOND_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.DIAMOND, 5.0d, -3.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.axe(ToolMaterials.DIAMOND, 6.0d, 0.25d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.DIAMOND, 3.0d, 0.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.hoe(ToolMaterials.DIAMOND, 4.0d, 1.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -4773,14 +4778,14 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.NETHERITE_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.NETHERITE, 5.0d, -3.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.axe(ToolMaterials.NETHERITE, 6.0d, 0.25d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.NETHERITE, 4.0d, 0.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.hoe(ToolMaterials.NETHERITE, 5.0d, 1.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build(),
                 ItemEventMap.builder()
@@ -4814,8 +4819,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(384))
-                    .with(ShooterItemComponent.of(ItematicItemTags.BOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, BowItem.RANGE))
-                    .with(UseAnimationItemComponent.of(UseAction.BOW))
+                    .with(ShooterItemComponent.of(this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION), this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION), BowItem.RANGE))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.BOW_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BOW_FORGING))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
@@ -4826,8 +4830,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(465))
-                    .with(ShooterItemComponent.of(ItematicItemTags.CROSSBOW_AMMUNITION, ItematicItemTags.BOW_AMMUNITION, CrossbowItem.RANGE, this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_LOADING_START), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_1), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_2), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_3)))
-                    .with(UseAnimationItemComponent.of(UseAction.CROSSBOW))
+                    .with(ShooterItemComponent.of(this.items.getOrThrow(ItematicItemTags.CROSSBOW_AMMUNITION), this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION), CrossbowItem.RANGE, this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_LOADING_START), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_1), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_2), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_3)))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.CROSSBOW_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.CROSSBOW_FORGING))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
@@ -4840,10 +4843,9 @@ public class ItemUtil {
                     .with(DamageableItemComponent.ofPreserved(250))
                     .with(ToolItemComponent.builder(2)
                         .build())
-                    .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE, -2.9d))
+                    .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE + 1, 0.275d))
                     .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
                     .with(ProjectileItemComponent.of(TridentEntityInitializer.of(true), 1))
-                    .with(UseAnimationItemComponent.of(UseAction.SPEAR))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.TRIDENT_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.TRIDENT_FORGING))
                     .build(),
@@ -4919,7 +4921,6 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(BrushItemComponent.of(BrushItemAccessor.maxBrushTime()))
                     .with(DamageableItemComponent.of(64))
-                    .with(UseAnimationItemComponent.of(UseAction.BRUSH))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BRUSH_FORGING))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.BRUSH)))
                     .build()
@@ -6604,15 +6605,14 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.SHIELD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
+                    .with(UseableItemComponent.builder()
+                        .animation(UseAction.BLOCK)
+                        .build())
                     .with(DamageableItemComponent.of(336))
                     .with(EquipmentItemComponent.of(EquipmentSlot.OFFHAND, false, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_SHIELD))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(UseAnimationItemComponent.of(UseAction.BLOCK))
                     .with(BannerPatternHolderItemComponent.of())
-                    .build(),
-                ItemEventMap.builder()
-                    .add(ItemEvents.USE, ActionEntry.of(StartUsingItemAction.indefinitely()))
                     .build()
             ));
         }
@@ -9744,8 +9744,10 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(ZoomItemComponent.of(SpyglassItem.FOV_MULTIPLIER, this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
-                    .with(UseableItemComponent.of(SpyglassItem.MAX_USE_TIME))
-                    .with(UseAnimationItemComponent.of(UseAction.SPYGLASS))
+                    .with(UseableItemComponent.builder()
+                        .ticks(SpyglassItem.MAX_USE_TIME)
+                        .animation(UseAction.SPYGLASS)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOWSTONE_DUST, create(
@@ -10059,7 +10061,6 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(PlayableItemComponent.of(InstrumentTags.GOAT_HORNS))
-                    .with(UseAnimationItemComponent.of(UseAction.TOOT_HORN))
                     .build()
             ));
             this.registerable.register(ItemKeys.HONEYCOMB, create(

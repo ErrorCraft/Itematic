@@ -14,9 +14,12 @@
       "item": "minecraft:glass_bottle"
     },
     "minecraft:stackable": 16,
-    "minecraft:use_animation": "drink",
     "minecraft:useable": {
-      "ticks": 40
+      "animation": "drink",
+      "ticks": {
+        "type": "minecraft:constant",
+        "amount": 40
+      }
     }
   },
   "events": {

@@ -17,7 +17,7 @@
       "ticks": 300
     },
     "minecraft:shooter": {
-      "ammunition": "minecraft:bow_ammunition",
+      "ammunition": "#minecraft:bow_ammunition",
       "chargeable": {
         "quick_charge_sounds": {
           "default": "minecraft:item.crossbow.loading_start",
@@ -28,10 +28,15 @@
           ]
         }
       },
-      "held_ammunition": "minecraft:crossbow_ammunition",
+      "held_ammunition": "#minecraft:crossbow_ammunition",
       "range": 8
     },
     "minecraft:stackable": 1,
-    "minecraft:use_animation": "crossbow"
+    "minecraft:useable": {
+      "animation": "crossbow",
+      "ticks": {
+        "type": "minecraft:shooter"
+      }
+    }
   }
 }

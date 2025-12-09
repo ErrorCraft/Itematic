@@ -19,9 +19,12 @@
         "type": "minecraft:potion"
       }
     },
-    "minecraft:use_animation": "drink",
     "minecraft:useable": {
-      "ticks": 32
+      "animation": "drink",
+      "ticks": {
+        "type": "minecraft:constant",
+        "amount": 32
+      }
     }
   },
   "events": {

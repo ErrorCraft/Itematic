@@ -4,11 +4,13 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,6 +33,17 @@ public abstract class WolfEntityExtender extends MobEntityExtender {
     )
     private ItemStack getDefaultStackForArmadilloScuteUseCreateStack(Item instance) {
         return this.getWorld().itematic$createStack(ItemKeys.ARMADILLO_SCUTE);
+    }
+
+    @Redirect(
+        method = "tryAttack",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/passive/WolfEntity;getAttributeValue(Lnet/minecraft/registry/entry/RegistryEntry;)D"
+        )
+    )
+    private double useCustomAttackDamage(WolfEntity instance, RegistryEntry<EntityAttribute> attribute) {
+        return this.itematic$getAttackDamage();
     }
 
     @Redirect(

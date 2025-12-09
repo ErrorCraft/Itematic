@@ -6,12 +6,15 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
@@ -20,6 +23,10 @@ import java.util.Optional;
 
 @Mixin(HeldItemRenderer.class)
 public class HeldItemRendererExtender {
+    @Shadow
+    @Final
+    private MinecraftClient client;
+
     @Redirect(
         method = { "getHandRenderType", "getUsingItemHandRenderType" },
         at = @At(
@@ -151,5 +158,16 @@ public class HeldItemRendererExtender {
     )
     private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
         return instance.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
+    }
+
+    @Redirect(
+        method = "applyEatOrDrinkTransformation",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;getMaxUseTime()I"
+        )
+    )
+    private int getMaxUseTimeUseCustomImplementation(ItemStack instance) {
+        return instance.itematic$useDuration(this.client.player);
     }
 }

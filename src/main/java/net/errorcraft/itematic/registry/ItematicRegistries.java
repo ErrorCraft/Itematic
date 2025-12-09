@@ -14,6 +14,8 @@ import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.pointer.Pointers;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateType;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateTypes;
+import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
+import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
 import net.errorcraft.itematic.mixin.registry.RegistriesAccessor;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
@@ -34,6 +36,7 @@ public class ItematicRegistries {
     public static final Registry<SmithingTemplateType<?>> SMITHING_TEMPLATE_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.SMITHING_TEMPLATE_TYPE, r -> SmithingTemplateTypes.TRIM_PATTERN);
     public static final Registry<BlockPickerType<?>> BLOCK_PICKER_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.BLOCK_PICKER_TYPE, r -> BlockPickerTypes.SIMPLE);
     public static final Registry<TradeModifierType<?>> TRADE_MODIFIER_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.TRADE_MODIFIER_TYPE, r -> TradeModifierTypes.ENCHANT_WITH_LEVELS);
+    public static final Registry<IntegerProviderType<?>> INTEGER_PROVIDER_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.INTEGER_PROVIDER_TYPE, r -> IntegerProviderTypes.CONSTANT);
 
     private ItematicRegistries() {}
 }

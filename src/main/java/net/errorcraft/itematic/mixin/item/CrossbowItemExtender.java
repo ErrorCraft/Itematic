@@ -37,9 +37,10 @@ public abstract class CrossbowItemExtender {
         )
     )
     private static ItemStack getProjectileTypeUseItemComponent(LivingEntity instance, ItemStack stack) {
-        return stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
-            .map(instance::itematic$getAmmunition)
-            .orElse(ItemStack.EMPTY);
+        if (stack.itematic$hasComponent(ItemComponentTypes.SHOOTER)) {
+            return instance.itematic$getAmmunition(stack);
+        }
+        return ItemStack.EMPTY;
     }
 
     @Redirect(

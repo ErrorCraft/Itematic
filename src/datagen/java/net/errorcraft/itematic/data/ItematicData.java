@@ -35,5 +35,6 @@ public class ItematicData implements DataGeneratorEntrypoint {
         pack.addProvider(RecipeProvider::new);
         pack.addProvider(PotionTagProvider::new);
         pack.addProvider(DispenseBehaviorProvider::new);
+        pack.addProvider(EntityTypeTagProvider::new);
     }
 }

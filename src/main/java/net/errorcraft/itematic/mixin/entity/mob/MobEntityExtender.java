@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -26,14 +27,12 @@ import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -167,6 +166,25 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
     )
     private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, @Share("item") LocalRef<RegistryEntry<Item>> itemEntry) {
         return new ItemStack(itemEntry.get());
+    }
+
+    @Redirect(
+        method = "tryAttack",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/mob/MobEntity;getAttributeValue(Lnet/minecraft/registry/entry/RegistryEntry;)D",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/entity/attribute/EntityAttributes;GENERIC_ATTACK_DAMAGE:Lnet/minecraft/registry/entry/RegistryEntry;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private double useCustomAttackDamage(MobEntity instance, RegistryEntry<EntityAttribute> attribute) {
+        return this.itematic$getAttackDamage();
     }
 
     /**

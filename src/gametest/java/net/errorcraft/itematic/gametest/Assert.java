@@ -106,6 +106,12 @@ public class Assert {
         }
     }
 
+    public static void areDoublesEqual(double value, double expected, ComparingDoubleStringSupplier messageSupplier) {
+        if (value != expected) {
+            throw new GameTestException(messageSupplier.get(value, expected));
+        }
+    }
+
     public static <T> void forAll(Iterable<T> elements, Consumer<T> elementAssertion) {
         for (T element : elements) {
             elementAssertion.accept(element);
@@ -120,5 +126,10 @@ public class Assert {
     @FunctionalInterface
     public interface ComparingFloatStringSupplier {
         String get(float value, float expected);
+    }
+
+    @FunctionalInterface
+    public interface ComparingDoubleStringSupplier {
+        String get(double value, double expected);
     }
 }

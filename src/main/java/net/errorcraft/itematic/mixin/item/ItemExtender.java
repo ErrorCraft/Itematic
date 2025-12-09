@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.item;
 
 import com.google.common.collect.Interner;
 import net.errorcraft.itematic.access.item.ItemAccess;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemBase;
 import net.errorcraft.itematic.item.ItemUtil;
@@ -24,6 +25,7 @@ import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.component.type.ToolComponent;
 import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -367,6 +369,28 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             });
     }
 
+    @Redirect(
+        method = "getMiningSpeed",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/component/type/ToolComponent;getSpeed(Lnet/minecraft/block/BlockState;)F"
+        )
+    )
+    private float getSpeedPassItemStack(ToolComponent instance, BlockState state, ItemStack stack) {
+        return instance.itematic$getSpeed(stack, state);
+    }
+
+    @Redirect(
+        method = "isCorrectForDrops",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/component/type/ToolComponent;isCorrectForDrops(Lnet/minecraft/block/BlockState;)Z"
+        )
+    )
+    private boolean isCorrectForDropsPassItemStack(ToolComponent instance, BlockState state, ItemStack stack) {
+        return instance.itematic$isCorrectForDrops(stack, state);
+    }
+
     /**
      * @author ErrorCraft
      * @reason Uses the ItemComponent implementation for data-driven items.
@@ -448,10 +472,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     public void getUseActionUseItemComponent(ItemStack stack, CallbackInfoReturnable<UseAction> info) {
-        UseAction animation = this.itematic$getComponent(ItemComponentTypes.USE_ANIMATION)
-            .map(UseAnimationItemComponent::animation)
-            .orElse(UseAction.NONE);
-        info.setReturnValue(animation);
+        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+            info.setReturnValue(UseAction.NONE);
+            return;
+        }
+        info.setReturnValue(stack.getOrDefault(ItematicDataComponentTypes.USE_ANIMATION, UseAction.NONE));
     }
 
     @Inject(
@@ -460,10 +485,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     public void getMaxUseTimeUseItemComponent(ItemStack stack, CallbackInfoReturnable<Integer> info) {
-        int maxUseTime = this.itematic$getComponent(ItemComponentTypes.USEABLE)
-            .map(UseableItemComponent::ticks)
-            .orElse(-1);
-        info.setReturnValue(maxUseTime);
+        info.setReturnValue(0);
     }
 
     @Inject(

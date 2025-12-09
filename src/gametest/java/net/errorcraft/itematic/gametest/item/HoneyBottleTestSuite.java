@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.gametest.item;
 
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.gametest.Assert;
 import net.errorcraft.itematic.gametest.TestUtil;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -27,7 +27,7 @@ public class HoneyBottleTestSuite {
         world.spawnEntity(player);
         stack.use(world, player, Hand.MAIN_HAND);
         context.createTimedTaskRunner().expectMinDurationAndRun(
-            TestUtil.getItemComponent(stack, ItemComponentTypes.USEABLE).ticks(),
+            TestUtil.getComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack, player),
             () -> Assert.entityDoesNotHaveStatusEffect(player, StatusEffects.POISON)
         ).completeIfSuccessful();
     }
