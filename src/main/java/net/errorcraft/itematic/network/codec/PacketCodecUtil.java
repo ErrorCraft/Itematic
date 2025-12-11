@@ -3,14 +3,24 @@ package net.errorcraft.itematic.network.codec;
 import com.mojang.datafixers.util.Function4;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
+import org.apache.commons.lang3.math.Fraction;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 
 public class PacketCodecUtil {
+    public static final PacketCodec<ByteBuf, Fraction> FRACTION = PacketCodec.tuple(
+        PacketCodecs.VAR_INT, Fraction::getNumerator,
+        PacketCodecs.VAR_INT, Fraction::getDenominator,
+        Fraction::getFraction
+    );
+
     private PacketCodecUtil() {}
 
     public static <B, C, T1, T2, T3, T4> PacketCodec<B, C> tuple(
@@ -42,5 +52,9 @@ public class PacketCodecUtil {
 
     public static <T> PacketCodec<ByteBuf, TagKey<T>> tag(RegistryKey<? extends Registry<T>> registry) {
         return Identifier.PACKET_CODEC.xmap(id -> TagKey.of(registry, id), TagKey::id);
+    }
+
+    public static <B extends ByteBuf, T> PacketCodec<B, Set<T>> set(PacketCodec<B, T> packetCodec) {
+        return PacketCodecs.collection(HashSet::new, packetCodec);
     }
 }

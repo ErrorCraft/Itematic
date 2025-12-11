@@ -2,6 +2,8 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -37,14 +39,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) implements ItemComponent<ItemHolderItemComponent> {
+public record ItemHolderItemComponent(int capacity, ItemHolderRules rules, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) implements ItemComponent<ItemHolderItemComponent> {
     public static final Codec<ItemHolderItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.POSITIVE_INT.fieldOf("capacity").forGetter(ItemHolderItemComponent::capacity),
+        ItemHolderRules.CODEC.fieldOf("rules").forGetter(ItemHolderItemComponent::rules),
         SoundEvent.ENTRY_CODEC.fieldOf("insert_item_sound").forGetter(ItemHolderItemComponent::insertItemSound),
         SoundEvent.ENTRY_CODEC.fieldOf("remove_item_sound").forGetter(ItemHolderItemComponent::removeItemSound),
         SoundEvent.ENTRY_CODEC.fieldOf("empty_sound").forGetter(ItemHolderItemComponent::emptySound)
     ).apply(instance, ItemHolderItemComponent::new));
     public static final int ITEM_BAR_COLOR = BundleItemAccessor.itemBarColor();
+
+    public static ItemHolderItemComponent of(int capacity, ItemHolderRules rules, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) {
+        return new ItemHolderItemComponent(capacity, rules, insertItemSound, removeItemSound, emptySound);
+    }
 
     @Override
     public ItemComponentType<ItemHolderItemComponent> type() {
@@ -72,20 +79,18 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
             return false;
         }
 
-        BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
-        if (bundleContents == null) {
+        BundleContentsComponent.Builder newBuilder = this.createBuilder(stack);
+        if (newBuilder == null) {
             return false;
         }
 
-        BundleContentsComponent.Builder bundleContentsBuilder = new BundleContentsComponent.Builder(bundleContents);
-        bundleContentsBuilder.itematic$setCapacity(this.capacity);
         if (slot.getStack().isEmpty()) {
-            this.remove(user, bundleContentsBuilder, removedStack -> this.add(bundleContentsBuilder, slot.insertStack(removedStack), user));
+            this.remove(user, newBuilder, removedStack -> this.add(newBuilder, slot.insertStack(removedStack), user));
         } else {
-            this.add(bundleContentsBuilder, slot, user);
+            this.add(newBuilder, slot, user);
         }
 
-        stack.set(DataComponentTypes.BUNDLE_CONTENTS, bundleContentsBuilder.build());
+        stack.set(DataComponentTypes.BUNDLE_CONTENTS, newBuilder.build());
         return true;
     }
 
@@ -95,26 +100,25 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
             return false;
         }
 
-        BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
-        if (bundleContents == null) {
+        BundleContentsComponent.Builder newBuilder = this.createBuilder(stack);
+        if (newBuilder == null) {
             return false;
         }
 
-        BundleContentsComponent.Builder bundleContentsBuilder = new BundleContentsComponent.Builder(bundleContents);
-        bundleContentsBuilder.itematic$setCapacity(this.capacity);
         if (cursorStack.isEmpty()) {
-            this.remove(user, bundleContentsBuilder, resultStackConsumer::set);
+            this.remove(user, newBuilder, resultStackConsumer::set);
         } else {
-            this.add(bundleContentsBuilder, cursorStack, user);
+            this.add(newBuilder, cursorStack, user);
         }
 
-        stack.set(DataComponentTypes.BUNDLE_CONTENTS, bundleContentsBuilder.build());
+        stack.set(DataComponentTypes.BUNDLE_CONTENTS, newBuilder.build());
         return true;
     }
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
         builder.add(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT);
+        builder.add(ItematicDataComponentTypes.ITEM_HOLDER_RULES, this.rules);
     }
 
     @Override
@@ -166,8 +170,19 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
         }
     }
 
-    public static ItemHolderItemComponent of(int capacity, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) {
-        return new ItemHolderItemComponent(capacity, insertItemSound, removeItemSound, emptySound);
+    private BundleContentsComponent.Builder createBuilder(ItemStack stack) {
+        BundleContentsComponent existingBundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
+        if (existingBundleContents == null) {
+            return null;
+        }
+        ItemHolderRules rules = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_RULES);
+        if (rules == null) {
+            return null;
+        }
+        BundleContentsComponent.Builder newBuilder = new BundleContentsComponent.Builder(existingBundleContents);
+        newBuilder.itematic$setCapacity(this.capacity);
+        newBuilder.itematic$setRules(rules);
+        return newBuilder;
     }
 
     private void add(BundleContentsComponent.Builder bundleContentsBuilder, ItemStack stack, PlayerEntity user) {

@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.block.ComposterBlockUtil;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
+import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.ItematicEntityTypeTags;
@@ -15,11 +16,15 @@ import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.armor.ArmorMaterialKeys;
 import net.errorcraft.itematic.item.color.colors.*;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.item.holder.rule.rules.FractionItemHolderRule;
+import net.errorcraft.itematic.item.holder.rule.rules.FractionWithOccupancyHeldItemsItemHolderRule;
+import net.errorcraft.itematic.item.holder.rule.rules.RejectItemHolderRule;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.pointer.PointerKeys;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
@@ -9730,7 +9735,22 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.BUNDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(ItemHolderItemComponent.of(Item.DEFAULT_MAX_COUNT, this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
+                    .with(ItemHolderItemComponent.of(
+                        Item.DEFAULT_MAX_COUNT,
+                        ItemHolderRules.builder()
+                            .rule(RejectItemHolderRule.INSTANCE, ItemPredicate.Builder.create()
+                                .itematic$items(this.items.getOrThrow(ItematicItemTags.BANNED_BUNDLE_ITEMS))
+                                .build())
+                            .rule(FractionWithOccupancyHeldItemsItemHolderRule.of(1, 4), ItemPredicate.Builder.create()
+                                .itematic$behavior(ItemComponentTypes.ITEM_HOLDER)
+                                .build())
+                            .rule(FractionItemHolderRule.of(1, 1), ItemPredicate.Builder.create()
+                                .itematic$dataComponents(DataComponentTypes.BEES)
+                                .build())
+                            .build(),
+                        this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT),
+                        this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE),
+                        this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CLOCK, create(

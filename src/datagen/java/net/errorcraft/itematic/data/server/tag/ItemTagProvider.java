@@ -1265,6 +1265,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE);
         this.getOrCreateTagBuilder(ItematicItemTags.SPAWNERS)
             .add(ItemKeys.SPAWNER);
+        this.getOrCreateTagBuilder(ItematicItemTags.BANNED_BUNDLE_ITEMS)
+            .addTag(ItematicItemTags.SHULKER_BOXES);
         this.getOrCreateTagBuilder(ItematicItemTags.SHULKER_BOXES)
             .add(ItemKeys.SHULKER_BOX)
             .add(ItemKeys.BLACK_SHULKER_BOX)

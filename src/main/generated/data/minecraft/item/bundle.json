@@ -7,7 +7,39 @@
       "capacity": 64,
       "empty_sound": "minecraft:item.bundle.drop_contents",
       "insert_item_sound": "minecraft:item.bundle.insert",
-      "remove_item_sound": "minecraft:item.bundle.remove_one"
+      "remove_item_sound": "minecraft:item.bundle.remove_one",
+      "rules": [
+        {
+          "type": "minecraft:reject",
+          "condition": {
+            "items": "#minecraft:banned_bundle_items"
+          }
+        },
+        {
+          "type": "minecraft:fraction_with_occupancy_held_items",
+          "condition": {
+            "behavior": [
+              "minecraft:item_holder"
+            ]
+          },
+          "fraction": {
+            "denominator": 4,
+            "numerator": 1
+          }
+        },
+        {
+          "type": "minecraft:fraction",
+          "condition": {
+            "data_components": [
+              "minecraft:bees"
+            ]
+          },
+          "fraction": {
+            "denominator": 1,
+            "numerator": 1
+          }
+        }
+      ]
     },
     "minecraft:stackable": 1
   }

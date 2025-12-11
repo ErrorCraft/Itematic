@@ -2,10 +2,12 @@ package net.errorcraft.itematic.mixin.component.type;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.component.type.BundleContentsComponentBuilderAccess;
+import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.math.Fraction;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,16 +30,42 @@ public class BundleContentsComponentExtender {
         @Unique
         private Fraction capacity;
 
+        @Unique
+        private ItemHolderRules rules;
+
         @Redirect(
             method = "getMaxAllowed",
             at = @At(
                 value = "FIELD",
                 target = "Lorg/apache/commons/lang3/math/Fraction;ONE:Lorg/apache/commons/lang3/math/Fraction;",
+                opcode = Opcodes.GETSTATIC,
                 remap = false
             )
         )
         private Fraction getCapacity() {
             return this.capacity;
+        }
+
+        @Redirect(
+            method = { "getMaxAllowed", "add(Lnet/minecraft/item/ItemStack;)I", "removeFirst" },
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/component/type/BundleContentsComponent;getOccupancy(Lnet/minecraft/item/ItemStack;)Lorg/apache/commons/lang3/math/Fraction;"
+            )
+        )
+        private Fraction calculateFromDataComponent(ItemStack stack) {
+            return this.rules.occupancy(stack);
+        }
+
+        @Redirect(
+            method = "add(Lnet/minecraft/item/ItemStack;)I",
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/item/Item;canBeNested()Z"
+            )
+        )
+        private boolean checkFromDataComponent(Item instance, ItemStack stack) {
+            return this.rules.canOccupy(stack);
         }
 
         @Inject(
@@ -68,6 +96,11 @@ public class BundleContentsComponentExtender {
         @Override
         public void itematic$setCapacity(int capacity) {
             this.capacity = Fraction.getFraction(capacity, Item.DEFAULT_MAX_COUNT);
+        }
+
+        @Override
+        public void itematic$setRules(ItemHolderRules rules) {
+            this.rules = rules;
         }
     }
 }

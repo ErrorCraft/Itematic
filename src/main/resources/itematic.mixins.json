@@ -306,6 +306,8 @@
     "predicate.entity.EntityPredicateExtender",
     "predicate.entity.EntityPredicateExtender$BuilderExtender",
     "predicate.entity.PlayerPredicateExtender$StatMatcherExtender",
+    "predicate.item.ItemPredicateExtender",
+    "predicate.item.ItemPredicateExtender$BuilderExtender",
     "recipe.ArmorDyeRecipeExtender",
     "recipe.BannerDuplicateRecipeExtender",
     "recipe.BlastingRecipeExtender",

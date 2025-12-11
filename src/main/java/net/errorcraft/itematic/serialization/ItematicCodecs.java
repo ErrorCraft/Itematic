@@ -4,7 +4,10 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.mixin.util.dynamic.CodecsAccessor;
+import net.minecraft.util.dynamic.Codecs;
+import org.apache.commons.lang3.math.Fraction;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,6 +28,10 @@ public class ItematicCodecs {
         }
         return DataResult.error(() -> "Value must be non-negative: " + value);
     });
+    public static final Codec<Fraction> POSITIVE_FRACTION = RecordCodecBuilder.create(instance -> instance.group(
+        Codecs.POSITIVE_INT.fieldOf("numerator").forGetter(Fraction::getNumerator),
+        Codecs.POSITIVE_INT.fieldOf("denominator").forGetter(Fraction::getDenominator)
+    ).apply(instance, Fraction::getFraction));
 
     private ItematicCodecs() {}
 
