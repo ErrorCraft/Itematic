@@ -21,8 +21,8 @@ public record FractionWithOccupancyHeldItemsItemHolderRule(Fraction fraction) im
     ).apply(instance, FractionWithOccupancyHeldItemsItemHolderRule::new));
     public static final PacketCodec<ByteBuf, FractionWithOccupancyHeldItemsItemHolderRule> PACKET_CODEC = PacketCodecUtil.FRACTION.xmap(FractionWithOccupancyHeldItemsItemHolderRule::new, FractionWithOccupancyHeldItemsItemHolderRule::fraction);
 
-    public static FractionWithOccupancyHeldItemsItemHolderRule of(int numerator, int denominator) {
-        return new FractionWithOccupancyHeldItemsItemHolderRule(Fraction.getFraction(numerator, denominator));
+    public static FractionWithOccupancyHeldItemsItemHolderRule of(Fraction fraction) {
+        return new FractionWithOccupancyHeldItemsItemHolderRule(fraction);
     }
 
     @Override

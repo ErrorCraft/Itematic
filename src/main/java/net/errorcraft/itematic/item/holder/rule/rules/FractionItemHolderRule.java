@@ -18,8 +18,8 @@ public record FractionItemHolderRule(Fraction fraction) implements ItemHolderRul
     ).apply(instance, FractionItemHolderRule::new));
     public static final PacketCodec<ByteBuf, FractionItemHolderRule> PACKET_CODEC = PacketCodecUtil.FRACTION.xmap(FractionItemHolderRule::new, FractionItemHolderRule::fraction);
 
-    public static FractionItemHolderRule of(int numerator, int denominator) {
-        return new FractionItemHolderRule(Fraction.getFraction(numerator, denominator));
+    public static FractionItemHolderRule of(Fraction fraction) {
+        return new FractionItemHolderRule(fraction);
     }
 
     @Override

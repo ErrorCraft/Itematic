@@ -159,6 +159,9 @@
       "net/minecraft/class_9085": [
         "net/errorcraft/itematic/access/client/render/entity/feature/WolfArmorFeatureRendererAccess"
       ],
+      "net/minecraft/class_9276": [
+        "net/errorcraft/itematic/access/component/type/BundleContentsComponentAccess"
+      ],
       "net/minecraft/class_9276\u0024class_9277": [
         "net/errorcraft/itematic/access/component/type/BundleContentsComponentBuilderAccess"
       ],

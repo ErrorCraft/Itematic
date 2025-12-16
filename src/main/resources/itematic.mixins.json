@@ -83,6 +83,7 @@
     "command.argument.ScoreboardCriterionArgumentTypeExtender",
     "component.DataComponentTypesAccessor",
     "component.DataComponentTypesExtender",
+    "component.type.BundleContentsComponentAccessor",
     "component.type.BundleContentsComponentExtender",
     "component.type.BundleContentsComponentExtender$BuilderExtender",
     "component.type.ChargedProjectilesComponentExtender",

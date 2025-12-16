@@ -2,12 +2,12 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
+import net.errorcraft.itematic.component.type.BundleContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.mixin.item.BundleItemAccessor;
 import net.errorcraft.itematic.util.Util;
 import net.minecraft.client.item.BundleTooltipData;
@@ -117,8 +117,7 @@ public record ItemHolderItemComponent(int capacity, ItemHolderRules rules, Regis
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT);
-        builder.add(ItematicDataComponentTypes.ITEM_HOLDER_RULES, this.rules);
+        builder.add(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponentUtil.create(this.rules));
     }
 
     @Override
@@ -170,18 +169,13 @@ public record ItemHolderItemComponent(int capacity, ItemHolderRules rules, Regis
         }
     }
 
-    private BundleContentsComponent.Builder createBuilder(ItemStack stack) {
+    public BundleContentsComponent.Builder createBuilder(ItemStack stack) {
         BundleContentsComponent existingBundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
         if (existingBundleContents == null) {
             return null;
         }
-        ItemHolderRules rules = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_RULES);
-        if (rules == null) {
-            return null;
-        }
         BundleContentsComponent.Builder newBuilder = new BundleContentsComponent.Builder(existingBundleContents);
         newBuilder.itematic$setCapacity(this.capacity);
-        newBuilder.itematic$setRules(rules);
         return newBuilder;
     }
 

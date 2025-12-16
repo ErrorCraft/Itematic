@@ -1,7 +1,9 @@
 package net.errorcraft.itematic.component;
 
-import net.errorcraft.itematic.component.type.*;
-import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
+import net.errorcraft.itematic.component.type.ImmuneToDamageComponent;
+import net.errorcraft.itematic.component.type.ItemListDataComponent;
+import net.errorcraft.itematic.component.type.UseDurationDataComponent;
+import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
 import net.errorcraft.itematic.mixin.component.DataComponentTypesAccessor;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.util.UseActionUtil;
@@ -17,7 +19,6 @@ public class ItematicDataComponentTypes {
     public static final DataComponentType<ItemListDataComponent> SHOOTER_HELD_AMMUNITION = DataComponentTypesAccessor.register("shooter_held_ammunition", builder -> builder.codec(ItemListDataComponent.CODEC).packetCodec(ItemListDataComponent.PACKET_CODEC));
     public static final DataComponentType<Double> ATTACK_SPEED_MULTIPLIER = DataComponentTypesAccessor.register("attack_speed_multiplier", builder -> builder.codec(ItematicCodecs.NON_NEGATIVE_DOUBLE).packetCodec(PacketCodecs.DOUBLE));
     public static final DataComponentType<WeaponAttackDamageDataComponent> WEAPON_ATTACK_DAMAGE = DataComponentTypesAccessor.register("weapon_attack_damage", builder -> builder.codec(WeaponAttackDamageDataComponent.CODEC).packetCodec(WeaponAttackDamageDataComponent.PACKET_CODEC));
-    public static final DataComponentType<ItemHolderRules> ITEM_HOLDER_RULES = DataComponentTypesAccessor.register("item_holder_rules", builder -> builder.codec(ItemHolderRules.CODEC).packetCodec(ItemHolderRules.PACKET_CODEC));
 
     public static void init() {}
 }

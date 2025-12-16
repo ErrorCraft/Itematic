@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.block.ComposterBlockUtil;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
-import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.ItematicEntityTypeTags;
@@ -22,6 +21,7 @@ import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.item.holder.rule.rules.FractionItemHolderRule;
 import net.errorcraft.itematic.item.holder.rule.rules.FractionWithOccupancyHeldItemsItemHolderRule;
 import net.errorcraft.itematic.item.holder.rule.rules.RejectItemHolderRule;
@@ -31,6 +31,7 @@ import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.block.DecoratedPotPatternsAccessor;
+import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
 import net.errorcraft.itematic.mixin.item.*;
 import net.errorcraft.itematic.potion.PotionKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
@@ -85,6 +86,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.event.GameEvent;
+import org.apache.commons.lang3.math.Fraction;
 
 import java.util.List;
 
@@ -9741,10 +9743,10 @@ public class ItemUtil {
                             .rule(RejectItemHolderRule.INSTANCE, ItemPredicate.Builder.create()
                                 .itematic$items(this.items.getOrThrow(ItematicItemTags.BANNED_BUNDLE_ITEMS))
                                 .build())
-                            .rule(FractionWithOccupancyHeldItemsItemHolderRule.of(1, 4), ItemPredicate.Builder.create()
+                            .rule(FractionWithOccupancyHeldItemsItemHolderRule.of(BundleContentsComponentAccessor.nestedBundleOccupancy()), ItemPredicate.Builder.create()
                                 .itematic$behavior(ItemComponentTypes.ITEM_HOLDER)
                                 .build())
-                            .rule(FractionItemHolderRule.of(1, 1), ItemPredicate.Builder.create()
+                            .rule(FractionItemHolderRule.of(Fraction.ONE), ItemPredicate.Builder.create()
                                 .itematic$dataComponents(DataComponentTypes.BEES)
                                 .build())
                             .build(),
