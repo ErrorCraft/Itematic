@@ -246,8 +246,8 @@ public class BundleContentsComponentExtender implements BundleContentsComponentA
         }
 
         @Override
-        public void itematic$setCapacity(int capacity) {
-            this.capacity = Fraction.getFraction(capacity, Item.DEFAULT_MAX_COUNT);
+        public void itematic$setCapacity(Fraction capacity) {
+            this.capacity = capacity;
         }
     }
 }

@@ -58,6 +58,18 @@ public class ItematicCodecs {
         return CodecsAccessor.rangedFloat(0.0f, maxInclusive, value -> "Value must be positive and at most " + maxInclusive + ": " + value);
     }
 
+    public static Codec<Fraction> positiveFraction(int maxInclusive) {
+        if (maxInclusive <= 0) {
+            throw new IllegalArgumentException("maxInclusive must be positive, got " + maxInclusive + " instead");
+        }
+        return POSITIVE_FRACTION.validate(fraction -> {
+            if (fraction.intValue() > maxInclusive) {
+                return DataResult.error(() -> "Fraction must be at most " + maxInclusive);
+            }
+            return DataResult.success(fraction);
+        });
+    }
+
     private static class SetCodec<E> implements Codec<Set<E>> {
         private final Codec<List<E>> listCodec;
 

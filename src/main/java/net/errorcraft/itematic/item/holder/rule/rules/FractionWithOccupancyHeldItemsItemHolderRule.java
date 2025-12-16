@@ -4,11 +4,11 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.ItemHolderItemComponent;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRule;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleTypes;
 import net.errorcraft.itematic.network.codec.PacketCodecUtil;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.item.ItemStack;
@@ -17,7 +17,7 @@ import org.apache.commons.lang3.math.Fraction;
 
 public record FractionWithOccupancyHeldItemsItemHolderRule(Fraction fraction) implements ItemHolderRule {
     public static final MapCodec<FractionWithOccupancyHeldItemsItemHolderRule> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ItematicCodecs.POSITIVE_FRACTION.fieldOf("fraction").forGetter(FractionWithOccupancyHeldItemsItemHolderRule::fraction)
+        ItemHolderItemComponent.CAPACITY_CODEC.fieldOf("fraction").forGetter(FractionWithOccupancyHeldItemsItemHolderRule::fraction)
     ).apply(instance, FractionWithOccupancyHeldItemsItemHolderRule::new));
     public static final PacketCodec<ByteBuf, FractionWithOccupancyHeldItemsItemHolderRule> PACKET_CODEC = PacketCodecUtil.FRACTION.xmap(FractionWithOccupancyHeldItemsItemHolderRule::new, FractionWithOccupancyHeldItemsItemHolderRule::fraction);
 

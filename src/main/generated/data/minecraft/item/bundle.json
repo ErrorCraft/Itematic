@@ -4,7 +4,10 @@
   },
   "components": {
     "minecraft:item_holder": {
-      "capacity": 64,
+      "capacity": {
+        "denominator": 1,
+        "numerator": 1
+      },
       "empty_sound": "minecraft:item.bundle.drop_contents",
       "insert_item_sound": "minecraft:item.bundle.insert",
       "remove_item_sound": "minecraft:item.bundle.remove_one",

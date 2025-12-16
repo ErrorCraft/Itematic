@@ -9738,7 +9738,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(ItemHolderItemComponent.of(
-                        Item.DEFAULT_MAX_COUNT,
+                        1,
                         ItemHolderRules.builder()
                             .rule(RejectItemHolderRule.INSTANCE, ItemPredicate.Builder.create()
                                 .itematic$items(this.items.getOrThrow(ItematicItemTags.BANNED_BUNDLE_ITEMS))

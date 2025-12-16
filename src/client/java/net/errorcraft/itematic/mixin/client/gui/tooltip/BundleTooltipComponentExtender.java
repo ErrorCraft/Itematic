@@ -2,8 +2,8 @@ package net.errorcraft.itematic.mixin.client.gui.tooltip;
 
 import net.errorcraft.itematic.access.client.gui.tooltip.BundleTooltipComponentAccess;
 import net.minecraft.client.gui.tooltip.BundleTooltipComponent;
-import net.minecraft.item.Item;
 import org.apache.commons.lang3.math.Fraction;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,6 +19,7 @@ public class BundleTooltipComponentExtender implements BundleTooltipComponentAcc
         at = @At(
             value = "FIELD",
             target = "Lorg/apache/commons/lang3/math/Fraction;ONE:Lorg/apache/commons/lang3/math/Fraction;",
+            opcode = Opcodes.GETSTATIC,
             remap = false
         )
     )
@@ -27,7 +28,7 @@ public class BundleTooltipComponentExtender implements BundleTooltipComponentAcc
     }
 
     @Override
-    public void itematic$setCapacity(int capacity) {
-        this.capacity = Fraction.getFraction(capacity, Item.DEFAULT_MAX_COUNT);
+    public void itematic$setCapacity(Fraction capacity) {
+        this.capacity = capacity;
     }
 }

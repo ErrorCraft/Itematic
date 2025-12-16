@@ -1,8 +1,10 @@
 package net.errorcraft.itematic.access.client.item;
 
+import org.apache.commons.lang3.math.Fraction;
+
 public interface BundleTooltipDataAccess {
-    default int itematic$capacity() {
-        return 0;
+    default Fraction itematic$capacity() {
+        return null;
     }
-    default void itematic$setCapacity(int capacity) {}
+    default void itematic$setCapacity(Fraction capacity) {}
 }
