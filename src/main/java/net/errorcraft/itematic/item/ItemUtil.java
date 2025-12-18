@@ -9727,7 +9727,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.BUNDLE, create(
-                ItemBase.Builder.forItem(ItemKeys.BUNDLE).build(),
+                ItemBase.Builder.forItem(ItemKeys.BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(ItemHolderItemComponent.of(Item.DEFAULT_MAX_COUNT, this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))

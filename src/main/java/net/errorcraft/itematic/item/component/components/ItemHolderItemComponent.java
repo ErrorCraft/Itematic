@@ -44,7 +44,10 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
         SoundEvent.ENTRY_CODEC.fieldOf("remove_item_sound").forGetter(ItemHolderItemComponent::removeItemSound),
         SoundEvent.ENTRY_CODEC.fieldOf("empty_sound").forGetter(ItemHolderItemComponent::emptySound)
     ).apply(instance, ItemHolderItemComponent::new));
-    public static final int ITEM_BAR_COLOR = BundleItemAccessor.itemBarColor();
+
+    public static ItemHolderItemComponent of(int capacity, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) {
+        return new ItemHolderItemComponent(capacity, insertItemSound, removeItemSound, emptySound);
+    }
 
     @Override
     public ItemComponentType<ItemHolderItemComponent> type() {
@@ -126,21 +129,6 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
         }
     }
 
-    public boolean itemBarVisible(ItemStack stack) {
-        BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
-        if (bundleContents == null) {
-            return false;
-        }
-        return bundleContents.getOccupancy().compareTo(Fraction.ZERO) > 0 ;
-    }
-
-    public int itemBarStep(ItemStack stack) {
-        int step = this.fullness(stack)
-            .multiplyBy(Fraction.getFraction((Item.ITEM_BAR_STEPS - 1) * Item.DEFAULT_MAX_COUNT, 1))
-            .intValue();
-        return Math.min(step, Item.ITEM_BAR_STEPS);
-    }
-
     public Optional<TooltipData> tooltipData(ItemStack stack) {
         BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
         if (bundleContents == null) {
@@ -164,10 +152,6 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
         if (bundleContents != null) {
             ItemUsage.spawnItemContents(item, bundleContents.iterateCopy());
         }
-    }
-
-    public static ItemHolderItemComponent of(int capacity, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) {
-        return new ItemHolderItemComponent(capacity, insertItemSound, removeItemSound, emptySound);
     }
 
     private void add(BundleContentsComponent.Builder bundleContentsBuilder, ItemStack stack, PlayerEntity user) {

@@ -25,6 +25,7 @@ public class ItematicCodecs {
         }
         return DataResult.error(() -> "Value must be non-negative: " + value);
     });
+    public static final Codec<Integer> HUE = Codec.intRange(0, 360);
 
     private ItematicCodecs() {}
 

@@ -1,5 +1,6 @@
 {
   "base": {
+    "item_bar_style": "minecraft:bundle",
     "translation_key": "item.minecraft.bundle"
   },
   "components": {

@@ -1,0 +1,24 @@
+{
+  "color": {
+    "type": "minecraft:hue_shift",
+    "end": 0,
+    "start": 120
+  },
+  "progress": "minecraft:damage",
+  "textures": [
+    "minecraft:item_bar/progress/13",
+    "minecraft:item_bar/progress/12",
+    "minecraft:item_bar/progress/11",
+    "minecraft:item_bar/progress/10",
+    "minecraft:item_bar/progress/9",
+    "minecraft:item_bar/progress/8",
+    "minecraft:item_bar/progress/7",
+    "minecraft:item_bar/progress/6",
+    "minecraft:item_bar/progress/5",
+    "minecraft:item_bar/progress/4",
+    "minecraft:item_bar/progress/3",
+    "minecraft:item_bar/progress/2",
+    "minecraft:item_bar/progress/1",
+    "minecraft:item_bar/progress/0"
+  ]
+}
