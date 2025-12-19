@@ -4,7 +4,10 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.mixin.util.dynamic.CodecsAccessor;
+import net.minecraft.util.dynamic.Codecs;
+import org.apache.commons.lang3.math.Fraction;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,6 +29,10 @@ public class ItematicCodecs {
         return DataResult.error(() -> "Value must be non-negative: " + value);
     });
     public static final Codec<Integer> HUE = Codec.intRange(0, 360);
+    public static final Codec<Fraction> POSITIVE_FRACTION = RecordCodecBuilder.create(instance -> instance.group(
+        Codecs.POSITIVE_INT.fieldOf("numerator").forGetter(Fraction::getNumerator),
+        Codecs.POSITIVE_INT.fieldOf("denominator").forGetter(Fraction::getDenominator)
+    ).apply(instance, Fraction::getFraction));
 
     private ItematicCodecs() {}
 
@@ -50,6 +57,18 @@ public class ItematicCodecs {
             throw new IllegalArgumentException("maxInclusive must be positive, got " + maxInclusive + " instead");
         }
         return CodecsAccessor.rangedFloat(0.0f, maxInclusive, value -> "Value must be positive and at most " + maxInclusive + ": " + value);
+    }
+
+    public static Codec<Fraction> positiveFraction(int maxInclusive) {
+        if (maxInclusive <= 0) {
+            throw new IllegalArgumentException("maxInclusive must be positive, got " + maxInclusive + " instead");
+        }
+        return POSITIVE_FRACTION.validate(fraction -> {
+            if (fraction.intValue() > maxInclusive) {
+                return DataResult.error(() -> "Fraction must be at most " + maxInclusive);
+            }
+            return DataResult.success(fraction);
+        });
     }
 
     private static class SetCodec<E> implements Codec<Set<E>> {

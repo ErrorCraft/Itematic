@@ -4,6 +4,7 @@ import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.item.color.ItemColorTypes;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleTypes;
 import net.errorcraft.itematic.item.model.override.ModelOverrides;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPickerTypes;
 import net.errorcraft.itematic.item.pointer.Pointers;
@@ -39,5 +40,6 @@ public class Itematic implements ModInitializer {
         TradeModifierTypes.init();
         ItematicDataComponentTypes.init();
         IntegerProviderTypes.init();
+        ItemHolderRuleTypes.init();
     }
 }

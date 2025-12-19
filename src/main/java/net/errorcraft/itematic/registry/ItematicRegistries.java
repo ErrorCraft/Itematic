@@ -6,6 +6,8 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleType;
+import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleTypes;
 import net.errorcraft.itematic.item.model.override.ModelOverride;
 import net.errorcraft.itematic.item.model.override.ModelOverrides;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPickerType;
@@ -37,6 +39,7 @@ public class ItematicRegistries {
     public static final Registry<BlockPickerType<?>> BLOCK_PICKER_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.BLOCK_PICKER_TYPE, r -> BlockPickerTypes.SIMPLE);
     public static final Registry<TradeModifierType<?>> TRADE_MODIFIER_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.TRADE_MODIFIER_TYPE, r -> TradeModifierTypes.ENCHANT_WITH_LEVELS);
     public static final Registry<IntegerProviderType<?>> INTEGER_PROVIDER_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.INTEGER_PROVIDER_TYPE, r -> IntegerProviderTypes.CONSTANT);
+    public static final Registry<ItemHolderRuleType<?>> ITEM_HOLDER_RULE_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.ITEM_HOLDER_RULE_TYPE, r -> ItemHolderRuleTypes.REJECT);
 
     private ItematicRegistries() {}
 }

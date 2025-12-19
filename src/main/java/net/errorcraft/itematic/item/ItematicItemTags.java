@@ -153,6 +153,7 @@ public class ItematicItemTags {
     public static final TagKey<Item> SMITHING_TEMPLATES = of("item_group/smithing_templates");
     public static final TagKey<Item> SPAWNERS = of("item_group/spawners");
 
+    public static final TagKey<Item> BANNED_BUNDLE_ITEMS = of("banned_bundle_items");
     public static final TagKey<Item> SHULKER_BOXES = of("shulker_boxes");
 
     public static final TagKey<Item> PREVENTS_MINING_IN_CREATIVE = of("prevents_mining_in_creative");
