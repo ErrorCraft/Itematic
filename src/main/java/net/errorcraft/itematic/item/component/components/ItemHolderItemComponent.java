@@ -49,7 +49,6 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
         SoundEvent.ENTRY_CODEC.fieldOf("remove_item_sound").forGetter(ItemHolderItemComponent::removeItemSound),
         SoundEvent.ENTRY_CODEC.fieldOf("empty_sound").forGetter(ItemHolderItemComponent::emptySound)
     ).apply(instance, ItemHolderItemComponent::new));
-    public static final int ITEM_BAR_COLOR = BundleItemAccessor.itemBarColor();
 
     public static ItemHolderItemComponent of(int capacity, ItemHolderRules rules, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) {
         return new ItemHolderItemComponent(Fraction.getFraction(capacity, 1), rules, insertItemSound, removeItemSound, emptySound);
@@ -130,24 +129,10 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
         if (bundleContents == null || itemHolderCapacity == null) {
             return;
         }
+
         int occupancy = Util.multiplyFraction(bundleContents.getOccupancy(), Item.DEFAULT_MAX_COUNT);
         int capacity = Util.multiplyFraction(itemHolderCapacity, Item.DEFAULT_MAX_COUNT);
         tooltip.add(Text.translatable("item.minecraft.bundle.fullness", occupancy, capacity).formatted(Formatting.GRAY));
-    }
-
-    public boolean itemBarVisible(ItemStack stack) {
-        BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
-        if (bundleContents == null) {
-            return false;
-        }
-        return bundleContents.getOccupancy().compareTo(Fraction.ZERO) > 0 ;
-    }
-
-    public int itemBarStep(ItemStack stack) {
-        int step = this.fullness(stack)
-            .multiplyBy(Fraction.getFraction((Item.ITEM_BAR_STEPS - 1) * Item.DEFAULT_MAX_COUNT, 1))
-            .intValue();
-        return Math.min(step, Item.ITEM_BAR_STEPS);
     }
 
     public Optional<TooltipData> tooltipData(ItemStack stack) {

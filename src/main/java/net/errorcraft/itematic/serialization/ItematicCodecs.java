@@ -28,6 +28,7 @@ public class ItematicCodecs {
         }
         return DataResult.error(() -> "Value must be non-negative: " + value);
     });
+    public static final Codec<Integer> HUE = Codec.intRange(0, 360);
     public static final Codec<Fraction> POSITIVE_FRACTION = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.POSITIVE_INT.fieldOf("numerator").forGetter(Fraction::getNumerator),
         Codecs.POSITIVE_INT.fieldOf("denominator").forGetter(Fraction::getDenominator)

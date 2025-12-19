@@ -9734,7 +9734,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.BUNDLE, create(
-                ItemBase.Builder.forItem(ItemKeys.BUNDLE).build(),
+                ItemBase.Builder.forItem(ItemKeys.BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(ItemHolderItemComponent.of(

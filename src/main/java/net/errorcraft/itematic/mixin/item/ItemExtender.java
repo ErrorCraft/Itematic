@@ -488,17 +488,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         info.setReturnValue(0);
     }
 
-    @Inject(
-        method = "getItemBarColor",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    private void itemBarColorUseItemComponentCheck(ItemStack stack, CallbackInfoReturnable<Integer> info) {
-        if (this.itematic$hasComponent(ItemComponentTypes.ITEM_HOLDER)) {
-            info.setReturnValue(ItemHolderItemComponent.ITEM_BAR_COLOR);
-        }
-    }
-
     /**
      * @author ErrorCraft
      * @reason Uses the ItemBase implementation for data-driven items.
@@ -531,28 +520,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     public Optional<TooltipData> getTooltipData(ItemStack stack) {
         return this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
             .flatMap(c -> c.tooltipData(stack));
-    }
-
-    @Inject(
-        method = "isItemBarVisible",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    private void isItemBarVisibleCheckItemHolderItemComponent(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
-        this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
-            .map(c -> c.itemBarVisible(stack))
-            .ifPresent(info::setReturnValue);
-    }
-
-    @Inject(
-        method = "getItemBarStep",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    public void getItemBarStepCheckItemHolderItemComponent(ItemStack stack, CallbackInfoReturnable<Integer> info) {
-        this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
-            .map(c -> c.itemBarStep(stack))
-            .ifPresent(info::setReturnValue);
     }
 
     @Inject(
