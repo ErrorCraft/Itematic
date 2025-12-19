@@ -1,8 +1,10 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.gametest.Assert;
+import net.errorcraft.itematic.gametest.TestUtil;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
@@ -17,7 +19,7 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.ClickType;
 import net.minecraft.world.GameMode;
 
-import java.util.List;
+import java.util.Objects;
 
 public class ItemHolderItemComponentTestSuite {
     private static final int SLOT = 0;
@@ -48,7 +50,7 @@ public class ItemHolderItemComponentTestSuite {
         PlayerInventory inventory = player.getInventory();
         ItemStack stack = world.itematic$createStack(ItemKeys.BUNDLE);
         ItemStack stackToRemove = world.itematic$createStack(ItemKeys.STICK);
-        stack.set(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(List.of(stackToRemove)));
+        addToBundleContentsComponent(stack, stackToRemove);
         Slot slot = new Slot(inventory, SLOT, 0, 0);
         world.spawnEntity(player);
         boolean success = stack.onStackClicked(slot, ClickType.RIGHT, player);
@@ -89,7 +91,7 @@ public class ItemHolderItemComponentTestSuite {
         PlayerInventory inventory = player.getInventory();
         ItemStack stack = world.itematic$createStack(ItemKeys.BUNDLE);
         ItemStack stackToRemove = world.itematic$createStack(ItemKeys.STICK);
-        stack.set(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(List.of(stackToRemove)));
+        addToBundleContentsComponent(stack, stackToRemove);
         inventory.insertStack(SLOT, stack);
         stack = inventory.getStack(SLOT);
         StackReference cursorStack = StackReferenceUtil.of(ItemStack.EMPTY);
@@ -103,5 +105,13 @@ public class ItemHolderItemComponentTestSuite {
                 component -> context.assertTrue(component.isEmpty(), "Expected bundle to be empty")
             );
         });
+    }
+
+    private static void addToBundleContentsComponent(ItemStack origin, ItemStack stackToAdd) {
+        BundleContentsComponent.Builder builder = Objects.requireNonNull(
+            TestUtil.getItemComponent(origin, ItemComponentTypes.ITEM_HOLDER).createBuilder(origin)
+        );
+        builder.add(stackToAdd);
+        origin.set(DataComponentTypes.BUNDLE_CONTENTS, builder.build());
     }
 }

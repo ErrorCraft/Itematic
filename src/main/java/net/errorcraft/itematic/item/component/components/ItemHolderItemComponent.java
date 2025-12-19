@@ -2,11 +2,15 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.component.type.BundleContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.mixin.item.BundleItemAccessor;
+import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.util.Util;
 import net.minecraft.client.item.BundleTooltipData;
 import net.minecraft.client.item.TooltipData;
@@ -29,7 +33,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.math.Fraction;
 
@@ -37,14 +40,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) implements ItemComponent<ItemHolderItemComponent> {
+public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) implements ItemComponent<ItemHolderItemComponent> {
+    public static final Codec<Fraction> CAPACITY_CODEC = ItematicCodecs.positiveFraction(100);
     public static final Codec<ItemHolderItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codecs.POSITIVE_INT.fieldOf("capacity").forGetter(ItemHolderItemComponent::capacity),
+        CAPACITY_CODEC.fieldOf("capacity").forGetter(ItemHolderItemComponent::capacity),
+        ItemHolderRules.CODEC.fieldOf("rules").forGetter(ItemHolderItemComponent::rules),
         SoundEvent.ENTRY_CODEC.fieldOf("insert_item_sound").forGetter(ItemHolderItemComponent::insertItemSound),
         SoundEvent.ENTRY_CODEC.fieldOf("remove_item_sound").forGetter(ItemHolderItemComponent::removeItemSound),
         SoundEvent.ENTRY_CODEC.fieldOf("empty_sound").forGetter(ItemHolderItemComponent::emptySound)
     ).apply(instance, ItemHolderItemComponent::new));
     public static final int ITEM_BAR_COLOR = BundleItemAccessor.itemBarColor();
+
+    public static ItemHolderItemComponent of(int capacity, ItemHolderRules rules, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) {
+        return new ItemHolderItemComponent(Fraction.getFraction(capacity, 1), rules, insertItemSound, removeItemSound, emptySound);
+    }
 
     @Override
     public ItemComponentType<ItemHolderItemComponent> type() {
@@ -72,20 +81,18 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
             return false;
         }
 
-        BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
-        if (bundleContents == null) {
+        BundleContentsComponent.Builder newBuilder = this.createBuilder(stack);
+        if (newBuilder == null) {
             return false;
         }
 
-        BundleContentsComponent.Builder bundleContentsBuilder = new BundleContentsComponent.Builder(bundleContents);
-        bundleContentsBuilder.itematic$setCapacity(this.capacity);
         if (slot.getStack().isEmpty()) {
-            this.remove(user, bundleContentsBuilder, removedStack -> this.add(bundleContentsBuilder, slot.insertStack(removedStack), user));
+            this.remove(user, newBuilder, removedStack -> this.add(newBuilder, slot.insertStack(removedStack), user));
         } else {
-            this.add(bundleContentsBuilder, slot, user);
+            this.add(newBuilder, slot, user);
         }
 
-        stack.set(DataComponentTypes.BUNDLE_CONTENTS, bundleContentsBuilder.build());
+        stack.set(DataComponentTypes.BUNDLE_CONTENTS, newBuilder.build());
         return true;
     }
 
@@ -95,35 +102,37 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
             return false;
         }
 
-        BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
-        if (bundleContents == null) {
+        BundleContentsComponent.Builder newBuilder = this.createBuilder(stack);
+        if (newBuilder == null) {
             return false;
         }
 
-        BundleContentsComponent.Builder bundleContentsBuilder = new BundleContentsComponent.Builder(bundleContents);
-        bundleContentsBuilder.itematic$setCapacity(this.capacity);
         if (cursorStack.isEmpty()) {
-            this.remove(user, bundleContentsBuilder, resultStackConsumer::set);
+            this.remove(user, newBuilder, resultStackConsumer::set);
         } else {
-            this.add(bundleContentsBuilder, cursorStack, user);
+            this.add(newBuilder, cursorStack, user);
         }
 
-        stack.set(DataComponentTypes.BUNDLE_CONTENTS, bundleContentsBuilder.build());
+        stack.set(DataComponentTypes.BUNDLE_CONTENTS, newBuilder.build());
         return true;
     }
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT);
+        builder.add(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponentUtil.create(this.rules));
+        builder.add(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY, this.capacity);
     }
 
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
-        if (bundleContents != null) {
-            int occupancy = Util.multiplyFraction(bundleContents.getOccupancy(), Item.DEFAULT_MAX_COUNT);
-            tooltip.add(Text.translatable("item.minecraft.bundle.fullness", occupancy, this.capacity).formatted(Formatting.GRAY));
+        Fraction itemHolderCapacity = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY);
+        if (bundleContents == null || itemHolderCapacity == null) {
+            return;
         }
+        int occupancy = Util.multiplyFraction(bundleContents.getOccupancy(), Item.DEFAULT_MAX_COUNT);
+        int capacity = Util.multiplyFraction(itemHolderCapacity, Item.DEFAULT_MAX_COUNT);
+        tooltip.add(Text.translatable("item.minecraft.bundle.fullness", occupancy, capacity).formatted(Formatting.GRAY));
     }
 
     public boolean itemBarVisible(ItemStack stack) {
@@ -146,8 +155,12 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
         if (bundleContents == null) {
             return Optional.empty();
         }
+        Fraction capacity = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY);
+        if (capacity == null) {
+            return Optional.empty();
+        }
         BundleTooltipData data = new BundleTooltipData(bundleContents);
-        data.itematic$setCapacity(this.capacity);
+        data.itematic$setCapacity(capacity);
         return Optional.of(data);
     }
 
@@ -156,7 +169,11 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
         if (bundleContents == null) {
             return Fraction.ZERO;
         }
-        return bundleContents.getOccupancy().multiplyBy(Fraction.getFraction(1, this.capacity));
+        Fraction capacity = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY);
+        if (capacity == null) {
+            return Fraction.ZERO;
+        }
+        return bundleContents.getOccupancy().divideBy(capacity);
     }
 
     public void onDestroyed(ItemEntity item) {
@@ -166,8 +183,18 @@ public record ItemHolderItemComponent(int capacity, RegistryEntry<SoundEvent> in
         }
     }
 
-    public static ItemHolderItemComponent of(int capacity, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) {
-        return new ItemHolderItemComponent(capacity, insertItemSound, removeItemSound, emptySound);
+    public BundleContentsComponent.Builder createBuilder(ItemStack stack) {
+        BundleContentsComponent existingBundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
+        if (existingBundleContents == null) {
+            return null;
+        }
+        Fraction capacity = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY);
+        if (capacity == null) {
+            return null;
+        }
+        BundleContentsComponent.Builder newBuilder = new BundleContentsComponent.Builder(existingBundleContents);
+        newBuilder.itematic$setCapacity(capacity);
+        return newBuilder;
     }
 
     private void add(BundleContentsComponent.Builder bundleContentsBuilder, ItemStack stack, PlayerEntity user) {
