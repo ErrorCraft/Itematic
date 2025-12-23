@@ -4,7 +4,10 @@
   },
   "components": {
     "minecraft:block": {
-      "block": "minecraft:lily_pad"
+      "block": "minecraft:lily_pad",
+      "passes": [
+        "fluid"
+      ]
     },
     "minecraft:compostable": {
       "level_increase_chance": 0.65
@@ -15,7 +18,6 @@
         "type": "minecraft:constant",
         "color": -9321636
       }
-    },
-    "minecraft:useable_on_fluid": {}
+    }
   }
 }

@@ -3340,8 +3340,7 @@ public class ItemUtil {
                 ItemBase.Builder.forBlock(ItemKeys.FROGSPAWN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FROGSPAWN)))
-                    .with(UseableOnFluidItemComponent.INSTANCE)
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FROGSPAWN), BlockItemComponent.Pass.FLUID))
                     .build()
             ));
         }
@@ -6105,8 +6104,7 @@ public class ItemUtil {
                 ItemBase.Builder.forBlock(ItemKeys.LILY_PAD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_PAD)))
-                    .with(UseableOnFluidItemComponent.INSTANCE)
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_PAD), BlockItemComponent.Pass.FLUID))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(TintedItemComponent.of(ConstantItemColor.of(0xff71c35c)))
                     .build()

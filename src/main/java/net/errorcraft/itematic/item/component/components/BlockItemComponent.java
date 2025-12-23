@@ -10,6 +10,8 @@ import net.errorcraft.itematic.item.placement.BlockPlacer;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.item.placement.block.picker.pickers.AttachedToSideBlockPicker;
 import net.errorcraft.itematic.item.placement.block.picker.pickers.SimpleBlockPicker;
+import net.errorcraft.itematic.mixin.item.ItemAccessor;
+import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.minecraft.block.Block;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.item.TooltipType;
@@ -17,6 +19,7 @@ import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
@@ -24,30 +27,42 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.RaycastContext;
+import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Set;
 
-public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly) implements ItemComponent<BlockItemComponent> {
+public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set<Pass> passes) implements ItemComponent<BlockItemComponent> {
     public static final Codec<BlockItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         BlockPicker.CODEC.fieldOf("block").forGetter(BlockItemComponent::block),
-        Codec.BOOL.optionalFieldOf("operator_only", false).forGetter(BlockItemComponent::operatorOnly)
+        Codec.BOOL.optionalFieldOf("operator_only", false).forGetter(BlockItemComponent::operatorOnly),
+        ItematicCodecs.setCodec(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(BlockItemComponent::passes)
     ).apply(instance, BlockItemComponent::new));
 
-    public static BlockItemComponent of(BlockPicker<?> block, boolean operatorOnly) {
-        return new BlockItemComponent(block, operatorOnly);
+    public static BlockItemComponent of(BlockPicker<?> block, boolean operatorOnly, Set<Pass> passes) {
+        return new BlockItemComponent(block, operatorOnly, passes);
     }
 
     public static BlockItemComponent of(RegistryEntry<Block> block) {
-        return of(new SimpleBlockPicker(block), false);
+        return of(new SimpleBlockPicker(block), false, Pass.DEFAULT_PASSES);
+    }
+
+    public static BlockItemComponent of(RegistryEntry<Block> block, Pass... passes) {
+        return of(new SimpleBlockPicker(block), false, Set.of(passes));
     }
 
     public static BlockItemComponent operator(RegistryEntry<Block> block) {
-        return of(new SimpleBlockPicker(block), true);
+        return of(new SimpleBlockPicker(block), true, Pass.DEFAULT_PASSES);
     }
 
     public static BlockItemComponent attachedToSide(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, Direction attachedSide) {
-        return of(new AttachedToSideBlockPicker(attachedBlock, otherBlock, attachedSide), false);
+        return of(new AttachedToSideBlockPicker(attachedBlock, otherBlock, attachedSide), false, Pass.DEFAULT_PASSES);
     }
 
     @Override
@@ -61,9 +76,26 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly) imp
     }
 
     @Override
+    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+        if (this.isUnuseable(Pass.FLUID)) {
+            return ActionResult.PASS;
+        }
+
+        BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
+        if (blockHitResult.getType() != HitResult.Type.BLOCK) {
+            return ActionResult.PASS;
+        }
+
+        ItemUsageContext context = new ItemUsageContext(world, user, hand, stack, blockHitResult);
+        return this.place(context, resultStackConsumer);
+    }
+
+    @Override
     public ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
-        BlockPlacer placer = BlockPlacer.of(context, resultStackConsumer, this.block, this.operatorOnly, true);
-        return placer.place();
+        if (this.isUnuseable(Pass.BLOCK)) {
+            return ActionResult.PASS;
+        }
+        return this.place(context, resultStackConsumer);
     }
 
     @Override
@@ -84,6 +116,33 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly) imp
         ContainerComponent container = item.getStack().set(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT);
         if (container != null) {
             ItemUsage.spawnItemContents(item, container.iterateNonEmptyCopy());
+        }
+    }
+
+    private boolean isUnuseable(Pass pass) {
+        return !this.passes.contains(pass);
+    }
+
+    private ActionResult place(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+        return BlockPlacer.of(context, resultStackConsumer, this.block, this.operatorOnly, true)
+            .place();
+    }
+
+    public enum Pass implements StringIdentifiable {
+        BLOCK("block"),
+        FLUID("fluid");
+        public static final Set<Pass> DEFAULT_PASSES = Set.of(BLOCK);
+        public static final Codec<Pass> CODEC = StringIdentifiable.createCodec(Pass::values);
+
+        private final String name;
+
+        Pass(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String asString() {
+            return this.name;
         }
     }
 }
