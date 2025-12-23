@@ -257,6 +257,7 @@
     "item.BrushItemAccessor",
     "item.BrushItemExtender",
     "item.BundleItemAccessor",
+    "item.BundleItemExtender",
     "item.CrossbowItemAccessor",
     "item.CrossbowItemExtender",
     "item.DebugStickItemAccessor",
