@@ -24,10 +24,11 @@ public class ColorProviderTypes {
 
     private static <T extends ColorProvider> ColorProviderType<T> register(Identifier id, MapCodec<T> codec) {
         ColorProviderType<T> type = new ColorProviderType<>(id, codec);
-        var existing = ID_TO_TYPE.putIfAbsent(id, type);
+        ColorProviderType<?> existing = ID_TO_TYPE.putIfAbsent(id, type);
         if (existing != null) {
             throw new IllegalStateException("Duplicate color provider type registration with id " + id);
         }
+
         return type;
     }
 }

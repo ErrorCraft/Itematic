@@ -1,17 +1,10 @@
 package net.errorcraft.itematic.access.component.type;
 
-import net.errorcraft.itematic.component.type.BundleContentsComponentExtraFields;
-import net.minecraft.item.ItemStack;
-
-import java.util.List;
+import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
+import org.apache.commons.lang3.math.Fraction;
 
 public interface BundleContentsComponentAccess {
-    default List<ItemStack> itematic$stacks() {
+    default Fraction itematic$occupancy(ItemHolderRules rules) {
         return null;
     }
-    default BundleContentsComponentExtraFields itematic$extraFields() {
-        return null;
-    }
-    default void itematic$setExtraFields(BundleContentsComponentExtraFields extraFields) {}
-    default void itematic$calculateOccupancy() {}
 }

@@ -3,7 +3,6 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.BundleContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -37,6 +36,7 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.math.Fraction;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -69,6 +69,7 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
         if (!BundleItemAccessor.dropAllBundledItems(stack, user)) {
             return ActionResult.PASS;
         }
+
         user.playSound(this.emptySound.value(), 0.8f, 0.8f + world.getRandom().nextFloat() * 0.4f);
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         return ActionResult.success(world.isClient());
@@ -118,20 +119,20 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponentUtil.create(this.rules));
+        builder.add(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT);
         builder.add(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY, this.capacity);
+        builder.add(ItematicDataComponentTypes.ITEM_HOLDER_RULES, this.rules);
     }
 
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
-        Fraction itemHolderCapacity = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY);
-        if (bundleContents == null || itemHolderCapacity == null) {
+        Fraction occupancyFraction = this.occupancy(stack);
+        if (occupancyFraction == null) {
             return;
         }
 
-        int occupancy = Util.multiplyFraction(bundleContents.getOccupancy(), Item.DEFAULT_MAX_COUNT);
-        int capacity = Util.multiplyFraction(itemHolderCapacity, Item.DEFAULT_MAX_COUNT);
+        int occupancy = Util.multiplyFraction(occupancyFraction, Item.DEFAULT_MAX_COUNT);
+        int capacity = Util.multiplyFraction(Objects.requireNonNull(stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY)), Item.DEFAULT_MAX_COUNT);
         tooltip.add(Text.translatable("item.minecraft.bundle.fullness", occupancy, capacity).formatted(Formatting.GRAY));
     }
 
@@ -140,25 +141,34 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
         if (bundleContents == null) {
             return Optional.empty();
         }
+
         Fraction capacity = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY);
         if (capacity == null) {
             return Optional.empty();
         }
+
         BundleTooltipData data = new BundleTooltipData(bundleContents);
         data.itematic$setCapacity(capacity);
         return Optional.of(data);
     }
 
-    public Fraction fullness(ItemStack stack) {
+    public Fraction occupancy(ItemStack stack) {
         BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
         if (bundleContents == null) {
-            return Fraction.ZERO;
+            return null;
         }
+
         Fraction capacity = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY);
         if (capacity == null) {
-            return Fraction.ZERO;
+            return null;
         }
-        return bundleContents.getOccupancy().divideBy(capacity);
+
+        ItemHolderRules rules = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_RULES);
+        if (rules == null) {
+            return null;
+        }
+
+        return bundleContents.itematic$occupancy(rules).divideBy(capacity);
     }
 
     public void onDestroyed(ItemEntity item) {
@@ -173,12 +183,23 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
         if (existingBundleContents == null) {
             return null;
         }
+
+        return this.createBuilder(stack, existingBundleContents);
+    }
+
+    public BundleContentsComponent.Builder createBuilder(ItemStack stack, BundleContentsComponent existingBundleContents) {
         Fraction capacity = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY);
         if (capacity == null) {
             return null;
         }
+
+        ItemHolderRules rules = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_RULES);
+        if (rules == null) {
+            return null;
+        }
+
         BundleContentsComponent.Builder newBuilder = new BundleContentsComponent.Builder(existingBundleContents);
-        newBuilder.itematic$setCapacity(capacity);
+        newBuilder.itematic$setExtraFields(existingBundleContents, capacity, rules);
         return newBuilder;
     }
 

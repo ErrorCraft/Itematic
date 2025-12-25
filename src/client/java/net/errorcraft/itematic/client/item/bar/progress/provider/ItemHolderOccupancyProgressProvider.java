@@ -2,14 +2,12 @@ package net.errorcraft.itematic.client.item.bar.progress.provider;
 
 import net.errorcraft.itematic.client.item.bar.progress.ProgressProvider;
 import net.errorcraft.itematic.client.item.bar.progress.ProgressProviderKeys;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BundleContentsComponent;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.math.Fraction;
 
-import java.util.Objects;
+import java.util.Optional;
 
 public class ItemHolderOccupancyProgressProvider implements ProgressProvider {
     @Override
@@ -19,19 +17,16 @@ public class ItemHolderOccupancyProgressProvider implements ProgressProvider {
 
     @Override
     public boolean isVisible(ItemStack stack) {
-        if (!stack.contains(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY)) {
-            return false;
-        }
-        return stack.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT)
-            .getOccupancy()
-            .compareTo(Fraction.ZERO) > 0;
+        return occupancy(stack).filter(f -> f.compareTo(Fraction.ZERO) > 0).isPresent();
     }
 
     @Override
     public float get(ItemStack stack) {
-        return stack.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT)
-            .getOccupancy()
-            .divideBy(Objects.requireNonNull(stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY)))
-            .floatValue();
+        return occupancy(stack).map(Fraction::floatValue).orElse(0.0f);
+    }
+
+    private static Optional<Fraction> occupancy(ItemStack stack) {
+        return stack.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+            .map(c -> c.occupancy(stack));
     }
 }

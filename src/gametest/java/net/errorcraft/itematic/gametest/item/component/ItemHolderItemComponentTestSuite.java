@@ -17,8 +17,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.ClickType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.GameMode;
 
 import java.util.Objects;
@@ -106,28 +104,6 @@ public class ItemHolderItemComponentTestSuite {
             Assert.itemStackHasComponent(inventory.getStack(SLOT), DataComponentTypes.BUNDLE_CONTENTS,
                 component -> context.assertTrue(component.isEmpty(), "Expected item holder to be empty")
             );
-        });
-    }
-
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-    public void usingItemHolderEmptiesItWithCorrectRules(TestContext context) {
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.BUNDLE);
-        ItemStack stackToRemove = world.itematic$createStack(ItemKeys.STICK);
-        addToBundleContentsComponent(stack, stackToRemove);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
-        TypedActionResult<ItemStack> result = stack.use(world, player, Hand.MAIN_HAND);
-        context.addInstantFinalTask(() -> {
-            context.assertTrue(result.getResult().isAccepted(), "Expected use to be successful");
-            Assert.itemStackHasComponent(result.getValue(), DataComponentTypes.BUNDLE_CONTENTS, component -> {
-                context.assertTrue(component.isEmpty(), "Expected item holder to be empty");
-                context.assertEquals(
-                    component.itematic$extraFields().rules(),
-                    TestUtil.getItemComponent(stack, ItemComponentTypes.ITEM_HOLDER).rules(),
-                    "item holder rules"
-                );
-            });
         });
     }
 

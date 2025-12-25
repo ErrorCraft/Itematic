@@ -1,7 +1,9 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.gametest.Assert;
+import net.errorcraft.itematic.gametest.TestUtil;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.component.DataComponentTypes;
@@ -68,8 +70,12 @@ public class BundleTestSuite {
             Assert.itemStackIsEmpty(slot.getStack());
             Assert.itemStackHasComponent(bundleStack, DataComponentTypes.BUNDLE_CONTENTS, bundleContents -> {
                 Assert.itemStackIsOf(bundleContents.get(0), ItemKeys.BUNDLE);
-                context.assertEquals(bundleContents.getOccupancy(), BundleContentsComponentAccessor.nestedBundleOccupancy(), "occupancy");
             });
+            context.assertEquals(
+                TestUtil.getItemComponent(bundleStack, ItemComponentTypes.ITEM_HOLDER).occupancy(bundleStack),
+                BundleContentsComponentAccessor.nestedBundleOccupancy(),
+                "occupancy"
+            );
         });
     }
 }

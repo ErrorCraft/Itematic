@@ -25,10 +25,11 @@ public interface ProgressProvider {
     float get(ItemStack stack);
 
     private static ProgressProvider register(Identifier id, ProgressProvider provider) {
-        var existing = ID_TO_PROVIDER.putIfAbsent(id, provider);
+        ProgressProvider existing = ID_TO_PROVIDER.putIfAbsent(id, provider);
         if (existing != null) {
             throw new IllegalStateException("Duplicate progress provider registration with id " + id);
         }
+
         return provider;
     }
 }

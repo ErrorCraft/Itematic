@@ -9,8 +9,6 @@ import net.errorcraft.itematic.item.holder.rule.ItemHolderRule;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleTypes;
 import net.errorcraft.itematic.network.codec.PacketCodecUtil;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.codec.PacketCodec;
 import org.apache.commons.lang3.math.Fraction;
@@ -32,14 +30,10 @@ public record FractionWithOccupancyHeldItemsItemHolderRule(Fraction fraction) im
 
     @Override
     public Fraction occupancy(ItemStack stack) {
-        if (!stack.itematic$hasComponent(ItemComponentTypes.ITEM_HOLDER)) {
-            return this.fraction;
-        }
-        BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
-        if (bundleContents == null) {
-            return this.fraction;
-        }
-        return this.fraction.add(bundleContents.getOccupancy());
+        return stack.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+            .map(c -> c.occupancy(stack))
+            .map(this.fraction::add)
+            .orElse(this.fraction);
     }
 
     @Override
