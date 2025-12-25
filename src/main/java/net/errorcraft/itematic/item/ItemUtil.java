@@ -23,7 +23,7 @@ import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.item.holder.rule.rules.FractionItemHolderRule;
-import net.errorcraft.itematic.item.holder.rule.rules.FractionWithOccupancyHeldItemsItemHolderRule;
+import net.errorcraft.itematic.item.holder.rule.rules.OccupancyHeldItemsWithPenaltyItemHolderRule;
 import net.errorcraft.itematic.item.holder.rule.rules.RejectItemHolderRule;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.pointer.PointerKeys;
@@ -9743,7 +9743,7 @@ public class ItemUtil {
                             .rule(RejectItemHolderRule.INSTANCE, ItemPredicate.Builder.create()
                                 .itematic$items(this.items.getOrThrow(ItematicItemTags.BANNED_BUNDLE_ITEMS))
                                 .build())
-                            .rule(FractionWithOccupancyHeldItemsItemHolderRule.of(BundleContentsComponentAccessor.nestedBundleOccupancy()), ItemPredicate.Builder.create()
+                            .rule(OccupancyHeldItemsWithPenaltyItemHolderRule.of(BundleContentsComponentAccessor.nestedBundleOccupancy()), ItemPredicate.Builder.create()
                                 .itematic$behavior(ItemComponentTypes.ITEM_HOLDER)
                                 .build())
                             .rule(FractionItemHolderRule.of(Fraction.ONE), ItemPredicate.Builder.create()

@@ -13,27 +13,27 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.codec.PacketCodec;
 import org.apache.commons.lang3.math.Fraction;
 
-public record FractionWithOccupancyHeldItemsItemHolderRule(Fraction fraction) implements ItemHolderRule {
-    public static final MapCodec<FractionWithOccupancyHeldItemsItemHolderRule> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ItemHolderItemComponent.CAPACITY_CODEC.fieldOf("fraction").forGetter(FractionWithOccupancyHeldItemsItemHolderRule::fraction)
-    ).apply(instance, FractionWithOccupancyHeldItemsItemHolderRule::new));
-    public static final PacketCodec<ByteBuf, FractionWithOccupancyHeldItemsItemHolderRule> PACKET_CODEC = PacketCodecUtil.FRACTION.xmap(FractionWithOccupancyHeldItemsItemHolderRule::new, FractionWithOccupancyHeldItemsItemHolderRule::fraction);
+public record OccupancyHeldItemsWithPenaltyItemHolderRule(Fraction penalty) implements ItemHolderRule {
+    public static final MapCodec<OccupancyHeldItemsWithPenaltyItemHolderRule> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        ItemHolderItemComponent.CAPACITY_CODEC.fieldOf("penalty").forGetter(OccupancyHeldItemsWithPenaltyItemHolderRule::penalty)
+    ).apply(instance, OccupancyHeldItemsWithPenaltyItemHolderRule::new));
+    public static final PacketCodec<ByteBuf, OccupancyHeldItemsWithPenaltyItemHolderRule> PACKET_CODEC = PacketCodecUtil.FRACTION.xmap(OccupancyHeldItemsWithPenaltyItemHolderRule::new, OccupancyHeldItemsWithPenaltyItemHolderRule::penalty);
 
-    public static FractionWithOccupancyHeldItemsItemHolderRule of(Fraction fraction) {
-        return new FractionWithOccupancyHeldItemsItemHolderRule(fraction);
+    public static OccupancyHeldItemsWithPenaltyItemHolderRule of(Fraction fraction) {
+        return new OccupancyHeldItemsWithPenaltyItemHolderRule(fraction);
     }
 
     @Override
     public ItemHolderRuleType<?> type() {
-        return ItemHolderRuleTypes.FRACTION_WITH_OCCUPANCY_HELD_ITEMS;
+        return ItemHolderRuleTypes.OCCUPANCY_HELD_ITEMS_WITH_PENALTY;
     }
 
     @Override
     public Fraction occupancy(ItemStack stack) {
         return stack.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
             .map(c -> c.occupancy(stack))
-            .map(this.fraction::add)
-            .orElse(this.fraction);
+            .map(this.penalty::add)
+            .orElse(this.penalty);
     }
 
     @Override
