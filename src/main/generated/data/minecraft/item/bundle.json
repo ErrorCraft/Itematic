@@ -20,13 +20,13 @@
           }
         },
         {
-          "type": "minecraft:fraction_with_occupancy_held_items",
+          "type": "minecraft:occupancy_held_items_with_penalty",
           "condition": {
             "behavior": [
               "minecraft:item_holder"
             ]
           },
-          "fraction": {
+          "penalty": {
             "denominator": 16,
             "numerator": 1
           }

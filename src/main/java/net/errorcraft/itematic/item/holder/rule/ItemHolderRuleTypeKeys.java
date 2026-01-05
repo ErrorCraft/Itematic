@@ -6,7 +6,7 @@ import net.minecraft.util.Identifier;
 
 public class ItemHolderRuleTypeKeys {
     public static final RegistryKey<ItemHolderRuleType<?>> REJECT = of("reject");
-    public static final RegistryKey<ItemHolderRuleType<?>> FRACTION_WITH_OCCUPANCY_HELD_ITEMS = of("fraction_with_occupancy_held_items");
+    public static final RegistryKey<ItemHolderRuleType<?>> OCCUPANCY_HELD_ITEMS_WITH_PENALTY = of("occupancy_held_items_with_penalty");
     public static final RegistryKey<ItemHolderRuleType<?>> FRACTION = of("fraction");
 
     private ItemHolderRuleTypeKeys() {}
