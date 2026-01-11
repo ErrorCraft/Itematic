@@ -53,6 +53,12 @@ public class Assert {
         }
     }
 
+    public static void itemStackIsNotEmpty(ItemStack value) {
+        if (value.isEmpty()) {
+            throw new GameTestException("Expected item stack not to be empty");
+        }
+    }
+
     public static <T> void itemStackHasComponent(ItemStack value, DataComponentType<T> type) {
         if (value.get(type) == null) {
             throw new GameTestException("Expected item stack to contain the " + type + " component");

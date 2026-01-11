@@ -5,6 +5,7 @@
   "client": [
     "MinecraftClientExtender",
     "color.item.ItemColorsExtender",
+    "gui.DrawContextExtender",
     "gui.hud.InGameHudExtender",
     "gui.screen.CustomizeFlatLevelScreenExtender",
     "gui.screen.CustomizeFlatLevelScreenExtender$SuperflatLayersListWidgetExtender",

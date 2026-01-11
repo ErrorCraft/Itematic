@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.data;
 
 import net.errorcraft.itematic.data.client.AtlasProvider;
+import net.errorcraft.itematic.data.client.ItemBarStyleProvider;
 import net.errorcraft.itematic.data.server.RecipeProvider;
 import net.errorcraft.itematic.data.server.registry.*;
 import net.errorcraft.itematic.data.server.tag.*;
@@ -36,5 +37,6 @@ public class ItematicData implements DataGeneratorEntrypoint {
         pack.addProvider(PotionTagProvider::new);
         pack.addProvider(DispenseBehaviorProvider::new);
         pack.addProvider(EntityTypeTagProvider::new);
+        pack.addProvider(ItemBarStyleProvider::new);
     }
 }

@@ -4,9 +4,11 @@
   },
   "components": {
     "minecraft:block": {
-      "block": "minecraft:frogspawn"
+      "block": "minecraft:frogspawn",
+      "passes": [
+        "fluid"
+      ]
     },
-    "minecraft:stackable": 64,
-    "minecraft:useable_on_fluid": {}
+    "minecraft:stackable": 64
   }
 }

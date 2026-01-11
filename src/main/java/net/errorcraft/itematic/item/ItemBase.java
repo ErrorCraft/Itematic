@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.util.IdentifierUtil;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -10,6 +11,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextCodecs;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.Util;
 
@@ -17,17 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record ItemBase(String translationKey, Rarity rarity, Optional<List<Text>> tooltip, Optional<Boolean> glint) {
+public record ItemBase(String translationKey, Rarity rarity, Optional<List<Text>> tooltip, Optional<Boolean> glint, Identifier itemBarStyle) {
     public static final Codec<ItemBase> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.STRING.fieldOf("translation_key").forGetter(ItemBase::translationKey),
         Rarity.CODEC.optionalFieldOf("rarity", Rarity.COMMON).forGetter(ItemBase::rarity),
         TextCodecs.CODEC.listOf().optionalFieldOf("tooltip").forGetter(ItemBase::tooltip),
-        Codec.BOOL.optionalFieldOf("glint").forGetter(ItemBase::glint)
+        Codec.BOOL.optionalFieldOf("glint").forGetter(ItemBase::glint),
+        Identifier.CODEC.optionalFieldOf("item_bar_style", ItemBarStyleKeys.DAMAGE).forGetter(ItemBase::itemBarStyle)
     ).apply(instance, ItemBase::new));
 
     public void addComponents(ComponentMap.Builder builder) {
         builder.add(DataComponentTypes.RARITY, this.rarity);
         this.glint.ifPresent(glint -> builder.add(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, glint));
+        builder.add(ItematicDataComponentTypes.ITEM_BAR_STYLE, this.itemBarStyle);
     }
 
     public static class Builder {
@@ -35,6 +39,7 @@ public record ItemBase(String translationKey, Rarity rarity, Optional<List<Text>
         private Rarity rarity = Rarity.COMMON;
         private List<Text> tooltip;
         private Boolean glint;
+        private Identifier itemBarStyle = ItemBarStyleKeys.DAMAGE;
 
         private Builder(String name) {
             this.translationKey = name;
@@ -49,7 +54,7 @@ public record ItemBase(String translationKey, Rarity rarity, Optional<List<Text>
         }
 
         public ItemBase build() {
-            return new ItemBase(this.translationKey, this.rarity, Optional.ofNullable(this.tooltip), Optional.ofNullable(this.glint));
+            return new ItemBase(this.translationKey, this.rarity, Optional.ofNullable(this.tooltip), Optional.ofNullable(this.glint), this.itemBarStyle);
         }
 
         public Builder rarity(Rarity rarity) {
@@ -71,6 +76,11 @@ public record ItemBase(String translationKey, Rarity rarity, Optional<List<Text>
 
         public Builder glint() {
             this.glint = true;
+            return this;
+        }
+
+        public Builder itemBarStyle(Identifier itemBarStyle) {
+            this.itemBarStyle = itemBarStyle;
             return this;
         }
     }

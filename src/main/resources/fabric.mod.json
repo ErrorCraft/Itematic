@@ -99,6 +99,9 @@
       "net/minecraft/class_2048\u0024class_2049": [
         "net/errorcraft/itematic/access/predicate/EntityPredicateBuilderAccess"
       ],
+      "net/minecraft/class_2073\u0024class_2074": [
+        "net/errorcraft/itematic/access/predicate/item/ItemPredicateBuilderAccess"
+      ],
       "net/minecraft/class_2248": [
         "net/errorcraft/itematic/access/block/BlockAccess"
       ],
@@ -155,6 +158,9 @@
       ],
       "net/minecraft/class_9085": [
         "net/errorcraft/itematic/access/client/render/entity/feature/WolfArmorFeatureRendererAccess"
+      ],
+      "net/minecraft/class_9276": [
+        "net/errorcraft/itematic/access/component/type/BundleContentsComponentAccess"
       ],
       "net/minecraft/class_9276\u0024class_9277": [
         "net/errorcraft/itematic/access/component/type/BundleContentsComponentBuilderAccess"

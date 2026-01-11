@@ -1,0 +1,58 @@
+package net.errorcraft.itematic.client.item.bar;
+
+import net.errorcraft.itematic.client.item.bar.color.provider.ConstantColorProvider;
+import net.errorcraft.itematic.client.item.bar.color.provider.HueShiftColorProvider;
+import net.errorcraft.itematic.client.item.bar.progress.ProgressProvider;
+import net.errorcraft.itematic.item.ItemBarStyleKeys;
+import net.errorcraft.itematic.mixin.item.BundleItemAccessor;
+import net.minecraft.util.Identifier;
+
+import java.util.List;
+import java.util.function.BiConsumer;
+
+public class ItemBarStyles {
+    private ItemBarStyles() {}
+
+    public static void bootstrap(BiConsumer<Identifier, ItemBarStyle> provider) {
+        provider.accept(ItemBarStyleKeys.DAMAGE, new ItemBarStyle(
+            ProgressProvider.DAMAGE,
+            new HueShiftColorProvider(120, 0),
+            List.of(
+                new Identifier("item_bar/progress/13"),
+                new Identifier("item_bar/progress/12"),
+                new Identifier("item_bar/progress/11"),
+                new Identifier("item_bar/progress/10"),
+                new Identifier("item_bar/progress/9"),
+                new Identifier("item_bar/progress/8"),
+                new Identifier("item_bar/progress/7"),
+                new Identifier("item_bar/progress/6"),
+                new Identifier("item_bar/progress/5"),
+                new Identifier("item_bar/progress/4"),
+                new Identifier("item_bar/progress/3"),
+                new Identifier("item_bar/progress/2"),
+                new Identifier("item_bar/progress/1"),
+                new Identifier("item_bar/progress/0")
+            )
+        ));
+        provider.accept(ItemBarStyleKeys.BUNDLE, new ItemBarStyle(
+            ProgressProvider.ITEM_HOLDER_OCCUPANCY,
+            new ConstantColorProvider(BundleItemAccessor.itemBarColor()),
+            List.of(
+                new Identifier("item_bar/progress/0"),
+                new Identifier("item_bar/progress/0"),
+                new Identifier("item_bar/progress/1"),
+                new Identifier("item_bar/progress/2"),
+                new Identifier("item_bar/progress/3"),
+                new Identifier("item_bar/progress/4"),
+                new Identifier("item_bar/progress/5"),
+                new Identifier("item_bar/progress/6"),
+                new Identifier("item_bar/progress/7"),
+                new Identifier("item_bar/progress/8"),
+                new Identifier("item_bar/progress/9"),
+                new Identifier("item_bar/progress/10"),
+                new Identifier("item_bar/progress/11"),
+                new Identifier("item_bar/progress/12")
+            )
+        ));
+    }
+}

@@ -15,17 +15,23 @@ import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.armor.ArmorMaterialKeys;
 import net.errorcraft.itematic.item.color.colors.*;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
+import net.errorcraft.itematic.item.holder.rule.rules.FractionItemHolderRule;
+import net.errorcraft.itematic.item.holder.rule.rules.OccupancyHeldItemsWithPenaltyItemHolderRule;
+import net.errorcraft.itematic.item.holder.rule.rules.RejectItemHolderRule;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.pointer.PointerKeys;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.block.DecoratedPotPatternsAccessor;
+import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
 import net.errorcraft.itematic.mixin.item.*;
 import net.errorcraft.itematic.potion.PotionKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
@@ -80,6 +86,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.event.GameEvent;
+import org.apache.commons.lang3.math.Fraction;
 
 import java.util.List;
 
@@ -3333,8 +3340,7 @@ public class ItemUtil {
                 ItemBase.Builder.forBlock(ItemKeys.FROGSPAWN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FROGSPAWN)))
-                    .with(UseableOnFluidItemComponent.INSTANCE)
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FROGSPAWN), BlockItemComponent.Pass.FLUID))
                     .build()
             ));
         }
@@ -6098,8 +6104,7 @@ public class ItemUtil {
                 ItemBase.Builder.forBlock(ItemKeys.LILY_PAD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_PAD)))
-                    .with(UseableOnFluidItemComponent.INSTANCE)
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_PAD), BlockItemComponent.Pass.FLUID))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .with(TintedItemComponent.of(ConstantItemColor.of(0xff71c35c)))
                     .build()
@@ -9727,10 +9732,27 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.BUNDLE, create(
-                ItemBase.Builder.forItem(ItemKeys.BUNDLE).build(),
+                ItemBase.Builder.forItem(ItemKeys.BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(ItemHolderItemComponent.of(Item.DEFAULT_MAX_COUNT, this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE), this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
+                    .with(ItemHolderItemComponent.of(
+                        1,
+                        ItemHolderRules.builder()
+                            .rule(RejectItemHolderRule.INSTANCE, ItemPredicate.Builder.create()
+                                .itematic$items(this.items.getOrThrow(ItematicItemTags.BANNED_BUNDLE_ITEMS))
+                                .build())
+                            .rule(OccupancyHeldItemsWithPenaltyItemHolderRule.of(BundleContentsComponentAccessor.nestedBundleOccupancy()), ItemPredicate.Builder.create()
+                                .itematic$behavior(ItemComponentTypes.ITEM_HOLDER)
+                                .build())
+                            .rule(FractionItemHolderRule.of(Fraction.ONE), ItemPredicate.Builder.create()
+                                .itematic$dataComponents(DataComponentTypes.BEES)
+                                .build())
+                            .build(),
+                        this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT),
+                        this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE),
+                        this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CLOCK, create(
