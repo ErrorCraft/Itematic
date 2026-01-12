@@ -7,3 +7,5 @@ accessible    class    net/minecraft/client/gui/screen/GameModeSelectionScreen$G
 accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget
 accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry
 accessible    class    net/minecraft/client/gui/screen/world/CustomizeFlatLevelScreen$SuperflatLayersListWidget
+
+inject-interface    net/minecraft/util/DyeColor    net/errorcraft/itematic/access/util/DyeColorAccess

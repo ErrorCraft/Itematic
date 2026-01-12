@@ -7,7 +7,7 @@ import net.errorcraft.itematic.network.codec.PacketCodecUtil;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.minecraft.component.DataComponentType;
+import net.minecraft.component.ComponentType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -18,7 +18,7 @@ import net.minecraft.registry.RegistryKeys;
 import java.util.Optional;
 import java.util.Set;
 
-public record ItemPredicateExtraFields(Optional<Set<ItemComponentType<?>>> behavior, Optional<Set<DataComponentType<?>>> dataComponents) {
+public record ItemPredicateExtraFields(Optional<Set<ItemComponentType<?>>> behavior, Optional<Set<ComponentType<?>>> dataComponents) {
     public static final MapCodec<ItemPredicateExtraFields> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ItematicCodecs.setCodec(ItematicRegistries.ITEM_COMPONENT_TYPE.getCodec()).optionalFieldOf("behavior").forGetter(ItemPredicateExtraFields::behavior),
         ItematicCodecs.setCodec(Registries.DATA_COMPONENT_TYPE.getCodec()).optionalFieldOf("data_components").forGetter(ItemPredicateExtraFields::dataComponents)
@@ -29,7 +29,7 @@ public record ItemPredicateExtraFields(Optional<Set<ItemComponentType<?>>> behav
         ItemPredicateExtraFields::new
     );
 
-    public static ItemPredicateExtraFields of(Set<ItemComponentType<?>> behavior, Set<DataComponentType<?>> dataComponents) {
+    public static ItemPredicateExtraFields of(Set<ItemComponentType<?>> behavior, Set<ComponentType<?>> dataComponents) {
         return new ItemPredicateExtraFields(
             behavior.isEmpty() ? Optional.empty() : Optional.of(behavior),
             dataComponents.isEmpty() ? Optional.empty() : Optional.of(dataComponents)
@@ -59,11 +59,13 @@ public record ItemPredicateExtraFields(Optional<Set<ItemComponentType<?>>> behav
         if (this.dataComponents.isEmpty()) {
             return true;
         }
-        for (DataComponentType<?> type : this.dataComponents.get()) {
+
+        for (ComponentType<?> type : this.dataComponents.get()) {
             if (!stack.contains(type)) {
                 return false;
             }
         }
+
         return true;
     }
 }

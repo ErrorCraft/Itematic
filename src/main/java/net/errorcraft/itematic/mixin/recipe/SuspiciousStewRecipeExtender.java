@@ -11,6 +11,7 @@ import net.minecraft.recipe.SuspiciousStewRecipe;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -19,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 @Mixin(SuspiciousStewRecipe.class)
 public class SuspiciousStewRecipeExtender {
     @Redirect(
-        method = "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z",
+        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
@@ -28,7 +29,8 @@ public class SuspiciousStewRecipeExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/block/Blocks;BROWN_MUSHROOM:Lnet/minecraft/block/Block;"
+                target = "Lnet/minecraft/block/Blocks;BROWN_MUSHROOM:Lnet/minecraft/block/Block;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )
@@ -37,7 +39,7 @@ public class SuspiciousStewRecipeExtender {
     }
 
     @Redirect(
-        method = "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z",
+        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
@@ -46,7 +48,8 @@ public class SuspiciousStewRecipeExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/block/Blocks;RED_MUSHROOM:Lnet/minecraft/block/Block;"
+                target = "Lnet/minecraft/block/Blocks;RED_MUSHROOM:Lnet/minecraft/block/Block;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )
@@ -55,7 +58,7 @@ public class SuspiciousStewRecipeExtender {
     }
 
     @Redirect(
-        method = "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z",
+        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
@@ -66,7 +69,7 @@ public class SuspiciousStewRecipeExtender {
     }
 
     @Redirect(
-        method = "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z",
+        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
@@ -75,7 +78,8 @@ public class SuspiciousStewRecipeExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BOWL:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/item/Items;BOWL:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )
@@ -84,7 +88,7 @@ public class SuspiciousStewRecipeExtender {
     }
 
     @Redirect(
-        method = "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
+        method = "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/block/SuspiciousStewIngredient;of(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/block/SuspiciousStewIngredient;"
@@ -96,7 +100,7 @@ public class SuspiciousStewRecipeExtender {
     }
 
     @Redirect(
-        method = "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
+        method = "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"

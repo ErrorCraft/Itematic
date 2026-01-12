@@ -1,12 +1,11 @@
 package net.errorcraft.itematic.mixin.loot.function;
 
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.loot.function.SetPotionLootFunctionAccess;
-import net.minecraft.component.DataComponentType;
+import net.minecraft.component.ComponentType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
@@ -24,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -72,30 +70,17 @@ public class SetPotionLootFunctionExtender implements SetPotionLootFunctionAcces
         };
     }
 
-    @WrapWithCondition(
+    @WrapOperation(
         method = "process",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;apply(Lnet/minecraft/component/DataComponentType;Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/item/ItemStack;apply(Lnet/minecraft/component/ComponentType;Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;"
         )
     )
-    private <T, U> boolean applyPotionContentComponentCheckForRegistryEntryFromRegistryEntryList(ItemStack instance, DataComponentType<T> type, T defaultValue, U change, BiFunction<T, U, T> applier, @Local(argsOnly = true) LootContext context, @Share("potion") LocalRef<RegistryEntry<Potion>> potion) {
-        Optional<RegistryEntry<Potion>> optionalEntry = this.potions.getRandom(context.getRandom());
-        optionalEntry.ifPresent(potion::set);
-        return optionalEntry.isPresent();
-    }
-
-    @ModifyArg(
-        method = "process",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;apply(Lnet/minecraft/component/DataComponentType;Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;"
-        ),
-        index = 1
-    )
-    @SuppressWarnings("unchecked")
-    private <U> U applyPotionContentComponentUseRegistryEntryFromRegistryEntryList(U change, @Share("potion") LocalRef<RegistryEntry<Potion>> potion) {
-        return (U) potion.get();
+    private <T, U> Object applyPotionContentComponentCheckForRegistryEntryFromRegistryEntryList(ItemStack instance, ComponentType<T> type, T defaultValue, U change, BiFunction<T, U, T> applier, Operation<Object> original, @Local(argsOnly = true) LootContext context) {
+        this.potions.getRandom(context.getRandom())
+            .ifPresent(potion -> original.call(instance, type, defaultValue, potion, applier));
+        return null;
     }
 
     @Override

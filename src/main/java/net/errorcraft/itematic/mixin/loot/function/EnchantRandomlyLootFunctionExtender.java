@@ -21,14 +21,14 @@ import java.util.Optional;
 @Mixin(EnchantRandomlyLootFunction.class)
 public class EnchantRandomlyLootFunctionExtender {
     @Inject(
-        method = "method_53327",
+        method = "method_60291",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/enchantment/Enchantment;isAcceptableItem(Lnet/minecraft/item/ItemStack;)Z"
         ),
         cancellable = true
     )
-    private static void isValidEnchantUseItemComponent(boolean isBook, ItemStack stack, RegistryEntry.Reference<Enchantment> enchantment, CallbackInfoReturnable<Boolean> info) {
+    private static void isValidEnchantUseItemComponent(boolean isBook, ItemStack stack, RegistryEntry<Enchantment> enchantment, CallbackInfoReturnable<Boolean> info) {
         info.setReturnValue(stack.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
             .map(c -> c.enchantments()
                 .map(enchantment::isIn)

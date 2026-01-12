@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.village;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -14,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(TradeOffers.class)
 public class TradeOffersExtender {
     @Redirect(
-        method = { "method_16929", "enchant" },
+        method = "method_16929",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
@@ -34,15 +33,6 @@ public class TradeOffersExtender {
     private static ItemStack createStackForPotionReturnEmptyStack(Item item, RegistryEntry<Potion> potion) {
         return ItemStack.EMPTY;
     }
-
-    @Redirect(
-        method = "enchant",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;addEnchantment(Lnet/minecraft/enchantment/Enchantment;I)V"
-        )
-    )
-    private static void doNotAddEnchantment(ItemStack instance, Enchantment enchantment, int level) {}
 
     @Mixin(TradeOffers.SellItemFactory.class)
     public static class SellItemFactoryExtender {

@@ -53,7 +53,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
     ).apply(instance, ShooterItemComponent::new));
     private static final float CHARGE_PROGRESS = CrossbowItemAccessor.chargeProgress();
     private static final float LOAD_PROGRESS = CrossbowItemAccessor.loadProgress();
-    private static final int DEFAULT_CHARGE_TIME = CrossbowItemAccessor.defaultPullTime();
+    private static final int DEFAULT_CHARGE_TIME = (int) (CrossbowItemAccessor.defaultPullTime() * 20);
     private static final int EXTRA_USE_TIME = 3;
     private static final int CHARGE_TIME_PER_QUICK_CHARGE_LEVEL = 5;
     private static final CrossbowItem DUMMY = new CrossbowItem(new Item.Settings());

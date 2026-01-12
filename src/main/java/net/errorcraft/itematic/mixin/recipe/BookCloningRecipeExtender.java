@@ -16,7 +16,10 @@ import org.spongepowered.asm.mixin.injection.*;
 @Mixin(BookCloningRecipe.class)
 public class BookCloningRecipeExtender {
     @Redirect(
-        method = { "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z", "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;" },
+        method = {
+            "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
+            "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
@@ -28,7 +31,10 @@ public class BookCloningRecipeExtender {
     }
 
     @Redirect(
-        method = { "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z", "craft(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;" },
+        method = {
+            "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
+            "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
@@ -47,7 +53,7 @@ public class BookCloningRecipeExtender {
     }
 
     @Redirect(
-        method = "getRemainder(Lnet/minecraft/inventory/RecipeInputInventory;)Lnet/minecraft/util/collection/DefaultedList;",
+        method = "getRemainder(Lnet/minecraft/recipe/input/CraftingRecipeInput;)Lnet/minecraft/util/collection/DefaultedList;",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
@@ -61,7 +67,7 @@ public class BookCloningRecipeExtender {
     }
 
     @ModifyConstant(
-        method = "getRemainder(Lnet/minecraft/inventory/RecipeInputInventory;)Lnet/minecraft/util/collection/DefaultedList;",
+        method = "getRemainder(Lnet/minecraft/recipe/input/CraftingRecipeInput;)Lnet/minecraft/util/collection/DefaultedList;",
         constant = @Constant(
             classValue = WrittenBookItem.class
         )

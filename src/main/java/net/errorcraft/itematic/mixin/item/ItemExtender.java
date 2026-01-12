@@ -22,7 +22,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentType;
+import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.ToolComponent;
@@ -349,10 +349,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "isEnchantable",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/DataComponentType;)Z"
+            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
         )
     )
-    public boolean isEnchantableUseComponentCheck(ItemStack instance, DataComponentType<?> type) {
+    public boolean isEnchantableUseComponentCheck(ItemStack instance, ComponentType<?> type) {
         return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
     }
 
@@ -476,6 +476,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             info.setReturnValue(UseAction.NONE);
             return;
         }
+
         info.setReturnValue(stack.getOrDefault(ItematicDataComponentTypes.USE_ANIMATION, UseAction.NONE));
     }
 
@@ -484,7 +485,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         at = @At("HEAD"),
         cancellable = true
     )
-    public void getMaxUseTimeUseItemComponent(ItemStack stack, CallbackInfoReturnable<Integer> info) {
+    public void getMaxUseTimeDoNothing(ItemStack stack, LivingEntity user, CallbackInfoReturnable<Integer> info) {
         info.setReturnValue(0);
     }
 
@@ -613,7 +614,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
-    public boolean canBeEnchantedWith(ItemStack stack, Enchantment enchantment, EnchantingContext context) {
+    public boolean canBeEnchantedWith(ItemStack stack, RegistryEntry<Enchantment> enchantment, EnchantingContext context) {
         return true;
     }
 

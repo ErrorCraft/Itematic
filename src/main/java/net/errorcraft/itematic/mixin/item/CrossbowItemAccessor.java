@@ -11,8 +11,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(CrossbowItem.class)
 public interface CrossbowItemAccessor {
     @Accessor("DEFAULT_PULL_TIME")
-    @Contract
-    static int defaultPullTime() {
+    static float defaultPullTime() {
         throw new AssertionError();
     }
 

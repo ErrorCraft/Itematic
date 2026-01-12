@@ -45,6 +45,7 @@ import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.stat.Stats;
@@ -52,7 +53,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -95,7 +95,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     public abstract boolean isEmpty();
 
     @Shadow
-    public abstract void damage(int amount, Random random, @Nullable ServerPlayerEntity serverPlayerEntity, Runnable runnable);
+    public abstract void damage(int amount, ServerWorld serverWorld, @Nullable ServerPlayerEntity player, Runnable breakCallback);
 
     @Shadow
     public abstract int getDamage();
@@ -552,22 +552,23 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/lang/Runnable;)V",
+        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/lang/Runnable;)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;setDamage(I)V",
             shift = At.Shift.AFTER
         )
     )
-    private void invokeDamageToolEvent(int amount, Random random, ServerPlayerEntity serverPlayerEntity, Runnable breakCallback, CallbackInfo info) {
+    private void invokeDamageToolEvent(int amount, ServerWorld serverWorld, ServerPlayerEntity player, Runnable breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
+
         this.itematic$invokeEvent(ItemEvents.DAMAGE_ITEM, this.context);
     }
 
     @WrapWithCondition(
-        method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/lang/Runnable;)V",
+        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/lang/Runnable;)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/advancement/criterion/ItemDurabilityChangedCriterion;trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;I)V"
@@ -581,13 +582,13 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/lang/Runnable;)V",
+        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/lang/Runnable;)V",
         at = @At(
             value = "INVOKE",
             target = "Ljava/lang/Runnable;run()V"
         )
     )
-    private void invokeBreakToolEvent(int amount, Random random, ServerPlayerEntity serverPlayerEntity, Runnable runnable, CallbackInfo info) {
+    private void invokeBreakToolEvent(int amount, ServerWorld serverWorld, ServerPlayerEntity player, Runnable breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
@@ -672,7 +673,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
         this.context = context;
         Entity entity = context.entity(ActionContextParameter.THIS).orElse(null);
-        this.damage(amount, context.world().getRandom(), entity instanceof ServerPlayerEntity player ? player : null, () -> this.onItemBroken(entity, context));
+        this.damage(amount, context.world(), entity instanceof ServerPlayerEntity player ? player : null, () -> this.onItemBroken(entity, context));
         this.context = null;
     }
 

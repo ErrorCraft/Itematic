@@ -20,7 +20,7 @@ import java.util.Optional;
 @Mixin(BannerDuplicateRecipe.class)
 public class BannerDuplicateRecipeExtender {
     @ModifyConstant(
-        method = "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z",
+        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
         constant = @Constant(
             classValue = BannerItem.class,
             ordinal = 0
@@ -34,7 +34,7 @@ public class BannerDuplicateRecipeExtender {
     }
 
     @ModifyVariable(
-        method = "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z",
+        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
         at = @At("LOAD"),
         ordinal = 0
     )
@@ -43,7 +43,7 @@ public class BannerDuplicateRecipeExtender {
     }
 
     @Redirect(
-        method = "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z",
+        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/BannerItem;getColor()Lnet/minecraft/util/DyeColor;"
@@ -54,7 +54,7 @@ public class BannerDuplicateRecipeExtender {
     }
 
     @Redirect(
-        method = "getRemainder(Lnet/minecraft/inventory/RecipeInputInventory;)Lnet/minecraft/util/collection/DefaultedList;",
+        method = "getRemainder(Lnet/minecraft/recipe/input/CraftingRecipeInput;)Lnet/minecraft/util/collection/DefaultedList;",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
