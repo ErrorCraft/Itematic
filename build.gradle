@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.12-SNAPSHOT'
+	id 'fabric-loom' version '1.14-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -108,7 +108,7 @@ loom {
 			source sourceSets.gametest
 		}
 	}
-	accessWidenerPath = file("src/main/resources/itematic.accesswidener")
+	accessWidenerPath = file("src/main/resources/itematic.classtweaker")
 }
 
 java {

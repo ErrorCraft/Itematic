@@ -33,7 +33,7 @@
       "environment": "client"
     }
   ],
-  "accessWidener": "itematic.accesswidener",
+  "accessWidener": "itematic.classtweaker",
   "custom": {
     "loom:injected_interfaces": {
       "net/minecraft/class_314": [
