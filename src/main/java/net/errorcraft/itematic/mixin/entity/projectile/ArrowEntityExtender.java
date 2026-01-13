@@ -13,12 +13,15 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ArrowEntity.class)
 public abstract class ArrowEntityExtender extends PersistentProjectileEntity {
-    protected ArrowEntityExtender(EntityType<? extends PersistentProjectileEntity> type, World world, ItemStack stack) {
-        super(type, world, stack);
+    protected ArrowEntityExtender(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
+        super(entityType, world);
     }
 
     @Redirect(
-        method = { "getDefaultItemStack", "tick" },
+        method = {
+            "getDefaultItemStack",
+            "tick"
+        },
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"

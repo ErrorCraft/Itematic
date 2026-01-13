@@ -344,6 +344,7 @@
     "registry.BuiltinRegistriesExtender",
     "registry.RegistriesAccessor",
     "registry.RegistriesExtender",
+    "registry.RegistryLoaderAccessor$EntryAccessor",
     "registry.RegistryLoaderExtender",
     "registry.SimpleRegistryExtender",
     "registry.entry.RegistryEntryExtender",

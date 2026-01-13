@@ -52,6 +52,7 @@ import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.*;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -139,6 +140,7 @@ public class ItemUtil {
         private final RegistryEntryLookup<String> decoratedPotPatterns;
         private final RegistryEntryLookup<StatusEffect> statusEffects;
         private final RegistryEntryLookup<Potion> potions;
+        private final RegistryEntryLookup<Enchantment> enchantments;
 
         private Bootstrapper(Registerable<Item> registerable) {
             this.registerable = registerable;
@@ -156,6 +158,7 @@ public class ItemUtil {
             this.decoratedPotPatterns = registerable.getRegistryLookup(RegistryKeys.DECORATED_POT_PATTERN);
             this.statusEffects = registerable.getRegistryLookup(RegistryKeys.STATUS_EFFECT);
             this.potions = registerable.getRegistryLookup(RegistryKeys.POTION);
+            this.enchantments = registerable.getRegistryLookup(RegistryKeys.ENCHANTMENT);
         }
 
         private void bootstrap() {
@@ -4869,7 +4872,7 @@ public class ItemUtil {
                                 MatchToolLootCondition.builder(
                                     ItemPredicate.Builder.create()
                                         .subPredicate(ItemSubPredicateTypes.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.of(
-                                            new EnchantmentPredicate(Enchantments.RIPTIDE, NumberRange.IntRange.ANY)
+                                            new EnchantmentPredicate(this.enchantments.getOrThrow(Enchantments.RIPTIDE), NumberRange.IntRange.ANY)
                                         ))))
                             ).build()
                         ),
