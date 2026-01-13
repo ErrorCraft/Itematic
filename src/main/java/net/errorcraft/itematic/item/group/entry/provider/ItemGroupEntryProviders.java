@@ -11,11 +11,9 @@ import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FireworksComponent;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryEntryLookup;
@@ -27,8 +25,6 @@ import net.minecraft.registry.tag.PaintingVariantTags;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class ItemGroupEntryProviders {
     private ItemGroupEntryProviders() {}
@@ -351,47 +347,7 @@ public class ItemGroupEntryProviders {
             .add(ItemTags.DECORATED_POT_SHERDS)
             .add(ItematicItemTags.SMITHING_TEMPLATES)
             .add(items.getOrThrow(ItemKeys.EXPERIENCE_BOTTLE))
-            .add(enchantedBooks(items,
-                enchantments.getOrThrow(EnchantmentKeys.PROTECTION),
-                enchantments.getOrThrow(EnchantmentKeys.FIRE_PROTECTION),
-                enchantments.getOrThrow(EnchantmentKeys.FEATHER_FALLING),
-                enchantments.getOrThrow(EnchantmentKeys.BLAST_PROTECTION),
-                enchantments.getOrThrow(EnchantmentKeys.PROJECTILE_PROTECTION),
-                enchantments.getOrThrow(EnchantmentKeys.RESPIRATION),
-                enchantments.getOrThrow(EnchantmentKeys.AQUA_AFFINITY),
-                enchantments.getOrThrow(EnchantmentKeys.THORNS),
-                enchantments.getOrThrow(EnchantmentKeys.DEPTH_STRIDER),
-                enchantments.getOrThrow(EnchantmentKeys.FROST_WALKER),
-                enchantments.getOrThrow(EnchantmentKeys.BINDING_CURSE),
-                enchantments.getOrThrow(EnchantmentKeys.SOUL_SPEED),
-                enchantments.getOrThrow(EnchantmentKeys.SWIFT_SNEAK),
-                enchantments.getOrThrow(EnchantmentKeys.SHARPNESS),
-                enchantments.getOrThrow(EnchantmentKeys.SMITE),
-                enchantments.getOrThrow(EnchantmentKeys.BANE_OF_ARTHROPODS),
-                enchantments.getOrThrow(EnchantmentKeys.KNOCKBACK),
-                enchantments.getOrThrow(EnchantmentKeys.FIRE_ASPECT),
-                enchantments.getOrThrow(EnchantmentKeys.LOOTING),
-                enchantments.getOrThrow(EnchantmentKeys.SWEEPING_EDGE),
-                enchantments.getOrThrow(EnchantmentKeys.EFFICIENCY),
-                enchantments.getOrThrow(EnchantmentKeys.SILK_TOUCH),
-                enchantments.getOrThrow(EnchantmentKeys.UNBREAKING),
-                enchantments.getOrThrow(EnchantmentKeys.FORTUNE),
-                enchantments.getOrThrow(EnchantmentKeys.POWER),
-                enchantments.getOrThrow(EnchantmentKeys.PUNCH),
-                enchantments.getOrThrow(EnchantmentKeys.FLAME),
-                enchantments.getOrThrow(EnchantmentKeys.INFINITY),
-                enchantments.getOrThrow(EnchantmentKeys.LUCK_OF_THE_SEA),
-                enchantments.getOrThrow(EnchantmentKeys.LURE),
-                enchantments.getOrThrow(EnchantmentKeys.LOYALTY),
-                enchantments.getOrThrow(EnchantmentKeys.IMPALING),
-                enchantments.getOrThrow(EnchantmentKeys.RIPTIDE),
-                enchantments.getOrThrow(EnchantmentKeys.CHANNELING),
-                enchantments.getOrThrow(EnchantmentKeys.MULTISHOT),
-                enchantments.getOrThrow(EnchantmentKeys.QUICK_CHARGE),
-                enchantments.getOrThrow(EnchantmentKeys.PIERCING),
-                enchantments.getOrThrow(EnchantmentKeys.MENDING),
-                enchantments.getOrThrow(EnchantmentKeys.VANISHING_CURSE)
-            ))
+            .add(EnchantmentItemGroupEntry.of(items.getOrThrow(ItemKeys.ENCHANTED_BOOK)))
             .build()
         );
         registerable.register(ItemGroupEntryProviderKeys.SPAWN_EGGS, ItemGroupEntryProvider.of(
@@ -499,30 +455,6 @@ public class ItemGroupEntryProviders {
             );
         }
         return entries.toArray(ItemGroupEntry[]::new);
-    }
-
-    @SafeVarargs
-    private static ItemGroupEntry[] enchantedBooks(RegistryEntryLookup<Item> items, RegistryEntry<Enchantment>... enchantments) {
-        RegistryEntry.Reference<Item> enchantedBook = items.getOrThrow(ItemKeys.ENCHANTED_BOOK);
-        return Stream.of(enchantments).map(RegistryEntry::value)
-            .flatMap(enchantment -> IntStream.rangeClosed(enchantment.getMinLevel(), enchantment.getMaxLevel())
-                .mapToObj(level -> {
-                    ItemEnchantmentsComponent.Builder itemEnchantmentsBuilder = new ItemEnchantmentsComponent.Builder(ItemEnchantmentsComponent.DEFAULT);
-                    itemEnchantmentsBuilder.add(enchantment, level);
-                    return StackItemGroupEntry.builder(enchantedBook)
-                        .components(ComponentChanges.builder()
-                            .add(DataComponentTypes.ENCHANTMENTS, itemEnchantmentsBuilder.build()))
-                        .visibility(getStackVisibility(enchantment, level))
-                        .build();
-                }))
-            .toArray(ItemGroupEntry[]::new);
-    }
-
-    private static ItemGroup.StackVisibility getStackVisibility(Enchantment enchantment, int level) {
-        if (enchantment.getMaxLevel() == level) {
-            return ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS;
-        }
-        return ItemGroup.StackVisibility.SEARCH_TAB_ONLY;
     }
 
     private static ItemGroupEntry[] lightBlocks(RegistryEntry<Item> item) {

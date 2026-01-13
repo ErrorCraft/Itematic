@@ -8646,7 +8646,9 @@ public class ItemUtil {
                             .addOptional(LightEndPortalAction.of(ActionContextParameter.TARGET))
                     ))
                     .add(ItemEvents.THROW_PROJECTILE, ActionEntry.of(
-                        PlaySoundAction.of(ActionContextParameter.THIS, this.soundEvents.getOrThrow(SoundEventKeys.ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL, 1.0f, 1.2f)
+                        PlaySoundAction.builder(ActionContextParameter.THIS, this.soundEvents.getOrThrow(SoundEventKeys.ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL)
+                            .pitch(0.33f, 0.5f)
+                            .build()
                     ))
                     .build()
             ));

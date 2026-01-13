@@ -3,8 +3,8 @@ package net.errorcraft.itematic.item.group.entry.entries;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
+import net.errorcraft.itematic.item.group.entry.PossiblyHiddenItemGroupEntry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -18,9 +18,9 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
-public class SuspiciousEffectIngredientItemGroupEntry extends ItemGroupEntry {
+public class SuspiciousEffectIngredientItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     public static final MapCodec<SuspiciousEffectIngredientItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(SuspiciousEffectIngredientItemGroupEntry::item)
+        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(entry -> entry.item)
     ).apply(instance, SuspiciousEffectIngredientItemGroupEntry::new));
 
     private final RegistryEntry<Item> item;
@@ -30,12 +30,13 @@ public class SuspiciousEffectIngredientItemGroupEntry extends ItemGroupEntry {
         this.item = item;
     }
 
-    public RegistryEntry<Item> item() {
-        return this.item;
-    }
-
     public static SuspiciousEffectIngredientItemGroupEntry of(RegistryEntry<Item> item) {
         return new SuspiciousEffectIngredientItemGroupEntry(ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS, false, item);
+    }
+
+    @Override
+    public ItemGroupEntryType type() {
+        return ItemGroupEntryType.SUSPICIOUS_EFFECT_INGREDIENT;
     }
 
     @Override
@@ -52,10 +53,5 @@ public class SuspiciousEffectIngredientItemGroupEntry extends ItemGroupEntry {
                 set.add(stack);
             });
         return set;
-    }
-
-    @Override
-    protected ItemGroupEntryType type() {
-        return ItemGroupEntryType.SUSPICIOUS_EFFECT_INGREDIENT;
     }
 }
