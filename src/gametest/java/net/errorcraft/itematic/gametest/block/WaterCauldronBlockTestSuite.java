@@ -36,6 +36,6 @@ public class WaterCauldronBlockTestSuite {
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
         context.useBlock(WATER_CAULDRON_POSITION, player);
-        context.addFinalTask(() -> Assert.itemStackDoesNotHaveComponent(player.getStackInHand(Hand.MAIN_HAND), DataComponentTypes.DYED_COLOR));
+        context.addFinalTask(() -> Assert.itemStackDoesNotHaveDataComponent(player.getStackInHand(Hand.MAIN_HAND), DataComponentTypes.DYED_COLOR));
     }
 }

@@ -2,7 +2,7 @@ package net.errorcraft.itematic.gametest;
 
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.component.DataComponentType;
+import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
@@ -59,25 +59,25 @@ public class Assert {
         }
     }
 
-    public static <T> void itemStackHasComponent(ItemStack value, DataComponentType<T> type) {
+    public static <T> void itemStackHasDataComponent(ItemStack value, ComponentType<T> type) {
         if (value.get(type) == null) {
             throw new GameTestException("Expected item stack to contain the " + type + " component");
         }
     }
 
-    public static <T> void itemStackDoesNotHaveComponent(ItemStack value, DataComponentType<T> type) {
+    public static <T> void itemStackDoesNotHaveDataComponent(ItemStack value, ComponentType<T> type) {
         if (value.get(type) != null) {
             throw new GameTestException("Expected item stack to not contain the " + type + " component");
         }
     }
 
-    public static <T> void itemStackHasComponent(ItemStack value, DataComponentType<T> type, Consumer<T> assertion) {
-        itemStackHasComponent(value, type);
-        assertion.accept(TestUtil.getComponent(value, type));
+    public static <T> void itemStackHasDataComponent(ItemStack value, ComponentType<T> type, Consumer<T> assertion) {
+        itemStackHasDataComponent(value, type);
+        assertion.accept(TestUtil.getDataComponent(value, type));
     }
 
     public static void itemStackHasPotion(ItemStack value, RegistryEntry<Potion> expected) {
-        itemStackHasComponent(value, DataComponentTypes.POTION_CONTENTS, component -> {
+        itemStackHasDataComponent(value, DataComponentTypes.POTION_CONTENTS, component -> {
             RegistryEntry<Potion> potion = component.potion()
                 .orElseThrow(() -> new GameTestException("Expected item stack to have potion " + expected.getKey().orElseThrow()));
             if (expected != potion) {

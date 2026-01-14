@@ -81,9 +81,11 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Shadow
     public abstract ItemStack eatFood(World world, ItemStack stack);
 
-    @Shadow public abstract AttributeContainer getAttributes();
+    @Shadow
+    public abstract AttributeContainer getAttributes();
 
-    @Shadow public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
+    @Shadow
+    public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
 
     @Unique
     private int itemUsedTicks;
@@ -340,6 +342,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         if (original == -1) {
             return 0;
         }
+
         return original;
     }
 
@@ -349,7 +352,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void checkMaxUseTime(CallbackInfoReturnable<Boolean> info) {
-        if (this.activeItemStack.itematic$useDuration((LivingEntity)(Object) this) <= 0) {
+        if (this.activeItemStack.getMaxUseTime((LivingEntity)(Object) this) <= 0) {
             info.setReturnValue(false);
         }
     }
@@ -384,6 +387,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         if (original == -1) {
             return Integer.MAX_VALUE;
         }
+
         return original;
     }
 
@@ -450,14 +454,17 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         if (!stack.itematic$hasComponent(ItemComponentTypes.WEAPON)) {
             return null;
         }
+
         WeaponAttackDamageDataComponent weaponAttackDamage = stack.get(ItematicDataComponentTypes.WEAPON_ATTACK_DAMAGE);
         if (weaponAttackDamage == null) {
             return null;
         }
+
         double damage = weaponAttackDamage.getDamage(stack, this);
         if (weaponAttackDamage.shouldAddBase(stack, this)) {
             return damage + this.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         }
+
         return damage;
     }
 }

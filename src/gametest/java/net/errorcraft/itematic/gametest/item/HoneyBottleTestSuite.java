@@ -27,7 +27,7 @@ public class HoneyBottleTestSuite {
         world.spawnEntity(player);
         stack.use(world, player, Hand.MAIN_HAND);
         context.createTimedTaskRunner().expectMinDurationAndRun(
-            TestUtil.getComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack, player),
+            TestUtil.getDataComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack, player),
             () -> Assert.entityDoesNotHaveStatusEffect(player, StatusEffects.POISON)
         ).completeIfSuccessful();
     }

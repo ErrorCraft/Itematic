@@ -1,16 +1,15 @@
 package net.errorcraft.itematic.component;
 
-import net.errorcraft.itematic.component.type.ImmuneToDamageComponent;
-import net.errorcraft.itematic.component.type.ItemListDataComponent;
-import net.errorcraft.itematic.component.type.UseDurationDataComponent;
-import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
+import net.errorcraft.itematic.component.type.*;
 import net.errorcraft.itematic.item.component.components.ItemHolderItemComponent;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
+import net.errorcraft.itematic.item.shooter.ChargingSoundsUtil;
 import net.errorcraft.itematic.mixin.component.DataComponentTypesAccessor;
 import net.errorcraft.itematic.network.codec.PacketCodecUtil;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.util.UseActionUtil;
 import net.minecraft.component.ComponentType;
+import net.minecraft.item.CrossbowItem;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.UseAction;
@@ -27,6 +26,8 @@ public class ItematicDataComponentTypes {
     public static final ComponentType<Identifier> ITEM_BAR_STYLE = DataComponentTypesAccessor.register("item_bar_style", builder -> builder.codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC).cache());
     public static final ComponentType<Fraction> ITEM_HOLDER_CAPACITY = DataComponentTypesAccessor.register("item_holder_capacity", builder -> builder.codec(ItemHolderItemComponent.CAPACITY_CODEC).packetCodec(PacketCodecUtil.FRACTION));
     public static final ComponentType<ItemHolderRules> ITEM_HOLDER_RULES = DataComponentTypesAccessor.register("item_holder_rules", builder -> builder.codec(ItemHolderRules.CODEC).packetCodec(ItemHolderRules.PACKET_CODEC).cache());
+    public static final ComponentType<ItemDamageRulesDataComponent> SHOOTER_DAMAGE_RULES = DataComponentTypesAccessor.register("shooter_damage_rules", builder -> builder.codec(ItemDamageRulesDataComponent.CODEC).packetCodec(ItemDamageRulesDataComponent.PACKET_CODEC).cache());
+    public static final ComponentType<CrossbowItem.LoadingSounds> SHOOTER_DEFAULT_CHARGING_SOUNDS = DataComponentTypesAccessor.register("shooter_default_charging_sounds", builder -> builder.codec(CrossbowItem.LoadingSounds.CODEC).packetCodec(ChargingSoundsUtil.PACKET_CODEC).cache());
 
     public static void init() {}
 }

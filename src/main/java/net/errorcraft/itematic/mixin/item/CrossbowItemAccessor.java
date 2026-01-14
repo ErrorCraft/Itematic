@@ -11,31 +11,32 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(CrossbowItem.class)
 public interface CrossbowItemAccessor {
     @Accessor("DEFAULT_PULL_TIME")
-    static float defaultPullTime() {
+    static float defaultChargeTime() {
         throw new AssertionError();
     }
 
     @Accessor("CHARGE_PROGRESS")
-    @Contract
-    static float chargeProgress() {
+    static float startSoundProgress() {
         throw new AssertionError();
     }
 
     @Accessor("LOAD_PROGRESS")
-    @Contract
-    static float loadProgress() {
+    static float midSoundProgress() {
         throw new AssertionError();
     }
 
     @Accessor("DEFAULT_SPEED")
-    @Contract
     static float defaultSpeed() {
         throw new AssertionError();
     }
 
     @Accessor("FIREWORK_ROCKET_SPEED")
-    @Contract
     static float fireworkRocketSpeed() {
+        throw new AssertionError();
+    }
+
+    @Accessor("DEFAULT_LOADING_SOUNDS")
+    static CrossbowItem.LoadingSounds defaultChargingSounds() {
         throw new AssertionError();
     }
 

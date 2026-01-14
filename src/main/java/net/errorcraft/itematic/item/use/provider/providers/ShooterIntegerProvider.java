@@ -2,9 +2,7 @@ package net.errorcraft.itematic.item.use.provider.providers;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
-import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
@@ -12,7 +10,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.codec.PacketCodec;
 
-import java.util.Optional;
 import java.util.OptionalInt;
 
 public record ShooterIntegerProvider() implements IntegerProvider {
@@ -27,16 +24,12 @@ public record ShooterIntegerProvider() implements IntegerProvider {
 
     @Override
     public OptionalInt get(ItemStack stack, LivingEntity user) {
-        Optional<ShooterItemComponent> shooter = stack.itematic$getComponent(ItemComponentTypes.SHOOTER);
-        if (shooter.isEmpty()) {
-            return OptionalInt.empty();
-        }
-        if (shooter.get().isCharged(stack)) {
-            return OptionalInt.empty();
-        }
         if (user.itematic$getAmmunition(stack).isEmpty()) {
             return OptionalInt.empty();
         }
-        return OptionalInt.of(UseDurationDataComponent.INDEFINITE_USE_DURATION);
+
+        return stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
+            .map(shooter -> shooter.useDuration(stack, user))
+            .orElseGet(OptionalInt::empty);
     }
 }

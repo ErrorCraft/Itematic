@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.item;
 import com.google.common.collect.Interner;
 import net.errorcraft.itematic.access.item.ItemAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemBase;
 import net.errorcraft.itematic.item.ItemUtil;
@@ -480,13 +481,22 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         info.setReturnValue(stack.getOrDefault(ItematicDataComponentTypes.USE_ANIMATION, UseAction.NONE));
     }
 
-    @Inject(
-        method = "getMaxUseTime",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    public void getMaxUseTimeDoNothing(ItemStack stack, LivingEntity user, CallbackInfoReturnable<Integer> info) {
-        info.setReturnValue(0);
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+            return 0;
+        }
+
+        UseDurationDataComponent useDuration = this.components.get(ItematicDataComponentTypes.USE_DURATION);
+        if (useDuration == null) {
+            return 0;
+        }
+
+        return useDuration.ticks(stack, user);
     }
 
     /**
