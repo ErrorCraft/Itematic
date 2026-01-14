@@ -22,7 +22,10 @@
       "action": {
         "type": "minecraft:play_sound",
         "category": "neutral",
-        "pitch": 1.2,
+        "pitch": {
+          "max": 0.5,
+          "min": 0.33
+        },
         "position": "this",
         "sound": "minecraft:entity.ender_eye.launch",
         "volume": 1.0

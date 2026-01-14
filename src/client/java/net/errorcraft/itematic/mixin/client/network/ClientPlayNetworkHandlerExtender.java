@@ -54,6 +54,6 @@ public abstract class ClientPlayNetworkHandlerExtender extends ClientCommonNetwo
     @Override
     @SuppressWarnings("DataFlowIssue")
     public void itematic$onTwirl(TwirlS2CPacket packet) {
-        TwirlPlayerAction.execute(packet.spinAttackStrength(), this.client.player, this.world);
+        TwirlPlayerAction.execute(packet.spinAttackStrength(), this.client.player, this.world, this.client.player.getActiveItem());
     }
 }

@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.village.trade;
 
-import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.loot.function.DyeItemModifier;
@@ -28,6 +27,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.registry.tag.StructureTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;

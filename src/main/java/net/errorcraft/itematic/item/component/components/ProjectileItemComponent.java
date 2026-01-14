@@ -23,32 +23,31 @@ import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Position;
 import net.minecraft.world.World;
 
-public record ProjectileItemComponent(EntityInitializer<?> entity, int damage, float chargedSpeed) implements ItemComponent<ProjectileItemComponent> {
+public record ProjectileItemComponent(EntityInitializer<?> entity, float chargedSpeed) implements ItemComponent<ProjectileItemComponent> {
     public static final Codec<ProjectileItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         EntityInitializer.CODEC.fieldOf("entity").forGetter(ProjectileItemComponent::entity),
-        Codecs.NONNEGATIVE_INT.optionalFieldOf("damage", 0).forGetter(ProjectileItemComponent::damage),
         ItematicCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("charged_speed", CrossbowItemAccessor.defaultSpeed()).forGetter(ProjectileItemComponent::chargedSpeed)
     ).apply(instance, ProjectileItemComponent::new));
 
-    public static ProjectileItemComponent of(EntityInitializer<?> entity, int damage, float chargedSpeed) {
-        return new ProjectileItemComponent(entity, damage, chargedSpeed);
+    // TODO: Move chargedSpeed field to rules defined in ChargeableShooterMethod + data component
+    public static ProjectileItemComponent of(EntityInitializer<?> entity, float chargedSpeed) {
+        return new ProjectileItemComponent(entity, chargedSpeed);
     }
 
-    public static ProjectileItemComponent of(EntityInitializer<?> entity, int damage) {
-        return of(entity, damage, CrossbowItemAccessor.defaultSpeed());
+    public static ProjectileItemComponent of(EntityInitializer<?> entity) {
+        return of(entity, CrossbowItemAccessor.defaultSpeed());
     }
 
     public static ProjectileItemComponent of(RegistryEntry<EntityType<?>> entity) {
-        return of(SimpleEntityInitializer.of(entity.value()), 0);
+        return of(SimpleEntityInitializer.of(entity.value()));
     }
 
     public static <U extends PersistentProjectileEntity> ProjectileItemComponent persistentProjectile(EntityType<U> entityType, PersistentProjectileEntityInitializer.OwnerCreator<U> ownerCreator, PersistentProjectileEntityInitializer.SimpleCreator<U> simpleCreator) {
-        return of(new PersistentProjectileEntityInitializer<>(entityType, ownerCreator, simpleCreator), 1);
+        return of(new PersistentProjectileEntityInitializer<>(entityType, ownerCreator, simpleCreator));
     }
 
     @Override

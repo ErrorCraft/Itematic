@@ -10,7 +10,6 @@
       "duration_multiplier": 0.125
     },
     "minecraft:projectile": {
-      "damage": 1,
       "entity": {
         "type": "minecraft:arrow"
       }

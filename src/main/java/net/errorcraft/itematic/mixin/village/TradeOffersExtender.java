@@ -37,7 +37,13 @@ public class TradeOffersExtender {
     @Mixin(TradeOffers.SellItemFactory.class)
     public static class SellItemFactoryExtender {
         @Redirect(
-            method = { "<init>(Lnet/minecraft/block/Block;IIII)V", "<init>(Lnet/minecraft/item/Item;III)V", "<init>(Lnet/minecraft/item/Item;IIII)V", "<init>(Lnet/minecraft/item/Item;IIIIF)V" },
+            method = {
+                "<init>(Lnet/minecraft/block/Block;IIII)V",
+                "<init>(Lnet/minecraft/item/Item;III)V",
+                "<init>(Lnet/minecraft/item/Item;IIII)V",
+                "<init>(Lnet/minecraft/item/Item;IIIIF)V",
+                "<init>(Lnet/minecraft/item/Item;IIIIFLnet/minecraft/registry/RegistryKey;)V"
+            },
             at = @At(
                 value = "NEW",
                 target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
@@ -58,6 +64,17 @@ public class TradeOffersExtender {
             )
         )
         private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+            return ItemStack.EMPTY;
+        }
+
+        @Redirect(
+            method = "<init>(Lnet/minecraft/item/ItemConvertible;IILnet/minecraft/item/ItemConvertible;IIIFLnet/minecraft/registry/RegistryKey;)V",
+            at = @At(
+                value = "NEW",
+                target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            )
+        )
+        private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item, int count) {
             return ItemStack.EMPTY;
         }
     }

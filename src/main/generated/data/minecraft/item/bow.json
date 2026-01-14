@@ -19,6 +19,13 @@
     "minecraft:shooter": {
       "ammunition": "#minecraft:bow_ammunition",
       "held_ammunition": "#minecraft:bow_ammunition",
+      "item_damage": {
+        "default_damage": 1,
+        "rules": []
+      },
+      "method": {
+        "type": "minecraft:direct"
+      },
       "range": 15
     },
     "minecraft:stackable": 1,

@@ -5,8 +5,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
-public class EnchantmentTags {
-    public static final TagKey<Enchantment> CURSED = of("cursed");
+public class ItematicEnchantmentTags {
     public static final TagKey<Enchantment> ENCHANTING = of("enchanting");
     public static final TagKey<Enchantment> FORGING = of("forging");
 
@@ -42,9 +41,7 @@ public class EnchantmentTags {
     public static final TagKey<Enchantment> STEERING_FORGING = of("steering_forging");
     public static final TagKey<Enchantment> BRUSH_FORGING = of("brush_forging");
 
-    public static final TagKey<Enchantment> TRADEABLE = of("tradeable");
-
-    private EnchantmentTags() {}
+    private ItematicEnchantmentTags() {}
 
     private static TagKey<Enchantment> of(String id) {
         return TagKey.of(RegistryKeys.ENCHANTMENT, new Identifier(id));

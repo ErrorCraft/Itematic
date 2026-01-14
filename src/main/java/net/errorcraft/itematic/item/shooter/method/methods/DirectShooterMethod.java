@@ -51,10 +51,6 @@ public record DirectShooterMethod() implements ShooterMethod {
 
     @Override
     public void stop(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks) {
-        if (!(user instanceof PlayerEntity playerEntity)) {
-            return;
-        }
-
         ItemStack ammunition = user.itematic$getAmmunition(stack);
         if (ammunition.isEmpty()) {
             return;
@@ -67,11 +63,13 @@ public record DirectShooterMethod() implements ShooterMethod {
 
         List<ItemStack> projectiles = RangedWeaponItemAccessor.load(stack, ammunition, user);
         if (world instanceof ServerWorld serverWorld && !projectiles.isEmpty()) {
-            shooter.shoot(serverWorld, playerEntity, playerEntity.getActiveHand(), stack, projectiles, pullProgress * 3.0f, 1.0f, pullProgress == 1.0f, null);
+            shooter.shoot(serverWorld, user, user.getActiveHand(), stack, projectiles, pullProgress * 3.0f, 1.0f, pullProgress == 1.0f, null);
         }
 
-        world.playSound(null, playerEntity.getX(), playerEntity.getY(), playerEntity.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + pullProgress * 0.5f);
-        playerEntity.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + pullProgress * 0.5f);
+        if (user instanceof PlayerEntity playerEntity) {
+            playerEntity.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+        }
     }
 
     @Override
