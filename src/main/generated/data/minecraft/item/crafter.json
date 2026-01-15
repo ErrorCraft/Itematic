@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "block.minecraft.crafter"
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:crafter"
+    },
+    "minecraft:stackable": 64
+  }
+}

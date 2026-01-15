@@ -1,0 +1,33 @@
+{
+  "base": {
+    "translation_key": "item.minecraft.mace"
+  },
+  "components": {
+    "minecraft:damageable": {
+      "durability": 500
+    },
+    "minecraft:enchantable": {
+      "enchantability": 15,
+      "enchantments": "minecraft:sword_enchanting"
+    },
+    "minecraft:forgeable": {
+      "enchantments": "minecraft:sword_forging"
+    },
+    "minecraft:repairable": {
+      "items": "minecraft:repairs_mace"
+    },
+    "minecraft:stackable": 1,
+    "minecraft:tool": {
+      "damage_per_block": 2,
+      "rules": []
+    },
+    "minecraft:weapon": {
+      "attack_damage": {
+        "default_damage": 6.0,
+        "rules": []
+      },
+      "attack_speed": 0.125,
+      "may_smash": true
+    }
+  }
+}

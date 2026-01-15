@@ -5,6 +5,8 @@
     "minecraft:skull_banner_pattern",
     "minecraft:mojang_banner_pattern",
     "minecraft:globe_banner_pattern",
-    "minecraft:piglin_banner_pattern"
+    "minecraft:piglin_banner_pattern",
+    "minecraft:flow_banner_pattern",
+    "minecraft:guster_banner_pattern"
   ]
 }

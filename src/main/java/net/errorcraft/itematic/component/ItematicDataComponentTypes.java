@@ -29,5 +29,7 @@ public class ItematicDataComponentTypes {
     public static final ComponentType<ItemDamageRulesDataComponent> SHOOTER_DAMAGE_RULES = DataComponentTypesAccessor.register("shooter_damage_rules", builder -> builder.codec(ItemDamageRulesDataComponent.CODEC).packetCodec(ItemDamageRulesDataComponent.PACKET_CODEC).cache());
     public static final ComponentType<CrossbowItem.LoadingSounds> SHOOTER_DEFAULT_CHARGING_SOUNDS = DataComponentTypesAccessor.register("shooter_default_charging_sounds", builder -> builder.codec(CrossbowItem.LoadingSounds.CODEC).packetCodec(ChargingSoundsUtil.PACKET_CODEC).cache());
 
+    private ItematicDataComponentTypes() {}
+
     public static void init() {}
 }

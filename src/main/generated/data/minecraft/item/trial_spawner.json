@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "block.minecraft.trial_spawner"
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:trial_spawner"
+    },
+    "minecraft:stackable": 64
+  }
+}

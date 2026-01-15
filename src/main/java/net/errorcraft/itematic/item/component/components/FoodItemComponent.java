@@ -34,11 +34,19 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
     }
 
     public static ItemComponent<?>[] from(FoodComponent component) {
-        return from(component, null);
+        return from(component, UseAction.EAT, null);
+    }
+
+    public static ItemComponent<?>[] from(FoodComponent component, UseAction animation) {
+        return from(component, animation, null);
     }
 
     public static ItemComponent<?>[] from(FoodComponent component, RegistryEntry<Item> resultItem) {
         return from(component, (int)(component.eatSeconds() * SharedConstants.TICKS_PER_SECOND), UseAction.EAT, resultItem);
+    }
+
+    public static ItemComponent<?>[] from(FoodComponent component, UseAction animation, RegistryEntry<Item> resultItem) {
+        return from(component, (int)(component.eatSeconds() * SharedConstants.TICKS_PER_SECOND), animation, resultItem);
     }
 
     public static ItemComponent<?>[] from(FoodComponent component, int eatTicks, UseAction useAction, RegistryEntry<Item> resultItem) {

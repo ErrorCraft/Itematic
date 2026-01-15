@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "block.minecraft.waxed_copper_door"
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:waxed_copper_door"
+    },
+    "minecraft:stackable": 64
+  }
+}

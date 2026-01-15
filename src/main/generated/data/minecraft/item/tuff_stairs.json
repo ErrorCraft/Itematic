@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "block.minecraft.tuff_stairs"
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:tuff_stairs"
+    },
+    "minecraft:stackable": 64
+  }
+}

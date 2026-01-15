@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "block.minecraft.waxed_weathered_copper_bulb"
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:waxed_weathered_copper_bulb"
+    },
+    "minecraft:stackable": 64
+  }
+}

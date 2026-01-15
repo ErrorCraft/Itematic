@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "item.minecraft.flow_armor_trim_smithing_template"
+  },
+  "components": {
+    "minecraft:smithing_template": {
+      "template": "minecraft:flow_pattern"
+    },
+    "minecraft:stackable": 64
+  }
+}

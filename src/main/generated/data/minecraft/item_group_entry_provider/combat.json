@@ -9,6 +9,7 @@
       "tag": "minecraft:item_group/axes"
     },
     "minecraft:trident",
+    "minecraft:mace",
     "minecraft:shield",
     {
       "type": "tag",

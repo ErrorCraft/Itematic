@@ -14,6 +14,13 @@ public record DecoratedPotPatternItemComponent(RegistryEntry<String> pattern) im
         RegistryFixedCodec.of(RegistryKeys.DECORATED_POT_PATTERN).fieldOf("pattern").forGetter(DecoratedPotPatternItemComponent::pattern)
     ).apply(instance, DecoratedPotPatternItemComponent::new));
 
+    public static ItemComponent<?>[] of(RegistryEntry<String> pattern) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(64),
+            new DecoratedPotPatternItemComponent(pattern)
+        };
+    }
+
     @Override
     public ItemComponentType<DecoratedPotPatternItemComponent> type() {
         return ItemComponentTypes.DECORATED_POT_PATTERN;
@@ -22,9 +29,5 @@ public record DecoratedPotPatternItemComponent(RegistryEntry<String> pattern) im
     @Override
     public Codec<DecoratedPotPatternItemComponent> codec() {
         return CODEC;
-    }
-
-    public static DecoratedPotPatternItemComponent of(RegistryEntry<String> pattern) {
-        return new DecoratedPotPatternItemComponent(pattern);
     }
 }

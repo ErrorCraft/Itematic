@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "block.minecraft.waxed_oxidized_chiseled_copper"
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:waxed_oxidized_chiseled_copper"
+    },
+    "minecraft:stackable": 64
+  }
+}

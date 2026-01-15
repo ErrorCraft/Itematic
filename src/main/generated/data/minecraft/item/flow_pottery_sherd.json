@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "item.minecraft.flow_pottery_sherd"
+  },
+  "components": {
+    "minecraft:decorated_pot_pattern": {
+      "pattern": "minecraft:flow_pottery_pattern"
+    },
+    "minecraft:stackable": 64
+  }
+}

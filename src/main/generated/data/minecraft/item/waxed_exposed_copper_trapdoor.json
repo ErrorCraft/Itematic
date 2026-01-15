@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "block.minecraft.waxed_exposed_copper_trapdoor"
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:waxed_exposed_copper_trapdoor"
+    },
+    "minecraft:stackable": 64
+  }
+}

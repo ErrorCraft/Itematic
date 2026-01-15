@@ -41,11 +41,14 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> MUSIC_DISC_BLOCKS = of("music_disc.blocks");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_CAT = of("music_disc.cat");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_CHIRP = of("music_disc.chirp");
+    public static final RegistryKey<SoundEvent> MUSIC_DISC_CREATOR = of("music_disc.creator");
+    public static final RegistryKey<SoundEvent> MUSIC_DISC_CREATOR_MUSIC_BOX = of("music_disc.creator_music_box");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_FAR = of("music_disc.far");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_MALL = of("music_disc.mall");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_MELLOHI = of("music_disc.mellohi");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_OTHERSIDE = of("music_disc.otherside");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_PIGSTEP = of("music_disc.pigstep");
+    public static final RegistryKey<SoundEvent> MUSIC_DISC_PRECIPICE = of("music_disc.precipice");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_RELIC = of("music_disc.relic");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_STAL = of("music_disc.stal");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_STRAD = of("music_disc.strad");

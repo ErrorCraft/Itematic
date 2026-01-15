@@ -1,0 +1,22 @@
+{
+  "base": {
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.ominous_bottle"
+  },
+  "components": {
+    "minecraft:consumable": {},
+    "minecraft:food": {
+      "nutrition": 1,
+      "saturation": 0.2
+    },
+    "minecraft:ominous_effect_provider": {},
+    "minecraft:stackable": 64,
+    "minecraft:useable": {
+      "animation": "drink",
+      "ticks": {
+        "type": "minecraft:constant",
+        "amount": 32
+      }
+    }
+  }
+}

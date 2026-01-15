@@ -1,8 +1,13 @@
 {
   "values": [
     "minecraft:waxed_copper_block",
+    "minecraft:waxed_chiseled_copper",
+    "minecraft:waxed_copper_grate",
     "minecraft:waxed_cut_copper",
     "minecraft:waxed_cut_copper_stairs",
-    "minecraft:waxed_cut_copper_slab"
+    "minecraft:waxed_cut_copper_slab",
+    "minecraft:waxed_copper_door",
+    "minecraft:waxed_copper_trapdoor",
+    "minecraft:waxed_copper_bulb"
   ]
 }
