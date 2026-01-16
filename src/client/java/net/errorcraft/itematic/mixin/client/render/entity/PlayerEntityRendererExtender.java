@@ -1,6 +1,8 @@
 package net.errorcraft.itematic.mixin.client.render.entity;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
+import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,7 +19,10 @@ public class PlayerEntityRendererExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private static boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.CROSSBOW);
+    private static boolean isOfForCrossbowUseItemComponent(ItemStack instance, Item item) {
+        return instance.itematic$getComponent(ItemComponentTypes.SHOOTER)
+            .map(ShooterItemComponent::method)
+            .filter(method -> method.type() == ShooterMethodTypes.CHARGEABLE)
+            .isPresent();
     }
 }

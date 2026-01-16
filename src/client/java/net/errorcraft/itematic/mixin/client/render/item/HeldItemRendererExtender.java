@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.client.render.item;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
-import net.errorcraft.itematic.component.type.UseDurationDataComponent;
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
+import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.item.HeldItemRenderer;
@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
+import java.util.Optional;
 import java.util.OptionalInt;
 
 @Mixin(HeldItemRenderer.class)
@@ -43,8 +44,11 @@ public class HeldItemRendererExtender {
             )
         )
     )
-    private static boolean isOfForBowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BOW);
+    private static boolean isOfForBowUseItemComponent(ItemStack instance, Item item) {
+        return instance.itematic$getComponent(ItemComponentTypes.SHOOTER)
+            .map(ShooterItemComponent::method)
+            .filter(method -> method.type() == ShooterMethodTypes.DIRECT)
+            .isPresent();
     }
 
     @Redirect(
@@ -63,10 +67,17 @@ public class HeldItemRendererExtender {
         )
     )
     private boolean isOfForCrossbowUseItemComponent(ItemStack instance, Item item, AbstractClientPlayerEntity player, @Share("useDuration") LocalIntRef useDuration) {
-        OptionalInt optionalUseDuration = instance.itematic$getComponent(ItemComponentTypes.SHOOTER)
-            .map(shooter -> shooter.useDuration(instance, player))
-            .orElseGet(OptionalInt::empty);
-        if (optionalUseDuration.orElse(UseDurationDataComponent.INDEFINITE_USE_DURATION) == UseDurationDataComponent.INDEFINITE_USE_DURATION) {
+        Optional<ShooterItemComponent> optionalShooter = instance.itematic$getComponent(ItemComponentTypes.SHOOTER);
+        if (optionalShooter.isEmpty()) {
+            return false;
+        }
+
+        if (optionalShooter.get().method().type() !=  ShooterMethodTypes.CHARGEABLE) {
+            return false;
+        }
+
+        OptionalInt optionalUseDuration = optionalShooter.get().useDuration(instance, player);
+        if (optionalUseDuration.orElse(0) <= 0) {
             return false;
         }
 
@@ -82,7 +93,7 @@ public class HeldItemRendererExtender {
             ordinal = 0
         )
     )
-    private int useDifference(AbstractClientPlayerEntity instance, @Share("useDuration") LocalIntRef useDuration) {
+    private int useDifferenceForCrossbow(AbstractClientPlayerEntity instance, @Share("useDuration") LocalIntRef useDuration) {
         return useDuration.get() - instance.itematic$itemUsedTicks();
     }
 
@@ -101,10 +112,54 @@ public class HeldItemRendererExtender {
         method = "renderFirstPersonItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getItemUseTimeLeft()I"
+            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getItemUseTimeLeft()I",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/render/item/HeldItemRenderer;applyEquipOffset(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/Arm;F)V",
+                ordinal = 0
+            )
         )
     )
-    private int getUseTimeLeftUseUsedTicks(AbstractClientPlayerEntity instance) {
+    private int getUseTimeLeftForCrossbowUseNegatedUsedTicks(AbstractClientPlayerEntity instance) {
+        return -instance.itematic$itemUsedTicks();
+    }
+
+    @Redirect(
+        method = "renderFirstPersonItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getItemUseTimeLeft()I",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/render/item/HeldItemRenderer;renderItem(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
+                ordinal = 0
+            )
+        )
+    )
+    private int getUseTimeLeftForUseAnimationCheckUseUsedTicks(AbstractClientPlayerEntity instance) {
+        return instance.itematic$itemUsedTicks();
+    }
+
+    @Redirect(
+        method = "renderFirstPersonItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getItemUseTimeLeft()I"
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/render/item/HeldItemRenderer;applyEatOrDrinkTransformation(Lnet/minecraft/client/util/math/MatrixStack;FLnet/minecraft/util/Arm;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/player/PlayerEntity;)V"
+            )
+        )
+    )
+    private int getUseTimeLeftForBowAndSpearUseNegatedUsedTicks(AbstractClientPlayerEntity instance) {
         return -instance.itematic$itemUsedTicks();
     }
 
@@ -137,8 +192,11 @@ public class HeldItemRendererExtender {
             )
         )
     )
-    private static boolean isOfForCrossbowUseRegistryKeyCheckStatic(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.CROSSBOW);
+    private static boolean isOfForCrossbowUseItemComponentStatic(ItemStack instance, Item item) {
+        return instance.itematic$getComponent(ItemComponentTypes.SHOOTER)
+            .map(ShooterItemComponent::method)
+            .filter(method -> method.type() == ShooterMethodTypes.CHARGEABLE)
+            .isPresent();
     }
 
     @Redirect(

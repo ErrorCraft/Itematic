@@ -32,6 +32,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.OptionalInt;
 
 public record ChargeableShooterMethod(CrossbowItem.LoadingSounds defaultChargingSounds) implements ShooterMethod {
@@ -67,7 +68,7 @@ public record ChargeableShooterMethod(CrossbowItem.LoadingSounds defaultCharging
 
         float chargedSpeed = stack.getOrDefault(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)
             .itematic$getChargedSpeed();
-        shoot(component, world, user, hand, stack, chargedSpeed, 1.0f, null);
+        this.shoot(component, world, user, hand, stack, chargedSpeed, 1.0f, null);
         return true;
     }
 
@@ -99,7 +100,7 @@ public record ChargeableShooterMethod(CrossbowItem.LoadingSounds defaultCharging
             return;
         }
 
-        if (CrossbowItem.isCharged(stack) || !CrossbowItemAccessor.loadProjectiles(user, stack)) {
+        if (CrossbowItem.isCharged(stack) || !chargeProjectiles(user, stack)) {
             return;
         }
 
@@ -166,5 +167,15 @@ public record ChargeableShooterMethod(CrossbowItem.LoadingSounds defaultCharging
     private CrossbowItem.LoadingSounds chargingSounds(ItemStack stack) {
         return EnchantmentHelper.getEffect(stack, EnchantmentEffectComponentTypes.CROSSBOW_CHARGING_SOUNDS)
             .orElseGet(() -> stack.getOrDefault(ItematicDataComponentTypes.SHOOTER_DEFAULT_CHARGING_SOUNDS, ChargingSoundsUtil.EMPTY));
+    }
+
+    private static boolean chargeProjectiles(LivingEntity user, ItemStack stack) {
+        List<ItemStack> projectiles = RangedWeaponItemAccessor.load(stack, user.itematic$getAmmunition(stack), user);
+        if (projectiles.isEmpty()) {
+            return false;
+        }
+
+        stack.set(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.of(projectiles));
+        return true;
     }
 }
