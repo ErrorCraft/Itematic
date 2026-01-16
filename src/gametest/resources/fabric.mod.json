@@ -7,10 +7,13 @@
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": [
+      "net.errorcraft.itematic.gametest.block.AnvilBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.BeehiveBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.CandleBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.ComposterBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.DispenserBehaviorTestSuite",
+      "net.errorcraft.itematic.gametest.block.EnchantingTableTestSuite",
+      "net.errorcraft.itematic.gametest.block.GrindstoneTestSuite",
       "net.errorcraft.itematic.gametest.block.PickBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.ShulkerBoxBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.WaterCauldronBlockTestSuite",

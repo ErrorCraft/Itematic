@@ -4,6 +4,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.fluid.Fluid;
@@ -84,6 +86,16 @@ public class Assert {
                 throw new GameTestException("Expected item stack to have potion " + expected.getKey().orElseThrow() + ", got " + potion.getKey().orElseThrow() + " instead");
             }
         });
+    }
+
+    public static void dataComponentHasEnchantment(ItemEnchantmentsComponent enchantments, RegistryKey<Enchantment> expected) {
+        for (RegistryEntry<Enchantment> enchantment : enchantments.getEnchantments()) {
+            if (enchantment.matchesKey(expected)) {
+                return;
+            }
+        }
+
+        throw new GameTestException("Expected data component to have enchantment " + expected);
     }
 
     public static void entityDoesNotHaveStatusEffect(LivingEntity entity, RegistryEntry<StatusEffect> effect) {
