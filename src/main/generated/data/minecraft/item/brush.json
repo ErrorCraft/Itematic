@@ -10,9 +10,6 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:brush"
     },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:brush_forging"
-    },
     "minecraft:stackable": 1,
     "minecraft:useable": {
       "animation": "brush",

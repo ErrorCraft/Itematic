@@ -13,16 +13,12 @@
       "behavior": "minecraft:equip_entity"
     },
     "minecraft:enchantable": {
-      "enchantability": 15,
-      "enchantments": "minecraft:leggings_enchanting"
+      "enchantability": 15
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_netherite",
       "slot": "legs",
       "swappable": true
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:leggings_forging"
     },
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_fire"

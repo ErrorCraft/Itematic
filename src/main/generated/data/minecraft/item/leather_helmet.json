@@ -16,16 +16,12 @@
       "default_color": -6265536
     },
     "minecraft:enchantable": {
-      "enchantability": 15,
-      "enchantments": "minecraft:helmet_enchanting"
+      "enchantability": 15
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_leather",
       "slot": "head",
       "swappable": true
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:helmet_forging"
     },
     "minecraft:repairable": {
       "items": "minecraft:repairs_leather_armor"

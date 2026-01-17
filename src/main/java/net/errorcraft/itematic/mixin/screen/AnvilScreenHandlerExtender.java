@@ -50,7 +50,7 @@ public class AnvilScreenHandlerExtender {
             )
         )
     )
-    private boolean isOfForEnchantedBookUseComponentCheck(ItemStack instance, Item item) {
+    private boolean isOfForEnchantedBookUseItemComponentCheck(ItemStack instance, Item item) {
         return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTMENT_HOLDER);
     }
 }

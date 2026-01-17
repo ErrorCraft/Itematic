@@ -16,16 +16,12 @@
       "default_color": -6265536
     },
     "minecraft:enchantable": {
-      "enchantability": 15,
-      "enchantments": "minecraft:chestplate_enchanting"
+      "enchantability": 15
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_leather",
       "slot": "chest",
       "swappable": true
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:chestplate_forging"
     },
     "minecraft:repairable": {
       "items": "minecraft:repairs_leather_armor"

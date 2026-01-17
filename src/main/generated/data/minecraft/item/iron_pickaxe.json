@@ -7,11 +7,7 @@
       "durability": 250
     },
     "minecraft:enchantable": {
-      "enchantability": 14,
-      "enchantments": "minecraft:pickaxe_enchanting"
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:pickaxe_forging"
+      "enchantability": 14
     },
     "minecraft:repairable": {
       "items": "minecraft:repairs_iron_tool"

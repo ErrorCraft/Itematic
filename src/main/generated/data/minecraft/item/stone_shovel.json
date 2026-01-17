@@ -7,11 +7,7 @@
       "durability": 131
     },
     "minecraft:enchantable": {
-      "enchantability": 5,
-      "enchantments": "minecraft:shovel_enchanting"
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:shovel_forging"
+      "enchantability": 5
     },
     "minecraft:repairable": {
       "items": "minecraft:repairs_stone_tool"

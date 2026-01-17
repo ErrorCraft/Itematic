@@ -7,11 +7,7 @@
       "durability": 59
     },
     "minecraft:enchantable": {
-      "enchantability": 15,
-      "enchantments": "minecraft:sword_enchanting"
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:sword_forging"
+      "enchantability": 15
     },
     "minecraft:fuel": {
       "ticks": 200

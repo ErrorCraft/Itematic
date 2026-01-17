@@ -7,11 +7,7 @@
       "durability": 59
     },
     "minecraft:enchantable": {
-      "enchantability": 15,
-      "enchantments": "minecraft:pickaxe_enchanting"
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:pickaxe_forging"
+      "enchantability": 15
     },
     "minecraft:fuel": {
       "ticks": 200

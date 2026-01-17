@@ -7,11 +7,7 @@
       "durability": 384
     },
     "minecraft:enchantable": {
-      "enchantability": 1,
-      "enchantments": "minecraft:bow_enchanting"
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:bow_forging"
+      "enchantability": 1
     },
     "minecraft:fuel": {
       "ticks": 300

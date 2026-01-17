@@ -7,11 +7,7 @@
       "durability": 1561
     },
     "minecraft:enchantable": {
-      "enchantability": 10,
-      "enchantments": "minecraft:sword_enchanting"
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:sword_forging"
+      "enchantability": 10
     },
     "minecraft:repairable": {
       "items": "minecraft:repairs_diamond_tool"

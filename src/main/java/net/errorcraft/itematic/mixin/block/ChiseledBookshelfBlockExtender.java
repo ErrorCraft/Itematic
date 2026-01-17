@@ -15,7 +15,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ChiseledBookshelfBlock.class)
 public class ChiseledBookshelfBlockExtender {
     @Redirect(
-        method = { "tryAddBook", "tryRemoveBook" },
+        method = {
+            "tryAddBook",
+            "tryRemoveBook"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"

@@ -37,10 +37,10 @@ public class EnchantmentHelperExtender {
         )
     )
     private static boolean isOfForBookUseItemComponent(ItemStack instance, Item item, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
-        Optional<RegistryEntry<Item>> optionalEntry = instance.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
+        Optional<RegistryEntry<Item>> optionalItem = instance.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
             .flatMap(EnchantableItemComponent::transformsInto);
-        optionalEntry.ifPresent(transformsInto::set);
-        return optionalEntry.isPresent();
+        optionalItem.ifPresent(transformsInto::set);
+        return optionalItem.isPresent();
     }
 
     @Redirect(

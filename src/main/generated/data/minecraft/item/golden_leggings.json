@@ -13,16 +13,12 @@
       "behavior": "minecraft:equip_entity"
     },
     "minecraft:enchantable": {
-      "enchantability": 25,
-      "enchantments": "minecraft:leggings_enchanting"
+      "enchantability": 25
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_gold",
       "slot": "legs",
       "swappable": true
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:leggings_forging"
     },
     "minecraft:repairable": {
       "items": "minecraft:repairs_golden_armor"

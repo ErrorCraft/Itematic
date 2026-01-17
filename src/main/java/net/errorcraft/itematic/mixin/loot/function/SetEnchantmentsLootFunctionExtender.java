@@ -24,11 +24,11 @@ public class SetEnchantmentsLootFunctionExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean isOfForBookUseItemComponentCheck(ItemStack instance, Item item, @Share("transformedEntry") LocalRef<RegistryEntry<Item>> transformedEntry) {
-        Optional<RegistryEntry<Item>> optionalEntry = instance.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
+    private boolean isOfForBookUseItemComponent(ItemStack instance, Item item, @Share("transformedEntry") LocalRef<RegistryEntry<Item>> transformedEntry) {
+        Optional<RegistryEntry<Item>> optionalItem = instance.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
             .flatMap(EnchantableItemComponent::transformsInto);
-        optionalEntry.ifPresent(transformedEntry::set);
-        return optionalEntry.isPresent();
+        optionalItem.ifPresent(transformedEntry::set);
+        return optionalItem.isPresent();
     }
 
     @Redirect(
@@ -38,7 +38,7 @@ public class SetEnchantmentsLootFunctionExtender {
             target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack copyComponentsToNewStackForEnchantedBookUseRegistryEntry(ItemStack instance, ItemConvertible item, int count, @Share("transformedEntry") LocalRef<RegistryEntry<Item>> transformedEntry) {
+    private ItemStack copyComponentsToNewStackForEnchantedBookUseItemComponent(ItemStack instance, ItemConvertible item, int count, @Share("transformedEntry") LocalRef<RegistryEntry<Item>> transformedEntry) {
         return instance.itematic$copyComponentsToNewStack(transformedEntry.get(), count);
     }
 }

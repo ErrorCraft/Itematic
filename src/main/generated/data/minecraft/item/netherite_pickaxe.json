@@ -7,11 +7,7 @@
       "durability": 2031
     },
     "minecraft:enchantable": {
-      "enchantability": 15,
-      "enchantments": "minecraft:pickaxe_enchanting"
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:pickaxe_forging"
+      "enchantability": 15
     },
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_fire"

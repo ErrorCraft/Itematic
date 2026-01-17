@@ -91,7 +91,6 @@
     "component.type.DyedColorComponentExtender",
     "component.type.ToolComponentExtender",
     "component.type.ToolComponentExtender$RuleExtender",
-    "enchantment.EnchantmentExtender",
     "enchantment.EnchantmentHelperExtender",
     "entity.BucketableExtender",
     "entity.CrossbowUserExtender",

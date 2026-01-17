@@ -21,6 +21,8 @@ import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.util.Util;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.fabricmc.fabric.api.item.v1.EnchantingContext;
+import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.advancement.criterion.ItemDurabilityChangedCriterion;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipType;
@@ -28,6 +30,7 @@ import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.ComponentHolder;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentMapImpl;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -75,7 +78,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackExtender implements ComponentHolder, ItemStackAccess {
+public abstract class ItemStackExtender implements ComponentHolder, ItemStackAccess, FabricItemStack {
     @Shadow
     @Final
     private static Logger LOGGER;
@@ -645,6 +648,12 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     @Overwrite
     public String toString() {
         return this.count + " " + this.itematic$key().getValue().toString();
+    }
+
+    @Override
+    public boolean canBeEnchantedWith(RegistryEntry<Enchantment> enchantment, EnchantingContext context) {
+        // Use the original implementation again
+        return enchantment.value().isAcceptableItem((ItemStack)(Object) this);
     }
 
     @Override

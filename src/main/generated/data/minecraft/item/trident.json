@@ -8,11 +8,7 @@
       "preserve_item": true
     },
     "minecraft:enchantable": {
-      "enchantability": 1,
-      "enchantments": "minecraft:trident_enchanting"
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:trident_forging"
+      "enchantability": 1
     },
     "minecraft:projectile": {
       "entity": {
