@@ -279,6 +279,7 @@
     "item.ItemUsageExtender",
     "item.KnowledgeBookItemExtender",
     "item.MilkBucketItemAccessor",
+    "item.OminousBottleItemAccessor",
     "item.PotionItemAccessor",
     "item.RangedWeaponItemAccessor",
     "item.SmithingTemplateItemAccessor",

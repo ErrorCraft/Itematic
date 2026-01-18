@@ -32,8 +32,10 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> FIRE_CHARGE_USE = of("item.firecharge.use");
     public static final RegistryKey<SoundEvent> FIRE_EXTINGUISH = of("block.fire.extinguish");
     public static final RegistryKey<SoundEvent> FLINT_AND_STEEL_USE = of("item.flintandsteel.use");
+    public static final RegistryKey<SoundEvent> GENERIC_DRINK = of("entity.generic.drink");
     public static final RegistryKey<SoundEvent> GENERIC_SPLASH = of("entity.generic.splash");
     public static final RegistryKey<SoundEvent> HOE_TILL = of("item.hoe.till");
+    public static final RegistryKey<SoundEvent> HONEY_BOTTLE_DRINK = of("item.honey_bottle.drink");
     public static final RegistryKey<SoundEvent> HORSE_SADDLE = of("entity.horse.saddle");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_5 = of("music_disc.5");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_11 = of("music_disc.11");
@@ -54,6 +56,7 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> MUSIC_DISC_STRAD = of("music_disc.strad");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_WAIT = of("music_disc.wait");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_WARD = of("music_disc.ward");
+    public static final RegistryKey<SoundEvent> OMINOUS_BOTTLE_DISPOSE = of("item.ominous_bottle.dispose");
     public static final RegistryKey<SoundEvent> SHOVEL_FLATTEN = of("item.shovel.flatten");
     public static final RegistryKey<SoundEvent> SPYGLASS_USE = of("item.spyglass.use");
     public static final RegistryKey<SoundEvent> SPYGLASS_STOP_USING = of("item.spyglass.stop_using");

@@ -4,10 +4,9 @@
     "translation_key": "item.minecraft.ominous_bottle"
   },
   "components": {
-    "minecraft:consumable": {},
-    "minecraft:food": {
-      "nutrition": 1,
-      "saturation": 0.2
+    "minecraft:consumable": {
+      "has_consume_particles": false,
+      "sound": "minecraft:entity.generic.drink"
     },
     "minecraft:ominous_effect_provider": {},
     "minecraft:stackable": 64,
@@ -16,6 +15,17 @@
       "ticks": {
         "type": "minecraft:constant",
         "amount": 32
+      }
+    }
+  },
+  "events": {
+    "minecraft:consume_item": {
+      "action": {
+        "type": "minecraft:play_sound",
+        "pitch": 1.0,
+        "position": "this",
+        "sound": "minecraft:item.ominous_bottle.dispose",
+        "volume": 1.0
       }
     }
   }

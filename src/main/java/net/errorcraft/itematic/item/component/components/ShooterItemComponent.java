@@ -98,7 +98,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
         this.method.addComponents(builder);
     }
 
-    public void shoot(ServerWorld world, LivingEntity shooter, Hand hand, ItemStack shooterStack, List<ItemStack> projectiles, float speed, float divergence, boolean critical, @Nullable LivingEntity target) {
+    public void shoot(ServerWorld world, LivingEntity shooter, Hand hand, ItemStack shooterStack, List<ItemStack> projectiles, float power, float divergence, boolean critical, @Nullable LivingEntity target) {
         float maxAngle = EnchantmentHelper.getProjectileSpread(world, shooterStack, shooter, 0.0f);
         float angleStep = projectiles.size() == 1 ?
             0.0f :
@@ -114,7 +114,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
             float angle = angleOffset + direction * ((i + 1) / 2.0f) * angleStep;
             direction *= -1;
             this.damageItem(shooterStack, world, hand, shooter);
-            this.createProjectile(projectile, world, shooter, speed, divergence, angle, i, critical, target);
+            this.createProjectile(projectile, world, shooter, power, divergence, angle, i, critical, target);
         }
     }
 
@@ -141,16 +141,16 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
         stack.itematic$damage(damage, context);
     }
 
-    private void createProjectile(ItemStack projectile, ServerWorld world, LivingEntity shooter, float speed, float divergence, float angle, int index, boolean critical, @Nullable LivingEntity target) {
+    private void createProjectile(ItemStack projectile, ServerWorld world, LivingEntity shooter, float power, float divergence, float angle, int index, boolean critical, @Nullable LivingEntity target) {
         Optional<Entity> optionalEntity = projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE)
-            .map(projectileComponent -> projectileComponent.createEntity(world, shooter, projectile, 0.0f, speed));
+            .map(projectileComponent -> projectileComponent.createEntity(world, shooter, projectile, 0.0f, power));
         if (optionalEntity.isEmpty()) {
             return;
         }
 
         Entity entity = optionalEntity.get();
         if (entity instanceof ProjectileEntity projectileEntity) {
-            this.method.initializeProjectile(shooter, projectileEntity, index, speed, divergence, angle, critical, target);
+            this.method.initializeProjectile(shooter, projectileEntity, index, power, divergence, angle, critical, target);
         }
 
         world.spawnEntity(entity);

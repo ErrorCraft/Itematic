@@ -22,12 +22,12 @@ public interface CrossbowItemAccessor {
     }
 
     @Accessor("DEFAULT_SPEED")
-    static float defaultSpeed() {
+    static float defaultPower() {
         throw new AssertionError();
     }
 
     @Accessor("FIREWORK_ROCKET_SPEED")
-    static float fireworkRocketSpeed() {
+    static float fireworkRocketPower() {
         throw new AssertionError();
     }
 

@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.item.shooter.method.methods;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
@@ -10,6 +11,7 @@ import net.errorcraft.itematic.item.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.item.RangedWeaponItemAccessor;
+import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -23,6 +25,12 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.registry.RegistryCodecs;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -33,20 +41,22 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
 
-public record ChargeableShooterMethod(CrossbowItem.LoadingSounds defaultChargingSounds) implements ShooterMethod {
+public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.LoadingSounds defaultChargingSounds, ChargedPowerRules chargedPowerRules) implements ShooterMethod {
     public static final MapCodec<ChargeableShooterMethod> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        CrossbowItem.LoadingSounds.CODEC.fieldOf("default_charging_sounds").forGetter(ChargeableShooterMethod::defaultChargingSounds)
+        ItematicCodecs.NON_NEGATIVE_FLOAT.fieldOf("default_charge_time").forGetter(ChargeableShooterMethod::defaultChargeTime),
+        CrossbowItem.LoadingSounds.CODEC.fieldOf("default_charging_sounds").forGetter(ChargeableShooterMethod::defaultChargingSounds),
+        ChargedPowerRules.CODEC.fieldOf("charged_power_rules").forGetter(ChargeableShooterMethod::chargedPowerRules)
     ).apply(instance, ChargeableShooterMethod::new));
-    private static final float DEFAULT_CHARGE_TIME = CrossbowItemAccessor.defaultChargeTime();
     private static final float START_SOUND_PROGRESS = CrossbowItemAccessor.startSoundProgress();
     private static final float MID_SOUND_PROGRESS = CrossbowItemAccessor.midSoundProgress();
     private static final int EXTRA_USE_TIME = 3;
     private static final CrossbowItem DUMMY = new CrossbowItem(new Item.Settings());
 
-    public static ChargeableShooterMethod of(CrossbowItem.LoadingSounds defaultChargingSounds) {
-        return new ChargeableShooterMethod(defaultChargingSounds);
+    public static ChargeableShooterMethod of(CrossbowItem.LoadingSounds defaultChargingSounds, ChargedPowerRules.Rule... chargedPowerRules) {
+        return new ChargeableShooterMethod(CrossbowItemAccessor.defaultChargeTime(), defaultChargingSounds, new ChargedPowerRules(List.of(chargedPowerRules), CrossbowItemAccessor.defaultPower()));
     }
 
     @Override
@@ -57,7 +67,9 @@ public record ChargeableShooterMethod(CrossbowItem.LoadingSounds defaultCharging
     @Override
     public void addComponents(ComponentMap.Builder builder) {
         builder.add(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT);
+        builder.add(ItematicDataComponentTypes.SHOOTER_DEFAULT_CHARGE_TIME, this.defaultChargeTime);
         builder.add(ItematicDataComponentTypes.SHOOTER_DEFAULT_CHARGING_SOUNDS, this.defaultChargingSounds);
+        builder.add(ItematicDataComponentTypes.SHOOTER_CHARGED_POWER_RULES, this.chargedPowerRules);
     }
 
     @Override
@@ -66,9 +78,12 @@ public record ChargeableShooterMethod(CrossbowItem.LoadingSounds defaultCharging
             return false;
         }
 
-        float chargedSpeed = stack.getOrDefault(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)
-            .itematic$getChargedSpeed();
-        this.shoot(component, world, user, hand, stack, chargedSpeed, 1.0f, null);
+        ChargedPowerRules chargedPowerRules = stack.get(ItematicDataComponentTypes.SHOOTER_CHARGED_POWER_RULES);
+        if (chargedPowerRules == null) {
+            return false;
+        }
+
+        this.shoot(component, world, user, hand, stack, chargedPowerRules.power(stack), 1.0f, null);
         return true;
     }
 
@@ -78,7 +93,7 @@ public record ChargeableShooterMethod(CrossbowItem.LoadingSounds defaultCharging
             return;
         }
 
-        int chargeTime = getChargeTime(stack, user);
+        int chargeTime = CrossbowItem.getPullTime(stack, user);
         if (usedTicks >= chargeTime) {
             return;
         }
@@ -96,7 +111,7 @@ public record ChargeableShooterMethod(CrossbowItem.LoadingSounds defaultCharging
 
     @Override
     public void stop(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks) {
-        if (usedTicks < getChargeTime(stack, user)) {
+        if (usedTicks < CrossbowItem.getPullTime(stack, user)) {
             return;
         }
 
@@ -125,15 +140,15 @@ public record ChargeableShooterMethod(CrossbowItem.LoadingSounds defaultCharging
             return OptionalInt.empty();
         }
 
-        return OptionalInt.of(getChargeTime(stack, user) + EXTRA_USE_TIME);
+        return OptionalInt.of(CrossbowItem.getPullTime(stack, user) + EXTRA_USE_TIME);
     }
 
     @Override
     public float pullProgress(ItemStack stack, LivingEntity user, int usedTicks) {
-        return ((float)usedTicks) / getChargeTime(stack, user);
+        return ((float)usedTicks) / CrossbowItem.getPullTime(stack, user);
     }
 
-    public void shoot(ShooterItemComponent shooter, World world, LivingEntity user, Hand hand, ItemStack stack, float speed, float divergence, @Nullable LivingEntity livingEntity) {
+    public void shoot(ShooterItemComponent shooter, World world, LivingEntity user, Hand hand, ItemStack stack, float power, float divergence, @Nullable LivingEntity livingEntity) {
         if (!(world instanceof ServerWorld serverWorld)) {
             return;
         }
@@ -143,21 +158,11 @@ public record ChargeableShooterMethod(CrossbowItem.LoadingSounds defaultCharging
             return;
         }
 
-        shooter.shoot(serverWorld, user, hand, stack, chargedProjectiles.getProjectiles(), speed, divergence, user instanceof PlayerEntity, livingEntity);
+        shooter.shoot(serverWorld, user, hand, stack, chargedProjectiles.getProjectiles(), power, divergence, user instanceof PlayerEntity, livingEntity);
         if (user instanceof ServerPlayerEntity player) {
             Criteria.SHOT_CROSSBOW.trigger(player, stack);
             player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         }
-    }
-
-    public static int getChargeTime(ItemStack stack, LivingEntity user) {
-        // TODO: Place the default charge time into a data component and change all CrossbowItem::getPullTime references to this one.
-        //  Alternatively, modify the original method's hard values with the ones from the data component.
-        //  What to do if the component is removed or does not exist otherwise? Maybe return 0 or -1 as an invalid state or check beforehand.
-        float chargeTime = user.getWorld() instanceof ServerWorld serverWorld ?
-            EnchantmentHelper.getCrossbowChargeTime(serverWorld, stack, user, DEFAULT_CHARGE_TIME) :
-            DEFAULT_CHARGE_TIME;
-        return MathHelper.floor(chargeTime * 20);
     }
 
     private static int getChargeTimeAt(int chargeTime, float progress) {
@@ -177,5 +182,47 @@ public record ChargeableShooterMethod(CrossbowItem.LoadingSounds defaultCharging
 
         stack.set(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.of(projectiles));
         return true;
+    }
+
+    public record ChargedPowerRules(List<Rule> rules, float defaultPower) {
+        public static final Codec<ChargedPowerRules> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Rule.CODEC.listOf().fieldOf("rules").forGetter(ChargedPowerRules::rules),
+            ItematicCodecs.NON_NEGATIVE_FLOAT.fieldOf("default_power").forGetter(ChargedPowerRules::defaultPower)
+        ).apply(instance, ChargedPowerRules::new));
+        public static final PacketCodec<RegistryByteBuf, ChargedPowerRules> PACKET_CODEC = PacketCodec.tuple(
+            Rule.PACKET_CODEC.collect(PacketCodecs.toList()), ChargedPowerRules::rules,
+            PacketCodecs.FLOAT, ChargedPowerRules::defaultPower,
+            ChargedPowerRules::new
+        );
+
+        public float power(ItemStack stack) {
+            for (Rule rule : this.rules) {
+                if (rule.power.isPresent() && rule.matches(stack)) {
+                    return rule.power.get();
+                }
+            }
+
+            return this.defaultPower;
+        }
+
+        public record Rule(RegistryEntryList<Item> items, Optional<Float> power) {
+            public static final Codec<Rule> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                RegistryCodecs.entryList(RegistryKeys.ITEM).fieldOf("items").forGetter(Rule::items),
+                ItematicCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("power").forGetter(Rule::power)
+            ).apply(instance, Rule::new));
+            public static final PacketCodec<RegistryByteBuf, Rule> PACKET_CODEC = PacketCodec.tuple(
+                PacketCodecs.registryEntryList(RegistryKeys.ITEM), Rule::items,
+                PacketCodecs.FLOAT.collect(PacketCodecs::optional), Rule::power,
+                Rule::new
+            );
+
+            public static Rule of(RegistryEntryList<Item> items, float power) {
+                return new Rule(items, Optional.of(power));
+            }
+
+            public boolean matches(ItemStack stack) {
+                return stack.isIn(this.items);
+            }
+        }
     }
 }

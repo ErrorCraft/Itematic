@@ -9,8 +9,6 @@ import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
@@ -27,19 +25,13 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Position;
 import net.minecraft.world.World;
 
-public record ProjectileItemComponent(EntityInitializer<?> entity, float chargedSpeed) implements ItemComponent<ProjectileItemComponent> {
+public record ProjectileItemComponent(EntityInitializer<?> entity) implements ItemComponent<ProjectileItemComponent> {
     public static final Codec<ProjectileItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        EntityInitializer.CODEC.fieldOf("entity").forGetter(ProjectileItemComponent::entity),
-        ItematicCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("charged_speed", CrossbowItemAccessor.defaultSpeed()).forGetter(ProjectileItemComponent::chargedSpeed)
+        EntityInitializer.CODEC.fieldOf("entity").forGetter(ProjectileItemComponent::entity)
     ).apply(instance, ProjectileItemComponent::new));
 
-    // TODO: Move chargedSpeed field to rules defined in ChargeableShooterMethod + data component
-    public static ProjectileItemComponent of(EntityInitializer<?> entity, float chargedSpeed) {
-        return new ProjectileItemComponent(entity, chargedSpeed);
-    }
-
     public static ProjectileItemComponent of(EntityInitializer<?> entity) {
-        return of(entity, CrossbowItemAccessor.defaultSpeed());
+        return new ProjectileItemComponent(entity);
     }
 
     public static ProjectileItemComponent of(RegistryEntry<EntityType<?>> entity) {
@@ -64,6 +56,7 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, float charged
         if (world.isClient()) {
             return null;
         }
+
         return this.createEntity((ServerWorld) world, user, stack, ItemStackConsumer.EMPTY, angleOffset, speed, 1.0f);
     }
 
@@ -79,6 +72,7 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, float charged
         if (world.isClient()) {
             return null;
         }
+
         ActionContext context = ActionContext.builder((ServerWorld) world, stack, ItemStackConsumer.EMPTY)
             .position(ActionContextParameter.TARGET, position)
             .build();
@@ -90,13 +84,16 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, float charged
         if (entity == null) {
             return null;
         }
+
         entity.refreshPositionAfterTeleport(context.position(position));
         if (entity instanceof ThrownItemEntity thrownItemEntity) {
             thrownItemEntity.setItem(context.stack());
         }
+
         if (entity instanceof ProjectileEntity projectileEntity) {
             this.initializeProjectile(context, projectileEntity, angleOffset, speed, uncertainty);
         }
+
         return entity;
     }
 
@@ -107,21 +104,24 @@ public record ProjectileItemComponent(EntityInitializer<?> entity, float charged
         );
     }
 
-    private void initializeProjectile(ProjectileEntity entity, Direction side, float speed, float uncertainty) {
-        if (entity instanceof ExplosiveProjectileEntity) {
-            return;
-        }
-        entity.setVelocity(side.getOffsetX(), side.getOffsetY(), side.getOffsetZ(), speed, uncertainty);
-    }
-
     private void initializeProjectile(ProjectileEntity entity, Entity user, float angleOffset, float speed, float uncertainty) {
         entity.setOwner(user);
         if (entity instanceof PersistentProjectileEntity persistentProjectileEntity && user instanceof PlayerEntity player && player.isInCreativeMode()) {
             persistentProjectileEntity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
         }
+
         if (entity instanceof ExplosiveProjectileEntity) {
             return;
         }
+
         entity.setVelocity(user, user.getPitch(), user.getYaw(), angleOffset, speed, uncertainty);
+    }
+
+    private void initializeProjectile(ProjectileEntity entity, Direction side, float speed, float uncertainty) {
+        if (entity instanceof ExplosiveProjectileEntity) {
+            return;
+        }
+
+        entity.setVelocity(side.getOffsetX(), side.getOffsetY(), side.getOffsetZ(), speed, uncertainty);
     }
 }

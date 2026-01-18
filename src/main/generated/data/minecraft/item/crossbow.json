@@ -20,12 +20,22 @@
         "rules": [
           {
             "damage": 3,
-            "entities": "minecraft:firework_rocket"
+            "items": "minecraft:firework_rocket"
           }
         ]
       },
       "method": {
         "type": "minecraft:chargeable",
+        "charged_power_rules": {
+          "default_power": 3.15,
+          "rules": [
+            {
+              "items": "minecraft:firework_rocket",
+              "power": 1.6
+            }
+          ]
+        },
+        "default_charge_time": 1.25,
         "default_charging_sounds": {
           "end": "minecraft:item.crossbow.loading_end",
           "mid": "minecraft:item.crossbow.loading_middle",

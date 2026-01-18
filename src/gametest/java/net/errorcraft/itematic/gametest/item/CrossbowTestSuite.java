@@ -2,7 +2,6 @@ package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.gametest.Assert;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.Enchantments;
@@ -33,7 +32,7 @@ public class CrossbowTestSuite {
         world.spawnEntity(player);
         context.createTimedTaskRunner()
             .createAndAddReported(() -> stack.use(world, player, Hand.MAIN_HAND))
-            .expectMinDurationAndRun((int) (CrossbowItemAccessor.defaultChargeTime() * 20), () -> {
+            .expectMinDurationAndRun(stack.getMaxUseTime(player), () -> {
                 player.stopUsingItem();
                 Assert.itemStackHasDataComponent(player.getStackInHand(Hand.MAIN_HAND), DataComponentTypes.CHARGED_PROJECTILES,
                     component -> context.assertTrue(component.itematic$contains(ItemKeys.ARROW), "Expected item stack to have an Arrow as a charged projectile")

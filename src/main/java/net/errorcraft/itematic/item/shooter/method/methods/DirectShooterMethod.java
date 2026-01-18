@@ -1,6 +1,8 @@
 package net.errorcraft.itematic.item.shooter.method.methods;
 
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethod;
@@ -14,8 +16,11 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
@@ -25,12 +30,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.OptionalInt;
 
-public record DirectShooterMethod() implements ShooterMethod {
-    public static final MapCodec<DirectShooterMethod> CODEC = MapCodec.unit(DirectShooterMethod::new);
+public record DirectShooterMethod(RegistryEntry<SoundEvent> shootSound) implements ShooterMethod {
+    private static final RegistryEntry<SoundEvent> DEFAULT_SHOOT_SOUND = Registries.SOUND_EVENT.getEntry(SoundEvents.ENTITY_ARROW_SHOOT);
+    public static final MapCodec<DirectShooterMethod> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        SoundEvent.ENTRY_CODEC.optionalFieldOf("shoot_sound", DEFAULT_SHOOT_SOUND).forGetter(DirectShooterMethod::shootSound)
+    ).apply(instance, DirectShooterMethod::new));
     private static final BowItem DUMMY = new BowItem(new Item.Settings());
 
     public static DirectShooterMethod of() {
-        return new DirectShooterMethod();
+        return new DirectShooterMethod(DEFAULT_SHOOT_SOUND);
     }
 
     @Override
@@ -39,7 +47,9 @@ public record DirectShooterMethod() implements ShooterMethod {
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {}
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(ItematicDataComponentTypes.SHOOTER_SHOOT_SOUND, this.shootSound);
+    }
 
     @Override
     public boolean tryShoot(ShooterItemComponent component, ItemStack stack, World world, LivingEntity user, Hand hand) {
@@ -66,7 +76,11 @@ public record DirectShooterMethod() implements ShooterMethod {
             shooter.shoot(serverWorld, user, user.getActiveHand(), stack, projectiles, pullProgress * 3.0f, 1.0f, pullProgress == 1.0f, null);
         }
 
-        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + pullProgress * 0.5f);
+        RegistryEntry<SoundEvent> shootSound = stack.get(ItematicDataComponentTypes.SHOOTER_SHOOT_SOUND);
+        if (shootSound != null) {
+            world.playSound(null, user.getX(), user.getY(), user.getZ(), shootSound.value(), SoundCategory.PLAYERS, 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + pullProgress * 0.5f);
+        }
+
         if (user instanceof PlayerEntity playerEntity) {
             playerEntity.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         }
