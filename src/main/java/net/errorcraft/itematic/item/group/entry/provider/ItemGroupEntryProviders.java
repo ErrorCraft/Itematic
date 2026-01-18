@@ -171,6 +171,10 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.REPEATER)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.COMPARATOR)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.TARGET)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.COPPER_BULB)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.EXPOSED_COPPER_BULB)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.WEATHERED_COPPER_BULB)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.OXIDIZED_COPPER_BULB)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.LEVER)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.OAK_BUTTON)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.STONE_BUTTON)),
@@ -269,6 +273,7 @@ public class ItemGroupEntryProviders {
             .add(items.getOrThrow(ItemKeys.END_CRYSTAL))
             .add(items.getOrThrow(ItemKeys.SNOWBALL))
             .add(items.getOrThrow(ItemKeys.EGG))
+            .add(items.getOrThrow(ItemKeys.WIND_CHARGE))
             .add(items.getOrThrow(ItemKeys.BOW))
             .add(items.getOrThrow(ItemKeys.CROSSBOW))
             .add(flightDuration(items.getOrThrow(ItemKeys.FIREWORK_ROCKET)))
