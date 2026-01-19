@@ -23,7 +23,7 @@ public class MappableItemComponentTestSuite {
         ItemStack resultStack = stack.use(world, player, Hand.MAIN_HAND).getValue();
         context.addInstantFinalTask(() -> {
             Assert.itemStackIsOf(resultStack, ItemKeys.FILLED_MAP);
-            Assert.itemStackHasComponent(resultStack, DataComponentTypes.MAP_ID);
+            Assert.itemStackHasDataComponent(resultStack, DataComponentTypes.MAP_ID);
         });
     }
 }

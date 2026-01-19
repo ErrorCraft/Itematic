@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(SpectralArrowEntity.class)
 public abstract class SpectralArrowEntityExtender extends PersistentProjectileEntity {
-    protected SpectralArrowEntityExtender(EntityType<? extends PersistentProjectileEntity> type, World world, ItemStack stack) {
-        super(type, world, stack);
+    protected SpectralArrowEntityExtender(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
+        super(entityType, world);
     }
 
     @Redirect(

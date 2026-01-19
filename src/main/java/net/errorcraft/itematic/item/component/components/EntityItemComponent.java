@@ -22,11 +22,12 @@ import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.RegistryEntryLookup;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,20 +55,27 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
         if (this.entity.type() != EntityType.PAINTING) {
             return;
         }
+
+        RegistryWrapper.WrapperLookup lookup = context.getRegistryLookup();
+        if (lookup == null) {
+            return;
+        }
+
         NbtComponent entityData = stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT);
         if (!entityData.isEmpty()) {
-            entityData.get(PaintingEntity.VARIANT_MAP_CODEC).result().ifPresentOrElse(
+            entityData.get(lookup.getOps(NbtOps.INSTANCE), PaintingEntity.VARIANT_MAP_CODEC).result().ifPresentOrElse(
                 variant -> {
                     variant.getKey().ifPresent((key) -> {
                         tooltip.add(Text.translatable(key.getValue().toTranslationKey("painting", "title")).formatted(Formatting.YELLOW));
                         tooltip.add(Text.translatable(key.getValue().toTranslationKey("painting", "author")).formatted(Formatting.GRAY));
                     });
-                    tooltip.add(Text.translatable("painting.dimensions", MathHelper.ceilDiv(variant.value().getWidth(), 16), MathHelper.ceilDiv(variant.value().getHeight(), 16)));
+                    tooltip.add(Text.translatable("painting.dimensions", variant.value().width(), variant.value().height()));
                 },
                 () -> tooltip.add(RANDOM_TEXT)
             );
             return;
         }
+
         if (type.isCreative()) {
             tooltip.add(RANDOM_TEXT);
         }

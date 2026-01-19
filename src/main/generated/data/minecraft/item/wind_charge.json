@@ -1,0 +1,23 @@
+{
+  "base": {
+    "translation_key": "item.minecraft.wind_charge"
+  },
+  "components": {
+    "minecraft:cooldown": {
+      "ticks": 10
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:shoot_projectile"
+    },
+    "minecraft:projectile": {
+      "entity": {
+        "type": "minecraft:wind_charge"
+      }
+    },
+    "minecraft:stackable": 64,
+    "minecraft:throwable": {
+      "angle_offset": 0.0,
+      "speed": 1.5
+    }
+  }
+}

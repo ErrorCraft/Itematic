@@ -2,8 +2,8 @@ package net.errorcraft.itematic.item.group.entry.entries;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
+import net.errorcraft.itematic.item.group.entry.PossiblyHiddenItemGroupEntry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Instrument;
 import net.minecraft.item.Item;
@@ -16,10 +16,10 @@ import net.minecraft.registry.tag.TagKey;
 
 import java.util.Collection;
 
-public class InstrumentItemGroupEntry extends ItemGroupEntry {
+public class InstrumentItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     public static final MapCodec<InstrumentItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(instance.group(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(InstrumentItemGroupEntry::item),
-        TagKey.unprefixedCodec(RegistryKeys.INSTRUMENT).fieldOf("tag").forGetter(InstrumentItemGroupEntry::tag)
+        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(entry -> entry.item),
+        TagKey.unprefixedCodec(RegistryKeys.INSTRUMENT).fieldOf("tag").forGetter(entry -> entry.tag)
     )).apply(instance, InstrumentItemGroupEntry::new));
 
     private final RegistryEntry<Item> item;
@@ -35,16 +35,13 @@ public class InstrumentItemGroupEntry extends ItemGroupEntry {
         this.tag = tag;
     }
 
-    public RegistryEntry<Item> item() {
-        return this.item;
-    }
-
-    public TagKey<Instrument> tag() {
-        return this.tag;
-    }
-
     public static InstrumentItemGroupEntry of(RegistryEntry<Item> item, TagKey<Instrument> tag) {
         return new InstrumentItemGroupEntry(item, tag);
+    }
+
+    @Override
+    public ItemGroupEntryType type() {
+        return ItemGroupEntryType.INSTRUMENT;
     }
 
     @Override
@@ -59,10 +56,5 @@ public class InstrumentItemGroupEntry extends ItemGroupEntry {
                 return stack;
             })
             .toList();
-    }
-
-    @Override
-    protected ItemGroupEntryType type() {
-        return ItemGroupEntryType.INSTRUMENT;
     }
 }

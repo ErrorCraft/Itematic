@@ -3,7 +3,6 @@ package net.errorcraft.itematic.mixin.server;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.util.math.BlockPos;
@@ -29,16 +28,5 @@ public class ServerPlayerInteractionManagerExtender {
     )
     private boolean tryBreakBlockCanMineUseItemStackVersion(Item instance, BlockState state, World world, BlockPos pos, PlayerEntity miner) {
         return this.player.getMainHandStack().itematic$canMine(state, world, pos, miner);
-    }
-
-    @Redirect(
-        method = "interactItem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getMaxUseTime()I"
-        )
-    )
-    private int getMaxUseTimeUseCustomImplementation(ItemStack instance) {
-        return instance.itematic$useDuration(this.player);
     }
 }

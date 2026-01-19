@@ -8,10 +8,10 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 
 public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implements EntityInitializer<TridentEntity> {
     public static final MapCodec<TridentEntityInitializer> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -26,9 +26,14 @@ public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implemen
     @Override
     public TridentEntity create(ActionContext context) {
         ItemStack stack = context.stack();
-        if (this.preventSpawnFromRiptide && EnchantmentHelper.getRiptide(stack) > 0) {
+        LivingEntity user = context.livingEntity(ActionContextParameter.THIS).orElse(null);
+        float spinAttackStrength = user != null ?
+            EnchantmentHelper.getTridentSpinAttackStrength(context.world(), stack, user) :
+            0.0f;
+        if (this.preventSpawnFromRiptide && spinAttackStrength > 0.0f) {
             return null;
         }
+
         stack.itematic$damage(1, context);
         TridentEntity entity = this.create(context, stack);
         stack.decrementUnlessCreative(1, context.player(ActionContextParameter.THIS).orElse(null));
@@ -41,11 +46,10 @@ public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implemen
     }
 
     private TridentEntity create(ActionContext context, ItemStack stack) {
-        ServerWorld world = context.world();
-        return context.player(ActionContextParameter.THIS)
-            .map(player -> new TridentEntity(world, player, stack))
+        return context.livingEntity(ActionContextParameter.THIS)
+            .map(user -> new TridentEntity(context.world(), user, stack))
             .orElseGet(() -> {
-                TridentEntity entity = new TridentEntity(EntityType.TRIDENT, world);
+                TridentEntity entity = new TridentEntity(EntityType.TRIDENT, context.world());
                 entity.setPosition(context.position(ActionContextParameter.TARGET));
                 return entity;
             });

@@ -1,0 +1,28 @@
+{
+  "base": {
+    "translation_key": "item.minecraft.breeze_spawn_egg"
+  },
+  "components": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:spawn_entity_from_item"
+    },
+    "minecraft:entity": {
+      "allow_item_data": true,
+      "entity": {
+        "type": "minecraft:breeze"
+      }
+    },
+    "minecraft:spawn_egg": {},
+    "minecraft:stackable": 64,
+    "minecraft:tinted": {
+      "tint": {
+        "type": "minecraft:index",
+        "indices": [
+          11506911,
+          9529055
+        ]
+      }
+    },
+    "minecraft:useable_on_fluid": {}
+  }
+}

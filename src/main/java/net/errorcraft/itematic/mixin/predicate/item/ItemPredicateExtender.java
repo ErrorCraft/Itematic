@@ -9,7 +9,7 @@ import net.errorcraft.itematic.access.predicate.item.ItemPredicateAccess;
 import net.errorcraft.itematic.access.predicate.item.ItemPredicateBuilderAccess;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.predicate.item.ItemPredicateExtraFields;
-import net.minecraft.component.DataComponentType;
+import net.minecraft.component.ComponentType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.predicate.item.ItemPredicate;
@@ -81,7 +81,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         private final Set<ItemComponentType<?>> behavior = new HashSet<>();
 
         @Unique
-        private final Set<DataComponentType<?>> dataComponents = new HashSet<>();
+        private final Set<ComponentType<?>> dataComponents = new HashSet<>();
 
         @ModifyReturnValue(
             method = "build",
@@ -105,7 +105,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         }
 
         @Override
-        public ItemPredicate.Builder itematic$dataComponents(DataComponentType<?>... dataComponents) {
+        public ItemPredicate.Builder itematic$dataComponents(ComponentType<?>... dataComponents) {
             this.dataComponents.addAll(List.of(dataComponents));
             return (ItemPredicate.Builder)(Object) this;
         }

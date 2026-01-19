@@ -4,8 +4,8 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
-import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
+import net.errorcraft.itematic.item.group.entry.PossiblyHiddenItemGroupEntry;
 import net.errorcraft.itematic.mixin.item.ItemGroupsAccessor;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
@@ -15,8 +15,12 @@ import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.predicate.TagPredicate;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryOps;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.registry.tag.TagKey;
@@ -26,10 +30,10 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Optional;
 
-public class PaintingVariantItemGroupEntry extends ItemGroupEntry {
+public class PaintingVariantItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     public static final MapCodec<PaintingVariantItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(instance.group(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(PaintingVariantItemGroupEntry::item),
-        TagPredicate.createCodec(RegistryKeys.PAINTING_VARIANT).fieldOf("tag").forGetter(PaintingVariantItemGroupEntry::tag)
+        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(entry -> entry.item),
+        TagPredicate.createCodec(RegistryKeys.PAINTING_VARIANT).fieldOf("tag").forGetter(entry -> entry.tag)
     )).apply(instance, PaintingVariantItemGroupEntry::new));
     private static final Comparator<RegistryEntry<PaintingVariant>> PAINTING_VARIANT_COMPARATOR = ItemGroupsAccessor.paintingVariantComparator();
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -47,14 +51,6 @@ public class PaintingVariantItemGroupEntry extends ItemGroupEntry {
         this.tag = tag;
     }
 
-    public RegistryEntry<Item> item() {
-        return this.item;
-    }
-
-    public TagPredicate<PaintingVariant> tag() {
-        return this.tag;
-    }
-
     public static PaintingVariantItemGroupEntry expected(RegistryEntry<Item> item, TagKey<PaintingVariant> tag) {
         return new PaintingVariantItemGroupEntry(false, item, TagPredicate.expected(tag));
     }
@@ -64,13 +60,19 @@ public class PaintingVariantItemGroupEntry extends ItemGroupEntry {
     }
 
     @Override
+    public ItemGroupEntryType type() {
+        return ItemGroupEntryType.PAINTING_VARIANT;
+    }
+
+    @Override
     protected Collection<ItemStack> createStacks(ItemGroup.DisplayContext context) {
-        return context.lookup()
-            .getWrapperOrThrow(RegistryKeys.PAINTING_VARIANT)
+        RegistryWrapper.WrapperLookup lookup = context.lookup();
+        RegistryOps<NbtElement> ops = lookup.getOps(NbtOps.INSTANCE);
+        return lookup.getWrapperOrThrow(RegistryKeys.PAINTING_VARIANT)
             .streamEntries()
             .filter(this.tag::test)
             .sorted(PAINTING_VARIANT_COMPARATOR)
-            .map(variant -> NbtComponent.DEFAULT.with(PaintingEntity.VARIANT_MAP_CODEC, variant).resultOrPartial(LOGGER::error))
+            .map(variant -> NbtComponent.DEFAULT.with(ops, PaintingEntity.VARIANT_MAP_CODEC, variant).resultOrPartial(LOGGER::error))
             .flatMap(Optional::stream)
             .map(nbt -> nbt.apply(newNbt -> newNbt.putString(Entity.ID_KEY, EntityTypeKeys.PAINTING.getValue().toString())))
             .map(nbt -> {
@@ -79,10 +81,5 @@ public class PaintingVariantItemGroupEntry extends ItemGroupEntry {
                 return stack;
             })
             .toList();
-    }
-
-    @Override
-    protected ItemGroupEntryType type() {
-        return ItemGroupEntryType.PAINTING_VARIANT;
     }
 }

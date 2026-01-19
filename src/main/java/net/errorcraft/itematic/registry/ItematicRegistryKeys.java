@@ -10,6 +10,7 @@ import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.item.model.override.ModelOverride;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.item.pointer.Pointer;
+import net.errorcraft.itematic.item.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateType;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
@@ -41,6 +42,7 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<TradeModifierType<?>>> TRADE_MODIFIER_TYPE = RegistryKey.ofRegistry(new Identifier("trade_modifier_type"));
     public static final RegistryKey<Registry<IntegerProviderType<?>>> INTEGER_PROVIDER_TYPE = RegistryKey.ofRegistry(new Identifier("integer_provider_type"));
     public static final RegistryKey<Registry<ItemHolderRuleType<?>>> ITEM_HOLDER_RULE_TYPE = RegistryKey.ofRegistry(new Identifier("item_holder_rule_type"));
+    public static final RegistryKey<Registry<ShooterMethodType<?>>> SHOOTER_METHOD_TYPE = RegistryKey.ofRegistry(new Identifier("shooter_method_type"));
 
     private ItematicRegistryKeys() {}
 }

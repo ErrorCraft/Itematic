@@ -1,0 +1,15 @@
+{
+  "base": {
+    "rarity": "epic",
+    "translation_key": "item.minecraft.music_disc_creator_music_box"
+  },
+  "components": {
+    "minecraft:record": {
+      "description_key": "item.minecraft.music_disc_creator_music_box.desc",
+      "duration": 1460,
+      "output_signal": 11,
+      "sound_event": "minecraft:music_disc.creator_music_box"
+    },
+    "minecraft:stackable": 1
+  }
+}

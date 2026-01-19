@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "block.minecraft.vault"
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:vault"
+    },
+    "minecraft:stackable": 64
+  }
+}

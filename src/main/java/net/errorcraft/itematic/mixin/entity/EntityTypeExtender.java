@@ -33,8 +33,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class EntityTypeExtender<T extends Entity> implements EntityTypeAccess {
     @Unique
     private MapCodec<? extends EntityInitializer<?>> initializerCodec;
+
     @Unique
     private EntityInitializer<?> initializer;
+
     @Unique
     private ActionContext actionContext;
 
@@ -418,6 +420,25 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         return type;
     }
 
+    @ModifyArg(
+        method = "<clinit>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "CONSTANT",
+                args = "stringValue=wind_charge"
+            )
+        )
+    )
+    private static EntityType.Builder<WindChargeEntity> setWindChargeInitializerCodec(EntityType.Builder<WindChargeEntity> type) {
+        type.itematic$initializerCodec(WindChargeEntityInitializer.CODEC);
+        return type;
+    }
+
     @Inject(
         method = "create(Lnet/minecraft/world/World;)Lnet/minecraft/entity/Entity;",
         at = @At(
@@ -430,6 +451,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         if (this.initializer == null) {
             return;
         }
+
         EntityInitializer<?> initializer = this.initializer; // Copy to a local and set the field to null, so we don't get a StackOverflowError
         this.initializer = null;
         info.setReturnValue((T) initializer.create(this.actionContext));

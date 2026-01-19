@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(HoneyBottleItem.class)
 public interface HoneyBottleItemAccessor {
     @Accessor("MAX_USE_TIME")
-    static int maxUseTime() {
+    static int useDuration() {
         throw new AssertionError();
     }
 }

@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "item.minecraft.guster_pottery_sherd"
+  },
+  "components": {
+    "minecraft:decorated_pot_pattern": {
+      "pattern": "minecraft:guster_pottery_pattern"
+    },
+    "minecraft:stackable": 64
+  }
+}

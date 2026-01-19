@@ -12,11 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.StructureTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.WorldEvents;
 import net.minecraft.world.event.GameEvent;
 
 public record EyeOfEnderEntityInitializer() implements EntityInitializer<EyeOfEnderEntity> {
@@ -45,8 +42,6 @@ public record EyeOfEnderEntityInitializer() implements EntityInitializer<EyeOfEn
             Criteria.USED_ENDER_EYE.trigger(serverPlayer, strongholdPos);
         }
 
-        world.itematic$playSound(null, pos, SoundEvents.ENTITY_ENDER_EYE_LAUNCH, SoundCategory.NEUTRAL, 0.5f, 0.4f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
-        world.syncWorldEvent(null, WorldEvents.EYE_OF_ENDER_LAUNCHES, blockPos, 0);
         return entity;
     }
 

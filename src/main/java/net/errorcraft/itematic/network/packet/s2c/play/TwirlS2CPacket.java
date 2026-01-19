@@ -8,9 +8,9 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.PacketType;
 
-public record TwirlS2CPacket(int riptideLevel) implements Packet<ClientPlayPacketListener> {
+public record TwirlS2CPacket(float spinAttackStrength) implements Packet<ClientPlayPacketListener> {
     public static final PacketCodec<RegistryByteBuf, TwirlS2CPacket> CODEC = PacketCodec.tuple(
-        PacketCodecs.VAR_INT, TwirlS2CPacket::riptideLevel,
+        PacketCodecs.FLOAT, TwirlS2CPacket::spinAttackStrength,
         TwirlS2CPacket::new
     );
 

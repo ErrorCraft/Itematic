@@ -1,8 +1,13 @@
 {
   "values": [
     "minecraft:copper_block",
+    "minecraft:chiseled_copper",
+    "minecraft:copper_grate",
     "minecraft:cut_copper",
     "minecraft:cut_copper_stairs",
-    "minecraft:cut_copper_slab"
+    "minecraft:cut_copper_slab",
+    "minecraft:copper_door",
+    "minecraft:copper_trapdoor",
+    "minecraft:copper_bulb"
   ]
 }

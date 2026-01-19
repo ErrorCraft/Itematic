@@ -7,11 +7,7 @@
       "durability": 2031
     },
     "minecraft:enchantable": {
-      "enchantability": 15,
-      "enchantments": "minecraft:shovel_enchanting"
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:shovel_forging"
+      "enchantability": 15
     },
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_fire"

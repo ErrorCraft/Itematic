@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "block.minecraft.chiseled_tuff_bricks"
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:chiseled_tuff_bricks"
+    },
+    "minecraft:stackable": 64
+  }
+}

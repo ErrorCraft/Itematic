@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "block.minecraft.polished_tuff_stairs"
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:polished_tuff_stairs"
+    },
+    "minecraft:stackable": 64
+  }
+}

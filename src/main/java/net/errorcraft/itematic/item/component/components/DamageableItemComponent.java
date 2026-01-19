@@ -3,7 +3,6 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
-import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -12,7 +11,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ToolComponent;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -64,30 +62,29 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                     .map(proficientEntityTypeTag -> WeaponAttackDamageDataComponent.Rule.addsToBase(proficientEntityTypeTag, attackDamage - 1.0d))
                     .toArray(WeaponAttackDamageDataComponent.Rule[]::new)
             ),
-            EnchantableItemComponent.enchants(material, EnchantmentTags.SWORD_ENCHANTING),
-            ForgeableItemComponent.of(EnchantmentTags.SWORD_FORGING),
+            EnchantableItemComponent.of(material),
             RepairableItemComponent.of(repairItemsTag)
         };
     }
 
     @SafeVarargs
     public static ItemComponent<?>[] shovel(ToolMaterial material, TagKey<Item> repairItemsTag, TagKey<EntityType<?>>... proficientEntityTypeTags) {
-        return tool(material, 2.5d, 0.25d, BlockTags.SHOVEL_MINEABLE, EnchantmentTags.SHOVEL_ENCHANTING, EnchantmentTags.SHOVEL_FORGING, repairItemsTag, proficientEntityTypeTags);
+        return tool(material, 2.5d, 0.25d, BlockTags.SHOVEL_MINEABLE, repairItemsTag, proficientEntityTypeTags);
     }
 
     @SafeVarargs
     public static ItemComponent<?>[] pickaxe(ToolMaterial material, TagKey<Item> repairItemsTag, TagKey<EntityType<?>>... proficientEntityTypeTags) {
-        return tool(material, 2.0d, 0.3d, BlockTags.PICKAXE_MINEABLE, EnchantmentTags.PICKAXE_ENCHANTING, EnchantmentTags.PICKAXE_FORGING, repairItemsTag, proficientEntityTypeTags);
+        return tool(material, 2.0d, 0.3d, BlockTags.PICKAXE_MINEABLE, repairItemsTag, proficientEntityTypeTags);
     }
 
     @SafeVarargs
     public static ItemComponent<?>[] axe(ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItemsTag, TagKey<EntityType<?>>... proficientEntityTypeTags) {
-        return tool(material, attackDamage, attackSpeed, BlockTags.AXE_MINEABLE, EnchantmentTags.AXE_ENCHANTING, EnchantmentTags.AXE_FORGING, repairItemsTag, proficientEntityTypeTags);
+        return tool(material, attackDamage, attackSpeed, BlockTags.AXE_MINEABLE, repairItemsTag, proficientEntityTypeTags);
     }
 
     @SafeVarargs
     public static ItemComponent<?>[] hoe(ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItemsTag, TagKey<EntityType<?>>... proficientEntityTypeTags) {
-        return tool(material, attackDamage, attackSpeed, BlockTags.HOE_MINEABLE, EnchantmentTags.HOE_ENCHANTING, EnchantmentTags.HOE_FORGING, repairItemsTag, proficientEntityTypeTags);
+        return tool(material, attackDamage, attackSpeed, BlockTags.HOE_MINEABLE, repairItemsTag, proficientEntityTypeTags);
     }
 
     @Override
@@ -96,7 +93,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
     }
 
     @SafeVarargs
-    private static ItemComponent<?>[] tool(ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Block> mineableBlocks, TagKey<Enchantment> toolEnchantingTag, TagKey<Enchantment> toolForgingTag, TagKey<Item> repairItemsTag, TagKey<EntityType<?>>... proficientEntityTypeTags) {
+    private static ItemComponent<?>[] tool(ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Block> mineableBlocks, TagKey<Item> repairItemsTag, TagKey<EntityType<?>>... proficientEntityTypeTags) {
         double realAttackDamage = attackDamage + material.getAttackDamage();
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
@@ -110,8 +107,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                     .map(proficientEntityTypeTag -> WeaponAttackDamageDataComponent.Rule.addsToBase(proficientEntityTypeTag, realAttackDamage - 1.0d))
                     .toArray(WeaponAttackDamageDataComponent.Rule[]::new)
             ),
-            EnchantableItemComponent.enchants(material, toolEnchantingTag),
-            ForgeableItemComponent.of(toolForgingTag),
+            EnchantableItemComponent.of(material),
             RepairableItemComponent.of(repairItemsTag)
         };
     }

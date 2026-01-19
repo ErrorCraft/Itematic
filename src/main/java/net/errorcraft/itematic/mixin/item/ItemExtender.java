@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.item;
 import com.google.common.collect.Interner;
 import net.errorcraft.itematic.access.item.ItemAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemBase;
 import net.errorcraft.itematic.item.ItemUtil;
@@ -22,7 +23,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentType;
+import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.ToolComponent;
@@ -349,10 +350,21 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "isEnchantable",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/DataComponentType;)Z"
+            target = "Lnet/minecraft/item/ItemStack;getMaxCount()I"
         )
     )
-    public boolean isEnchantableUseComponentCheck(ItemStack instance, DataComponentType<?> type) {
+    public int getMaxCountUseStackCount(ItemStack instance) {
+        return instance.getCount();
+    }
+
+    @Redirect(
+        method = "isEnchantable",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
+        )
+    )
+    public boolean containsMaxDamageUseItemComponentCheck(ItemStack instance, ComponentType<?> type) {
         return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
     }
 
@@ -476,16 +488,26 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             info.setReturnValue(UseAction.NONE);
             return;
         }
+
         info.setReturnValue(stack.getOrDefault(ItematicDataComponentTypes.USE_ANIMATION, UseAction.NONE));
     }
 
-    @Inject(
-        method = "getMaxUseTime",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    public void getMaxUseTimeUseItemComponent(ItemStack stack, CallbackInfoReturnable<Integer> info) {
-        info.setReturnValue(0);
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+            return 0;
+        }
+
+        UseDurationDataComponent useDuration = this.components.get(ItematicDataComponentTypes.USE_DURATION);
+        if (useDuration == null) {
+            return 0;
+        }
+
+        return useDuration.ticks(stack, user);
     }
 
     /**
@@ -613,7 +635,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
-    public boolean canBeEnchantedWith(ItemStack stack, Enchantment enchantment, EnchantingContext context) {
+    public boolean canBeEnchantedWith(ItemStack stack, RegistryEntry<Enchantment> enchantment, EnchantingContext context) {
         return true;
     }
 

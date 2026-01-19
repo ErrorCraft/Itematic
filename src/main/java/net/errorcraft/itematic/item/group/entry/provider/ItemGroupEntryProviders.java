@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.item.group.entry.provider;
 
-import net.errorcraft.itematic.enchantment.EnchantmentKeys;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
@@ -11,12 +10,10 @@ import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FireworksComponent;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.OminousBottleItem;
 import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
@@ -27,15 +24,12 @@ import net.minecraft.registry.tag.PaintingVariantTags;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class ItemGroupEntryProviders {
     private ItemGroupEntryProviders() {}
 
     public static void bootstrap(Registerable<ItemGroupEntryProvider> registerable) {
         RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
-        RegistryEntryLookup<Enchantment> enchantments = registerable.getRegistryLookup(RegistryKeys.ENCHANTMENT);
         RegistryEntryLookup<BannerPattern> bannerPatterns = registerable.getRegistryLookup(RegistryKeys.BANNER_PATTERN);
 
         registerable.register(ItemGroupEntryProviderKeys.BUILDING_BLOCKS, ItemGroupEntryProvider.of(
@@ -167,6 +161,7 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.DRAGON_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.END_PORTAL_FRAME)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.ENDER_EYE)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.VAULT)),
             ItemGroupEntry.tag(ItematicItemTags.INFESTED_BLOCKS)
         ));
         registerable.register(ItemGroupEntryProviderKeys.REDSTONE_BLOCKS, ItemGroupEntryProvider.of(
@@ -176,6 +171,10 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.REPEATER)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.COMPARATOR)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.TARGET)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.COPPER_BULB)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.EXPOSED_COPPER_BULB)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.WEATHERED_COPPER_BULB)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.OXIDIZED_COPPER_BULB)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.LEVER)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.OAK_BUTTON)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.STONE_BUTTON)),
@@ -199,6 +198,7 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.HONEY_BLOCK)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.DISPENSER)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.DROPPER)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.CRAFTER)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.HOPPER)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.CHEST)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.BARREL)),
@@ -245,6 +245,7 @@ public class ItemGroupEntryProviders {
             .add(items.getOrThrow(ItemKeys.SPYGLASS))
             .add(items.getOrThrow(ItemKeys.MAP))
             .add(items.getOrThrow(ItemKeys.WRITABLE_BOOK))
+            .add(items.getOrThrow(ItemKeys.WIND_CHARGE))
             .add(items.getOrThrow(ItemKeys.ENDER_PEARL))
             .add(items.getOrThrow(ItemKeys.ENDER_EYE))
             .add(items.getOrThrow(ItemKeys.ELYTRA))
@@ -262,6 +263,7 @@ public class ItemGroupEntryProviders {
             .add(ItematicItemTags.SWORDS)
             .add(ItematicItemTags.AXES)
             .add(items.getOrThrow(ItemKeys.TRIDENT))
+            .add(items.getOrThrow(ItemKeys.MACE))
             .add(items.getOrThrow(ItemKeys.SHIELD))
             .add(ItematicItemTags.ARMOR)
             .add(ItematicItemTags.HORSE_ARMOR)
@@ -271,6 +273,7 @@ public class ItemGroupEntryProviders {
             .add(items.getOrThrow(ItemKeys.END_CRYSTAL))
             .add(items.getOrThrow(ItemKeys.SNOWBALL))
             .add(items.getOrThrow(ItemKeys.EGG))
+            .add(items.getOrThrow(ItemKeys.WIND_CHARGE))
             .add(items.getOrThrow(ItemKeys.BOW))
             .add(items.getOrThrow(ItemKeys.CROSSBOW))
             .add(flightDuration(items.getOrThrow(ItemKeys.FIREWORK_ROCKET)))
@@ -284,6 +287,7 @@ public class ItemGroupEntryProviders {
             .add(SuspiciousEffectIngredientItemGroupEntry.of(items.getOrThrow(ItemKeys.SUSPICIOUS_STEW)))
             .add(items.getOrThrow(ItemKeys.MILK_BUCKET))
             .add(items.getOrThrow(ItemKeys.HONEY_BOTTLE))
+            .add(ominousBottles(items.getOrThrow(ItemKeys.OMINOUS_BOTTLE)))
             .add(PotionItemGroupEntry.of(items.getOrThrow(ItemKeys.POTION)))
             .add(PotionItemGroupEntry.of(items.getOrThrow(ItemKeys.SPLASH_POTION)))
             .add(PotionItemGroupEntry.of(items.getOrThrow(ItemKeys.LINGERING_POTION)))
@@ -332,6 +336,8 @@ public class ItemGroupEntryProviders {
             .add(items.getOrThrow(ItemKeys.HEART_OF_THE_SEA))
             .add(items.getOrThrow(ItemKeys.FIRE_CHARGE))
             .add(items.getOrThrow(ItemKeys.BLAZE_ROD))
+            .add(items.getOrThrow(ItemKeys.BREEZE_ROD))
+            .add(items.getOrThrow(ItemKeys.HEAVY_CORE))
             .add(items.getOrThrow(ItemKeys.NETHER_STAR))
             .add(items.getOrThrow(ItemKeys.ENDER_PEARL))
             .add(items.getOrThrow(ItemKeys.ENDER_EYE))
@@ -351,47 +357,9 @@ public class ItemGroupEntryProviders {
             .add(ItemTags.DECORATED_POT_SHERDS)
             .add(ItematicItemTags.SMITHING_TEMPLATES)
             .add(items.getOrThrow(ItemKeys.EXPERIENCE_BOTTLE))
-            .add(enchantedBooks(items,
-                enchantments.getOrThrow(EnchantmentKeys.PROTECTION),
-                enchantments.getOrThrow(EnchantmentKeys.FIRE_PROTECTION),
-                enchantments.getOrThrow(EnchantmentKeys.FEATHER_FALLING),
-                enchantments.getOrThrow(EnchantmentKeys.BLAST_PROTECTION),
-                enchantments.getOrThrow(EnchantmentKeys.PROJECTILE_PROTECTION),
-                enchantments.getOrThrow(EnchantmentKeys.RESPIRATION),
-                enchantments.getOrThrow(EnchantmentKeys.AQUA_AFFINITY),
-                enchantments.getOrThrow(EnchantmentKeys.THORNS),
-                enchantments.getOrThrow(EnchantmentKeys.DEPTH_STRIDER),
-                enchantments.getOrThrow(EnchantmentKeys.FROST_WALKER),
-                enchantments.getOrThrow(EnchantmentKeys.BINDING_CURSE),
-                enchantments.getOrThrow(EnchantmentKeys.SOUL_SPEED),
-                enchantments.getOrThrow(EnchantmentKeys.SWIFT_SNEAK),
-                enchantments.getOrThrow(EnchantmentKeys.SHARPNESS),
-                enchantments.getOrThrow(EnchantmentKeys.SMITE),
-                enchantments.getOrThrow(EnchantmentKeys.BANE_OF_ARTHROPODS),
-                enchantments.getOrThrow(EnchantmentKeys.KNOCKBACK),
-                enchantments.getOrThrow(EnchantmentKeys.FIRE_ASPECT),
-                enchantments.getOrThrow(EnchantmentKeys.LOOTING),
-                enchantments.getOrThrow(EnchantmentKeys.SWEEPING_EDGE),
-                enchantments.getOrThrow(EnchantmentKeys.EFFICIENCY),
-                enchantments.getOrThrow(EnchantmentKeys.SILK_TOUCH),
-                enchantments.getOrThrow(EnchantmentKeys.UNBREAKING),
-                enchantments.getOrThrow(EnchantmentKeys.FORTUNE),
-                enchantments.getOrThrow(EnchantmentKeys.POWER),
-                enchantments.getOrThrow(EnchantmentKeys.PUNCH),
-                enchantments.getOrThrow(EnchantmentKeys.FLAME),
-                enchantments.getOrThrow(EnchantmentKeys.INFINITY),
-                enchantments.getOrThrow(EnchantmentKeys.LUCK_OF_THE_SEA),
-                enchantments.getOrThrow(EnchantmentKeys.LURE),
-                enchantments.getOrThrow(EnchantmentKeys.LOYALTY),
-                enchantments.getOrThrow(EnchantmentKeys.IMPALING),
-                enchantments.getOrThrow(EnchantmentKeys.RIPTIDE),
-                enchantments.getOrThrow(EnchantmentKeys.CHANNELING),
-                enchantments.getOrThrow(EnchantmentKeys.MULTISHOT),
-                enchantments.getOrThrow(EnchantmentKeys.QUICK_CHARGE),
-                enchantments.getOrThrow(EnchantmentKeys.PIERCING),
-                enchantments.getOrThrow(EnchantmentKeys.MENDING),
-                enchantments.getOrThrow(EnchantmentKeys.VANISHING_CURSE)
-            ))
+            .add(items.getOrThrow(ItemKeys.TRIAL_KEY))
+            .add(items.getOrThrow(ItemKeys.OMINOUS_TRIAL_KEY))
+            .add(EnchantmentItemGroupEntry.of(items.getOrThrow(ItemKeys.ENCHANTED_BOOK)))
             .build()
         );
         registerable.register(ItemGroupEntryProviderKeys.SPAWN_EGGS, ItemGroupEntryProvider.of(
@@ -402,6 +370,8 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.BAT_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.BEE_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.BLAZE_SPAWN_EGG)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.BOGGED_SPAWN_EGG)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.BREEZE_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.CAMEL_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.CAT_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.CAVE_SPIDER_SPAWN_EGG)),
@@ -498,31 +468,8 @@ public class ItemGroupEntryProviders {
                 .build()
             );
         }
+
         return entries.toArray(ItemGroupEntry[]::new);
-    }
-
-    @SafeVarargs
-    private static ItemGroupEntry[] enchantedBooks(RegistryEntryLookup<Item> items, RegistryEntry<Enchantment>... enchantments) {
-        RegistryEntry.Reference<Item> enchantedBook = items.getOrThrow(ItemKeys.ENCHANTED_BOOK);
-        return Stream.of(enchantments).map(RegistryEntry::value)
-            .flatMap(enchantment -> IntStream.rangeClosed(enchantment.getMinLevel(), enchantment.getMaxLevel())
-                .mapToObj(level -> {
-                    ItemEnchantmentsComponent.Builder itemEnchantmentsBuilder = new ItemEnchantmentsComponent.Builder(ItemEnchantmentsComponent.DEFAULT);
-                    itemEnchantmentsBuilder.add(enchantment, level);
-                    return StackItemGroupEntry.builder(enchantedBook)
-                        .components(ComponentChanges.builder()
-                            .add(DataComponentTypes.ENCHANTMENTS, itemEnchantmentsBuilder.build()))
-                        .visibility(getStackVisibility(enchantment, level))
-                        .build();
-                }))
-            .toArray(ItemGroupEntry[]::new);
-    }
-
-    private static ItemGroup.StackVisibility getStackVisibility(Enchantment enchantment, int level) {
-        if (enchantment.getMaxLevel() == level) {
-            return ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS;
-        }
-        return ItemGroup.StackVisibility.SEARCH_TAB_ONLY;
     }
 
     private static ItemGroupEntry[] lightBlocks(RegistryEntry<Item> item) {
@@ -530,6 +477,18 @@ public class ItemGroupEntryProviders {
         for (int level = LightBlock.field_33722; level >= 0; --level) {
             entries.add(StackItemGroupEntry.fromStack(LightBlock.addNbtForLevel(new ItemStack(item), level), true));
         }
+
+        return entries.toArray(ItemGroupEntry[]::new);
+    }
+
+    private static ItemGroupEntry[] ominousBottles(RegistryEntry<Item> item) {
+        List<ItemGroupEntry> entries = new ArrayList<>(OminousBottleItem.field_50145 - OminousBottleItem.field_50144);
+        for (int amplifier = OminousBottleItem.field_50144; amplifier <= OminousBottleItem.field_50145; amplifier++) {
+            ItemStack stack = new ItemStack(item);
+            stack.set(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER, amplifier);
+            entries.add(StackItemGroupEntry.fromStack(stack));
+        }
+
         return entries.toArray(ItemGroupEntry[]::new);
     }
 }

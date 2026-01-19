@@ -9,6 +9,7 @@
       "tag": "minecraft:item_group/axes"
     },
     "minecraft:trident",
+    "minecraft:mace",
     "minecraft:shield",
     {
       "type": "tag",
@@ -24,6 +25,7 @@
     "minecraft:end_crystal",
     "minecraft:snowball",
     "minecraft:egg",
+    "minecraft:wind_charge",
     "minecraft:bow",
     "minecraft:crossbow",
     {

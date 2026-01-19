@@ -1,0 +1,8 @@
+{
+  "base": {
+    "translation_key": "item.minecraft.breeze_rod"
+  },
+  "components": {
+    "minecraft:stackable": 64
+  }
+}

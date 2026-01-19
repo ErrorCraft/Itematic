@@ -1,0 +1,11 @@
+{
+  "base": {
+    "translation_key": "block.minecraft.copper_trapdoor"
+  },
+  "components": {
+    "minecraft:block": {
+      "block": "minecraft:copper_trapdoor"
+    },
+    "minecraft:stackable": 64
+  }
+}

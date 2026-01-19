@@ -1,10 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.google.common.collect.ImmutableMap;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.access.util.DyeColorAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.DyeItemComponent;
@@ -12,16 +8,12 @@ import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.DyeColor;
 import net.minecraft.world.World;
@@ -30,20 +22,18 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.Slice;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 @Mixin(SheepEntity.class)
 public abstract class SheepEntityExtender extends MobEntityExtender {
-    @Shadow
-    protected abstract ItemStack method_17689(RecipeInputInventory inventory, RecipeEntry<CraftingRecipe> entry);
-
-    @Shadow
-    protected abstract DyeColor method_17691(DyeColor par1, DyeColor par2);
-
     @Shadow
     public abstract DyeColor getColor();
 
@@ -66,9 +56,6 @@ public abstract class SheepEntityExtender extends MobEntityExtender {
         .put(DyeColor.RED, ItemKeys.RED_WOOL)
         .put(DyeColor.BLACK, ItemKeys.BLACK_WOOL)
         .build();
-
-    @Unique
-    private static World world;
 
     protected SheepEntityExtender(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -96,73 +83,71 @@ public abstract class SheepEntityExtender extends MobEntityExtender {
         return this.itematic$dropItem(DYE_TO_WOOL.get(this.getColor()), yOffset);
     }
 
-    @WrapOperation(
+    @Redirect(
         method = "getChildColor",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/SheepEntity;createDyeMixingCraftingInventory(Lnet/minecraft/util/DyeColor;Lnet/minecraft/util/DyeColor;)Lnet/minecraft/inventory/RecipeInputInventory;"
+            target = "Lnet/minecraft/entity/passive/SheepEntity;createChildColorRecipeInput(Lnet/minecraft/util/DyeColor;Lnet/minecraft/util/DyeColor;)Lnet/minecraft/recipe/input/CraftingRecipeInput;"
         )
     )
-    private RecipeInputInventory createDyeMixingCraftingInventorySetRegistryManager(DyeColor firstColor, DyeColor secondColor, Operation<RecipeInputInventory> original) {
-        world = this.getWorld();
-        RecipeInputInventory inventory = original.call(firstColor, secondColor);
-        world = null;
-        return inventory;
+    private CraftingRecipeInput createChildColorRecipeInput(DyeColor firstColor, DyeColor secondColor) {
+        return CraftingRecipeInput.create(
+            2,
+            1,
+            List.of(
+                this.getWorld().itematic$createStack(firstColor.itematic$itemKey()),
+                this.getWorld().itematic$createStack(secondColor.itematic$itemKey())
+            )
+        );
     }
 
-    @Inject(
+    @Redirect(
         method = "getChildColor",
         at = @At(
-            value = "INVOKE_ASSIGN",
-            target = "Lnet/minecraft/entity/passive/SheepEntity;createDyeMixingCraftingInventory(Lnet/minecraft/util/DyeColor;Lnet/minecraft/util/DyeColor;)Lnet/minecraft/inventory/RecipeInputInventory;",
-            shift = At.Shift.AFTER
-        ),
-        cancellable = true
-    )
-    private void getColorUseItemComponent(AnimalEntity firstParent, AnimalEntity secondParent, CallbackInfoReturnable<DyeColor> info, @Local(ordinal = 0) DyeColor firstColor, @Local(ordinal = 1) DyeColor secondColor, @Local RecipeInputInventory inventory) {
-        World world = this.getWorld();
-        DyeColor color = world.getRecipeManager()
-            .getFirstMatch(RecipeType.CRAFTING, inventory, world)
-            .map(entry -> this.method_17689(inventory, entry))
-            .flatMap(stack -> stack.itematic$getComponent(ItemComponentTypes.DYE))
-            .map(DyeItemComponent::color)
-            .orElseGet(() -> this.method_17691(firstColor, secondColor));
-        info.setReturnValue(color);
-    }
-
-    @Redirect(
-        method = "createDyeMixingCraftingInventory",
-        at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/DyeItem;byColor(Lnet/minecraft/util/DyeColor;)Lnet/minecraft/item/DyeItem;"
+            target = "Ljava/util/Optional;filter(Ljava/util/function/Predicate;)Ljava/util/Optional;"
         )
     )
-    private static DyeItem dyeItemByColorReturnNull(DyeColor color) {
-        return null;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private Optional<DyeItemComponent> instanceOfDyeItemUseItemComponent(Optional<Item> instance, Predicate<? super Object> predicate) {
+        return instance.flatMap(item -> item.itematic$getComponent(ItemComponentTypes.DYE));
     }
 
     @Redirect(
-        method = "createDyeMixingCraftingInventory",
+        method = "getChildColor",
         at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            value = "INVOKE",
+            target = "Ljava/util/Optional;map(Ljava/util/function/Function;)Ljava/util/Optional;",
             ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "INVOKE",
+                target = "Ljava/util/Optional;filter(Ljava/util/function/Predicate;)Ljava/util/Optional;"
+            )
         )
     )
-    private static ItemStack newItemStackForFirstColorUseCreateStack(ItemConvertible item, DyeColor firstColor) {
-        return world.itematic$createStack(((DyeColorAccess)(Object) firstColor).itematic$itemKey());
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private Optional<DyeItemComponent> castToDyeItemDoNothing(Optional<DyeItemComponent> instance, Function<? super Item, ? extends DyeItem> mapper) {
+        return instance;
     }
 
-    @Redirect(
-        method = "createDyeMixingCraftingInventory",
+    @ModifyArg(
+        method = "getChildColor",
         at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            value = "INVOKE",
+            target = "Ljava/util/Optional;map(Ljava/util/function/Function;)Ljava/util/Optional;",
             ordinal = 1
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "INVOKE",
+                target = "Ljava/util/Optional;filter(Ljava/util/function/Predicate;)Ljava/util/Optional;"
+            )
         )
     )
-    private static ItemStack newItemStackForSecondColorUseCreateStack(ItemConvertible item, @Local(ordinal = 1, argsOnly = true) DyeColor secondColor) {
-        return world.itematic$createStack(((DyeColorAccess)(Object) secondColor).itematic$itemKey());
+    private Function<? super DyeItemComponent, ? extends DyeColor> getColorUseItemComponent(Function<? super DyeItem, ? extends DyeColor> mapper) {
+        return DyeItemComponent::color;
     }
 
     @Override

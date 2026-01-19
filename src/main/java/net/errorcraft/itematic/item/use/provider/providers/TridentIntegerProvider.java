@@ -8,10 +8,10 @@ import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.server.world.ServerWorld;
 
 import java.util.OptionalInt;
 
@@ -33,10 +33,11 @@ public record TridentIntegerProvider() implements IntegerProvider {
         return OptionalInt.empty();
     }
 
-    private static boolean mayStartUsing(ItemStack stack, Entity user) {
-        if (EnchantmentHelper.getRiptide(stack) > 0 && !user.isTouchingWaterOrRain()) {
+    private static boolean mayStartUsing(ItemStack stack, LivingEntity user) {
+        if (user.getWorld() instanceof ServerWorld serverWorld && EnchantmentHelper.getTridentSpinAttackStrength(serverWorld, stack, user) > 0.0f && !user.isTouchingWaterOrRain()) {
             return false;
         }
+
         return stack.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
             .map(c -> c.isUsable(stack))
             .orElse(true);

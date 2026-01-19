@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.DyeItemComponent;
 import net.errorcraft.itematic.network.codec.PacketCodecUtil;
-import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -13,6 +12,7 @@ import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
+import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryFixedCodec;
@@ -27,42 +27,50 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
     }
 
     @Override
-    public boolean matches(RecipeInputInventory inventory, World world) {
+    public boolean matches(CraftingRecipeInput input, World world) {
         boolean foundIngredient = false;
         boolean foundColor = false;
-        for (int i = 0; i < inventory.size(); i++) {
-            ItemStack stack = inventory.getStack(i);
+        for (int i = 0; i < input.getSize(); i++) {
+            ItemStack stack = input.getStackInSlot(i);
             if (stack.isEmpty()) {
                 continue;
             }
+
             if (this.ingredient.test(stack)) {
                 if (foundIngredient) {
                     return false;
                 }
+
                 foundIngredient = true;
                 continue;
             }
+
             if (this.isExpectedColor(stack)) {
                 if (foundColor) {
                     return false;
                 }
+
                 foundColor = true;
                 continue;
             }
+
             return false;
         }
+
         return foundIngredient && foundColor;
     }
 
     @Override
-    public ItemStack craft(RecipeInputInventory inventory, RegistryWrapper.WrapperLookup lookup) {
-        for (int i = 0; i < inventory.size(); i++) {
-            ItemStack stack = inventory.getStack(i);
+    public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+        for (int i = 0; i < input.getSize(); i++) {
+            ItemStack stack = input.getStackInSlot(i);
             if (!this.ingredient.test(stack)) {
                 continue;
             }
+
             return stack.itematic$copyComponentsToNewStack(this.result.getRegistryEntry(), 1);
         }
+
         return ItemStack.EMPTY;
     }
 

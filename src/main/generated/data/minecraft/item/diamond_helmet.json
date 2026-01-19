@@ -13,16 +13,12 @@
       "behavior": "minecraft:equip_entity"
     },
     "minecraft:enchantable": {
-      "enchantability": 10,
-      "enchantments": "minecraft:helmet_enchanting"
+      "enchantability": 10
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_diamond",
       "slot": "head",
       "swappable": true
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:helmet_forging"
     },
     "minecraft:repairable": {
       "items": "minecraft:repairs_diamond_armor"

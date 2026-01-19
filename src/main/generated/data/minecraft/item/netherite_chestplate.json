@@ -13,16 +13,12 @@
       "behavior": "minecraft:equip_entity"
     },
     "minecraft:enchantable": {
-      "enchantability": 15,
-      "enchantments": "minecraft:chestplate_enchanting"
+      "enchantability": 15
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_netherite",
       "slot": "chest",
       "swappable": true
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:chestplate_forging"
     },
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_fire"
