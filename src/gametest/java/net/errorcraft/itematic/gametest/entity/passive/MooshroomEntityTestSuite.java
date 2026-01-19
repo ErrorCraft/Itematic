@@ -34,7 +34,7 @@ public class MooshroomEntityTestSuite {
             context.assertTrue(bowlResult.isAccepted(), "Expected interaction with bowl on brown Mooshroom to be successful");
             ItemStack heldStack = player.getStackInHand(Hand.MAIN_HAND);
             Assert.itemStackIsOf(heldStack, ItemKeys.SUSPICIOUS_STEW);
-            Assert.itemStackHasComponent(heldStack, DataComponentTypes.SUSPICIOUS_STEW_EFFECTS,
+            Assert.itemStackHasDataComponent(heldStack, DataComponentTypes.SUSPICIOUS_STEW_EFFECTS,
                 component -> context.assertTrue(!component.effects().isEmpty(), "Expected item stack to have suspicious effects")
             );
         });
