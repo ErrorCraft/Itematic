@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.registry;
 import com.google.common.collect.ImmutableList;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
@@ -17,6 +18,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryLoader;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -37,13 +39,13 @@ public class RegistryLoaderExtender {
     private static List<RegistryLoader.Entry<?>> addCustomEntries(List<RegistryLoader.Entry<?>> original) {
         return new ImmutableList.Builder<RegistryLoader.Entry<?>>()
             .addAll(original)
-            .add(new RegistryLoader.Entry<>(RegistryKeys.ITEM, ItemUtil.CODEC))
-            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterial.CODEC))
-            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
-            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.TRADE, Trade.CODEC))
-            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
-            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.SMITHING_TEMPLATE, SmithingTemplate.CODEC))
-            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
+            .add(createEntry(RegistryKeys.ITEM, ItemUtil.CODEC))
+            .add(createEntry(ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterial.CODEC))
+            .add(createEntry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
+            .add(createEntry(ItematicRegistryKeys.TRADE, Trade.CODEC))
+            .add(createEntry(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
+            .add(createEntry(ItematicRegistryKeys.SMITHING_TEMPLATE, SmithingTemplate.CODEC))
+            .add(createEntry(ItematicRegistryKeys.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();
     }
 
@@ -51,19 +53,19 @@ public class RegistryLoaderExtender {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/util/List;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/List;"
+            target = "Ljava/util/List;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/List;"
         )
     )
     private static List<RegistryLoader.Entry<?>> addCustomNetworkEntries(List<RegistryLoader.Entry<?>> original) {
         return new ImmutableList.Builder<RegistryLoader.Entry<?>>()
             .addAll(original)
-            .add(new RegistryLoader.Entry<>(RegistryKeys.ITEM, ItemUtil.CODEC))
-            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterial.CODEC))
-            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
-            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.TRADE, Trade.CODEC))
-            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
-            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.SMITHING_TEMPLATE, SmithingTemplate.CODEC))
-            .add(new RegistryLoader.Entry<>(ItematicRegistryKeys.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
+            .add(createEntry(RegistryKeys.ITEM, ItemUtil.CODEC))
+            .add(createEntry(ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterial.CODEC))
+            .add(createEntry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
+            .add(createEntry(ItematicRegistryKeys.TRADE, Trade.CODEC))
+            .add(createEntry(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
+            .add(createEntry(ItematicRegistryKeys.SMITHING_TEMPLATE, SmithingTemplate.CODEC))
+            .add(createEntry(ItematicRegistryKeys.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();
     }
 
@@ -81,5 +83,10 @@ public class RegistryLoaderExtender {
             ActionValidator validator = new ActionValidator((Registry<ActionEntry>) registry);
             validator.validate(exceptions);
         }
+    }
+
+    @Unique
+    private static <T> RegistryLoader.Entry<T> createEntry(RegistryKey<Registry<T>> registry, Codec<T> codec) {
+        return RegistryLoaderAccessor.EntryAccessor.create(registry, codec);
     }
 }

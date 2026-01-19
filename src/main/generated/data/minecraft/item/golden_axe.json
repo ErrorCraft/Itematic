@@ -7,11 +7,7 @@
       "durability": 32
     },
     "minecraft:enchantable": {
-      "enchantability": 22,
-      "enchantments": "minecraft:axe_enchanting"
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:axe_forging"
+      "enchantability": 22
     },
     "minecraft:repairable": {
       "items": "minecraft:repairs_golden_tool"

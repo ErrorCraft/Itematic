@@ -13,6 +13,8 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> BAT = of("bat");
     public static final RegistryKey<EntityType<?>> BEE = of("bee");
     public static final RegistryKey<EntityType<?>> BLAZE = of("blaze");
+    public static final RegistryKey<EntityType<?>> BOGGED = of("bogged");
+    public static final RegistryKey<EntityType<?>> BREEZE = of("breeze");
     public static final RegistryKey<EntityType<?>> CAMEL = of("camel");
     public static final RegistryKey<EntityType<?>> CAT = of("cat");
     public static final RegistryKey<EntityType<?>> CAVE_SPIDER = of("cave_spider");
@@ -83,6 +85,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> VINDICATOR = of("vindicator");
     public static final RegistryKey<EntityType<?>> WANDERING_TRADER = of("wandering_trader");
     public static final RegistryKey<EntityType<?>> WARDEN = of("warden");
+    public static final RegistryKey<EntityType<?>> WIND_CHARGE = of("wind_charge");
     public static final RegistryKey<EntityType<?>> WITCH = of("witch");
     public static final RegistryKey<EntityType<?>> WITHER = of("wither");
     public static final RegistryKey<EntityType<?>> WITHER_SKELETON = of("wither_skeleton");

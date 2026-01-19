@@ -23,7 +23,6 @@ public class ItematicData implements DataGeneratorEntrypoint {
         pack.addProvider(ItemProvider::new);
         pack.addProvider(ArmorMaterialProvider::new);
         pack.addProvider(AtlasProvider::new);
-        pack.addProvider(EnchantmentTagProvider::new);
         pack.addProvider(ItemTagProvider::new);
         pack.addProvider(BlockTagProvider::new);
         pack.addProvider(ItemGroupEntryProviderProvider::new);

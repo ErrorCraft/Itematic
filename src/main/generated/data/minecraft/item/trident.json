@@ -8,14 +8,9 @@
       "preserve_item": true
     },
     "minecraft:enchantable": {
-      "enchantability": 1,
-      "enchantments": "minecraft:trident_enchanting"
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:trident_forging"
+      "enchantability": 1
     },
     "minecraft:projectile": {
-      "damage": 1,
       "entity": {
         "type": "minecraft:trident",
         "prevent_spawn_from_riptide": true
@@ -86,7 +81,7 @@
                 "predicates": {
                   "minecraft:enchantments": [
                     {
-                      "enchantment": "minecraft:riptide"
+                      "enchantments": "minecraft:riptide"
                     }
                   ]
                 }

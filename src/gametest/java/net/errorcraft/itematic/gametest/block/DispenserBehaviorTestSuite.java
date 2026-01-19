@@ -668,7 +668,7 @@ public class DispenserBehaviorTestSuite {
         context.runAtTick(4, () -> context.addFinalTask(() -> {
             context.dontExpectItem(world.itematic$getItem(ItemKeys.SHEARS).value());
             Assert.itemStackIsOf(blockEntity.getStack(0), ItemKeys.SHEARS);
-            context.assertFalse(blockEntity.getStack(0).isDamaged(), "Expected item stack to not be damaged");
+            context.assertFalse(blockEntity.getStack(0).isDamaged(), "Expected item stack not to be damaged");
         }));
     }
 
@@ -740,7 +740,7 @@ public class DispenserBehaviorTestSuite {
         context.runAtTick(4, () -> context.addFinalTask(() -> {
             context.dontExpectItem(world.itematic$getItem(ItemKeys.FLINT_AND_STEEL).value());
             Assert.itemStackIsOf(blockEntity.getStack(0), ItemKeys.FLINT_AND_STEEL);
-            context.assertFalse(blockEntity.getStack(0).isDamaged(), "Expected item stack to not be damaged");
+            context.assertFalse(blockEntity.getStack(0).isDamaged(), "Expected item stack not to be damaged");
         }));
     }
 
@@ -768,7 +768,7 @@ public class DispenserBehaviorTestSuite {
         context.runAtTick(4, () -> context.addFinalTask(() -> {
             context.dontExpectItem(world.itematic$getItem(ItemKeys.BRUSH).value());
             Assert.itemStackIsOf(blockEntity.getStack(0), ItemKeys.BRUSH);
-            context.assertFalse(blockEntity.getStack(0).isDamaged(), "Expected item stack to not be damaged");
+            context.assertFalse(blockEntity.getStack(0).isDamaged(), "Expected item stack not to be damaged");
         }));
     }
 

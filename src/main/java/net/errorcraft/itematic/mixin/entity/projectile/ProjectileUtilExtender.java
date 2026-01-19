@@ -13,23 +13,23 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.Optional;
-
 @Mixin(ProjectileUtil.class)
 public class ProjectileUtilExtender {
     @Redirect(
         method = "createArrowProjectile",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ArrowItem;createArrow(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/projectile/PersistentProjectileEntity;"
+            target = "Lnet/minecraft/item/ArrowItem;createArrow(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/entity/projectile/PersistentProjectileEntity;"
         )
     )
-    private static PersistentProjectileEntity createProjectileUseItemComponent(ArrowItem instance, World world, ItemStack projectile, LivingEntity shooter) {
-        Optional<Entity> optionalEntity = projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE)
-            .map(c -> c.createEntity(world, shooter, projectile, 1.0f, 1.0f));
-        if (optionalEntity.orElse(null) instanceof PersistentProjectileEntity persistentProjectileEntity) {
+    private static PersistentProjectileEntity createProjectileUseItemComponent(ArrowItem instance, World world, ItemStack projectile, LivingEntity shooter, ItemStack shotFrom) {
+        Entity entity = projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE)
+            .map(c -> c.createEntity(world, shooter, projectile, 1.0f, 1.0f))
+            .orElse(null);
+        if (entity instanceof PersistentProjectileEntity persistentProjectileEntity) {
             return persistentProjectileEntity;
         }
-        return new ArrowEntity(world, shooter, projectile.copyWithCount(1));
+
+        return new ArrowEntity(world, shooter, projectile.copyWithCount(1), shotFrom);
     }
 }

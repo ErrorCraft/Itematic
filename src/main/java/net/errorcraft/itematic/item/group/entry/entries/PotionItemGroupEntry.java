@@ -3,8 +3,8 @@ package net.errorcraft.itematic.item.group.entry.entries;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.PotionContentsComponentUtil;
-import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
+import net.errorcraft.itematic.item.group.entry.PossiblyHiddenItemGroupEntry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -14,9 +14,9 @@ import net.minecraft.registry.entry.RegistryFixedCodec;
 
 import java.util.Collection;
 
-public class PotionItemGroupEntry extends ItemGroupEntry {
+public class PotionItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     public static final MapCodec<PotionItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(PotionItemGroupEntry::item)
+        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(entry -> entry.item)
     ).apply(instance, PotionItemGroupEntry::new));
 
     private final RegistryEntry<Item> item;
@@ -30,12 +30,13 @@ public class PotionItemGroupEntry extends ItemGroupEntry {
         this.item = item;
     }
 
-    public RegistryEntry<Item> item() {
-        return this.item;
-    }
-
     public static PotionItemGroupEntry of(RegistryEntry<Item> item) {
         return new PotionItemGroupEntry(item);
+    }
+
+    @Override
+    public ItemGroupEntryType type() {
+        return ItemGroupEntryType.POTION;
     }
 
     @Override
@@ -45,10 +46,5 @@ public class PotionItemGroupEntry extends ItemGroupEntry {
             .streamEntries()
             .map(entry -> PotionContentsComponentUtil.setPotion(new ItemStack(this.item), entry))
             .toList();
-    }
-
-    @Override
-    protected ItemGroupEntryType type() {
-        return ItemGroupEntryType.POTION;
     }
 }

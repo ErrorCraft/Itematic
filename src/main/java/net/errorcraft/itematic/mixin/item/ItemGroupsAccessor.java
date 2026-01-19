@@ -17,10 +17,5 @@ public interface ItemGroupsAccessor {
     }
 
     @Accessor("displayContext")
-    static ItemGroup.DisplayContext displayContext() {
-        throw new AssertionError();
-    }
-
-    @Accessor("displayContext")
     static void setDisplayContext(ItemGroup.DisplayContext displayContext) {}
 }

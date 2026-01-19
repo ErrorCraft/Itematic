@@ -6,9 +6,6 @@
     "minecraft:damageable": {
       "durability": 25
     },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:steering_forging"
-    },
     "minecraft:stackable": 1,
     "minecraft:steering": {
       "damage_per_use": 7,

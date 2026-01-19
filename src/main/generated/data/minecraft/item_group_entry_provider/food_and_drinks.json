@@ -11,6 +11,41 @@
     "minecraft:milk_bucket",
     "minecraft:honey_bottle",
     {
+      "type": "stack",
+      "components": {
+        "minecraft:ominous_bottle_amplifier": 0
+      },
+      "item": "minecraft:ominous_bottle"
+    },
+    {
+      "type": "stack",
+      "components": {
+        "minecraft:ominous_bottle_amplifier": 1
+      },
+      "item": "minecraft:ominous_bottle"
+    },
+    {
+      "type": "stack",
+      "components": {
+        "minecraft:ominous_bottle_amplifier": 2
+      },
+      "item": "minecraft:ominous_bottle"
+    },
+    {
+      "type": "stack",
+      "components": {
+        "minecraft:ominous_bottle_amplifier": 3
+      },
+      "item": "minecraft:ominous_bottle"
+    },
+    {
+      "type": "stack",
+      "components": {
+        "minecraft:ominous_bottle_amplifier": 4
+      },
+      "item": "minecraft:ominous_bottle"
+    },
+    {
       "type": "potion",
       "item": "minecraft:potion"
     },

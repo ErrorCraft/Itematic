@@ -6,16 +6,12 @@ import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.SharedConstants;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.UseAction;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
@@ -29,27 +25,8 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
         FoodComponent.StatusEffectEntry.CODEC.listOf().optionalFieldOf("effects", List.of()).forGetter(FoodItemComponent::effects)
     ).apply(instance, FoodItemComponent::new));
 
-    public static FoodItemComponent of(int nutrition, float saturation, boolean alwaysEdible, List<FoodComponent.StatusEffectEntry> effects) {
-        return new FoodItemComponent(nutrition, saturation, alwaysEdible, effects);
-    }
-
-    public static ItemComponent<?>[] from(FoodComponent component) {
-        return from(component, null);
-    }
-
-    public static ItemComponent<?>[] from(FoodComponent component, RegistryEntry<Item> resultItem) {
-        return from(component, (int)(component.eatSeconds() * SharedConstants.TICKS_PER_SECOND), UseAction.EAT, resultItem);
-    }
-
-    public static ItemComponent<?>[] from(FoodComponent component, int eatTicks, UseAction useAction, RegistryEntry<Item> resultItem) {
-        return new ItemComponent<?>[] {
-            UseableItemComponent.builder()
-                .ticks(eatTicks)
-                .animation(useAction)
-                .build(),
-            of(component.nutrition(), component.saturation(), component.canAlwaysEat(), component.effects()),
-            ConsumableItemComponent.of(resultItem)
-        };
+    public static FoodItemComponent of(FoodComponent food) {
+        return new FoodItemComponent(food.nutrition(), food.saturation(), food.canAlwaysEat(), food.effects());
     }
 
     @Override

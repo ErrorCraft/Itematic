@@ -46,6 +46,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.DIAMOND);
         this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_NETHERITE_TOOL)
             .add(ItemKeys.NETHERITE_INGOT);
+        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_MACE)
+            .add(ItemKeys.BREEZE_ROD);
         this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_SHIELD)
             .forceAddTag(ItemTags.PLANKS);
         this.getOrCreateTagBuilder(ItematicItemTags.FURNACE_MINECART_FUEL)
@@ -321,7 +323,20 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.DEEPSLATE_TILE_SLAB)
             .add(ItemKeys.DEEPSLATE_TILE_WALL);
         this.getOrCreateTagBuilder(ItematicItemTags.TUFF_BUILDING_BLOCKS)
-            .add(ItemKeys.TUFF);
+            .add(ItemKeys.TUFF)
+            .add(ItemKeys.TUFF_STAIRS)
+            .add(ItemKeys.TUFF_SLAB)
+            .add(ItemKeys.TUFF_WALL)
+            .add(ItemKeys.CHISELED_TUFF)
+            .add(ItemKeys.POLISHED_TUFF)
+            .add(ItemKeys.POLISHED_TUFF_STAIRS)
+            .add(ItemKeys.POLISHED_TUFF_SLAB)
+            .add(ItemKeys.POLISHED_TUFF_WALL)
+            .add(ItemKeys.TUFF_BRICKS)
+            .add(ItemKeys.TUFF_BRICK_STAIRS)
+            .add(ItemKeys.TUFF_BRICK_SLAB)
+            .add(ItemKeys.TUFF_BRICK_WALL)
+            .add(ItemKeys.CHISELED_TUFF_BRICKS);
         this.getOrCreateTagBuilder(ItematicItemTags.BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.BRICKS)
             .add(ItemKeys.BRICK_STAIRS)
@@ -485,44 +500,84 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.SMOOTH_QUARTZ_SLAB);
         this.getOrCreateTagBuilder(ItematicItemTags.COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.COPPER_BLOCK)
+            .add(ItemKeys.CHISELED_COPPER)
+            .add(ItemKeys.COPPER_GRATE)
             .add(ItemKeys.CUT_COPPER)
             .add(ItemKeys.CUT_COPPER_STAIRS)
-            .add(ItemKeys.CUT_COPPER_SLAB);
+            .add(ItemKeys.CUT_COPPER_SLAB)
+            .add(ItemKeys.COPPER_DOOR)
+            .add(ItemKeys.COPPER_TRAPDOOR)
+            .add(ItemKeys.COPPER_BULB);
         this.getOrCreateTagBuilder(ItematicItemTags.EXPOSED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.EXPOSED_COPPER)
+            .add(ItemKeys.EXPOSED_CHISELED_COPPER)
+            .add(ItemKeys.EXPOSED_COPPER_GRATE)
             .add(ItemKeys.EXPOSED_CUT_COPPER)
             .add(ItemKeys.EXPOSED_CUT_COPPER_STAIRS)
-            .add(ItemKeys.EXPOSED_CUT_COPPER_SLAB);
+            .add(ItemKeys.EXPOSED_CUT_COPPER_SLAB)
+            .add(ItemKeys.EXPOSED_COPPER_DOOR)
+            .add(ItemKeys.EXPOSED_COPPER_TRAPDOOR)
+            .add(ItemKeys.EXPOSED_COPPER_BULB);
         this.getOrCreateTagBuilder(ItematicItemTags.WEATHERED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WEATHERED_COPPER)
+            .add(ItemKeys.WEATHERED_CHISELED_COPPER)
+            .add(ItemKeys.WEATHERED_COPPER_GRATE)
             .add(ItemKeys.WEATHERED_CUT_COPPER)
             .add(ItemKeys.WEATHERED_CUT_COPPER_STAIRS)
-            .add(ItemKeys.WEATHERED_CUT_COPPER_SLAB);
+            .add(ItemKeys.WEATHERED_CUT_COPPER_SLAB)
+            .add(ItemKeys.WEATHERED_COPPER_DOOR)
+            .add(ItemKeys.WEATHERED_COPPER_TRAPDOOR)
+            .add(ItemKeys.WEATHERED_COPPER_BULB);
         this.getOrCreateTagBuilder(ItematicItemTags.OXIDIZED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.OXIDIZED_COPPER)
+            .add(ItemKeys.OXIDIZED_CHISELED_COPPER)
+            .add(ItemKeys.OXIDIZED_COPPER_GRATE)
             .add(ItemKeys.OXIDIZED_CUT_COPPER)
             .add(ItemKeys.OXIDIZED_CUT_COPPER_STAIRS)
-            .add(ItemKeys.OXIDIZED_CUT_COPPER_SLAB);
+            .add(ItemKeys.OXIDIZED_CUT_COPPER_SLAB)
+            .add(ItemKeys.OXIDIZED_COPPER_DOOR)
+            .add(ItemKeys.OXIDIZED_COPPER_TRAPDOOR)
+            .add(ItemKeys.OXIDIZED_COPPER_BULB);
         this.getOrCreateTagBuilder(ItematicItemTags.WAXED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WAXED_COPPER_BLOCK)
+            .add(ItemKeys.WAXED_CHISELED_COPPER)
+            .add(ItemKeys.WAXED_COPPER_GRATE)
             .add(ItemKeys.WAXED_CUT_COPPER)
             .add(ItemKeys.WAXED_CUT_COPPER_STAIRS)
-            .add(ItemKeys.WAXED_CUT_COPPER_SLAB);
+            .add(ItemKeys.WAXED_CUT_COPPER_SLAB)
+            .add(ItemKeys.WAXED_COPPER_DOOR)
+            .add(ItemKeys.WAXED_COPPER_TRAPDOOR)
+            .add(ItemKeys.WAXED_COPPER_BULB);
         this.getOrCreateTagBuilder(ItematicItemTags.WAXED_EXPOSED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WAXED_EXPOSED_COPPER)
+            .add(ItemKeys.WAXED_EXPOSED_CHISELED_COPPER)
+            .add(ItemKeys.WAXED_EXPOSED_COPPER_GRATE)
             .add(ItemKeys.WAXED_EXPOSED_CUT_COPPER)
             .add(ItemKeys.WAXED_EXPOSED_CUT_COPPER_STAIRS)
-            .add(ItemKeys.WAXED_EXPOSED_CUT_COPPER_SLAB);
+            .add(ItemKeys.WAXED_EXPOSED_CUT_COPPER_SLAB)
+            .add(ItemKeys.WAXED_EXPOSED_COPPER_DOOR)
+            .add(ItemKeys.WAXED_EXPOSED_COPPER_TRAPDOOR)
+            .add(ItemKeys.WAXED_EXPOSED_COPPER_BULB);
         this.getOrCreateTagBuilder(ItematicItemTags.WAXED_WEATHERED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WAXED_WEATHERED_COPPER)
+            .add(ItemKeys.WAXED_WEATHERED_CHISELED_COPPER)
+            .add(ItemKeys.WAXED_WEATHERED_COPPER_GRATE)
             .add(ItemKeys.WAXED_WEATHERED_CUT_COPPER)
             .add(ItemKeys.WAXED_WEATHERED_CUT_COPPER_STAIRS)
-            .add(ItemKeys.WAXED_WEATHERED_CUT_COPPER_SLAB);
+            .add(ItemKeys.WAXED_WEATHERED_CUT_COPPER_SLAB)
+            .add(ItemKeys.WAXED_WEATHERED_COPPER_DOOR)
+            .add(ItemKeys.WAXED_WEATHERED_COPPER_TRAPDOOR)
+            .add(ItemKeys.WAXED_WEATHERED_COPPER_BULB);
         this.getOrCreateTagBuilder(ItematicItemTags.WAXED_OXIDIZED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WAXED_OXIDIZED_COPPER)
+            .add(ItemKeys.WAXED_OXIDIZED_CHISELED_COPPER)
+            .add(ItemKeys.WAXED_OXIDIZED_COPPER_GRATE)
             .add(ItemKeys.WAXED_OXIDIZED_CUT_COPPER)
             .add(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_STAIRS)
-            .add(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_SLAB);
+            .add(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_SLAB)
+            .add(ItemKeys.WAXED_OXIDIZED_COPPER_DOOR)
+            .add(ItemKeys.WAXED_OXIDIZED_COPPER_TRAPDOOR)
+            .add(ItemKeys.WAXED_OXIDIZED_COPPER_BULB);
         this.getOrCreateTagBuilder(ItematicItemTags.COPPER_LIKE_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.COPPER_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.EXPOSED_COPPER_BUILDING_BLOCKS)
@@ -988,6 +1043,14 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.END_ROD)
             .add(ItemKeys.SEA_LANTERN)
             .add(ItemKeys.REDSTONE_LAMP)
+            .add(ItemKeys.COPPER_BULB)
+            .add(ItemKeys.EXPOSED_COPPER_BULB)
+            .add(ItemKeys.WEATHERED_COPPER_BULB)
+            .add(ItemKeys.OXIDIZED_COPPER_BULB)
+            .add(ItemKeys.WAXED_COPPER_BULB)
+            .add(ItemKeys.WAXED_EXPOSED_COPPER_BULB)
+            .add(ItemKeys.WAXED_WEATHERED_COPPER_BULB)
+            .add(ItemKeys.WAXED_OXIDIZED_COPPER_BULB)
             .add(ItemKeys.GLOWSTONE)
             .add(ItemKeys.SHROOMLIGHT)
             .addTag(ItematicItemTags.FROGLIGHTS)
@@ -1105,6 +1168,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MUSIC_DISC_CAT)
             .add(ItemKeys.MUSIC_DISC_BLOCKS)
             .add(ItemKeys.MUSIC_DISC_CHIRP)
+            .add(ItemKeys.MUSIC_DISC_CREATOR)
+            .add(ItemKeys.MUSIC_DISC_CREATOR_MUSIC_BOX)
             .add(ItemKeys.MUSIC_DISC_FAR)
             .add(ItemKeys.MUSIC_DISC_MALL)
             .add(ItemKeys.MUSIC_DISC_MELLOHI)
@@ -1116,7 +1181,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MUSIC_DISC_OTHERSIDE)
             .add(ItemKeys.MUSIC_DISC_RELIC)
             .add(ItemKeys.MUSIC_DISC_5)
-            .add(ItemKeys.MUSIC_DISC_PIGSTEP);
+            .add(ItemKeys.MUSIC_DISC_PIGSTEP)
+            .add(ItemKeys.MUSIC_DISC_PRECIPICE);
         this.getOrCreateTagBuilder(ItematicItemTags.SWORDS)
             .add(ItemKeys.WOODEN_SWORD)
             .add(ItemKeys.STONE_SWORD)
@@ -1244,7 +1310,9 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.SKULL_BANNER_PATTERN)
             .add(ItemKeys.MOJANG_BANNER_PATTERN)
             .add(ItemKeys.GLOBE_BANNER_PATTERN)
-            .add(ItemKeys.PIGLIN_BANNER_PATTERN);
+            .add(ItemKeys.PIGLIN_BANNER_PATTERN)
+            .add(ItemKeys.FLOW_BANNER_PATTERN)
+            .add(ItemKeys.GUSTER_BANNER_PATTERN);
         this.getOrCreateTagBuilder(ItematicItemTags.SMITHING_TEMPLATES)
             .add(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
             .add(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE)
@@ -1262,9 +1330,12 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE)
             .add(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE)
             .add(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE)
-            .add(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE);
+            .add(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE)
+            .add(ItemKeys.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE)
+            .add(ItemKeys.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE);
         this.getOrCreateTagBuilder(ItematicItemTags.SPAWNERS)
-            .add(ItemKeys.SPAWNER);
+            .add(ItemKeys.SPAWNER)
+            .add(ItemKeys.TRIAL_SPAWNER);
         this.getOrCreateTagBuilder(ItematicItemTags.BANNED_BUNDLE_ITEMS)
             .addTag(ItematicItemTags.SHULKER_BOXES);
         this.getOrCreateTagBuilder(ItematicItemTags.SHULKER_BOXES)

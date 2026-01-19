@@ -143,6 +143,10 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
         builder.itematic$registerWaterPotionRecipe(ItemKeys.GLOWSTONE_DUST, Potions.THICK);
         builder.itematic$registerWaterPotionRecipe(ItemKeys.REDSTONE, Potions.MUNDANE);
         builder.itematic$registerWaterPotionRecipe(ItemKeys.NETHER_WART, Potions.AWKWARD);
+        builder.itematic$registerWaterPotionRecipe(ItemKeys.BREEZE_ROD, Potions.MUNDANE);
+        builder.itematic$registerWaterPotionRecipe(ItemKeys.SLIME_BLOCK, Potions.MUNDANE);
+        builder.itematic$registerWaterPotionRecipe(ItemKeys.STONE, Potions.MUNDANE);
+        builder.itematic$registerWaterPotionRecipe(ItemKeys.COBWEB, Potions.MUNDANE);
 
         builder.itematic$registerAwkwardPotionRecipe(ItemKeys.GOLDEN_CARROT, Potions.NIGHT_VISION);
         builder.itematic$registerAwkwardPotionRecipe(ItemKeys.MAGMA_CREAM, Potions.FIRE_RESISTANCE);
@@ -155,6 +159,10 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
         builder.itematic$registerAwkwardPotionRecipe(ItemKeys.GHAST_TEAR, Potions.REGENERATION);
         builder.itematic$registerAwkwardPotionRecipe(ItemKeys.BLAZE_POWDER, Potions.STRENGTH);
         builder.itematic$registerAwkwardPotionRecipe(ItemKeys.PHANTOM_MEMBRANE, Potions.SLOW_FALLING);
+        builder.itematic$registerAwkwardPotionRecipe(ItemKeys.BREEZE_ROD, Potions.WIND_CHARGED);
+        builder.itematic$registerAwkwardPotionRecipe(ItemKeys.SLIME_BLOCK, Potions.OOZING);
+        builder.itematic$registerAwkwardPotionRecipe(ItemKeys.STONE, Potions.INFESTED);
+        builder.itematic$registerAwkwardPotionRecipe(ItemKeys.COBWEB, Potions.WEAVING);
 
         builder.itematic$registerLongPotionRecipe(Potions.NIGHT_VISION, Potions.LONG_NIGHT_VISION);
         builder.itematic$registerLongPotionRecipe(Potions.INVISIBILITY, Potions.LONG_INVISIBILITY);

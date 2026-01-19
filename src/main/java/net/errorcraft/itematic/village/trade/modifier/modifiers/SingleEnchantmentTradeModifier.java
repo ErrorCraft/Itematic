@@ -14,7 +14,9 @@ import net.minecraft.loot.context.LootContext;
 import net.minecraft.predicate.ComponentPredicate;
 import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradedItem;
@@ -30,7 +32,6 @@ public record SingleEnchantmentTradeModifier(int index, int baseRandomCost, int 
         RegistryCodecs.entryList(RegistryKeys.ENCHANTMENT).fieldOf("enchantments").forGetter(SingleEnchantmentTradeModifier::enchantments),
         Range.INT_CODEC.fieldOf("levels").forGetter(SingleEnchantmentTradeModifier::levels)
     ).apply(instance, SingleEnchantmentTradeModifier::new));
-    private static final int TREASURE_BONUS_FACTOR = 2;
 
     public static SingleEnchantmentTradeModifier of(int index, int baseRandomCost, int perLevelRandomCost, int perLevelCost, RegistryEntryList<Enchantment> enchantments) {
         return new SingleEnchantmentTradeModifier(index, baseRandomCost, perLevelRandomCost, perLevelCost, enchantments, Range.IntegerRange.atLeast(1));
@@ -45,20 +46,21 @@ public record SingleEnchantmentTradeModifier(int index, int baseRandomCost, int 
     public Optional<TradedItem> apply(Trade.Input wants, ItemStack gives, LootContext context) {
         Random random = context.getRandom();
         this.enchantments.getRandom(random)
-            .ifPresent(entry -> this.apply(wants.getStack(this.index), gives, random, entry.value()));
+            .ifPresent(entry -> this.apply(wants.getStack(this.index), gives, random, entry));
         return Optional.of(new TradedItem(gives.getRegistryEntry(), gives.getCount(), ComponentPredicate.of(gives.getComponents())));
     }
 
-    private void apply(ItemStack wants, ItemStack gives, Random random, Enchantment enchantment) {
-        int minLevel = Math.max(enchantment.getMinLevel(), this.levels.min());
-        int maxLevel = Math.min(enchantment.getMaxLevel(), this.levels.max());
+    private void apply(ItemStack wants, ItemStack gives, Random random, RegistryEntry<Enchantment> enchantment) {
+        int minLevel = Math.max(enchantment.value().getMinLevel(), this.levels.min());
+        int maxLevel = Math.min(enchantment.value().getMaxLevel(), this.levels.max());
         int level = MathHelper.nextInt(random, minLevel, maxLevel);
 
         gives.addEnchantment(enchantment, level);
         int count = random.nextInt(this.baseRandomCost + level * this.perLevelRandomCost) + level * this.perLevelCost;
-        if (enchantment.isTreasure()) {
-            count *= TREASURE_BONUS_FACTOR;
+        if (enchantment.isIn(EnchantmentTags.DOUBLE_TRADE_PRICE)) {
+            count *= 2;
         }
+
         wants.itematic$tryIncrement(count);
     }
 }

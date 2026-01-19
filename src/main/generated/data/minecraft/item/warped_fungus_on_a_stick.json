@@ -6,9 +6,6 @@
     "minecraft:damageable": {
       "durability": 100
     },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:steering_forging"
-    },
     "minecraft:stackable": 1,
     "minecraft:steering": {
       "target": "minecraft:strider"

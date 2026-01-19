@@ -62,9 +62,21 @@ public interface DecoratedPotPatternsAccessor {
         throw new AssertionError();
     }
 
+    @Accessor("FLOW_POTTERY_PATTERN_KEY")
+    @Contract
+    static RegistryKey<String> flow() {
+        throw new AssertionError();
+    }
+
     @Accessor("FRIEND_POTTERY_PATTERN_KEY")
     @Contract
     static RegistryKey<String> friend() {
+        throw new AssertionError();
+    }
+
+    @Accessor("GUSTER_POTTERY_PATTERN_KEY")
+    @Contract
+    static RegistryKey<String> guster() {
         throw new AssertionError();
     }
 
@@ -107,6 +119,12 @@ public interface DecoratedPotPatternsAccessor {
     @Accessor("POTTERY_PATTERN_PRIZE_KEY")
     @Contract
     static RegistryKey<String> prize() {
+        throw new AssertionError();
+    }
+
+    @Accessor("SCRAPE_POTTERY_PATTERN_KEY")
+    @Contract
+    static RegistryKey<String> scrape() {
         throw new AssertionError();
     }
 

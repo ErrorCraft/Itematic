@@ -1,0 +1,17 @@
+{
+  "base": {
+    "tooltip": [
+      {
+        "color": "gray",
+        "translate": "item.minecraft.flow_banner_pattern.desc"
+      }
+    ],
+    "translation_key": "item.minecraft.flow_banner_pattern"
+  },
+  "components": {
+    "minecraft:banner_pattern": {
+      "patterns": "minecraft:pattern_item/flow"
+    },
+    "minecraft:stackable": 1
+  }
+}

@@ -28,6 +28,13 @@ public record SmithingTemplateItemComponent(RegistryEntry<SmithingTemplate> temp
     private static final Text APPLIES_TO_TEXT = SmithingTemplateItemAccessor.getAppliesToText();
     private static final Text INGREDIENTS_TEXT = SmithingTemplateItemAccessor.getIngredientsText();
 
+    public static ItemComponent<?>[] of(RegistryEntry<SmithingTemplate> template) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(64),
+            new SmithingTemplateItemComponent(template)
+        };
+    }
+
     @Override
     public ItemComponentType<SmithingTemplateItemComponent> type() {
         return ItemComponentTypes.SMITHING_TEMPLATE;
@@ -47,9 +54,5 @@ public record SmithingTemplateItemComponent(RegistryEntry<SmithingTemplate> temp
         tooltip.add(ScreenTexts.space().append(template.appliesToText().formatted(DESCRIPTION_FORMATTING)));
         tooltip.add(INGREDIENTS_TEXT);
         tooltip.add(ScreenTexts.space().append(template.ingredientsText().formatted(DESCRIPTION_FORMATTING)));
-    }
-
-    public static SmithingTemplateItemComponent of(RegistryEntry<SmithingTemplate> template) {
-        return new SmithingTemplateItemComponent(template);
     }
 }

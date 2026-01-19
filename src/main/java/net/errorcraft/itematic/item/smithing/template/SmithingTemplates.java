@@ -15,9 +15,11 @@ import net.minecraft.util.Identifier;
 
 public class SmithingTemplates {
     public static final RegistryKey<SmithingTemplate> NETHERITE_UPGRADE = of("netherite_upgrade");
+    public static final RegistryKey<SmithingTemplate> BOLT_PATTERN = of("bolt_pattern");
     public static final RegistryKey<SmithingTemplate> COAST_PATTERN = of("coast_pattern");
     public static final RegistryKey<SmithingTemplate> DUNE_PATTERN = of("dune_pattern");
     public static final RegistryKey<SmithingTemplate> EYE_PATTERN = of("eye_pattern");
+    public static final RegistryKey<SmithingTemplate> FLOW_PATTERN = of("flow_pattern");
     public static final RegistryKey<SmithingTemplate> HOST_PATTERN = of("host_pattern");
     public static final RegistryKey<SmithingTemplate> RAISER_PATTERN = of("raiser_pattern");
     public static final RegistryKey<SmithingTemplate> RIB_PATTERN = of("rib_pattern");
@@ -39,9 +41,11 @@ public class SmithingTemplates {
         RegistryEntryLookup<ArmorTrimPattern> trimPatterns = registerable.getRegistryLookup(RegistryKeys.TRIM_PATTERN);
 
         registerable.register(NETHERITE_UPGRADE, new ItemUpgradeSmithingTemplate(items.getOrThrow(ItemKeys.NETHERITE_INGOT), new Identifier("netherite_upgrade")));
+        registerable.register(BOLT_PATTERN, new TrimPatternSmithingTemplate(trimPatterns.getOrThrow(ArmorTrimPatterns.BOLT)));
         registerable.register(COAST_PATTERN, new TrimPatternSmithingTemplate(trimPatterns.getOrThrow(ArmorTrimPatterns.COAST)));
         registerable.register(DUNE_PATTERN, new TrimPatternSmithingTemplate(trimPatterns.getOrThrow(ArmorTrimPatterns.DUNE)));
         registerable.register(EYE_PATTERN, new TrimPatternSmithingTemplate(trimPatterns.getOrThrow(ArmorTrimPatterns.EYE)));
+        registerable.register(FLOW_PATTERN, new TrimPatternSmithingTemplate(trimPatterns.getOrThrow(ArmorTrimPatterns.FLOW)));
         registerable.register(HOST_PATTERN, new TrimPatternSmithingTemplate(trimPatterns.getOrThrow(ArmorTrimPatterns.HOST)));
         registerable.register(RAISER_PATTERN, new TrimPatternSmithingTemplate(trimPatterns.getOrThrow(ArmorTrimPatterns.RAISER)));
         registerable.register(RIB_PATTERN, new TrimPatternSmithingTemplate(trimPatterns.getOrThrow(ArmorTrimPatterns.RIB)));

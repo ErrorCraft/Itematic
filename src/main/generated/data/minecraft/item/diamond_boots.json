@@ -13,16 +13,12 @@
       "behavior": "minecraft:equip_entity"
     },
     "minecraft:enchantable": {
-      "enchantability": 10,
-      "enchantments": "minecraft:boots_enchanting"
+      "enchantability": 10
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_diamond",
       "slot": "feet",
       "swappable": true
-    },
-    "minecraft:forgeable": {
-      "enchantments": "minecraft:boots_forging"
     },
     "minecraft:repairable": {
       "items": "minecraft:repairs_diamond_armor"

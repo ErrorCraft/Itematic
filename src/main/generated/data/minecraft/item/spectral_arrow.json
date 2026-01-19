@@ -7,7 +7,6 @@
       "behavior": "minecraft:shoot_projectile"
     },
     "minecraft:projectile": {
-      "damage": 1,
       "entity": {
         "type": "minecraft:spectral_arrow"
       }

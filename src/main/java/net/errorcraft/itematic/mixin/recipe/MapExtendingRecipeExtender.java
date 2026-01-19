@@ -2,12 +2,12 @@ package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.MapExtendingRecipe;
 import net.minecraft.recipe.ShapedRecipe;
+import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -31,19 +31,20 @@ public class MapExtendingRecipeExtender {
     }
 
     @Redirect(
-        method = "matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z",
+        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/recipe/ShapedRecipe;matches(Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/world/World;)Z"
+            target = "Lnet/minecraft/recipe/ShapedRecipe;matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z"
         )
     )
-    private boolean matchesUseRegistryKeyCheck(ShapedRecipe instance, RecipeInputInventory recipeInputInventory, World world) {
-        for (int i = 0; i < recipeInputInventory.size(); ++i) {
-            ItemStack stack = recipeInputInventory.getStack(i);
+    private boolean matchesUseRegistryKeyCheck(ShapedRecipe instance, CraftingRecipeInput input, World world) {
+        for (int i = 0; i < input.getStackCount(); ++i) {
+            ItemStack stack = input.getStackInSlot(i);
             if (!isValid(stack, i)) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -63,6 +64,7 @@ public class MapExtendingRecipeExtender {
         if (index == MAP_SLOT) {
             return stack.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
         }
+
         return stack.itematic$isOf(ItemKeys.PAPER);
     }
 }

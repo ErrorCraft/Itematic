@@ -7,9 +7,13 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.TridentItem;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -32,37 +36,35 @@ public record TwirlPlayerAction() implements Action<TwirlPlayerAction> {
         if (player == null) {
             return false;
         }
-        int riptideLevel = EnchantmentHelper.getRiptide(context.stack());
-        if (player instanceof ServerPlayerEntity serverPlayer) {
-            serverPlayer.networkHandler.sendPacket(new TwirlS2CPacket(riptideLevel));
+
+        float spinAttackStrength = EnchantmentHelper.getTridentSpinAttackStrength(context.world(), context.stack(), player);
+        if (spinAttackStrength <= 0.0f) {
+            return false;
         }
-        execute(riptideLevel, player, context.world());
+
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            serverPlayer.networkHandler.sendPacket(new TwirlS2CPacket(spinAttackStrength));
+        }
+
+        execute(spinAttackStrength, player, context.world(), context.stack());
         return true;
     }
 
-    public static void execute(int riptideLevel, PlayerEntity player, World world) {
-        double riptideFactor = 3.0d * ((1.0d + riptideLevel) / 4.0d);
+    public static void execute(float spinAttackStrength, PlayerEntity player, World world, ItemStack usedStack) {
         float yaw = player.getYaw();
         float pitch = player.getPitch();
         double x = -Math.sin(yaw * (Math.PI / 180.0d)) * Math.cos(pitch * (Math.PI / 180.0d));
         double y = -Math.sin(pitch * (Math.PI / 180.0d));
         double z = Math.cos(yaw * (Math.PI / 180)) * Math.cos(pitch * (Math.PI / 180.0d));
         double distance = Math.sqrt(x * x + y * y + z * z);
-        player.addVelocity(x * riptideFactor / distance, y * riptideFactor / distance, z * riptideFactor / distance);
-        player.useRiptide(20);
+        player.addVelocity(x * spinAttackStrength / distance, y * spinAttackStrength / distance, z * spinAttackStrength / distance);
+        player.useRiptide(20, TridentItem.ATTACK_DAMAGE, usedStack);
         if (player.isOnGround()) {
             player.move(MovementType.SELF, new Vec3d(0.0d, 1.2d, 0.0d));
         }
-        world.playSoundFromEntity(null, player, soundEvent(riptideLevel), SoundCategory.PLAYERS, 1.0f, 1.0f);
-    }
 
-    private static SoundEvent soundEvent(int level) {
-        if (level >= 3) {
-            return SoundEvents.ITEM_TRIDENT_RIPTIDE_3;
-        }
-        if (level == 2) {
-            return SoundEvents.ITEM_TRIDENT_RIPTIDE_2;
-        }
-        return SoundEvents.ITEM_TRIDENT_RIPTIDE_1;
+        RegistryEntry<SoundEvent> sound = EnchantmentHelper.getEffect(usedStack, EnchantmentEffectComponentTypes.TRIDENT_SOUND)
+            .orElse(SoundEvents.ITEM_TRIDENT_THROW);
+        world.playSoundFromEntity(null, player, sound.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
     }
 }

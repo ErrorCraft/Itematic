@@ -10,7 +10,8 @@ public enum ItemGroupEntryType implements StringIdentifiable {
     PAINTING_VARIANT("painting_variant", PaintingVariantItemGroupEntry.CODEC),
     INSTRUMENT("instrument", InstrumentItemGroupEntry.CODEC),
     SUSPICIOUS_EFFECT_INGREDIENT("suspicious_effect_ingredient", SuspiciousEffectIngredientItemGroupEntry.CODEC),
-    POTION("potion", PotionItemGroupEntry.CODEC);
+    POTION("potion", PotionItemGroupEntry.CODEC),
+    ENCHANTMENT("enchantment", EnchantmentItemGroupEntry.CODEC);
 
     private final String name;
     private final MapCodec<? extends ItemGroupEntry> codec;

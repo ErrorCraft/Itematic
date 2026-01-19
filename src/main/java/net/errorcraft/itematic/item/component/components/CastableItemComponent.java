@@ -61,8 +61,10 @@ public record CastableItemComponent() implements ItemComponent<CastableItemCompo
 
     private void cast(World world, PlayerEntity user, ItemStack stack) {
         world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_FISHING_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
-        if (!world.isClient()) {
-            world.spawnEntity(new FishingBobberEntity(user, world, EnchantmentHelper.getLuckOfTheSea(stack), EnchantmentHelper.getLure(stack)));
+        if (world instanceof ServerWorld serverWorld) {
+            int luck = EnchantmentHelper.getFishingLuckBonus(serverWorld, stack, user);
+            int speed = (int) (EnchantmentHelper.getFishingTimeReduction(serverWorld, stack, user) * 20);
+            world.spawnEntity(new FishingBobberEntity(user, world, luck, speed));
         }
 
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));

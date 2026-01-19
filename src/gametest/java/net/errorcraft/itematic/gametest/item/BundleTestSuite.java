@@ -32,7 +32,7 @@ public class BundleTestSuite {
         context.addInstantFinalTask(() -> {
             context.assertTrue(bundleStack.onStackClicked(slot, ClickType.RIGHT, player), "Expected right-clicking with Bundle to be successful");
             Assert.itemStackIsEmpty(slot.getStack());
-            Assert.itemStackHasComponent(bundleStack, DataComponentTypes.BUNDLE_CONTENTS, bundleContents -> {
+            Assert.itemStackHasDataComponent(bundleStack, DataComponentTypes.BUNDLE_CONTENTS, bundleContents -> {
                 Assert.itemStackIsOf(bundleContents.get(0), ItemKeys.STICK);
             });
         });
@@ -50,7 +50,7 @@ public class BundleTestSuite {
         context.addInstantFinalTask(() -> {
             context.assertTrue(bundleStack.onStackClicked(slot, ClickType.RIGHT, player), "Expected right-clicking with Bundle to be successful");
             Assert.itemStackIsNotEmpty(slot.getStack());
-            Assert.itemStackHasComponent(bundleStack, DataComponentTypes.BUNDLE_CONTENTS, bundleContents -> {
+            Assert.itemStackHasDataComponent(bundleStack, DataComponentTypes.BUNDLE_CONTENTS, bundleContents -> {
                 context.assertTrue(bundleContents.isEmpty(), "Expected Bundle to be empty");
             });
         });
@@ -68,7 +68,7 @@ public class BundleTestSuite {
         context.addInstantFinalTask(() -> {
             context.assertTrue(bundleStack.onStackClicked(slot, ClickType.RIGHT, player), "Expected right-clicking with Bundle to be successful");
             Assert.itemStackIsEmpty(slot.getStack());
-            Assert.itemStackHasComponent(bundleStack, DataComponentTypes.BUNDLE_CONTENTS, bundleContents -> {
+            Assert.itemStackHasDataComponent(bundleStack, DataComponentTypes.BUNDLE_CONTENTS, bundleContents -> {
                 Assert.itemStackIsOf(bundleContents.get(0), ItemKeys.BUNDLE);
             });
             context.assertEquals(

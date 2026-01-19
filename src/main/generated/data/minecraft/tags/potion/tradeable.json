@@ -36,6 +36,10 @@
     "minecraft:weakness",
     "minecraft:long_weakness",
     "minecraft:slow_falling",
-    "minecraft:long_slow_falling"
+    "minecraft:long_slow_falling",
+    "minecraft:wind_charged",
+    "minecraft:weaving",
+    "minecraft:oozing",
+    "minecraft:infested"
   ]
 }

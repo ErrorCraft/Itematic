@@ -45,17 +45,6 @@ public abstract class WitchEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "tickMovement",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getMaxUseTime()I"
-        )
-    )
-    private int getMaxUseTimeUseCustomImplementation(ItemStack instance) {
-        return instance.itematic$useDuration(this);
-    }
-
-    @Redirect(
         method = "shootAt",
         at = @At(
             value = "INVOKE",

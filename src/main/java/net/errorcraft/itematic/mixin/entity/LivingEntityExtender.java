@@ -12,6 +12,7 @@ import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.ConsumableItemComponent;
 import net.errorcraft.itematic.item.component.components.LifeSavingItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -33,6 +34,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Hand;
@@ -42,10 +44,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -81,9 +80,14 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Shadow
     public abstract ItemStack eatFood(World world, ItemStack stack);
 
-    @Shadow public abstract AttributeContainer getAttributes();
+    @Shadow
+    public abstract AttributeContainer getAttributes();
 
-    @Shadow public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
+    @Shadow
+    public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
+
+    @Shadow
+    protected abstract void spawnItemParticles(ItemStack stack, int count);
 
     @Unique
     private int itemUsedTicks;
@@ -340,6 +344,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         if (original == -1) {
             return 0;
         }
+
         return original;
     }
 
@@ -349,8 +354,51 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void checkMaxUseTime(CallbackInfoReturnable<Boolean> info) {
-        if (this.activeItemStack.itematic$useDuration((LivingEntity)(Object) this) <= 0) {
+        if (this.activeItemStack.getMaxUseTime((LivingEntity)(Object) this) <= 0) {
             info.setReturnValue(false);
+        }
+    }
+
+    @Inject(
+        method = "spawnConsumptionEffects",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void alwaysSpawnItemParticlesAndStoreConsumableSound(ItemStack stack, int particleCount, CallbackInfo info, @Share("consumeSound") LocalRef<RegistryEntry<SoundEvent>> consumeSound) {
+        this.spawnItemParticles(stack, particleCount);
+        this.activeItemStack.itematic$getComponent(ItemComponentTypes.CONSUMABLE)
+            .map(ConsumableItemComponent::sound)
+            .ifPresentOrElse(consumeSound::set, info::cancel);
+    }
+
+    @Redirect(
+        method = "spawnConsumptionEffects",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/LivingEntity;spawnItemParticles(Lnet/minecraft/item/ItemStack;I)V"
+        )
+    )
+    private void doNotSpawnItemParticlesNormally(LivingEntity instance, ItemStack stack, int count) {}
+
+    @ModifyArg(
+        method = "spawnConsumptionEffects",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/LivingEntity;playSound(Lnet/minecraft/sound/SoundEvent;FF)V"
+        )
+    )
+    private SoundEvent playSoundUseItemComponent(SoundEvent sound, @Share("consumeSound") LocalRef<RegistryEntry<SoundEvent>> consumeSound) {
+        return consumeSound.get().value();
+    }
+
+    @Inject(
+        method = "spawnItemParticles",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void shouldSpawnParticles(ItemStack stack, int count, CallbackInfo info) {
+        if (!this.activeItemStack.itematic$getComponent(ItemComponentTypes.CONSUMABLE).map(ConsumableItemComponent::hasConsumeParticles).orElse(false)) {
+            info.cancel();
         }
     }
 
@@ -384,6 +432,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         if (original == -1) {
             return Integer.MAX_VALUE;
         }
+
         return original;
     }
 
@@ -450,14 +499,17 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         if (!stack.itematic$hasComponent(ItemComponentTypes.WEAPON)) {
             return null;
         }
+
         WeaponAttackDamageDataComponent weaponAttackDamage = stack.get(ItematicDataComponentTypes.WEAPON_ATTACK_DAMAGE);
         if (weaponAttackDamage == null) {
             return null;
         }
+
         double damage = weaponAttackDamage.getDamage(stack, this);
         if (weaponAttackDamage.shouldAddBase(stack, this)) {
             return damage + this.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         }
+
         return damage;
     }
 }

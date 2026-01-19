@@ -90,6 +90,7 @@ public class HostileEntityExtender extends PathAwareEntity implements LivingEnti
         if (!heldStack.isEmpty()) {
             return heldStack;
         }
+
         return this.getWorld().itematic$createStack(ItemKeys.ARROW);
     }
 }

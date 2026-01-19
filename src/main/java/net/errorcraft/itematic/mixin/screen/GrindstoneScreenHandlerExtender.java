@@ -25,10 +25,10 @@ public class GrindstoneScreenHandlerExtender {
         )
     )
     private boolean isOfForEnchantedBookUseItemComponent(ItemStack instance, Item item, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
-        Optional<RegistryEntry<Item>> optionalEntry = instance.itematic$getComponent(ItemComponentTypes.ENCHANTMENT_HOLDER)
+        Optional<RegistryEntry<Item>> optionalItem = instance.itematic$getComponent(ItemComponentTypes.ENCHANTMENT_HOLDER)
             .map(EnchantmentHolderItemComponent::grindingTransformsInto);
-        optionalEntry.ifPresent(transformsInto::set);
-        return optionalEntry.isPresent();
+        optionalItem.ifPresent(transformsInto::set);
+        return optionalItem.isPresent();
     }
 
     @Redirect(
@@ -42,7 +42,10 @@ public class GrindstoneScreenHandlerExtender {
         return instance.itematic$copyComponentsToNewStack(transformsInto.get(), count);
     }
 
-    @Mixin(targets = { "net/minecraft/screen/GrindstoneScreenHandler$2", "net/minecraft/screen/GrindstoneScreenHandler$3" })
+    @Mixin(targets = {
+        "net/minecraft/screen/GrindstoneScreenHandler$2",
+        "net/minecraft/screen/GrindstoneScreenHandler$3"
+    })
     public static class EnchantedItemSlotExtender {
         @Redirect(
             method = "canInsert",

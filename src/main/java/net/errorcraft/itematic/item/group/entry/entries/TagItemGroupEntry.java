@@ -2,23 +2,22 @@ package net.errorcraft.itematic.item.group.entry.entries;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
+import net.errorcraft.itematic.item.group.entry.PossiblyHiddenItemGroupEntry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.TagKey;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
-public class TagItemGroupEntry extends ItemGroupEntry {
+public class TagItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     public static final MapCodec<TagItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(
-        TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("tag").forGetter(TagItemGroupEntry::tag)
+        TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("tag").forGetter(entry -> entry.tag)
     ).apply(instance, TagItemGroupEntry::new));
 
     private final TagKey<Item> tag;
@@ -32,27 +31,17 @@ public class TagItemGroupEntry extends ItemGroupEntry {
         this.tag = tag;
     }
 
-    public TagKey<Item> tag() {
-        return this.tag;
+    @Override
+    public ItemGroupEntryType type() {
+        return ItemGroupEntryType.TAG;
     }
 
     @Override
     protected Collection<ItemStack> createStacks(ItemGroup.DisplayContext context) {
         return context.lookup().getWrapperOrThrow(RegistryKeys.ITEM).getOptional(this.tag)
-            .map(TagItemGroupEntry::createStacks)
-            .orElse(List.of());
-    }
-
-    @Override
-    protected ItemGroupEntryType type() {
-        return ItemGroupEntryType.TAG;
-    }
-
-    private static Collection<ItemStack> createStacks(RegistryEntryList.Named<Item> entries) {
-        List<ItemStack> stacks = new ArrayList<>(entries.size());
-        for (RegistryEntry<Item> entry : entries) {
-            stacks.add(new ItemStack(entry));
-        }
-        return stacks;
+            .map(RegistryEntryList.ListBacked::stream)
+            .map(stream -> stream.map(ItemStack::new))
+            .map(Stream::toList)
+            .orElseGet(List::of);
     }
 }
