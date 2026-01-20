@@ -7,6 +7,7 @@ import net.errorcraft.itematic.entity.projectile.ItematicProjectileUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
+import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
 import net.minecraft.entity.CrossbowUser;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.CrossbowItem;
@@ -41,11 +42,8 @@ public interface CrossbowUserExtender {
     )
     private boolean instanceOfCrossbowItemUseItemComponent(Object reference, Class<CrossbowItem> clazz, @Local ItemStack heldStack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
         Optional<ShooterItemComponent> optionalComponent = heldStack.itematic$getComponent(ItemComponentTypes.SHOOTER);
-        if (optionalComponent.map(ShooterItemComponent::isChargeable).orElse(false)) {
-            shooterItemComponent.set(optionalComponent.get());
-            return true;
-        }
-        return false;
+        optionalComponent.ifPresent(shooterItemComponent::set);
+        return optionalComponent.isPresent();
     }
 
     @ModifyVariable(
@@ -65,6 +63,8 @@ public interface CrossbowUserExtender {
         )
     )
     private void shootAllUseItemComponent(CrossbowItem instance, World world, LivingEntity shooter, Hand hand, ItemStack stack, float speed, float divergence, LivingEntity livingEntity, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
-        shooterItemComponent.get().shootAll(world, shooter, hand, stack, speed, divergence, livingEntity);
+        if (shooterItemComponent.get().method() instanceof ChargeableShooterMethod chargeableShooterMethod) {
+            chargeableShooterMethod.shoot(shooterItemComponent.get(), world, shooter, hand, stack, speed, divergence, livingEntity);
+        }
     }
 }

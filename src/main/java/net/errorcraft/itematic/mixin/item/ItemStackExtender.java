@@ -15,8 +15,10 @@ import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.util.Util;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
@@ -159,7 +161,11 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = { "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V", "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V", "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V" },
+        method = {
+            "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V",
+            "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V",
+            "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/registry/entry/RegistryEntry;value()Ljava/lang/Object;"
@@ -170,7 +176,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = { "<init>(Lnet/minecraft/item/ItemConvertible;I)V" },
+        method = "<init>(Lnet/minecraft/item/ItemConvertible;I)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemConvertible;asItem()Lnet/minecraft/item/Item;"
@@ -192,7 +198,10 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = { "<init>(Lnet/minecraft/item/ItemConvertible;I)V", "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V" },
+        method = {
+            "<init>(Lnet/minecraft/item/ItemConvertible;I)V",
+            "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/Item;getComponents()Lnet/minecraft/component/ComponentMap;"
@@ -426,7 +435,10 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = { "areItemsEqual", "areItemsAndComponentsEqual" },
+        method = {
+            "areItemsEqual",
+            "areItemsAndComponentsEqual"
+        },
         at = @At("HEAD"),
         cancellable = true
     )
@@ -437,7 +449,10 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = { "areItemsEqual", "areItemsAndComponentsEqual" },
+        method = {
+            "areItemsEqual",
+            "areItemsAndComponentsEqual"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
@@ -445,6 +460,18 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     )
     private static boolean isOfUseRegistryEntryCheck(ItemStack instance, Item item, ItemStack left, ItemStack right) {
         return instance.itemMatches(right.getRegistryEntry());
+    }
+
+    @Inject(
+        method = "isUsedOnRelease",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void checkForChargeableShooter(CallbackInfoReturnable<Boolean> info) {
+        this.itematic$getComponent(ItemComponentTypes.SHOOTER)
+            .map(ShooterItemComponent::method)
+            .filter(method -> method.type() == ShooterMethodTypes.CHARGEABLE)
+            .ifPresent(method -> info.setReturnValue(true));
     }
 
     @Inject(
@@ -595,7 +622,13 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = { "useOnBlock", "method_56097", "postHit", "postMine", "onCraftByPlayer" },
+        method = {
+            "useOnBlock",
+            "method_56097",
+            "postHit",
+            "postMine",
+            "onCraftByPlayer"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"

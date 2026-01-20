@@ -84,7 +84,7 @@ public class ActionContext {
         if (hand == null) {
             return builder(world, stack, resultStackConsumer);
         }
-        return builder(world, stack, resultStackConsumer, hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+        return builder(world, stack, resultStackConsumer, LivingEntity.getSlotForHand(hand));
     }
 
     public Builder builderForCopy() {
@@ -273,6 +273,11 @@ public class ActionContext {
 
         public Builder slot(EquipmentSlot slot) {
             this.slot = slot;
+            return this;
+        }
+
+        public Builder hand(Hand hand) {
+            this.slot = LivingEntity.getSlotForHand(hand);
             return this;
         }
     }

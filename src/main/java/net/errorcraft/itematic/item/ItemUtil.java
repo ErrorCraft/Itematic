@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.block.ComposterBlockUtil;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
+import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.ItematicEntityTypeTags;
@@ -27,6 +28,8 @@ import net.errorcraft.itematic.item.holder.rule.rules.OccupancyHeldItemsWithPena
 import net.errorcraft.itematic.item.holder.rule.rules.RejectItemHolderRule;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.pointer.PointerKeys;
+import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
+import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
@@ -4849,7 +4852,13 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(384))
-                    .with(ShooterItemComponent.of(this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION), this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION), BowItem.RANGE))
+                    .with(ShooterItemComponent.of(
+                        UseAction.BOW,
+                        this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
+                        this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
+                        BowItem.RANGE,
+                        DirectShooterMethod.of()
+                    ))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.BOW_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BOW_FORGING))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
@@ -4860,7 +4869,23 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(465))
-                    .with(ShooterItemComponent.of(this.items.getOrThrow(ItematicItemTags.CROSSBOW_AMMUNITION), this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION), CrossbowItem.RANGE, this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_LOADING_START), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_1), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_2), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_3)))
+                    .with(ShooterItemComponent.of(
+                        UseAction.CROSSBOW,
+                        this.items.getOrThrow(ItematicItemTags.CROSSBOW_AMMUNITION),
+                        this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
+                        CrossbowItem.RANGE,
+                        ChargeableShooterMethod.of(
+                            ChargeableShooterMethod.ChargingSounds.DEFAULT,
+                            ChargeableShooterMethod.ChargedPowerRules.Rule.of(
+                                RegistryEntryList.of(this.items.getOrThrow(ItemKeys.FIREWORK_ROCKET)),
+                                CrossbowItemAccessor.fireworkRocketPower()
+                            )
+                        ),
+                        ItemDamageRulesDataComponent.Rule.of(
+                            RegistryEntryList.of(this.items.getOrThrow(ItemKeys.FIREWORK_ROCKET)),
+                            3
+                        )
+                    ))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.CROSSBOW_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.CROSSBOW_FORGING))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
@@ -4875,7 +4900,7 @@ public class ItemUtil {
                         .build())
                     .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE + 1, 0.275d))
                     .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
-                    .with(ProjectileItemComponent.of(TridentEntityInitializer.of(true), 1))
+                    .with(ProjectileItemComponent.of(TridentEntityInitializer.of(true)))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.TRIDENT_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.TRIDENT_FORGING))
                     .build(),
@@ -8637,7 +8662,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ThrowableItemComponent.of())
-                    .with(ProjectileItemComponent.of(EyeOfEnderEntityInitializer.INSTANCE, 0))
+                    .with(ProjectileItemComponent.of(EyeOfEnderEntityInitializer.INSTANCE))
                     .with(PreventUseWhenUsedOnTargetItemComponent.forBlock())
                     .build(),
                 ItemEventMap.builder()
@@ -8710,7 +8735,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(FireworkItemComponent.INSTANCE)
-                    .with(ProjectileItemComponent.of(FireworkRocketEntityInitializer.INSTANCE, 3, CrossbowItemAccessor.fireworkRocketSpeed()))
+                    .with(ProjectileItemComponent.of(FireworkRocketEntityInitializer.INSTANCE))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_FIREWORK_ROCKET)))
                     .build()
             ));
