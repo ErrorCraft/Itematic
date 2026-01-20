@@ -27,6 +27,7 @@
       "net.errorcraft.itematic.gametest.entity.passive.SheepEntityTestSuite",
       "net.errorcraft.itematic.gametest.entity.passive.SnifferEntityTestSuite",
       "net.errorcraft.itematic.gametest.entity.passive.WolfEntityTestSuite",
+      "net.errorcraft.itematic.gametest.item.BeetrootSoupTestSuite",
       "net.errorcraft.itematic.gametest.item.BowTestSuite",
       "net.errorcraft.itematic.gametest.item.BrushTestSuite",
       "net.errorcraft.itematic.gametest.item.BundleTestSuite",

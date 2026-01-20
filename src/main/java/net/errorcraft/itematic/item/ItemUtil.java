@@ -517,7 +517,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.BEETROOT_SOUP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(ConsumableItemComponent.builder(FoodComponents.BEETROOT_SOUP).build())
+                    .with(ConsumableItemComponent.builder(FoodComponents.BEETROOT_SOUP)
+                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.SUSPICIOUS_STEW, create(
