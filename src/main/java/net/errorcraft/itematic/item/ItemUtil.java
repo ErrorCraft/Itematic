@@ -32,7 +32,6 @@ import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
-import net.errorcraft.itematic.mixin.block.DecoratedPotPatternsAccessor;
 import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
 import net.errorcraft.itematic.mixin.item.*;
 import net.errorcraft.itematic.potion.PotionKeys;
@@ -50,6 +49,8 @@ import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSeq
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.DecoratedPotPattern;
+import net.minecraft.block.DecoratedPotPatterns;
 import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
@@ -139,7 +140,7 @@ public class ItemUtil {
         private final RegistryEntryLookup<Pointer> pointers;
         private final RegistryEntryLookup<ActionEntry> actions;
         private final RegistryEntryLookup<SmithingTemplate> smithingTemplates;
-        private final RegistryEntryLookup<String> decoratedPotPatterns;
+        private final RegistryEntryLookup<DecoratedPotPattern> decoratedPotPatterns;
         private final RegistryEntryLookup<StatusEffect> statusEffects;
         private final RegistryEntryLookup<Potion> potions;
         private final RegistryEntryLookup<Enchantment> enchantments;
@@ -9871,145 +9872,145 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.BRICK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.decoratedPotSide())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BLANK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ANGLER_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.ANGLER_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.angler())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.ANGLER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ARCHER_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.ARCHER_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.archer())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.ARCHER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ARMS_UP_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.ARMS_UP_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.armsUp())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.ARMS_UP)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLADE_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.BLADE_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.blade())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BLADE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BREWER_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.BREWER_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.brewer())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BREWER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BURN_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.BURN_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.burn())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BURN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DANGER_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.DANGER_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.danger())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.DANGER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPLORER_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.EXPLORER_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.explorer())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.EXPLORER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FLOW_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.FLOW_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.flow())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.FLOW)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FRIEND_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.FRIEND_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.friend())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.FRIEND)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GUSTER_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.GUSTER_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.guster())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.GUSTER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HEART_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.HEART_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.heart())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.HEART)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HEARTBREAK_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.HEARTBREAK_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.heartbreak())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.HEARTBREAK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOWL_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.HOWL_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.howl())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.HOWL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MINER_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.MINER_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.miner())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.MINER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOURNER_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.MOURNER_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.mourner())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.MOURNER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PLENTY_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.PLENTY_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.plenty())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.PLENTY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PRIZE_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.PRIZE_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.prize())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.PRIZE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SCRAPE_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.SCRAPE_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.scrape())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SCRAPE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHEAF_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.SHEAF_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.sheaf())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SHEAF)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHELTER_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.SHELTER_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.shelter())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SHELTER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SKULL_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.SKULL_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.skull())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SKULL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNORT_POTTERY_SHERD, create(
                 ItemBase.Builder.forItem(ItemKeys.SNORT_POTTERY_SHERD).build(),
                 ItemComponentSet.builder()
-                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatternsAccessor.snort())))
+                    .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SNORT)))
                     .build()
             ));
         }

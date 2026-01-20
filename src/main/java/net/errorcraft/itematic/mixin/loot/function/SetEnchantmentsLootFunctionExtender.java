@@ -35,10 +35,10 @@ public class SetEnchantmentsLootFunctionExtender {
         method = "process",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/item/ItemStack;withItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack copyComponentsToNewStackForEnchantedBookUseItemComponent(ItemStack instance, ItemConvertible item, int count, @Share("transformedEntry") LocalRef<RegistryEntry<Item>> transformedEntry) {
-        return instance.itematic$copyComponentsToNewStack(transformedEntry.get(), count);
+    private ItemStack withItemForEnchantedBookUseItemComponent(ItemStack instance, ItemConvertible item, @Share("transformedEntry") LocalRef<RegistryEntry<Item>> transformedEntry) {
+        return instance.itematic$copyWithItem(transformedEntry.get());
     }
 }

@@ -1,10 +1,12 @@
 package net.errorcraft.itematic.mixin.client.render.item;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
+import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.entity.LivingEntity;
@@ -124,6 +126,17 @@ public class HeldItemRendererExtender {
     )
     private int getUseTimeLeftForCrossbowUseNegatedUsedTicks(AbstractClientPlayerEntity instance) {
         return -instance.itematic$itemUsedTicks();
+    }
+
+    @Redirect(
+        method = "renderFirstPersonItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/CrossbowItem;getPullTime(Lnet/minecraft/entity/LivingEntity;)I"
+        )
+    )
+    private int getPullTimeUseItemComponent(LivingEntity user, @Local(argsOnly = true) ItemStack stack) {
+        return ChargeableShooterMethod.getChargeTime(stack, user);
     }
 
     @Redirect(
