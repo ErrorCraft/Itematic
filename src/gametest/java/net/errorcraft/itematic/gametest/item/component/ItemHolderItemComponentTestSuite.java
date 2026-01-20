@@ -37,7 +37,7 @@ public class ItemHolderItemComponentTestSuite {
         context.addInstantFinalTask(() -> {
             context.assertTrue(success, "Expected right clicking with item holder to be successful");
             Assert.itemStackIsEmpty(inventory.getStack(SLOT));
-            Assert.itemStackHasComponent(stack, DataComponentTypes.BUNDLE_CONTENTS,
+            Assert.itemStackHasDataComponent(stack, DataComponentTypes.BUNDLE_CONTENTS,
                 component -> Assert.itemStackIsOf(component.get(0), ItemKeys.STICK)
             );
         });
@@ -57,7 +57,7 @@ public class ItemHolderItemComponentTestSuite {
         context.addInstantFinalTask(() -> {
             context.assertTrue(success, "Expected right clicking with item holder to be successful");
             Assert.itemStackIsOf(inventory.getStack(SLOT), ItemKeys.STICK);
-            Assert.itemStackHasComponent(stack, DataComponentTypes.BUNDLE_CONTENTS,
+            Assert.itemStackHasDataComponent(stack, DataComponentTypes.BUNDLE_CONTENTS,
                 component -> context.assertTrue(component.isEmpty(), "Expected item holder to be empty")
             );
         });
@@ -78,7 +78,7 @@ public class ItemHolderItemComponentTestSuite {
         context.addInstantFinalTask(() -> {
             context.assertTrue(success, "Expected right clicking on item holder to be successful");
             Assert.itemStackIsEmpty(cursorStack.get());
-            Assert.itemStackHasComponent(inventory.getStack(SLOT), DataComponentTypes.BUNDLE_CONTENTS,
+            Assert.itemStackHasDataComponent(inventory.getStack(SLOT), DataComponentTypes.BUNDLE_CONTENTS,
                 component -> Assert.itemStackIsOf(component.get(0), ItemKeys.STICK)
             );
         });
@@ -101,7 +101,7 @@ public class ItemHolderItemComponentTestSuite {
         context.addInstantFinalTask(() -> {
             context.assertTrue(success, "Expected right clicking on item holder to be successful");
             Assert.itemStackIsOf(cursorStack.get(), ItemKeys.STICK);
-            Assert.itemStackHasComponent(inventory.getStack(SLOT), DataComponentTypes.BUNDLE_CONTENTS,
+            Assert.itemStackHasDataComponent(inventory.getStack(SLOT), DataComponentTypes.BUNDLE_CONTENTS,
                 component -> context.assertTrue(component.isEmpty(), "Expected item holder to be empty")
             );
         });

@@ -15,7 +15,6 @@
       "enchantments": "minecraft:trident_forging"
     },
     "minecraft:projectile": {
-      "damage": 1,
       "entity": {
         "type": "minecraft:trident",
         "prevent_spawn_from_riptide": true

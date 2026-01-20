@@ -8,8 +8,6 @@
     },
     "minecraft:firework": {},
     "minecraft:projectile": {
-      "charged_speed": 1.6,
-      "damage": 3,
       "entity": {
         "type": "minecraft:firework_rocket"
       }

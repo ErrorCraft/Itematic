@@ -7,7 +7,4 @@ public interface ChargedProjectilesComponentAccess {
     default boolean itematic$contains(RegistryKey<Item> item) {
         return false;
     }
-    default float itematic$getChargedSpeed() {
-        return 0.0f;
-    }
 }

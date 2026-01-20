@@ -281,6 +281,7 @@
     "item.KnowledgeBookItemExtender",
     "item.MilkBucketItemAccessor",
     "item.PotionItemAccessor",
+    "item.RangedWeaponItemAccessor",
     "item.RangedWeaponItemExtender",
     "item.SmithingTemplateItemAccessor",
     "item.SpawnEggItemAccessor",

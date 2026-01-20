@@ -4,7 +4,9 @@
   },
   "components": {
     "minecraft:consumable": {
-      "result_item": "minecraft:bucket"
+      "has_consume_particles": false,
+      "result_item": "minecraft:bucket",
+      "sound": "minecraft:entity.generic.drink"
     },
     "minecraft:recipe_remainder": {
       "item": "minecraft:bucket"

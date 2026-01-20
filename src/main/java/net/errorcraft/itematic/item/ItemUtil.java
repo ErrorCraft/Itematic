@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.block.ComposterBlockUtil;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
+import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.enchantment.EnchantmentTags;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.ItematicEntityTypeTags;
@@ -27,6 +28,8 @@ import net.errorcraft.itematic.item.holder.rule.rules.OccupancyHeldItemsWithPena
 import net.errorcraft.itematic.item.holder.rule.rules.RejectItemHolderRule;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.pointer.PointerKeys;
+import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
+import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
@@ -187,7 +190,12 @@ public class ItemUtil {
                         .ticks(MilkBucketItemAccessor.getMaxUseTime())
                         .animation(UseAction.DRINK)
                         .build())
-                    .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
+                    .with(ConsumableItemComponent.builder(MilkBucketItemAccessor.getMaxUseTime())
+                            .useAnimation(UseAction.DRINK)
+                            .resultItem(this.items.getOrThrow(ItemKeys.BUCKET))
+                            .noConsumeParticles()
+                            .consumeSound(this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_DRINK))
+                        .build())
                     .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build(),
                 ItemEventMap.builder()
@@ -204,7 +212,12 @@ public class ItemUtil {
                         .build())
                     .with(PotionItemComponent.INSTANCE)
                     .with(PotionHolderItemComponent.of(1.0f))
-                    .with(ConsumableItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
+                    .with(ConsumableItemComponent.builder(PotionItemAccessor.getMaxUseTime())
+                            .useAnimation(UseAction.DRINK)
+                            .resultItem(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
+                            .noConsumeParticles()
+                            .consumeSound(this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_DRINK))
+                        .build())
                     .with(TintedItemComponent.of(PotionItemColor.INSTANCE))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM)))
                     .build(),
@@ -254,7 +267,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.APPLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.APPLE))
+                    .with(ConsumableItemComponent.builder(FoodComponents.APPLE).build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .build()
             ));
@@ -262,7 +275,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.MELON_SLICE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.MELON_SLICE))
+                    .with(ConsumableItemComponent.builder(FoodComponents.MELON_SLICE).build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
                     .build()
             ));
@@ -270,7 +283,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.DRIED_KELP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.DRIED_KELP))
+                    .with(ConsumableItemComponent.builder(FoodComponents.DRIED_KELP).build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .build()
             ));
@@ -278,7 +291,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.CARROT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.CARROT))
+                    .with(ConsumableItemComponent.builder(FoodComponents.CARROT).build())
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARROTS)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .build()
@@ -287,7 +300,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.POTATO).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.POTATO))
+                    .with(ConsumableItemComponent.builder(FoodComponents.POTATO).build())
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POTATOES)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .build()
@@ -296,7 +309,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.BAKED_POTATO).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.BAKED_POTATO))
+                    .with(ConsumableItemComponent.builder(FoodComponents.BAKED_POTATO).build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
                     .build()
             ));
@@ -304,7 +317,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.CHORUS_FRUIT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.CHORUS_FRUIT))
+                    .with(ConsumableItemComponent.builder(FoodComponents.CHORUS_FRUIT).build())
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(TeleportAction.of(16, ActionContextParameter.THIS)))
@@ -314,7 +327,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.BEETROOT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.BEETROOT))
+                    .with(ConsumableItemComponent.builder(FoodComponents.BEETROOT).build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .build()
             ));
@@ -322,7 +335,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.SWEET_BERRIES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.SWEET_BERRIES))
+                    .with(ConsumableItemComponent.builder(FoodComponents.SWEET_BERRIES).build())
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SWEET_BERRY_BUSH)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .build()
@@ -331,7 +344,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.GLOW_BERRIES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.GLOW_BERRIES))
+                    .with(ConsumableItemComponent.builder(FoodComponents.GLOW_BERRIES).build())
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAVE_VINES)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .build()
@@ -340,7 +353,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.BREAD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.BREAD))
+                    .with(ConsumableItemComponent.builder(FoodComponents.BREAD).build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
                     .build()
             ));
@@ -348,7 +361,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.COOKIE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.COOKIE))
+                    .with(ConsumableItemComponent.builder(FoodComponents.COOKIE).build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
                     .build()
             ));
@@ -356,140 +369,148 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.PORKCHOP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.PORKCHOP))
+                    .with(ConsumableItemComponent.builder(FoodComponents.PORKCHOP).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_PORKCHOP, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_PORKCHOP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.COOKED_PORKCHOP))
+                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_PORKCHOP).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.BEEF, create(
                 ItemBase.Builder.forItem(ItemKeys.BEEF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.BEEF))
+                    .with(ConsumableItemComponent.builder(FoodComponents.BEEF).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_BEEF, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_BEEF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.COOKED_BEEF))
+                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_BEEF).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.CHICKEN, create(
                 ItemBase.Builder.forItem(ItemKeys.CHICKEN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.CHICKEN))
+                    .with(ConsumableItemComponent.builder(FoodComponents.CHICKEN).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_CHICKEN, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_CHICKEN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.COOKED_CHICKEN))
+                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_CHICKEN).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.RABBIT, create(
                 ItemBase.Builder.forItem(ItemKeys.RABBIT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.RABBIT))
+                    .with(ConsumableItemComponent.builder(FoodComponents.RABBIT).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_RABBIT, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_RABBIT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.COOKED_RABBIT))
+                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_RABBIT).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.MUTTON, create(
                 ItemBase.Builder.forItem(ItemKeys.MUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.MUTTON))
+                    .with(ConsumableItemComponent.builder(FoodComponents.MUTTON).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_MUTTON, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_MUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.COOKED_MUTTON))
+                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_MUTTON).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COD, create(
                 ItemBase.Builder.forItem(ItemKeys.COD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.COD))
+                    .with(ConsumableItemComponent.builder(FoodComponents.COD).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.SALMON, create(
                 ItemBase.Builder.forItem(ItemKeys.SALMON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.SALMON))
+                    .with(ConsumableItemComponent.builder(FoodComponents.SALMON).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.TROPICAL_FISH, create(
                 ItemBase.Builder.forItem(ItemKeys.TROPICAL_FISH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.TROPICAL_FISH))
+                    .with(ConsumableItemComponent.builder(FoodComponents.TROPICAL_FISH).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.PUFFERFISH, create(
                 ItemBase.Builder.forItem(ItemKeys.PUFFERFISH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.PUFFERFISH))
+                    .with(ConsumableItemComponent.builder(FoodComponents.PUFFERFISH).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_COD, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_COD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.COOKED_COD))
+                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_COD).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_SALMON, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_SALMON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.COOKED_SALMON))
+                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_SALMON).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSHROOM_STEW, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSHROOM_STEW).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(FoodItemComponent.from(FoodComponents.MUSHROOM_STEW, this.items.getOrThrow(ItemKeys.BOWL)))
+                    .with(ConsumableItemComponent.builder(FoodComponents.MUSHROOM_STEW)
+                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.RABBIT_STEW, create(
                 ItemBase.Builder.forItem(ItemKeys.RABBIT_STEW).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(FoodItemComponent.from(FoodComponents.RABBIT_STEW, this.items.getOrThrow(ItemKeys.BOWL)))
+                    .with(ConsumableItemComponent.builder(FoodComponents.RABBIT_STEW)
+                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.BEETROOT_SOUP, create(
                 ItemBase.Builder.forItem(ItemKeys.BEETROOT_SOUP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(FoodItemComponent.from(FoodComponents.BEETROOT_SOUP))
+                    .with(ConsumableItemComponent.builder(FoodComponents.BEETROOT_SOUP)
+                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.SUSPICIOUS_STEW, create(
                 ItemBase.Builder.forItem(ItemKeys.SUSPICIOUS_STEW).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(FoodItemComponent.from(FoodComponents.SUSPICIOUS_STEW, this.items.getOrThrow(ItemKeys.BOWL)))
+                    .with(ConsumableItemComponent.builder(FoodComponents.SUSPICIOUS_STEW)
+                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                        .build())
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
@@ -503,21 +524,21 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.ROTTEN_FLESH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.ROTTEN_FLESH))
+                    .with(ConsumableItemComponent.builder(FoodComponents.ROTTEN_FLESH).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.SPIDER_EYE, create(
                 ItemBase.Builder.forItem(ItemKeys.SPIDER_EYE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.SPIDER_EYE))
+                    .with(ConsumableItemComponent.builder(FoodComponents.SPIDER_EYE).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.POISONOUS_POTATO, create(
                 ItemBase.Builder.forItem(ItemKeys.POISONOUS_POTATO).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.POISONOUS_POTATO))
+                    .with(ConsumableItemComponent.builder(FoodComponents.POISONOUS_POTATO).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_APPLE, create(
@@ -526,7 +547,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.GOLDEN_APPLE))
+                    .with(ConsumableItemComponent.builder(FoodComponents.GOLDEN_APPLE).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.ENCHANTED_GOLDEN_APPLE, create(
@@ -536,21 +557,21 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.ENCHANTED_GOLDEN_APPLE))
+                    .with(ConsumableItemComponent.builder(FoodComponents.ENCHANTED_GOLDEN_APPLE).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_CARROT, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_CARROT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.GOLDEN_CARROT))
+                    .with(ConsumableItemComponent.builder(FoodComponents.GOLDEN_CARROT).build())
                     .build()
             ));
             this.registerable.register(ItemKeys.PUMPKIN_PIE, create(
                 ItemBase.Builder.forItem(ItemKeys.PUMPKIN_PIE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(FoodItemComponent.from(FoodComponents.PUMPKIN_PIE))
+                    .with(ConsumableItemComponent.builder(FoodComponents.PUMPKIN_PIE).build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.GUARANTEED_TO_COMPOST))
                     .build()
             ));
@@ -558,7 +579,13 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.HONEY_BOTTLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(FoodItemComponent.from(FoodComponents.HONEY_BOTTLE, HoneyBottleItemAccessor.maxUseTime(), UseAction.DRINK, this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
+                    .with(ConsumableItemComponent.builder(HoneyBottleItemAccessor.maxUseTime())
+                        .food(FoodComponents.HONEY_BOTTLE)
+                        .useAnimation(UseAction.DRINK)
+                        .resultItem(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
+                        .noConsumeParticles()
+                        .consumeSound(this.soundEvents.getOrThrow(SoundEventKeys.HONEY_BOTTLE_DRINK))
+                        .build())
                     .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .build(),
                 ItemEventMap.builder()
@@ -4825,7 +4852,13 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(384))
-                    .with(ShooterItemComponent.of(this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION), this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION), BowItem.RANGE))
+                    .with(ShooterItemComponent.of(
+                        UseAction.BOW,
+                        this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
+                        this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
+                        BowItem.RANGE,
+                        DirectShooterMethod.of()
+                    ))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.BOW_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.BOW_FORGING))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
@@ -4836,7 +4869,23 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(465))
-                    .with(ShooterItemComponent.of(this.items.getOrThrow(ItematicItemTags.CROSSBOW_AMMUNITION), this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION), CrossbowItem.RANGE, this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_LOADING_START), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_1), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_2), this.soundEvents.getOrThrow(SoundEventKeys.CROSSBOW_QUICK_CHARGE_3)))
+                    .with(ShooterItemComponent.of(
+                        UseAction.CROSSBOW,
+                        this.items.getOrThrow(ItematicItemTags.CROSSBOW_AMMUNITION),
+                        this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
+                        CrossbowItem.RANGE,
+                        ChargeableShooterMethod.of(
+                            ChargeableShooterMethod.ChargingSounds.DEFAULT,
+                            ChargeableShooterMethod.ChargedPowerRules.Rule.of(
+                                RegistryEntryList.of(this.items.getOrThrow(ItemKeys.FIREWORK_ROCKET)),
+                                CrossbowItemAccessor.fireworkRocketPower()
+                            )
+                        ),
+                        ItemDamageRulesDataComponent.Rule.of(
+                            RegistryEntryList.of(this.items.getOrThrow(ItemKeys.FIREWORK_ROCKET)),
+                            3
+                        )
+                    ))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.CROSSBOW_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.CROSSBOW_FORGING))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.WOOD_FUEL_TIME))
@@ -4851,7 +4900,7 @@ public class ItemUtil {
                         .build())
                     .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE + 1, 0.275d))
                     .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
-                    .with(ProjectileItemComponent.of(TridentEntityInitializer.of(true), 1))
+                    .with(ProjectileItemComponent.of(TridentEntityInitializer.of(true)))
                     .with(EnchantableItemComponent.enchants(1, EnchantmentTags.TRIDENT_ENCHANTING))
                     .with(ForgeableItemComponent.of(EnchantmentTags.TRIDENT_FORGING))
                     .build(),
@@ -8613,7 +8662,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ThrowableItemComponent.of())
-                    .with(ProjectileItemComponent.of(EyeOfEnderEntityInitializer.INSTANCE, 0))
+                    .with(ProjectileItemComponent.of(EyeOfEnderEntityInitializer.INSTANCE))
                     .with(PreventUseWhenUsedOnTargetItemComponent.forBlock())
                     .build(),
                 ItemEventMap.builder()
@@ -8686,7 +8735,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(FireworkItemComponent.INSTANCE)
-                    .with(ProjectileItemComponent.of(FireworkRocketEntityInitializer.INSTANCE, 3, CrossbowItemAccessor.fireworkRocketSpeed()))
+                    .with(ProjectileItemComponent.of(FireworkRocketEntityInitializer.INSTANCE))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_FIREWORK_ROCKET)))
                     .build()
             ));

@@ -4,7 +4,9 @@
   },
   "components": {
     "minecraft:consumable": {
-      "result_item": "minecraft:glass_bottle"
+      "has_consume_particles": false,
+      "result_item": "minecraft:glass_bottle",
+      "sound": "minecraft:entity.generic.drink"
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:use_item_on_block_or_dispense_item"
