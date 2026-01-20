@@ -22,17 +22,14 @@ import java.util.Optional;
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperExtender {
     @Redirect(
-        method = "getPossibleEntries",
+        method = "getEnchantmentsComponentType",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/Registry;iterator()Ljava/util/Iterator;"
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private static Iterator<Enchantment> getPossibleEntriesUseEnchantmentTag(Registry<Enchantment> instance, @Local(argsOnly = true) int power, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
-            .flatMap(EnchantableItemComponent::enchantments)
-            .map(key -> instance.getOrCreateEntryList(key).stream().map(RegistryEntry::value).iterator())
-            .orElse(instance.iterator());
+    private static boolean isOfUseItemComponentCheck(ItemStack instance, Item item) {
+        return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTMENT_HOLDER);
     }
 
     @Redirect(
@@ -58,5 +55,32 @@ public class EnchantmentHelperExtender {
     )
     private static ItemStack newItemStackForEnchantedBookUseItemComponent(ItemConvertible item, @Local(argsOnly = true) ItemStack target, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
         return target.itematic$copyWithItem(transformsInto.get());
+    }
+
+    @Redirect(
+        method = "getPossibleEntries",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private static boolean isOfUseItemComponent(ItemStack instance, Item item) {
+        return instance.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
+            .map(enchantable -> enchantable.enchantments().isEmpty())
+            .orElse(false);
+    }
+
+    @Redirect(
+        method = "getPossibleEntries",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/registry/Registry;iterator()Ljava/util/Iterator;"
+        )
+    )
+    private static Iterator<Enchantment> getPossibleEntriesUseEnchantmentTag(Registry<Enchantment> instance, @Local(argsOnly = true) int power, @Local(argsOnly = true) ItemStack stack) {
+        return stack.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
+            .flatMap(EnchantableItemComponent::enchantments)
+            .map(key -> instance.getOrCreateEntryList(key).stream().map(RegistryEntry::value).iterator())
+            .orElse(instance.iterator());
     }
 }

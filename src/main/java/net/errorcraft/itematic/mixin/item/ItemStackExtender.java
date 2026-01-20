@@ -15,11 +15,15 @@ import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.util.Util;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.fabricmc.fabric.api.item.v1.EnchantingContext;
+import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.advancement.criterion.ItemDurabilityChangedCriterion;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipType;
@@ -27,6 +31,7 @@ import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.ComponentHolder;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentMapImpl;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -74,7 +79,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackExtender implements ComponentHolder, ItemStackAccess {
+public abstract class ItemStackExtender implements ComponentHolder, ItemStackAccess, FabricItemStack {
     @Shadow
     @Final
     private static Logger LOGGER;
@@ -159,7 +164,11 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = { "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V", "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V", "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V" },
+        method = {
+            "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V",
+            "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V",
+            "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/registry/entry/RegistryEntry;value()Ljava/lang/Object;"
@@ -170,7 +179,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = { "<init>(Lnet/minecraft/item/ItemConvertible;I)V" },
+        method = "<init>(Lnet/minecraft/item/ItemConvertible;I)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemConvertible;asItem()Lnet/minecraft/item/Item;"
@@ -192,7 +201,10 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = { "<init>(Lnet/minecraft/item/ItemConvertible;I)V", "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V" },
+        method = {
+            "<init>(Lnet/minecraft/item/ItemConvertible;I)V",
+            "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/Item;getComponents()Lnet/minecraft/component/ComponentMap;"
@@ -426,7 +438,10 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = { "areItemsEqual", "areItemsAndComponentsEqual" },
+        method = {
+            "areItemsEqual",
+            "areItemsAndComponentsEqual"
+        },
         at = @At("HEAD"),
         cancellable = true
     )
@@ -437,7 +452,10 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = { "areItemsEqual", "areItemsAndComponentsEqual" },
+        method = {
+            "areItemsEqual",
+            "areItemsAndComponentsEqual"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
@@ -445,6 +463,18 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     )
     private static boolean isOfUseRegistryEntryCheck(ItemStack instance, Item item, ItemStack left, ItemStack right) {
         return instance.itemMatches(right.getRegistryEntry());
+    }
+
+    @Inject(
+        method = "isUsedOnRelease",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void checkForChargeableShooter(CallbackInfoReturnable<Boolean> info) {
+        this.itematic$getComponent(ItemComponentTypes.SHOOTER)
+            .map(ShooterItemComponent::method)
+            .filter(method -> method.type() == ShooterMethodTypes.CHARGEABLE)
+            .ifPresent(method -> info.setReturnValue(true));
     }
 
     @Inject(
@@ -595,7 +625,13 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = { "useOnBlock", "method_56097", "postHit", "postMine", "onCraftByPlayer" },
+        method = {
+            "useOnBlock",
+            "method_56097",
+            "postHit",
+            "postMine",
+            "onCraftByPlayer"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
@@ -615,10 +651,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
+    public boolean canBeEnchantedWith(Enchantment enchantment, EnchantingContext context) {
+        // Use the original implementation again
+        return enchantment.isAcceptableItem((ItemStack)(Object) this);
+    }
+
+    @Override
     public RegistryKey<Item> itematic$key() {
         if (this.entry == null) {
             return ItemKeys.AIR;
         }
+
         return this.entry.getKey().orElse(ItemKeys.AIR);
     }
 
@@ -632,6 +675,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.isEmpty()) {
             return;
         }
+
         this.count = MathHelper.clamp(this.count + count, 0, this.getMaxCount());
     }
 
@@ -652,6 +696,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.isEmpty()) {
             return EMPTY;
         }
+
         return this.itematic$copyComponentsToNewStackIgnoreEmpty(item, count);
     }
 
@@ -670,6 +715,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (context.player(ActionContextParameter.THIS).map(PlayerEntity::isCreative).orElse(false)) {
             return;
         }
+
         this.context = context;
         Entity entity = context.entity(ActionContextParameter.THIS).orElse(null);
         this.damage(amount, context.world().getRandom(), entity instanceof ServerPlayerEntity player ? player : null, () -> this.onItemBroken(entity, context));
@@ -686,6 +732,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return Optional.empty();
         }
+
         return this.entry.value().itematic$getComponent(type);
     }
 
@@ -694,9 +741,11 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return false;
         }
+
         if (this.activeEvents.contains(event)) {
             return false;
         }
+
         this.activeEvents.add(event);
         boolean result = this.entry.value().itematic$invokeEvent(event, context);
         this.activeEvents.remove(event);
@@ -708,9 +757,11 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return true;
         }
+
         if (miner.isCreative() && this.isIn(ItematicItemTags.PREVENTS_MINING_IN_CREATIVE)) {
             return false;
         }
+
         return this.entry.value().canMine(state, world, pos, miner);
     }
 
@@ -719,6 +770,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return false;
         }
+
         return this.entry.value().isNetworkSynced();
     }
 
@@ -727,6 +779,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return false;
         }
+
         return this.entry.value().itematic$mayStartUsing(world, user, hand, stack);
     }
 
@@ -735,10 +788,12 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
             return 0;
         }
+
         UseDurationDataComponent useDuration = this.get(ItematicDataComponentTypes.USE_DURATION);
         if (useDuration == null) {
             return 0;
         }
+
         return useDuration.ticks((ItemStack)(Object) this, user);
     }
 
@@ -747,6 +802,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (!this.itematic$hasComponent(ItemComponentTypes.WEAPON)) {
             return 1.0d;
         }
+
         return this.getOrDefault(ItematicDataComponentTypes.ATTACK_SPEED_MULTIPLIER, 1.0d);
     }
 
@@ -766,11 +822,13 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (entity instanceof LivingEntity livingEntity) {
             context.slot().ifPresent(livingEntity::sendEquipmentBreakStatus);
         }
+
         this.decrement(1);
         this.itematic$invokeEvent(ItemEvents.BREAK_ITEM, context);
         if (entity instanceof PlayerEntity player && this.entry != null) {
             player.incrementStat(Stats.BROKEN.itematic$getOrCreateStat(this.entry));
         }
+
         this.setDamage(0);
     }
 }

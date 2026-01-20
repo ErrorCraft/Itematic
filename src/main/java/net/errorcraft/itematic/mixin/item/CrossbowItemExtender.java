@@ -1,32 +1,28 @@
 package net.errorcraft.itematic.mixin.item;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.entity.initializer.EntityInitializer;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
+import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.ProjectileItemComponent;
-import net.minecraft.entity.EntityType;
+import net.minecraft.SharedConstants;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stat.Stat;
-import net.minecraft.stat.StatType;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CrossbowItem.class)
 public abstract class CrossbowItemExtender {
-    @Redirect(
-        method = "shootAll",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
-        )
+    @Inject(
+        method = "loadProjectiles",
+        at = @At("HEAD"),
+        cancellable = true
     )
-    private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local(argsOnly = true) ItemStack stack) {
-        return instance.itematic$getOrCreateStat(stack.getRegistryEntry());
+    private static void getAmmunitionUseItemComponent(LivingEntity shooter, ItemStack crossbow, CallbackInfoReturnable<Boolean> info) {
+        if (!crossbow.itematic$hasComponent(ItemComponentTypes.SHOOTER)) {
+            info.setReturnValue(false);
+        }
     }
 
     @Redirect(
@@ -36,36 +32,36 @@ public abstract class CrossbowItemExtender {
             target = "Lnet/minecraft/entity/LivingEntity;getProjectileType(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static ItemStack getProjectileTypeUseItemComponent(LivingEntity instance, ItemStack stack) {
+    private static ItemStack getAmmunitionUseItemComponent(LivingEntity instance, ItemStack stack) {
         if (stack.itematic$hasComponent(ItemComponentTypes.SHOOTER)) {
-            return instance.itematic$getAmmunition(stack);
+            instance.itematic$getAmmunition(stack);
         }
+
         return ItemStack.EMPTY;
     }
 
-    @Redirect(
-        method = "createArrowEntity",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
+    @Inject(
+        method = "getPullTime",
+        at = @At("HEAD"),
+        cancellable = true
     )
-    private boolean isOfForFireworkRocketUseItemComponent(ItemStack instance, Item item) {
-        return instance.itematic$getComponent(ItemComponentTypes.PROJECTILE)
-            .map(ProjectileItemComponent::entity)
-            .map(EntityInitializer::type)
-            .map(e -> e == EntityType.FIREWORK_ROCKET)
-            .orElse(false);
+    private static void checkAndStoreDefaultChargeTime(ItemStack stack, CallbackInfoReturnable<Integer> info, @Share("defaultChargeTime") LocalFloatRef defaultChargeTime) {
+        Float possibleDefaultChargeTime = stack.get(ItematicDataComponentTypes.SHOOTER_DEFAULT_CHARGE_TIME);
+        if (possibleDefaultChargeTime == null) {
+            info.setReturnValue(0);
+            return;
+        }
+
+        defaultChargeTime.set(possibleDefaultChargeTime);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public int getWeaponStackDamage(ItemStack projectile) {
-        return projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE)
-            .map(ProjectileItemComponent::damage)
-            .orElse(0);
+    @ModifyConstant(
+        method = "getPullTime",
+        constant = @Constant(
+            intValue = 25
+        )
+    )
+    private static int defaultChargeTimeUseDataComponent(int constant, @Share("defaultChargeTime") LocalFloatRef defaultChargeTime) {
+        return (int) (defaultChargeTime.get() * SharedConstants.TICKS_PER_SECOND);
     }
 }

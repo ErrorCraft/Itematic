@@ -14,6 +14,8 @@ import net.errorcraft.itematic.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPickerTypes;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.pointer.Pointers;
+import net.errorcraft.itematic.item.shooter.method.ShooterMethodType;
+import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateType;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateTypes;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
@@ -40,6 +42,7 @@ public class ItematicRegistries {
     public static final Registry<TradeModifierType<?>> TRADE_MODIFIER_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.TRADE_MODIFIER_TYPE, r -> TradeModifierTypes.ENCHANT_WITH_LEVELS);
     public static final Registry<IntegerProviderType<?>> INTEGER_PROVIDER_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.INTEGER_PROVIDER_TYPE, r -> IntegerProviderTypes.CONSTANT);
     public static final Registry<ItemHolderRuleType<?>> ITEM_HOLDER_RULE_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.ITEM_HOLDER_RULE_TYPE, r -> ItemHolderRuleTypes.REJECT);
+    public static final Registry<ShooterMethodType<?>> SHOOTER_METHOD_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.SHOOTER_METHOD_TYPE, r -> ShooterMethodTypes.DIRECT);
 
     private ItematicRegistries() {}
 }

@@ -349,10 +349,21 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "isEnchantable",
         at = @At(
             value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;getMaxCount()I"
+        )
+    )
+    public int getMaxCountUseStackCount(ItemStack instance) {
+        return instance.getCount();
+    }
+
+    @Redirect(
+        method = "isEnchantable",
+        at = @At(
+            value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/DataComponentType;)Z"
         )
     )
-    public boolean isEnchantableUseComponentCheck(ItemStack instance, DataComponentType<?> type) {
+    public boolean containsMaxDamageUseItemComponentCheck(ItemStack instance, DataComponentType<?> type) {
         return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
     }
 
