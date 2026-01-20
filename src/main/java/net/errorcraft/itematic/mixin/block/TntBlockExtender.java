@@ -20,7 +20,7 @@ public class TntBlockExtender {
         slice = @Slice(
             from = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/entity/player/PlayerEntity;isCreative()Z"
+                target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)Z"
             )
         )
     )

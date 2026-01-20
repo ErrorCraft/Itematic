@@ -12,10 +12,12 @@ import net.minecraft.network.codec.PacketCodec;
 
 import java.util.OptionalInt;
 
-public record ShooterIntegerProvider() implements IntegerProvider {
+public class ShooterIntegerProvider implements IntegerProvider {
     public static final ShooterIntegerProvider INSTANCE = new ShooterIntegerProvider();
     public static final MapCodec<ShooterIntegerProvider> CODEC = MapCodec.unit(INSTANCE);
     public static final PacketCodec<ByteBuf, ShooterIntegerProvider> PACKET_CODEC = PacketCodec.unit(INSTANCE);
+
+    private ShooterIntegerProvider() {}
 
     @Override
     public IntegerProviderType<?> type() {

@@ -21,10 +21,10 @@ public class SetItemLootFunctionExtender {
         method = "process",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/item/ItemStack;withItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack copyComponentsToNewStackUseRegistryEntry(ItemStack instance, ItemConvertible item, int count) {
+    private ItemStack withItemUseRegistryEntry(ItemStack instance, ItemConvertible item) {
         return instance.itematic$copyWithItem(this.item);
     }
 }

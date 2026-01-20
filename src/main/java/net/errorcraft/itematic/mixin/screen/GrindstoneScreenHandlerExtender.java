@@ -35,11 +35,11 @@ public class GrindstoneScreenHandlerExtender {
         method = "grind",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/item/ItemStack;withItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack copyComponentsToNewStackForBookUseItemComponent(ItemStack instance, ItemConvertible item, int count, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
-        return instance.itematic$copyComponentsToNewStack(transformsInto.get(), count);
+    private ItemStack withItemForBookUseItemComponent(ItemStack instance, ItemConvertible item, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
+        return instance.itematic$copyWithItem(transformsInto.get());
     }
 
     @Mixin(targets = {

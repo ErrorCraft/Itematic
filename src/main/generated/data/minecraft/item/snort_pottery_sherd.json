@@ -4,7 +4,7 @@
   },
   "components": {
     "minecraft:decorated_pot_pattern": {
-      "pattern": "minecraft:snort_pottery_pattern"
+      "pattern": "minecraft:snort"
     },
     "minecraft:stackable": 64
   }

@@ -34,20 +34,20 @@ public class ServerPlayNetworkHandlerExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean isOfForWritableBookUseItemComponentCheck(ItemStack instance, Item item, @Share("writableItemComponent") LocalRef<WritableItemComponent> writableItemComponent) {
-        Optional<WritableItemComponent> optionalComponent = instance.itematic$getComponent(ItemComponentTypes.WRITABLE);
-        optionalComponent.ifPresent(writableItemComponent::set);
-        return optionalComponent.isPresent();
+    private boolean isOfForWritableBookUseItemComponentCheck(ItemStack instance, Item item, @Share("writable") LocalRef<WritableItemComponent> writable) {
+        Optional<WritableItemComponent> optionalWritable = instance.itematic$getComponent(ItemComponentTypes.WRITABLE);
+        optionalWritable.ifPresent(writable::set);
+        return optionalWritable.isPresent();
     }
 
     @Redirect(
         method = "addBook",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/item/ItemStack;withItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack copyComponentsToNewStackForWrittenBookUseItemComponent(ItemStack instance, ItemConvertible itemConvertible, int count, @Share("writableItemComponent") LocalRef<WritableItemComponent> writableItemComponent) {
-        return instance.itematic$copyComponentsToNewStack(writableItemComponent.get().transformsInto(), count);
+    private ItemStack withItemForWrittenBookUseItemComponent(ItemStack instance, ItemConvertible itemConvertible, @Share("writable") LocalRef<WritableItemComponent> writable) {
+        return instance.itematic$copyWithItem(writable.get().transformsInto());
     }
 }
