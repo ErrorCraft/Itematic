@@ -13,10 +13,12 @@ import net.minecraft.registry.entry.RegistryEntry;
 
 import java.util.OptionalInt;
 
-public record PlayableIntegerProvider() implements IntegerProvider {
+public class PlayableIntegerProvider implements IntegerProvider {
     public static final PlayableIntegerProvider INSTANCE = new PlayableIntegerProvider();
     public static final MapCodec<PlayableIntegerProvider> CODEC = MapCodec.unit(INSTANCE);
     public static final PacketCodec<ByteBuf, PlayableIntegerProvider> PACKET_CODEC = PacketCodec.unit(INSTANCE);
+
+    private PlayableIntegerProvider() {}
 
     @Override
     public IntegerProviderType<?> type() {

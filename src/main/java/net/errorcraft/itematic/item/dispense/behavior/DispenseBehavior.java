@@ -67,9 +67,11 @@ public class DispenseBehavior extends FallibleItemDispenserBehavior {
         if (result.isEmpty()) {
             return super.dispenseSilently(pointer, stack);
         }
+
         if (result.get()) {
             return this.succeed(pointer, stack, stackReference.get());
         }
+
         return this.fail(pointer, stack);
     }
 
@@ -77,15 +79,20 @@ public class DispenseBehavior extends FallibleItemDispenserBehavior {
         if (oldStack == newStack) {
             return oldStack;
         }
+
         if (newStack.isEmpty()) {
             return super.dispenseSilently(pointer, oldStack);
         }
+
         if (oldStack.isEmpty()) {
             return newStack;
         }
-        if (pointer.blockEntity().addToFirstFreeSlot(newStack) < 0) {
-            super.dispenseSilently(pointer, newStack);
+
+        ItemStack remainingStack = pointer.blockEntity().addToFirstFreeSlot(newStack);
+        if (!remainingStack.isEmpty()) {
+            super.dispenseSilently(pointer, remainingStack);
         }
+
         return oldStack;
     }
 
@@ -93,6 +100,7 @@ public class DispenseBehavior extends FallibleItemDispenserBehavior {
         if (this.dispenseAsItemOnFailure) {
             return super.dispenseSilently(pointer, stack);
         }
+
         this.setSuccess(false);
         return stack;
     }

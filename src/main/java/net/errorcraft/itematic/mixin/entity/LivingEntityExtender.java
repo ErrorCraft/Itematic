@@ -17,6 +17,7 @@ import net.errorcraft.itematic.item.component.components.LifeSavingItemComponent
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -78,7 +79,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public abstract boolean isUsingItem();
 
     @Shadow
-    public abstract ItemStack eatFood(World world, ItemStack stack);
+    public abstract ItemStack eatFood(World world, ItemStack stack, FoodComponent foodComponent);
 
     @Shadow
     public abstract AttributeContainer getAttributes();
@@ -462,8 +463,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Override
-    public void itematic$eatFood(World world, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        this.eatFood(world, stack);
+    public void itematic$eatFood(World world, ItemStack stack, FoodComponent food, ItemStackConsumer resultStackConsumer) {
+        this.eatFood(world, stack, food);
         if (world instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, this.getActiveHand())
                 .entityPosition(ActionContextParameter.THIS, this)

@@ -4,7 +4,7 @@
   },
   "components": {
     "minecraft:decorated_pot_pattern": {
-      "pattern": "minecraft:mourner_pottery_pattern"
+      "pattern": "minecraft:mourner"
     },
     "minecraft:stackable": 64
   }

@@ -16,6 +16,7 @@ import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Optional;
 
 public record FoodItemComponent(int nutrition, float saturation, boolean alwaysEdible, List<FoodComponent.StatusEffectEntry> effects) implements ItemComponent<FoodItemComponent> {
     public static final Codec<FoodItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -41,12 +42,15 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
 
     @Override
     public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackConsumer resultStackConsumer) {
-        user.itematic$eatFood(world, stack, resultStackConsumer);
+        FoodComponent food = stack.get(DataComponentTypes.FOOD);
+        if (food != null) {
+            user.itematic$eatFood(world, stack, food, resultStackConsumer);
+        }
     }
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.FOOD, new FoodComponent(this.nutrition, this.saturation, false, 1.0f, this.effects));
+        builder.add(DataComponentTypes.FOOD, new FoodComponent(this.nutrition, this.saturation, false, 1.0f, Optional.empty(), this.effects));
     }
 
     public boolean mayStartUsing(PlayerEntity user) {

@@ -55,6 +55,6 @@ public class WindChargeEntityInitializer implements EntityInitializer<WindCharge
         double velocityX = random.nextTriangular(direction.getOffsetX(), VELOCITY_DEVIATION);
         double velocityY = random.nextTriangular(direction.getOffsetY(), VELOCITY_DEVIATION);
         double velocityZ = random.nextTriangular(direction.getOffsetZ(), VELOCITY_DEVIATION);
-        return new WindChargeEntity(world, position.getX(), position.getY(), position.getZ(), velocityX, velocityY, velocityZ);
+        return new WindChargeEntity(world, position.getX(), position.getY(), position.getZ(), new Vec3d(velocityX, velocityY, velocityZ));
     }
 }

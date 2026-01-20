@@ -4,7 +4,7 @@
   },
   "components": {
     "minecraft:decorated_pot_pattern": {
-      "pattern": "minecraft:burn_pottery_pattern"
+      "pattern": "minecraft:burn"
     },
     "minecraft:stackable": 64
   }

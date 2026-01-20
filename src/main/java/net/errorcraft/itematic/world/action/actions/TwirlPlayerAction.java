@@ -37,7 +37,7 @@ public record TwirlPlayerAction() implements Action<TwirlPlayerAction> {
             return false;
         }
 
-        float spinAttackStrength = EnchantmentHelper.getTridentSpinAttackStrength(context.world(), context.stack(), player);
+        float spinAttackStrength = EnchantmentHelper.getTridentSpinAttackStrength(player);
         if (spinAttackStrength <= 0.0f) {
             return false;
         }
