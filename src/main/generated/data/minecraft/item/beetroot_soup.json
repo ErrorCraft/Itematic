@@ -3,7 +3,9 @@
     "translation_key": "item.minecraft.beetroot_soup"
   },
   "components": {
-    "minecraft:consumable": {},
+    "minecraft:consumable": {
+      "result_item": "minecraft:bowl"
+    },
     "minecraft:food": {
       "nutrition": 6,
       "saturation": 7.2000003
