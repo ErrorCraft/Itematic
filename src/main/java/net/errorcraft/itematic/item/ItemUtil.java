@@ -1077,7 +1077,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.HEAVY_CORE, create(
-                ItemBase.Builder.forBlock(ItemKeys.HEAVY_CORE).build(),
+                ItemBase.Builder.forBlock(ItemKeys.HEAVY_CORE)
+                    .rarity(Rarity.EPIC)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HEAVY_CORE)))
@@ -5305,7 +5307,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.TRIDENT, create(
-                ItemBase.Builder.forItem(ItemKeys.TRIDENT).build(),
+                ItemBase.Builder.forItem(ItemKeys.TRIDENT)
+                    .rarity(Rarity.EPIC)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.ofPreserved(250))
@@ -5390,7 +5394,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.MACE, create(
-                ItemBase.Builder.forItem(ItemKeys.MACE).build(),
+                ItemBase.Builder.forItem(ItemKeys.MACE)
+                    .rarity(Rarity.EPIC)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(500))
@@ -9813,7 +9819,9 @@ public class ItemUtil {
 
         private void bootstrapBannerPatterns() {
             this.registerable.register(ItemKeys.FLOWER_BANNER_PATTERN, create(
-                ItemBase.Builder.forItem(ItemKeys.FLOWER_BANNER_PATTERN).tooltip(ItemKeys.FLOWER_BANNER_PATTERN).build(),
+                ItemBase.Builder.forItem(ItemKeys.FLOWER_BANNER_PATTERN)
+                    .tooltip(ItemKeys.FLOWER_BANNER_PATTERN)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.FLOWER_PATTERN_ITEM))
                     .build()
@@ -9846,25 +9854,36 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOBE_BANNER_PATTERN, create(
-                ItemBase.Builder.forItem(ItemKeys.GLOBE_BANNER_PATTERN).tooltip(ItemKeys.GLOBE_BANNER_PATTERN).build(),
+                ItemBase.Builder.forItem(ItemKeys.GLOBE_BANNER_PATTERN)
+                    .tooltip(ItemKeys.GLOBE_BANNER_PATTERN)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.GLOBE_PATTERN_ITEM))
                     .build()
             ));
             this.registerable.register(ItemKeys.PIGLIN_BANNER_PATTERN, create(
-                ItemBase.Builder.forItem(ItemKeys.PIGLIN_BANNER_PATTERN).tooltip(ItemKeys.PIGLIN_BANNER_PATTERN).build(),
+                ItemBase.Builder.forItem(ItemKeys.PIGLIN_BANNER_PATTERN)
+                    .rarity(Rarity.UNCOMMON)
+                    .tooltip(ItemKeys.PIGLIN_BANNER_PATTERN)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.PIGLIN_PATTERN_ITEM))
                     .build()
             ));
             this.registerable.register(ItemKeys.FLOW_BANNER_PATTERN, create(
-                ItemBase.Builder.forItem(ItemKeys.FLOW_BANNER_PATTERN).tooltip(ItemKeys.FLOW_BANNER_PATTERN).build(),
+                ItemBase.Builder.forItem(ItemKeys.FLOW_BANNER_PATTERN)
+                    .rarity(Rarity.RARE)
+                    .tooltip(ItemKeys.FLOW_BANNER_PATTERN)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.FLOW_PATTERN_ITEM))
                     .build()
             ));
             this.registerable.register(ItemKeys.GUSTER_BANNER_PATTERN, create(
-                ItemBase.Builder.forItem(ItemKeys.GUSTER_BANNER_PATTERN).tooltip(ItemKeys.GUSTER_BANNER_PATTERN).build(),
+                ItemBase.Builder.forItem(ItemKeys.GUSTER_BANNER_PATTERN)
+                    .rarity(Rarity.RARE)
+                    .tooltip(ItemKeys.GUSTER_BANNER_PATTERN)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.GUSTER_PATTERN_ITEM))
                     .build()
