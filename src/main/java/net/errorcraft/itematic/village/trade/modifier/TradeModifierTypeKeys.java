@@ -12,6 +12,6 @@ public class TradeModifierTypeKeys {
     private TradeModifierTypeKeys() {}
 
     private static RegistryKey<TradeModifierType<?>> of(String key) {
-        return RegistryKey.of(ItematicRegistryKeys.TRADE_MODIFIER_TYPE, new Identifier(key));
+        return RegistryKey.of(ItematicRegistryKeys.TRADE_MODIFIER_TYPE, Identifier.ofVanilla(key));
     }
 }

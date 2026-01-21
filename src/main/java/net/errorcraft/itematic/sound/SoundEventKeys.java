@@ -66,6 +66,6 @@ public class SoundEventKeys {
     private SoundEventKeys() {}
 
     private static RegistryKey<SoundEvent> of(String id) {
-        return RegistryKey.of(RegistryKeys.SOUND_EVENT, new Identifier(id));
+        return RegistryKey.of(RegistryKeys.SOUND_EVENT, Identifier.ofVanilla(id));
     }
 }

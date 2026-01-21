@@ -78,6 +78,6 @@ public class TradeTags {
     private TradeTags() {}
 
     private static TagKey<Trade> of(String id) {
-        return TagKey.of(ItematicRegistryKeys.TRADE, new Identifier(id));
+        return TagKey.of(ItematicRegistryKeys.TRADE, Identifier.ofVanilla(id));
     }
 }

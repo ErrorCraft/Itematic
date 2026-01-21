@@ -11,6 +11,6 @@ public class PotionTags {
     private PotionTags() {}
 
     private static TagKey<Potion> of(String id) {
-        return TagKey.of(RegistryKeys.POTION, new Identifier(id));
+        return TagKey.of(RegistryKeys.POTION, Identifier.ofVanilla(id));
     }
 }

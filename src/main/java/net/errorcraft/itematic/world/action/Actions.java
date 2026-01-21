@@ -238,7 +238,7 @@ public class Actions {
             LocationCheckLootCondition.builder(
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
-                        .tag(ItematicBlockTags.AIR)),
+                        .tag(BlockTags.AIR)),
                 new BlockPos(0, 1, 0)));
     }
 
@@ -267,6 +267,6 @@ public class Actions {
     }
 
     private static RegistryKey<ActionEntry> of(String name) {
-        return RegistryKey.of(ItematicRegistryKeys.ACTION, new Identifier(name));
+        return RegistryKey.of(ItematicRegistryKeys.ACTION, Identifier.ofVanilla(name));
     }
 }

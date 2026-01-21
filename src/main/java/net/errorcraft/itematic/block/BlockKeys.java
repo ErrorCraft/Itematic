@@ -6,7 +6,6 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 public class BlockKeys {
-    public static final RegistryKey<Block> AIR = of("air");
     public static final RegistryKey<Block> STONE = of("stone");
     public static final RegistryKey<Block> GRANITE = of("granite");
     public static final RegistryKey<Block> POLISHED_GRANITE = of("polished_granite");
@@ -720,8 +719,6 @@ public class BlockKeys {
     public static final RegistryKey<Block> CONDUIT = of("conduit");
     public static final RegistryKey<Block> BAMBOO = of("bamboo");
     public static final RegistryKey<Block> POTTED_BAMBOO = of("potted_bamboo");
-    public static final RegistryKey<Block> VOID_AIR = of("void_air");
-    public static final RegistryKey<Block> CAVE_AIR = of("cave_air");
     public static final RegistryKey<Block> POLISHED_GRANITE_STAIRS = of("polished_granite_stairs");
     public static final RegistryKey<Block> SMOOTH_RED_SANDSTONE_STAIRS = of("smooth_red_sandstone_stairs");
     public static final RegistryKey<Block> MOSSY_STONE_BRICK_STAIRS = of("mossy_stone_brick_stairs");
@@ -1033,6 +1030,6 @@ public class BlockKeys {
     private BlockKeys() {}
 
     private static RegistryKey<Block> of(String id) {
-        return RegistryKey.of(RegistryKeys.BLOCK, new Identifier(id));
+        return RegistryKey.of(RegistryKeys.BLOCK, Identifier.ofVanilla(id));
     }
 }

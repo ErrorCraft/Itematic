@@ -11,6 +11,6 @@ public class BlockPickerTypeKeys {
     private BlockPickerTypeKeys() {}
 
     private static RegistryKey<BlockPickerType<?>> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.BLOCK_PICKER_TYPE, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.BLOCK_PICKER_TYPE, Identifier.ofVanilla(id));
     }
 }

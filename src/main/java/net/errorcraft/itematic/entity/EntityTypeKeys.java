@@ -99,6 +99,6 @@ public class EntityTypeKeys {
     private EntityTypeKeys() {}
 
     private static RegistryKey<EntityType<?>> of(String id) {
-        return RegistryKey.of(RegistryKeys.ENTITY_TYPE, new Identifier(id));
+        return RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.ofVanilla(id));
     }
 }

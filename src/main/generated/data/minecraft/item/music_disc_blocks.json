@@ -4,12 +4,7 @@
     "translation_key": "item.minecraft.music_disc_blocks"
   },
   "components": {
-    "minecraft:record": {
-      "description_key": "item.minecraft.music_disc_blocks.desc",
-      "duration": 6900,
-      "output_signal": 3,
-      "sound_event": "minecraft:music_disc.blocks"
-    },
+    "minecraft:playable_song": "minecraft:blocks",
     "minecraft:stackable": 1
   }
 }

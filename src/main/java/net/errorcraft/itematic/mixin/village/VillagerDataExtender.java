@@ -25,13 +25,20 @@ public class VillagerDataExtender implements VillagerDataAccess {
     private int level;
 
     @Unique
-    private static final String[] LEVELS = { "novice", "apprentice", "journeyman", "expert", "master" };
+    private static final String[] LEVELS = {
+        "novice",
+        "apprentice",
+        "journeyman",
+        "expert",
+        "master"
+    };
 
     public @Nullable TagKey<Trade> itematic$tradeTag() {
         if (this.profession.workSound() == null) {
             return null;
         }
-        Identifier tag = new Identifier(this.profession.id() + "_" + this.levelName());
+
+        Identifier tag = Identifier.ofVanilla(this.profession.id() + "_" + this.levelName());
         return TagKey.of(ItematicRegistryKeys.TRADE, tag);
     }
 

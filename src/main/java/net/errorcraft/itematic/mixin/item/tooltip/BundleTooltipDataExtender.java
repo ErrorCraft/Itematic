@@ -1,7 +1,7 @@
-package net.errorcraft.itematic.mixin.client.item;
+package net.errorcraft.itematic.mixin.item.tooltip;
 
-import net.errorcraft.itematic.access.client.item.BundleTooltipDataAccess;
-import net.minecraft.client.item.BundleTooltipData;
+import net.errorcraft.itematic.access.item.tooltip.BundleTooltipDataAccess;
+import net.minecraft.item.tooltip.BundleTooltipData;
 import org.apache.commons.lang3.math.Fraction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

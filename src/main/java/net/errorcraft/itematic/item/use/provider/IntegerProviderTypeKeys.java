@@ -14,6 +14,6 @@ public class IntegerProviderTypeKeys {
     private IntegerProviderTypeKeys() {}
 
     private static RegistryKey<IntegerProviderType<?>> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.INTEGER_PROVIDER_TYPE, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.INTEGER_PROVIDER_TYPE, Identifier.ofVanilla(id));
     }
 }

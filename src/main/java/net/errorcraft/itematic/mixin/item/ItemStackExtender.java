@@ -25,7 +25,6 @@ import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.advancement.criterion.ItemDurabilityChangedCriterion;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.ComponentHolder;
 import net.minecraft.component.ComponentMap;
@@ -40,6 +39,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -526,17 +526,15 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         return this.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
     }
 
-    @Redirect(
+    @WrapWithCondition(
         method = "getTooltip",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;appendTooltip(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/List;Lnet/minecraft/client/item/TooltipType;)V"
+            target = "Lnet/minecraft/item/Item;appendTooltip(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/List;Lnet/minecraft/item/tooltip/TooltipType;)V"
         )
     )
-    private void appendTooltipUseRegistryEntry(Item instance, ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        if (this.entry != null) {
-            this.entry.value().appendTooltip(stack, context, tooltip, type);
-        }
+    private boolean appendTooltipCheckRegistryEntry(Item instance, ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        return this.entry != null;
     }
 
     @Redirect(

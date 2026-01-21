@@ -51,7 +51,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DecoratedPotPattern;
 import net.minecraft.block.DecoratedPotPatterns;
-import net.minecraft.client.color.world.FoliageColors;
+import net.minecraft.block.jukebox.JukeboxSong;
+import net.minecraft.block.jukebox.JukeboxSongs;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.*;
@@ -89,6 +90,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.world.biome.FoliageColors;
 import net.minecraft.world.event.GameEvent;
 import org.apache.commons.lang3.math.Fraction;
 
@@ -144,6 +146,7 @@ public class ItemUtil {
         private final RegistryEntryLookup<StatusEffect> statusEffects;
         private final RegistryEntryLookup<Potion> potions;
         private final RegistryEntryLookup<Enchantment> enchantments;
+        private final RegistryEntryLookup<JukeboxSong> jukeboxSongs;
 
         private Bootstrapper(Registerable<Item> registerable) {
             this.registerable = registerable;
@@ -162,6 +165,7 @@ public class ItemUtil {
             this.statusEffects = registerable.getRegistryLookup(RegistryKeys.STATUS_EFFECT);
             this.potions = registerable.getRegistryLookup(RegistryKeys.POTION);
             this.enchantments = registerable.getRegistryLookup(RegistryKeys.ENCHANTMENT);
+            this.jukeboxSongs = registerable.getRegistryLookup(RegistryKeys.JUKEBOX_SONG);
         }
 
         private void bootstrap() {
@@ -9319,7 +9323,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_13), ItemKeys.MUSIC_DISC_13, 178 * 20, 1))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.THIRTEEN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CAT, create(
@@ -9327,7 +9331,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CAT), ItemKeys.MUSIC_DISC_CAT, 185 * 20, 2))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CAT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_BLOCKS, create(
@@ -9335,7 +9339,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_BLOCKS), ItemKeys.MUSIC_DISC_BLOCKS, 345 * 20, 3))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.BLOCKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CHIRP, create(
@@ -9343,7 +9347,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CHIRP), ItemKeys.MUSIC_DISC_CHIRP, 185 * 20, 4))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CHIRP)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CREATOR, create(
@@ -9351,7 +9355,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CREATOR), ItemKeys.MUSIC_DISC_CREATOR, 176 * 20, 12))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CREATOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CREATOR_MUSIC_BOX, create(
@@ -9359,7 +9363,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_CREATOR_MUSIC_BOX), ItemKeys.MUSIC_DISC_CREATOR_MUSIC_BOX, 73 * 20, 11))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CREATOR_MUSIC_BOX)))
                     .build()
             ));
 
@@ -9368,7 +9372,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_FAR), ItemKeys.MUSIC_DISC_FAR, 174 * 20, 5))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.FAR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_MALL, create(
@@ -9376,7 +9380,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_MALL), ItemKeys.MUSIC_DISC_MALL, 197 * 20, 6))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.MALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_MELLOHI, create(
@@ -9384,7 +9388,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_MELLOHI), ItemKeys.MUSIC_DISC_MELLOHI, 96 * 20, 7))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.MELLOHI)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_STAL, create(
@@ -9392,7 +9396,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_STAL), ItemKeys.MUSIC_DISC_STAL, 150 * 20, 8))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.STAL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_STRAD, create(
@@ -9400,7 +9404,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_STRAD), ItemKeys.MUSIC_DISC_STRAD, 188 * 20, 9))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.STRAD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_WARD, create(
@@ -9408,7 +9412,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_WARD), ItemKeys.MUSIC_DISC_WARD, 251 * 20, 10))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.WARD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_11, create(
@@ -9416,7 +9420,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_11), ItemKeys.MUSIC_DISC_11, 71 * 20, 11))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.ELEVEN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_WAIT, create(
@@ -9424,7 +9428,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_WAIT), ItemKeys.MUSIC_DISC_WAIT, 238 * 20, 12))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.WAIT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_OTHERSIDE, create(
@@ -9432,7 +9436,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_OTHERSIDE), ItemKeys.MUSIC_DISC_OTHERSIDE, 195 * 20, 14))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.OTHERSIDE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_RELIC, create(
@@ -9440,7 +9444,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_RELIC), ItemKeys.MUSIC_DISC_RELIC, 218 * 20, 14))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.RELIC)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_PIGSTEP, create(
@@ -9448,7 +9452,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_PIGSTEP), ItemKeys.MUSIC_DISC_PIGSTEP, 149 * 20, 13))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.PIGSTEP)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_PRECIPICE, create(
@@ -9456,7 +9460,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_PRECIPICE), ItemKeys.MUSIC_DISC_PRECIPICE, 299 * 20, 13))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.PRECIPICE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_5, create(
@@ -9464,7 +9468,7 @@ public class ItemUtil {
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(RecordItemComponent.of(this.soundEvents.getOrThrow(SoundEventKeys.MUSIC_DISC_5), ItemKeys.MUSIC_DISC_5, 178 * 20, 15))
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.FIVE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DISC_FRAGMENT_5, create(
@@ -10202,7 +10206,7 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.COMPASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(PointableItemComponent.of(this.pointers.getOrThrow(PointerKeys.SPAWN_LOCATION), Util.createTranslationKey("item", new Identifier("lodestone_compass"))))
+                    .with(PointableItemComponent.of(this.pointers.getOrThrow(PointerKeys.SPAWN_LOCATION), Util.createTranslationKey("item", Identifier.ofVanilla("lodestone_compass"))))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(

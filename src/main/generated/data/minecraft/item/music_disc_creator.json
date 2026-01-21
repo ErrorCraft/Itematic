@@ -4,12 +4,7 @@
     "translation_key": "item.minecraft.music_disc_creator"
   },
   "components": {
-    "minecraft:record": {
-      "description_key": "item.minecraft.music_disc_creator.desc",
-      "duration": 3520,
-      "output_signal": 12,
-      "sound_event": "minecraft:music_disc.creator"
-    },
+    "minecraft:playable_song": "minecraft:creator",
     "minecraft:stackable": 1
   }
 }

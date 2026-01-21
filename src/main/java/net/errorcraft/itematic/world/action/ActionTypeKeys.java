@@ -53,6 +53,6 @@ public class ActionTypeKeys {
     private ActionTypeKeys() {}
 
     private static RegistryKey<ActionType<?>> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.ACTION_TYPE, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.ACTION_TYPE, Identifier.ofVanilla(id));
     }
 }

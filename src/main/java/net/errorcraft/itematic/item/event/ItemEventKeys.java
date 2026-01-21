@@ -26,6 +26,6 @@ public class ItemEventKeys {
     private ItemEventKeys() {}
 
     private static RegistryKey<ItemEvent> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.ITEM_EVENT, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.ITEM_EVENT, Identifier.ofVanilla(id));
     }
 }
