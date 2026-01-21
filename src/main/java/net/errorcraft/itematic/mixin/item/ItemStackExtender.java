@@ -52,7 +52,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
-import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -74,6 +73,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -99,7 +99,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     public abstract boolean isEmpty();
 
     @Shadow
-    public abstract void damage(int amount, ServerWorld serverWorld, @Nullable ServerPlayerEntity player, Runnable breakCallback);
+    public abstract void damage(int amount, ServerWorld world, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback);
 
     @Shadow
     public abstract int getDamage();
@@ -354,6 +354,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return Stream.empty();
         }
+
         return this.entry.streamTags();
     }
 
@@ -387,6 +388,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.isEmpty()) {
             return false;
         }
+
         return this.entry.isIn(tag);
     }
 
@@ -399,6 +401,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.isEmpty()) {
             return false;
         }
+
         return predicate.test(this.entry);
     }
 
@@ -411,6 +414,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.isEmpty()) {
             return false;
         }
+
         return this.entry == itemEntry;
     }
 
@@ -581,14 +585,14 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/lang/Runnable;)V",
+        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;setDamage(I)V",
             shift = At.Shift.AFTER
         )
     )
-    private void invokeDamageToolEvent(int amount, ServerWorld serverWorld, ServerPlayerEntity player, Runnable breakCallback, CallbackInfo info) {
+    private void invokeDamageToolEvent(int amount, ServerWorld world, ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
@@ -597,7 +601,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @WrapWithCondition(
-        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/lang/Runnable;)V",
+        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/advancement/criterion/ItemDurabilityChangedCriterion;trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;I)V"
@@ -611,23 +615,23 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/lang/Runnable;)V",
+        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/lang/Runnable;run()V"
+            target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"
         )
     )
-    private void invokeBreakToolEvent(int amount, ServerWorld serverWorld, ServerPlayerEntity player, Runnable breakCallback, CallbackInfo info) {
+    private void invokeBreakToolEvent(int amount, ServerWorld world, ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
+
         this.itematic$invokeEvent(ItemEvents.BREAK_ITEM, this.context);
     }
 
     @Redirect(
         method = {
             "useOnBlock",
-            "method_56097",
             "postHit",
             "postMine",
             "onCraftByPlayer"
@@ -661,6 +665,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return ItemKeys.AIR;
         }
+
         return this.entry.getKey().orElse(ItemKeys.AIR);
     }
 
@@ -674,6 +679,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.isEmpty()) {
             return;
         }
+
         this.count = MathHelper.clamp(this.count + count, 0, this.getMaxCount());
     }
 
@@ -694,6 +700,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.isEmpty()) {
             return EMPTY;
         }
+
         return this.itematic$copyComponentsToNewStackIgnoreEmpty(item, count);
     }
 
@@ -712,9 +719,10 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (context.player(ActionContextParameter.THIS).map(PlayerEntity::isCreative).orElse(false)) {
             return;
         }
+
         this.context = context;
         Entity entity = context.entity(ActionContextParameter.THIS).orElse(null);
-        this.damage(amount, context.world(), entity instanceof ServerPlayerEntity player ? player : null, () -> this.onItemBroken(entity, context));
+        this.damage(amount, context.world(), entity instanceof ServerPlayerEntity player ? player : null, item -> this.onItemBroken(item, entity, context));
         this.context = null;
     }
 
@@ -728,6 +736,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return Optional.empty();
         }
+
         return this.entry.value().itematic$getComponent(type);
     }
 
@@ -736,9 +745,11 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return false;
         }
+
         if (this.activeEvents.contains(event)) {
             return false;
         }
+
         this.activeEvents.add(event);
         boolean result = this.entry.value().itematic$invokeEvent(event, context);
         this.activeEvents.remove(event);
@@ -750,9 +761,11 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return true;
         }
+
         if (miner.isCreative() && this.isIn(ItematicItemTags.PREVENTS_MINING_IN_CREATIVE)) {
             return false;
         }
+
         return this.entry.value().canMine(state, world, pos, miner);
     }
 
@@ -761,6 +774,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return false;
         }
+
         return this.entry.value().isNetworkSynced();
     }
 
@@ -769,6 +783,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             return false;
         }
+
         return this.entry.value().itematic$mayStartUsing(world, user, hand, stack);
     }
 
@@ -777,6 +792,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (!this.itematic$hasComponent(ItemComponentTypes.WEAPON)) {
             return 1.0d;
         }
+
         return this.getOrDefault(ItematicDataComponentTypes.ATTACK_SPEED_MULTIPLIER, 1.0d);
     }
 
@@ -792,15 +808,13 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Unique
-    private void onItemBroken(Entity entity, ActionContext context) {
+    private void onItemBroken(Item item, Entity entity, ActionContext context) {
         if (entity instanceof LivingEntity livingEntity) {
-            context.slot().ifPresent(livingEntity::sendEquipmentBreakStatus);
+            context.slot().ifPresent(slot -> livingEntity.sendEquipmentBreakStatus(item, slot));
         }
+
         this.decrement(1);
         this.itematic$invokeEvent(ItemEvents.BREAK_ITEM, context);
-        if (entity instanceof PlayerEntity player && this.entry != null) {
-            player.incrementStat(Stats.BROKEN.itematic$getOrCreateStat(this.entry));
-        }
         this.setDamage(0);
     }
 }

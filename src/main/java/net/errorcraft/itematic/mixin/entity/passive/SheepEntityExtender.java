@@ -108,7 +108,6 @@ public abstract class SheepEntityExtender extends MobEntityExtender {
             target = "Ljava/util/Optional;filter(Ljava/util/function/Predicate;)Ljava/util/Optional;"
         )
     )
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<DyeItemComponent> instanceOfDyeItemUseItemComponent(Optional<Item> instance, Predicate<? super Object> predicate) {
         return instance.flatMap(item -> item.itematic$getComponent(ItemComponentTypes.DYE));
     }
@@ -127,7 +126,6 @@ public abstract class SheepEntityExtender extends MobEntityExtender {
             )
         )
     )
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<DyeItemComponent> castToDyeItemDoNothing(Optional<DyeItemComponent> instance, Function<? super Item, ? extends DyeItem> mapper) {
         return instance;
     }

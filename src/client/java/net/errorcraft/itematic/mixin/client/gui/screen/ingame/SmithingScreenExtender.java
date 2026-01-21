@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Mixin(SmithingScreen.class)
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public abstract class SmithingScreenExtender extends ForgingScreen<SmithingScreenHandler> {
     public SmithingScreenExtender(SmithingScreenHandler handler, PlayerInventory playerInventory, Text title, Identifier texture) {
         super(handler, playerInventory, title, texture);

@@ -3,7 +3,7 @@ package net.errorcraft.itematic.village.trade;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.loot.function.DyeItemModifier;
-import net.errorcraft.itematic.loot.function.ItemModifierUtil;
+import net.errorcraft.itematic.loot.function.SetRandomPotionItemModifier;
 import net.errorcraft.itematic.mixin.village.TradeOffersAccessor;
 import net.errorcraft.itematic.potion.PotionTags;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
@@ -779,7 +779,7 @@ public class Trades {
     }
 
     private static Trade sellWithPotion(RegistryEntryLookup<Item> items, RegistryEntryList<Potion> potions, RegistryEntry<Item> item, RegistryEntry<Item> resultItem, int tradeExperience) {
-        return Trade.builder(Trade.Entry.of(resultItem, 5, ItemModifierUtil.setPotion(potions)))
+        return Trade.builder(Trade.Entry.of(resultItem, 5, SetRandomPotionItemModifier.of(potions)))
             .wants(Trade.Entry.ofEmerald(items, 2))
             .wants(Trade.Entry.of(item, 5))
             .tradeExperience(tradeExperience)

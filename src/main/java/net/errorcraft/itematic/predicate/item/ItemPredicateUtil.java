@@ -32,7 +32,6 @@ public class ItemPredicateUtil {
         ItemPredicateUtil::create
     );
 
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private static ItemPredicate create(Optional<RegistryEntryList<Item>> items, NumberRange.IntRange count, ComponentPredicate components, Map<ItemSubPredicate.Type<?>, ItemSubPredicate> subPredicates, ItemPredicateExtraFields extraFields) {
         ItemPredicate predicate = new ItemPredicate(items, count, components, subPredicates);
         ((ItemPredicateAccess)(Object) predicate).itematic$setExtraFields(extraFields);

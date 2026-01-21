@@ -10,7 +10,6 @@ public interface NumberRangeAccessor {
     @Mixin(NumberRange.IntRange.class)
     interface IntRangeAccessor {
         @Invoker("<init>")
-        @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
         static NumberRange.IntRange create(Optional<Integer> min, Optional<Integer> max) {
             throw new AssertionError();
         }
