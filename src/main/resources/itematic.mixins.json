@@ -100,6 +100,7 @@
     "entity.EyeOfEnderEntityExtender",
     "entity.FallingBlockEntityExtender",
     "entity.ItemEntityExtender",
+    "entity.LeashableExtender",
     "entity.LivingEntityExtender",
     "entity.ai.brain.task.BoneMealTaskExtender",
     "entity.ai.brain.task.CelebrateRaidWinTaskExtender",

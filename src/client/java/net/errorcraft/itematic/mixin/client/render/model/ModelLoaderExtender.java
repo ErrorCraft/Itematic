@@ -1,7 +1,9 @@
 package net.errorcraft.itematic.mixin.client.render.model;
 
 import net.minecraft.client.color.block.BlockColors;
+import net.minecraft.client.render.model.BlockStatesLoader;
 import net.minecraft.client.render.model.ModelLoader;
+import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.item.Item;
@@ -23,15 +25,20 @@ import java.util.Set;
 
 @Mixin(ModelLoader.class)
 public abstract class ModelLoaderExtender {
-    @Unique
-    private static final String ITEM_MODEL_PREFIX = "models/item/";
-    @Unique
-    private static final int ITEM_MODEL_PREFIX_LENGTH = ITEM_MODEL_PREFIX.length();
-    @Unique
-    private static final int FILE_SUFFIX_LENGTH = ".json".length();
+    @Shadow
+    protected abstract void addModelToBake(ModelIdentifier id, UnbakedModel model);
 
     @Shadow
-    protected abstract void addModel(ModelIdentifier modelId);
+    protected abstract void loadInventoryVariantItemModel(Identifier id);
+
+    @Unique
+    private static final String ITEM_MODEL_PREFIX = "models/item/";
+
+    @Unique
+    private static final int ITEM_MODEL_PREFIX_LENGTH = ITEM_MODEL_PREFIX.length();
+
+    @Unique
+    private static final int FILE_SUFFIX_LENGTH = ".json".length();
 
     @Redirect(
         method = "<init>",
@@ -59,11 +66,11 @@ public abstract class ModelLoaderExtender {
             )
         )
     )
-    private void addAllLoadedItemModels(BlockColors blockColors, Profiler profiler, Map<Identifier, JsonUnbakedModel> jsonUnbakedModels, Map<Identifier, List<ModelLoader.SourceTrackedData>> blockStates, CallbackInfo info) {
+    private void addAllLoadedItemModels(BlockColors blockColors, Profiler profiler, Map<Identifier, JsonUnbakedModel> jsonUnbakedModels, Map<Identifier, List<BlockStatesLoader.SourceTrackedData>> blockStates, CallbackInfo info) {
         for (Identifier identifier : jsonUnbakedModels.keySet()) {
             if (identifier.getPath().startsWith(ITEM_MODEL_PREFIX)) {
                 Identifier actualId = identifier.withPath(path -> path.substring(ITEM_MODEL_PREFIX_LENGTH, path.length() - FILE_SUFFIX_LENGTH));
-                this.addModel(new ModelIdentifier(actualId, "inventory"));
+                this.loadInventoryVariantItemModel(actualId);
             }
         }
     }

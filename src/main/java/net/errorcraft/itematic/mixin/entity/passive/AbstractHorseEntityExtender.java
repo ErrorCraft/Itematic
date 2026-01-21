@@ -6,7 +6,6 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
@@ -149,17 +148,6 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
     )
     private boolean isOfForEnchantedGoldenAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.ENCHANTED_GOLDEN_APPLE);
-    }
-
-    @Redirect(
-        method = "saddle",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack newItemStackForSaddleUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.SADDLE);
     }
 
     @Redirect(

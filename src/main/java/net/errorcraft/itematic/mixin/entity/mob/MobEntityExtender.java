@@ -11,7 +11,6 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.SpawnEggItemComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.mob.MobEntity;
@@ -130,17 +129,6 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
     }
 
     @Redirect(
-        method = { "detachLeash", "readLeashNbt" },
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/mob/MobEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
-        )
-    )
-    private ItemEntity dropItemForLeadUseRegistryKey(MobEntity instance, ItemConvertible itemConvertible) {
-        return this.itematic$dropItem(ItemKeys.LEAD);
-    }
-
-    @Redirect(
         method = "initEquipment",
         at = @At(
             value = "INVOKE",
@@ -153,6 +141,7 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
         if (optionalEntry.isEmpty()) {
             return null;
         }
+
         item.set(optionalEntry.get());
         return optionalEntry.get().value();
     }
@@ -198,6 +187,7 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
         if (key == null) {
             return null;
         }
+
         return this.getWorld().itematic$createStack(key);
     }
 

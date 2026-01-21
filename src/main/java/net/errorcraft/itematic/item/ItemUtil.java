@@ -5395,7 +5395,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(500))
                     .with(ToolItemComponent.builder(2).build())
-                    .with(WeaponItemComponent.ofSmashing(1, 6.0d, 0.125d))
+                    .with(WeaponItemComponent.ofSmashing(1, 6.0d, 0.15d))
                     .with(EnchantableItemComponent.of(15))
                     .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_MACE))
                     .build()
