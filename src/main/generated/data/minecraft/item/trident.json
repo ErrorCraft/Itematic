@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "item.minecraft.trident"
   },
   "components": {

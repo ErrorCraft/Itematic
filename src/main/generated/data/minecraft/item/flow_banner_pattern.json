@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "rare",
     "tooltip": [
       {
         "color": "gray",
