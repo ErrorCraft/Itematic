@@ -35,6 +35,7 @@
       "net.errorcraft.itematic.gametest.item.FishingRodTestSuite",
       "net.errorcraft.itematic.gametest.item.FlowerPotItemTestSuite",
       "net.errorcraft.itematic.gametest.item.HoneyBottleTestSuite",
+      "net.errorcraft.itematic.gametest.item.LeadTestSuite",
       "net.errorcraft.itematic.gametest.item.SignTestSuite",
       "net.errorcraft.itematic.gametest.item.component.BlockItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.ConsumableItemComponentTestSuite",

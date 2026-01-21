@@ -34,6 +34,7 @@ public record SaddleItemComponent() implements ItemComponent<SaddleItemComponent
         if (this.trySaddle(target, user.getWorld(), stack, SoundCategory.NEUTRAL)) {
             return ActionResult.success(user.getWorld().isClient());
         }
+
         return ActionResult.PASS;
     }
 
@@ -41,14 +42,16 @@ public record SaddleItemComponent() implements ItemComponent<SaddleItemComponent
         if (!(target instanceof Saddleable saddleable)) {
             return false;
         }
+
         if (!target.isAlive() || saddleable.isSaddled() || !saddleable.canBeSaddled()) {
             return false;
         }
+
         if (!world.isClient()) {
-            saddleable.saddle(soundCategory);
+            saddleable.saddle(stack.split(1), soundCategory);
             target.getWorld().emitGameEvent(target, GameEvent.EQUIP, target.getPos());
-            stack.decrement(1);
         }
+
         return true;
     }
 }
