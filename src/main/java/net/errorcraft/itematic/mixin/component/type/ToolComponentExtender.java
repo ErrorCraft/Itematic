@@ -50,6 +50,7 @@ public class ToolComponentExtender implements ToolComponentAccess {
                 return rule.speed().get();
             }
         }
+
         return this.defaultMiningSpeed;
     }
 
@@ -60,6 +61,7 @@ public class ToolComponentExtender implements ToolComponentAccess {
                 return rule.correctForDrops().get();
             }
         }
+
         return false;
     }
 
@@ -204,13 +206,13 @@ public class ToolComponentExtender implements ToolComponentAccess {
             if (this.blocks != null && !state.isIn(this.blocks)) {
                 return false;
             }
+
             return this.extraFields.item()
                 .map(item -> item.test(stack))
                 .orElse(true);
         }
 
         @Unique
-        @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
         private static ToolComponent.Rule create(Optional<RegistryEntryList<Block>> blocks, Optional<Float> speed, Optional<Boolean> correctForDrops) {
             return new ToolComponent.Rule(blocks.orElse(null), speed, correctForDrops);
         }

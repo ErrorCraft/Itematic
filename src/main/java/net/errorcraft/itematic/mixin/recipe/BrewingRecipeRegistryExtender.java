@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.recipe.BrewingRecipeRegistryAccess;
@@ -34,6 +36,7 @@ import java.util.Optional;
 public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAccess {
     @Unique
     private List<BrewingRecipe<RegistryKey<Item>>> itemRecipes;
+
     @Unique
     private List<BrewingRecipe<RegistryEntry<Potion>>> potionRecipes;
 
@@ -57,6 +60,7 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
                 return true;
             }
         }
+
         return false;
     }
 
@@ -71,6 +75,7 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
                 return true;
             }
         }
+
         return false;
     }
 
@@ -85,18 +90,24 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
                 return true;
             }
         }
+
         return false;
     }
 
+    @Definition(
+        id = "iterator",
+        method = "Ljava/util/List;iterator()Ljava/util/Iterator;"
+    )
+    @Expression("? = ?.iterator()")
     @Inject(
         method = "hasPotionRecipe",
         at = @At(
-            value = "INVOKE_ASSIGN",
-            target = "Ljava/util/List;iterator()Ljava/util/Iterator;"
+            value = "MIXINEXTRAS:EXPRESSION",
+            shift = At.Shift.AFTER
         ),
         cancellable = true
     )
-    @SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "OptionalGetWithoutIsPresent"})
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     private void hasPotionRecipeUseItemKeys(ItemStack input, ItemStack ingredient, CallbackInfoReturnable<Boolean> info, @Local Optional<RegistryEntry<Potion>> optional) {
         RegistryEntry<Potion> potion = optional.get();
         for (BrewingRecipe<RegistryEntry<Potion>> recipe : this.potionRecipes) {
@@ -105,6 +116,7 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
                 return;
             }
         }
+
         info.setReturnValue(false);
     }
 
@@ -119,6 +131,7 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
                 return true;
             }
         }
+
         return false;
     }
 
@@ -217,22 +230,26 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
         if (input.isEmpty()) {
             return input;
         }
+
         Optional<RegistryEntry<Potion>> optionalPotion = input.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT)
             .potion();
         if (optionalPotion.isEmpty()) {
             return input;
         }
+
         RegistryEntry<Potion> potion = optionalPotion.get();
         for (BrewingRecipe<RegistryKey<Item>> recipe : this.itemRecipes) {
             if (input.itematic$isOf(recipe.input()) && ingredient.itematic$isOf(recipe.ingredient())) {
                 return PotionContentsComponentUtil.setPotion(world.itematic$createStack(recipe.output()), potion);
             }
         }
+
         for (BrewingRecipe<RegistryEntry<Potion>> recipe : this.potionRecipes) {
             if (recipe.input() == potion && ingredient.itematic$isOf(recipe.ingredient())) {
                 return PotionContentsComponentUtil.setPotion(new ItemStack(input.getRegistryEntry()), recipe.output());
             }
         }
+
         return input;
     }
 
@@ -240,6 +257,7 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
     public static class BuilderExtender implements BrewingRecipeRegistryBuilderAccess {
         @Unique
         private final List<BrewingRecipe<RegistryKey<Item>>> itemRecipes = new ArrayList<>();
+
         @Unique
         private final List<BrewingRecipe<RegistryEntry<Potion>>> potionRecipes = new ArrayList<>();
 

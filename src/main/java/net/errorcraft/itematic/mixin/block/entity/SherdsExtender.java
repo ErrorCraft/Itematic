@@ -28,7 +28,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 @Mixin(Sherds.class)
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public abstract class SherdsExtender implements SherdsAccess {
     @Shadow
     @Final
@@ -190,6 +189,7 @@ public abstract class SherdsExtender implements SherdsAccess {
         if (this.equals(DEFAULT)) {
             return nbt;
         }
+
         nbt.put("sherds", CODEC.encodeStart(lookup.getOps(NbtOps.INSTANCE), (Sherds)(Object) this).getOrThrow());
         return nbt;
     }

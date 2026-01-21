@@ -73,7 +73,6 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
 
     @Mixin(ItemPredicate.Builder.class)
     public static class BuilderExtender implements ItemPredicateBuilderAccess {
-        @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
         @Shadow
         private Optional<RegistryEntryList<Item>> item;
 
