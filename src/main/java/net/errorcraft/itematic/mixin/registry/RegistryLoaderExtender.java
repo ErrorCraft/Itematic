@@ -33,7 +33,8 @@ public class RegistryLoaderExtender {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/util/List;of([Ljava/lang/Object;)Ljava/util/List;"
+            target = "Ljava/util/List;of([Ljava/lang/Object;)Ljava/util/List;",
+            ordinal = 0
         )
     )
     private static List<RegistryLoader.Entry<?>> addCustomEntries(List<RegistryLoader.Entry<?>> original) {
@@ -53,7 +54,8 @@ public class RegistryLoaderExtender {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/util/List;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/List;"
+            target = "Ljava/util/List;of([Ljava/lang/Object;)Ljava/util/List;",
+            ordinal = 1
         )
     )
     private static List<RegistryLoader.Entry<?>> addCustomNetworkEntries(List<RegistryLoader.Entry<?>> original) {

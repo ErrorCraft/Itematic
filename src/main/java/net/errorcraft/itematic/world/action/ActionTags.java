@@ -11,6 +11,6 @@ public class ActionTags {
     private ActionTags() {}
 
     private static TagKey<ActionEntry> of(String id) {
-        return TagKey.of(ItematicRegistryKeys.ACTION, new Identifier(id));
+        return TagKey.of(ItematicRegistryKeys.ACTION, Identifier.ofVanilla(id));
     }
 }

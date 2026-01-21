@@ -4,12 +4,7 @@
     "translation_key": "item.minecraft.music_disc_pigstep"
   },
   "components": {
-    "minecraft:record": {
-      "description_key": "item.minecraft.music_disc_pigstep.desc",
-      "duration": 2980,
-      "output_signal": 13,
-      "sound_event": "minecraft:music_disc.pigstep"
-    },
+    "minecraft:playable_song": "minecraft:pigstep",
     "minecraft:stackable": 1
   }
 }

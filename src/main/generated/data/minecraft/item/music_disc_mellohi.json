@@ -4,12 +4,7 @@
     "translation_key": "item.minecraft.music_disc_mellohi"
   },
   "components": {
-    "minecraft:record": {
-      "description_key": "item.minecraft.music_disc_mellohi.desc",
-      "duration": 1920,
-      "output_signal": 7,
-      "sound_event": "minecraft:music_disc.mellohi"
-    },
+    "minecraft:playable_song": "minecraft:mellohi",
     "minecraft:stackable": 1
   }
 }

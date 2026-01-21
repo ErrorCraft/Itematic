@@ -4,12 +4,7 @@
     "translation_key": "item.minecraft.music_disc_otherside"
   },
   "components": {
-    "minecraft:record": {
-      "description_key": "item.minecraft.music_disc_otherside.desc",
-      "duration": 3900,
-      "output_signal": 14,
-      "sound_event": "minecraft:music_disc.otherside"
-    },
+    "minecraft:playable_song": "minecraft:otherside",
     "minecraft:stackable": 1
   }
 }

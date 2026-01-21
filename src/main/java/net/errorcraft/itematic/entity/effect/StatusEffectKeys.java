@@ -18,6 +18,6 @@ public class StatusEffectKeys {
     public static final RegistryKey<StatusEffect> SATURATION = of("saturation");
 
     private static RegistryKey<StatusEffect> of(String id) {
-        return RegistryKey.of(RegistryKeys.STATUS_EFFECT, new Identifier(id));
+        return RegistryKey.of(RegistryKeys.STATUS_EFFECT, Identifier.ofVanilla(id));
     }
 }

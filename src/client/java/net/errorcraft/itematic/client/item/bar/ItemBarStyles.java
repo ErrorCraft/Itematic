@@ -18,40 +18,40 @@ public class ItemBarStyles {
             ProgressProvider.DAMAGE,
             new HueShiftColorProvider(120, 0),
             List.of(
-                new Identifier("item_bar/progress/13"),
-                new Identifier("item_bar/progress/12"),
-                new Identifier("item_bar/progress/11"),
-                new Identifier("item_bar/progress/10"),
-                new Identifier("item_bar/progress/9"),
-                new Identifier("item_bar/progress/8"),
-                new Identifier("item_bar/progress/7"),
-                new Identifier("item_bar/progress/6"),
-                new Identifier("item_bar/progress/5"),
-                new Identifier("item_bar/progress/4"),
-                new Identifier("item_bar/progress/3"),
-                new Identifier("item_bar/progress/2"),
-                new Identifier("item_bar/progress/1"),
-                new Identifier("item_bar/progress/0")
+                Identifier.ofVanilla("item_bar/progress/13"),
+                Identifier.ofVanilla("item_bar/progress/12"),
+                Identifier.ofVanilla("item_bar/progress/11"),
+                Identifier.ofVanilla("item_bar/progress/10"),
+                Identifier.ofVanilla("item_bar/progress/9"),
+                Identifier.ofVanilla("item_bar/progress/8"),
+                Identifier.ofVanilla("item_bar/progress/7"),
+                Identifier.ofVanilla("item_bar/progress/6"),
+                Identifier.ofVanilla("item_bar/progress/5"),
+                Identifier.ofVanilla("item_bar/progress/4"),
+                Identifier.ofVanilla("item_bar/progress/3"),
+                Identifier.ofVanilla("item_bar/progress/2"),
+                Identifier.ofVanilla("item_bar/progress/1"),
+                Identifier.ofVanilla("item_bar/progress/0")
             )
         ));
         provider.accept(ItemBarStyleKeys.BUNDLE, new ItemBarStyle(
             ProgressProvider.ITEM_HOLDER_OCCUPANCY,
             new ConstantColorProvider(BundleItemAccessor.itemBarColor()),
             List.of(
-                new Identifier("item_bar/progress/0"),
-                new Identifier("item_bar/progress/0"),
-                new Identifier("item_bar/progress/1"),
-                new Identifier("item_bar/progress/2"),
-                new Identifier("item_bar/progress/3"),
-                new Identifier("item_bar/progress/4"),
-                new Identifier("item_bar/progress/5"),
-                new Identifier("item_bar/progress/6"),
-                new Identifier("item_bar/progress/7"),
-                new Identifier("item_bar/progress/8"),
-                new Identifier("item_bar/progress/9"),
-                new Identifier("item_bar/progress/10"),
-                new Identifier("item_bar/progress/11"),
-                new Identifier("item_bar/progress/12")
+                Identifier.ofVanilla("item_bar/progress/0"),
+                Identifier.ofVanilla("item_bar/progress/0"),
+                Identifier.ofVanilla("item_bar/progress/1"),
+                Identifier.ofVanilla("item_bar/progress/2"),
+                Identifier.ofVanilla("item_bar/progress/3"),
+                Identifier.ofVanilla("item_bar/progress/4"),
+                Identifier.ofVanilla("item_bar/progress/5"),
+                Identifier.ofVanilla("item_bar/progress/6"),
+                Identifier.ofVanilla("item_bar/progress/7"),
+                Identifier.ofVanilla("item_bar/progress/8"),
+                Identifier.ofVanilla("item_bar/progress/9"),
+                Identifier.ofVanilla("item_bar/progress/10"),
+                Identifier.ofVanilla("item_bar/progress/11"),
+                Identifier.ofVanilla("item_bar/progress/12")
             )
         ));
     }

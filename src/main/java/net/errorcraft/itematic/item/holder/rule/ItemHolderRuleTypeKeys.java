@@ -12,6 +12,6 @@ public class ItemHolderRuleTypeKeys {
     private ItemHolderRuleTypeKeys() {}
 
     private static RegistryKey<ItemHolderRuleType<?>> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.ITEM_HOLDER_RULE_TYPE, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.ITEM_HOLDER_RULE_TYPE, Identifier.ofVanilla(id));
     }
 }

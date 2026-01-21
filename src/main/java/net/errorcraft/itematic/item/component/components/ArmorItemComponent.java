@@ -84,6 +84,7 @@ public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional
         if (!this.material.hasKeyAndValue()) {
             return;
         }
+
         components.get(ItemComponentTypes.EQUIPMENT)
             .ifPresent(c -> this.material.value().addAttributes(builder, c.slot()));
     }

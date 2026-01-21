@@ -1342,6 +1342,6 @@ public class ItemKeys {
 
 
     private static RegistryKey<Item> register(String name) {
-        return RegistryKey.of(RegistryKeys.ITEM, new Identifier(name));
+        return RegistryKey.of(RegistryKeys.ITEM, Identifier.ofVanilla(name));
     }
 }

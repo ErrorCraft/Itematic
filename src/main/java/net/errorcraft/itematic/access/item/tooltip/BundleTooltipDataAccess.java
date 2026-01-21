@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.access.client.item;
+package net.errorcraft.itematic.access.item.tooltip;
 
 import org.apache.commons.lang3.math.Fraction;
 

@@ -11,6 +11,6 @@ public class PotionKeys {
     private PotionKeys() {}
 
     private static RegistryKey<Potion> of(String id) {
-        return RegistryKey.of(RegistryKeys.POTION, new Identifier(id));
+        return RegistryKey.of(RegistryKeys.POTION, Identifier.ofVanilla(id));
     }
 }

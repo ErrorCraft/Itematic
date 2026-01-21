@@ -4,12 +4,7 @@
     "translation_key": "item.minecraft.music_disc_precipice"
   },
   "components": {
-    "minecraft:record": {
-      "description_key": "item.minecraft.music_disc_precipice.desc",
-      "duration": 5980,
-      "output_signal": 13,
-      "sound_event": "minecraft:music_disc.precipice"
-    },
+    "minecraft:playable_song": "minecraft:precipice",
     "minecraft:stackable": 1
   }
 }

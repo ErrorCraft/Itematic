@@ -4,12 +4,7 @@
     "translation_key": "item.minecraft.music_disc_chirp"
   },
   "components": {
-    "minecraft:record": {
-      "description_key": "item.minecraft.music_disc_chirp.desc",
-      "duration": 3700,
-      "output_signal": 4,
-      "sound_event": "minecraft:music_disc.chirp"
-    },
+    "minecraft:playable_song": "minecraft:chirp",
     "minecraft:stackable": 1
   }
 }

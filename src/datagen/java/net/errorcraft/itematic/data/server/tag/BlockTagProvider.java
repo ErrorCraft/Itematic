@@ -24,10 +24,6 @@ public class BlockTagProvider extends FabricTagProvider<Block> {
             .add(BlockKeys.GRASS_BLOCK)
             .add(BlockKeys.DIRT)
             .add(BlockKeys.DIRT_PATH);
-        this.getOrCreateTagBuilder(ItematicBlockTags.AIR)
-            .add(BlockKeys.AIR)
-            .add(BlockKeys.CAVE_AIR)
-            .add(BlockKeys.VOID_AIR);
         this.getOrCreateTagBuilder(ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)
             .add(BlockKeys.GRASS_BLOCK)
             .add(BlockKeys.DIRT)

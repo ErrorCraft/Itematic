@@ -194,7 +194,7 @@ public class DispenseBehaviors {
     }
 
     private static RegistryKey<DispenseBehavior> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.DISPENSE_BEHAVIOR, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.DISPENSE_BEHAVIOR, Identifier.ofVanilla(id));
     }
     
     private static PassingSequenceHandler.Builder shootProjectile(float power, float uncertainty) {

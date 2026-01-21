@@ -14,6 +14,6 @@ public class SequenceHandlerTypeKeys {
     private SequenceHandlerTypeKeys() {}
 
     private static RegistryKey<SequenceHandlerType<?>> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.SEQUENCE_HANDLER_TYPE, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.SEQUENCE_HANDLER_TYPE, Identifier.ofVanilla(id));
     }
 }

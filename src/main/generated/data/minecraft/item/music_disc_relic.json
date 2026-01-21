@@ -4,12 +4,7 @@
     "translation_key": "item.minecraft.music_disc_relic"
   },
   "components": {
-    "minecraft:record": {
-      "description_key": "item.minecraft.music_disc_relic.desc",
-      "duration": 4360,
-      "output_signal": 14,
-      "sound_event": "minecraft:music_disc.relic"
-    },
+    "minecraft:playable_song": "minecraft:relic",
     "minecraft:stackable": 1
   }
 }

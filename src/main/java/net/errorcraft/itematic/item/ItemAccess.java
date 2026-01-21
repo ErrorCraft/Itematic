@@ -30,10 +30,6 @@ public class ItemAccess {
         return this.registry.getEntry(id);
     }
 
-    public Item get(int id) {
-        return this.registry.get(id);
-    }
-
     public Stream<RegistryEntry.Reference<Item>> streamEntries() {
         return this.registry.streamEntries();
     }

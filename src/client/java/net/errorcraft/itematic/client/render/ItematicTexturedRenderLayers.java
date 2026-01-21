@@ -11,8 +11,8 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class ItematicTexturedRenderLayers {
-    public static final Identifier ARMOR_MATERIALS_ID = new Identifier("armor_materials");
-    public static final Identifier ARMOR_MATERIALS_ATLAS_TEXTURE = new Identifier("textures/atlas/armor_materials.png");
+    public static final Identifier ARMOR_MATERIALS_ID = Identifier.ofVanilla("armor_materials");
+    public static final Identifier ARMOR_MATERIALS_ATLAS_TEXTURE = Identifier.ofVanilla("textures/atlas/armor_materials.png");
     public static final RenderLayer ARMOR_MATERIAL_RENDER_LAYER = RenderLayer.getArmorCutoutNoCull(ARMOR_MATERIALS_ATLAS_TEXTURE);
 
     private ItematicTexturedRenderLayers() {}
@@ -21,8 +21,8 @@ public class ItematicTexturedRenderLayers {
         provider.accept(ARMOR_MATERIALS_ID, List.of(
             new DirectoryAtlasSource("models/armor", "models/armor/"),
             new DirectoryAtlasSource("entity/horse/armor", "entity/horse/armor/"),
-            new SingleAtlasSource(new Identifier("entity/wolf/wolf_armor"), Optional.empty()),
-            new SingleAtlasSource(new Identifier("entity/wolf/wolf_armor_overlay"), Optional.empty())
+            new SingleAtlasSource(Identifier.ofVanilla("entity/wolf/wolf_armor"), Optional.empty()),
+            new SingleAtlasSource(Identifier.ofVanilla("entity/wolf/wolf_armor_overlay"), Optional.empty())
         ));
     }
 }

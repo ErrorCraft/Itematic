@@ -13,6 +13,6 @@ public class FluidKeys {
     private FluidKeys() {}
 
     private static RegistryKey<Fluid> of(String id) {
-        return RegistryKey.of(RegistryKeys.FLUID, new Identifier(id));
+        return RegistryKey.of(RegistryKeys.FLUID, Identifier.ofVanilla(id));
     }
 }

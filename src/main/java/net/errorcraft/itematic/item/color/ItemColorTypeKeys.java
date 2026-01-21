@@ -15,6 +15,6 @@ public class ItemColorTypeKeys {
     public static final RegistryKey<ItemColorType<?>> MAP = of("map");
 
     private static RegistryKey<ItemColorType<?>> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.ITEM_COLOR_TYPE, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.ITEM_COLOR_TYPE, Identifier.ofVanilla(id));
     }
 }
