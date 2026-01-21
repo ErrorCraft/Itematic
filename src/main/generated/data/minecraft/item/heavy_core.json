@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "block.minecraft.heavy_core"
   },
   "components": {
