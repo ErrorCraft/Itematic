@@ -15,8 +15,8 @@ public interface SherdsAccessor {
     static Sherds create(List<Optional<RegistryEntry<Item>>> sherds) {
         throw new AssertionError();
     }
+
     @Invoker("<init>")
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     static Sherds create(Optional<RegistryEntry<Item>> back, Optional<RegistryEntry<Item>> left, Optional<RegistryEntry<Item>> right, Optional<RegistryEntry<Item>> front) {
         throw new AssertionError();
     }

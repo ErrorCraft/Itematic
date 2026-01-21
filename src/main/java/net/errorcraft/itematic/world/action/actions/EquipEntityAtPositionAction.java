@@ -37,14 +37,16 @@ public record EquipEntityAtPositionAction(ActionContextParameter position) imple
         if (entities.isEmpty()) {
             return false;
         }
+
         LivingEntity target = entities.getFirst();
-        EquipmentSlot equipmentSlot = MobEntity.getPreferredEquipmentSlot(equipment);
+        EquipmentSlot equipmentSlot = target.getPreferredEquipmentSlot(equipment);
         ItemStack equippedStack = equipment.copyWithCount(1);
         target.equipStack(equipmentSlot, equippedStack);
         if (target instanceof MobEntity mobEntity) {
             mobEntity.setEquipmentDropChance(equipmentSlot, 2.0f);
             mobEntity.setPersistent();
         }
+
         return true;
     }
 }

@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.Item;
@@ -174,7 +175,7 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
 
     @Override
     public boolean canEquip(ItemStack stack) {
-        return this.isTame() && this.hasArmorSlot() && this.isHorseArmor(stack) && !this.isWearingBodyArmor();
+        return this.isTame() && this.canUseSlot(EquipmentSlot.BODY) && this.isHorseArmor(stack) && !this.isWearingBodyArmor();
     }
 
     @Mixin(targets = "net/minecraft/entity/passive/AbstractHorseEntity$2")
