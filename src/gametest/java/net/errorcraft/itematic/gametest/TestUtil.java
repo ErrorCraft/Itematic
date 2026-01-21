@@ -81,11 +81,16 @@ public class TestUtil {
     }
 
     public static <T extends Entity> T createEntity(TestContext context, EntityType<T> type, Consumer<T> initializer) {
+        return createEntityAt(context, type, BlockPos.ORIGIN, initializer);
+    }
+
+    public static <T extends Entity> T createEntityAt(TestContext context, EntityType<T> type, BlockPos pos, Consumer<T> initializer) {
         T entity = type.create(context.getWorld());
         if (entity == null) {
             throw new GameTestException("Entity is null");
         }
 
+        setEntityPos(context, entity, pos);
         initializer.accept(entity);
         return entity;
     }

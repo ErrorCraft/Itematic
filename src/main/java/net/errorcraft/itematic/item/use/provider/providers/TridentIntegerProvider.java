@@ -36,7 +36,7 @@ public class TridentIntegerProvider implements IntegerProvider {
     }
 
     private static boolean mayStartUsing(ItemStack stack, LivingEntity user) {
-        if (EnchantmentHelper.getTridentSpinAttackStrength(user) > 0.0f && !user.isTouchingWaterOrRain()) {
+        if (EnchantmentHelper.getTridentSpinAttackStrength(stack, user) > 0.0f && !user.isTouchingWaterOrRain()) {
             return false;
         }
 

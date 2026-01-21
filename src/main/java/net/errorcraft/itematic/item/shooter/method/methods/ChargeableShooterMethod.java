@@ -12,7 +12,6 @@ import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.item.RangedWeaponItemAccessor;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.minecraft.SharedConstants;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -94,7 +93,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Load
             return;
         }
 
-        int chargeTime = getChargeTime(stack, user);
+        int chargeTime = CrossbowItem.getPullTime(stack, user);
         if (usedTicks >= chargeTime) {
             return;
         }
@@ -112,7 +111,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Load
 
     @Override
     public void stop(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks) {
-        if (usedTicks < getChargeTime(stack, user)) {
+        if (usedTicks < CrossbowItem.getPullTime(stack, user)) {
             return;
         }
 
@@ -141,12 +140,12 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Load
             return OptionalInt.empty();
         }
 
-        return OptionalInt.of(getChargeTime(stack, user) + EXTRA_USE_TIME);
+        return OptionalInt.of(CrossbowItem.getPullTime(stack, user) + EXTRA_USE_TIME);
     }
 
     @Override
     public float pullProgress(ItemStack stack, LivingEntity user, int usedTicks) {
-        return ((float)usedTicks) / getChargeTime(stack, user);
+        return ((float)usedTicks) / CrossbowItem.getPullTime(stack, user);
     }
 
     public void shoot(ShooterItemComponent shooter, World world, LivingEntity user, Hand hand, ItemStack stack, float power, float divergence, @Nullable LivingEntity livingEntity) {
@@ -164,16 +163,6 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Load
             Criteria.SHOT_CROSSBOW.trigger(player, stack);
             player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         }
-    }
-
-    public static int getChargeTime(ItemStack stack, LivingEntity user) {
-        Float defaultChargeTime = stack.get(ItematicDataComponentTypes.SHOOTER_DEFAULT_CHARGE_TIME);
-        if (defaultChargeTime == null) {
-            return 0;
-        }
-
-        float chargeTime = EnchantmentHelper.getCrossbowChargeTime(user, defaultChargeTime);
-        return MathHelper.floor(chargeTime * SharedConstants.TICKS_PER_SECOND);
     }
 
     private static int getChargeTimeAt(int chargeTime, float progress) {

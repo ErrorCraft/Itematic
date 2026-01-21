@@ -28,7 +28,7 @@ public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implemen
         ItemStack stack = context.stack();
         LivingEntity user = context.livingEntity(ActionContextParameter.THIS).orElse(null);
         float spinAttackStrength = user != null ?
-            EnchantmentHelper.getTridentSpinAttackStrength(user) :
+            EnchantmentHelper.getTridentSpinAttackStrength(stack, user) :
             0.0f;
         if (this.preventSpawnFromRiptide && spinAttackStrength > 0.0f) {
             return null;

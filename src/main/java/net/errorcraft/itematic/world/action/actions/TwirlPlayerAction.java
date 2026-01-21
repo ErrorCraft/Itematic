@@ -37,7 +37,8 @@ public record TwirlPlayerAction() implements Action<TwirlPlayerAction> {
             return false;
         }
 
-        float spinAttackStrength = EnchantmentHelper.getTridentSpinAttackStrength(player);
+        ItemStack stack = context.stack();
+        float spinAttackStrength = EnchantmentHelper.getTridentSpinAttackStrength(stack, player);
         if (spinAttackStrength <= 0.0f) {
             return false;
         }
@@ -46,7 +47,7 @@ public record TwirlPlayerAction() implements Action<TwirlPlayerAction> {
             serverPlayer.networkHandler.sendPacket(new TwirlS2CPacket(spinAttackStrength));
         }
 
-        execute(spinAttackStrength, player, context.world(), context.stack());
+        execute(spinAttackStrength, player, context.world(), stack);
         return true;
     }
 
