@@ -40,7 +40,7 @@ public class SmithingTemplates {
         RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
         RegistryEntryLookup<ArmorTrimPattern> trimPatterns = registerable.getRegistryLookup(RegistryKeys.TRIM_PATTERN);
 
-        registerable.register(NETHERITE_UPGRADE, new ItemUpgradeSmithingTemplate(items.getOrThrow(ItemKeys.NETHERITE_INGOT), new Identifier("netherite_upgrade")));
+        registerable.register(NETHERITE_UPGRADE, new ItemUpgradeSmithingTemplate(items.getOrThrow(ItemKeys.NETHERITE_INGOT), Identifier.ofVanilla("netherite_upgrade")));
         registerable.register(BOLT_PATTERN, new TrimPatternSmithingTemplate(trimPatterns.getOrThrow(ArmorTrimPatterns.BOLT)));
         registerable.register(COAST_PATTERN, new TrimPatternSmithingTemplate(trimPatterns.getOrThrow(ArmorTrimPatterns.COAST)));
         registerable.register(DUNE_PATTERN, new TrimPatternSmithingTemplate(trimPatterns.getOrThrow(ArmorTrimPatterns.DUNE)));
@@ -62,6 +62,6 @@ public class SmithingTemplates {
     }
 
     private static RegistryKey<SmithingTemplate> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.SMITHING_TEMPLATE, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.SMITHING_TEMPLATE, Identifier.ofVanilla(id));
     }
 }

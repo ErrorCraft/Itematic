@@ -163,6 +163,6 @@ public class ItematicItemTags {
     private ItematicItemTags() {}
 
     private static TagKey<Item> of(String id) {
-        return TagKey.of(RegistryKeys.ITEM, new Identifier(id));
+        return TagKey.of(RegistryKeys.ITEM, Identifier.ofVanilla(id));
     }
 }

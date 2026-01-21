@@ -141,9 +141,6 @@
       "net/minecraft/class_5289\u0024class_5290": [
         "net/errorcraft/itematic/access/client/gui/screen/GameModeSelectionScreenGameModeSelectionAccess"
       ],
-      "net/minecraft/class_5631": [
-        "net/errorcraft/itematic/access/client/item/BundleTooltipDataAccess"
-      ],
       "net/minecraft/class_6880": [
         "net/errorcraft/itematic/access/registry/entry/RegistryEntryAccess<TT;>"
       ],

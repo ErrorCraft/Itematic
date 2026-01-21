@@ -4,12 +4,7 @@
     "translation_key": "item.minecraft.music_disc_far"
   },
   "components": {
-    "minecraft:record": {
-      "description_key": "item.minecraft.music_disc_far.desc",
-      "duration": 3480,
-      "output_signal": 5,
-      "sound_event": "minecraft:music_disc.far"
-    },
+    "minecraft:playable_song": "minecraft:far",
     "minecraft:stackable": 1
   }
 }

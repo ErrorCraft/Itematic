@@ -9,6 +9,6 @@ public class ColorProviderTypeKeys {
     private ColorProviderTypeKeys() {}
 
     private static Identifier of(String id) {
-        return new Identifier(id);
+        return Identifier.ofVanilla(id);
     }
 }

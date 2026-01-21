@@ -824,6 +824,6 @@ public class Trades {
     }
 
     private static RegistryKey<Trade> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.TRADE, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.TRADE, Identifier.ofVanilla(id));
     }
 }

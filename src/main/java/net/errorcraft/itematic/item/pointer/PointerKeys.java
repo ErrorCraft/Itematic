@@ -11,6 +11,6 @@ public class PointerKeys {
     private PointerKeys() {}
 
     private static RegistryKey<Pointer> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.POINTER, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.POINTER, Identifier.ofVanilla(id));
     }
 }

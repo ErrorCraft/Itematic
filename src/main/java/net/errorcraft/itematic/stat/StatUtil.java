@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 public class StatUtil {
     public static final Codec<Stat<?>> CODEC = Registries.STAT_TYPE.getCodec()
         .dispatch(Stat::getType, StatType::itematic$codec);
-    private static final Identifier UNKNOWN = new Identifier("unknown");
+    private static final Identifier UNKNOWN = Identifier.ofVanilla("unknown");
 
     private StatUtil() {}
 

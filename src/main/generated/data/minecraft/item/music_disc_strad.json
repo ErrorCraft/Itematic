@@ -4,12 +4,7 @@
     "translation_key": "item.minecraft.music_disc_strad"
   },
   "components": {
-    "minecraft:record": {
-      "description_key": "item.minecraft.music_disc_strad.desc",
-      "duration": 3760,
-      "output_signal": 9,
-      "sound_event": "minecraft:music_disc.strad"
-    },
+    "minecraft:playable_song": "minecraft:strad",
     "minecraft:stackable": 1
   }
 }

@@ -11,6 +11,6 @@ public class SmithingTemplateTypeKeys {
     private SmithingTemplateTypeKeys() {}
 
     private static RegistryKey<SmithingTemplateType<?>> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.SMITHING_TEMPLATE_TYPE, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.SMITHING_TEMPLATE_TYPE, Identifier.ofVanilla(id));
     }
 }

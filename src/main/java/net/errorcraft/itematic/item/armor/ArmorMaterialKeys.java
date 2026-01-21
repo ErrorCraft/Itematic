@@ -17,6 +17,6 @@ public class ArmorMaterialKeys {
     private ArmorMaterialKeys() {}
 
     private static RegistryKey<ArmorMaterial> register(String name) {
-        return RegistryKey.of(ItematicRegistryKeys.ARMOR_MATERIAL, new Identifier(name));
+        return RegistryKey.of(ItematicRegistryKeys.ARMOR_MATERIAL, Identifier.ofVanilla(name));
     }
 }

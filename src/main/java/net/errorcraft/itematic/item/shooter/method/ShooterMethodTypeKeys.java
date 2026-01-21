@@ -11,6 +11,6 @@ public class ShooterMethodTypeKeys {
     private ShooterMethodTypeKeys() {}
 
     private static RegistryKey<ShooterMethodType<?>> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.SHOOTER_METHOD_TYPE, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.SHOOTER_METHOD_TYPE, Identifier.ofVanilla(id));
     }
 }

@@ -27,6 +27,6 @@ public class ModelOverrideKeys {
     public static final RegistryKey<ModelOverride> LEVEL = of("level");
 
     private static RegistryKey<ModelOverride> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.MODEL_OVERRIDE, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.MODEL_OVERRIDE, Identifier.ofVanilla(id));
     }
 }

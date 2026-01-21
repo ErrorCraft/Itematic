@@ -11,6 +11,6 @@ public class ItematicEntityTypeTags {
     private ItematicEntityTypeTags() {}
 
     private static TagKey<EntityType<?>> of(String id) {
-        return TagKey.of(RegistryKeys.ENTITY_TYPE, new Identifier(id));
+        return TagKey.of(RegistryKeys.ENTITY_TYPE, Identifier.ofVanilla(id));
     }
 }

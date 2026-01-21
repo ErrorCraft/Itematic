@@ -20,6 +20,6 @@ public class ItemGroupEntryProviderTags {
     private ItemGroupEntryProviderTags() {}
 
     private static TagKey<ItemGroupEntryProvider> of(String id) {
-        return TagKey.of(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, new Identifier(id));
+        return TagKey.of(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, Identifier.ofVanilla(id));
     }
 }

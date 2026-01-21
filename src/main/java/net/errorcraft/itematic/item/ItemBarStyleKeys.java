@@ -9,6 +9,6 @@ public class ItemBarStyleKeys {
     private ItemBarStyleKeys() {}
 
     private static Identifier of(String name) {
-        return new Identifier(name);
+        return Identifier.ofVanilla(name);
     }
 }

@@ -9,3 +9,4 @@ accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsList
 accessible    class    net/minecraft/client/gui/screen/world/CustomizeFlatLevelScreen$SuperflatLayersListWidget
 
 inject-interface    net/minecraft/util/DyeColor    net/errorcraft/itematic/access/util/DyeColorAccess
+inject-interface    net/minecraft/item/tooltip/BundleTooltipData    net/errorcraft/itematic/access/item/tooltip/BundleTooltipDataAccess

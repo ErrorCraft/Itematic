@@ -4,12 +4,7 @@
     "translation_key": "item.minecraft.music_disc_11"
   },
   "components": {
-    "minecraft:record": {
-      "description_key": "item.minecraft.music_disc_11.desc",
-      "duration": 1420,
-      "output_signal": 11,
-      "sound_event": "minecraft:music_disc.11"
-    },
+    "minecraft:playable_song": "minecraft:11",
     "minecraft:stackable": 1
   }
 }

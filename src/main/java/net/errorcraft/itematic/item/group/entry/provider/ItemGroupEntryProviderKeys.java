@@ -20,6 +20,6 @@ public class ItemGroupEntryProviderKeys {
     private ItemGroupEntryProviderKeys() {}
 
     private static RegistryKey<ItemGroupEntryProvider> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, new Identifier(id));
+        return RegistryKey.of(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, Identifier.ofVanilla(id));
     }
 }
