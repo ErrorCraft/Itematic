@@ -21,7 +21,7 @@ public record DisplayParticleAction(ActionContextParameter position, ParticleEff
     public static final MapCodec<DisplayParticleAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ActionContextParameter.CODEC.fieldOf("position").forGetter(DisplayParticleAction::position),
         ParticleTypes.TYPE_CODEC.fieldOf("particle").forGetter(DisplayParticleAction::particle),
-        Codecs.NONNEGATIVE_INT.fieldOf("count").forGetter(DisplayParticleAction::count),
+        Codecs.NON_NEGATIVE_INT.fieldOf("count").forGetter(DisplayParticleAction::count),
         Vec3dProvider.CODEC.optionalFieldOf("offset", Vec3dProvider.ZERO).forGetter(DisplayParticleAction::offset),
         Vec3dProvider.CODEC.fieldOf("delta").forGetter(DisplayParticleAction::delta),
         ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("speed").forGetter(DisplayParticleAction::speed),

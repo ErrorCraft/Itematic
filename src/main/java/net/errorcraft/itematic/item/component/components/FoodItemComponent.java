@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public record FoodItemComponent(int nutrition, float saturation, boolean alwaysEdible, List<FoodComponent.StatusEffectEntry> effects) implements ItemComponent<FoodItemComponent> {
     public static final Codec<FoodItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codecs.NONNEGATIVE_INT.fieldOf("nutrition").forGetter(FoodItemComponent::nutrition),
+        Codecs.NON_NEGATIVE_INT.fieldOf("nutrition").forGetter(FoodItemComponent::nutrition),
         Codec.FLOAT.fieldOf("saturation").forGetter(FoodItemComponent::saturation),
         Codec.BOOL.optionalFieldOf("always_edible", false).forGetter(FoodItemComponent::alwaysEdible),
         FoodComponent.StatusEffectEntry.CODEC.listOf().optionalFieldOf("effects", List.of()).forGetter(FoodItemComponent::effects)

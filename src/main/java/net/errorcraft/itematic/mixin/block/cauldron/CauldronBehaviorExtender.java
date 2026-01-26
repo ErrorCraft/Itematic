@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 @Mixin(CauldronBehavior.class)
 public interface CauldronBehaviorExtender {
     @Redirect(
-        method = "method_32215",
+        method = "cleanShulkerBox",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/block/Block;getBlockFromItem(Lnet/minecraft/item/Item;)Lnet/minecraft/block/Block;"
@@ -44,7 +44,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @Redirect(
-        method = "method_32215",
+        method = "cleanShulkerBox",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
@@ -55,7 +55,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @Redirect(
-        method = "method_32209",
+        method = "cleanArmor",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
@@ -66,7 +66,10 @@ public interface CauldronBehaviorExtender {
     }
 
     @Redirect(
-        method = { "method_32219", "method_32222" },
+        method = {
+            "method_32219",
+            "method_32222"
+        },
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
@@ -1020,7 +1023,13 @@ public interface CauldronBehaviorExtender {
     }
 
     @Redirect(
-        method = { "method_32219", "method_32220", "method_32222", "emptyCauldron", "fillCauldron" },
+        method = {
+            "method_32219",
+            "method_32220",
+            "method_32222",
+            "emptyCauldron",
+            "fillCauldron"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"

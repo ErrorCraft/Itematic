@@ -25,7 +25,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
@@ -64,21 +63,25 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
         if (!this.swappable) {
             return ActionResult.PASS;
         }
-        TypedActionResult<ItemStack> result = this.equipAndSwap(stack.getItem(), world, user, hand);
-        resultStackConsumer.set(result.getValue());
+
+        ActionResult result = this.equipAndSwap(stack.getItem(), world, user, hand);
+        if (result instanceof ActionResult.Success success) {
+            resultStackConsumer.set(success.getNewHandStack());
+        }
+
         if (world instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, hand)
                 .entityPosition(ActionContextParameter.THIS, user)
                 .build();
             stack.itematic$invokeEvent(ItemEvents.EQUIP_ITEM, context);
         }
-        if (result.getResult() == ActionResult.FAIL) {
+        if (result == ActionResult.FAIL) {
             return ActionResult.PASS;
         }
-        if (result.getResult().isAccepted() && !world.isClient()) {
+        if (result.isAccepted() && !world.isClient()) {
             user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         }
-        return result.getResult();
+        return result;
     }
 
     @Override

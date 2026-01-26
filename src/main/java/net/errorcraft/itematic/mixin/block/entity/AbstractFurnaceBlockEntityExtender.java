@@ -6,6 +6,7 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.FuelItemComponent;
 import net.errorcraft.itematic.item.component.components.RecipeRemainderItemComponent;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.item.FuelRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -13,30 +14,24 @@ import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKeys;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
 public class AbstractFurnaceBlockEntityExtender {
-    @Inject(
+    @Redirect(
         method = "getFuelTime",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
-        ),
-        cancellable = true
+            target = "Lnet/minecraft/item/FuelRegistry;getFuelTicks(Lnet/minecraft/item/ItemStack;)I"
+        )
     )
-    public void getFuelTimeUseItemComponent(ItemStack fuel, CallbackInfoReturnable<Integer> info) {
-        info.setReturnValue(fuel.itematic$getComponent(ItemComponentTypes.FUEL).map(FuelItemComponent::ticks).orElse(0));
-    }
-
-    @Inject(
-        method = "canUseAsFuel",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    private static void canUseAsFuelUseItemComponentCheck(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
-        info.setReturnValue(stack.itematic$hasComponent(ItemComponentTypes.FUEL));
+    private int getFuelTicksUseDataComponent(FuelRegistry instance, ItemStack item) {
+        return item.itematic$getComponent(ItemComponentTypes.FUEL)
+            .map(FuelItemComponent::ticks)
+            .orElse(0);
     }
 
     @Redirect(

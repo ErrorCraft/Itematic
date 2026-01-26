@@ -21,7 +21,7 @@ public abstract class RaidExtender {
     public abstract World getWorld();
 
     @Redirect(
-        method = "getOminousBanner",
+        method = "createOminousBanner",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
@@ -32,7 +32,7 @@ public abstract class RaidExtender {
     }
 
     @Inject(
-        method = "getOminousBanner",
+        method = "createOminousBanner",
         at = @At(
             value = "NEW",
             target = "()Lnet/minecraft/component/type/BannerPatternsComponent$Builder;"
@@ -49,10 +49,10 @@ public abstract class RaidExtender {
         method = "setWaveCaptain",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/village/raid/Raid;getOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/village/raid/Raid;createOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private void getOminousBannerSetDataDrivenItemStack(int wave, RaiderEntity entity, CallbackInfo info) {
+    private void createOminousBannerSetDataDrivenItemStack(int wave, RaiderEntity entity, CallbackInfo info) {
         RaidUtil.createOminousBanner(this.getWorld());
     }
 }

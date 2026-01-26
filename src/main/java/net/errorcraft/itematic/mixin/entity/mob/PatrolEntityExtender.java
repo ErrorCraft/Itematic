@@ -17,10 +17,10 @@ public class PatrolEntityExtender {
         method = "initialize",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/village/raid/Raid;getOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/village/raid/Raid;createOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private void getOminousBannerSetDataDrivenItemStack(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, CallbackInfoReturnable<EntityData> info) {
+    private void createOminousBannerSetDataDrivenItemStack(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, CallbackInfoReturnable<EntityData> info) {
         RaidUtil.createOminousBanner(world);
     }
 }

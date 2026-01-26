@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int damagePerUse) implements ItemComponent<SteeringItemComponent> {
     public static final Codec<SteeringItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(RegistryKeys.ENTITY_TYPE).fieldOf("target").forGetter(SteeringItemComponent::target),
-        Codecs.NONNEGATIVE_INT.optionalFieldOf("damage_per_use", 1).forGetter(SteeringItemComponent::damagePerUse)
+        Codecs.NON_NEGATIVE_INT.optionalFieldOf("damage_per_use", 1).forGetter(SteeringItemComponent::damagePerUse)
     ).apply(instance, SteeringItemComponent::new));
 
     @Override

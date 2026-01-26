@@ -220,17 +220,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Redirect(
-        method = "getVisibilityBoundingBox",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForDragonHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.DRAGON_HEAD);
-    }
-
-    @Redirect(
         method = "tryUseTotem",
         at = @At(
             value = "INVOKE",
@@ -403,6 +392,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         }
     }
 
+    // todo
     @Redirect(
         method = "tickFallFlying",
         at = @At(
@@ -492,7 +482,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public double itematic$getAttackDamage() {
         Double baseAttackDamage = this.getBaseAttackDamage(this.getMainHandStack());
         return ((AttributeContainerAccess) this.getAttributes())
-            .itematic$getValue(EntityAttributes.GENERIC_ATTACK_DAMAGE, baseAttackDamage);
+            .itematic$getValue(EntityAttributes.ATTACK_DAMAGE, baseAttackDamage);
     }
 
     @Unique
@@ -508,7 +498,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
         double damage = weaponAttackDamage.getDamage(stack, this);
         if (weaponAttackDamage.shouldAddBase(stack, this)) {
-            return damage + this.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+            return damage + this.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE);
         }
 
         return damage;

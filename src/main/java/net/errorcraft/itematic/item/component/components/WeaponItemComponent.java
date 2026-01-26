@@ -30,7 +30,7 @@ import java.util.List;
 
 public record WeaponItemComponent(int damagePerHit, WeaponAttackDamageDataComponent attackDamage, double attackSpeed, boolean maySmash) implements ItemComponent<WeaponItemComponent> {
     public static final Codec<WeaponItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codecs.NONNEGATIVE_INT.optionalFieldOf("damage_per_hit", 1).forGetter(WeaponItemComponent::damagePerHit),
+        Codecs.NON_NEGATIVE_INT.optionalFieldOf("damage_per_hit", 1).forGetter(WeaponItemComponent::damagePerHit),
         WeaponAttackDamageDataComponent.CODEC.fieldOf("attack_damage").forGetter(WeaponItemComponent::attackDamage),
         ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("attack_speed").forGetter(WeaponItemComponent::attackSpeed),
         Codec.BOOL.optionalFieldOf("may_smash", false).forGetter(WeaponItemComponent::maySmash)
@@ -98,7 +98,7 @@ public record WeaponItemComponent(int damagePerHit, WeaponAttackDamageDataCompon
                 Text.translatable(
                     "attribute.modifier.equals.0",
                     AttributeModifiersComponent.DECIMAL_FORMAT.format(weaponAttackDamage.defaultDamage()),
-                    Text.translatable(EntityAttributes.GENERIC_ATTACK_DAMAGE.value().getTranslationKey())
+                    Text.translatable(EntityAttributes.ATTACK_DAMAGE.value().getTranslationKey())
                 ).formatted(Formatting.DARK_GREEN)
             );
         }
@@ -106,7 +106,7 @@ public record WeaponItemComponent(int damagePerHit, WeaponAttackDamageDataCompon
             Text.translatable(
                 "attribute.modifier.equals.0",
                 AttributeModifiersComponent.DECIMAL_FORMAT.format(this.attackSpeed),
-                Text.translatable(EntityAttributes.GENERIC_ATTACK_SPEED.value().getTranslationKey())
+                Text.translatable(EntityAttributes.ATTACK_SPEED.value().getTranslationKey())
             ).formatted(Formatting.DARK_GREEN)
         );
     }

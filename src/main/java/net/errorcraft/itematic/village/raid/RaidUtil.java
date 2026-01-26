@@ -29,6 +29,6 @@ public class RaidUtil {
 
     public static ItemStack getOminousBanner(RegistryEntryLookup<Item> items, RegistryEntryLookup<BannerPattern> bannerPatterns) {
         ominousBanner = new ItemStack(items.getOrThrow(ItemKeys.WHITE_BANNER));
-        return Raid.getOminousBanner(bannerPatterns);
+        return Raid.createOminousBanner(bannerPatterns);
     }
 }

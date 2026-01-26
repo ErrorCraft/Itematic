@@ -10,21 +10,21 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 public class RecipeBookGhostSlotsExtender {
-    @Mixin(RecipeBookGhostSlots.GhostInputSlot.class)
-    public static class GhostInputSlotExtender {
-        @Redirect(
-            method = "getCurrentItemStack",
-            at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/recipe/Ingredient;getMatchingStacks()[Lnet/minecraft/item/ItemStack;"
-            )
-        )
-        private ItemStack[] getMatchingStacksUseDynamicRegistry(Ingredient instance) {
-            ClientWorld world = MinecraftClient.getInstance().world;
-            if (world == null) {
-                return new ItemStack[0];
-            }
-            return instance.itematic$getMatchingStacks(world.getRegistryManager());
-        }
-    }
+//    @Mixin(RecipeBookGhostSlots.GhostInputSlot.class)
+//    public static class GhostInputSlotExtender {
+//        @Redirect(
+//            method = "getCurrentItemStack",
+//            at = @At(
+//                value = "INVOKE",
+//                target = "Lnet/minecraft/recipe/Ingredient;getMatchingStacks()[Lnet/minecraft/item/ItemStack;"
+//            )
+//        )
+//        private ItemStack[] getMatchingStacksUseDynamicRegistry(Ingredient instance) {
+//            ClientWorld world = MinecraftClient.getInstance().world;
+//            if (world == null) {
+//                return new ItemStack[0];
+//            }
+//            return instance.itematic$getMatchingStacks(world.getRegistryManager());
+//        }
+//    }
 }
