@@ -1,18 +1,17 @@
 package net.errorcraft.itematic.mixin.entity.raid;
 
 import net.errorcraft.itematic.village.raid.RaidUtil;
-import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.PatrolEntity;
 import net.minecraft.entity.raid.RaiderEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(RaiderEntity.class)
 public class RaiderEntityExtender extends PatrolEntity {
@@ -20,15 +19,18 @@ public class RaiderEntityExtender extends PatrolEntity {
         super(entityType, world);
     }
 
-    @Redirect(
-        method = { "onDeath", "loot" },
+    @Inject(
+        method = {
+            "onDeath",
+            "loot"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/village/raid/Raid;getOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack getOminousBannerUseRegistryEntry(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
-        return RaidUtil.createOminousBanner(this.getWorld(), bannerPatternLookup);
+    private void getOminousBannerSetDataDrivenItemStack(CallbackInfo info) {
+        RaidUtil.createOminousBanner(this.getWorld());
     }
 
     @Mixin(RaiderEntity.PickupBannerAsLeaderGoal.class)
@@ -37,15 +39,15 @@ public class RaiderEntityExtender extends PatrolEntity {
         @Final
         private T actor;
 
-        @Redirect(
+        @Inject(
             method = "canStart",
             at = @At(
                 value = "INVOKE",
                 target = "Lnet/minecraft/village/raid/Raid;getOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
             )
         )
-        private ItemStack getOminousBannerUseRegistryEntry(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
-            return RaidUtil.createOminousBanner(this.actor.getWorld(), bannerPatternLookup);
+        private void getOminousBannerSetDataDrivenItemStack(CallbackInfoReturnable<Boolean> info) {
+            RaidUtil.createOminousBanner(this.actor.getWorld());
         }
     }
 }
