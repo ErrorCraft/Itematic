@@ -16,11 +16,16 @@ public record PersistentProjectileEntityInitializer<T extends PersistentProjecti
     @Override
     public T create(ActionContext context) {
         if (context.entity(ActionContextParameter.THIS).orElse(null) instanceof LivingEntity entity) {
+            ItemStack shooter = entity.getActiveItem();
+            if (shooter.isEmpty()) {
+                shooter = null;
+            }
+
             return this.ownerCreator.create(
                 context.world(),
                 entity,
                 context.stack().copyWithCount(1),
-                entity.getActiveItem()
+                shooter
             );
         }
 
