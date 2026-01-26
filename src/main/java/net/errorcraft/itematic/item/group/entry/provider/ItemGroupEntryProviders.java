@@ -156,7 +156,7 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.tag(ItematicItemTags.BEDS),
             ItemGroupEntry.tag(ItematicItemTags.CANDLES),
             ItemGroupEntry.tag(ItematicItemTags.BANNERS),
-            StackItemGroupEntry.fromStack(RaidUtil.createOminousBanner(items, bannerPatterns)),
+            StackItemGroupEntry.fromStack(RaidUtil.getOminousBanner(items, bannerPatterns)),
             ItemGroupEntry.tag(ItematicItemTags.HEADS),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.DRAGON_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.END_PORTAL_FRAME)),
