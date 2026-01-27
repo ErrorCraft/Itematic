@@ -16,15 +16,18 @@ import net.minecraft.item.Instrument;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.util.*;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Hand;
+import net.minecraft.util.UseAction;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -59,7 +62,7 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
 
     @Override
     public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        return this.instrument(stack)
+        return this.instrument(stack, user.getRegistryManager())
             .map(RegistryEntry::value)
             .map(instrument -> {
                 GoatHornItemAccessor.playSound(world, user, instrument);
@@ -71,19 +74,25 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
 
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        this.instrument(stack)
+        RegistryWrapper.WrapperLookup lookup = context.getRegistryLookup();
+        if (lookup == null) {
+            return;
+        }
+
+        this.instrument(stack, lookup)
             .flatMap(RegistryEntry::getKey)
             .map(RegistryKey::getValue)
             .ifPresent(id -> tooltip.add(Text.translatable(Util.createTranslationKey("instrument", id)).formatted(Formatting.GRAY)));
     }
 
-    public Optional<? extends RegistryEntry<Instrument>> instrument(ItemStack stack) {
+    public Optional<? extends RegistryEntry<Instrument>> instrument(ItemStack stack, RegistryWrapper.WrapperLookup lookup) {
         RegistryEntry<Instrument> instrument = stack.get(DataComponentTypes.INSTRUMENT);
         if (instrument != null) {
             return Optional.of(instrument);
         }
-        // todo fix
-        return Registries.INSTRUMENT.getEntryList(this.instruments)
+
+        return lookup.getWrapperOrThrow(RegistryKeys.INSTRUMENT)
+            .getOptional(this.instruments)
             .map(RegistryEntryList::stream)
             .flatMap(Stream::findFirst);
     }

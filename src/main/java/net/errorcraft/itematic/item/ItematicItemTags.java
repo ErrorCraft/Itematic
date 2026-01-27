@@ -24,7 +24,6 @@ public class ItematicItemTags {
     public static final TagKey<Item> REPAIRS_MACE = of("repairs_mace");
     public static final TagKey<Item> REPAIRS_SHIELD = of("repairs_shield");
 
-    public static final TagKey<Item> FURNACE_MINECART_FUEL = of("furnace_minecart_fuel");
     public static final TagKey<Item> BOW_AMMUNITION = of("bow_ammunition");
     public static final TagKey<Item> CROSSBOW_AMMUNITION = of("crossbow_ammunition");
 

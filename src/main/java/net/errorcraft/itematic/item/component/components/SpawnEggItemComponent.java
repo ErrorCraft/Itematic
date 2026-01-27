@@ -10,6 +10,7 @@ import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -75,6 +76,7 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
         if (entity instanceof PassiveEntity passiveEntity) {
             return passiveEntity.createChild(world, passiveEntity);
         }
-        return entityType.create(world);
+
+        return entityType.create(world, SpawnReason.SPAWN_EGG);
     }
 }

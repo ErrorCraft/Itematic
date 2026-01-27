@@ -6,6 +6,7 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.decoration.AbstractDecorationEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 public record DecorationEntityInitializer<T extends AbstractDecorationEntity>(EntityType<T> type, Creator<T> creator, PlacementChecker checker) implements EntityInitializer<T> {
     @Override
-    public T create(ActionContext context) {
+    public T create(ActionContext context, SpawnReason reason) {
         Direction side = context.side();
         return this.create(context.world(), context.player(ActionContextParameter.THIS).orElse(null), context.blockPos(ActionContextParameter.TARGET), side, context.stack());
     }

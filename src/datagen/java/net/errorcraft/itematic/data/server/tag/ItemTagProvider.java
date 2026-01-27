@@ -50,8 +50,6 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.BREEZE_ROD);
         this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_SHIELD)
             .forceAddTag(ItemTags.PLANKS);
-        this.getOrCreateTagBuilder(ItematicItemTags.FURNACE_MINECART_FUEL)
-            .add(ItemKeys.COAL, ItemKeys.CHARCOAL);
         this.getOrCreateTagBuilder(ItematicItemTags.BOW_AMMUNITION)
             .forceAddTag(ItemTags.ARROWS);
         this.getOrCreateTagBuilder(ItematicItemTags.CROSSBOW_AMMUNITION)

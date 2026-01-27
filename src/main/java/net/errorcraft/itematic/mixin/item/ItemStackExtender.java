@@ -2,8 +2,6 @@ package net.errorcraft.itematic.mixin.item;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
-import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
@@ -23,7 +21,6 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
-import net.minecraft.advancement.criterion.ItemDurabilityChangedCriterion;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.ComponentHolder;
@@ -582,15 +579,25 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
     }
 
+    @ModifyReturnValue(
+        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;)I",
+        at = @At("RETURN")
+    )
+    private int limitDamageApplied(int original) {
+        return this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
+            .map(c -> Math.min(c.maximumDamage((ItemStack)(Object) this) - this.getDamage(), original))
+            .orElse(original);
+    }
+
     @Inject(
-        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V",
+        method = "onDurabilityChange",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;setDamage(I)V",
             shift = At.Shift.AFTER
         )
     )
-    private void invokeDamageToolEvent(int amount, ServerWorld world, ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
+    private void invokeDamageToolEvent(int damage, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
@@ -598,28 +605,14 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         this.itematic$invokeEvent(ItemEvents.DAMAGE_ITEM, this.context);
     }
 
-    @WrapWithCondition(
-        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/advancement/criterion/ItemDurabilityChangedCriterion;trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;I)V"
-        )
-    )
-    private boolean limitDamageApplied(ItemDurabilityChangedCriterion instance, ServerPlayerEntity player, ItemStack stack, int durability, @Local(argsOnly = true) LocalIntRef amount) {
-        this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
-            .map(c -> Math.min(c.maximumDamage((ItemStack)(Object) this) - this.getDamage(), amount.get()))
-            .ifPresent(amount::set);
-        return amount.get() != 0;
-    }
-
     @Inject(
-        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V",
+        method = "onDurabilityChange",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"
         )
     )
-    private void invokeBreakToolEvent(int amount, ServerWorld world, ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
+    private void invokeBreakToolEvent(int damage, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }

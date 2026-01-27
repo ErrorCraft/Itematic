@@ -139,7 +139,7 @@ public class EntityPlacer extends Placer {
             this.initializer.type().itematic$setInitializer(null, null);
             return entity;
         }
-        Entity entity = this.initializer.create(context);
+        Entity entity = this.initializer.create(context, this.spawnReason);
         if (entity != null) {
             entity.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(offset));
             ((ServerWorld) this.world).spawnEntityAndPassengers(entity);

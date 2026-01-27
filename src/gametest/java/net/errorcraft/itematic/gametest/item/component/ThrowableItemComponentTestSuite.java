@@ -11,8 +11,8 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
@@ -26,9 +26,9 @@ public class ThrowableItemComponentTestSuite {
         PlayerEntity player = TestUtil.createMockPlayer(context, GameMode.SURVIVAL, SPAWN_POSITION);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
-        TypedActionResult<ItemStack> result = stack.use(world, player, Hand.MAIN_HAND);
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addFinalTask(() -> {
-            context.assertTrue(result.getResult().isAccepted(), "Expected Egg usage to be successful");
+            context.assertTrue(result.isAccepted(), "Expected Egg usage to be successful");
             context.expectEntityAt(EntityType.EGG, SPAWN_POSITION.add(0, (int)player.getStandingEyeHeight(), 0));
         });
     }
@@ -40,9 +40,9 @@ public class ThrowableItemComponentTestSuite {
         PlayerEntity player = TestUtil.createMockPlayer(context, GameMode.SURVIVAL, SPAWN_POSITION);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
-        TypedActionResult<ItemStack> result = stack.use(world, player, Hand.MAIN_HAND);
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addFinalTask(() -> {
-            context.assertTrue(result.getResult().isAccepted(), "Expected Ender Pearl usage to be successful");
+            context.assertTrue(result.isAccepted(), "Expected Ender Pearl usage to be successful");
             context.expectEntityAt(EntityType.ENDER_PEARL, SPAWN_POSITION.add(0, (int)player.getStandingEyeHeight(), 0));
         });
     }
@@ -54,9 +54,9 @@ public class ThrowableItemComponentTestSuite {
         PlayerEntity player = TestUtil.createMockPlayer(context, GameMode.SURVIVAL, SPAWN_POSITION);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
-        TypedActionResult<ItemStack> result = stack.use(world, player, Hand.MAIN_HAND);
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addFinalTask(() -> {
-            context.assertTrue(result.getResult().isAccepted(), "Expected Snowball usage to be successful");
+            context.assertTrue(result.isAccepted(), "Expected Snowball usage to be successful");
             context.expectEntityAt(EntityType.SNOWBALL, SPAWN_POSITION.add(0, (int)player.getStandingEyeHeight(), 0));
         });
     }
@@ -68,9 +68,9 @@ public class ThrowableItemComponentTestSuite {
         PlayerEntity player = TestUtil.createMockPlayer(context, GameMode.SURVIVAL, SPAWN_POSITION);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
-        TypedActionResult<ItemStack> result = stack.use(world, player, Hand.MAIN_HAND);
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addFinalTask(() -> {
-            context.assertTrue(result.getResult().isAccepted(), "Expected Experience Bottle usage to be successful");
+            context.assertTrue(result.isAccepted(), "Expected Experience Bottle usage to be successful");
             context.expectEntityAt(EntityType.EXPERIENCE_BOTTLE, SPAWN_POSITION.add(0, (int)player.getStandingEyeHeight(), 0));
         });
     }
@@ -82,9 +82,9 @@ public class ThrowableItemComponentTestSuite {
         PlayerEntity player = TestUtil.createMockPlayer(context, GameMode.SURVIVAL, SPAWN_POSITION);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
-        TypedActionResult<ItemStack> result = stack.use(world, player, Hand.MAIN_HAND);
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addFinalTask(() -> {
-            context.assertTrue(result.getResult().isAccepted(), "Expected Splash Potion usage to be successful");
+            context.assertTrue(result.isAccepted(), "Expected Splash Potion usage to be successful");
             context.expectEntityAt(EntityType.POTION, SPAWN_POSITION.add(0, (int)player.getStandingEyeHeight(), 0));
         });
     }
@@ -96,9 +96,9 @@ public class ThrowableItemComponentTestSuite {
         PlayerEntity player = TestUtil.createMockPlayer(context, GameMode.SURVIVAL, SPAWN_POSITION);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
-        TypedActionResult<ItemStack> result = stack.use(world, player, Hand.MAIN_HAND);
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addFinalTask(() -> {
-            context.assertTrue(result.getResult().isAccepted(), "Expected Lingering Potion usage to be successful");
+            context.assertTrue(result.isAccepted(), "Expected Lingering Potion usage to be successful");
             context.expectEntityAt(EntityType.POTION, SPAWN_POSITION.add(0, (int)player.getStandingEyeHeight(), 0));
         });
     }
@@ -114,8 +114,8 @@ public class ThrowableItemComponentTestSuite {
         PlayerEntity player = TestUtil.createMockPlayer(context, GameMode.SURVIVAL, SPAWN_POSITION);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
-        TypedActionResult<ItemStack> result = stack.use(world, player, Hand.MAIN_HAND);
-        context.assertTrue(result.getResult().isAccepted(), "Expected Trident usage to be successful");
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
+        context.assertTrue(result.isAccepted(), "Expected Trident usage to be successful");
         context.runAtTick(minDrawDuration, () -> context.addFinalTask(() -> {
             stack.onStoppedUsing(world, player, player.getItemUseTimeLeft());
             context.expectEntityAt(EntityType.TRIDENT, SPAWN_POSITION.add(0, (int)player.getStandingEyeHeight(), 0));

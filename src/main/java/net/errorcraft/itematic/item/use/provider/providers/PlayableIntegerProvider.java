@@ -6,10 +6,12 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
+import net.minecraft.SharedConstants;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.OptionalInt;
 
@@ -28,9 +30,9 @@ public class PlayableIntegerProvider implements IntegerProvider {
     @Override
     public OptionalInt get(ItemStack stack, LivingEntity user) {
         return stack.itematic$getComponent(ItemComponentTypes.PLAYABLE)
-            .flatMap(component -> component.instrument(stack))
+            .flatMap(component -> component.instrument(stack, user.getRegistryManager()))
             .map(RegistryEntry::value)
-            .map(instrument -> OptionalInt.of(instrument.useDuration()))
+            .map(instrument -> OptionalInt.of(MathHelper.floor(instrument.useDuration() * SharedConstants.TICKS_PER_SECOND)))
             .orElseGet(OptionalInt::empty);
     }
 }

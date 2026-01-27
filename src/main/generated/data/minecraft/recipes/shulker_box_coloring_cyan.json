@@ -2,8 +2,6 @@
   "type": "minecraft:item_coloring",
   "category": "misc",
   "color": "cyan",
-  "ingredient": {
-    "tag": "minecraft:shulker_boxes"
-  },
+  "ingredient": "#minecraft:shulker_boxes",
   "result": "minecraft:cyan_shulker_box"
 }

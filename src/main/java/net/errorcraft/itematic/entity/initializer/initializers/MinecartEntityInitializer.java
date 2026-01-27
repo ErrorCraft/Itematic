@@ -9,6 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.enums.RailShape;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.BlockTags;
@@ -19,7 +20,7 @@ import net.minecraft.world.World;
 
 public record MinecartEntityInitializer<T extends AbstractMinecartEntity>(EntityType<T> type, Creator<T> creator) implements EntityInitializer<T> {
     @Override
-    public T create(ActionContext context) {
+    public T create(ActionContext context, SpawnReason reason) {
         return this.create(context.world(), context.blockPos(ActionContextParameter.TARGET), context.stack());
     }
 

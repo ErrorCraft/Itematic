@@ -36,12 +36,10 @@
     "network.ClientPlayerEntityExtender",
     "network.ClientPlayerInteractionManagerExtender",
     "network.ClientPlayNetworkHandlerExtender",
-    "network.ClientTagLoaderExtender",
     "option.HotbarStorageEntryExtender",
     "particle.CrackParticleExtender$SlimeballFactoryExtender",
     "particle.CrackParticleExtender$SnowballFactoryExtender",
     "recipebook.RecipeBookGroupExtender",
-    "render.WorldRendererExtender",
     "render.block.BlockRenderManagerExtender",
     "render.block.entity.DecoratedPotBlockEntityRendererExtender",
     "render.entity.FishingBobberEntityRendererExtender",
@@ -66,12 +64,11 @@
     "render.item.ItemModelsExtender",
     "render.item.ItemRendererExtender",
     "render.model.BakedModelManagerExtender",
-    "render.model.ModelLoaderExtender",
     "render.model.json.ModelOverrideListExtender",
     "toast.RecipeToastExtender",
-    "tutorial.BundleTutorialExtender",
     "tutorial.CraftPlanksTutorialStepHandlerExtender",
-    "world.ClientWorldExtender"
+    "world.ClientWorldExtender",
+    "world.WorldEventHandlerExtender"
   ],
   "injectors": {
     "defaultRequire": 1

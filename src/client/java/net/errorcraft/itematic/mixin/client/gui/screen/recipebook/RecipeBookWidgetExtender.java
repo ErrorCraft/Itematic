@@ -3,7 +3,6 @@ package net.errorcraft.itematic.mixin.client.gui.screen.recipebook;
 import net.errorcraft.itematic.access.client.gui.screen.recipebook.RecipeBookWidgetAccess;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
-import net.minecraft.screen.AbstractRecipeScreenHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,7 +14,7 @@ public class RecipeBookWidgetExtender implements RecipeBookWidgetAccess {
         method = "initialize",
         at = @At("TAIL")
     )
-    private void initializeAllowRecipeSpecificInitialization(int parentWidth, int parentHeight, MinecraftClient client, boolean narrow, AbstractRecipeScreenHandler<?, ?> craftingScreenHandler, CallbackInfo info) {
+    private void initializeAllowRecipeSpecificInitialization(int parentWidth, int parentHeight, MinecraftClient client, boolean narrow, CallbackInfo info) {
         this.itematic$initializeRecipeSpecific(client.world);
     }
 }

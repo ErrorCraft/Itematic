@@ -49,7 +49,7 @@ public class RaiderEntityExtender extends PatrolEntity {
             target = "Lnet/minecraft/village/raid/Raid;createOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private static void createOminousBannerSetDataDrivenItemStack(ItemEntity itemEntity, CallbackInfoReturnable<Boolean> cir) {
+    private static void createOminousBannerSetDataDrivenItemStack(ItemEntity itemEntity, CallbackInfoReturnable<Boolean> info) {
         RaidUtil.createOminousBanner(itemEntity.getWorld());
     }
 

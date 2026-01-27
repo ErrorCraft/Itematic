@@ -392,9 +392,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         }
     }
 
-    // todo
     @Redirect(
-        method = "tickFallFlying",
+        method = "isFallFlyingAllowed",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"

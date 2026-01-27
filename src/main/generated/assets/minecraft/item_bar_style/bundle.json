@@ -1,7 +1,7 @@
 {
   "color": {
     "type": "minecraft:constant",
-    "color": 6711039
+    "color": -9402369
   },
   "progress": "minecraft:item_holder_occupancy",
   "textures": [

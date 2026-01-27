@@ -39,6 +39,6 @@ public record UseableOnFluidItemComponent() implements ItemComponent<UseableOnFl
         }
 
         ItemUsageContext itemUsageContext = new ItemUsageContext(world, user, hand, stack, blockHitResult);
-        return stack.useOnBlock(itemUsageContext); // todo fix
+        return stack.useOnBlock(itemUsageContext).isAccepted() ? ItemResult.SUCCESS : ItemResult.PASS; // todo fix
     }
 }

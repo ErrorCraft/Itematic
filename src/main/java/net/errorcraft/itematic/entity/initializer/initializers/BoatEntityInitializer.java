@@ -6,6 +6,7 @@ import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +23,7 @@ public record BoatEntityInitializer(BoatEntity.Type variant) implements EntityIn
     }
 
     @Override
-    public BoatEntity create(ActionContext context) {
+    public BoatEntity create(ActionContext context, SpawnReason reason) {
         return this.create(context.world(), context.blockPos(ActionContextParameter.TARGET));
     }
 

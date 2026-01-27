@@ -10,12 +10,9 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.texture.GuiAtlasManager;
-import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -25,14 +22,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.function.Function;
+
 @Mixin(DrawContext.class)
 public abstract class DrawContextExtender {
     @Shadow
-    @Final
-    private GuiAtlasManager guiAtlasManager;
-
-    @Shadow
-    public abstract void drawSprite(int x, int y, int z, int width, int height, Sprite sprite, float red, float green, float blue, float alpha);
+    public abstract void drawGuiTexture(Function<Identifier, RenderLayer> function, Identifier identifier, int i, int j, int k, int l, int m);
 
     @Unique
     private ItemBarStyleLoader itemBarStyles;
@@ -73,11 +68,12 @@ public abstract class DrawContextExtender {
         if (itemBarStyleId == null) {
             return;
         }
+
         this.itemBarStyles.get(itemBarStyleId).ifPresent(itemBarStyle -> this.drawGuiTexture(
+            RenderLayer::getGuiTextured,
             itemBarStyle.progressTexture(stack),
             x,
             y,
-            200,
             16,
             16,
             itemBarStyle.color(stack)
@@ -102,13 +98,4 @@ public abstract class DrawContextExtender {
         )
     )
     private void doNotRenderOriginalItemBar(DrawContext instance, RenderLayer layer, int x1, int y1, int x2, int y2, int color) {}
-
-    @Unique
-    private void drawGuiTexture(Identifier texture, int x, int y, int z, int width, int height, int color) {
-        float red = ((color >> 16) & 0xff) / 255.0f;
-        float green = ((color >> 8) & 0xff) / 255.0f;
-        float blue = (color & 0xff) / 255.0f;
-        Sprite sprite = this.guiAtlasManager.getSprite(texture);
-        this.drawSprite(x, y, z, width, height, sprite, red, green, blue, 1.0f);
-    }
 }

@@ -7,7 +7,6 @@ import net.errorcraft.itematic.block.ComposterBlockUtil;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
 import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
-import net.errorcraft.itematic.entity.ItematicEntityTypeTags;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
 import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.fluid.FluidKeys;
@@ -48,7 +47,6 @@ import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPas
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.DecoratedPotPattern;
 import net.minecraft.block.DecoratedPotPatterns;
 import net.minecraft.block.jukebox.JukeboxSong;
@@ -231,7 +229,7 @@ public class ItemUtil {
                                 LocationCheckLootCondition.builder(
                                     LocationPredicate.Builder.create()
                                         .block(BlockPredicate.Builder.create()
-                                            .tag(BlockTags.CONVERTABLE_TO_MUD))
+                                            .tag(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
                                 ),
                                 MatchToolLootCondition.builder(
                                     ItemPredicate.Builder.create()
@@ -5019,14 +5017,14 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.WOODEN_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.sword(ToolMaterial.WOOD, this.blocks, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build(),
                 ItemEventMap.builder()
@@ -5036,21 +5034,21 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.WOODEN_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.WOOD, 7.0d, 0.2d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.WOOD, 7.0d, 0.2d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.WOOD, 1.0d, 0.25d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.WOOD, 1.0d, 0.25d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build(),
                 ItemEventMap.builder()
@@ -5060,13 +5058,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.STONE_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.sword(ToolMaterial.STONE, this.blocks, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -5075,19 +5073,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.STONE_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.STONE, 8.0d, 0.2d, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.STONE, 8.0d, 0.2d, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.STONE, 2.0d, 0.5d, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.STONE, 2.0d, 0.5d, ItematicItemTags.REPAIRS_STONE_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -5096,13 +5094,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GOLDEN_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
+                    .with(DamageableItemComponent.sword(ToolMaterial.GOLD, this.blocks, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -5111,19 +5109,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GOLDEN_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.GOLD, 7.0d, 0.25d, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.GOLD, 7.0d, 0.25d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.GOLD, 1.0d, 0.25d, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.GOLD, 1.0d, 0.25d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -5132,13 +5130,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.IRON_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.sword(ToolMaterial.IRON, this.blocks, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -5147,19 +5145,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.IRON_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.IRON, 7.0d, 0.225d, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.IRON, 7.0d, 0.225d, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.IRON, 3.0d, 0.75d, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.IRON, 3.0d, 0.75d, ItematicItemTags.REPAIRS_IRON_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -5168,13 +5166,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.DIAMOND_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.sword(ToolMaterial.DIAMOND, this.blocks, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -5183,19 +5181,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.DIAMOND_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.DIAMOND, 6.0d, 0.25d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.DIAMOND, 6.0d, 0.25d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.DIAMOND, 4.0d, 1.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.DIAMOND, 4.0d, 1.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -5204,14 +5202,14 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.NETHERITE_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.sword(ToolMaterial.NETHERITE, this.blocks, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build(),
                 ItemEventMap.builder()
@@ -5221,21 +5219,21 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.NETHERITE_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.NETHERITE, 6.0d, 0.25d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.NETHERITE, 6.0d, 0.25d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.NETHERITE, 5.0d, 1.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.NETHERITE, 5.0d, 1.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build(),
                 ItemEventMap.builder()
@@ -5256,10 +5254,10 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(238))
                     .with(ToolItemComponent.builder(1)
-                        .rule(ToolComponent.Rule.ofAlwaysDropping(List.of(Blocks.COBWEB), 15.0f))
-                        .rule(ToolComponent.Rule.of(BlockTags.LEAVES, 15.0f))
-                        .rule(ToolComponent.Rule.of(BlockTags.WOOL, 5.0f))
-                        .rule(ToolComponent.Rule.of(List.of(Blocks.VINE, Blocks.GLOW_LICHEN), 2.0f))
+                        .rule(ToolComponent.Rule.ofAlwaysDropping(RegistryEntryList.of(this.blocks.getOrThrow(BlockKeys.COBWEB)), 15.0f))
+                        .rule(ToolComponent.Rule.of(this.blocks.getOrThrow(BlockTags.LEAVES), 15.0f))
+                        .rule(ToolComponent.Rule.of(this.blocks.getOrThrow(BlockTags.WOOL), 5.0f))
+                        .rule(ToolComponent.Rule.of(RegistryEntryList.of(this.blocks.getOrThrow(BlockKeys.VINE), this.blocks.getOrThrow(BlockKeys.GLOW_LICHEN)), 2.0f))
                         .build())
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHEAR)))
                     .build()
@@ -9087,7 +9085,7 @@ public class ItemUtil {
                             LocationCheckLootCondition.builder(
                                     LocationPredicate.Builder.create()
                                         .block(BlockPredicate.Builder.create()
-                                            .blocks(this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
+                                            .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
                                             .state(StatePredicate.Builder.create()
                                                 .exactMatch(Properties.EYE, false))))
                                 .build()
@@ -10234,7 +10232,7 @@ public class ItemUtil {
                             LocationCheckLootCondition.builder(
                                     LocationPredicate.Builder.create()
                                         .block(BlockPredicate.Builder.create()
-                                            .blocks(this.blocks.getOrThrow(BlockKeys.LODESTONE).value())))
+                                            .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value())))
                                 .build()
                         ),
                         PassingSequenceHandler.builder()
@@ -10303,7 +10301,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(false))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(this.blocks, false))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOW_INK_SAC, create(
@@ -10312,7 +10310,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(true))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(this.blocks, true))
                     .build()
             ));
             this.registerable.register(ItemKeys.BONE_MEAL, create(
@@ -10613,7 +10611,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         FirstToPassRequirementsSequenceHandler.builder()
-                            .add(Actions.waxSign(true))
+                            .add(Actions.waxSign(this.blocks, true))
                             .add(PassingSequenceHandler.builder()
                                 .add(WaxBlockAction.of(ActionContextParameter.TARGET))
                                 .add(DecrementItemAction.of(1))

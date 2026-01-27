@@ -9,6 +9,7 @@ import net.errorcraft.itematic.client.render.ItematicTexturedRenderLayers;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ArmorItemComponent;
 import net.errorcraft.itematic.item.component.components.TintedItemComponent;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -34,7 +35,7 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
     private SpriteAtlasTexture armorMaterialsAtlas;
 
     @ModifyConstant(
-        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V",
+        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/WolfEntityRenderState;FF)V",
         constant = @Constant(
             classValue = AnimalArmorItem.class,
             ordinal = 0
@@ -47,7 +48,7 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
     }
 
     @ModifyVariable(
-        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V",
+        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/WolfEntityRenderState;FF)V",
         at = @At("LOAD")
     )
     private Item castToAnimalArmorItemUseNull(Item instance) {
@@ -55,7 +56,7 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
     }
 
     @Redirect(
-        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V",
+        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/WolfEntityRenderState;FF)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/AnimalArmorItem;getType()Lnet/minecraft/item/AnimalArmorItem$Type;"
@@ -66,7 +67,7 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
     }
 
     @Redirect(
-        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V",
+        method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/WolfEntityRenderState;FF)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/AnimalArmorItem;getEntityTexture()Lnet/minecraft/util/Identifier;"
@@ -77,7 +78,10 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
     }
 
     @Redirect(
-        method = { "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V", "renderDyed" },
+        method = {
+            "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/WolfEntityRenderState;FF)V",
+            "renderDyed"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/render/RenderLayer;getEntityCutoutNoCull(Lnet/minecraft/util/Identifier;)Lnet/minecraft/client/render/RenderLayer;"
@@ -88,7 +92,10 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
     }
 
     @ModifyArg(
-        method = { "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V", "renderDyed" },
+        method = {
+            "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/WolfEntityRenderState;FF)V",
+            "renderDyed"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/render/VertexConsumerProvider;getBuffer(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;"
@@ -99,7 +106,10 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
     }
 
     @ModifyExpressionValue(
-        method = { "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/WolfEntity;FFFFFF)V", "renderDyed" },
+        method = {
+            "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/WolfEntityRenderState;FF)V",
+            "renderDyed"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/render/VertexConsumerProvider;getBuffer(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;"
@@ -114,7 +124,7 @@ public class WolfArmorFeatureRendererExtender implements WolfArmorFeatureRendere
         method = "renderDyed",
         at = @At("HEAD")
     )
-    private void setArmorItemComponent(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, AnimalArmorItem item, CallbackInfo info, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
+    private void setArmorItemComponent(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, AnimalArmorItem item, Model model, CallbackInfo info, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
         armorItemComponent.set(stack.itematic$getComponent(ItemComponentTypes.ARMOR).orElseThrow());
     }
 

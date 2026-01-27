@@ -10,6 +10,7 @@ public interface ItemResult {
 
     ItemResult max(ItemResult other);
     ActionResult toActionResult();
+    boolean isAccepted(); // todo remove
 
     class Pass implements ItemResult {
         private Pass() {}
@@ -22,6 +23,11 @@ public interface ItemResult {
         @Override
         public ActionResult toActionResult() {
             return ActionResult.PASS;
+        }
+
+        @Override
+        public boolean isAccepted() {
+            return false;
         }
     }
 
@@ -41,6 +47,11 @@ public interface ItemResult {
         public ActionResult toActionResult() {
             return ActionResult.CONSUME;
         }
+
+        @Override
+        public boolean isAccepted() {
+            return true;
+        }
     }
 
     class Success implements ItemResult {
@@ -54,6 +65,11 @@ public interface ItemResult {
         @Override
         public ActionResult toActionResult() {
             return ActionResult.SUCCESS;
+        }
+
+        @Override
+        public boolean isAccepted() {
+            return true;
         }
     }
 }

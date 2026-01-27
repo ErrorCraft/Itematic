@@ -64,7 +64,7 @@ public record CastableItemComponent() implements ItemComponent<CastableItemCompo
         if (world instanceof ServerWorld serverWorld) {
             int luck = EnchantmentHelper.getFishingLuckBonus(serverWorld, stack, user);
             int speed = (int) (EnchantmentHelper.getFishingTimeReduction(serverWorld, stack, user) * 20);
-            world.spawnEntity(new FishingBobberEntity(user, world, luck, speed));
+            world.spawnEntity(new FishingBobberEntity(user, world, luck, speed, stack));
         }
 
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));

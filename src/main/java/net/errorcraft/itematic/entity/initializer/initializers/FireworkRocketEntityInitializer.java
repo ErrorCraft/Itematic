@@ -5,6 +5,7 @@ import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.util.math.Vec3d;
 
@@ -18,7 +19,7 @@ public record FireworkRocketEntityInitializer() implements EntityInitializer<Fir
     }
 
     @Override
-    public FireworkRocketEntity create(ActionContext context) {
+    public FireworkRocketEntity create(ActionContext context, SpawnReason reason) {
         Vec3d pos = context.position(ActionContextParameter.TARGET);
         return new FireworkRocketEntity(context.world(), pos.getX(), pos.getY(), pos.getZ(), context.stack().copyWithCount(1));
     }

@@ -23,6 +23,7 @@ public record PotionItemColor() implements ItemColor<PotionItemColor> {
         if (tintIndex != 0) {
             return DEFAULT_COLOR;
         }
-        return ColorHelper.Argb.fullAlpha(stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).getColor());
+
+        return ColorHelper.fullAlpha(stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).getColor());
     }
 }

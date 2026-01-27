@@ -5,6 +5,7 @@ import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.WindChargeEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -26,7 +27,7 @@ public class WindChargeEntityInitializer implements EntityInitializer<WindCharge
     }
 
     @Override
-    public WindChargeEntity create(ActionContext context) {
+    public WindChargeEntity create(ActionContext context, SpawnReason reason) {
         ServerWorld world = context.world();
         PlayerEntity user = context.player(ActionContextParameter.THIS).orElse(null);
         if (user != null) {

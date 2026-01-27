@@ -454,7 +454,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
 
         EntityInitializer<?> initializer = this.initializer; // Copy to a local and set the field to null, so we don't get a StackOverflowError
         this.initializer = null;
-        info.setReturnValue((T) initializer.create(this.actionContext));
+        info.setReturnValue((T) initializer.create(this.actionContext, reason));
         this.actionContext = null;
     }
 

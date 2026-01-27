@@ -28,7 +28,7 @@ public class FishingRodTestSuite {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.FISHING_ROD);
         player.setStackInHand(Hand.MAIN_HAND, stack);
-        world.spawnEntity(new FishingBobberEntity(player, world, 0, 0));
+        world.spawnEntity(new FishingBobberEntity(player, world, 0, 0, stack));
         stack.use(world, player, Hand.MAIN_HAND);
         context.addInstantFinalTask(() -> context.assertTrue(player.fishHook == null, "Expected player to have retracted a fishing rod"));
     }

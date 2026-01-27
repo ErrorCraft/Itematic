@@ -31,6 +31,7 @@ public record IndexItemColor(List<Integer> indices) implements ItemColor<IndexIt
         if (tintIndex < 0 || tintIndex >= indices.size()) {
             return DEFAULT_COLOR;
         }
-        return ColorHelper.Argb.fullAlpha(this.indices.get(tintIndex));
+
+        return ColorHelper.fullAlpha(this.indices.get(tintIndex));
     }
 }

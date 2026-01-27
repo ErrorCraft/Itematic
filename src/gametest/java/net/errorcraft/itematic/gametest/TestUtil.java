@@ -9,6 +9,7 @@ import net.minecraft.component.ComponentType;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -85,7 +86,7 @@ public class TestUtil {
     }
 
     public static <T extends Entity> T createEntityAt(TestContext context, EntityType<T> type, BlockPos pos, Consumer<T> initializer) {
-        T entity = type.create(context.getWorld());
+        T entity = type.create(context.getWorld(), SpawnReason.COMMAND);
         if (entity == null) {
             throw new GameTestException("Entity is null");
         }

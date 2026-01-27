@@ -66,15 +66,15 @@ public class Actions {
                 .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.HOE_TILL), SoundCategory.BLOCKS))
         ));
         registerable.register(TILL_DIRT, ActionEntry.of(
-            setBlockRequirements(builder -> builder.tag(ItematicBlockTags.TILLABLE_INTO_FARMLAND), true),
+            setBlockRequirements(blocks, builder -> builder.tag(blocks, ItematicBlockTags.TILLABLE_INTO_FARMLAND), true),
             SetBlockStateAction.of(ActionContextParameter.TARGET, blocks.getOrThrow(BlockKeys.FARMLAND))
         ));
         registerable.register(TILL_COARSE_DIRT, ActionEntry.of(
-            setBlockRequirements(builder -> builder.blocks(blocks.getOrThrow(BlockKeys.COARSE_DIRT).value()), true),
+            setBlockRequirements(blocks, builder -> builder.blocks(blocks, blocks.getOrThrow(BlockKeys.COARSE_DIRT).value()), true),
             SetBlockStateAction.of(ActionContextParameter.TARGET, blocks.getOrThrow(BlockKeys.DIRT))
         ));
         registerable.register(TILL_ROOTED_DIRT, ActionEntry.of(
-            setBlockRequirements(builder -> builder.blocks(blocks.getOrThrow(BlockKeys.ROOTED_DIRT).value()), false),
+            setBlockRequirements(blocks, builder -> builder.blocks(blocks, blocks.getOrThrow(BlockKeys.ROOTED_DIRT).value()), false),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(ActionContextParameter.TARGET, blocks.getOrThrow(BlockKeys.DIRT)))
                 .add(DropItemFromBlockAction.of(ActionContextParameter.TARGET, items.getOrThrow(ItemKeys.HANGING_ROOTS)))
@@ -92,7 +92,7 @@ public class Actions {
                 .add(SwingHandAction.INSTANCE)
         ));
         registerable.register(FLATTEN_GROUND, ActionEntry.of(
-            setBlockRequirements(builder -> builder.tag(ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH), true),
+            setBlockRequirements(blocks, builder -> builder.tag(blocks, ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH), true),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(ActionContextParameter.TARGET, blocks.getOrThrow(BlockKeys.DIRT_PATH)))
                 .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.SHOVEL_FLATTEN), SoundCategory.BLOCKS))
@@ -103,7 +103,7 @@ public class Actions {
                 LocationCheckLootCondition.builder(
                     LocationPredicate.Builder.create()
                         .block(BlockPredicate.Builder.create()
-                            .tag(BlockTags.CAMPFIRES)
+                            .tag(blocks, BlockTags.CAMPFIRES)
                             .state(StatePredicate.Builder.create()
                                 .exactMatch(Properties.LIT, true))))
                 .build()
@@ -162,7 +162,7 @@ public class Actions {
                             LocationCheckLootCondition.builder(
                                 LocationPredicate.Builder.create()
                                     .block(BlockPredicate.Builder.create()
-                                        .blocks(blocks.getOrThrow(BlockKeys.TNT).value())))
+                                        .blocks(blocks, blocks.getOrThrow(BlockKeys.TNT).value())))
                                 .build()
                         ),
                         PrimeTntAction.of(ActionContextParameter.TARGET)
@@ -172,12 +172,12 @@ public class Actions {
         ));
     }
 
-    public static ActionEntry waxSign(boolean wax) {
-        return modifySign(ModifySignAction.wax(ActionContextParameter.TARGET, wax));
+    public static ActionEntry waxSign(RegistryEntryLookup<Block> blocks, boolean wax) {
+        return modifySign(blocks, ModifySignAction.wax(ActionContextParameter.TARGET, wax));
     }
 
-    public static ActionEntry glowSign(boolean glow) {
-        return modifySign(ModifySignAction.glow(ActionContextParameter.TARGET, glow));
+    public static ActionEntry glowSign(RegistryEntryLookup<Block> blocks, boolean glow) {
+        return modifySign(blocks, ModifySignAction.glow(ActionContextParameter.TARGET, glow));
     }
 
     public static ActionEntry potBlock(RegistryEntryLookup<Block> blocks, RegistryKey<Block> pottedBlock) {
@@ -187,7 +187,7 @@ public class Actions {
                 LocationCheckLootCondition.builder(
                     LocationPredicate.Builder.create()
                         .block(BlockPredicate.Builder.create()
-                            .blocks(blocks.getOrThrow(BlockKeys.FLOWER_POT).value())))
+                            .blocks(blocks, blocks.getOrThrow(BlockKeys.FLOWER_POT).value())))
                     .build()
             ),
             PassingSequenceHandler.builder()
@@ -199,14 +199,14 @@ public class Actions {
         );
     }
 
-    private static ActionEntry modifySign(ModifySignAction action) {
+    private static ActionEntry modifySign(RegistryEntryLookup<Block> blocks, ModifySignAction action) {
         return ActionEntry.of(
             ActionRequirements.of(
                 ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
                 LocationCheckLootCondition.builder(
                     LocationPredicate.Builder.create()
                         .block(BlockPredicate.Builder.create()
-                            .tag(BlockTags.SIGNS)))
+                            .tag(blocks, BlockTags.SIGNS)))
                     .build()
             ),
             PassingSequenceHandler.builder()
@@ -216,14 +216,14 @@ public class Actions {
         );
     }
 
-    private static ActionRequirements setBlockRequirements(UnaryOperator<BlockPredicate.Builder> blockPredicateBuilder, boolean checkEmptySpace) {
+    private static ActionRequirements setBlockRequirements(RegistryEntryLookup<Block> blocks, UnaryOperator<BlockPredicate.Builder> blockPredicateBuilder, boolean checkEmptySpace) {
         return ActionRequirements.of(
             ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-            setBlockConditions(blockPredicateBuilder.apply(BlockPredicate.Builder.create()), checkEmptySpace).build()
+            setBlockConditions(blocks, blockPredicateBuilder.apply(BlockPredicate.Builder.create()), checkEmptySpace).build()
         );
     }
 
-    private static LootCondition.Builder setBlockConditions(BlockPredicate.Builder blockPredicate, boolean checkEmptySpace) {
+    private static LootCondition.Builder setBlockConditions(RegistryEntryLookup<Block> blocks, BlockPredicate.Builder blockPredicate, boolean checkEmptySpace) {
         LootCondition.Builder locationCheckPredicate = LocationCheckLootCondition.builder(
             LocationPredicate.Builder.create()
                 .block(blockPredicate));
@@ -238,7 +238,7 @@ public class Actions {
             LocationCheckLootCondition.builder(
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
-                        .tag(BlockTags.AIR)),
+                        .tag(blocks, BlockTags.AIR)),
                 new BlockPos(0, 1, 0)));
     }
 

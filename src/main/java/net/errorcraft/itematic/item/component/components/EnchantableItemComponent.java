@@ -26,7 +26,7 @@ public record EnchantableItemComponent(int enchantability, Optional<RegistryEntr
     }
 
     public static EnchantableItemComponent of(ToolMaterial material) {
-        return of(material.getEnchantability());
+        return of(material.enchantmentValue());
     }
 
     public static EnchantableItemComponent of(int enchantability) {

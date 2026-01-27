@@ -95,7 +95,7 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
     protected void fillRecipes(LootContext context) {
         Registry<Trade> trades = context.getWorld().getRegistryManager().get(ItematicRegistryKeys.TRADE);
         for (TagKey<Trade> trade : TRADE_TO_AMOUNT.keySet()) {
-            this.fillRecipesFromPool(trades.getOrCreateEntryList(trade), TRADE_TO_AMOUNT.getInt(trade), context);
+            this.fillRecipesFromPool(trades.getEntryList(trade).orElseThrow(), TRADE_TO_AMOUNT.getInt(trade), context);
         }
     }
 

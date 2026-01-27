@@ -9,6 +9,7 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
@@ -24,7 +25,7 @@ public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implemen
     }
 
     @Override
-    public TridentEntity create(ActionContext context) {
+    public TridentEntity create(ActionContext context, SpawnReason reason) {
         ItemStack stack = context.stack();
         LivingEntity user = context.livingEntity(ActionContextParameter.THIS).orElse(null);
         float spinAttackStrength = user != null ?

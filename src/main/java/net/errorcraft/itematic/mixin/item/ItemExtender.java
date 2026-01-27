@@ -422,6 +422,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+        // todo move to ItemStack canRepairWith (data component)
         return this.itematic$getComponent(ItemComponentTypes.REPAIRABLE)
             .map(RepairableItemComponent::items)
             .map(ingredient::isIn)

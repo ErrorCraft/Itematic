@@ -7,6 +7,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.DyeItemComponent;
 import net.errorcraft.itematic.item.component.components.FireworkShapeModifierItemComponent;
+import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
@@ -29,26 +30,11 @@ public class FireworkStarRecipeExtender {
         method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z",
-            ordinal = 0
+            target = "Ljava/util/Map;containsKey(Ljava/lang/Object;)Z"
         )
     )
-    private boolean testUseItemComponentCheck(Ingredient instance, ItemStack itemStack) {
+    private boolean containsKeyUseItemComponentCheck(Map<Item, FireworkExplosionComponent.Type> instance, Object o, @Local ItemStack itemStack) {
         return itemStack.itematic$hasComponent(ItemComponentTypes.FIREWORK_SHAPE_MODIFIER);
-    }
-
-    @Redirect(
-        method = "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z",
-            ordinal = 0
-        )
-    )
-    private boolean testUseItemComponentCheck(Ingredient instance, ItemStack itemStack, @Share("fireworkTypeModifierItemComponent") LocalRef<FireworkShapeModifierItemComponent> fireworkTypeModifierItemComponent) {
-        Optional<FireworkShapeModifierItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.FIREWORK_SHAPE_MODIFIER);
-        optionalComponent.ifPresent(fireworkTypeModifierItemComponent::set);
-        return optionalComponent.isPresent();
     }
 
     @Redirect(
@@ -59,8 +45,10 @@ public class FireworkStarRecipeExtender {
         )
     )
     @SuppressWarnings("unchecked")
-    private <K, V> V getModifierUseItemComponent(Map<K, V> instance, Object o, @Share("fireworkTypeModifierItemComponent") LocalRef<FireworkShapeModifierItemComponent> fireworkTypeModifierItemComponent) {
-        return (V) fireworkTypeModifierItemComponent.get().shape();
+    private <V> V getUseItemComponent(Map<Item, FireworkExplosionComponent.Type> instance, Object o, @Local ItemStack itemStack, @Share("fireworkTypeModifierItemComponent") LocalRef<FireworkShapeModifierItemComponent> fireworkTypeModifierItemComponent) {
+        return (V) itemStack.itematic$getComponent(ItemComponentTypes.FIREWORK_SHAPE_MODIFIER)
+            .map(FireworkShapeModifierItemComponent::shape)
+            .orElse(null);
     }
 
     @Redirect(

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.recipebook;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.recipebook.RecipeBookGhostSlots;
+//import net.minecraft.client.gui.screen.recipebook.RecipeBookGhostSlots;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;

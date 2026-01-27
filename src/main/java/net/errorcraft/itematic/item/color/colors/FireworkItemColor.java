@@ -33,18 +33,18 @@ public record FireworkItemColor() implements ItemColor<FireworkItemColor> {
 
         int size = colors.size();
         if (size == 1) {
-            return ColorHelper.Argb.fullAlpha(colors.getInt(0));
+            return ColorHelper.fullAlpha(colors.getInt(0));
         }
 
         int red = 0;
         int green = 0;
         int blue = 0;
         for (int color : colors) {
-            red += ColorHelper.Argb.getRed(color);
-            green += ColorHelper.Argb.getGreen(color);
-            blue += ColorHelper.Argb.getBlue(color);
+            red += ColorHelper.getRed(color);
+            green += ColorHelper.getGreen(color);
+            blue += ColorHelper.getBlue(color);
         }
 
-        return ColorHelper.Argb.getArgb(red / size, green / size, blue / size);
+        return ColorHelper.getArgb(red / size, green / size, blue / size);
     }
 }
