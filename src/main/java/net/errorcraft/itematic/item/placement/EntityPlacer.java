@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.placement;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BucketItemComponent;
@@ -76,11 +77,11 @@ public class EntityPlacer extends Placer {
     }
 
     @Override
-    public ActionResult place() {
+    public ItemResult place() {
         if (!this.mayModifyBlock || !this.tryModifySpawnerBlock()) {
             this.placeEntity();
         }
-        return ActionResult.CONSUME;
+        return ItemResult.CONSUME;
     }
 
     private boolean tryModifySpawnerBlock() {

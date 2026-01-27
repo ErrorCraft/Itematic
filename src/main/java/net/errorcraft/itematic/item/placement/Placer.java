@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.item.placement;
 
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,7 +28,7 @@ public abstract class Placer {
         this.player = player;
     }
 
-    public abstract ActionResult place();
+    public abstract ItemResult place();
 
     protected void tryDecrementStack() {
         this.stack.decrementUnlessCreative(1, this.player);

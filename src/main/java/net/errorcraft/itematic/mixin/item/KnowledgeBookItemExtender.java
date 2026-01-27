@@ -6,23 +6,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.KnowledgeBookItem;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
-import net.minecraft.util.TypedActionResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(KnowledgeBookItem.class)
 public class KnowledgeBookItemExtender {
-    @Redirect(
-        method = "use",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/util/TypedActionResult;fail(Ljava/lang/Object;)Lnet/minecraft/util/TypedActionResult;"
-        )
-    )
-    private <T> TypedActionResult<T> failResultPassInstead(T data) {
-        return TypedActionResult.pass(data);
-    }
+    // todo check implementation before removing
+//    @Redirect(
+//        method = "use",
+//        at = @At(
+//            value = "INVOKE",
+//            target = "Lnet/minecraft/util/TypedActionResult;fail(Ljava/lang/Object;)Lnet/minecraft/util/TypedActionResult;"
+//        )
+//    )
+//    private <T> TypedActionResult<T> failResultPassInstead(T data) {
+//        return TypedActionResult.pass(data);
+//    }
 
     @Redirect(
         method = "use",

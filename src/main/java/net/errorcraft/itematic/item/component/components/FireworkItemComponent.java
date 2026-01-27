@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -17,7 +18,6 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -41,31 +41,34 @@ public record FireworkItemComponent() implements ItemComponent<FireworkItemCompo
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (!user.isFallFlying()) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
+
         if (world.isClient()) {
-            return ActionResult.SUCCESS;
+            return ItemResult.SUCCESS;
         }
+
         FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(world, stack, user);
         world.spawnEntity(fireworkRocketEntity);
         stack.decrementUnlessCreative(1, user);
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
-        return ActionResult.CONSUME;
+        return ItemResult.CONSUME;
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         World world = context.getWorld();
         ItemStack stack = context.getStack();
         if (world.isClient()) {
-            return ActionResult.SUCCESS;
+            return ItemResult.SUCCESS;
         }
+
         FireworkRocketEntity entity = createFireworkEntity(world, stack, context);
         world.spawnEntity(entity);
         stack.decrement(1);
-        return ActionResult.CONSUME;
+        return ItemResult.CONSUME;
     }
 
     @Override

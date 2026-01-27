@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -14,7 +15,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DebugStickItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -36,20 +36,20 @@ public record DebugStickItemComponent() implements ItemComponent<DebugStickItemC
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         World world = context.getWorld();
         if (world.isClient()) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
         PlayerEntity player = context.getPlayer();
         if (player == null) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
         BlockPos pos = context.getBlockPos();
         if (!DUMMY.callUse(player, world.getBlockState(pos), world, pos, true, context.getStack())) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
-        return ActionResult.success(world.isClient());
+        return ItemResult.SUCCESS;
     }
 
     @Override

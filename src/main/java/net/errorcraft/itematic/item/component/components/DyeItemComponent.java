@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -10,7 +11,6 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 
 public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemComponent> {
@@ -27,10 +27,11 @@ public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemC
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         if (!(context.getWorld() instanceof ServerWorld world)) {
-            return ActionResult.SUCCESS;
+            return ItemResult.SUCCESS;
         }
+
         ActionContext actionContext = ActionContext.builder(world, context.getStack(), resultStackConsumer)
             .entityPosition(ActionContextParameter.THIS, context.getPlayer())
             .position(ActionContextParameter.TARGET, context.getBlockPos())
@@ -38,9 +39,10 @@ public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemC
         ModifySignAction action = ModifySignAction.dye(ActionContextParameter.TARGET, this.color);
         if (action.execute(actionContext)) {
             context.getStack().decrementUnlessCreative(1, context.getPlayer());
-            return ActionResult.CONSUME;
+            return ItemResult.CONSUME;
         }
-        return ActionResult.PASS;
+
+        return ItemResult.PASS;
     }
 
     public static DyeItemComponent of(DyeColor color) {

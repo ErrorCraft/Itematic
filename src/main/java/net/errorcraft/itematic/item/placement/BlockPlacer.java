@@ -3,6 +3,7 @@ package net.errorcraft.itematic.item.placement;
 import net.errorcraft.itematic.access.block.entity.BlockEntityAccess;
 import net.errorcraft.itematic.block.BlockStateUtil;
 import net.errorcraft.itematic.block.ShapeContextUtil;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
@@ -26,7 +27,6 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Property;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -68,20 +68,20 @@ public class BlockPlacer extends Placer {
     }
 
     @Override
-    public ActionResult place() {
+    public ItemResult place() {
         if (!this.context.canPlace()) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
         BlockState blockState = this.getPlacementState();
         if (blockState == null) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
         if (!this.world.setBlockState(this.blockPos, blockState, Block.NOTIFY_ALL_AND_REDRAW)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
 
         this.placed(blockState);
-        return ActionResult.success(this.world.isClient());
+        return ItemResult.SUCCESS;
     }
 
     private void placed(BlockState blockState) {

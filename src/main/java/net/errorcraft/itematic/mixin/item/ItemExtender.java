@@ -6,6 +6,7 @@ import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemBase;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
@@ -89,26 +90,30 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         at = @At("HEAD"),
         cancellable = true
     )
-    public void useUseItemComponent(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
+    public void useUseItemComponent(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<ActionResult> info) {
         ItemStack stack = user.getStackInHand(hand);
         StackReference stackReference = StackReferenceUtil.of(stack);
-        ActionResult result = ActionResult.PASS;
+        ItemResult result = ItemResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
-            ActionResult newResult = component.use(world, user, hand, stack, stackReference::set);
-            if (newResult == ActionResult.FAIL) {
-                info.setReturnValue(TypedActionResult.fail(stackReference.get()));
-                return;
-            }
-            result = result.itematic$merge(newResult);
+            ItemResult newResult = component.use(world, user, hand, stack, stackReference::set);
+            result = result.max(newResult);
         }
 
         if (world instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, hand)
                 .entityPosition(ActionContextParameter.THIS, user)
                 .build();
-            this.itematic$invokeEvent(ItemEvents.USE, context);
+            if (this.itematic$invokeEvent(ItemEvents.USE, context)) {
+                result = result.max(ItemResult.CONSUME);
+            }
         }
-        info.setReturnValue(new TypedActionResult<>(result, stackReference.get()));
+
+        ActionResult trueResult = result.toActionResult();
+        if (trueResult instanceof ActionResult.Success success) {
+            trueResult = success.withNewHandStack(stackReference.get());
+        }
+
+        info.setReturnValue(trueResult);
     }
 
     /**
@@ -119,13 +124,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     public ActionResult useOnBlock(ItemUsageContext context) {
         ItemStack stack = context.getStack();
         StackReference stackReference = StackReferenceUtil.of(stack);
-        ActionResult result = ActionResult.PASS;
+        ItemResult result = ItemResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
-            ActionResult newResult = component.useOnBlock(context, stackReference::set);
-            if (newResult == ActionResult.FAIL) {
-                return newResult;
-            }
-            result = result.itematic$merge(newResult);
+            ItemResult newResult = component.useOnBlock(context, stackReference::set);
+            result = result.max(newResult);
         }
 
         if (context.getWorld() instanceof ServerWorld serverWorld) {
@@ -134,11 +136,18 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .position(ActionContextParameter.TARGET, context.getBlockPos())
                 .side(context.getSide())
                 .build();
-            this.itematic$invokeEvent(ItemEvents.USE_ON_BLOCK, actionContext);
+            if (this.itematic$invokeEvent(ItemEvents.USE_ON_BLOCK, actionContext)) {
+                result = result.max(ItemResult.CONSUME);
+            }
         }
 
-        tryUpdateItemStack(context.getPlayer(), context.getHand(), stack, stackReference);
-        return result;
+        tryUpdateItemStack(context.getPlayer(), context.getHand(), stack, stackReference); // todo: necessary?
+        ActionResult trueResult = result.toActionResult();
+        if (trueResult instanceof ActionResult.Success success) {
+            trueResult = success.withNewHandStack(stackReference.get());
+        }
+
+        return trueResult;
     }
 
     /**
@@ -148,13 +157,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Overwrite
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
         StackReference stackReference = StackReferenceUtil.of(stack);
-        ActionResult result = ActionResult.PASS;
+        ItemResult result = ItemResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
-            ActionResult newResult = component.useOnEntity(user, entity, hand, stack, stackReference::set);
-            if (newResult == ActionResult.FAIL) {
-                return newResult;
-            }
-            result = result.itematic$merge(newResult);
+            ItemResult newResult = component.useOnEntity(user, entity, hand, stack, stackReference::set);
+            result = result.max(newResult);
         }
 
         if (user.getWorld() instanceof ServerWorld serverWorld) {
@@ -162,11 +168,18 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .entityPosition(ActionContextParameter.THIS, user)
                 .entityPosition(ActionContextParameter.TARGET, entity)
                 .build();
-            this.itematic$invokeEvent(ItemEvents.USE_ON_ENTITY, context);
+            if (this.itematic$invokeEvent(ItemEvents.USE_ON_ENTITY, context)) {
+                result = result.max(ItemResult.CONSUME);
+            }
         }
 
         tryUpdateItemStack(user, hand, stack, stackReference);
-        return result;
+        ActionResult trueResult = result.toActionResult();
+        if (trueResult instanceof ActionResult.Success success) {
+            trueResult = success.withNewHandStack(stackReference.get());
+        }
+
+        return trueResult;
     }
 
     /**

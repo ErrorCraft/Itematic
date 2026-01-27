@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -26,7 +27,6 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 
 import java.util.List;
@@ -101,11 +101,12 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         ItemStack stack = context.getStack();
         if (context.getWorld().isClient()) {
-            return ActionResult.SUCCESS;
+            return ItemResult.SUCCESS;
         }
+
         EntityPlacer placer = EntityPlacer.spawned(context, stack, resultStackConsumer, this);
         return placer.place();
     }
@@ -114,6 +115,7 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
         if (!this.allowItemData) {
             return this.entity;
         }
+
         NbtComponent entityData = stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT);
         Optional<EntityInitializer<?>> initializer = entityData.get(ENTITY_TYPE_MAP_CODEC)
             .result()

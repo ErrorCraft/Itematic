@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -10,7 +11,6 @@ import net.minecraft.entity.Saddleable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -30,12 +30,12 @@ public record SaddleItemComponent() implements ItemComponent<SaddleItemComponent
     }
 
     @Override
-    public ActionResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (this.trySaddle(target, user.getWorld(), stack, SoundCategory.NEUTRAL)) {
-            return ActionResult.success(user.getWorld().isClient());
+            return ItemResult.SUCCESS;
         }
 
-        return ActionResult.PASS;
+        return ItemResult.PASS;
     }
 
     public boolean trySaddle(LivingEntity target, World world, ItemStack stack, SoundCategory soundCategory) {

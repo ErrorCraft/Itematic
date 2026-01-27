@@ -2,12 +2,14 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.use.provider.providers.PlayableIntegerProvider;
 import net.errorcraft.itematic.mixin.item.GoatHornItemAccessor;
+import net.minecraft.SharedConstants;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Instrument;
@@ -23,6 +25,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -55,15 +58,15 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         return this.instrument(stack)
             .map(RegistryEntry::value)
             .map(instrument -> {
                 GoatHornItemAccessor.playSound(world, user, instrument);
-                user.getItemCooldownManager().set(stack.getItem(), instrument.useDuration());
+                user.getItemCooldownManager().set(stack.getItem(), MathHelper.floor(instrument.useDuration() * SharedConstants.TICKS_PER_SECOND));
                 user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
-                return ActionResult.CONSUME;
-            }).orElse(ActionResult.PASS);
+                return ItemResult.CONSUME;
+            }).orElse(ItemResult.PASS);
     }
 
     @Override
@@ -79,6 +82,7 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
         if (instrument != null) {
             return Optional.of(instrument);
         }
+        // todo fix
         return Registries.INSTRUMENT.getEntryList(this.instruments)
             .map(RegistryEntryList::stream)
             .flatMap(Stream::findFirst);

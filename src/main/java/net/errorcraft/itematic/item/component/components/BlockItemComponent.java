@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -76,14 +77,14 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (this.isUnuseable(Pass.FLUID)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
 
         BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
 
         ItemUsageContext context = new ItemUsageContext(world, user, hand, stack, blockHitResult);
@@ -91,9 +92,9 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         if (this.isUnuseable(Pass.BLOCK)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
         return this.place(context, resultStackConsumer);
     }
@@ -123,7 +124,7 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
         return !this.passes.contains(pass);
     }
 
-    private ActionResult place(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    private ItemResult place(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         return BlockPlacer.of(context, resultStackConsumer, this.block, this.operatorOnly, true)
             .place();
     }

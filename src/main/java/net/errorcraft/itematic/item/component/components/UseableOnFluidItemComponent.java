@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -31,13 +32,13 @@ public record UseableOnFluidItemComponent() implements ItemComponent<UseableOnFl
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
 
         ItemUsageContext itemUsageContext = new ItemUsageContext(world, user, hand, stack, blockHitResult);
-        return stack.useOnBlock(itemUsageContext);
+        return stack.useOnBlock(itemUsageContext); // todo fix
     }
 }

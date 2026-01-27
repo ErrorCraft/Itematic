@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -19,7 +20,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
@@ -41,18 +41,18 @@ public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int dam
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (world.isClient()) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
         ActionContext context = ActionContext.builder((ServerWorld) world, stack, resultStackConsumer, hand)
             .entityPosition(ActionContextParameter.THIS, user)
             .build();
         if (this.apply(user, stack, context)) {
-            return ActionResult.SUCCESS;
+            return ItemResult.SUCCESS;
         }
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
-        return ActionResult.PASS;
+        return ItemResult.PASS;
     }
 
     public static SteeringItemComponent of(RegistryEntry<EntityType<?>> target, int damage) {

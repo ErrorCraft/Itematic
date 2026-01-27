@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -29,9 +30,9 @@ public record CooldownItemComponent(int ticks) implements ItemComponent<Cooldown
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         user.getItemCooldownManager().set(stack.getItem(), this.ticks);
-        return ActionResult.PASS;
+        return ItemResult.PASS;
     }
 
     public static CooldownItemComponent of(int ticks) {

@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -59,9 +60,9 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (!this.swappable) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
 
         ActionResult result = this.equipAndSwap(stack.getItem(), world, user, hand);
@@ -76,12 +77,13 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
             stack.itematic$invokeEvent(ItemEvents.EQUIP_ITEM, context);
         }
         if (result == ActionResult.FAIL) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
         if (result.isAccepted() && !world.isClient()) {
             user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         }
-        return result;
+//        return result;
+        return ItemResult.SUCCESS; // todo fix
     }
 
     @Override

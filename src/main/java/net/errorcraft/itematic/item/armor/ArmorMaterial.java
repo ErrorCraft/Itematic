@@ -49,7 +49,7 @@ public record ArmorMaterial(Identifier assetId, Map<ArmorItem.Type, Integer> def
         Identifier id = Identifier.ofVanilla("armor." + type.getName());
         AttributeModifierSlot attributeModifierSlot = AttributeModifierSlot.forEquipmentSlot(slot);
         builder.add(
-            EntityAttributes.GENERIC_ARMOR,
+            EntityAttributes.ARMOR,
             new EntityAttributeModifier(
                 id,
                 this.defense(slot),
@@ -58,7 +58,7 @@ public record ArmorMaterial(Identifier assetId, Map<ArmorItem.Type, Integer> def
             attributeModifierSlot
         );
         builder.add(
-            EntityAttributes.GENERIC_ARMOR_TOUGHNESS,
+            EntityAttributes.ARMOR_TOUGHNESS,
             new EntityAttributeModifier(
                 id,
                 this.toughness,
@@ -68,7 +68,7 @@ public record ArmorMaterial(Identifier assetId, Map<ArmorItem.Type, Integer> def
         );
         if (this.knockbackResistance > 0.0d) {
             builder.add(
-                EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,
+                EntityAttributes.KNOCKBACK_RESISTANCE,
                 new EntityAttributeModifier(
                     id,
                     this.knockbackResistance,

@@ -19,6 +19,7 @@ import net.minecraft.registry.tag.TagKey;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public record WeaponAttackDamageDataComponent(List<Rule> rules, double defaultDamage) {
     public static final Codec<WeaponAttackDamageDataComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -66,7 +67,7 @@ public record WeaponAttackDamageDataComponent(List<Rule> rules, double defaultDa
 
         public static Rule addsToBase(TagKey<EntityType<?>> entityTypes, double damage) {
             return new Rule(
-                Optional.ofNullable(Registries.ENTITY_TYPE.getOrCreateEntryList(entityTypes)),
+                Registries.ENTITY_TYPE.getEntryList(entityTypes).map(Function.identity()),
                 Optional.empty(),
                 Optional.of(damage),
                 Optional.of(true)

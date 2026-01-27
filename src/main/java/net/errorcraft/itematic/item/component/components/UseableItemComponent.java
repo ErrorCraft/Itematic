@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.UseDurationDataComponent;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -17,7 +18,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.UseAction;
@@ -47,41 +47,47 @@ public record UseableItemComponent(UseDurationDataComponent ticks, UseAction ani
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (this.isUnuseable(Pass.NORMAL)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
+
         return tryStartUsing(world, user, hand, stack);
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         if (this.isUnuseable(Pass.BLOCK)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
+
         return tryStartUsing(context.getWorld(), context.getPlayer(), context.getHand(), context.getStack());
     }
 
     @Override
-    public ActionResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (this.isUnuseable(Pass.ENTITY)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
+
         return tryStartUsing(user.getWorld(), user, hand, stack);
     }
 
-    private static ActionResult tryStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    private static ItemResult tryStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         if (!stack.itematic$mayStartUsing(world, user, hand, stack)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
+
         UseDurationDataComponent useDurationDataComponent = stack.get(ItematicDataComponentTypes.USE_DURATION);
         if (useDurationDataComponent == null) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
+
         if (useDurationDataComponent.startUsing(world, user, hand, stack)) {
-            return ActionResult.CONSUME;
+            return ItemResult.CONSUME;
         }
-        return ActionResult.PASS;
+
+        return ItemResult.PASS;
     }
 
     @Override

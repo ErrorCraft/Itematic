@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component;
 
 import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.serialization.SetMapCodec;
@@ -16,7 +17,6 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -32,16 +32,16 @@ public interface ItemComponent<T extends ItemComponent<T>> {
     ItemComponentType<T> type();
     Codec<T> codec();
 
-    default ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        return ActionResult.PASS;
+    default ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+        return ItemResult.PASS;
     }
 
-    default ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
-        return ActionResult.PASS;
+    default ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+        return ItemResult.PASS;
     }
 
-    default ActionResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        return ActionResult.PASS;
+    default ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+        return ItemResult.PASS;
     }
 
     default boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, ItemStackConsumer resultStackConsumer) {
