@@ -1,11 +1,11 @@
 {
   "base": {
     "rarity": "rare",
-    "translation_key": "item.minecraft.guster_banner_pattern"
+    "translation_key": "item.minecraft.field_masoned_banner_pattern"
   },
   "components": {
     "minecraft:banner_pattern": {
-      "patterns": "minecraft:pattern_item/guster"
+      "patterns": "minecraft:pattern_item/field_masoned"
     },
     "minecraft:stackable": 1
   }

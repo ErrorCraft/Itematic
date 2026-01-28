@@ -1,7 +1,7 @@
 {
   "base": {
     "glint": true,
-    "rarity": "epic",
+    "rarity": "rare",
     "translation_key": "item.minecraft.enchanted_golden_apple"
   },
   "components": {

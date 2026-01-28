@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "epic",
     "translation_key": "item.minecraft.silence_armor_trim_smithing_template"
   },
   "components": {

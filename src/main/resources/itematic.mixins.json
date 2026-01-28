@@ -263,6 +263,7 @@
     "item.ElytraItemExtender",
     "item.EquipmentExtender",
     "item.FilledMapItemAccessor",
+    "item.FuelRegistryExtender$BuilderExtender",
     "item.GoatHornItemAccessor",
     "item.ItemAccessor",
     "item.ItemAccessor$SettingsAccessor",

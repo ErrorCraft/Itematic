@@ -81,9 +81,6 @@
       "net/minecraft/class_1856": [
         "net/errorcraft/itematic/access/recipe/IngredientAccess"
       ],
-      "net/minecraft/class_1856\u0024class_1859": [
-        "net/errorcraft/itematic/access/recipe/IngredientEntryAccess"
-      ],
       "net/minecraft/class_1914": [
         "net/errorcraft/itematic/access/village/TradeOfferAccess"
       ],

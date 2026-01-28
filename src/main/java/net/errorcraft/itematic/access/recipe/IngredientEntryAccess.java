@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface IngredientEntryAccess {
+    // todo remove
     default boolean itematic$test(ItemStack stack) {
         return false;
     }

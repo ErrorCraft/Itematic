@@ -1,6 +1,5 @@
 {
   "base": {
-    "rarity": "rare",
     "translation_key": "item.minecraft.golden_apple"
   },
   "components": {

@@ -1303,6 +1303,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.TURTLE_HELMET)
             .add(ItemKeys.PHANTOM_MEMBRANE);
         this.getOrCreateTagBuilder(ItematicItemTags.BANNER_PATTERNS)
+            .add(ItemKeys.FIELD_MASONED_BANNER_PATTERN)
+            .add(ItemKeys.BORDURE_INDENTED_BANNER_PATTERN)
             .add(ItemKeys.FLOWER_BANNER_PATTERN)
             .add(ItemKeys.CREEPER_BANNER_PATTERN)
             .add(ItemKeys.SKULL_BANNER_PATTERN)

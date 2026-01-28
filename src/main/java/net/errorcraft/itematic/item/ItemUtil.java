@@ -664,9 +664,7 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_APPLE, create(
-                ItemBase.Builder.forItem(ItemKeys.GOLDEN_APPLE)
-                    .rarity(Rarity.RARE)
-                    .build(),
+                ItemBase.Builder.forItem(ItemKeys.GOLDEN_APPLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
@@ -684,7 +682,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.ENCHANTED_GOLDEN_APPLE, create(
                 ItemBase.Builder.forItem(ItemKeys.ENCHANTED_GOLDEN_APPLE)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.RARE)
                     .glint()
                     .build(),
                 ItemComponentSet.builder()
@@ -2699,7 +2697,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.SNIFFER_EGG, create(
-                ItemBase.Builder.forBlock(ItemKeys.SNIFFER_EGG).build(),
+                ItemBase.Builder.forBlock(ItemKeys.SNIFFER_EGG)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SNIFFER_EGG)))
@@ -5440,7 +5440,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.TRIDENT, create(
                 ItemBase.Builder.forItem(ItemKeys.TRIDENT)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
@@ -5760,7 +5760,6 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.END_CRYSTAL, create(
                 ItemBase.Builder.forItem(ItemKeys.END_CRYSTAL)
-                    .rarity(Rarity.RARE)
                     .glint()
                     .build(),
                 ItemComponentSet.builder()
@@ -7217,7 +7216,7 @@ public class ItemUtil {
             this.bootstrapSkulls();
             this.registerable.register(ItemKeys.ELYTRA, create(
                 ItemBase.Builder.forItem(ItemKeys.ELYTRA)
-                    .rarity(Rarity.UNCOMMON)
+                    .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
@@ -7289,7 +7288,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_HELMET, create(
-                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_HELMET).build(),
+                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_HELMET)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.chainEnchantability()))
@@ -7298,7 +7299,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_CHESTPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_CHESTPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_CHESTPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.chainEnchantability()))
@@ -7307,7 +7310,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_LEGGINGS, create(
-                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_LEGGINGS).build(),
+                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_LEGGINGS)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.chainEnchantability()))
@@ -7316,7 +7321,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_BOOTS, create(
-                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_BOOTS).build(),
+                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_BOOTS)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.chainEnchantability()))
@@ -7569,7 +7576,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.DRAGON_HEAD, create(
                 ItemBase.Builder.forBlock(ItemKeys.DRAGON_HEAD)
-                    .rarity(Rarity.UNCOMMON)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
@@ -9458,7 +9465,7 @@ public class ItemUtil {
         private void bootstrapRecords() {
             this.registerable.register(ItemKeys.MUSIC_DISC_13, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_13)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.THIRTEEN)))
@@ -9466,7 +9473,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CAT, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_CAT)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CAT)))
@@ -9474,7 +9481,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_BLOCKS, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_BLOCKS)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.BLOCKS)))
@@ -9482,7 +9489,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CHIRP, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_CHIRP)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CHIRP)))
@@ -9490,7 +9497,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CREATOR, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_CREATOR)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CREATOR)))
@@ -9498,7 +9505,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CREATOR_MUSIC_BOX, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_CREATOR_MUSIC_BOX)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CREATOR_MUSIC_BOX)))
@@ -9507,7 +9514,7 @@ public class ItemUtil {
 
             this.registerable.register(ItemKeys.MUSIC_DISC_FAR, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_FAR)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.FAR)))
@@ -9515,7 +9522,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_MALL, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_MALL)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.MALL)))
@@ -9523,7 +9530,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_MELLOHI, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_MELLOHI)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.MELLOHI)))
@@ -9531,7 +9538,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_STAL, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_STAL)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.STAL)))
@@ -9539,7 +9546,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_STRAD, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_STRAD)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.STRAD)))
@@ -9547,7 +9554,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_WARD, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_WARD)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.WARD)))
@@ -9555,7 +9562,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_11, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_11)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.ELEVEN)))
@@ -9563,7 +9570,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_WAIT, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_WAIT)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.WAIT)))
@@ -9571,7 +9578,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_OTHERSIDE, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_OTHERSIDE)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.OTHERSIDE)))
@@ -9579,7 +9586,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_RELIC, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_RELIC)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.RELIC)))
@@ -9587,7 +9594,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_PIGSTEP, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_PIGSTEP)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.PIGSTEP)))
@@ -9595,7 +9602,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_PRECIPICE, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_PRECIPICE)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.PRECIPICE)))
@@ -9603,14 +9610,17 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_5, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_5)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.FIVE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DISC_FRAGMENT_5, create(
-                ItemBase.Builder.forItem(ItemKeys.DISC_FRAGMENT_5).tooltip(ItemKeys.DISC_FRAGMENT_5).build(),
+                ItemBase.Builder.forItem(ItemKeys.DISC_FRAGMENT_5)
+                    .rarity(Rarity.UNCOMMON)
+                    .tooltip(ItemKeys.DISC_FRAGMENT_5)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .build()
@@ -9686,115 +9696,153 @@ public class ItemUtil {
 
         private void bootstrapSmithingTemplates() {
             this.registerable.register(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.NETHERITE_UPGRADE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SENTRY_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.DUNE_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.COAST_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.WILD_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.WARD_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.EYE_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.VEX_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.TIDE_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SNOUT_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.RIB_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SPIRE_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.WAYFINDER_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SHAPER_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.EPIC)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SILENCE_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.RAISER_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.HOST_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.FLOW_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.BOLT_PATTERN)))
                     .build()
@@ -9951,9 +9999,7 @@ public class ItemUtil {
 
         private void bootstrapBannerPatterns() {
             this.registerable.register(ItemKeys.FLOWER_BANNER_PATTERN, create(
-                ItemBase.Builder.forItem(ItemKeys.FLOWER_BANNER_PATTERN)
-                    .tooltip(ItemKeys.FLOWER_BANNER_PATTERN)
-                    .build(),
+                ItemBase.Builder.forItem(ItemKeys.FLOWER_BANNER_PATTERN).build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.FLOWER_PATTERN_ITEM))
                     .build()
@@ -9961,7 +10007,6 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.CREEPER_BANNER_PATTERN, create(
                 ItemBase.Builder.forItem(ItemKeys.CREEPER_BANNER_PATTERN)
                     .rarity(Rarity.UNCOMMON)
-                    .tooltip(ItemKeys.CREEPER_BANNER_PATTERN)
                     .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.CREEPER_PATTERN_ITEM))
@@ -9969,8 +10014,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.SKULL_BANNER_PATTERN, create(
                 ItemBase.Builder.forItem(ItemKeys.SKULL_BANNER_PATTERN)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(ItemKeys.SKULL_BANNER_PATTERN)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.SKULL_PATTERN_ITEM))
@@ -9978,17 +10022,14 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MOJANG_BANNER_PATTERN, create(
                 ItemBase.Builder.forItem(ItemKeys.MOJANG_BANNER_PATTERN)
-                    .rarity(Rarity.EPIC)
-                    .tooltip(ItemKeys.MOJANG_BANNER_PATTERN)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.MOJANG_PATTERN_ITEM))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOBE_BANNER_PATTERN, create(
-                ItemBase.Builder.forItem(ItemKeys.GLOBE_BANNER_PATTERN)
-                    .tooltip(ItemKeys.GLOBE_BANNER_PATTERN)
-                    .build(),
+                ItemBase.Builder.forItem(ItemKeys.GLOBE_BANNER_PATTERN).build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.GLOBE_PATTERN_ITEM))
                     .build()
@@ -9996,7 +10037,6 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.PIGLIN_BANNER_PATTERN, create(
                 ItemBase.Builder.forItem(ItemKeys.PIGLIN_BANNER_PATTERN)
                     .rarity(Rarity.UNCOMMON)
-                    .tooltip(ItemKeys.PIGLIN_BANNER_PATTERN)
                     .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.PIGLIN_PATTERN_ITEM))
@@ -10005,7 +10045,6 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.FLOW_BANNER_PATTERN, create(
                 ItemBase.Builder.forItem(ItemKeys.FLOW_BANNER_PATTERN)
                     .rarity(Rarity.RARE)
-                    .tooltip(ItemKeys.FLOW_BANNER_PATTERN)
                     .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.FLOW_PATTERN_ITEM))
@@ -10014,10 +10053,25 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GUSTER_BANNER_PATTERN, create(
                 ItemBase.Builder.forItem(ItemKeys.GUSTER_BANNER_PATTERN)
                     .rarity(Rarity.RARE)
-                    .tooltip(ItemKeys.GUSTER_BANNER_PATTERN)
                     .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.GUSTER_PATTERN_ITEM))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FIELD_MASONED_BANNER_PATTERN, create(
+                ItemBase.Builder.forItem(ItemKeys.FIELD_MASONED_BANNER_PATTERN)
+                    .rarity(Rarity.RARE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(BannerPatternItemComponent.of(BannerPatternTags.FIELD_MASONED_PATTERN_ITEM))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BORDURE_INDENTED_BANNER_PATTERN, create(
+                ItemBase.Builder.forItem(ItemKeys.BORDURE_INDENTED_BANNER_PATTERN)
+                    .rarity(Rarity.RARE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(BannerPatternItemComponent.of(BannerPatternTags.BORDURE_INDENTED_PATTERN_ITEM))
                     .build()
             ));
         }
@@ -10031,139 +10085,185 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.ANGLER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.ANGLER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.ANGLER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.ANGLER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ARCHER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.ARCHER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.ARCHER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.ARCHER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ARMS_UP_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.ARMS_UP_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.ARMS_UP_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.ARMS_UP)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLADE_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.BLADE_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.BLADE_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BLADE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BREWER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.BREWER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.BREWER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BREWER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BURN_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.BURN_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.BURN_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BURN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DANGER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.DANGER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.DANGER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.DANGER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPLORER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.EXPLORER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.EXPLORER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.EXPLORER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FLOW_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.FLOW_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.FLOW_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.FLOW)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FRIEND_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.FRIEND_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.FRIEND_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.FRIEND)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GUSTER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.GUSTER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.GUSTER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.GUSTER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HEART_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.HEART_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.HEART_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.HEART)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HEARTBREAK_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.HEARTBREAK_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.HEARTBREAK_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.HEARTBREAK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOWL_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.HOWL_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.HOWL_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.HOWL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MINER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.MINER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.MINER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.MINER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOURNER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.MOURNER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.MOURNER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.MOURNER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PLENTY_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.PLENTY_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.PLENTY_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.PLENTY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PRIZE_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.PRIZE_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.PRIZE_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.PRIZE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SCRAPE_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.SCRAPE_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.SCRAPE_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SCRAPE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHEAF_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.SHEAF_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.SHEAF_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SHEAF)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHELTER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.SHELTER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.SHELTER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SHELTER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SKULL_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.SKULL_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.SKULL_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SKULL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNORT_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.SNORT_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.SNORT_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SNORT)))
                     .build()
@@ -10203,7 +10303,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.NETHER_STAR, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHER_STAR)
-                    .rarity(Rarity.UNCOMMON)
+                    .rarity(Rarity.RARE)
                     .glint()
                     .build(),
                 ItemComponentSet.builder()
@@ -10376,7 +10476,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.RECOVERY_COMPASS, create(
-                ItemBase.Builder.forItem(ItemKeys.RECOVERY_COMPASS).build(),
+                ItemBase.Builder.forItem(ItemKeys.RECOVERY_COMPASS)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(PointableItemComponent.of(this.pointers.getOrThrow(PointerKeys.LAST_DEATH)))
@@ -10716,7 +10818,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.NAUTILUS_SHELL, create(
-                ItemBase.Builder.forItem(ItemKeys.NAUTILUS_SHELL).build(),
+                ItemBase.Builder.forItem(ItemKeys.NAUTILUS_SHELL)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .build()
@@ -10730,7 +10834,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.GOAT_HORN, create(
-                ItemBase.Builder.forItem(ItemKeys.GOAT_HORN).build(),
+                ItemBase.Builder.forItem(ItemKeys.GOAT_HORN)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(PlayableItemComponent.of(InstrumentTags.GOAT_HORNS))
@@ -10753,7 +10859,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.ECHO_SHARD, create(
-                ItemBase.Builder.forItem(ItemKeys.ECHO_SHARD).build(),
+                ItemBase.Builder.forItem(ItemKeys.ECHO_SHARD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .build()

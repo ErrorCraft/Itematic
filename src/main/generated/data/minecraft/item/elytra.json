@@ -1,6 +1,6 @@
 {
   "base": {
-    "rarity": "uncommon",
+    "rarity": "epic",
     "translation_key": "item.minecraft.elytra"
   },
   "components": {
