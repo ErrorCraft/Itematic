@@ -12,7 +12,10 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.*;
+import net.errorcraft.itematic.item.component.components.BlockItemComponent;
+import net.errorcraft.itematic.item.component.components.DamageableItemComponent;
+import net.errorcraft.itematic.item.component.components.RecipeRemainderItemComponent;
+import net.errorcraft.itematic.item.component.components.RepairableItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
@@ -22,7 +25,6 @@ import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;
-import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.ToolComponent;
@@ -35,8 +37,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.item.tooltip.TooltipData;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -45,7 +49,10 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ClickType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.StringHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.*;
@@ -359,27 +366,28 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
     }
 
-    @Redirect(
-        method = "isEnchantable",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getMaxCount()I"
-        )
-    )
-    public int getMaxCountUseStackCount(ItemStack instance) {
-        return instance.getCount();
-    }
-
-    @Redirect(
-        method = "isEnchantable",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
-        )
-    )
-    public boolean containsMaxDamageUseItemComponentCheck(ItemStack instance, ComponentType<?> type) {
-        return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
-    }
+    // todo: probably moved to ItemStack
+//    @Redirect(
+//        method = "isEnchantable",
+//        at = @At(
+//            value = "INVOKE",
+//            target = "Lnet/minecraft/item/ItemStack;getMaxCount()I"
+//        )
+//    )
+//    public int getMaxCountUseStackCount(ItemStack instance) {
+//        return instance.getCount();
+//    }
+//
+//    @Redirect(
+//        method = "isEnchantable",
+//        at = @At(
+//            value = "INVOKE",
+//            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
+//        )
+//    )
+//    public boolean containsMaxDamageUseItemComponentCheck(ItemStack instance, ComponentType<?> type) {
+//        return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
+//    }
 
     @Inject(
         method = "canMine",
@@ -460,16 +468,17 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .orElse(true);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public int getEnchantability() {
-        return this.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
-            .map(EnchantableItemComponent::enchantability)
-            .orElse(0);
-    }
+    // todo: probably moved to ItemStack
+//    /**
+//     * @author ErrorCraft
+//     * @reason Uses the ItemComponent implementation for data-driven items.
+//     */
+//    @Overwrite
+//    public int getEnchantability() {
+//        return this.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
+//            .map(EnchantableItemComponent::enchantability)
+//            .orElse(0);
+//    }
 
     /**
      * @author ErrorCraft
@@ -675,10 +684,26 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             component.addComponents(componentsBuilder);
             component.addAttributeModifiers(attributeModifiersBuilder, this.itemComponents);
         }
+
         AttributeModifiersComponent attributeModifiers = attributeModifiersBuilder.build();
         if (!attributeModifiers.modifiers().isEmpty()) {
             componentsBuilder.add(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributeModifiers);
         }
+
         return COMPONENT_INTERNER.intern(componentsBuilder.build());
+    }
+
+    @Mixin(Item.Settings.class)
+    public static class SettingsExtender {
+        @Redirect(
+            method = "useRemainder",
+            at = @At(
+                value = "NEW",
+                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            )
+        )
+        private ItemStack newItemStackUseEmptyItemStack(ItemConvertible item) {
+            return ItemStack.EMPTY;
+        }
     }
 }

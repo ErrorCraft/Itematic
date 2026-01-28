@@ -579,15 +579,15 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
     }
 
-    @ModifyReturnValue(
-        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;)I",
-        at = @At("RETURN")
-    )
-    private int limitDamageApplied(int original) {
-        return this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
-            .map(c -> Math.min(c.maximumDamage((ItemStack)(Object) this) - this.getDamage(), original))
-            .orElse(original);
-    }
+//    @ModifyReturnValue(
+//        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;)I",
+//        at = @At("RETURN")
+//    )
+//    private int limitDamageApplied(int original) {
+//        return this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
+//            .map(c -> Math.min(c.maximumDamage((ItemStack)(Object) this) - this.getDamage(), original))
+//            .orElse(original);
+//    }
 
     @Inject(
         method = "onDurabilityChange",

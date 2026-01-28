@@ -35,7 +35,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Hand;
@@ -45,7 +44,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -78,8 +80,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Shadow
     public abstract boolean isUsingItem();
 
-    @Shadow
-    public abstract ItemStack eatFood(World world, ItemStack stack, FoodComponent foodComponent);
+//    @Shadow
+//    public abstract ItemStack eatFood(World world, ItemStack stack, FoodComponent foodComponent);
 
     @Shadow
     public abstract AttributeContainer getAttributes();
@@ -88,7 +90,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
 
     @Shadow
-    protected abstract void spawnItemParticles(ItemStack stack, int count);
+    public abstract void spawnItemParticles(ItemStack stack, int count);
 
     @Unique
     private int itemUsedTicks;
@@ -97,14 +99,14 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         super(type, world);
     }
 
-    @Redirect(
-        method = "eatFood",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;decrementUnlessCreative(ILnet/minecraft/entity/LivingEntity;)V"
-        )
-    )
-    private void doNotDecrementItemStack(ItemStack instance, int amount, LivingEntity entity) {}
+//    @Redirect(
+//        method = "eatFood",
+//        at = @At(
+//            value = "INVOKE",
+//            target = "Lnet/minecraft/item/ItemStack;decrementUnlessCreative(ILnet/minecraft/entity/LivingEntity;)V"
+//        )
+//    )
+//    private void doNotDecrementItemStack(ItemStack instance, int amount, LivingEntity entity) {}
 
     @Redirect(
         method = "getPreferredEquipmentSlot",
@@ -338,48 +340,48 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         return original;
     }
 
-    @Inject(
-        method = "shouldSpawnConsumptionEffects",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    private void checkMaxUseTime(CallbackInfoReturnable<Boolean> info) {
-        if (this.activeItemStack.getMaxUseTime((LivingEntity)(Object) this) <= 0) {
-            info.setReturnValue(false);
-        }
-    }
-
-    @Inject(
-        method = "spawnConsumptionEffects",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    private void alwaysSpawnItemParticlesAndStoreConsumableSound(ItemStack stack, int particleCount, CallbackInfo info, @Share("consumeSound") LocalRef<RegistryEntry<SoundEvent>> consumeSound) {
-        this.spawnItemParticles(stack, particleCount);
-        this.activeItemStack.itematic$getComponent(ItemComponentTypes.CONSUMABLE)
-            .map(ConsumableItemComponent::sound)
-            .ifPresentOrElse(consumeSound::set, info::cancel);
-    }
-
-    @Redirect(
-        method = "spawnConsumptionEffects",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;spawnItemParticles(Lnet/minecraft/item/ItemStack;I)V"
-        )
-    )
-    private void doNotSpawnItemParticlesNormally(LivingEntity instance, ItemStack stack, int count) {}
-
-    @ModifyArg(
-        method = "spawnConsumptionEffects",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;playSound(Lnet/minecraft/sound/SoundEvent;FF)V"
-        )
-    )
-    private SoundEvent playSoundUseItemComponent(SoundEvent sound, @Share("consumeSound") LocalRef<RegistryEntry<SoundEvent>> consumeSound) {
-        return consumeSound.get().value();
-    }
+//    @Inject(
+//        method = "shouldSpawnConsumptionEffects",
+//        at = @At("HEAD"),
+//        cancellable = true
+//    )
+//    private void checkMaxUseTime(CallbackInfoReturnable<Boolean> info) {
+//        if (this.activeItemStack.getMaxUseTime((LivingEntity)(Object) this) <= 0) {
+//            info.setReturnValue(false);
+//        }
+//    }
+//
+//    @Inject(
+//        method = "spawnConsumptionEffects",
+//        at = @At("HEAD"),
+//        cancellable = true
+//    )
+//    private void alwaysSpawnItemParticlesAndStoreConsumableSound(ItemStack stack, int particleCount, CallbackInfo info, @Share("consumeSound") LocalRef<RegistryEntry<SoundEvent>> consumeSound) {
+//        this.spawnItemParticles(stack, particleCount);
+//        this.activeItemStack.itematic$getComponent(ItemComponentTypes.CONSUMABLE)
+//            .map(ConsumableItemComponent::sound)
+//            .ifPresentOrElse(consumeSound::set, info::cancel);
+//    }
+//
+//    @Redirect(
+//        method = "spawnConsumptionEffects",
+//        at = @At(
+//            value = "INVOKE",
+//            target = "Lnet/minecraft/entity/LivingEntity;spawnItemParticles(Lnet/minecraft/item/ItemStack;I)V"
+//        )
+//    )
+//    private void doNotSpawnItemParticlesNormally(LivingEntity instance, ItemStack stack, int count) {}
+//
+//    @ModifyArg(
+//        method = "spawnConsumptionEffects",
+//        at = @At(
+//            value = "INVOKE",
+//            target = "Lnet/minecraft/entity/LivingEntity;playSound(Lnet/minecraft/sound/SoundEvent;FF)V"
+//        )
+//    )
+//    private SoundEvent playSoundUseItemComponent(SoundEvent sound, @Share("consumeSound") LocalRef<RegistryEntry<SoundEvent>> consumeSound) {
+//        return consumeSound.get().value();
+//    }
 
     @Inject(
         method = "spawnItemParticles",
@@ -453,7 +455,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Override
     public void itematic$eatFood(World world, ItemStack stack, FoodComponent food, ItemStackConsumer resultStackConsumer) {
-        this.eatFood(world, stack, food);
+//        this.eatFood(world, stack, food);
         if (world instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, this.getActiveHand())
                 .entityPosition(ActionContextParameter.THIS, this)

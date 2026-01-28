@@ -12,15 +12,14 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.providers.ConstantIntegerProvider;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.errorcraft.itematic.util.UseActionUtil;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 import java.util.Set;
@@ -28,7 +27,7 @@ import java.util.Set;
 public record UseableItemComponent(UseDurationDataComponent ticks, UseAction animation, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
     public static final Codec<UseableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         UseDurationDataComponent.MAP_CODEC.forGetter(UseableItemComponent::ticks),
-        UseActionUtil.CODEC.optionalFieldOf("animation", UseAction.NONE).forGetter(UseableItemComponent::animation),
+        UseAction.CODEC.optionalFieldOf("animation", UseAction.NONE).forGetter(UseableItemComponent::animation),
         ItematicCodecs.setCodec(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(UseableItemComponent::passes)
     ).apply(instance, UseableItemComponent::new));
 

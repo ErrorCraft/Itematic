@@ -70,17 +70,6 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
     }
 
     @Redirect(
-        method = "getDrinkSound",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForMilkBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.MILK_BUCKET);
-    }
-
-    @Redirect(
         method = "interactMob",
         at = @At(
             value = "INVOKE",

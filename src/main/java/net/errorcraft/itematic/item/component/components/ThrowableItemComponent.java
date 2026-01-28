@@ -15,11 +15,11 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 import java.util.Optional;

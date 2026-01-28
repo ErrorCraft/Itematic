@@ -25,7 +25,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
@@ -87,17 +86,6 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
         return instance.itematic$getOrCreateStat(this.activeItemStack.getRegistryEntry());
     }
 
-    @ModifyArg(
-        method = "disableShield",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"
-        )
-    )
-    private Item setCooldownForShieldUseDynamicRegistry(Item item) {
-        return this.getWorld().itematic$getItem(ItemKeys.SHIELD).value();
-    }
-
     @Redirect(
         method = "attack",
         at = @At(
@@ -108,7 +96,7 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/entity/attribute/EntityAttributes;GENERIC_ATTACK_DAMAGE:Lnet/minecraft/registry/entry/RegistryEntry;",
+                target = "Lnet/minecraft/entity/attribute/EntityAttributes;ATTACK_DAMAGE:Lnet/minecraft/registry/entry/RegistryEntry;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -121,14 +109,7 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
         method = "attack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/player/PlayerEntity;setStackInHand(Lnet/minecraft/util/Hand;Lnet/minecraft/item/ItemStack;)V",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;postHit(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/player/PlayerEntity;)V"
-            )
+            target = "Lnet/minecraft/entity/player/PlayerEntity;setStackInHand(Lnet/minecraft/util/Hand;Lnet/minecraft/item/ItemStack;)V"
         )
     )
     private void neverSetEmptyStack(PlayerEntity instance, Hand hand, ItemStack stack) {}
@@ -144,16 +125,16 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
         return this.inventory.getMainHandStack().itematic$attackSpeedMultiplier() * original;
     }
 
-    @Redirect(
-        method = "eatFood",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
-        )
-    )
-    private <T> Stat<T> doNotGetOrCreateStat(StatType<T> instance, T key) {
-        return null;
-    }
+//    @Redirect(
+//        method = "eatFood",
+//        at = @At(
+//            value = "INVOKE",
+//            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+//        )
+//    )
+//    private <T> Stat<T> doNotGetOrCreateStat(StatType<T> instance, T key) {
+//        return null;
+//    }
 
     @Redirect(
         method = "isUsingSpyglass",

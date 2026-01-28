@@ -15,19 +15,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
-import java.util.List;
-import java.util.Optional;
-
-public record FoodItemComponent(int nutrition, float saturation, boolean alwaysEdible, List<FoodComponent.StatusEffectEntry> effects) implements ItemComponent<FoodItemComponent> {
+public record FoodItemComponent(int nutrition, float saturation, boolean alwaysEdible) implements ItemComponent<FoodItemComponent> {
     public static final Codec<FoodItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.NON_NEGATIVE_INT.fieldOf("nutrition").forGetter(FoodItemComponent::nutrition),
         Codec.FLOAT.fieldOf("saturation").forGetter(FoodItemComponent::saturation),
-        Codec.BOOL.optionalFieldOf("always_edible", false).forGetter(FoodItemComponent::alwaysEdible),
-        FoodComponent.StatusEffectEntry.CODEC.listOf().optionalFieldOf("effects", List.of()).forGetter(FoodItemComponent::effects)
+        Codec.BOOL.optionalFieldOf("always_edible", false).forGetter(FoodItemComponent::alwaysEdible)
     ).apply(instance, FoodItemComponent::new));
 
+    // todo fix effects
     public static FoodItemComponent of(FoodComponent food) {
-        return new FoodItemComponent(food.nutrition(), food.saturation(), food.canAlwaysEat(), food.effects());
+        return new FoodItemComponent(food.nutrition(), food.saturation(), food.canAlwaysEat());
     }
 
     @Override
@@ -50,9 +47,10 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.FOOD, new FoodComponent(this.nutrition, this.saturation, false, 1.0f, Optional.empty(), this.effects));
+        builder.add(DataComponentTypes.FOOD, new FoodComponent(this.nutrition, this.saturation, this.alwaysEdible));
     }
 
+    // todo fix???
     public boolean mayStartUsing(PlayerEntity user) {
         return user.canConsume(this.alwaysEdible);
     }

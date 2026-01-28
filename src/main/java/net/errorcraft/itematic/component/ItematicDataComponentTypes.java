@@ -8,20 +8,19 @@ import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMeth
 import net.errorcraft.itematic.mixin.component.DataComponentTypesAccessor;
 import net.errorcraft.itematic.network.codec.PacketCodecUtil;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.errorcraft.itematic.util.UseActionUtil;
 import net.minecraft.component.ComponentType;
 import net.minecraft.item.CrossbowItem;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.UseAction;
 import org.apache.commons.lang3.math.Fraction;
 
 public class ItematicDataComponentTypes {
     public static final ComponentType<ImmuneToDamageComponent> IMMUNE_TO_DAMAGE = DataComponentTypesAccessor.register("immune_to_damage", builder -> builder.codec(ImmuneToDamageComponent.CODEC).packetCodec(ImmuneToDamageComponent.PACKET_CODEC));
     public static final ComponentType<UseDurationDataComponent> USE_DURATION = DataComponentTypesAccessor.register("use_duration", builder -> builder.codec(UseDurationDataComponent.CODEC).packetCodec(UseDurationDataComponent.PACKET_CODEC).cache());
-    public static final ComponentType<UseAction> USE_ANIMATION = DataComponentTypesAccessor.register("use_animation", builder -> builder.codec(UseActionUtil.CODEC).packetCodec(UseActionUtil.PACKET_CODEC).cache());
+    public static final ComponentType<UseAction> USE_ANIMATION = DataComponentTypesAccessor.register("use_animation", builder -> builder.codec(UseAction.CODEC).packetCodec(UseAction.PACKET_CODEC).cache());
     public static final ComponentType<ItemListDataComponent> SHOOTER_AMMUNITION = DataComponentTypesAccessor.register("shooter_ammunition", builder -> builder.codec(ItemListDataComponent.CODEC).packetCodec(ItemListDataComponent.PACKET_CODEC).cache());
     public static final ComponentType<ItemListDataComponent> SHOOTER_HELD_AMMUNITION = DataComponentTypesAccessor.register("shooter_held_ammunition", builder -> builder.codec(ItemListDataComponent.CODEC).packetCodec(ItemListDataComponent.PACKET_CODEC).cache());
     public static final ComponentType<Double> ATTACK_SPEED_MULTIPLIER = DataComponentTypesAccessor.register("attack_speed_multiplier", builder -> builder.codec(ItematicCodecs.NON_NEGATIVE_DOUBLE).packetCodec(PacketCodecs.DOUBLE).cache());

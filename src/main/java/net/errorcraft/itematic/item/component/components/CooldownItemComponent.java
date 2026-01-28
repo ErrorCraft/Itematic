@@ -7,17 +7,28 @@ import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.SharedConstants;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.UseCooldownComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
-public record CooldownItemComponent(int ticks) implements ItemComponent<CooldownItemComponent> {
+import java.util.Optional;
+
+public record CooldownItemComponent(Optional<Identifier> group, int ticks) implements ItemComponent<CooldownItemComponent> {
     public static final Codec<CooldownItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Identifier.CODEC.optionalFieldOf("group").forGetter(CooldownItemComponent::group),
         Codecs.POSITIVE_INT.fieldOf("ticks").forGetter(CooldownItemComponent::ticks)
     ).apply(instance, CooldownItemComponent::new));
+
+    public static CooldownItemComponent of(int ticks) {
+        return new CooldownItemComponent(Optional.empty(), ticks);
+    }
 
     @Override
     public ItemComponentType<CooldownItemComponent> type() {
@@ -31,11 +42,16 @@ public record CooldownItemComponent(int ticks) implements ItemComponent<Cooldown
 
     @Override
     public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        user.getItemCooldownManager().set(stack.getItem(), this.ticks);
+        UseCooldownComponent useCooldown = stack.get(DataComponentTypes.USE_COOLDOWN);
+        if (useCooldown != null) {
+            useCooldown.set(stack, user);
+        }
+
         return ItemResult.PASS;
     }
 
-    public static CooldownItemComponent of(int ticks) {
-        return new CooldownItemComponent(ticks);
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.USE_COOLDOWN, new UseCooldownComponent((float) this.ticks / SharedConstants.TICKS_PER_SECOND, this.group));
     }
 }

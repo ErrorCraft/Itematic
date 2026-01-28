@@ -30,7 +30,7 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
     public boolean matches(CraftingRecipeInput input, World world) {
         boolean foundIngredient = false;
         boolean foundColor = false;
-        for (int i = 0; i < input.getSize(); i++) {
+        for (int i = 0; i < input.size(); i++) {
             ItemStack stack = input.getStackInSlot(i);
             if (stack.isEmpty()) {
                 continue;
@@ -62,7 +62,7 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
 
     @Override
     public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        for (int i = 0; i < input.getSize(); i++) {
+        for (int i = 0; i < input.size(); i++) {
             ItemStack stack = input.getStackInSlot(i);
             if (!this.ingredient.test(stack)) {
                 continue;

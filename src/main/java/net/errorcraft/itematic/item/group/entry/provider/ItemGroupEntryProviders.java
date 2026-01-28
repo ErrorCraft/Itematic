@@ -10,10 +10,10 @@ import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FireworksComponent;
+import net.minecraft.component.type.OminousBottleAmplifierComponent;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.OminousBottleItem;
 import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
@@ -482,10 +482,10 @@ public class ItemGroupEntryProviders {
     }
 
     private static ItemGroupEntry[] ominousBottles(RegistryEntry<Item> item) {
-        List<ItemGroupEntry> entries = new ArrayList<>(OminousBottleItem.field_50145 - OminousBottleItem.field_50144);
-        for (int amplifier = OminousBottleItem.field_50144; amplifier <= OminousBottleItem.field_50145; amplifier++) {
+        List<ItemGroupEntry> entries = new ArrayList<>(OminousBottleAmplifierComponent.MAX_VALUE - OminousBottleAmplifierComponent.MIN_VALUE + 1);
+        for (int amplifier = OminousBottleAmplifierComponent.MIN_VALUE; amplifier <= OminousBottleAmplifierComponent.MAX_VALUE; amplifier++) {
             ItemStack stack = new ItemStack(item);
-            stack.set(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER, amplifier);
+            stack.set(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER, new OminousBottleAmplifierComponent(amplifier));
             entries.add(StackItemGroupEntry.fromStack(stack));
         }
 

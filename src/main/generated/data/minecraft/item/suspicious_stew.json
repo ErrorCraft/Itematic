@@ -23,22 +23,8 @@
   "events": {
     "minecraft:consume_item": {
       "action": {
-        "type": "minecraft:sequence",
-        "handler": "minecraft:passing",
-        "entries": [
-          {
-            "action": {
-              "type": "minecraft:apply_suspicious_stew_effects_from_item",
-              "entity": "this"
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:exchange_item",
-              "item": "minecraft:bowl"
-            }
-          }
-        ]
+        "type": "minecraft:apply_suspicious_stew_effects_from_item",
+        "entity": "this"
       }
     }
   }

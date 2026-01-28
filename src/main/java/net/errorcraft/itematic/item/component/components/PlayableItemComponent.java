@@ -15,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Instrument;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -26,7 +27,6 @@ import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.UseAction;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -66,7 +66,8 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
             .map(RegistryEntry::value)
             .map(instrument -> {
                 GoatHornItemAccessor.playSound(world, user, instrument);
-                user.getItemCooldownManager().set(stack.getItem(), MathHelper.floor(instrument.useDuration() * SharedConstants.TICKS_PER_SECOND));
+                // todo fix Registries.ITEM reference
+                user.getItemCooldownManager().set(stack, MathHelper.floor(instrument.useDuration() * SharedConstants.TICKS_PER_SECOND));
                 user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
                 return ItemResult.CONSUME;
             }).orElse(ItemResult.PASS);
