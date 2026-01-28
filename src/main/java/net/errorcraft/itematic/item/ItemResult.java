@@ -3,14 +3,13 @@ package net.errorcraft.itematic.item;
 import net.minecraft.util.ActionResult;
 
 public interface ItemResult {
-    // todo: make an enum?
     ItemResult PASS = new Pass();
     ItemResult CONSUME = new Consume();
-    ItemResult SUCCESS = new Success();
+    ItemResult SUCCEED = new Success();
 
     ItemResult max(ItemResult other);
     ActionResult toActionResult();
-    boolean isAccepted(); // todo remove
+    boolean succeeds();
 
     class Pass implements ItemResult {
         private Pass() {}
@@ -26,7 +25,7 @@ public interface ItemResult {
         }
 
         @Override
-        public boolean isAccepted() {
+        public boolean succeeds() {
             return false;
         }
     }
@@ -36,8 +35,8 @@ public interface ItemResult {
 
         @Override
         public ItemResult max(ItemResult other) {
-            if (other == SUCCESS) {
-                return SUCCESS;
+            if (other == SUCCEED) {
+                return SUCCEED;
             }
 
             return this;
@@ -49,7 +48,7 @@ public interface ItemResult {
         }
 
         @Override
-        public boolean isAccepted() {
+        public boolean succeeds() {
             return true;
         }
     }
@@ -68,7 +67,7 @@ public interface ItemResult {
         }
 
         @Override
-        public boolean isAccepted() {
+        public boolean succeeds() {
             return true;
         }
     }

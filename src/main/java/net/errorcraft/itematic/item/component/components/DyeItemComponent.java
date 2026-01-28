@@ -29,7 +29,7 @@ public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemC
     @Override
     public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         if (!(context.getWorld() instanceof ServerWorld world)) {
-            return ItemResult.SUCCESS;
+            return ItemResult.SUCCEED;
         }
 
         ActionContext actionContext = ActionContext.builder(world, context.getStack(), resultStackConsumer)

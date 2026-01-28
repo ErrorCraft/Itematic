@@ -72,7 +72,7 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
 
         user.playSound(this.emptySound.value(), 0.8f, 0.8f + world.getRandom().nextFloat() * 0.4f);
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
-        return ItemResult.SUCCESS;
+        return ItemResult.SUCCEED;
     }
 
     @Override

@@ -90,7 +90,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
             this.createEntity(context);
         }
 
-        return ItemResult.SUCCESS;
+        return ItemResult.SUCCEED;
     }
 
     private void createEntity(ActionContext context) {

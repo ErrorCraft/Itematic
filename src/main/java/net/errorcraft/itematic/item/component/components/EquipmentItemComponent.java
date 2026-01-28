@@ -76,14 +76,17 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
                 .build();
             stack.itematic$invokeEvent(ItemEvents.EQUIP_ITEM, context);
         }
+
         if (result == ActionResult.FAIL) {
             return ItemResult.PASS;
         }
+
         if (result.isAccepted() && !world.isClient()) {
             user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+            return ItemResult.SUCCEED;
         }
-//        return result;
-        return ItemResult.SUCCESS; // todo fix
+
+        return ItemResult.PASS;
     }
 
     @Override

@@ -104,7 +104,7 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
     public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         ItemStack stack = context.getStack();
         if (context.getWorld().isClient()) {
-            return ItemResult.SUCCESS;
+            return ItemResult.SUCCEED;
         }
 
         EntityPlacer placer = EntityPlacer.spawned(context, stack, resultStackConsumer, this);

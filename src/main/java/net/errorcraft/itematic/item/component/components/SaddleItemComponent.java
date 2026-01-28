@@ -32,7 +32,7 @@ public record SaddleItemComponent() implements ItemComponent<SaddleItemComponent
     @Override
     public ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (this.trySaddle(target, user.getWorld(), stack, SoundCategory.NEUTRAL)) {
-            return ItemResult.SUCCESS;
+            return ItemResult.SUCCEED;
         }
 
         return ItemResult.PASS;

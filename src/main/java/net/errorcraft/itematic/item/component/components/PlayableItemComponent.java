@@ -66,7 +66,6 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
             .map(RegistryEntry::value)
             .map(instrument -> {
                 GoatHornItemAccessor.playSound(world, user, instrument);
-                // todo fix Registries.ITEM reference
                 user.getItemCooldownManager().set(stack, MathHelper.floor(instrument.useDuration() * SharedConstants.TICKS_PER_SECOND));
                 user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
                 return ItemResult.CONSUME;

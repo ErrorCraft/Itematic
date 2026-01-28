@@ -49,7 +49,7 @@ public record DebugStickItemComponent() implements ItemComponent<DebugStickItemC
         if (!DUMMY.callUse(player, world.getBlockState(pos), world, pos, true, context.getStack())) {
             return ItemResult.PASS;
         }
-        return ItemResult.SUCCESS;
+        return ItemResult.SUCCEED;
     }
 
     @Override

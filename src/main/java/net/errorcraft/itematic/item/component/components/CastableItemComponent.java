@@ -39,7 +39,7 @@ public record CastableItemComponent() implements ItemComponent<CastableItemCompo
         if (!this.tryRetract(world, user, stack, resultStackConsumer)) {
             this.cast(world, user, stack);
         }
-        return ItemResult.SUCCESS;
+        return ItemResult.SUCCEED;
     }
 
     private boolean tryRetract(World world, PlayerEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {

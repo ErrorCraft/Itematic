@@ -34,7 +34,7 @@ public record UnlockRecipesItemComponent() implements ItemComponent<UnlockRecipe
 
     @Override
     public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        return DUMMY.use(world, user, hand).isAccepted() ? ItemResult.SUCCESS : ItemResult.PASS;
+        return DUMMY.use(world, user, hand).isAccepted() ? ItemResult.SUCCEED : ItemResult.PASS;
     }
 
     @Override

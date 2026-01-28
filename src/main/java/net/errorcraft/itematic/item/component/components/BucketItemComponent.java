@@ -123,15 +123,18 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
             FluidPlacer fluidPlacer = FluidPlacer.of(stack, stackReference::set, world, blockHitResult, user, this.fluid.get(), this.emptyingSound.orElse(null));
             result = place(fluidPlacer, result);
         }
+
         if (this.block.isPresent()) {
             ItemUsageContext context = new ItemUsageContext(world, user, hand, stack, blockHitResult);
             BlockPlacer blockPlacer = BlockPlacer.of(context, stackReference::set, this.block.get(), false, false);
             result = place(blockPlacer, result);
         }
+
         result = this.tryPlaceEntity(world, user, hand, stack, blockHitResult, stackReference, result);
-        if (result.isAccepted()) {
+        if (result.succeeds()) {
             resultStackConsumer.set(this.getResultStack(user, stack, stackReference.get()));
         }
+
         return result;
     }
 
@@ -139,9 +142,11 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         if (this.fluid.isEmpty()) {
             return RaycastContext.FluidHandling.NONE;
         }
+
         if (this.fluid.get().matchesKey(FluidKeys.EMPTY)) {
             return RaycastContext.FluidHandling.SOURCE_ONLY;
         }
+
         return RaycastContext.FluidHandling.NONE;
     }
 
@@ -149,12 +154,15 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         if (this.entity.isEmpty()) {
             return currentResult;
         }
-        if (this.entity.get().requireOtherSuccessfulPlacement && !currentResult.isAccepted()) { // todo
+
+        if (this.entity.get().requireOtherSuccessfulPlacement && !currentResult.succeeds()) {
             return currentResult;
         }
+
         if (world.isClient()) {
             return currentResult;
         }
+
         EntityPlacer entityPlacer = EntityPlacer.bucket(stack, stackReference::set, world, blockHitResult, user, this.entity.get().entity, hand);
         return place(entityPlacer, currentResult);
     }
@@ -168,10 +176,12 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         if (currentStack == possibleNewStack) {
             possibleNewStack = this.transformsInto.map(ItemStack::new).orElse(possibleNewStack);
         }
+
         if (player == null) {
             currentStack.decrement(1);
             return possibleNewStack;
         }
+
         return ItemUsage.exchangeStack(currentStack, player, possibleNewStack);
     }
 

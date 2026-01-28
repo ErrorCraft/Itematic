@@ -58,7 +58,7 @@ public class FluidPlacer extends Placer {
         if (!this.tryPlaceFluid(actualBlockPos, this.allowOffset)) {
             return ItemResult.PASS;
         }
-        return ItemResult.SUCCESS;
+        return ItemResult.SUCCEED;
     }
 
     private BlockPos getActualPosition(BlockPos offset) {
@@ -82,7 +82,7 @@ public class FluidPlacer extends Placer {
         this.applyPlayerEffects(fluidDrainable, drainedItemStack);
         this.world.emitGameEvent(this.player, GameEvent.FLUID_PICKUP, this.blockPos);
         this.resultStackConsumer.set(drainedItemStack);
-        return ItemResult.SUCCESS;
+        return ItemResult.SUCCEED;
     }
 
     private void applyPlayerEffects(FluidDrainable fluidDrainable, ItemStack drainedItemStack) {

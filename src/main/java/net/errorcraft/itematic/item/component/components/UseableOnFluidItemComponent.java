@@ -10,7 +10,6 @@ import net.errorcraft.itematic.mixin.item.ItemAccessor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -39,6 +38,6 @@ public record UseableOnFluidItemComponent() implements ItemComponent<UseableOnFl
         }
 
         ItemUsageContext itemUsageContext = new ItemUsageContext(world, user, hand, stack, blockHitResult);
-        return stack.useOnBlock(itemUsageContext).isAccepted() ? ItemResult.SUCCESS : ItemResult.PASS; // todo fix
+        return stack.useOnBlock(itemUsageContext).isAccepted() ? ItemResult.SUCCEED : ItemResult.PASS; // todo fix
     }
 }

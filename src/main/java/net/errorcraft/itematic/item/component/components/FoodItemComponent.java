@@ -22,7 +22,6 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
         Codec.BOOL.optionalFieldOf("always_edible", false).forGetter(FoodItemComponent::alwaysEdible)
     ).apply(instance, FoodItemComponent::new));
 
-    // todo fix effects
     public static FoodItemComponent of(FoodComponent food) {
         return new FoodItemComponent(food.nutrition(), food.saturation(), food.canAlwaysEat());
     }
@@ -50,8 +49,8 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
         builder.add(DataComponentTypes.FOOD, new FoodComponent(this.nutrition, this.saturation, this.alwaysEdible));
     }
 
-    // todo fix???
-    public boolean mayStartUsing(PlayerEntity user) {
-        return user.canConsume(this.alwaysEdible);
+    public boolean mayStartUsing(PlayerEntity user, ItemStack stack) {
+        FoodComponent food = stack.get(DataComponentTypes.FOOD);
+        return food != null && user.canConsume(food.canAlwaysEat());
     }
 }

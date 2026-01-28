@@ -49,7 +49,7 @@ public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int dam
             .entityPosition(ActionContextParameter.THIS, user)
             .build();
         if (this.apply(user, stack, context)) {
-            return ItemResult.SUCCESS;
+            return ItemResult.SUCCEED;
         }
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         return ItemResult.PASS;

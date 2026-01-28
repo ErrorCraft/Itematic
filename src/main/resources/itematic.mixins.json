@@ -218,6 +218,7 @@
     "entity.passive.VillagerEntityExtender",
     "entity.passive.WanderingTraderEntityExtender",
     "entity.passive.WolfEntityExtender",
+    "entity.player.ItemCooldownManagerExtender",
     "entity.player.PlayerEntityExtender",
     "entity.player.PlayerInventoryExtender",
     "entity.player.ServerPlayerEntityExtender",

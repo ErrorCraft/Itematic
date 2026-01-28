@@ -37,6 +37,6 @@ public record PlaceBlockAction(BlockPicker<?> block, ActionContextParameter posi
     @Override
     public boolean execute(ActionContext context) {
         BlockPlacer placer = BlockPlacer.of(context, this.position, this.block, false, this.decrementCount);
-        return placer.place().isAccepted();
+        return placer.place().succeeds();
     }
 }

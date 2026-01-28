@@ -81,7 +81,7 @@ public class BlockPlacer extends Placer {
         }
 
         this.placed(blockState);
-        return ItemResult.SUCCESS;
+        return ItemResult.SUCCEED;
     }
 
     private void placed(BlockState blockState) {

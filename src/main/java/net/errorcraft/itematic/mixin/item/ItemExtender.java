@@ -644,7 +644,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Override
     public boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return this.itematic$getComponent(ItemComponentTypes.FOOD)
-            .map(c -> c.mayStartUsing(user))
+            .map(c -> c.mayStartUsing(user, stack))
             .orElse(true);
     }
 

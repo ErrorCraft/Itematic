@@ -41,7 +41,7 @@ public record MappableItemComponent(RegistryEntry<Item> transformsInto) implemen
     @Override
     public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (world.isClient()) {
-            return ItemResult.SUCCESS;
+            return ItemResult.SUCCEED;
         }
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         user.getWorld().playSoundFromEntity(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundCategory(), 1.0f, 1.0f);

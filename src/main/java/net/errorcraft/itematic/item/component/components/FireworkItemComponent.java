@@ -47,7 +47,7 @@ public record FireworkItemComponent() implements ItemComponent<FireworkItemCompo
         }
 
         if (world.isClient()) {
-            return ItemResult.SUCCESS;
+            return ItemResult.SUCCEED;
         }
 
         FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(world, stack, user);
@@ -62,7 +62,7 @@ public record FireworkItemComponent() implements ItemComponent<FireworkItemCompo
         World world = context.getWorld();
         ItemStack stack = context.getStack();
         if (world.isClient()) {
-            return ItemResult.SUCCESS;
+            return ItemResult.SUCCEED;
         }
 
         FireworkRocketEntity entity = createFireworkEntity(world, stack, context);
