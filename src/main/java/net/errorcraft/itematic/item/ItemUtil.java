@@ -201,7 +201,6 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(ConsumableComponents.MILK_BUCKET)
                         .resultItem(this.items.getOrThrow(ItemKeys.BUCKET))
                         .build())
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ClearStatusEffectsAction.of(ActionContextParameter.THIS)))
@@ -732,7 +731,6 @@ public class ItemUtil {
                         .noConsumeParticles()
                         .consumeSound(this.soundEvents.getOrThrow(SoundEventKeys.HONEY_BOTTLE_DRINK))
                         .build())
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
@@ -9643,15 +9641,13 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.WATER_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.WATER), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY), this.items, this.dispenseBehaviors))
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LAVA_BUCKET, create(
                 ItemBase.Builder.forItem(ItemKeys.LAVA_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.LAVA), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_LAVA), this.items, this.dispenseBehaviors))
-                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.LAVA_FUEL_TIME))
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.LAVA_FUEL_TIME, this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POWDER_SNOW_BUCKET, create(
@@ -10768,7 +10764,6 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TOTEM_OF_UNDYING, create(

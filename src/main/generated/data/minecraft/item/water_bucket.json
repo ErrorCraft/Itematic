@@ -11,9 +11,6 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:use_bucket"
     },
-    "minecraft:recipe_remainder": {
-      "item": "minecraft:bucket"
-    },
     "minecraft:stackable": 1
   }
 }

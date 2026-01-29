@@ -14,7 +14,6 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
 import net.errorcraft.itematic.item.component.components.DamageableItemComponent;
-import net.errorcraft.itematic.item.component.components.RecipeRemainderItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
@@ -147,7 +146,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             }
         }
 
-        tryUpdateItemStack(context.getPlayer(), context.getHand(), stack, stackReference); // todo: necessary?
+        tryUpdateItemStack(context.getPlayer(), context.getHand(), stack, stackReference);
         ActionResult trueResult = result.toActionResult();
         if (trueResult instanceof ActionResult.Success success) {
             trueResult = success.withNewHandStack(stackReference.get());
@@ -416,15 +415,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public boolean hasRecipeRemainder() {
-        return this.itematic$hasComponent(ItemComponentTypes.RECIPE_REMAINDER);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
     public boolean canBeNested() {
         return this.itematic$getComponent(ItemComponentTypes.BLOCK)
             .map(BlockItemComponent::canBeNested)
@@ -597,15 +587,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return this.itematic$getComponent(ItemComponentTypes.FOOD)
             .map(c -> c.mayStartUsing(user, stack))
             .orElse(true);
-    }
-
-    @Override
-    public ItemStack getRecipeRemainder(ItemStack stack) {
-        // Use the ItemComponent implementation for data-driven items, so we don't get a NullPointerException
-        return this.itematic$getComponent(ItemComponentTypes.RECIPE_REMAINDER)
-            .map(RecipeRemainderItemComponent::item)
-            .map(ItemStack::new)
-            .orElse(ItemStack.EMPTY);
     }
 
     @Override
