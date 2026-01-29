@@ -11,32 +11,25 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.mixin.item.BundleItemAccessor;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.errorcraft.itematic.util.Util;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.tooltip.BundleTooltipData;
 import net.minecraft.item.tooltip.TooltipData;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.math.Fraction;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -122,18 +115,6 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
         builder.add(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT);
         builder.add(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY, this.capacity);
         builder.add(ItematicDataComponentTypes.ITEM_HOLDER_RULES, this.rules);
-    }
-
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        Fraction occupancyFraction = this.occupancy(stack);
-        if (occupancyFraction == null) {
-            return;
-        }
-
-        int occupancy = Util.multiplyFraction(occupancyFraction, Item.DEFAULT_MAX_COUNT);
-        int capacity = Util.multiplyFraction(Objects.requireNonNull(stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY)), Item.DEFAULT_MAX_COUNT);
-        tooltip.add(Text.translatable("item.minecraft.bundle.fullness", occupancy, capacity).formatted(Formatting.GRAY));
     }
 
     public Optional<TooltipData> tooltipData(ItemStack stack) {

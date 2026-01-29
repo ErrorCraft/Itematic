@@ -15,7 +15,7 @@ public class BundleTooltipComponentExtender implements BundleTooltipComponentAcc
     private Fraction capacity;
 
     @Redirect(
-        method = "drawItems",
+        method = "getProgressBarLabel",
         at = @At(
             value = "FIELD",
             target = "Lorg/apache/commons/lang3/math/Fraction;ONE:Lorg/apache/commons/lang3/math/Fraction;",

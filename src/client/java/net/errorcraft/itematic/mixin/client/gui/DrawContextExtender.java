@@ -13,6 +13,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -26,6 +27,10 @@ import java.util.function.Function;
 
 @Mixin(DrawContext.class)
 public abstract class DrawContextExtender {
+    @Shadow
+    @Final
+    private MatrixStack matrices;
+
     @Shadow
     public abstract void drawGuiTexture(Function<Identifier, RenderLayer> function, Identifier identifier, int i, int j, int k, int l, int m);
 
@@ -69,15 +74,21 @@ public abstract class DrawContextExtender {
             return;
         }
 
-        this.itemBarStyles.get(itemBarStyleId).ifPresent(itemBarStyle -> this.drawGuiTexture(
-            RenderLayer::getGuiTextured,
-            itemBarStyle.progressTexture(stack),
-            x,
-            y,
-            16,
-            16,
-            itemBarStyle.color(stack)
-        ));
+        this.itemBarStyles.get(itemBarStyleId).ifPresent(itemBarStyle -> {
+            if (stack.getCount() == 1 && countOverride == null) {
+                this.matrices.translate(0.0f, 0.0f, 200.0f);
+            }
+
+            this.drawGuiTexture(
+                RenderLayer::getGuiTextured,
+                itemBarStyle.progressTexture(stack),
+                x,
+                y,
+                16,
+                16,
+                itemBarStyle.color(stack)
+            );
+        });
     }
 
     @Redirect(
