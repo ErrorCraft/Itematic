@@ -10,7 +10,11 @@
       "allow_item_data": true,
       "entity": {
         "type": "minecraft:wolf"
-      }
+      },
+      "passes": [
+        "block",
+        "fluid"
+      ]
     },
     "minecraft:spawn_egg": {},
     "minecraft:stackable": 64,
@@ -22,7 +26,6 @@
           13545366
         ]
       }
-    },
-    "minecraft:useable_on_fluid": {}
+    }
   }
 }

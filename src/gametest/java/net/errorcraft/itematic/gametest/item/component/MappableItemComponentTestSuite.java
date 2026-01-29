@@ -22,8 +22,8 @@ public class MappableItemComponentTestSuite {
         ItemStack stack = world.itematic$createStack(ItemKeys.MAP);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addInstantFinalTask(() -> {
-            ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
             if (!(result instanceof ActionResult.Success successResult)) {
                 throw new GameTestException("Expected mappable usage to be successful");
             }

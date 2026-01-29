@@ -64,9 +64,8 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
 
     public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, int primaryColor, int secondaryColor, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
-            EntityItemComponent.of(SimpleEntityInitializer.of(entity.value()), true),
+            EntityItemComponent.of(SimpleEntityInitializer.of(entity.value()), true, EntityItemComponent.Pass.BLOCK, EntityItemComponent.Pass.FLUID),
             INSTANCE,
-            UseableOnFluidItemComponent.INSTANCE,
             TintedItemComponent.of(IndexItemColor.of(primaryColor, secondaryColor)),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
         };

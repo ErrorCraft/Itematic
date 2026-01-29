@@ -15,17 +15,18 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(RecipeToast.class)
 public class RecipeToastExtender {
     @Redirect(
-        method = "draw",
+        method = "show",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/recipe/Recipe;createIcon()Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack createIconUseDynamicRegistry(Recipe<?> instance, @Local(argsOnly = true) ToastManager manager) {
+    private static ItemStack createIconUseDynamicRegistry(Recipe<?> instance, @Local(argsOnly = true) ToastManager manager) {
         ClientWorld world = manager.getClient().world;
         if (world == null) {
             return ItemStack.EMPTY;
         }
+
         return ((RecipeAccess) instance).itematic$createIcon(world.getRegistryManager().getWrapperOrThrow(RegistryKeys.ITEM));
     }
 }

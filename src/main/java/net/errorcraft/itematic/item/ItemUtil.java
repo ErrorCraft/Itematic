@@ -5151,14 +5151,14 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.WOODEN_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterial.WOOD, this.blocks, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.sword(this.blocks, ToolMaterial.WOOD, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.WOOD, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build(),
                 ItemEventMap.builder()
@@ -5168,21 +5168,21 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.WOODEN_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.WOOD, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.WOOD, 7.0d, 0.2d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.WOOD, 7.0d, 0.2d, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.WOOD, 1.0d, 0.25d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.WOOD, 1.0d, 0.25d, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build(),
                 ItemEventMap.builder()
@@ -5192,13 +5192,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.STONE_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterial.STONE, this.blocks, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.sword(this.blocks, ToolMaterial.STONE, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.STONE, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -5207,19 +5207,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.STONE_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.STONE, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.STONE, 8.0d, 0.2d, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.STONE, 8.0d, 0.2d, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.STONE, 2.0d, 0.5d, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.STONE, 2.0d, 0.5d, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -5228,13 +5228,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GOLDEN_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterial.GOLD, this.blocks, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .with(DamageableItemComponent.sword(this.blocks, ToolMaterial.GOLD, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.GOLD, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -5243,19 +5243,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GOLDEN_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.GOLD, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.GOLD, 7.0d, 0.25d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.GOLD, 7.0d, 0.25d, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.GOLD, 1.0d, 0.25d, ItematicItemTags.REPAIRS_GOLDEN_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.GOLD, 1.0d, 0.25d, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -5264,13 +5264,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.IRON_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterial.IRON, this.blocks, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.sword(this.blocks, ToolMaterial.IRON, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.IRON, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -5279,19 +5279,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.IRON_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.IRON, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.IRON, 7.0d, 0.225d, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.IRON, 7.0d, 0.225d, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.IRON, 3.0d, 0.75d, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.IRON, 3.0d, 0.75d, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -5300,13 +5300,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.DIAMOND_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterial.DIAMOND, this.blocks, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.sword(this.blocks, ToolMaterial.DIAMOND, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.DIAMOND, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -5315,19 +5315,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.DIAMOND_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.DIAMOND, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.DIAMOND, 6.0d, 0.25d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.DIAMOND, 6.0d, 0.25d, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.DIAMOND, 4.0d, 1.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.DIAMOND, 4.0d, 1.0d, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -5336,14 +5336,14 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.NETHERITE_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterial.NETHERITE, this.blocks, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.sword(this.blocks, ToolMaterial.NETHERITE, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.NETHERITE, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build(),
                 ItemEventMap.builder()
@@ -5353,21 +5353,21 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.NETHERITE_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.NETHERITE, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.NETHERITE, 6.0d, 0.25d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.NETHERITE, 6.0d, 0.25d, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.NETHERITE, 5.0d, 1.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.NETHERITE, 5.0d, 1.0d, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build(),
                 ItemEventMap.builder()
@@ -5535,7 +5535,9 @@ public class ItemUtil {
                     .with(ToolItemComponent.builder(2).build())
                     .with(WeaponItemComponent.ofSmashing(1, 6.0d, 0.15d))
                     .with(EnchantableItemComponent.of(15))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_MACE))
+                    .with(RepairableItemComponent.of(RegistryEntryList.of(
+                        this.items.getOrThrow(ItemKeys.BREEZE_ROD)
+                    )))
                     .build()
             ));
         }
@@ -7222,7 +7224,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.ofPreserved(432))
                     .with(EquipmentItemComponent.of(EquipmentSlot.CHEST, true, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_ELYTRA)))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_ELYTRA))
+                    .with(RepairableItemComponent.of(RegistryEntryList.of(
+                        this.items.getOrThrow(ItemKeys.PHANTOM_MEMBRANE)
+                    )))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7235,7 +7239,7 @@ public class ItemUtil {
                         .build())
                     .with(DamageableItemComponent.of(336))
                     .with(EquipmentItemComponent.of(EquipmentSlot.OFFHAND, false, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_SHIELD))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(BannerPatternHolderItemComponent.of())
                     .build()
@@ -7248,7 +7252,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.leatherEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.of(0)))
@@ -7259,7 +7263,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.leatherEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.of(0)))
@@ -7270,7 +7274,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.leatherEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.of(0)))
@@ -7281,7 +7285,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.leatherEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.of(0)))
@@ -7294,7 +7298,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.chainEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7305,7 +7309,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.chainEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7316,7 +7320,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.chainEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7327,7 +7331,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.chainEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7336,7 +7340,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.ironEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_IRON_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7345,7 +7349,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.ironEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_IRON_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7354,7 +7358,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.ironEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_IRON_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7363,7 +7367,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.ironEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_IRON_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7372,7 +7376,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.diamondEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7381,7 +7385,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.diamondEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7390,7 +7394,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.diamondEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7399,7 +7403,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.diamondEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7408,7 +7412,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.goldEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7417,7 +7421,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.goldEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7426,7 +7430,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.goldEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7435,7 +7439,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.goldEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7445,7 +7449,7 @@ public class ItemUtil {
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.netheriteEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7455,7 +7459,7 @@ public class ItemUtil {
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.netheriteEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7465,7 +7469,7 @@ public class ItemUtil {
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.netheriteEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7475,7 +7479,7 @@ public class ItemUtil {
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.netheriteEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7484,7 +7488,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(275, EquipmentSlot.HEAD, this.armorMaterials.getOrThrow(ArmorMaterialKeys.TURTLE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_TURTLE)))
                     .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.turtleEnchantability()))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_TURTLE_ARMOR))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_TURTLE_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));

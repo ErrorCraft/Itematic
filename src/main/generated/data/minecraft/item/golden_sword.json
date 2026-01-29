@@ -10,7 +10,7 @@
       "enchantability": 22
     },
     "minecraft:repairable": {
-      "items": "minecraft:repairs_golden_tool"
+      "items": "#minecraft:gold_tool_materials"
     },
     "minecraft:stackable": 1,
     "minecraft:tool": {

@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.item;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.mojang.serialization.Codec;
@@ -35,7 +36,6 @@ import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
@@ -232,44 +232,42 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "useOnBlock",
+        method = {
+            "use",
+            "useOnBlock",
+            "useOnEntity"
+        },
         at = @At("HEAD"),
         cancellable = true
     )
-    public void useOnBlockCheckNullEntry(ItemUsageContext context, CallbackInfoReturnable<ActionResult> info) {
+    public void checkEmptyStackActionResult(CallbackInfoReturnable<ActionResult> info) {
         if (this.isEmpty()) {
             info.setReturnValue(ActionResult.PASS);
         }
     }
 
     @Inject(
-        method = "useOnEntity",
+        method = "postHit",
         at = @At("HEAD"),
         cancellable = true
     )
-    public void useOnEntityCheckNullEntry(PlayerEntity user, LivingEntity entity, Hand hand, CallbackInfoReturnable<ActionResult> info) {
+    public void checkEmptyStackBoolean(CallbackInfoReturnable<Boolean> info) {
         if (this.isEmpty()) {
-            info.setReturnValue(ActionResult.PASS);
+            info.setReturnValue(false);
         }
     }
 
     @Inject(
-        method = "usageTick",
+        method = {
+            "usageTick",
+            "onStoppedUsing",
+            "postMine",
+            "onCraftByPlayer"
+        },
         at = @At("HEAD"),
         cancellable = true
     )
-    public void usageTickCheckNullEntry(World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
-        if (this.isEmpty()) {
-            info.cancel();
-        }
-    }
-
-    @Inject(
-        method = "onStoppedUsing",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    public void onStoppedUsingCheckNullEntry(World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
+    public void checkEmptyStack(CallbackInfo info) {
         if (this.isEmpty()) {
             info.cancel();
         }
@@ -427,14 +425,25 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "isEnchantable",
+        method = "canRepairWith",
         at = @At("HEAD"),
         cancellable = true
     )
-    public void isEnchantableCheckNullEntry(CallbackInfoReturnable<Boolean> info) {
-        if (this.entry == null) {
+    public void containsDataComponentUseItemBehaviourComponent(ItemStack ingredient, CallbackInfoReturnable<Boolean> info) {
+        if (!this.itematic$hasComponent(ItemComponentTypes.REPAIRABLE)) {
             info.setReturnValue(false);
         }
+    }
+
+    @ModifyExpressionValue(
+        method = "isEnchantable",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
+        )
+    )
+    public boolean containsDataComponentUseItemBehaviourComponent(boolean original) {
+        return original && this.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
     }
 
     @Inject(

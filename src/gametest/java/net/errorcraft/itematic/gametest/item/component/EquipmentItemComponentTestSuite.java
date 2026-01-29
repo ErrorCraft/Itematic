@@ -47,8 +47,8 @@ public class EquipmentItemComponentTestSuite {
         player.equipStack(EquipmentSlot.HEAD, world.itematic$createStack(ItemKeys.IRON_HELMET));
         ItemStack stack = world.itematic$createStack(ItemKeys.LEATHER_HELMET);
         player.setStackInHand(Hand.MAIN_HAND, stack);
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addInstantFinalTask(() -> {
-            ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
             if (!(result instanceof ActionResult.Success successResult)) {
                 throw new GameTestException("Expected equipment usage to be successful");
             }

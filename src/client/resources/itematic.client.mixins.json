@@ -54,7 +54,6 @@
     "render.entity.feature.HeadFeatureRendererExtender",
     "render.entity.feature.HorseArmorFeatureRendererExtender",
     "render.entity.feature.PlayerHeldItemFeatureRendererExtender",
-    "render.entity.feature.SnowGolemPumpkinFeatureRendererExtender",
     "render.entity.feature.WolfArmorFeatureRendererExtender",
     "render.entity.model.DrownedEntityModelExtender",
     "render.entity.model.SkeletonEntityModelExtender",

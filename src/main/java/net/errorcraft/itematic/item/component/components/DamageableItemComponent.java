@@ -42,7 +42,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
         return new DamageableItemComponent(durability, Optional.empty(), true);
     }
 
-    public static ItemComponent<?>[] sword(ToolMaterial material, RegistryEntryLookup<Block> blocks, TagKey<Item> repairItemsTag) {
+    public static ItemComponent<?>[] sword(RegistryEntryLookup<Block> blocks, ToolMaterial material, RegistryEntryList<Item> repairItems) {
         double attackDamage = 4.0d + material.attackDamageBonus();
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
@@ -57,24 +57,24 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                 0.4d
             ),
             EnchantableItemComponent.of(material),
-            RepairableItemComponent.of(repairItemsTag)
+            RepairableItemComponent.of(repairItems)
         };
     }
 
-    public static ItemComponent<?>[] shovel(RegistryEntryLookup<Block> blocks, ToolMaterial material, TagKey<Item> repairItemsTag) {
-        return tool(blocks, material, 2.5d, 0.25d, BlockTags.SHOVEL_MINEABLE, repairItemsTag);
+    public static ItemComponent<?>[] shovel(RegistryEntryLookup<Block> blocks, ToolMaterial material, RegistryEntryList<Item> repairItems) {
+        return tool(blocks, material, 2.5d, 0.25d, BlockTags.SHOVEL_MINEABLE, repairItems);
     }
 
-    public static ItemComponent<?>[] pickaxe(RegistryEntryLookup<Block> blocks, ToolMaterial material, TagKey<Item> repairItemsTag) {
-        return tool(blocks, material, 2.0d, 0.3d, BlockTags.PICKAXE_MINEABLE, repairItemsTag);
+    public static ItemComponent<?>[] pickaxe(RegistryEntryLookup<Block> blocks, ToolMaterial material, RegistryEntryList<Item> repairItems) {
+        return tool(blocks, material, 2.0d, 0.3d, BlockTags.PICKAXE_MINEABLE, repairItems);
     }
 
-    public static ItemComponent<?>[] axe(RegistryEntryLookup<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItemsTag) {
-        return tool(blocks, material, attackDamage, attackSpeed, BlockTags.AXE_MINEABLE, repairItemsTag);
+    public static ItemComponent<?>[] axe(RegistryEntryLookup<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, RegistryEntryList<Item> repairItems) {
+        return tool(blocks, material, attackDamage, attackSpeed, BlockTags.AXE_MINEABLE, repairItems);
     }
 
-    public static ItemComponent<?>[] hoe(RegistryEntryLookup<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItemsTag) {
-        return tool(blocks, material, attackDamage, attackSpeed, BlockTags.HOE_MINEABLE, repairItemsTag);
+    public static ItemComponent<?>[] hoe(RegistryEntryLookup<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, RegistryEntryList<Item> repairItems) {
+        return tool(blocks, material, attackDamage, attackSpeed, BlockTags.HOE_MINEABLE, repairItems);
     }
 
     @Override
@@ -82,7 +82,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
         return ItemComponentTypes.DAMAGEABLE;
     }
 
-    private static ItemComponent<?>[] tool(RegistryEntryLookup<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Block> mineableBlocks, TagKey<Item> repairItemsTag) {
+    private static ItemComponent<?>[] tool(RegistryEntryLookup<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Block> mineableBlocks, RegistryEntryList<Item> repairItems) {
         double realAttackDamage = attackDamage + material.attackDamageBonus();
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
@@ -94,7 +94,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                 attackSpeed
             ),
             EnchantableItemComponent.of(material),
-            RepairableItemComponent.of(repairItemsTag)
+            RepairableItemComponent.of(repairItems)
         };
     }
 

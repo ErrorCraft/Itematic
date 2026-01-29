@@ -12,18 +12,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(KnowledgeBookItem.class)
 public class KnowledgeBookItemExtender {
-    // todo check implementation before removing
-//    @Redirect(
-//        method = "use",
-//        at = @At(
-//            value = "INVOKE",
-//            target = "Lnet/minecraft/util/TypedActionResult;fail(Ljava/lang/Object;)Lnet/minecraft/util/TypedActionResult;"
-//        )
-//    )
-//    private <T> TypedActionResult<T> failResultPassInstead(T data) {
-//        return TypedActionResult.pass(data);
-//    }
-
     @Redirect(
         method = "use",
         at = @At(

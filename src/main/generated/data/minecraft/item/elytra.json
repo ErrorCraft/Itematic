@@ -17,7 +17,7 @@
       "swappable": true
     },
     "minecraft:repairable": {
-      "items": "minecraft:repairs_elytra"
+      "items": "minecraft:phantom_membrane"
     },
     "minecraft:stackable": 1
   }

@@ -15,7 +15,6 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
 import net.errorcraft.itematic.item.component.components.DamageableItemComponent;
 import net.errorcraft.itematic.item.component.components.RecipeRemainderItemComponent;
-import net.errorcraft.itematic.item.component.components.RepairableItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
@@ -366,29 +365,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
     }
 
-    // todo: probably moved to ItemStack
-//    @Redirect(
-//        method = "isEnchantable",
-//        at = @At(
-//            value = "INVOKE",
-//            target = "Lnet/minecraft/item/ItemStack;getMaxCount()I"
-//        )
-//    )
-//    public int getMaxCountUseStackCount(ItemStack instance) {
-//        return instance.getCount();
-//    }
-//
-//    @Redirect(
-//        method = "isEnchantable",
-//        at = @At(
-//            value = "INVOKE",
-//            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
-//        )
-//    )
-//    public boolean containsMaxDamageUseItemComponentCheck(ItemStack instance, ComponentType<?> type) {
-//        return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
-//    }
-
     @Inject(
         method = "canMine",
         at = @At("HEAD"),
@@ -424,19 +400,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return instance.itematic$isCorrectForDrops(stack, state);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        // todo move to ItemStack canRepairWith (data component)
-        return this.itematic$getComponent(ItemComponentTypes.REPAIRABLE)
-            .map(RepairableItemComponent::items)
-            .map(ingredient::isIn)
-            .orElse(false);
-    }
-
     @Inject(
         method = "hasGlint",
         at = @At("HEAD"),
@@ -467,18 +430,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .map(BlockItemComponent::canBeNested)
             .orElse(true);
     }
-
-    // todo: probably moved to ItemStack
-//    /**
-//     * @author ErrorCraft
-//     * @reason Uses the ItemComponent implementation for data-driven items.
-//     */
-//    @Overwrite
-//    public int getEnchantability() {
-//        return this.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
-//            .map(EnchantableItemComponent::enchantability)
-//            .orElse(0);
-//    }
 
     /**
      * @author ErrorCraft
