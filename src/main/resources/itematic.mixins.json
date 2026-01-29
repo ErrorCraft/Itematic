@@ -86,6 +86,8 @@
     "component.type.BundleContentsComponentExtender",
     "component.type.BundleContentsComponentExtender$BuilderExtender",
     "component.type.ChargedProjectilesComponentExtender",
+    "component.type.ConsumableComponentAccessor",
+    "component.type.ConsumableComponentExtender",
     "component.type.DyedColorComponentExtender",
     "component.type.ToolComponentExtender",
     "component.type.ToolComponentExtender$RuleExtender",

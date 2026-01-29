@@ -6,13 +6,20 @@ import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public record FoodItemComponent(int nutrition, float saturation, boolean alwaysEdible) implements ItemComponent<FoodItemComponent> {
@@ -39,8 +46,16 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
     @Override
     public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackConsumer resultStackConsumer) {
         FoodComponent food = stack.get(DataComponentTypes.FOOD);
-        if (food != null) {
-            user.itematic$eatFood(world, stack, food, resultStackConsumer);
+        if (user instanceof PlayerEntity player) {
+            player.getHungerManager().eat(food);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5f, MathHelper.nextBetween(user.getRandom(), 0.9f, 1.0f));
+        }
+
+        if (world instanceof ServerWorld serverWorld) {
+            ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, user.getActiveHand())
+                .entityPosition(ActionContextParameter.THIS, user)
+                .build();
+            stack.itematic$invokeEvent(ItemEvents.EAT_ITEM, context);
         }
     }
 

@@ -10,14 +10,9 @@ import net.errorcraft.itematic.access.entity.attribute.AttributeContainerAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ConsumableItemComponent;
 import net.errorcraft.itematic.item.component.components.LifeSavingItemComponent;
-import net.errorcraft.itematic.item.event.ItemEvents;
-import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -34,7 +29,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Hand;
@@ -80,9 +74,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Shadow
     public abstract boolean isUsingItem();
 
-//    @Shadow
-//    public abstract ItemStack eatFood(World world, ItemStack stack, FoodComponent foodComponent);
-
     @Shadow
     public abstract AttributeContainer getAttributes();
 
@@ -98,15 +89,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public LivingEntityExtender(EntityType<?> type, World world) {
         super(type, world);
     }
-
-//    @Redirect(
-//        method = "eatFood",
-//        at = @At(
-//            value = "INVOKE",
-//            target = "Lnet/minecraft/item/ItemStack;decrementUnlessCreative(ILnet/minecraft/entity/LivingEntity;)V"
-//        )
-//    )
-//    private void doNotDecrementItemStack(ItemStack instance, int amount, LivingEntity entity) {}
 
     @Redirect(
         method = "getPreferredEquipmentSlot",
@@ -340,49 +322,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         return original;
     }
 
-//    @Inject(
-//        method = "shouldSpawnConsumptionEffects",
-//        at = @At("HEAD"),
-//        cancellable = true
-//    )
-//    private void checkMaxUseTime(CallbackInfoReturnable<Boolean> info) {
-//        if (this.activeItemStack.getMaxUseTime((LivingEntity)(Object) this) <= 0) {
-//            info.setReturnValue(false);
-//        }
-//    }
-//
-//    @Inject(
-//        method = "spawnConsumptionEffects",
-//        at = @At("HEAD"),
-//        cancellable = true
-//    )
-//    private void alwaysSpawnItemParticlesAndStoreConsumableSound(ItemStack stack, int particleCount, CallbackInfo info, @Share("consumeSound") LocalRef<RegistryEntry<SoundEvent>> consumeSound) {
-//        this.spawnItemParticles(stack, particleCount);
-//        this.activeItemStack.itematic$getComponent(ItemComponentTypes.CONSUMABLE)
-//            .map(ConsumableItemComponent::sound)
-//            .ifPresentOrElse(consumeSound::set, info::cancel);
-//    }
-//
-//    @Redirect(
-//        method = "spawnConsumptionEffects",
-//        at = @At(
-//            value = "INVOKE",
-//            target = "Lnet/minecraft/entity/LivingEntity;spawnItemParticles(Lnet/minecraft/item/ItemStack;I)V"
-//        )
-//    )
-//    private void doNotSpawnItemParticlesNormally(LivingEntity instance, ItemStack stack, int count) {}
-//
-//    @ModifyArg(
-//        method = "spawnConsumptionEffects",
-//        at = @At(
-//            value = "INVOKE",
-//            target = "Lnet/minecraft/entity/LivingEntity;playSound(Lnet/minecraft/sound/SoundEvent;FF)V"
-//        )
-//    )
-//    private SoundEvent playSoundUseItemComponent(SoundEvent sound, @Share("consumeSound") LocalRef<RegistryEntry<SoundEvent>> consumeSound) {
-//        return consumeSound.get().value();
-//    }
-
     @Inject(
         method = "spawnItemParticles",
         at = @At("HEAD"),
@@ -451,17 +390,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Override
     public boolean itematic$isHolding(RegistryKey<Item> key) {
         return this.isHolding(stack -> stack.itematic$isOf(key));
-    }
-
-    @Override
-    public void itematic$eatFood(World world, ItemStack stack, FoodComponent food, ItemStackConsumer resultStackConsumer) {
-//        this.eatFood(world, stack, food);
-        if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, this.getActiveHand())
-                .entityPosition(ActionContextParameter.THIS, this)
-                .build();
-            stack.itematic$invokeEvent(ItemEvents.EAT_ITEM, context);
-        }
     }
 
     @Override

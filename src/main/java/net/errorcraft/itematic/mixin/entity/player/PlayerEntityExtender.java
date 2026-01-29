@@ -125,17 +125,6 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
         return this.inventory.getMainHandStack().itematic$attackSpeedMultiplier() * original;
     }
 
-//    @Redirect(
-//        method = "eatFood",
-//        at = @At(
-//            value = "INVOKE",
-//            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
-//        )
-//    )
-//    private <T> Stat<T> doNotGetOrCreateStat(StatType<T> instance, T key) {
-//        return null;
-//    }
-
     @Redirect(
         method = "isUsingSpyglass",
         at = @At(
