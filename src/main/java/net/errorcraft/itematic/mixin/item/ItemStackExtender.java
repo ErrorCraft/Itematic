@@ -3,6 +3,9 @@ package net.errorcraft.itematic.mixin.item;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
@@ -113,6 +116,9 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     @Shadow
     public abstract int getCount();
 
+    @Shadow
+    protected abstract ItemStack applyRemainderAndCooldown(LivingEntity user, ItemStack stack);
+
     @Unique
     private final Set<ItemEvent> activeEvents = new HashSet<>();
 
@@ -154,9 +160,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         at = @At("TAIL")
     )
     private void componentChangesConstructorSetFields(RegistryEntry<Item> item, int count, ComponentChanges changes, CallbackInfo info) {
-        this.entry = item;
-        this.components = ComponentMapImpl.create(item.value().getComponents(), changes);
-        item.value().postProcessComponents((ItemStack)(Object) this);
+        this.setFields(item, changes);
     }
 
     @Redirect(
@@ -280,6 +284,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     @Overwrite
     public RegistryEntry<Item> getRegistryEntry() {
         return this.entry;
+    }
+
+    @ModifyExpressionValue(
+        method = "getItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"
+        )
+    )
+    private boolean isEmptyCheckUnboundRegistryEntry(boolean original) {
+        return original || !this.entry.hasKeyAndValue();
     }
 
     @Redirect(
@@ -429,7 +444,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         at = @At("HEAD"),
         cancellable = true
     )
-    public void containsDataComponentUseItemBehaviourComponent(ItemStack ingredient, CallbackInfoReturnable<Boolean> info) {
+    public void containsDataComponentUseItemBehaviorComponent(ItemStack ingredient, CallbackInfoReturnable<Boolean> info) {
         if (!this.itematic$hasComponent(ItemComponentTypes.REPAIRABLE)) {
             info.setReturnValue(false);
         }
@@ -442,7 +457,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
             target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
         )
     )
-    public boolean containsDataComponentUseItemBehaviourComponent(boolean original) {
+    public boolean containsDataComponentUseItemBehaviorComponent(boolean original) {
         return original && this.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
     }
 
@@ -645,6 +660,28 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         return instance.itematic$getOrCreateStat(this.entry);
     }
 
+    @Redirect(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/util/ActionResult$Success;withNewHandStack(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/util/ActionResult$Success;"
+        )
+    )
+    private ActionResult.Success doNotModifyResultingItemStack(ActionResult.Success instance, ItemStack newHandStack) {
+        return instance;
+    }
+
+    @Inject(
+        method = "applyRemainderAndCooldown",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void checkForUseableBehavior(LivingEntity user, ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
+        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+            info.setReturnValue((ItemStack)(Object) this);
+        }
+    }
+
     /**
      * @author ErrorCraft
      * @reason Uses a registry entry on the item stack for data-driven items.
@@ -652,6 +689,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     @Overwrite
     public String toString() {
         return this.count + " " + this.itematic$key().getValue().toString();
+    }
+
+    @Inject(
+        method = "hashCode",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private static void checkEmptyStack(ItemStack stack, CallbackInfoReturnable<Integer> info) {
+        if (stack != null && (stack.isEmpty() || !stack.getRegistryEntry().hasKeyAndValue())) {
+            info.setReturnValue(0);
+        }
     }
 
     @Override
@@ -801,6 +849,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         this.entry = entry;
         if (entry.hasKeyAndValue()) {
             this.components = new ComponentMapImpl(entry.value().getComponents());
+            entry.value().postProcessComponents((ItemStack)(Object) this);
+        } else {
+            this.components = new ComponentMapImpl(ComponentMap.EMPTY);
+        }
+    }
+
+    @Unique
+    private void setFields(RegistryEntry<Item> entry, ComponentChanges changes) {
+        this.entry = entry;
+        if (entry.hasKeyAndValue()) {
+            this.components = ComponentMapImpl.create(entry.value().getComponents(), changes);
             entry.value().postProcessComponents((ItemStack)(Object) this);
         } else {
             this.components = new ComponentMapImpl(ComponentMap.EMPTY);

@@ -199,7 +199,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(ConsumableItemComponent.builder(ConsumableComponents.MILK_BUCKET)
-                        .resultItem(this.items.getOrThrow(ItemKeys.BUCKET))
+                        .remainder(this.items.getOrThrow(ItemKeys.BUCKET))
                         .build())
                     .build(),
                 ItemEventMap.builder()
@@ -211,7 +211,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(ConsumableItemComponent.builder(ConsumableComponents.DRINK)
-                        .resultItem(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
+                        .remainder(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
                         .build())
                     .with(PotionItemComponent.INSTANCE)
                     .with(PotionHolderItemComponent.of(1.0f))
@@ -569,7 +569,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
                         .food(FoodComponents.MUSHROOM_STEW)
-                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                        .remainder(this.items.getOrThrow(ItemKeys.BOWL))
                         .build())
                     .build()
             ));
@@ -579,7 +579,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
                         .food(FoodComponents.RABBIT_STEW)
-                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                        .remainder(this.items.getOrThrow(ItemKeys.BOWL))
                         .build())
                     .build()
             ));
@@ -589,7 +589,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
                         .food(FoodComponents.BEETROOT_SOUP)
-                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                        .remainder(this.items.getOrThrow(ItemKeys.BOWL))
                         .build())
                     .build()
             ));
@@ -599,7 +599,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
                         .food(FoodComponents.SUSPICIOUS_STEW)
-                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                        .remainder(this.items.getOrThrow(ItemKeys.BOWL))
                         .build())
                     .build(),
                 ItemEventMap.builder()
@@ -727,7 +727,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(ConsumableComponents.HONEY_BOTTLE)
                         .food(FoodComponents.HONEY_BOTTLE)
                         .useAnimation(UseAction.DRINK)
-                        .resultItem(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
+                        .remainder(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
                         .noConsumeParticles()
                         .consumeSound(this.soundEvents.getOrThrow(SoundEventKeys.HONEY_BOTTLE_DRINK))
                         .build())
@@ -10619,7 +10619,7 @@ public class ItemUtil {
                             .add(ExchangeItemAction.of(
                                 this.items.getOrThrow(ItemKeys.POTION),
                                 ComponentChanges.builder()
-                                    .add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(potions.getOrThrow(PotionKeys.WATER)))
+                                    .add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(this.potions.getOrThrow(PotionKeys.WATER)))
                                     .build()))
                             .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, ActionContextParameter.TARGET, ActionContextParameter.THIS))
                             .add(PlaySoundAction.of(ActionContextParameter.THIS, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundCategory.NEUTRAL))

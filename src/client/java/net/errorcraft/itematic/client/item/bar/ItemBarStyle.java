@@ -7,6 +7,7 @@ import net.errorcraft.itematic.client.item.bar.progress.ProgressProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.util.math.ColorHelper;
 
 import java.util.List;
 
@@ -26,15 +27,17 @@ public record ItemBarStyle(ProgressProvider progress, ColorProvider color, List<
         if (progress <= 0.0f) {
             return this.textures.getFirst();
         }
+
         if (progress >= 1.0f) {
             return this.textures.getLast();
         }
+
         int index = (int) (progress * (this.textures.size() - 1));
         return this.textures.get(index);
     }
 
     public int color(ItemStack stack) {
         float progress = this.progress.get(stack);
-        return this.color.get(progress);
+        return ColorHelper.fullAlpha(this.color.get(progress));
     }
 }

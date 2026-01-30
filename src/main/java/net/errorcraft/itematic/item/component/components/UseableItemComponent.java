@@ -13,21 +13,27 @@ import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.providers.ConstantIntegerProvider;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.UseRemainderComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.consume.UseAction;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.world.World;
 
+import java.util.Optional;
 import java.util.Set;
 
-public record UseableItemComponent(UseDurationDataComponent ticks, UseAction animation, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
+public record UseableItemComponent(UseDurationDataComponent ticks, UseAction animation, Optional<ItemStack> remainder, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
     public static final Codec<UseableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         UseDurationDataComponent.MAP_CODEC.forGetter(UseableItemComponent::ticks),
         UseAction.CODEC.optionalFieldOf("animation", UseAction.NONE).forGetter(UseableItemComponent::animation),
+        ItemStack.CODEC.optionalFieldOf("remainder").forGetter(UseableItemComponent::remainder),
         ItematicCodecs.setCodec(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(UseableItemComponent::passes)
     ).apply(instance, UseableItemComponent::new));
 
@@ -93,6 +99,7 @@ public record UseableItemComponent(UseDurationDataComponent ticks, UseAction ani
     public void addComponents(ComponentMap.Builder builder) {
         builder.add(ItematicDataComponentTypes.USE_DURATION, this.ticks);
         builder.add(ItematicDataComponentTypes.USE_ANIMATION, this.animation);
+        this.remainder.ifPresent(remainder -> builder.add(DataComponentTypes.USE_REMAINDER, new UseRemainderComponent(remainder)));
     }
 
     private boolean isUnuseable(Pass pass) {
@@ -102,6 +109,7 @@ public record UseableItemComponent(UseDurationDataComponent ticks, UseAction ani
     public static class Builder {
         private IntegerProvider ticks;
         private UseAction animation = UseAction.NONE;
+        private RegistryEntry<Item> remainder;
         private Set<Pass> passes = Pass.DEFAULT_PASSES;
 
         private Builder() {}
@@ -110,6 +118,7 @@ public record UseableItemComponent(UseDurationDataComponent ticks, UseAction ani
             return new UseableItemComponent(
                 this.ticks == null ? UseDurationDataComponent.INDEFINITE : new UseDurationDataComponent(this.ticks),
                 this.animation,
+                Optional.ofNullable(this.remainder).map(ItemStack::new),
                 this.passes
             );
         }
@@ -126,6 +135,11 @@ public record UseableItemComponent(UseDurationDataComponent ticks, UseAction ani
 
         public Builder animation(UseAction animation) {
             this.animation = animation;
+            return this;
+        }
+
+        public Builder remainder(RegistryEntry<Item> remainder) {
+            this.remainder = remainder;
             return this;
         }
 

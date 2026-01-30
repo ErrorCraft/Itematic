@@ -35,6 +35,7 @@ public record WeaponAttackDamageDataComponent(List<Rule> rules, double defaultDa
                 return rule.damage.get();
             }
         }
+
         return this.defaultDamage;
     }
 
@@ -44,7 +45,8 @@ public record WeaponAttackDamageDataComponent(List<Rule> rules, double defaultDa
                 return rule.addBase.get();
             }
         }
-        return false;
+
+        return true;
     }
 
     public record Rule(Optional<RegistryEntryList<EntityType<?>>> entities, Optional<ItemPredicate> item, Optional<Double> damage, Optional<Boolean> addBase) {

@@ -90,12 +90,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
     }
 
-    @Inject(
-        method = "use",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    public void useUseItemComponent(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<ActionResult> info) {
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public ActionResult use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
         StackReference stackReference = StackReferenceUtil.of(stack);
         ItemResult result = ItemResult.PASS;
@@ -115,10 +115,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
         ActionResult trueResult = result.toActionResult();
         if (trueResult instanceof ActionResult.Success success) {
-            trueResult = success.withNewHandStack(stackReference.get());
+            return success.withNewHandStack(stackReference.get());
         }
 
-        info.setReturnValue(trueResult);
+        return trueResult;
     }
 
     /**

@@ -3,9 +3,7 @@
     "translation_key": "item.minecraft.suspicious_stew"
   },
   "components": {
-    "minecraft:consumable": {
-      "result_item": "minecraft:bowl"
-    },
+    "minecraft:consumable": {},
     "minecraft:food": {
       "always_edible": true,
       "nutrition": 6,
@@ -14,6 +12,10 @@
     "minecraft:stackable": 1,
     "minecraft:useable": {
       "animation": "eat",
+      "remainder": {
+        "id": "minecraft:bowl",
+        "count": 1
+      },
       "ticks": {
         "type": "minecraft:constant",
         "amount": 32

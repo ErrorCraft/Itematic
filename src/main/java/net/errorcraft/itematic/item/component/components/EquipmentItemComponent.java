@@ -83,10 +83,9 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
 
         if (result.isAccepted() && !world.isClient()) {
             user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
-            return ItemResult.SUCCEED;
         }
 
-        return ItemResult.PASS;
+        return result.isAccepted() ? ItemResult.SUCCEED : ItemResult.PASS;
     }
 
     @Override

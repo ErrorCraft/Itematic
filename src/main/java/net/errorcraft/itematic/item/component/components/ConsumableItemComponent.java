@@ -20,11 +20,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
 import net.minecraft.item.consume.UseAction;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -33,18 +30,20 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
-public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) implements ItemComponent<ConsumableItemComponent> {
+public record ConsumableItemComponent(boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) implements ItemComponent<ConsumableItemComponent> {
     public static final Codec<ConsumableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).optionalFieldOf("result_item").forGetter(ConsumableItemComponent::resultItem),
         Codec.BOOL.optionalFieldOf("has_consume_particles", true).forGetter(ConsumableItemComponent::hasConsumeParticles),
         SoundEvent.ENTRY_CODEC.optionalFieldOf("sound", SoundEvents.ENTITY_GENERIC_EAT).forGetter(ConsumableItemComponent::sound)
     ).apply(instance, ConsumableItemComponent::new));
     private static final float CONSUME_EFFECTS_THRESHOLD = ConsumableComponentAccessor.consumeEffectsThreshold();
 
-    public static ConsumableItemComponent of(RegistryEntry<Item> resultItem, boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) {
-        return new ConsumableItemComponent(Optional.ofNullable(resultItem), hasConsumeParticles, sound);
+    public static ConsumableItemComponent of(boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) {
+        return new ConsumableItemComponent(hasConsumeParticles, sound);
     }
 
     public static Builder builder(ConsumableComponent consumable) {
@@ -88,9 +87,8 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, 
                 .build();
             stack.itematic$invokeEvent(ItemEvents.CONSUME_ITEM, context);
         }
-        this.resultItem.map(ItemStack::new)
-            .map(resultStack -> ItemUsage.exchangeStack(stack, player, resultStack))
-            .ifPresentOrElse(resultStackConsumer::set, () -> stack.decrementUnlessCreative(1, user));
+
+        stack.decrementUnlessCreative(1, user);
         if (player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.CONSUME_ITEM.trigger(serverPlayer, stack);
         }
@@ -107,7 +105,7 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, 
         private final int useDuration;
         private UseAction useAnimation;
         private FoodItemComponent food;
-        private RegistryEntry<Item> resultItem;
+        private RegistryEntry<Item> remainder;
         private boolean hasConsumeParticles = true;
         private RegistryEntry<SoundEvent> consumeSound = SoundEvents.ENTITY_GENERIC_EAT;
 
@@ -120,9 +118,10 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, 
             behavior.add(UseableItemComponent.builder()
                 .ticks(this.useDuration)
                 .animation(this.useAnimation)
+                .remainder(this.remainder)
                 .build()
             );
-            behavior.add(ConsumableItemComponent.of(this.resultItem, this.hasConsumeParticles, this.consumeSound));
+            behavior.add(ConsumableItemComponent.of(this.hasConsumeParticles, this.consumeSound));
             if (this.food != null) {
                 behavior.add(this.food);
             }
@@ -140,8 +139,8 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, 
             return this;
         }
 
-        public Builder resultItem(RegistryEntry<Item> resultItem) {
-            this.resultItem = Objects.requireNonNull(resultItem);
+        public Builder remainder(RegistryEntry<Item> resultItem) {
+            this.remainder = Objects.requireNonNull(resultItem);
             return this;
         }
 
