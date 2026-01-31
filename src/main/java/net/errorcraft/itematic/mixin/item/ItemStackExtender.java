@@ -3,6 +3,8 @@ package net.errorcraft.itematic.mixin.item;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
@@ -655,6 +657,21 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     )
     private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key) {
         return instance.itematic$getOrCreateStat(this.entry);
+    }
+
+    @WrapOperation(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/util/ActionResult$Success;withNewHandStack(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/util/ActionResult$Success;"
+        )
+    )
+    private ActionResult.Success doNotModifyResultingItemStackIfNotUseable(ActionResult.Success instance, ItemStack newHandStack, Operation<ActionResult.Success> original) {
+        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+            return instance;
+        }
+
+        return original.call(instance, newHandStack);
     }
 
     @Inject(
