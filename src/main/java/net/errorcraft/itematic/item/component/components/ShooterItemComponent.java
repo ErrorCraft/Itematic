@@ -48,7 +48,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
     public static ItemComponent<?>[] of(UseAction animation, RegistryEntryList<Item> heldAmmunition, RegistryEntryList<Item> ammunition, int range, ShooterMethod method, ItemDamageRulesDataComponent.Rule... rules) {
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
-                .ticks(ShooterIntegerProvider.INSTANCE)
+                .useFor(ShooterIntegerProvider.INSTANCE)
                 .animation(animation)
                 .build(),
             new ShooterItemComponent(

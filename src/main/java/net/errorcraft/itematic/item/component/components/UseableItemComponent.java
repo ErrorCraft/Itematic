@@ -11,6 +11,7 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.providers.ConstantIntegerProvider;
+import net.errorcraft.itematic.item.use.provider.providers.IndefiniteIntegerProvider;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -29,9 +30,9 @@ import net.minecraft.world.World;
 import java.util.Optional;
 import java.util.Set;
 
-public record UseableItemComponent(UseDurationDataComponent ticks, UseAction animation, Optional<ItemStack> remainder, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
+public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, UseAction animation, Optional<ItemStack> remainder, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
     public static final Codec<UseableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        UseDurationDataComponent.MAP_CODEC.forGetter(UseableItemComponent::ticks),
+        UseDurationDataComponent.CODEC.optionalFieldOf("ticks").forGetter(UseableItemComponent::ticks),
         UseAction.CODEC.optionalFieldOf("animation", UseAction.NONE).forGetter(UseableItemComponent::animation),
         ItemStack.CODEC.optionalFieldOf("remainder").forGetter(UseableItemComponent::remainder),
         ItematicCodecs.setCodec(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(UseableItemComponent::passes)
@@ -83,12 +84,12 @@ public record UseableItemComponent(UseDurationDataComponent ticks, UseAction ani
             return ItemResult.PASS;
         }
 
-        UseDurationDataComponent useDurationDataComponent = stack.get(ItematicDataComponentTypes.USE_DURATION);
-        if (useDurationDataComponent == null) {
-            return ItemResult.PASS;
+        UseDurationDataComponent useDuration = stack.get(ItematicDataComponentTypes.USE_DURATION);
+        if (useDuration == null) {
+            return ItemResult.CONSUME;
         }
 
-        if (useDurationDataComponent.startUsing(world, user, hand, stack)) {
+        if (useDuration.startUsing(world, user, hand, stack)) {
             return ItemResult.CONSUME;
         }
 
@@ -97,7 +98,7 @@ public record UseableItemComponent(UseDurationDataComponent ticks, UseAction ani
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
-        builder.add(ItematicDataComponentTypes.USE_DURATION, this.ticks);
+        this.ticks.ifPresent(ticks -> builder.add(ItematicDataComponentTypes.USE_DURATION, ticks));
         builder.add(ItematicDataComponentTypes.USE_ANIMATION, this.animation);
         this.remainder.ifPresent(remainder -> builder.add(DataComponentTypes.USE_REMAINDER, new UseRemainderComponent(remainder)));
     }
@@ -116,20 +117,25 @@ public record UseableItemComponent(UseDurationDataComponent ticks, UseAction ani
 
         public UseableItemComponent build() {
             return new UseableItemComponent(
-                this.ticks == null ? UseDurationDataComponent.INDEFINITE : new UseDurationDataComponent(this.ticks),
+                Optional.ofNullable(this.ticks).map(UseDurationDataComponent::new),
                 this.animation,
                 Optional.ofNullable(this.remainder).map(ItemStack::new),
                 this.passes
             );
         }
 
-        public Builder ticks(int ticks) {
+        public Builder useFor(int ticks) {
             this.ticks = new ConstantIntegerProvider(ticks);
             return this;
         }
 
-        public Builder ticks(IntegerProvider ticks) {
+        public Builder useFor(IntegerProvider ticks) {
             this.ticks = ticks;
+            return this;
+        }
+
+        public Builder useIndefinitely() {
+            this.ticks = IndefiniteIntegerProvider.INSTANCE;
             return this;
         }
 

@@ -116,7 +116,7 @@ public record ConsumableItemComponent(boolean hasConsumeParticles, RegistryEntry
         public ItemComponent<?>[] build() {
             Set<ItemComponent<?>> behavior = new HashSet<>();
             behavior.add(UseableItemComponent.builder()
-                .ticks(this.useDuration)
+                .useFor(this.useDuration)
                 .animation(this.useAnimation)
                 .remainder(this.remainder)
                 .build()

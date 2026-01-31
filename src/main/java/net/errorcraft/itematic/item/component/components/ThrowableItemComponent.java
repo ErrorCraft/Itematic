@@ -46,7 +46,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
     public static ItemComponent<?>[] trident(float speed, float angleOffset, int minDrawDuration) {
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
-                .ticks(TridentIntegerProvider.INSTANCE)
+                .useFor(TridentIntegerProvider.INSTANCE)
                 .animation(UseAction.SPEAR)
                 .build(),
             new ThrowableItemComponent(speed, angleOffset, Optional.of(NumberRange.IntRange.atLeast(minDrawDuration)))
