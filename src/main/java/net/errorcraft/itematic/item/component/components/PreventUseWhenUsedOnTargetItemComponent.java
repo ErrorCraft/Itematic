@@ -2,15 +2,26 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemResult;
+import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.util.Hand;
 
 public record PreventUseWhenUsedOnTargetItemComponent(boolean block, boolean entity) implements ItemComponent<PreventUseWhenUsedOnTargetItemComponent> {
     public static final Codec<PreventUseWhenUsedOnTargetItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.BOOL.optionalFieldOf("block", false).forGetter(PreventUseWhenUsedOnTargetItemComponent::block),
         Codec.BOOL.optionalFieldOf("entity", false).forGetter(PreventUseWhenUsedOnTargetItemComponent::entity)
     ).apply(instance, PreventUseWhenUsedOnTargetItemComponent::new));
+
+    public static PreventUseWhenUsedOnTargetItemComponent forBlock() {
+        return new PreventUseWhenUsedOnTargetItemComponent(true, false);
+    }
 
     @Override
     public ItemComponentType<PreventUseWhenUsedOnTargetItemComponent> type() {
@@ -22,11 +33,13 @@ public record PreventUseWhenUsedOnTargetItemComponent(boolean block, boolean ent
         return CODEC;
     }
 
-    public static PreventUseWhenUsedOnTargetItemComponent forBlock() {
-        return new PreventUseWhenUsedOnTargetItemComponent(true, false);
+    @Override
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+        return this.block ? ItemResult.CONSUME : ItemResult.PASS;
     }
 
-    public static PreventUseWhenUsedOnTargetItemComponent forEntity() {
-        return new PreventUseWhenUsedOnTargetItemComponent(false, true);
+    @Override
+    public ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+        return this.entity ? ItemResult.CONSUME : ItemResult.PASS;
     }
 }
