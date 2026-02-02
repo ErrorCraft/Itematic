@@ -23,7 +23,7 @@ public class BowTestSuite {
         ItemStack stack = world.itematic$createStack(ItemKeys.BOW);
         stack.addEnchantment(
             world.getRegistryManager()
-                .getWrapperOrThrow(RegistryKeys.ENCHANTMENT)
+                .getOrThrow(RegistryKeys.ENCHANTMENT)
                 .getOrThrow(Enchantments.MULTISHOT),
             1
         );

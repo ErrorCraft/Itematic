@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.ingame;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.ItemKeys;
@@ -30,11 +32,13 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
         super(screenHandler, playerInventory, text);
     }
 
+    @Definition(id = "getCreativeHotbarStorage", method = "Lnet/minecraft/client/MinecraftClient;getCreativeHotbarStorage()Lnet/minecraft/client/option/HotbarStorage;")
+    @Expression("? = ?.getCreativeHotbarStorage()")
     @Inject(
         method = "setSelectedTab",
         at = @At(
-            value = "INVOKE_ASSIGN",
-            target = "Lnet/minecraft/client/MinecraftClient;getCreativeHotbarStorage()Lnet/minecraft/client/option/HotbarStorage;"
+            value = "MIXINEXTRAS:EXPRESSION",
+            shift = At.Shift.AFTER
         )
     )
     @SuppressWarnings("ConstantConditions")
@@ -75,7 +79,7 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
     @SuppressWarnings("ConstantConditions")
     private Stream<RegistryEntryList.Named<Item>> streamTagsUseDynamicRegistry(DefaultedRegistry<Item> instance) {
         return this.client.world.getRegistryManager()
-            .get(RegistryKeys.ITEM)
+            .getOrThrow(RegistryKeys.ITEM)
             .streamTags();
     }
 }

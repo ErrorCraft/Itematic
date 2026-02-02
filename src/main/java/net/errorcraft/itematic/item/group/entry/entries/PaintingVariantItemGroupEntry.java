@@ -68,7 +68,7 @@ public class PaintingVariantItemGroupEntry extends PossiblyHiddenItemGroupEntry 
     protected Collection<ItemStack> createStacks(ItemGroup.DisplayContext context) {
         RegistryWrapper.WrapperLookup lookup = context.lookup();
         RegistryOps<NbtElement> ops = lookup.getOps(NbtOps.INSTANCE);
-        return lookup.getWrapperOrThrow(RegistryKeys.PAINTING_VARIANT)
+        return lookup.getOrThrow(RegistryKeys.PAINTING_VARIANT)
             .streamEntries()
             .filter(this.tag::test)
             .sorted(PAINTING_VARIANT_COMPARATOR)

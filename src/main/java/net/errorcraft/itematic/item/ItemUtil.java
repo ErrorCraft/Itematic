@@ -35,7 +35,6 @@ import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAcces
 import net.errorcraft.itematic.mixin.item.ArmorMaterialsAccessor;
 import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
-import net.errorcraft.itematic.mixin.item.WindChargeItemAccessor;
 import net.errorcraft.itematic.potion.PotionKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
@@ -9296,7 +9295,7 @@ public class ItemUtil {
                     .with(ThrowableItemComponent.of(1.5f))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.WIND_CHARGE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                    .with(CooldownItemComponent.of(WindChargeItemAccessor.cooldown()))
+                    .with(CooldownItemComponent.of(10))
                     .build()
             ));
             this.registerable.register(ItemKeys.FIREWORK_ROCKET, create(

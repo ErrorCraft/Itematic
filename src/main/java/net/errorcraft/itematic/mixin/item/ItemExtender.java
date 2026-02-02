@@ -263,10 +263,13 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+    public boolean onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+        boolean result = false;
         int usedTicks = user.itematic$itemUsedTicks();
         StackReference stackReference = StackReferenceUtil.of(stack);
         for (ItemComponent<?> component : this.itemComponents) {
+            // todo lol
+//            result |= component.stopUsing(stack, world, user, usedTicks, remainingUseTicks, stackReference::set);
             component.stopUsing(stack, world, user, usedTicks, remainingUseTicks, stackReference::set);
         }
 
@@ -278,6 +281,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         tryUpdateItemStack(user, Hand.MAIN_HAND, stack, stackReference);
+        return result;
     }
 
     @Inject(

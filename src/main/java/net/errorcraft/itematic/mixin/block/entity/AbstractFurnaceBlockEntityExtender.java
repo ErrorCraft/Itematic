@@ -79,7 +79,7 @@ public class AbstractFurnaceBlockEntityExtender {
         )
     )
     private static ItemStack newItemStackForWaterBucketUseRegistryEntry(ItemConvertible item, DynamicRegistryManager registryManager) {
-        return new ItemStack(registryManager.get(RegistryKeys.ITEM).entryOf(ItemKeys.WATER_BUCKET));
+        return new ItemStack(registryManager.getOrThrow(RegistryKeys.ITEM).getOrThrow(ItemKeys.WATER_BUCKET));
     }
 
     @Redirect(

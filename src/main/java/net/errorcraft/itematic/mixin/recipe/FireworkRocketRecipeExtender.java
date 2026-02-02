@@ -80,7 +80,7 @@ public class FireworkRocketRecipeExtender {
         )
     )
     private ItemStack newItemStackForFireworkRocketUseRegistryEntry(ItemConvertible item, int count, @Local(argsOnly = true) RegistryWrapper.WrapperLookup lookup) {
-        return lookup.getWrapperOrThrow(RegistryKeys.ITEM)
+        return lookup.getOrThrow(RegistryKeys.ITEM)
             .getOptional(ItemKeys.FIREWORK_ROCKET)
             .map(entry -> new ItemStack(entry, count))
             .orElse(ItemStack.EMPTY);
@@ -94,7 +94,7 @@ public class FireworkRocketRecipeExtender {
         )
     )
     private ItemStack newItemStackForFireworkRocketUseRegistryEntry(ItemConvertible item, RegistryWrapper.WrapperLookup lookup) {
-        return lookup.getWrapperOrThrow(RegistryKeys.ITEM)
+        return lookup.getOrThrow(RegistryKeys.ITEM)
             .getOptional(ItemKeys.FIREWORK_ROCKET)
             .map(ItemStack::new)
             .orElse(ItemStack.EMPTY);

@@ -27,6 +27,6 @@ public class RecipeToastExtender {
             return ItemStack.EMPTY;
         }
 
-        return ((RecipeAccess) instance).itematic$createIcon(world.getRegistryManager().getWrapperOrThrow(RegistryKeys.ITEM));
+        return ((RecipeAccess) instance).itematic$createIcon(world.getRegistryManager().getOrThrow(RegistryKeys.ITEM));
     }
 }

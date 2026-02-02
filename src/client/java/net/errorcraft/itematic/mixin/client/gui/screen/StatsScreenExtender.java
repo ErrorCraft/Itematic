@@ -103,8 +103,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
         @Unique
         private Set<RegistryEntry<Item>> entries(DynamicRegistryManager registryManager) {
             Set<RegistryEntry<Item>> entries = new HashSet<>();
-            Registry<Item> items = registryManager.get(RegistryKeys.ITEM);
-            Registry<Block> blocks = registryManager.get(RegistryKeys.BLOCK);
+            Registry<Item> items = registryManager.getOrThrow(RegistryKeys.ITEM);
+            Registry<Block> blocks = registryManager.getOrThrow(RegistryKeys.BLOCK);
             for (RegistryEntry<Item> entry : items.getIndexedEntries()) {
                 for (StatType<Item> statType : this.itemStatTypes) {
                     if (this.hasNoStatFor(statType, entry)) {
@@ -120,7 +120,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                         continue;
                     }
                     RegistryKey<Item> itemKey = entry.value().itematic$asItemKey();
-                    items.getEntry(itemKey).ifPresent(entries::add);
+                    items.getOptional(itemKey).ifPresent(entries::add);
                     break;
                 }
             }
@@ -202,11 +202,13 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 slice = @Slice(
                     from = @At(
                         value = "FIELD",
-                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;blockStatTypes:Ljava/util/List;"
+                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;blockStatTypes:Ljava/util/List;",
+                        opcode = Opcodes.GETFIELD
                     ),
                     to = @At(
                         value = "FIELD:LAST",
-                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;selectedStatType:Lnet/minecraft/stat/StatType;"
+                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;selectedStatType:Lnet/minecraft/stat/StatType;",
+                        opcode = Opcodes.GETFIELD
                     )
                 )
             )
@@ -224,11 +226,13 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 slice = @Slice(
                     from = @At(
                         value = "FIELD",
-                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;blockStatTypes:Ljava/util/List;"
+                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;blockStatTypes:Ljava/util/List;",
+                        opcode = Opcodes.GETFIELD
                     ),
                     to = @At(
                         value = "FIELD:LAST",
-                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;selectedStatType:Lnet/minecraft/stat/StatType;"
+                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;selectedStatType:Lnet/minecraft/stat/StatType;",
+                        opcode = Opcodes.GETFIELD
                     )
                 )
             )
@@ -246,7 +250,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 slice = @Slice(
                     from = @At(
                         value = "FIELD:LAST",
-                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;selectedStatType:Lnet/minecraft/stat/StatType;"
+                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;selectedStatType:Lnet/minecraft/stat/StatType;",
+                        opcode = Opcodes.GETFIELD
                     )
                 )
             )
@@ -264,7 +269,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 slice = @Slice(
                     from = @At(
                         value = "FIELD:LAST",
-                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;selectedStatType:Lnet/minecraft/stat/StatType;"
+                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;selectedStatType:Lnet/minecraft/stat/StatType;",
+                        opcode = Opcodes.GETFIELD
                     )
                 )
             )
@@ -364,7 +370,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 slice = @Slice(
                     from = @At(
                         value = "FIELD",
-                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;blockStatTypes:Ljava/util/List;"
+                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;blockStatTypes:Ljava/util/List;",
+                        opcode = Opcodes.GETFIELD
                     )
                 )
             )
@@ -382,7 +389,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 slice = @Slice(
                     from = @At(
                         value = "FIELD",
-                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;itemStatTypes:Ljava/util/List;"
+                        target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget;itemStatTypes:Ljava/util/List;",
+                        opcode = Opcodes.GETFIELD
                     )
                 )
             )

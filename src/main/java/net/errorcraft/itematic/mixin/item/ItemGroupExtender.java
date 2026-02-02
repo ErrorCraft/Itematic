@@ -49,7 +49,7 @@ public class ItemGroupExtender implements ItemGroupAccess {
         }
 
         context.lookup()
-            .getWrapperOrThrow(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER)
+            .getOrThrow(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER)
             .getOptional(this.entryProviderTag)
             .ifPresent(entryList -> collectEntries(entryList, context, entries));
         return false;

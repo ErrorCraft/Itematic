@@ -16,7 +16,7 @@ public class ActionTagProvider extends FabricTagProvider<ActionEntry> {
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup arg) {
+    protected void configure(RegistryWrapper.WrapperLookup lookup) {
         this.getOrCreateTagBuilder(ActionTags.USE_HOE_ON_BLOCK)
             .add(Actions.TILL_DIRT)
             .add(Actions.TILL_COARSE_DIRT)

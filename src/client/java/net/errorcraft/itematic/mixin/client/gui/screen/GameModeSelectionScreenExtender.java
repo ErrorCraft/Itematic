@@ -35,7 +35,7 @@ public class GameModeSelectionScreenExtender {
             if (world == null) {
                 return;
             }
-            ItemStack stack = instance.itematic$icon(world.getRegistryManager().get(RegistryKeys.ITEM));
+            ItemStack stack = instance.itematic$icon(world.getRegistryManager().getOrThrow(RegistryKeys.ITEM));
             context.drawItem(stack, x, y);
         }
     }
@@ -84,7 +84,7 @@ public class GameModeSelectionScreenExtender {
             if (this.icon == null) {
                 return ItemStack.EMPTY;
             }
-            return registry.getEntry(this.icon)
+            return registry.getOptional(this.icon)
                 .map(ItemStack::new)
                 .orElse(ItemStack.EMPTY);
         }

@@ -14,7 +14,7 @@ public class SmithingTemplateProvider extends FabricDynamicRegistryProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup registries, Entries entries) {
-        DynamicRegistryProviderUtil.addAll(entries, registries.getWrapperOrThrow(ItematicRegistryKeys.SMITHING_TEMPLATE));
+        DynamicRegistryProviderUtil.addAll(entries, registries.getOrThrow(ItematicRegistryKeys.SMITHING_TEMPLATE));
     }
 
     @Override

@@ -43,8 +43,8 @@ public record EnchantWithLevelsTradeModifier(int index, Range.IntegerRange level
         Random random = context.getRandom();
         int level = Math.max(1, this.level.get(random));
         DynamicRegistryManager registryManager = context.getWorld().getRegistryManager();
-        Optional<RegistryEntryList.Named<Enchantment>> enchantments = registryManager.get(RegistryKeys.ENCHANTMENT)
-            .getEntryList(EnchantmentTags.ON_TRADED_EQUIPMENT);
+        Optional<RegistryEntryList.Named<Enchantment>> enchantments = registryManager.getOrThrow(RegistryKeys.ENCHANTMENT)
+            .getOptional(EnchantmentTags.ON_TRADED_EQUIPMENT);
         ItemStack givesActual = EnchantmentHelper.enchant(random, gives, level, registryManager, enchantments);
         wants.getStack(this.index).itematic$tryIncrement(level);
         return Optional.of(new TradedItem(givesActual.getRegistryEntry(), givesActual.getCount(), ComponentPredicate.of(givesActual.getComponents())));

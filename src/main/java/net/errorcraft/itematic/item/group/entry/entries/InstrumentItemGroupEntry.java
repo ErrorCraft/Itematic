@@ -47,7 +47,7 @@ public class InstrumentItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     @Override
     protected Collection<ItemStack> createStacks(ItemGroup.DisplayContext context) {
         return context.lookup()
-            .getWrapperOrThrow(RegistryKeys.INSTRUMENT)
+            .getOrThrow(RegistryKeys.INSTRUMENT)
             .getOrThrow(this.tag)
             .stream()
             .map(instrument -> {

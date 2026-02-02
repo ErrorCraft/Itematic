@@ -56,7 +56,7 @@ public class ScoreboardCriterionArgumentTypeExtender implements ScoreboardCriter
         )
     )
     private <T> Iterator<RegistryEntry.Reference<T>> getRegistryUseDynamicRegistry(Iterator<T> original, @Local StatType<T> type) {
-        return this.registryAccess.getWrapperOrThrow(type.getRegistry().getKey())
+        return this.registryAccess.getOrThrow(type.getRegistry().getKey())
             .streamEntries()
             .iterator();
     }
