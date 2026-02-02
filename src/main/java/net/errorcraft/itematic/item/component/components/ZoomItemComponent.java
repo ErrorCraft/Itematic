@@ -46,8 +46,9 @@ public record ZoomItemComponent(float fieldOfViewMultiplier, RegistryEntry<Sound
     }
 
     @Override
-    public void stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
+    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
         this.playStopSound(user);
+        return true;
     }
 
     @Override

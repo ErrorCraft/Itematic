@@ -54,7 +54,9 @@ public interface ItemComponent<T extends ItemComponent<T>> {
 
     default void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {}
 
-    default void stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {}
+    default boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
+        return false;
+    }
 
     default void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackConsumer resultStackConsumer) {}
 

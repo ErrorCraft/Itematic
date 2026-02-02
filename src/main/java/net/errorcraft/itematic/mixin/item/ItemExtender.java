@@ -268,9 +268,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         int usedTicks = user.itematic$itemUsedTicks();
         StackReference stackReference = StackReferenceUtil.of(stack);
         for (ItemComponent<?> component : this.itemComponents) {
-            // todo lol
-//            result |= component.stopUsing(stack, world, user, usedTicks, remainingUseTicks, stackReference::set);
-            component.stopUsing(stack, world, user, usedTicks, remainingUseTicks, stackReference::set);
+            result |= component.stopUsing(stack, world, user, usedTicks, remainingUseTicks, stackReference::set);
         }
 
         if (world instanceof ServerWorld serverWorld) {
