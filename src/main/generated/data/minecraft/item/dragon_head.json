@@ -1,6 +1,6 @@
 {
   "base": {
-    "rarity": "uncommon",
+    "rarity": "rare",
     "translation_key": "block.minecraft.dragon_head"
   },
   "components": {

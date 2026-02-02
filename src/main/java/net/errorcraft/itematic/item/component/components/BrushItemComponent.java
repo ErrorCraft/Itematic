@@ -8,7 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BrushItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.UseAction;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.world.World;
 
 public record BrushItemComponent() implements ItemComponent<BrushItemComponent> {
@@ -19,7 +19,7 @@ public record BrushItemComponent() implements ItemComponent<BrushItemComponent> 
     public static ItemComponent<?>[] of(int brushTicks) {
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
-                .ticks(brushTicks)
+                .useFor(brushTicks)
                 .animation(UseAction.BRUSH)
                 .passes(UseableItemComponent.Pass.BLOCK)
                 .build(),

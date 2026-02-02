@@ -10,7 +10,11 @@
       "allow_item_data": true,
       "entity": {
         "type": "minecraft:skeleton_horse"
-      }
+      },
+      "passes": [
+        "block",
+        "fluid"
+      ]
     },
     "minecraft:spawn_egg": {},
     "minecraft:stackable": 64,
@@ -22,7 +26,6 @@
           15066584
         ]
       }
-    },
-    "minecraft:useable_on_fluid": {}
+    }
   }
 }

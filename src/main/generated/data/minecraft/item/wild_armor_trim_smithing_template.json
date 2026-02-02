@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "uncommon",
     "translation_key": "item.minecraft.wild_armor_trim_smithing_template"
   },
   "components": {

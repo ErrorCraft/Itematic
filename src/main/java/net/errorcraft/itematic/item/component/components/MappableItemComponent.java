@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.ItemUsageUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
@@ -18,7 +19,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
@@ -39,15 +39,15 @@ public record MappableItemComponent(RegistryEntry<Item> transformsInto) implemen
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (world.isClient()) {
-            return ActionResult.SUCCESS;
+            return ItemResult.SUCCEED;
         }
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         user.getWorld().playSoundFromEntity(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundCategory(), 1.0f, 1.0f);
         ItemStack resultStack = this.createStack(world, user.getBlockX(), user.getBlockZ(), 0, true, false);
         resultStackConsumer.set(ItemUsageUtil.exchangeStack(stack, user, resultStack, true, true));
-        return ActionResult.CONSUME;
+        return ItemResult.CONSUME;
     }
 
     public ItemStack createStack(World world, int x, int z, int scale, boolean showIcons, boolean unlimitedTracking) {

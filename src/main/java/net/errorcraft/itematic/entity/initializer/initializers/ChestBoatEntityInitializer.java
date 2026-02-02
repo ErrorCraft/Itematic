@@ -6,6 +6,7 @@ import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.entity.vehicle.ChestBoatEntity;
 import net.minecraft.util.StringIdentifiable;
@@ -23,7 +24,7 @@ public record ChestBoatEntityInitializer(BoatEntity.Type variant) implements Ent
     }
 
     @Override
-    public ChestBoatEntity create(ActionContext context) {
+    public ChestBoatEntity create(ActionContext context, SpawnReason reason) {
         return this.create(context.world(), context.blockPos(ActionContextParameter.TARGET));
     }
 

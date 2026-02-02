@@ -15,7 +15,9 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+
+import java.util.function.Function;
 
 @Mixin(GoatEntity.class)
 public abstract class GoatEntityExtender extends MobEntityExtender {
@@ -23,17 +25,19 @@ public abstract class GoatEntityExtender extends MobEntityExtender {
         super(entityType, world);
     }
 
-    @Redirect(
+    @ModifyArg(
         method = "getGoatHornStack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/GoatHornItem;getStackForInstrument(Lnet/minecraft/item/Item;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
+            target = "Ljava/util/Optional;map(Ljava/util/function/Function;)Ljava/util/Optional;"
         )
     )
-    private ItemStack getStackForInstrumentUseCreateStack(Item item, RegistryEntry<Instrument> instrument) {
-        ItemStack stack = this.getWorld().itematic$createStack(ItemKeys.GOAT_HORN);
-        stack.set(DataComponentTypes.INSTRUMENT, instrument);
-        return stack;
+    private Function<? super RegistryEntry<Instrument>, ? extends ItemStack> getStackForInstrumentUseCreateStack(Function<? super RegistryEntry<Instrument>, ? extends ItemStack> mapper) {
+        return instrument -> {
+            ItemStack stack = this.getWorld().itematic$createStack(ItemKeys.GOAT_HORN);
+            stack.set(DataComponentTypes.INSTRUMENT, instrument);
+            return stack;
+        };
     }
 
     @Override

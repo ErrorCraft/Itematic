@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.entity.passive.VillagerEntityUtil;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.minecraft.entity.EntityType;
@@ -42,17 +41,6 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
         method = "canGather",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/util/Set;contains(Ljava/lang/Object;)Z"
-        )
-    )
-    private boolean containsForGatherableItemsUseItemTagCheck(Set<Item> instance, Object o, ItemStack stack) {
-        return stack.isIn(ItematicItemTags.VILLAGER_GATHERABLE_ITEMS);
-    }
-
-    @Redirect(
-        method = "canGather",
-        at = @At(
-            value = "INVOKE",
             target = "Lcom/google/common/collect/ImmutableSet;contains(Ljava/lang/Object;)Z",
             remap = false
         )
@@ -62,6 +50,7 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
         if (tag == null) {
             return false;
         }
+
         return stack.isIn(tag);
     }
 
@@ -121,8 +110,9 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
         if (tag == null) {
             return;
         }
+
         Registry<Trade> trades = context.getWorld().getRegistryManager().get(ItematicRegistryKeys.TRADE);
-        this.fillRecipesFromPool(trades.getOrCreateEntryList(tag), 2, context);
+        this.fillRecipesFromPool(trades.getEntryList(tag).orElseThrow(), 2, context);
     }
 
     @Override

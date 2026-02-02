@@ -17,6 +17,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -28,8 +29,16 @@ import java.util.List;
 public record ToolItemComponent(ToolComponent tool) implements ItemComponent<ToolItemComponent> {
     public static final Codec<ToolItemComponent> CODEC = ToolComponent.CODEC.xmap(ToolItemComponent::new, ToolItemComponent::tool);
 
-    public static ToolItemComponent of(ToolMaterial material, TagKey<Block> mineableBlocks) {
-        return new ToolItemComponent(material.createComponent(mineableBlocks));
+    public static ToolItemComponent of(RegistryEntryLookup<Block> blocks, ToolMaterial material, TagKey<Block> mineableBlocks) {
+        ToolComponent tool = new ToolComponent(
+            List.of(
+                ToolComponent.Rule.ofNeverDropping(blocks.getOrThrow(material.incorrectBlocksForDrops())),
+                ToolComponent.Rule.ofAlwaysDropping(blocks.getOrThrow(mineableBlocks), material.speed())
+            ),
+            1.0f,
+            1
+        );
+        return new ToolItemComponent(tool);
     }
 
     public static Builder builder(int damage) {

@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -25,7 +26,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
@@ -60,25 +60,32 @@ public record EquipmentItemComponent(EquipmentSlot slot, boolean swappable, Regi
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (!this.swappable) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
-        TypedActionResult<ItemStack> result = this.equipAndSwap(stack.getItem(), world, user, hand);
-        resultStackConsumer.set(result.getValue());
+
+        ActionResult result = this.equipAndSwap(stack.getItem(), world, user, hand);
+        if (result instanceof ActionResult.Success success) {
+            resultStackConsumer.set(success.getNewHandStack());
+        }
+
         if (world instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, hand)
                 .entityPosition(ActionContextParameter.THIS, user)
                 .build();
             stack.itematic$invokeEvent(ItemEvents.EQUIP_ITEM, context);
         }
-        if (result.getResult() == ActionResult.FAIL) {
-            return ActionResult.PASS;
+
+        if (result == ActionResult.FAIL) {
+            return ItemResult.PASS;
         }
-        if (result.getResult().isAccepted() && !world.isClient()) {
+
+        if (result.isAccepted() && !world.isClient()) {
             user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         }
-        return result.getResult();
+
+        return result.isAccepted() ? ItemResult.SUCCEED : ItemResult.PASS;
     }
 
     @Override

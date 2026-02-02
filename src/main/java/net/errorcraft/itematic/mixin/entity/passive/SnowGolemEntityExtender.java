@@ -6,7 +6,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
@@ -30,17 +29,6 @@ public abstract class SnowGolemEntityExtender extends MobEntityExtender {
     )
     private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.SHEARS);
-    }
-
-    @Redirect(
-        method = "sheared",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack newItemStackForCarvedPumpkinUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.CARVED_PUMPKIN);
     }
 
     @Override

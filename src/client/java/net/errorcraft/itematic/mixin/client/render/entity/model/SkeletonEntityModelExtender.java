@@ -11,7 +11,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(SkeletonEntityModel.class)
 public class SkeletonEntityModelExtender {
     @Redirect(
-        method = { "animateModel(Lnet/minecraft/entity/mob/MobEntity;FFF)V", "setAngles(Lnet/minecraft/entity/mob/MobEntity;FFFFF)V" },
+        method = {
+            "getArmPose(Lnet/minecraft/client/render/entity/state/SkeletonEntityRenderState;Lnet/minecraft/util/Arm;)Lnet/minecraft/client/render/entity/model/BipedEntityModel$ArmPose;",
+            "setAngles(Lnet/minecraft/client/render/entity/state/SkeletonEntityRenderState;)V"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"

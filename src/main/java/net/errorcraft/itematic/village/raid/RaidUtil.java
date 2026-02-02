@@ -17,23 +17,18 @@ public class RaidUtil {
         if (ominousBanner == null) {
             return ItemStack.EMPTY;
         }
-        return ominousBanner;
-    }
 
-    public static ItemStack createOminousBanner(WorldAccess world, RegistryEntryLookup<BannerPattern> bannerPatterns) {
-        ItemStack stack = world.itematic$createStack(ItemKeys.WHITE_BANNER);
-        return createOminousBanner(stack, bannerPatterns);
-    }
-
-    public static ItemStack createOminousBanner(RegistryEntryLookup<Item> items, RegistryEntryLookup<BannerPattern> bannerPatterns) {
-        ItemStack stack = new ItemStack(items.getOrThrow(ItemKeys.WHITE_BANNER));
-        return createOminousBanner(stack, bannerPatterns);
-    }
-
-    private static ItemStack createOminousBanner(ItemStack stack, RegistryEntryLookup<BannerPattern> bannerPatterns) {
-        ominousBanner = stack;
-        Raid.getOminousBanner(bannerPatterns);
+        ItemStack resultingOminousBanner = ominousBanner;
         ominousBanner = null;
-        return stack;
+        return resultingOminousBanner;
+    }
+
+    public static void createOminousBanner(WorldAccess world) {
+        ominousBanner = world.itematic$createStack(ItemKeys.WHITE_BANNER);
+    }
+
+    public static ItemStack getOminousBanner(RegistryEntryLookup<Item> items, RegistryEntryLookup<BannerPattern> bannerPatterns) {
+        ominousBanner = new ItemStack(items.getOrThrow(ItemKeys.WHITE_BANNER));
+        return Raid.createOminousBanner(bannerPatterns);
     }
 }

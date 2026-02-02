@@ -7,13 +7,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.function.Predicate;
 
 @Mixin(AllayEntity.class)
 public abstract class AllayEntityExtender extends MobEntityExtender {
@@ -25,11 +26,11 @@ public abstract class AllayEntityExtender extends MobEntityExtender {
         method = "matchesDuplicationIngredient",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"
+            target = "Ljava/util/function/Predicate;test(Ljava/lang/Object;)Z"
         )
     )
-    private boolean testForDuplicationItemUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.itematic$isOf(ItemKeys.AMETHYST_SHARD);
+    private <T> boolean testForDuplicationItemUseRegistryKeyCheck(Predicate<T> instance, T t) {
+        return ((ItemStack) t).itematic$isOf(ItemKeys.AMETHYST_SHARD);
     }
 
     @Override

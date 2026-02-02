@@ -1,7 +1,6 @@
 classTweaker	v1	named
 
 accessible    class    net/minecraft/registry/Registries$Initializer
-accessible    class    net/minecraft/recipe/Ingredient$Entry
 accessible    class    net/minecraft/entity/passive/OcelotEntity$OcelotTemptGoal
 accessible    class    net/minecraft/client/gui/screen/GameModeSelectionScreen$GameModeSelection
 accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget
@@ -10,3 +9,4 @@ accessible    class    net/minecraft/client/gui/screen/world/CustomizeFlatLevelS
 
 inject-interface    net/minecraft/util/DyeColor    net/errorcraft/itematic/access/util/DyeColorAccess
 inject-interface    net/minecraft/item/tooltip/BundleTooltipData    net/errorcraft/itematic/access/item/tooltip/BundleTooltipDataAccess
+inject-interface    net/minecraft/recipe/Ingredient    net/errorcraft/itematic/access/recipe/IngredientAccess

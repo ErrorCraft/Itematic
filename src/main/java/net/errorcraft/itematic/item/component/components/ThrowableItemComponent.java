@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -14,12 +15,11 @@ import net.errorcraft.itematic.world.action.context.parameter.ActionContextParam
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 import java.util.Optional;
@@ -46,7 +46,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
     public static ItemComponent<?>[] trident(float speed, float angleOffset, int minDrawDuration) {
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
-                .ticks(TridentIntegerProvider.INSTANCE)
+                .useFor(TridentIntegerProvider.INSTANCE)
                 .animation(UseAction.SPEAR)
                 .build(),
             new ThrowableItemComponent(speed, angleOffset, Optional.of(NumberRange.IntRange.atLeast(minDrawDuration)))
@@ -64,9 +64,9 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (this.drawDuration.isPresent()) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
         return this.createEntity(world, user, stack, resultStackConsumer);
     }
@@ -81,7 +81,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
         }
     }
 
-    private ActionResult createEntity(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    private ItemResult createEntity(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (world instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer)
                 .entityPosition(ActionContextParameter.THIS, user)
@@ -89,7 +89,8 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
                 .build();
             this.createEntity(context);
         }
-        return ActionResult.success(world.isClient());
+
+        return ItemResult.SUCCEED;
     }
 
     private void createEntity(ActionContext context) {

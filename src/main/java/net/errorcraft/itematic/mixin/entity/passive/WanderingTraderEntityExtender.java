@@ -70,17 +70,6 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
     }
 
     @Redirect(
-        method = "getDrinkSound",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForMilkBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.MILK_BUCKET);
-    }
-
-    @Redirect(
         method = "interactMob",
         at = @At(
             value = "INVOKE",
@@ -95,7 +84,7 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
     protected void fillRecipes(LootContext context) {
         Registry<Trade> trades = context.getWorld().getRegistryManager().get(ItematicRegistryKeys.TRADE);
         for (TagKey<Trade> trade : TRADE_TO_AMOUNT.keySet()) {
-            this.fillRecipesFromPool(trades.getOrCreateEntryList(trade), TRADE_TO_AMOUNT.getInt(trade), context);
+            this.fillRecipesFromPool(trades.getEntryList(trade).orElseThrow(), TRADE_TO_AMOUNT.getInt(trade), context);
         }
     }
 

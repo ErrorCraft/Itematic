@@ -28,6 +28,6 @@ public record FoliageItemColor(RegistryEntry<Biome> biome) implements ItemColor<
 
     @Override
     public int color(ItemStack stack, int tintIndex) {
-        return ColorHelper.Argb.fullAlpha(this.biome.value().getFoliageColor());
+        return ColorHelper.fullAlpha(this.biome.value().getFoliageColor());
     }
 }

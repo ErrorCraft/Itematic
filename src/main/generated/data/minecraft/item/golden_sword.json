@@ -10,7 +10,7 @@
       "enchantability": 22
     },
     "minecraft:repairable": {
-      "items": "minecraft:repairs_golden_tool"
+      "items": "#minecraft:gold_tool_materials"
     },
     "minecraft:stackable": 1,
     "minecraft:tool": {
@@ -30,13 +30,7 @@
     "minecraft:weapon": {
       "attack_damage": {
         "default_damage": 4.0,
-        "rules": [
-          {
-            "add_base": true,
-            "damage": 3.0,
-            "entities": "#minecraft:proficient_with_golden_weapons"
-          }
-        ]
+        "rules": []
       },
       "attack_speed": 0.4
     }

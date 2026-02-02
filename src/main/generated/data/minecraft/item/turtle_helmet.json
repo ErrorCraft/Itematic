@@ -21,7 +21,7 @@
       "swappable": true
     },
     "minecraft:repairable": {
-      "items": "minecraft:repairs_turtle_armor"
+      "items": "#minecraft:repairs_turtle_armor"
     },
     "minecraft:stackable": 1
   }

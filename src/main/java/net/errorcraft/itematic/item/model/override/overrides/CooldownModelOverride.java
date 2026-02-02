@@ -11,8 +11,9 @@ public class CooldownModelOverride implements ClampedModelOverride {
     @Override
     public float applyUnclamped(ItemStack stack, @Nullable World world, @Nullable LivingEntity target, int seed) {
         if (target instanceof PlayerEntity player) {
-            player.getItemCooldownManager().getCooldownProgress(stack.getItem(), 0.0f);
+            player.getItemCooldownManager().getCooldownProgress(stack, 0.0f);
         }
+
         return 0.0f;
     }
 }

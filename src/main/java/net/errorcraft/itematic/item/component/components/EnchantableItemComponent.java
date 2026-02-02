@@ -5,7 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.item.ArmorMaterial;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.EnchantableComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.registry.RegistryKeys;
@@ -21,12 +23,8 @@ public record EnchantableItemComponent(int enchantability, Optional<RegistryEntr
         RegistryFixedCodec.of(RegistryKeys.ITEM).optionalFieldOf("transforms_into").forGetter(EnchantableItemComponent::transformsInto)
     ).apply(instance, EnchantableItemComponent::new));
 
-    public static EnchantableItemComponent of(RegistryEntry<ArmorMaterial> material) {
-        return of(material.value().enchantability());
-    }
-
     public static EnchantableItemComponent of(ToolMaterial material) {
-        return of(material.getEnchantability());
+        return of(material.enchantmentValue());
     }
 
     public static EnchantableItemComponent of(int enchantability) {
@@ -45,5 +43,10 @@ public record EnchantableItemComponent(int enchantability, Optional<RegistryEntr
     @Override
     public Codec<EnchantableItemComponent> codec() {
         return CODEC;
+    }
+
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.ENCHANTABLE, new EnchantableComponent(this.enchantability));
     }
 }

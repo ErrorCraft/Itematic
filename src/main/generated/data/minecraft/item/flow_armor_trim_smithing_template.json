@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "uncommon",
     "translation_key": "item.minecraft.flow_armor_trim_smithing_template"
   },
   "components": {

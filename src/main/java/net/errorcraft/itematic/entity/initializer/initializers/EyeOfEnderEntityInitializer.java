@@ -8,6 +8,7 @@ import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EyeOfEnderEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.StructureTags;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -26,7 +27,7 @@ public record EyeOfEnderEntityInitializer() implements EntityInitializer<EyeOfEn
     }
 
     @Override
-    public EyeOfEnderEntity create(ActionContext context) {
+    public EyeOfEnderEntity create(ActionContext context, SpawnReason reason) {
         ServerWorld world = context.world();
         BlockPos blockPos = this.getBlockPos(context);
         BlockPos strongholdPos = world.locateStructure(StructureTags.EYE_OF_ENDER_LOCATED, blockPos, 100, false);

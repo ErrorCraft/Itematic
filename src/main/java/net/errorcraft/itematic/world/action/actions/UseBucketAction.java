@@ -34,7 +34,7 @@ public record UseBucketAction(ActionContextParameter position) implements Action
                 BlockPos pos = context.blockPos(this.position);
                 BlockHitResult hitResult = new BlockHitResult(pos.toCenterPos(), context.side(), pos, true);
                 return c.place(context.world(), context.player(ActionContextParameter.THIS).orElse(null), context.hand(), stack, context.resultStackConsumer(), hitResult)
-                    .isAccepted();
+                    .succeeds();
             })
             .orElse(false);
     }

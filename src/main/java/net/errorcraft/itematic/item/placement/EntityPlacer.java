@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.placement;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BucketItemComponent;
@@ -19,7 +20,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -76,11 +76,11 @@ public class EntityPlacer extends Placer {
     }
 
     @Override
-    public ActionResult place() {
+    public ItemResult place() {
         if (!this.mayModifyBlock || !this.tryModifySpawnerBlock()) {
             this.placeEntity();
         }
-        return ActionResult.CONSUME;
+        return ItemResult.CONSUME;
     }
 
     private boolean tryModifySpawnerBlock() {
@@ -138,7 +138,7 @@ public class EntityPlacer extends Placer {
             this.initializer.type().itematic$setInitializer(null, null);
             return entity;
         }
-        Entity entity = this.initializer.create(context);
+        Entity entity = this.initializer.create(context, this.spawnReason);
         if (entity != null) {
             entity.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(offset));
             ((ServerWorld) this.world).spawnEntityAndPassengers(entity);

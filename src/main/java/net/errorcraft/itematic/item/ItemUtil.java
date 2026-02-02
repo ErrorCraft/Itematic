@@ -7,7 +7,6 @@ import net.errorcraft.itematic.block.ComposterBlockUtil;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
 import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
-import net.errorcraft.itematic.entity.ItematicEntityTypeTags;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
 import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.fluid.FluidKeys;
@@ -33,7 +32,10 @@ import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
-import net.errorcraft.itematic.mixin.item.*;
+import net.errorcraft.itematic.mixin.item.ArmorMaterialsAccessor;
+import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
+import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
+import net.errorcraft.itematic.mixin.item.WindChargeItemAccessor;
 import net.errorcraft.itematic.potion.PotionKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
@@ -48,7 +50,6 @@ import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPas
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.DecoratedPotPattern;
 import net.minecraft.block.DecoratedPotPatterns;
 import net.minecraft.block.jukebox.JukeboxSong;
@@ -69,6 +70,7 @@ import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.loot.condition.*;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.particle.ParticleTypes;
@@ -86,7 +88,10 @@ import net.minecraft.registry.tag.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.*;
+import net.minecraft.util.DyeColor;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
@@ -193,13 +198,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.MILK_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(ConsumableItemComponent.builder(MilkBucketItemAccessor.getMaxUseTime())
-                        .useAnimation(UseAction.DRINK)
-                        .resultItem(this.items.getOrThrow(ItemKeys.BUCKET))
-                        .noConsumeParticles()
-                        .consumeSound(this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_DRINK))
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.MILK_BUCKET)
+                        .remainder(this.items.getOrThrow(ItemKeys.BUCKET))
                         .build())
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ClearStatusEffectsAction.of(ActionContextParameter.THIS)))
@@ -209,11 +210,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.POTION).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(ConsumableItemComponent.builder(PotionItemAccessor.getMaxUseTime())
-                        .useAnimation(UseAction.DRINK)
-                        .resultItem(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
-                        .noConsumeParticles()
-                        .consumeSound(this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_DRINK))
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.DRINK)
+                        .remainder(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
                         .build())
                     .with(PotionItemComponent.INSTANCE)
                     .with(PotionHolderItemComponent.of(1.0f))
@@ -231,7 +229,7 @@ public class ItemUtil {
                                 LocationCheckLootCondition.builder(
                                     LocationPredicate.Builder.create()
                                         .block(BlockPredicate.Builder.create()
-                                            .tag(BlockTags.CONVERTABLE_TO_MUD))
+                                            .tag(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
                                 ),
                                 MatchToolLootCondition.builder(
                                     ItemPredicate.Builder.create()
@@ -265,11 +263,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(OminousBottleItemAccessor.useDuration())
-                        .useAnimation(UseAction.DRINK)
-                        .noConsumeParticles()
-                        .consumeSound(this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_DRINK))
-                        .build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.OMINOUS_BOTTLE).build())
                     .with(OminousEffectProviderItemComponent.INSTANCE)
                     .build(),
                 ItemEventMap.builder()
@@ -283,7 +277,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.APPLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.APPLE).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.APPLE)
+                        .build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .build()
             ));
@@ -291,7 +287,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.MELON_SLICE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.MELON_SLICE).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.MELON_SLICE)
+                        .build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
                     .build()
             ));
@@ -299,7 +297,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.DRIED_KELP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.DRIED_KELP).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.DRIED_KELP)
+                        .food(FoodComponents.DRIED_KELP)
+                        .build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .build()
             ));
@@ -307,7 +307,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.CARROT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.CARROT).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.CARROT)
+                        .build())
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARROTS)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .build()
@@ -316,7 +318,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.POTATO).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.POTATO).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.POTATO)
+                        .build())
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POTATOES)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .build()
@@ -325,7 +329,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.BAKED_POTATO).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.BAKED_POTATO).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.BAKED_POTATO)
+                        .build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
                     .build()
             ));
@@ -333,7 +339,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.CHORUS_FRUIT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.CHORUS_FRUIT).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.CHORUS_FRUIT)
+                        .build())
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(TeleportAction.of(16, ActionContextParameter.THIS)))
@@ -343,7 +351,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.BEETROOT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.BEETROOT).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.BEETROOT)
+                        .build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
                     .build()
             ));
@@ -351,7 +361,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.SWEET_BERRIES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.SWEET_BERRIES).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.SWEET_BERRIES)
+                        .build())
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SWEET_BERRY_BUSH)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .build()
@@ -360,7 +372,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.GLOW_BERRIES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.GLOW_BERRIES).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.GLOW_BERRIES)
+                        .build())
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAVE_VINES)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .build()
@@ -369,7 +383,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.BREAD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.BREAD).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.BREAD)
+                        .build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
                     .build()
             ));
@@ -377,135 +393,183 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.COOKIE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.COOKIE).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.COOKIE)
+                        .build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
-                    .build()
-            ));
-            this.registerable.register(ItemKeys.CRAFTER, create(
-                ItemBase.Builder.forBlock(ItemKeys.CRAFTER).build(),
-                ItemComponentSet.builder()
-                    .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRAFTER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PORKCHOP, create(
                 ItemBase.Builder.forItem(ItemKeys.PORKCHOP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.PORKCHOP).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.PORKCHOP)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_PORKCHOP, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_PORKCHOP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_PORKCHOP).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.COOKED_PORKCHOP)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.BEEF, create(
                 ItemBase.Builder.forItem(ItemKeys.BEEF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.BEEF).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.BEEF)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_BEEF, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_BEEF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_BEEF).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.COOKED_BEEF)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.CHICKEN, create(
                 ItemBase.Builder.forItem(ItemKeys.CHICKEN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.CHICKEN).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.CHICKEN)
+                        .build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
+                            RandomChanceLootCondition.builder(0.3f).build()
+                        ),
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 600)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_CHICKEN, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_CHICKEN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_CHICKEN).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.COOKED_CHICKEN)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.RABBIT, create(
                 ItemBase.Builder.forItem(ItemKeys.RABBIT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.RABBIT).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.RABBIT)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_RABBIT, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_RABBIT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_RABBIT).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.COOKED_RABBIT)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.MUTTON, create(
                 ItemBase.Builder.forItem(ItemKeys.MUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.MUTTON).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.MUTTON)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_MUTTON, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_MUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_MUTTON).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.COOKED_MUTTON)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COD, create(
                 ItemBase.Builder.forItem(ItemKeys.COD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.COD).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.COD)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.SALMON, create(
                 ItemBase.Builder.forItem(ItemKeys.SALMON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.SALMON).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.SALMON)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.TROPICAL_FISH, create(
                 ItemBase.Builder.forItem(ItemKeys.TROPICAL_FISH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.TROPICAL_FISH).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.TROPICAL_FISH)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.PUFFERFISH, create(
                 ItemBase.Builder.forItem(ItemKeys.PUFFERFISH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.PUFFERFISH).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.PUFFERFISH)
+                        .build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 1200, 1),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.HUNGER), 300, 2),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.NAUSEA), 300)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_COD, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_COD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_COD).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.COOKED_COD)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_SALMON, create(
                 ItemBase.Builder.forItem(ItemKeys.COOKED_SALMON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.COOKED_SALMON).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.COOKED_SALMON)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSHROOM_STEW, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSHROOM_STEW).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(ConsumableItemComponent.builder(FoodComponents.MUSHROOM_STEW)
-                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.MUSHROOM_STEW)
+                        .remainder(this.items.getOrThrow(ItemKeys.BOWL))
                         .build())
                     .build()
             ));
@@ -513,8 +577,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.RABBIT_STEW).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(ConsumableItemComponent.builder(FoodComponents.RABBIT_STEW)
-                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.RABBIT_STEW)
+                        .remainder(this.items.getOrThrow(ItemKeys.BOWL))
                         .build())
                     .build()
             ));
@@ -522,8 +587,9 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.BEETROOT_SOUP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(ConsumableItemComponent.builder(FoodComponents.BEETROOT_SOUP)
-                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.BEETROOT_SOUP)
+                        .remainder(this.items.getOrThrow(ItemKeys.BOWL))
                         .build())
                     .build()
             ));
@@ -531,70 +597,126 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.SUSPICIOUS_STEW).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(ConsumableItemComponent.builder(FoodComponents.SUSPICIOUS_STEW)
-                        .resultItem(this.items.getOrThrow(ItemKeys.BOWL))
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.SUSPICIOUS_STEW)
+                        .remainder(this.items.getOrThrow(ItemKeys.BOWL))
                         .build())
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
-                        PassingSequenceHandler.builder()
-                            .add(ApplySuspiciousStewEffectsFromItemAction.of(ActionContextParameter.THIS))
-                            .add(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.BOWL)))
-                    ))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ApplySuspiciousStewEffectsFromItemAction.of(ActionContextParameter.THIS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ROTTEN_FLESH, create(
                 ItemBase.Builder.forItem(ItemKeys.ROTTEN_FLESH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.ROTTEN_FLESH).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.ROTTEN_FLESH)
+                        .build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
+                            RandomChanceLootCondition.builder(0.8f).build()
+                        ),
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.HUNGER), 600)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPIDER_EYE, create(
                 ItemBase.Builder.forItem(ItemKeys.SPIDER_EYE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.SPIDER_EYE).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.SPIDER_EYE)
+                        .build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 100)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.POISONOUS_POTATO, create(
                 ItemBase.Builder.forItem(ItemKeys.POISONOUS_POTATO).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.POISONOUS_POTATO).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.POISONOUS_POTATO)
+                        .build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
+                            RandomChanceLootCondition.builder(0.6f).build()
+                        ),
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 100)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_APPLE, create(
-                ItemBase.Builder.forItem(ItemKeys.GOLDEN_APPLE)
-                    .rarity(Rarity.RARE)
-                    .build(),
+                ItemBase.Builder.forItem(ItemKeys.GOLDEN_APPLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.GOLDEN_APPLE).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.GOLDEN_APPLE)
+                        .build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 100, 1),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 2400)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENCHANTED_GOLDEN_APPLE, create(
                 ItemBase.Builder.forItem(ItemKeys.ENCHANTED_GOLDEN_APPLE)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.RARE)
                     .glint()
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.ENCHANTED_GOLDEN_APPLE).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.ENCHANTED_GOLDEN_APPLE)
+                        .build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 400, 1),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.RESISTANCE), 6000),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 6000),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 2400)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_CARROT, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_CARROT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.GOLDEN_CARROT).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.GOLDEN_CARROT)
+                        .build())
                     .build()
             ));
             this.registerable.register(ItemKeys.PUMPKIN_PIE, create(
                 ItemBase.Builder.forItem(ItemKeys.PUMPKIN_PIE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ConsumableItemComponent.builder(FoodComponents.PUMPKIN_PIE).build())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
+                        .food(FoodComponents.PUMPKIN_PIE)
+                        .build())
                     .with(CompostableItemComponent.of(ComposterBlockUtil.GUARANTEED_TO_COMPOST))
                     .build()
             ));
@@ -602,14 +724,13 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.HONEY_BOTTLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(ConsumableItemComponent.builder(HoneyBottleItemAccessor.useDuration())
+                    .with(ConsumableItemComponent.builder(ConsumableComponents.HONEY_BOTTLE)
                         .food(FoodComponents.HONEY_BOTTLE)
                         .useAnimation(UseAction.DRINK)
-                        .resultItem(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
+                        .remainder(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
                         .noConsumeParticles()
                         .consumeSound(this.soundEvents.getOrThrow(SoundEventKeys.HONEY_BOTTLE_DRINK))
                         .build())
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
@@ -2574,7 +2695,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.SNIFFER_EGG, create(
-                ItemBase.Builder.forBlock(ItemKeys.SNIFFER_EGG).build(),
+                ItemBase.Builder.forBlock(ItemKeys.SNIFFER_EGG)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SNIFFER_EGG)))
@@ -3785,6 +3908,13 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.VAULT)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CRAFTER, create(
+                ItemBase.Builder.forBlock(ItemKeys.CRAFTER).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRAFTER)))
                     .build()
             ));
         }
@@ -5019,14 +5149,14 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.WOODEN_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.sword(this.blocks, ToolMaterial.WOOD, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.WOOD, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build(),
                 ItemEventMap.builder()
@@ -5036,21 +5166,21 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.WOODEN_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.WOOD, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.WOOD, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.WOOD, 7.0d, 0.2d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.WOOD, 7.0d, 0.2d, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOODEN_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.WOODEN_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.WOOD, 1.0d, 0.25d, ItematicItemTags.REPAIRS_WOODEN_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.WOOD, 1.0d, 0.25d, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.TOOL_FUEL_TIME))
                     .build(),
                 ItemEventMap.builder()
@@ -5060,13 +5190,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.STONE_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.sword(this.blocks, ToolMaterial.STONE, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.STONE, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -5075,19 +5205,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.STONE_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.STONE, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.STONE, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.STONE, 8.0d, 0.2d, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.STONE, 8.0d, 0.2d, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.STONE_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.STONE, 2.0d, 0.5d, ItematicItemTags.REPAIRS_STONE_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.STONE, 2.0d, 0.5d, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -5096,13 +5226,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GOLDEN_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
+                    .with(DamageableItemComponent.sword(this.blocks, ToolMaterial.GOLD, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.GOLD, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -5111,19 +5241,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GOLDEN_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.GOLD, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.GOLD, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.GOLD, 7.0d, 0.25d, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.GOLD, 7.0d, 0.25d, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.GOLD, 1.0d, 0.25d, ItematicItemTags.REPAIRS_GOLDEN_TOOL, ItematicEntityTypeTags.PROFICIENT_WITH_GOLDEN_WEAPONS))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.GOLD, 1.0d, 0.25d, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -5132,13 +5262,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.IRON_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.sword(this.blocks, ToolMaterial.IRON, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.IRON, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -5147,19 +5277,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.IRON_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.IRON, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.IRON, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.IRON, 7.0d, 0.225d, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.IRON, 7.0d, 0.225d, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.IRON_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.IRON, 3.0d, 0.75d, ItematicItemTags.REPAIRS_IRON_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.IRON, 3.0d, 0.75d, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -5168,13 +5298,13 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.DIAMOND_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.sword(this.blocks, ToolMaterial.DIAMOND, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.DIAMOND, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -5183,19 +5313,19 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.DIAMOND_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.DIAMOND, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.DIAMOND, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.DIAMOND, 6.0d, 0.25d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.DIAMOND, 6.0d, 0.25d, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.DIAMOND, 4.0d, 1.0d, ItematicItemTags.REPAIRS_DIAMOND_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.DIAMOND, 4.0d, 1.0d, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -5204,14 +5334,14 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.NETHERITE_SWORD, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_SWORD).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.sword(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.sword(this.blocks, ToolMaterial.NETHERITE, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_SHOVEL, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_SHOVEL).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.shovel(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.shovel(this.blocks, ToolMaterial.NETHERITE, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build(),
                 ItemEventMap.builder()
@@ -5221,21 +5351,21 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.NETHERITE_PICKAXE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_PICKAXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.pickaxe(ToolMaterials.NETHERITE, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.pickaxe(this.blocks, ToolMaterial.NETHERITE, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_AXE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_AXE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.axe(ToolMaterials.NETHERITE, 6.0d, 0.25d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.axe(this.blocks, ToolMaterial.NETHERITE, 6.0d, 0.25d, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_HOE, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHERITE_HOE).build(),
                 ItemComponentSet.builder()
-                    .with(DamageableItemComponent.hoe(ToolMaterials.NETHERITE, 5.0d, 1.0d, ItematicItemTags.REPAIRS_NETHERITE_TOOL))
+                    .with(DamageableItemComponent.hoe(this.blocks, ToolMaterial.NETHERITE, 5.0d, 1.0d, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build(),
                 ItemEventMap.builder()
@@ -5256,10 +5386,10 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(238))
                     .with(ToolItemComponent.builder(1)
-                        .rule(ToolComponent.Rule.ofAlwaysDropping(List.of(Blocks.COBWEB), 15.0f))
-                        .rule(ToolComponent.Rule.of(BlockTags.LEAVES, 15.0f))
-                        .rule(ToolComponent.Rule.of(BlockTags.WOOL, 5.0f))
-                        .rule(ToolComponent.Rule.of(List.of(Blocks.VINE, Blocks.GLOW_LICHEN), 2.0f))
+                        .rule(ToolComponent.Rule.ofAlwaysDropping(RegistryEntryList.of(this.blocks.getOrThrow(BlockKeys.COBWEB)), 15.0f))
+                        .rule(ToolComponent.Rule.of(this.blocks.getOrThrow(BlockTags.LEAVES), 15.0f))
+                        .rule(ToolComponent.Rule.of(this.blocks.getOrThrow(BlockTags.WOOL), 5.0f))
+                        .rule(ToolComponent.Rule.of(RegistryEntryList.of(this.blocks.getOrThrow(BlockKeys.VINE), this.blocks.getOrThrow(BlockKeys.GLOW_LICHEN)), 2.0f))
                         .build())
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHEAR)))
                     .build()
@@ -5308,7 +5438,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.TRIDENT, create(
                 ItemBase.Builder.forItem(ItemKeys.TRIDENT)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
@@ -5403,7 +5533,9 @@ public class ItemUtil {
                     .with(ToolItemComponent.builder(2).build())
                     .with(WeaponItemComponent.ofSmashing(1, 6.0d, 0.15d))
                     .with(EnchantableItemComponent.of(15))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_MACE))
+                    .with(RepairableItemComponent.of(RegistryEntryList.of(
+                        this.items.getOrThrow(ItemKeys.BREEZE_ROD)
+                    )))
                     .build()
             ));
         }
@@ -5628,7 +5760,6 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.END_CRYSTAL, create(
                 ItemBase.Builder.forItem(ItemKeys.END_CRYSTAL)
-                    .rarity(Rarity.RARE)
                     .glint()
                     .build(),
                 ItemComponentSet.builder()
@@ -7085,13 +7216,15 @@ public class ItemUtil {
             this.bootstrapSkulls();
             this.registerable.register(ItemKeys.ELYTRA, create(
                 ItemBase.Builder.forItem(ItemKeys.ELYTRA)
-                    .rarity(Rarity.UNCOMMON)
+                    .rarity(Rarity.EPIC)
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.ofPreserved(432))
                     .with(EquipmentItemComponent.of(EquipmentSlot.CHEST, true, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_ELYTRA)))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_ELYTRA))
+                    .with(RepairableItemComponent.of(RegistryEntryList.of(
+                        this.items.getOrThrow(ItemKeys.PHANTOM_MEMBRANE)
+                    )))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7100,11 +7233,12 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(UseableItemComponent.builder()
+                        .useIndefinitely()
                         .animation(UseAction.BLOCK)
                         .build())
                     .with(DamageableItemComponent.of(336))
                     .with(EquipmentItemComponent.of(EquipmentSlot.OFFHAND, false, this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC)))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_SHIELD))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(BannerPatternHolderItemComponent.of())
                     .build()
@@ -7116,8 +7250,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.LEATHER_HELMET).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.LEATHER))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.leatherEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.of(0)))
@@ -7127,8 +7261,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.LEATHER_CHESTPLATE).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.LEATHER))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.leatherEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.of(0)))
@@ -7138,8 +7272,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.LEATHER_LEGGINGS).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.LEATHER))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.leatherEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.of(0)))
@@ -7149,46 +7283,54 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.LEATHER_BOOTS).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 5, this.armorMaterials.getOrThrow(ArmorMaterialKeys.LEATHER), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_LEATHER)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.LEATHER))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_LEATHER_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.leatherEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .with(TintedItemComponent.of(DyeableItemColor.of(0)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_HELMET, create(
-                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_HELMET).build(),
+                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_HELMET)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.CHAIN))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.chainEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_CHESTPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_CHESTPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_CHESTPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.CHAIN))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.chainEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_LEGGINGS, create(
-                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_LEGGINGS).build(),
+                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_LEGGINGS)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.CHAIN))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.chainEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAINMAIL_BOOTS, create(
-                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_BOOTS).build(),
+                ItemBase.Builder.forItem(ItemKeys.CHAINMAIL_BOOTS)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.CHAINMAIL), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_CHAIN)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.CHAIN))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.chainEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7196,8 +7338,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.IRON_HELMET).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.IRON))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.ironEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_IRON_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7205,8 +7347,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.IRON_CHESTPLATE).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.IRON))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.ironEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_IRON_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7214,8 +7356,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.IRON_LEGGINGS).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.IRON))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.ironEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_IRON_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7223,8 +7365,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.IRON_BOOTS).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 15, this.armorMaterials.getOrThrow(ArmorMaterialKeys.IRON), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_IRON)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.IRON))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_IRON_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.ironEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_IRON_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7232,8 +7374,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_HELMET).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.DIAMOND))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.diamondEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7241,8 +7383,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_CHESTPLATE).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.DIAMOND))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.diamondEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7250,8 +7392,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_LEGGINGS).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.DIAMOND))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.diamondEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7259,8 +7401,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.DIAMOND_BOOTS).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 33, this.armorMaterials.getOrThrow(ArmorMaterialKeys.DIAMOND), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_DIAMOND)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.DIAMOND))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_DIAMOND_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.diamondEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7268,8 +7410,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_HELMET).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.GOLD))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.goldEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7277,8 +7419,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_CHESTPLATE).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.GOLD))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.goldEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7286,8 +7428,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_LEGGINGS).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.GOLD))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.goldEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7295,8 +7437,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.GOLDEN_BOOTS).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 7, this.armorMaterials.getOrThrow(ArmorMaterialKeys.GOLD), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GOLD)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.GOLD))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_GOLDEN_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.goldEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7305,8 +7447,8 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.HELMET, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.NETHERITE))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.netheriteEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7315,8 +7457,8 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.CHESTPLATE, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.NETHERITE))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.netheriteEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7325,8 +7467,8 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.LEGGINGS, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.NETHERITE))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.netheriteEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7335,8 +7477,8 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(ArmorItem.Type.BOOTS, 37, this.armorMaterials.getOrThrow(ArmorMaterialKeys.NETHERITE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NETHERITE)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.NETHERITE))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_NETHERITE_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.netheriteEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7344,8 +7486,8 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.TURTLE_HELMET).build(),
                 ItemComponentSet.builder()
                     .with(ArmorItemComponent.of(275, EquipmentSlot.HEAD, this.armorMaterials.getOrThrow(ArmorMaterialKeys.TURTLE), this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_TURTLE)))
-                    .with(EnchantableItemComponent.of(ArmorMaterials.TURTLE))
-                    .with(RepairableItemComponent.of(ItematicItemTags.REPAIRS_TURTLE_ARMOR))
+                    .with(EnchantableItemComponent.of(ArmorMaterialsAccessor.turtleEnchantability()))
+                    .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_TURTLE_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -7437,7 +7579,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.DRAGON_HEAD, create(
                 ItemBase.Builder.forBlock(ItemKeys.DRAGON_HEAD)
-                    .rarity(Rarity.UNCOMMON)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
@@ -9087,7 +9229,7 @@ public class ItemUtil {
                             LocationCheckLootCondition.builder(
                                     LocationPredicate.Builder.create()
                                         .block(BlockPredicate.Builder.create()
-                                            .blocks(this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
+                                            .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
                                             .state(StatePredicate.Builder.create()
                                                 .exactMatch(Properties.EYE, false))))
                                 .build()
@@ -9326,7 +9468,7 @@ public class ItemUtil {
         private void bootstrapRecords() {
             this.registerable.register(ItemKeys.MUSIC_DISC_13, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_13)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.THIRTEEN)))
@@ -9334,7 +9476,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CAT, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_CAT)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CAT)))
@@ -9342,7 +9484,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_BLOCKS, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_BLOCKS)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.BLOCKS)))
@@ -9350,7 +9492,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CHIRP, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_CHIRP)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CHIRP)))
@@ -9358,7 +9500,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CREATOR, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_CREATOR)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CREATOR)))
@@ -9366,7 +9508,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_CREATOR_MUSIC_BOX, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_CREATOR_MUSIC_BOX)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CREATOR_MUSIC_BOX)))
@@ -9375,7 +9517,7 @@ public class ItemUtil {
 
             this.registerable.register(ItemKeys.MUSIC_DISC_FAR, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_FAR)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.FAR)))
@@ -9383,7 +9525,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_MALL, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_MALL)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.MALL)))
@@ -9391,7 +9533,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_MELLOHI, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_MELLOHI)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.MELLOHI)))
@@ -9399,7 +9541,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_STAL, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_STAL)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.STAL)))
@@ -9407,7 +9549,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_STRAD, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_STRAD)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.STRAD)))
@@ -9415,7 +9557,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_WARD, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_WARD)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.WARD)))
@@ -9423,7 +9565,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_11, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_11)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.ELEVEN)))
@@ -9431,7 +9573,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_WAIT, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_WAIT)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.WAIT)))
@@ -9439,7 +9581,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_OTHERSIDE, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_OTHERSIDE)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.OTHERSIDE)))
@@ -9447,7 +9589,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_RELIC, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_RELIC)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.RELIC)))
@@ -9455,7 +9597,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_PIGSTEP, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_PIGSTEP)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.PIGSTEP)))
@@ -9463,7 +9605,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_PRECIPICE, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_PRECIPICE)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.PRECIPICE)))
@@ -9471,14 +9613,17 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MUSIC_DISC_5, create(
                 ItemBase.Builder.forItem(ItemKeys.MUSIC_DISC_5)
-                    .rarity(Rarity.EPIC)
+                    .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemComponentSet.builder()
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.FIVE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DISC_FRAGMENT_5, create(
-                ItemBase.Builder.forItem(ItemKeys.DISC_FRAGMENT_5).tooltip(ItemKeys.DISC_FRAGMENT_5).build(),
+                ItemBase.Builder.forItem(ItemKeys.DISC_FRAGMENT_5)
+                    .rarity(Rarity.UNCOMMON)
+                    .tooltip(ItemKeys.DISC_FRAGMENT_5)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .build()
@@ -9497,15 +9642,13 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.WATER_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.WATER), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY), this.items, this.dispenseBehaviors))
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LAVA_BUCKET, create(
                 ItemBase.Builder.forItem(ItemKeys.LAVA_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.LAVA), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_LAVA), this.items, this.dispenseBehaviors))
-                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.LAVA_FUEL_TIME))
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.LAVA_FUEL_TIME, this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POWDER_SNOW_BUCKET, create(
@@ -9554,115 +9697,153 @@ public class ItemUtil {
 
         private void bootstrapSmithingTemplates() {
             this.registerable.register(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.NETHERITE_UPGRADE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SENTRY_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.DUNE_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.COAST_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.WILD_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.WARD_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.EYE_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.VEX_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.TIDE_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SNOUT_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.RIB_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SPIRE_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.WAYFINDER_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SHAPER_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.EPIC)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SILENCE_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.RAISER_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.HOST_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.FLOW_PATTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemBase.Builder.forItem(ItemKeys.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE).build(),
+                ItemBase.Builder.forItem(ItemKeys.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.BOLT_PATTERN)))
                     .build()
@@ -9819,9 +10000,7 @@ public class ItemUtil {
 
         private void bootstrapBannerPatterns() {
             this.registerable.register(ItemKeys.FLOWER_BANNER_PATTERN, create(
-                ItemBase.Builder.forItem(ItemKeys.FLOWER_BANNER_PATTERN)
-                    .tooltip(ItemKeys.FLOWER_BANNER_PATTERN)
-                    .build(),
+                ItemBase.Builder.forItem(ItemKeys.FLOWER_BANNER_PATTERN).build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.FLOWER_PATTERN_ITEM))
                     .build()
@@ -9829,7 +10008,6 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.CREEPER_BANNER_PATTERN, create(
                 ItemBase.Builder.forItem(ItemKeys.CREEPER_BANNER_PATTERN)
                     .rarity(Rarity.UNCOMMON)
-                    .tooltip(ItemKeys.CREEPER_BANNER_PATTERN)
                     .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.CREEPER_PATTERN_ITEM))
@@ -9837,8 +10015,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.SKULL_BANNER_PATTERN, create(
                 ItemBase.Builder.forItem(ItemKeys.SKULL_BANNER_PATTERN)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(ItemKeys.SKULL_BANNER_PATTERN)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.SKULL_PATTERN_ITEM))
@@ -9846,17 +10023,14 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.MOJANG_BANNER_PATTERN, create(
                 ItemBase.Builder.forItem(ItemKeys.MOJANG_BANNER_PATTERN)
-                    .rarity(Rarity.EPIC)
-                    .tooltip(ItemKeys.MOJANG_BANNER_PATTERN)
+                    .rarity(Rarity.RARE)
                     .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.MOJANG_PATTERN_ITEM))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOBE_BANNER_PATTERN, create(
-                ItemBase.Builder.forItem(ItemKeys.GLOBE_BANNER_PATTERN)
-                    .tooltip(ItemKeys.GLOBE_BANNER_PATTERN)
-                    .build(),
+                ItemBase.Builder.forItem(ItemKeys.GLOBE_BANNER_PATTERN).build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.GLOBE_PATTERN_ITEM))
                     .build()
@@ -9864,7 +10038,6 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.PIGLIN_BANNER_PATTERN, create(
                 ItemBase.Builder.forItem(ItemKeys.PIGLIN_BANNER_PATTERN)
                     .rarity(Rarity.UNCOMMON)
-                    .tooltip(ItemKeys.PIGLIN_BANNER_PATTERN)
                     .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.PIGLIN_PATTERN_ITEM))
@@ -9873,7 +10046,6 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.FLOW_BANNER_PATTERN, create(
                 ItemBase.Builder.forItem(ItemKeys.FLOW_BANNER_PATTERN)
                     .rarity(Rarity.RARE)
-                    .tooltip(ItemKeys.FLOW_BANNER_PATTERN)
                     .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.FLOW_PATTERN_ITEM))
@@ -9882,10 +10054,25 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.GUSTER_BANNER_PATTERN, create(
                 ItemBase.Builder.forItem(ItemKeys.GUSTER_BANNER_PATTERN)
                     .rarity(Rarity.RARE)
-                    .tooltip(ItemKeys.GUSTER_BANNER_PATTERN)
                     .build(),
                 ItemComponentSet.builder()
                     .with(BannerPatternItemComponent.of(BannerPatternTags.GUSTER_PATTERN_ITEM))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FIELD_MASONED_BANNER_PATTERN, create(
+                ItemBase.Builder.forItem(ItemKeys.FIELD_MASONED_BANNER_PATTERN)
+                    .rarity(Rarity.RARE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(BannerPatternItemComponent.of(BannerPatternTags.FIELD_MASONED_PATTERN_ITEM))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BORDURE_INDENTED_BANNER_PATTERN, create(
+                ItemBase.Builder.forItem(ItemKeys.BORDURE_INDENTED_BANNER_PATTERN)
+                    .rarity(Rarity.RARE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(BannerPatternItemComponent.of(BannerPatternTags.BORDURE_INDENTED_PATTERN_ITEM))
                     .build()
             ));
         }
@@ -9899,139 +10086,185 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.ANGLER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.ANGLER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.ANGLER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.ANGLER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ARCHER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.ARCHER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.ARCHER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.ARCHER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ARMS_UP_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.ARMS_UP_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.ARMS_UP_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.ARMS_UP)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLADE_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.BLADE_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.BLADE_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BLADE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BREWER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.BREWER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.BREWER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BREWER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BURN_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.BURN_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.BURN_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BURN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DANGER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.DANGER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.DANGER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.DANGER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPLORER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.EXPLORER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.EXPLORER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.EXPLORER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FLOW_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.FLOW_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.FLOW_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.FLOW)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FRIEND_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.FRIEND_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.FRIEND_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.FRIEND)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GUSTER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.GUSTER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.GUSTER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.GUSTER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HEART_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.HEART_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.HEART_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.HEART)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HEARTBREAK_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.HEARTBREAK_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.HEARTBREAK_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.HEARTBREAK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOWL_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.HOWL_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.HOWL_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.HOWL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MINER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.MINER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.MINER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.MINER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOURNER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.MOURNER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.MOURNER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.MOURNER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PLENTY_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.PLENTY_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.PLENTY_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.PLENTY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PRIZE_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.PRIZE_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.PRIZE_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.PRIZE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SCRAPE_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.SCRAPE_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.SCRAPE_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SCRAPE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHEAF_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.SHEAF_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.SHEAF_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SHEAF)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHELTER_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.SHELTER_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.SHELTER_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SHELTER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SKULL_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.SKULL_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.SKULL_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SKULL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNORT_POTTERY_SHERD, create(
-                ItemBase.Builder.forItem(ItemKeys.SNORT_POTTERY_SHERD).build(),
+                ItemBase.Builder.forItem(ItemKeys.SNORT_POTTERY_SHERD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(DecoratedPotPatternItemComponent.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SNORT)))
                     .build()
@@ -10071,7 +10304,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.NETHER_STAR, create(
                 ItemBase.Builder.forItem(ItemKeys.NETHER_STAR)
-                    .rarity(Rarity.UNCOMMON)
+                    .rarity(Rarity.RARE)
                     .glint()
                     .build(),
                 ItemComponentSet.builder()
@@ -10234,7 +10467,7 @@ public class ItemUtil {
                             LocationCheckLootCondition.builder(
                                     LocationPredicate.Builder.create()
                                         .block(BlockPredicate.Builder.create()
-                                            .blocks(this.blocks.getOrThrow(BlockKeys.LODESTONE).value())))
+                                            .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value())))
                                 .build()
                         ),
                         PassingSequenceHandler.builder()
@@ -10244,7 +10477,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.RECOVERY_COMPASS, create(
-                ItemBase.Builder.forItem(ItemKeys.RECOVERY_COMPASS).build(),
+                ItemBase.Builder.forItem(ItemKeys.RECOVERY_COMPASS)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(PointableItemComponent.of(this.pointers.getOrThrow(PointerKeys.LAST_DEATH)))
@@ -10286,7 +10521,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(ZoomItemComponent.of(SpyglassItem.FOV_MULTIPLIER, this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
                     .with(UseableItemComponent.builder()
-                        .ticks(SpyglassItem.MAX_USE_TIME)
+                        .useFor(SpyglassItem.MAX_USE_TIME)
                         .animation(UseAction.SPYGLASS)
                         .build())
                     .build()
@@ -10303,7 +10538,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(false))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(this.blocks, false))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOW_INK_SAC, create(
@@ -10312,7 +10547,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(true))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.glowSign(this.blocks, true))
                     .build()
             ));
             this.registerable.register(ItemKeys.BONE_MEAL, create(
@@ -10385,7 +10620,7 @@ public class ItemUtil {
                             .add(ExchangeItemAction.of(
                                 this.items.getOrThrow(ItemKeys.POTION),
                                 ComponentChanges.builder()
-                                    .add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(potions.getOrThrow(PotionKeys.WATER)))
+                                    .add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(this.potions.getOrThrow(PotionKeys.WATER)))
                                     .build()))
                             .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, ActionContextParameter.TARGET, ActionContextParameter.THIS))
                             .add(PlaySoundAction.of(ActionContextParameter.THIS, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundCategory.NEUTRAL))
@@ -10530,7 +10765,6 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TOTEM_OF_UNDYING, create(
@@ -10584,7 +10818,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.NAUTILUS_SHELL, create(
-                ItemBase.Builder.forItem(ItemKeys.NAUTILUS_SHELL).build(),
+                ItemBase.Builder.forItem(ItemKeys.NAUTILUS_SHELL)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .build()
@@ -10598,7 +10834,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.GOAT_HORN, create(
-                ItemBase.Builder.forItem(ItemKeys.GOAT_HORN).build(),
+                ItemBase.Builder.forItem(ItemKeys.GOAT_HORN)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(PlayableItemComponent.of(InstrumentTags.GOAT_HORNS))
@@ -10613,7 +10851,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         FirstToPassRequirementsSequenceHandler.builder()
-                            .add(Actions.waxSign(true))
+                            .add(Actions.waxSign(this.blocks, true))
                             .add(PassingSequenceHandler.builder()
                                 .add(WaxBlockAction.of(ActionContextParameter.TARGET))
                                 .add(DecrementItemAction.of(1))
@@ -10621,7 +10859,9 @@ public class ItemUtil {
                     .build()
             ));
             this.registerable.register(ItemKeys.ECHO_SHARD, create(
-                ItemBase.Builder.forItem(ItemKeys.ECHO_SHARD).build(),
+                ItemBase.Builder.forItem(ItemKeys.ECHO_SHARD)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .build()

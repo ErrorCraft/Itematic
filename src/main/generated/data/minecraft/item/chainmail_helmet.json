@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "uncommon",
     "translation_key": "item.minecraft.chainmail_helmet"
   },
   "components": {
@@ -21,7 +22,7 @@
       "swappable": true
     },
     "minecraft:repairable": {
-      "items": "minecraft:repairs_chainmail_armor"
+      "items": "#minecraft:repairs_chainmail_armor"
     },
     "minecraft:stackable": 1
   }

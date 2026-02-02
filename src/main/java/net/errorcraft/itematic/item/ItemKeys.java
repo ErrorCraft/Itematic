@@ -1209,6 +1209,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> PIGLIN_BANNER_PATTERN = register("piglin_banner_pattern");
     public static final RegistryKey<Item> FLOW_BANNER_PATTERN = register("flow_banner_pattern");
     public static final RegistryKey<Item> GUSTER_BANNER_PATTERN = register("guster_banner_pattern");
+    public static final RegistryKey<Item> FIELD_MASONED_BANNER_PATTERN = register("field_masoned_banner_pattern");
+    public static final RegistryKey<Item> BORDURE_INDENTED_BANNER_PATTERN = register("bordure_indented_banner_pattern");
     public static final RegistryKey<Item> GOAT_HORN = register("goat_horn");
     public static final RegistryKey<Item> COMPOSTER = register("composter");
     public static final RegistryKey<Item> BARREL = register("barrel");

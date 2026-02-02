@@ -6,12 +6,14 @@ import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemBase;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.*;
+import net.errorcraft.itematic.item.component.components.BlockItemComponent;
+import net.errorcraft.itematic.item.component.components.DamageableItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
@@ -21,7 +23,6 @@ import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;
-import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.ToolComponent;
@@ -34,8 +35,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.item.tooltip.TooltipData;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -44,7 +47,10 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ClickType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.StringHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.*;
@@ -84,31 +90,35 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
     }
 
-    @Inject(
-        method = "use",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    public void useUseItemComponent(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
+    /**
+     * @author ErrorCraft
+     * @reason Uses the ItemComponent implementation for data-driven items.
+     */
+    @Overwrite
+    public ActionResult use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
         StackReference stackReference = StackReferenceUtil.of(stack);
-        ActionResult result = ActionResult.PASS;
+        ItemResult result = ItemResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
-            ActionResult newResult = component.use(world, user, hand, stack, stackReference::set);
-            if (newResult == ActionResult.FAIL) {
-                info.setReturnValue(TypedActionResult.fail(stackReference.get()));
-                return;
-            }
-            result = result.itematic$merge(newResult);
+            ItemResult newResult = component.use(world, user, hand, stack, stackReference::set);
+            result = result.max(newResult);
         }
 
         if (world instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, hand)
                 .entityPosition(ActionContextParameter.THIS, user)
                 .build();
-            this.itematic$invokeEvent(ItemEvents.USE, context);
+            if (this.itematic$invokeEvent(ItemEvents.USE, context)) {
+                result = result.max(ItemResult.CONSUME);
+            }
         }
-        info.setReturnValue(new TypedActionResult<>(result, stackReference.get()));
+
+        ActionResult trueResult = result.toActionResult();
+        if (trueResult instanceof ActionResult.Success success) {
+            return success.withNewHandStack(stackReference.get());
+        }
+
+        return trueResult;
     }
 
     /**
@@ -119,13 +129,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     public ActionResult useOnBlock(ItemUsageContext context) {
         ItemStack stack = context.getStack();
         StackReference stackReference = StackReferenceUtil.of(stack);
-        ActionResult result = ActionResult.PASS;
+        ItemResult result = ItemResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
-            ActionResult newResult = component.useOnBlock(context, stackReference::set);
-            if (newResult == ActionResult.FAIL) {
-                return newResult;
-            }
-            result = result.itematic$merge(newResult);
+            ItemResult newResult = component.useOnBlock(context, stackReference::set);
+            result = result.max(newResult);
         }
 
         if (context.getWorld() instanceof ServerWorld serverWorld) {
@@ -134,11 +141,18 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .position(ActionContextParameter.TARGET, context.getBlockPos())
                 .side(context.getSide())
                 .build();
-            this.itematic$invokeEvent(ItemEvents.USE_ON_BLOCK, actionContext);
+            if (this.itematic$invokeEvent(ItemEvents.USE_ON_BLOCK, actionContext)) {
+                result = result.max(ItemResult.CONSUME);
+            }
         }
 
         tryUpdateItemStack(context.getPlayer(), context.getHand(), stack, stackReference);
-        return result;
+        ActionResult trueResult = result.toActionResult();
+        if (trueResult instanceof ActionResult.Success success) {
+            trueResult = success.withNewHandStack(stackReference.get());
+        }
+
+        return trueResult;
     }
 
     /**
@@ -148,13 +162,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Overwrite
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
         StackReference stackReference = StackReferenceUtil.of(stack);
-        ActionResult result = ActionResult.PASS;
+        ItemResult result = ItemResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
-            ActionResult newResult = component.useOnEntity(user, entity, hand, stack, stackReference::set);
-            if (newResult == ActionResult.FAIL) {
-                return newResult;
-            }
-            result = result.itematic$merge(newResult);
+            ItemResult newResult = component.useOnEntity(user, entity, hand, stack, stackReference::set);
+            result = result.max(newResult);
         }
 
         if (user.getWorld() instanceof ServerWorld serverWorld) {
@@ -162,11 +173,18 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .entityPosition(ActionContextParameter.THIS, user)
                 .entityPosition(ActionContextParameter.TARGET, entity)
                 .build();
-            this.itematic$invokeEvent(ItemEvents.USE_ON_ENTITY, context);
+            if (this.itematic$invokeEvent(ItemEvents.USE_ON_ENTITY, context)) {
+                result = result.max(ItemResult.CONSUME);
+            }
         }
 
         tryUpdateItemStack(user, hand, stack, stackReference);
-        return result;
+        ActionResult trueResult = result.toActionResult();
+        if (trueResult instanceof ActionResult.Success success) {
+            trueResult = success.withNewHandStack(stackReference.get());
+        }
+
+        return trueResult;
     }
 
     /**
@@ -346,28 +364,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
     }
 
-    @Redirect(
-        method = "isEnchantable",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getMaxCount()I"
-        )
-    )
-    public int getMaxCountUseStackCount(ItemStack instance) {
-        return instance.getCount();
-    }
-
-    @Redirect(
-        method = "isEnchantable",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
-        )
-    )
-    public boolean containsMaxDamageUseItemComponentCheck(ItemStack instance, ComponentType<?> type) {
-        return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
-    }
-
     @Inject(
         method = "canMine",
         at = @At("HEAD"),
@@ -403,18 +399,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return instance.itematic$isCorrectForDrops(stack, state);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return this.itematic$getComponent(ItemComponentTypes.REPAIRABLE)
-            .map(RepairableItemComponent::items)
-            .map(ingredient::isIn)
-            .orElse(false);
-    }
-
     @Inject(
         method = "hasGlint",
         at = @At("HEAD"),
@@ -431,30 +415,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public boolean hasRecipeRemainder() {
-        return this.itematic$hasComponent(ItemComponentTypes.RECIPE_REMAINDER);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
     public boolean canBeNested() {
         return this.itematic$getComponent(ItemComponentTypes.BLOCK)
             .map(BlockItemComponent::canBeNested)
             .orElse(true);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public int getEnchantability() {
-        return this.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
-            .map(EnchantableItemComponent::enchantability)
-            .orElse(0);
     }
 
     /**
@@ -621,17 +585,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Override
     public boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return this.itematic$getComponent(ItemComponentTypes.FOOD)
-            .map(c -> c.mayStartUsing(user))
+            .map(c -> c.mayStartUsing(user, stack))
             .orElse(true);
-    }
-
-    @Override
-    public ItemStack getRecipeRemainder(ItemStack stack) {
-        // Use the ItemComponent implementation for data-driven items, so we don't get a NullPointerException
-        return this.itematic$getComponent(ItemComponentTypes.RECIPE_REMAINDER)
-            .map(RecipeRemainderItemComponent::item)
-            .map(ItemStack::new)
-            .orElse(ItemStack.EMPTY);
     }
 
     @Override
@@ -661,10 +616,26 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             component.addComponents(componentsBuilder);
             component.addAttributeModifiers(attributeModifiersBuilder, this.itemComponents);
         }
+
         AttributeModifiersComponent attributeModifiers = attributeModifiersBuilder.build();
         if (!attributeModifiers.modifiers().isEmpty()) {
             componentsBuilder.add(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributeModifiers);
         }
+
         return COMPONENT_INTERNER.intern(componentsBuilder.build());
+    }
+
+    @Mixin(Item.Settings.class)
+    public static class SettingsExtender {
+        @Redirect(
+            method = "useRemainder",
+            at = @At(
+                value = "NEW",
+                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            )
+        )
+        private ItemStack newItemStackUseEmptyItemStack(ItemConvertible item) {
+            return ItemStack.EMPTY;
+        }
     }
 }

@@ -4,9 +4,6 @@
     "translation_key": "item.minecraft.dragon_breath"
   },
   "components": {
-    "minecraft:recipe_remainder": {
-      "item": "minecraft:glass_bottle"
-    },
     "minecraft:stackable": 64
   }
 }

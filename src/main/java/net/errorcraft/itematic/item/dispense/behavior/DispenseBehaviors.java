@@ -80,7 +80,7 @@ public class DispenseBehaviors {
                     LocationCheckLootCondition.builder(
                         LocationPredicate.Builder.create()
                             .block(BlockPredicate.Builder.create()
-                                .blocks(blocks.getOrThrow(BlockKeys.RESPAWN_ANCHOR).value())))
+                                .blocks(blocks, blocks.getOrThrow(BlockKeys.RESPAWN_ANCHOR).value())))
                         .build()
                 ),
                 decrement(ChargeRespawnAnchorAction.of(ActionContextParameter.TARGET))))

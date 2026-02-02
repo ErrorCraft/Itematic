@@ -3,9 +3,7 @@
     "translation_key": "item.minecraft.beetroot_soup"
   },
   "components": {
-    "minecraft:consumable": {
-      "result_item": "minecraft:bowl"
-    },
+    "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 6,
       "saturation": 7.2000003
@@ -13,6 +11,10 @@
     "minecraft:stackable": 1,
     "minecraft:useable": {
       "animation": "eat",
+      "remainder": {
+        "id": "minecraft:bowl",
+        "count": 1
+      },
       "ticks": {
         "type": "minecraft:constant",
         "amount": 32

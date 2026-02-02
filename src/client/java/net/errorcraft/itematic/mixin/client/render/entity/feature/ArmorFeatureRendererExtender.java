@@ -15,11 +15,11 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.render.entity.state.BipedEntityRenderState;
 import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
@@ -38,16 +38,16 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @Mixin(ArmorFeatureRenderer.class)
-public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> {
+public class ArmorFeatureRendererExtender<S extends BipedEntityRenderState, M extends BipedEntityModel<S>, A extends BipedEntityModel<S>> {
     @Unique
     private SpriteAtlasTexture armorMaterialsAtlas;
 
     @Inject(
-        method = "<init>",
+        method = "<init>(Lnet/minecraft/client/render/entity/feature/FeatureRendererContext;Lnet/minecraft/client/render/entity/model/BipedEntityModel;Lnet/minecraft/client/render/entity/model/BipedEntityModel;Lnet/minecraft/client/render/entity/model/BipedEntityModel;Lnet/minecraft/client/render/entity/model/BipedEntityModel;Lnet/minecraft/client/render/model/BakedModelManager;)V",
         at = @At("TAIL")
     )
-    private void setArmorMaterialsAtlas(FeatureRendererContext<T, M> context, A innerModel, A outerModel, BakedModelManager bakery, CallbackInfo info) {
-        this.armorMaterialsAtlas = bakery.getAtlas(ItematicTexturedRenderLayers.ARMOR_MATERIALS_ATLAS_TEXTURE);
+    private void setArmorMaterialsAtlas(FeatureRendererContext<S, M> context, A innerModel, A outerModel, A babyInnerModel, A babyOuterModel, BakedModelManager bakedModelManager, CallbackInfo info) {
+        this.armorMaterialsAtlas = bakedModelManager.getAtlas(ItematicTexturedRenderLayers.ARMOR_MATERIALS_ATLAS_TEXTURE);
     }
 
     @ModifyConstant(
@@ -57,7 +57,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
             ordinal = 0
         )
     )
-    private boolean instanceOfArmorItemUseItemComponentCheck(Object reference, Class<ArmorItem> clazz, @Local ItemStack itemStack, @Share("equipmentItemComponent") LocalRef<EquipmentItemComponent> equipmentItemComponent) {
+    private boolean instanceOfArmorItemUseItemComponentCheck(Object reference, Class<ArmorItem> clazz, @Local(argsOnly = true) ItemStack itemStack, @Share("equipmentItemComponent") LocalRef<EquipmentItemComponent> equipmentItemComponent) {
         Optional<EquipmentItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.EQUIPMENT);
         optionalComponent.ifPresent(equipmentItemComponent::set);
         return optionalComponent.isPresent();
@@ -91,12 +91,13 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
         ),
         cancellable = true
     )
-    private void storeArmorItemComponent(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo info, @Local ItemStack itemStack, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
+    private void storeArmorItemComponent(MatrixStack matrices, VertexConsumerProvider vertexConsumers, ItemStack stack, EquipmentSlot armorSlot, int light, A model, CallbackInfo info, @Local(argsOnly = true) ItemStack itemStack, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
         Optional<ArmorItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.ARMOR);
         if (optionalComponent.isEmpty()) {
             info.cancel();
             return;
         }
+
         armorItemComponent.set(optionalComponent.get());
     }
 
@@ -178,7 +179,7 @@ public class ArmorFeatureRendererExtender<T extends LivingEntity, M extends Bipe
             target = "Ljava/util/Iterator;next()Ljava/lang/Object;"
         )
     )
-    private <E> E nextElementForIteratorReturnNull(Iterator<E> instance, @Share("tintedItemComponent") LocalRef<TintedItemComponent> tintedItemComponent) {
+    private <E> E nextElementForIteratorReturnNull(Iterator<E> instance) {
         return null;
     }
 

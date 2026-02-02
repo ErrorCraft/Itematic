@@ -5,16 +5,6 @@
   "components": {
     "minecraft:consumable": {},
     "minecraft:food": {
-      "effects": [
-        {
-          "effect": {
-            "id": "minecraft:hunger",
-            "duration": 600,
-            "show_icon": true
-          },
-          "probability": 0.8
-        }
-      ],
       "nutrition": 4,
       "saturation": 0.8
     },
@@ -24,6 +14,31 @@
       "ticks": {
         "type": "minecraft:constant",
         "amount": 32
+      }
+    }
+  },
+  "events": {
+    "minecraft:consume_item": {
+      "action": {
+        "type": "minecraft:add_status_effects",
+        "effects": [
+          {
+            "id": "minecraft:hunger",
+            "duration": 600,
+            "show_icon": true
+          }
+        ],
+        "entity": "this"
+      },
+      "requirements": {
+        "conditions": {
+          "chance": 0.8,
+          "condition": "minecraft:random_chance"
+        },
+        "context": {
+          "entity": "this",
+          "position": "this"
+        }
       }
     }
   }

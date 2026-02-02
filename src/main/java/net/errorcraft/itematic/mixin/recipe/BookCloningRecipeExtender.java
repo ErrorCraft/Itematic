@@ -3,9 +3,7 @@ package net.errorcraft.itematic.mixin.recipe;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.RecipeRemainderItemComponent;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.WrittenBookItem;
 import net.minecraft.recipe.BookCloningRecipe;
@@ -52,20 +50,6 @@ public class BookCloningRecipeExtender {
         return instance.itematic$isOf(ItemKeys.WRITABLE_BOOK);
     }
 
-    @Redirect(
-        method = "getRemainder(Lnet/minecraft/recipe/input/CraftingRecipeInput;)Lnet/minecraft/util/collection/DefaultedList;",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack newItemStackForRemainderUseItemComponent(ItemConvertible item, @Local ItemStack stack) {
-        return stack.itematic$getComponent(ItemComponentTypes.RECIPE_REMAINDER)
-            .map(RecipeRemainderItemComponent::item)
-            .map(ItemStack::new)
-            .orElse(ItemStack.EMPTY);
-    }
-
     @ModifyConstant(
         method = "getRemainder(Lnet/minecraft/recipe/input/CraftingRecipeInput;)Lnet/minecraft/util/collection/DefaultedList;",
         constant = @Constant(
@@ -73,6 +57,6 @@ public class BookCloningRecipeExtender {
         )
     )
     private boolean instanceOfWrittenBookItemUseItemComponentCheck(Object reference, Class<WrittenBookItem> clazz, @Local ItemStack inputStack) {
-        return inputStack.itematic$hasComponent(ItemComponentTypes.RECIPE_REMAINDER);
+        return inputStack.itematic$hasComponent(ItemComponentTypes.TEXT_HOLDER);
     }
 }

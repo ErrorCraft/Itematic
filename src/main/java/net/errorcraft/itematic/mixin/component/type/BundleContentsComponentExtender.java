@@ -5,7 +5,6 @@ import net.errorcraft.itematic.access.component.type.BundleContentsComponentAcce
 import net.errorcraft.itematic.access.component.type.BundleContentsComponentBuilderAccess;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
 import net.minecraft.component.type.BundleContentsComponent;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.math.Fraction;
 import org.objectweb.asm.Opcodes;
@@ -121,10 +120,10 @@ public class BundleContentsComponentExtender implements BundleContentsComponentA
             method = "add(Lnet/minecraft/item/ItemStack;)I",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/item/Item;canBeNested()Z"
+                target = "Lnet/minecraft/component/type/BundleContentsComponent;canBeBundled(Lnet/minecraft/item/ItemStack;)Z"
             )
         )
-        private boolean checkFromDataComponent(Item instance, ItemStack stack) {
+        private boolean checkFromDataComponent(ItemStack stack) {
             return this.rules.canOccupy(stack);
         }
 

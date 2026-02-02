@@ -1,7 +1,7 @@
 {
   "base": {
     "glint": true,
-    "rarity": "uncommon",
+    "rarity": "rare",
     "translation_key": "item.minecraft.nether_star"
   },
   "components": {

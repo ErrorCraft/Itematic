@@ -2,58 +2,55 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.mixin.component.type.ConsumableComponentAccessor;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ConsumableComponent;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
-public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) implements ItemComponent<ConsumableItemComponent> {
-    private static final RegistryEntry<SoundEvent> DEFAULT_SOUND = Registries.SOUND_EVENT.getEntry(SoundEvents.ENTITY_GENERIC_EAT);
+public record ConsumableItemComponent(boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) implements ItemComponent<ConsumableItemComponent> {
     public static final Codec<ConsumableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).optionalFieldOf("result_item").forGetter(ConsumableItemComponent::resultItem),
         Codec.BOOL.optionalFieldOf("has_consume_particles", true).forGetter(ConsumableItemComponent::hasConsumeParticles),
-        SoundEvent.ENTRY_CODEC.optionalFieldOf("sound", DEFAULT_SOUND).forGetter(ConsumableItemComponent::sound)
+        SoundEvent.ENTRY_CODEC.optionalFieldOf("sound", SoundEvents.ENTITY_GENERIC_EAT).forGetter(ConsumableItemComponent::sound)
     ).apply(instance, ConsumableItemComponent::new));
+    private static final float CONSUME_EFFECTS_THRESHOLD = ConsumableComponentAccessor.consumeEffectsThreshold();
 
-    public static ConsumableItemComponent of(RegistryEntry<Item> resultItem, boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) {
-        return new ConsumableItemComponent(Optional.ofNullable(resultItem), hasConsumeParticles, sound);
+    public static ConsumableItemComponent of(boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) {
+        return new ConsumableItemComponent(hasConsumeParticles, sound);
     }
 
-    public static Builder builder(int useDuration) {
-        return new Builder(useDuration);
-    }
-
-    public static Builder builder(FoodComponent food) {
-        return new Builder(food.getEatTicks())
-            .food(food)
-            .useAnimation(UseAction.EAT);
+    public static Builder builder(ConsumableComponent consumable) {
+        return new Builder(consumable.getConsumeTicks())
+            .useAnimation(consumable.useAction())
+            .consumeSound(consumable.sound())
+            .hasConsumeParticles(consumable.hasConsumeParticles());
     }
 
     @Override
@@ -64,6 +61,19 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, 
     @Override
     public Codec<ConsumableItemComponent> codec() {
         return CODEC;
+    }
+
+    @Override
+    public void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {
+        ConsumableComponent consumable = stack.get(DataComponentTypes.CONSUMABLE);
+        if (consumable != null && shouldSpawnParticlesAndPlaySounds(usedTicks, remainingUseTicks)) {
+            consumable.spawnParticlesAndPlaySound(user.getRandom(), user, stack, 5);
+        }
+    }
+
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.CONSUMABLE, new ConsumableComponent(0.0f, UseAction.NONE, this.sound, this.hasConsumeParticles, List.of()));
     }
 
     public void consume(LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer, World world, Hand hand) {
@@ -77,9 +87,8 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, 
                 .build();
             stack.itematic$invokeEvent(ItemEvents.CONSUME_ITEM, context);
         }
-        this.resultItem.map(ItemStack::new)
-            .map(resultStack -> ItemUsage.exchangeStack(stack, player, resultStack))
-            .ifPresentOrElse(resultStackConsumer::set, () -> stack.decrementUnlessCreative(1, user));
+
+        stack.decrementUnlessCreative(1, user);
         if (player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.CONSUME_ITEM.trigger(serverPlayer, stack);
         }
@@ -87,13 +96,18 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, 
         player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
     }
 
+    private static boolean shouldSpawnParticlesAndPlaySounds(int usedTicks, int remainingUseTicks) {
+        boolean isValidTime = remainingUseTicks != UseDurationDataComponent.INDEFINITE_USE_DURATION && usedTicks > (usedTicks + remainingUseTicks) * CONSUME_EFFECTS_THRESHOLD;
+        return isValidTime && usedTicks % 4 == 0;
+    }
+
     public static class Builder {
         private final int useDuration;
         private UseAction useAnimation;
         private FoodItemComponent food;
-        private RegistryEntry<Item> resultItem;
+        private RegistryEntry<Item> remainder;
         private boolean hasConsumeParticles = true;
-        private RegistryEntry<SoundEvent> consumeSound = DEFAULT_SOUND;
+        private RegistryEntry<SoundEvent> consumeSound = SoundEvents.ENTITY_GENERIC_EAT;
 
         private Builder(int useDuration) {
             this.useDuration = useDuration;
@@ -102,11 +116,12 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, 
         public ItemComponent<?>[] build() {
             Set<ItemComponent<?>> behavior = new HashSet<>();
             behavior.add(UseableItemComponent.builder()
-                .ticks(this.useDuration)
+                .useFor(this.useDuration)
                 .animation(this.useAnimation)
+                .remainder(this.remainder)
                 .build()
             );
-            behavior.add(ConsumableItemComponent.of(this.resultItem, this.hasConsumeParticles, this.consumeSound));
+            behavior.add(ConsumableItemComponent.of(this.hasConsumeParticles, this.consumeSound));
             if (this.food != null) {
                 behavior.add(this.food);
             }
@@ -124,8 +139,8 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, 
             return this;
         }
 
-        public Builder resultItem(RegistryEntry<Item> resultItem) {
-            this.resultItem = Objects.requireNonNull(resultItem);
+        public Builder remainder(RegistryEntry<Item> resultItem) {
+            this.remainder = Objects.requireNonNull(resultItem);
             return this;
         }
 
@@ -136,6 +151,11 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, 
 
         public Builder consumeSound(RegistryEntry<SoundEvent> consumeSound) {
             this.consumeSound = Objects.requireNonNull(consumeSound);
+            return this;
+        }
+
+        public Builder hasConsumeParticles(boolean hasConsumeParticles) {
+            this.hasConsumeParticles = hasConsumeParticles;
             return this;
         }
     }

@@ -6,6 +6,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
@@ -14,13 +15,18 @@ import org.jetbrains.annotations.Nullable;
 
 public record PersistentProjectileEntityInitializer<T extends PersistentProjectileEntity>(EntityType<T> type, OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) implements EntityInitializer<T> {
     @Override
-    public T create(ActionContext context) {
+    public T create(ActionContext context, SpawnReason reason) {
         if (context.entity(ActionContextParameter.THIS).orElse(null) instanceof LivingEntity entity) {
+            ItemStack shooter = entity.getActiveItem();
+            if (shooter.isEmpty()) {
+                shooter = null;
+            }
+
             return this.ownerCreator.create(
                 context.world(),
                 entity,
                 context.stack().copyWithCount(1),
-                entity.getActiveItem()
+                shooter
             );
         }
 

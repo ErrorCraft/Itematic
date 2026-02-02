@@ -9,8 +9,7 @@
   "mixins": [
     "GameTestStateExtender",
     "StructureTestListenerExtender",
-    "TestContextExtender",
-    "TestServerExtender"
+    "TestContextExtender"
   ],
   "injectors": {
     "defaultRequire": 1

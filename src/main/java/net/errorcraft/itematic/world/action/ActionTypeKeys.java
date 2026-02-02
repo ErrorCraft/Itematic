@@ -49,6 +49,7 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> USE_BUCKET = of("use_bucket");
     public static final RegistryKey<ActionType<?>> REMOVE_STATUS_EFFECTS = of("remove_status_effects");
     public static final RegistryKey<ActionType<?>> INCREMENT_STAT = of("increment_stat");
+    public static final RegistryKey<ActionType<?>> ADD_STATUS_EFFECTS = of("add_status_effects");
 
     private ActionTypeKeys() {}
 

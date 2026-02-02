@@ -7,6 +7,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -27,7 +28,7 @@ public record EndCrystalEntityInitializer() implements EntityInitializer<EndCrys
     }
 
     @Override
-    public EndCrystalEntity create(ActionContext context) {
+    public EndCrystalEntity create(ActionContext context, SpawnReason reason) {
         ServerWorld world = context.world();
         BlockPos pos = context.blockPos(ActionContextParameter.TARGET);
         if (!world.getBlockState(pos.down()).isIn(ItematicBlockTags.END_CRYSTAL_SPAWNABLE_ON)) {

@@ -11,7 +11,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.GameTest;
+import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.GameMode;
 
@@ -45,10 +47,14 @@ public class EquipmentItemComponentTestSuite {
         player.equipStack(EquipmentSlot.HEAD, world.itematic$createStack(ItemKeys.IRON_HELMET));
         ItemStack stack = world.itematic$createStack(ItemKeys.LEATHER_HELMET);
         player.setStackInHand(Hand.MAIN_HAND, stack);
-        ItemStack resultStack = stack.use(world, player, Hand.MAIN_HAND).getValue();
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addInstantFinalTask(() -> {
+            if (!(result instanceof ActionResult.Success successResult)) {
+                throw new GameTestException("Expected equipment usage to be successful");
+            }
+
             Assert.itemStackIsOf(player.getEquippedStack(EquipmentSlot.HEAD), ItemKeys.LEATHER_HELMET);
-            Assert.itemStackIsOf(resultStack, ItemKeys.IRON_HELMET);
+            Assert.itemStackIsOf(successResult.getNewHandStack(), ItemKeys.IRON_HELMET);
         });
     }
 }

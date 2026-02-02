@@ -10,8 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -35,9 +35,9 @@ public class UseableOnFluidItemComponentTestSuite {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.LILY_PAD);
         player.setStackInHand(Hand.MAIN_HAND, stack);
-        TypedActionResult<ItemStack> result = stack.use(world, player, Hand.MAIN_HAND);
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addInstantFinalTask(() -> {
-            context.assertTrue(result.getResult().isAccepted(), "Expected Lily Pad usage to be successful");
+            context.assertTrue(result.isAccepted(), "Expected Lily Pad usage to be successful");
             context.expectBlock(Blocks.LILY_PAD, ABOVE_LOOK_AT_WATER_POSITION_ON_LAND);
         });
     }
@@ -50,9 +50,9 @@ public class UseableOnFluidItemComponentTestSuite {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.PIG_SPAWN_EGG);
         player.setStackInHand(Hand.MAIN_HAND, stack);
-        TypedActionResult<ItemStack> result = stack.use(world, player, Hand.MAIN_HAND);
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addInstantFinalTask(() -> {
-            context.assertTrue(result.getResult().isAccepted(), "Expected Pig Spawn Egg usage to be successful");
+            context.assertTrue(result.isAccepted(), "Expected Pig Spawn Egg usage to be successful");
             context.expectEntityAt(EntityType.PIG, LOOK_AT_WATER_POSITION_ON_LAND);
         });
     }
@@ -65,9 +65,9 @@ public class UseableOnFluidItemComponentTestSuite {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.PIG_SPAWN_EGG);
         player.setStackInHand(Hand.MAIN_HAND, stack);
-        TypedActionResult<ItemStack> result = stack.use(world, player, Hand.MAIN_HAND);
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addInstantFinalTask(() -> {
-            context.assertFalse(result.getResult().isAccepted(), "Expected Pig Spawn Egg usage to be unsuccessful");
+            context.assertFalse(result.isAccepted(), "Expected Pig Spawn Egg usage to be unsuccessful");
             context.dontExpectEntity(EntityType.PIG);
         });
     }
@@ -92,9 +92,9 @@ public class UseableOnFluidItemComponentTestSuite {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.PIG_SPAWN_EGG);
         player.setStackInHand(Hand.MAIN_HAND, stack);
-        TypedActionResult<ItemStack> result = stack.use(world, player, Hand.MAIN_HAND);
+        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
         context.addInstantFinalTask(() -> {
-            context.assertTrue(result.getResult().isAccepted(), "Expected Pig Spawn Egg usage to be successful");
+            context.assertTrue(result.isAccepted(), "Expected Pig Spawn Egg usage to be successful");
             BlockPos eyeBlockPos = SPAWN_POSITION_IN_WATER.add(0, (int) player.getStandingEyeHeight(), 0);
             context.expectEntityAt(EntityType.PIG, eyeBlockPos);
         });

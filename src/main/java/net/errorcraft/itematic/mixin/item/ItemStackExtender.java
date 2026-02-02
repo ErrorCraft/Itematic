@@ -1,9 +1,10 @@
 package net.errorcraft.itematic.mixin.item;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
-import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
@@ -23,7 +24,6 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
-import net.minecraft.advancement.criterion.ItemDurabilityChangedCriterion;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.ComponentHolder;
@@ -38,7 +38,6 @@ import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
@@ -116,6 +115,9 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     @Shadow
     public abstract int getCount();
 
+    @Shadow
+    protected abstract ItemStack applyRemainderAndCooldown(LivingEntity user, ItemStack stack);
+
     @Unique
     private final Set<ItemEvent> activeEvents = new HashSet<>();
 
@@ -157,9 +159,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         at = @At("TAIL")
     )
     private void componentChangesConstructorSetFields(RegistryEntry<Item> item, int count, ComponentChanges changes, CallbackInfo info) {
-        this.entry = item;
-        this.components = ComponentMapImpl.create(item.value().getComponents(), changes);
-        item.value().postProcessComponents((ItemStack)(Object) this);
+        this.setFields(item, changes);
     }
 
     @Redirect(
@@ -235,44 +235,42 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "useOnBlock",
+        method = {
+            "use",
+            "useOnBlock",
+            "useOnEntity"
+        },
         at = @At("HEAD"),
         cancellable = true
     )
-    public void useOnBlockCheckNullEntry(ItemUsageContext context, CallbackInfoReturnable<ActionResult> info) {
+    public void checkEmptyStackActionResult(CallbackInfoReturnable<ActionResult> info) {
         if (this.isEmpty()) {
             info.setReturnValue(ActionResult.PASS);
         }
     }
 
     @Inject(
-        method = "useOnEntity",
+        method = "postHit",
         at = @At("HEAD"),
         cancellable = true
     )
-    public void useOnEntityCheckNullEntry(PlayerEntity user, LivingEntity entity, Hand hand, CallbackInfoReturnable<ActionResult> info) {
+    public void checkEmptyStackBoolean(CallbackInfoReturnable<Boolean> info) {
         if (this.isEmpty()) {
-            info.setReturnValue(ActionResult.PASS);
+            info.setReturnValue(false);
         }
     }
 
     @Inject(
-        method = "usageTick",
+        method = {
+            "usageTick",
+            "onStoppedUsing",
+            "postMine",
+            "onCraftByPlayer"
+        },
         at = @At("HEAD"),
         cancellable = true
     )
-    public void usageTickCheckNullEntry(World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
-        if (this.isEmpty()) {
-            info.cancel();
-        }
-    }
-
-    @Inject(
-        method = "onStoppedUsing",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    public void onStoppedUsingCheckNullEntry(World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
+    public void checkEmptyStack(CallbackInfo info) {
         if (this.isEmpty()) {
             info.cancel();
         }
@@ -285,6 +283,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     @Overwrite
     public RegistryEntry<Item> getRegistryEntry() {
         return this.entry;
+    }
+
+    @ModifyExpressionValue(
+        method = "getItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"
+        )
+    )
+    private boolean isEmptyCheckUnboundRegistryEntry(boolean original) {
+        return original || !this.entry.hasKeyAndValue();
     }
 
     @Redirect(
@@ -430,14 +439,25 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "isEnchantable",
+        method = "canRepairWith",
         at = @At("HEAD"),
         cancellable = true
     )
-    public void isEnchantableCheckNullEntry(CallbackInfoReturnable<Boolean> info) {
-        if (this.entry == null) {
+    public void containsDataComponentUseItemBehaviorComponent(ItemStack ingredient, CallbackInfoReturnable<Boolean> info) {
+        if (!this.itematic$hasComponent(ItemComponentTypes.REPAIRABLE)) {
             info.setReturnValue(false);
         }
+    }
+
+    @ModifyExpressionValue(
+        method = "isEnchantable",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
+        )
+    )
+    public boolean containsDataComponentUseItemBehaviorComponent(boolean original) {
+        return original && this.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
     }
 
     @Inject(
@@ -582,15 +602,25 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
     }
 
+    @ModifyReturnValue(
+        method = "calculateDamage",
+        at = @At("RETURN")
+    )
+    private int limitDamageApplied(int original) {
+        return this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
+            .map(c -> Math.min(c.maximumDamage((ItemStack)(Object) this) - this.getDamage(), original))
+            .orElse(original);
+    }
+
     @Inject(
-        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V",
+        method = "onDurabilityChange",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;setDamage(I)V",
             shift = At.Shift.AFTER
         )
     )
-    private void invokeDamageToolEvent(int amount, ServerWorld world, ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
+    private void invokeDamageToolEvent(int damage, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
@@ -598,28 +628,14 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         this.itematic$invokeEvent(ItemEvents.DAMAGE_ITEM, this.context);
     }
 
-    @WrapWithCondition(
-        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/advancement/criterion/ItemDurabilityChangedCriterion;trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;I)V"
-        )
-    )
-    private boolean limitDamageApplied(ItemDurabilityChangedCriterion instance, ServerPlayerEntity player, ItemStack stack, int durability, @Local(argsOnly = true) LocalIntRef amount) {
-        this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
-            .map(c -> Math.min(c.maximumDamage((ItemStack)(Object) this) - this.getDamage(), amount.get()))
-            .ifPresent(amount::set);
-        return amount.get() != 0;
-    }
-
     @Inject(
-        method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V",
+        method = "onDurabilityChange",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"
         )
     )
-    private void invokeBreakToolEvent(int amount, ServerWorld world, ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
+    private void invokeBreakToolEvent(int damage, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
@@ -643,6 +659,32 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         return instance.itematic$getOrCreateStat(this.entry);
     }
 
+    @WrapOperation(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/util/ActionResult$Success;withNewHandStack(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/util/ActionResult$Success;"
+        )
+    )
+    private ActionResult.Success doNotModifyResultingItemStackIfNotUseable(ActionResult.Success instance, ItemStack newHandStack, Operation<ActionResult.Success> original) {
+        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+            return instance;
+        }
+
+        return original.call(instance, newHandStack);
+    }
+
+    @Inject(
+        method = "applyRemainderAndCooldown",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void checkForUseableBehavior(LivingEntity user, ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
+        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+            info.setReturnValue((ItemStack)(Object) this);
+        }
+    }
+
     /**
      * @author ErrorCraft
      * @reason Uses a registry entry on the item stack for data-driven items.
@@ -650,6 +692,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     @Overwrite
     public String toString() {
         return this.count + " " + this.itematic$key().getValue().toString();
+    }
+
+    @Inject(
+        method = "hashCode",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private static void checkEmptyStack(ItemStack stack, CallbackInfoReturnable<Integer> info) {
+        if (stack != null && (stack.isEmpty() || !stack.getRegistryEntry().hasKeyAndValue())) {
+            info.setReturnValue(0);
+        }
     }
 
     @Override
@@ -799,6 +852,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         this.entry = entry;
         if (entry.hasKeyAndValue()) {
             this.components = new ComponentMapImpl(entry.value().getComponents());
+            entry.value().postProcessComponents((ItemStack)(Object) this);
+        } else {
+            this.components = new ComponentMapImpl(ComponentMap.EMPTY);
+        }
+    }
+
+    @Unique
+    private void setFields(RegistryEntry<Item> entry, ComponentChanges changes) {
+        this.entry = entry;
+        if (entry.hasKeyAndValue()) {
+            this.components = ComponentMapImpl.create(entry.value().getComponents(), changes);
             entry.value().postProcessComponents((ItemStack)(Object) this);
         } else {
             this.components = new ComponentMapImpl(ComponentMap.EMPTY);

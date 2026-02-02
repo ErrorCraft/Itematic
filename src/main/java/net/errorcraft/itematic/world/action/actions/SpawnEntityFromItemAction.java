@@ -30,7 +30,7 @@ public record SpawnEntityFromItemAction(ActionContextParameter position) impleme
             .itematic$getComponent(ItemComponentTypes.ENTITY)
             .map(itemComponent -> EntityPlacer.action(context, this.position, itemComponent)
                 .place()
-                .isAccepted())
+                .succeeds())
             .orElse(false);
     }
 }
