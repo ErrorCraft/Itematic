@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.placement;
 
 import net.errorcraft.itematic.fluid.FluidKeys;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
@@ -19,7 +20,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -46,19 +46,19 @@ public class FluidPlacer extends Placer {
     }
 
     @Override
-    public ActionResult place() {
+    public ItemResult place() {
         BlockPos offset = this.blockPos.offset(this.direction);
         if (this.player != null && (!this.world.canPlayerModifyAt(this.player, this.blockPos) || !this.player.canPlaceOn(offset, this.direction, this.stack))) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
         if (this.fluid.matchesKey(FluidKeys.EMPTY)) {
             return this.tryDrainFluid();
         }
         BlockPos actualBlockPos = this.getActualPosition(offset);
         if (!this.tryPlaceFluid(actualBlockPos, this.allowOffset)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
-        return ActionResult.success(this.world.isClient());
+        return ItemResult.SUCCEED;
     }
 
     private BlockPos getActualPosition(BlockPos offset) {
@@ -71,18 +71,18 @@ public class FluidPlacer extends Placer {
         return offset;
     }
 
-    private ActionResult tryDrainFluid() {
+    private ItemResult tryDrainFluid() {
         if (!(this.blockState.getBlock() instanceof FluidDrainable fluidDrainable)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
         ItemStack drainedItemStack = fluidDrainable.tryDrainFluid(this.player, this.world, this.blockPos, this.blockState);
         if (drainedItemStack.isEmpty()) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
         this.applyPlayerEffects(fluidDrainable, drainedItemStack);
         this.world.emitGameEvent(this.player, GameEvent.FLUID_PICKUP, this.blockPos);
         this.resultStackConsumer.set(drainedItemStack);
-        return ActionResult.success(this.world.isClient());
+        return ItemResult.SUCCEED;
     }
 
     private void applyPlayerEffects(FluidDrainable fluidDrainable, ItemStack drainedItemStack) {

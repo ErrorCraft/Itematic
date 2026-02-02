@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.item.placement;
 
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +27,7 @@ public abstract class Placer {
         this.player = player;
     }
 
-    public abstract ActionResult place();
+    public abstract ItemResult place();
 
     protected void tryDecrementStack() {
         this.stack.decrementUnlessCreative(1, this.player);

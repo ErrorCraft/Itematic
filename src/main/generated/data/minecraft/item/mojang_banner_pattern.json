@@ -1,12 +1,6 @@
 {
   "base": {
-    "rarity": "epic",
-    "tooltip": [
-      {
-        "color": "gray",
-        "translate": "item.minecraft.mojang_banner_pattern.desc"
-      }
-    ],
+    "rarity": "rare",
     "translation_key": "item.minecraft.mojang_banner_pattern"
   },
   "components": {

@@ -10,14 +10,9 @@ import net.errorcraft.itematic.access.entity.attribute.AttributeContainerAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ConsumableItemComponent;
 import net.errorcraft.itematic.item.component.components.LifeSavingItemComponent;
-import net.errorcraft.itematic.item.event.ItemEvents;
-import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -34,8 +29,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Hand;
@@ -45,7 +38,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -79,16 +75,13 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public abstract boolean isUsingItem();
 
     @Shadow
-    public abstract ItemStack eatFood(World world, ItemStack stack, FoodComponent foodComponent);
-
-    @Shadow
     public abstract AttributeContainer getAttributes();
 
     @Shadow
     public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
 
     @Shadow
-    protected abstract void spawnItemParticles(ItemStack stack, int count);
+    public abstract void spawnItemParticles(ItemStack stack, int count);
 
     @Unique
     private int itemUsedTicks;
@@ -96,15 +89,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public LivingEntityExtender(EntityType<?> type, World world) {
         super(type, world);
     }
-
-    @Redirect(
-        method = "eatFood",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;decrementUnlessCreative(ILnet/minecraft/entity/LivingEntity;)V"
-        )
-    )
-    private void doNotDecrementItemStack(ItemStack instance, int amount, LivingEntity entity) {}
 
     @Redirect(
         method = "getPreferredEquipmentSlot",
@@ -217,17 +201,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     )
     private boolean isOfForPiglinHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.PIGLIN_HEAD);
-    }
-
-    @Redirect(
-        method = "getVisibilityBoundingBox",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForDragonHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.DRAGON_HEAD);
     }
 
     @Redirect(
@@ -350,49 +323,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Inject(
-        method = "shouldSpawnConsumptionEffects",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    private void checkMaxUseTime(CallbackInfoReturnable<Boolean> info) {
-        if (this.activeItemStack.getMaxUseTime((LivingEntity)(Object) this) <= 0) {
-            info.setReturnValue(false);
-        }
-    }
-
-    @Inject(
-        method = "spawnConsumptionEffects",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    private void alwaysSpawnItemParticlesAndStoreConsumableSound(ItemStack stack, int particleCount, CallbackInfo info, @Share("consumeSound") LocalRef<RegistryEntry<SoundEvent>> consumeSound) {
-        this.spawnItemParticles(stack, particleCount);
-        this.activeItemStack.itematic$getComponent(ItemComponentTypes.CONSUMABLE)
-            .map(ConsumableItemComponent::sound)
-            .ifPresentOrElse(consumeSound::set, info::cancel);
-    }
-
-    @Redirect(
-        method = "spawnConsumptionEffects",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;spawnItemParticles(Lnet/minecraft/item/ItemStack;I)V"
-        )
-    )
-    private void doNotSpawnItemParticlesNormally(LivingEntity instance, ItemStack stack, int count) {}
-
-    @ModifyArg(
-        method = "spawnConsumptionEffects",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;playSound(Lnet/minecraft/sound/SoundEvent;FF)V"
-        )
-    )
-    private SoundEvent playSoundUseItemComponent(SoundEvent sound, @Share("consumeSound") LocalRef<RegistryEntry<SoundEvent>> consumeSound) {
-        return consumeSound.get().value();
-    }
-
-    @Inject(
         method = "spawnItemParticles",
         at = @At("HEAD"),
         cancellable = true
@@ -404,7 +334,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Redirect(
-        method = "tickFallFlying",
+        method = "isFallFlyingAllowed",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
@@ -463,17 +393,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Override
-    public void itematic$eatFood(World world, ItemStack stack, FoodComponent food, ItemStackConsumer resultStackConsumer) {
-        this.eatFood(world, stack, food);
-        if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, this.getActiveHand())
-                .entityPosition(ActionContextParameter.THIS, this)
-                .build();
-            stack.itematic$invokeEvent(ItemEvents.EAT_ITEM, context);
-        }
-    }
-
-    @Override
     public void itematic$startUsingHand(Hand hand, int ticks) {
         ItemStack stack = this.getStackInHand(hand);
         if (stack.isEmpty() || this.isUsingItem()) {
@@ -492,7 +411,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public double itematic$getAttackDamage() {
         Double baseAttackDamage = this.getBaseAttackDamage(this.getMainHandStack());
         return ((AttributeContainerAccess) this.getAttributes())
-            .itematic$getValue(EntityAttributes.GENERIC_ATTACK_DAMAGE, baseAttackDamage);
+            .itematic$getValue(EntityAttributes.ATTACK_DAMAGE, baseAttackDamage);
     }
 
     @Unique
@@ -508,7 +427,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
         double damage = weaponAttackDamage.getDamage(stack, this);
         if (weaponAttackDamage.shouldAddBase(stack, this)) {
-            return damage + this.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+            return damage + this.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE);
         }
 
         return damage;

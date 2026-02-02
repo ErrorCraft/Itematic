@@ -10,6 +10,7 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.IngredientPlacement;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.recipe.input.CraftingRecipeInput;
@@ -17,7 +18,6 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.util.DyeColor;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
 public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ingredient, DyeColor color, ItemStack result) implements CraftingRecipe {
@@ -30,7 +30,7 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
     public boolean matches(CraftingRecipeInput input, World world) {
         boolean foundIngredient = false;
         boolean foundColor = false;
-        for (int i = 0; i < input.getSize(); i++) {
+        for (int i = 0; i < input.size(); i++) {
             ItemStack stack = input.getStackInSlot(i);
             if (stack.isEmpty()) {
                 continue;
@@ -62,7 +62,7 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
 
     @Override
     public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        for (int i = 0; i < input.getSize(); i++) {
+        for (int i = 0; i < input.size(); i++) {
             ItemStack stack = input.getStackInSlot(i);
             if (!this.ingredient.test(stack)) {
                 continue;
@@ -85,15 +85,13 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
     }
 
     @Override
-    public DefaultedList<Ingredient> getIngredients() {
-        DefaultedList<Ingredient> defaultedList = DefaultedList.of();
-        defaultedList.add(this.ingredient);
-        return defaultedList;
+    public RecipeSerializer<?> getSerializer() {
+        return ItematicRecipeSerializers.ITEM_COLORING;
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
-        return ItematicRecipeSerializers.ITEM_COLORING;
+    public IngredientPlacement getIngredientPlacement() {
+        return IngredientPlacement.NONE;
     }
 
     private boolean isExpectedColor(ItemStack stack) {
@@ -106,7 +104,7 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
     public static class Serializer implements RecipeSerializer<ItemColoringRecipe> {
         private static final MapCodec<ItemColoringRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             CraftingRecipeCategory.CODEC.fieldOf("category").orElse(CraftingRecipeCategory.MISC).forGetter(ItemColoringRecipe::category),
-            Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("ingredient").forGetter(ItemColoringRecipe::ingredient),
+            Ingredient.CODEC.fieldOf("ingredient").forGetter(ItemColoringRecipe::ingredient),
             DyeColor.CODEC.fieldOf("color").forGetter(ItemColoringRecipe::color),
             RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("result").xmap(ItemStack::new, ItemStack::getRegistryEntry).forGetter(ItemColoringRecipe::result)
         ).apply(instance, ItemColoringRecipe::new));

@@ -1,12 +1,6 @@
 {
   "base": {
     "rarity": "rare",
-    "tooltip": [
-      {
-        "color": "gray",
-        "translate": "item.minecraft.guster_banner_pattern.desc"
-      }
-    ],
     "translation_key": "item.minecraft.guster_banner_pattern"
   },
   "components": {

@@ -7,6 +7,7 @@ import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityIniti
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -39,7 +40,6 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -101,10 +101,10 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, this.getFluidHandling());
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
         return this.place(world, user, hand, stack, resultStackConsumer, blockHitResult);
     }
@@ -116,22 +116,25 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         }
     }
 
-    public ActionResult place(World world, @Nullable PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer, BlockHitResult blockHitResult) {
+    public ItemResult place(World world, @Nullable PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer, BlockHitResult blockHitResult) {
         StackReference stackReference = StackReferenceUtil.of(stack);
-        ActionResult result = ActionResult.PASS;
+        ItemResult result = ItemResult.PASS;
         if (this.fluid.isPresent()) {
             FluidPlacer fluidPlacer = FluidPlacer.of(stack, stackReference::set, world, blockHitResult, user, this.fluid.get(), this.emptyingSound.orElse(null));
             result = place(fluidPlacer, result);
         }
-        if (this.block.isPresent() && result != ActionResult.FAIL) {
+
+        if (this.block.isPresent()) {
             ItemUsageContext context = new ItemUsageContext(world, user, hand, stack, blockHitResult);
             BlockPlacer blockPlacer = BlockPlacer.of(context, stackReference::set, this.block.get(), false, false);
             result = place(blockPlacer, result);
         }
+
         result = this.tryPlaceEntity(world, user, hand, stack, blockHitResult, stackReference, result);
-        if (result.isAccepted()) {
+        if (result.succeeds()) {
             resultStackConsumer.set(this.getResultStack(user, stack, stackReference.get()));
         }
+
         return result;
     }
 
@@ -139,39 +142,46 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         if (this.fluid.isEmpty()) {
             return RaycastContext.FluidHandling.NONE;
         }
+
         if (this.fluid.get().matchesKey(FluidKeys.EMPTY)) {
             return RaycastContext.FluidHandling.SOURCE_ONLY;
         }
+
         return RaycastContext.FluidHandling.NONE;
     }
 
-    private ActionResult tryPlaceEntity(World world, @Nullable PlayerEntity user, Hand hand, ItemStack stack, BlockHitResult blockHitResult, StackReference stackReference, ActionResult currentResult) {
+    private ItemResult tryPlaceEntity(World world, @Nullable PlayerEntity user, Hand hand, ItemStack stack, BlockHitResult blockHitResult, StackReference stackReference, ItemResult currentResult) {
         if (this.entity.isEmpty()) {
             return currentResult;
         }
-        if (this.entity.get().requireOtherSuccessfulPlacement && !currentResult.isAccepted()) {
+
+        if (this.entity.get().requireOtherSuccessfulPlacement && !currentResult.succeeds()) {
             return currentResult;
         }
-        if (world.isClient() || currentResult == ActionResult.FAIL) {
+
+        if (world.isClient()) {
             return currentResult;
         }
+
         EntityPlacer entityPlacer = EntityPlacer.bucket(stack, stackReference::set, world, blockHitResult, user, this.entity.get().entity, hand);
         return place(entityPlacer, currentResult);
     }
 
-    private static ActionResult place(Placer placer, ActionResult currentResult) {
-        ActionResult result = placer.place();
-        return currentResult.itematic$merge(result);
+    private static ItemResult place(Placer placer, ItemResult currentResult) {
+        ItemResult result = placer.place();
+        return currentResult.max(result);
     }
 
     private ItemStack getResultStack(@Nullable PlayerEntity player, ItemStack currentStack, ItemStack possibleNewStack) {
         if (currentStack == possibleNewStack) {
             possibleNewStack = this.transformsInto.map(ItemStack::new).orElse(possibleNewStack);
         }
+
         if (player == null) {
             currentStack.decrement(1);
             return possibleNewStack;
         }
+
         return ItemUsage.exchangeStack(currentStack, player, possibleNewStack);
     }
 

@@ -25,6 +25,6 @@ public record ConstantItemColor(int color) implements ItemColor<ConstantItemColo
 
     @Override
     public int color(ItemStack stack, int tintIndex) {
-        return ColorHelper.Argb.fullAlpha(this.color);
+        return ColorHelper.fullAlpha(this.color);
     }
 }

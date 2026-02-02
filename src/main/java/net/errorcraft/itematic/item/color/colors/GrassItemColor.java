@@ -28,6 +28,6 @@ public record GrassItemColor(RegistryEntry<Biome> biome) implements ItemColor<Gr
 
     @Override
     public int color(ItemStack stack, int tintIndex) {
-        return ColorHelper.Argb.fullAlpha(this.biome.value().getGrassColorAt(0.0d, 0.0d));
+        return ColorHelper.fullAlpha(this.biome.value().getGrassColorAt(0.0d, 0.0d));
     }
 }

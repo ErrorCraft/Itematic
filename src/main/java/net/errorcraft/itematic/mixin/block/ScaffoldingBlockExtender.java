@@ -100,10 +100,12 @@ public class ScaffoldingBlockExtender extends Block implements BlockAccess {
         if (world.isClient() || world.isInBuildLimit(pos)) {
             return false;
         }
-        int topY = world.getTopY();
+
+        int topY = world.getTopYInclusive();
         if (context.getPlayer() instanceof ServerPlayerEntity player && pos.getY() >= topY) {
             player.sendMessageToClient(Text.translatable("build.tooHigh", topY - 1).formatted(Formatting.RED), true);
         }
+
         return true;
     }
 

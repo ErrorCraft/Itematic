@@ -10,6 +10,7 @@ import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -63,9 +64,8 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
 
     public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, int primaryColor, int secondaryColor, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
-            EntityItemComponent.of(SimpleEntityInitializer.of(entity.value()), true),
+            EntityItemComponent.of(SimpleEntityInitializer.of(entity.value()), true, EntityItemComponent.Pass.BLOCK, EntityItemComponent.Pass.FLUID),
             INSTANCE,
-            UseableOnFluidItemComponent.INSTANCE,
             TintedItemComponent.of(IndexItemColor.of(primaryColor, secondaryColor)),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
         };
@@ -75,6 +75,7 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
         if (entity instanceof PassiveEntity passiveEntity) {
             return passiveEntity.createChild(world, passiveEntity);
         }
-        return entityType.create(world);
+
+        return entityType.create(world, SpawnReason.SPAWN_EGG);
     }
 }

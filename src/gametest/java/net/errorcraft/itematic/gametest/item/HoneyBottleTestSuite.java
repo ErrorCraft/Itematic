@@ -25,10 +25,12 @@ public class HoneyBottleTestSuite {
         ItemStack stack = world.itematic$createStack(ItemKeys.HONEY_BOTTLE);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
-        stack.use(world, player, Hand.MAIN_HAND);
-        context.createTimedTaskRunner().expectMinDurationAndRun(
-            TestUtil.getDataComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack, player),
-            () -> Assert.entityDoesNotHaveStatusEffect(player, StatusEffects.POISON)
-        ).completeIfSuccessful();
+        context.createTimedTaskRunner()
+            .createAndAddReported(() -> stack.use(world, player, Hand.MAIN_HAND))
+            .expectMinDurationAndRun(
+                TestUtil.getDataComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack, player),
+                () -> Assert.entityDoesNotHaveStatusEffect(player, StatusEffects.POISON)
+            )
+            .completeIfSuccessful();
     }
 }

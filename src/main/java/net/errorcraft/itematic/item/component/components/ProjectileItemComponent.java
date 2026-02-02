@@ -13,6 +13,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ExplosiveProjectileEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -80,7 +81,7 @@ public record ProjectileItemComponent(EntityInitializer<?> entity) implements It
     }
 
     public Entity createEntity(ActionContext context, ActionContextParameter position, float angleOffset, float speed, float uncertainty) {
-        Entity entity = this.entity.create(context);
+        Entity entity = this.entity.create(context, SpawnReason.SPAWN_EGG);
         if (entity == null) {
             return null;
         }

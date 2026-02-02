@@ -18,7 +18,7 @@ import java.util.Optional;
 public record ItemDamageRulesDataComponent(List<Rule> rules, int defaultItemDamage) {
     public static final Codec<ItemDamageRulesDataComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Rule.CODEC.listOf().fieldOf("rules").forGetter(ItemDamageRulesDataComponent::rules),
-        Codecs.NONNEGATIVE_INT.fieldOf("default_damage").forGetter(ItemDamageRulesDataComponent::defaultItemDamage)
+        Codecs.NON_NEGATIVE_INT.fieldOf("default_damage").forGetter(ItemDamageRulesDataComponent::defaultItemDamage)
     ).apply(instance, ItemDamageRulesDataComponent::new));
     public static final PacketCodec<RegistryByteBuf, ItemDamageRulesDataComponent> PACKET_CODEC = PacketCodec.tuple(
         Rule.PACKET_CODEC.collect(PacketCodecs.toList()), ItemDamageRulesDataComponent::rules,
@@ -39,7 +39,7 @@ public record ItemDamageRulesDataComponent(List<Rule> rules, int defaultItemDama
     public record Rule(RegistryEntryList<Item> items, Optional<Integer> damage) {
         public static final Codec<Rule> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             RegistryCodecs.entryList(RegistryKeys.ITEM).fieldOf("items").forGetter(Rule::items),
-            Codecs.NONNEGATIVE_INT.optionalFieldOf("damage").forGetter(Rule::damage)
+            Codecs.NON_NEGATIVE_INT.optionalFieldOf("damage").forGetter(Rule::damage)
         ).apply(instance, Rule::new));
         public static final PacketCodec<RegistryByteBuf, Rule> PACKET_CODEC = PacketCodec.tuple(
             PacketCodecs.registryEntryList(RegistryKeys.ITEM), Rule::items,

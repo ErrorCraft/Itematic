@@ -9,6 +9,7 @@
     "fabric-gametest": [
       "net.errorcraft.itematic.gametest.block.AnvilBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.BeehiveBlockTestSuite",
+      "net.errorcraft.itematic.gametest.block.BrewingStandBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.CandleBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.ComposterBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.DispenserBehaviorTestSuite",

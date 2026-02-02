@@ -1,5 +1,6 @@
 {
   "base": {
+    "rarity": "uncommon",
     "translation_key": "item.minecraft.skull_pottery_sherd"
   },
   "components": {

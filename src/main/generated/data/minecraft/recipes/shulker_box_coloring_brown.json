@@ -2,8 +2,6 @@
   "type": "minecraft:item_coloring",
   "category": "misc",
   "color": "brown",
-  "ingredient": {
-    "tag": "minecraft:shulker_boxes"
-  },
+  "ingredient": "#minecraft:shulker_boxes",
   "result": "minecraft:brown_shulker_box"
 }

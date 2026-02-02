@@ -22,6 +22,11 @@ public interface SmithingTemplateItemAccessor {
         throw new AssertionError();
     }
 
+    @Accessor("SMITHING_TEMPLATE_TEXT")
+    static Text getSmithingTemplateText() {
+        throw new AssertionError();
+    }
+
     @Accessor("APPLIES_TO_TEXT")
     static Text getAppliesToText() {
         throw new AssertionError();

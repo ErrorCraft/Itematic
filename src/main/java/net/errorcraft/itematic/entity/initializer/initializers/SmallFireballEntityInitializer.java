@@ -6,6 +6,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.projectile.SmallFireballEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
@@ -23,7 +24,7 @@ public record SmallFireballEntityInitializer() implements EntityInitializer<Smal
     }
 
     @Override
-    public SmallFireballEntity create(ActionContext context) {
+    public SmallFireballEntity create(ActionContext context, SpawnReason reason) {
         ServerWorld world = context.world();
         Random random = world.getRandom();
         Direction direction = context.side();

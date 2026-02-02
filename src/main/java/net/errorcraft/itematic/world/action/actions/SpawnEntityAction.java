@@ -29,6 +29,6 @@ public record SpawnEntityAction(ActionContextParameter position, EntityInitializ
     public boolean execute(ActionContext context) {
         return EntityPlacer.action(context, this.position, this.entity)
             .place()
-            .isAccepted();
+            .succeeds();
     }
 }

@@ -4,31 +4,37 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.UseDurationDataComponent;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.providers.ConstantIntegerProvider;
+import net.errorcraft.itematic.item.use.provider.providers.IndefiniteIntegerProvider;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.errorcraft.itematic.util.UseActionUtil;
 import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.UseRemainderComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.util.ActionResult;
+import net.minecraft.item.consume.UseAction;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
+import java.util.Optional;
 import java.util.Set;
 
-public record UseableItemComponent(UseDurationDataComponent ticks, UseAction animation, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
+public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, UseAction animation, Optional<ItemStack> remainder, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
     public static final Codec<UseableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        UseDurationDataComponent.MAP_CODEC.forGetter(UseableItemComponent::ticks),
-        UseActionUtil.CODEC.optionalFieldOf("animation", UseAction.NONE).forGetter(UseableItemComponent::animation),
+        UseDurationDataComponent.CODEC.optionalFieldOf("ticks").forGetter(UseableItemComponent::ticks),
+        UseAction.CODEC.optionalFieldOf("animation", UseAction.NONE).forGetter(UseableItemComponent::animation),
+        ItemStack.CODEC.optionalFieldOf("remainder").forGetter(UseableItemComponent::remainder),
         ItematicCodecs.setCodec(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(UseableItemComponent::passes)
     ).apply(instance, UseableItemComponent::new));
 
@@ -47,47 +53,54 @@ public record UseableItemComponent(UseDurationDataComponent ticks, UseAction ani
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (this.isUnuseable(Pass.NORMAL)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
+
         return tryStartUsing(world, user, hand, stack);
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
         if (this.isUnuseable(Pass.BLOCK)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
+
         return tryStartUsing(context.getWorld(), context.getPlayer(), context.getHand(), context.getStack());
     }
 
     @Override
-    public ActionResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (this.isUnuseable(Pass.ENTITY)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
+
         return tryStartUsing(user.getWorld(), user, hand, stack);
     }
 
-    private static ActionResult tryStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    private static ItemResult tryStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         if (!stack.itematic$mayStartUsing(world, user, hand, stack)) {
-            return ActionResult.PASS;
+            return ItemResult.PASS;
         }
-        UseDurationDataComponent useDurationDataComponent = stack.get(ItematicDataComponentTypes.USE_DURATION);
-        if (useDurationDataComponent == null) {
-            return ActionResult.PASS;
+
+        UseDurationDataComponent useDuration = stack.get(ItematicDataComponentTypes.USE_DURATION);
+        if (useDuration == null) {
+            return ItemResult.CONSUME;
         }
-        if (useDurationDataComponent.startUsing(world, user, hand, stack)) {
-            return ActionResult.CONSUME;
+
+        if (useDuration.startUsing(world, user, hand, stack)) {
+            return ItemResult.CONSUME;
         }
-        return ActionResult.PASS;
+
+        return ItemResult.PASS;
     }
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
-        builder.add(ItematicDataComponentTypes.USE_DURATION, this.ticks);
+        this.ticks.ifPresent(ticks -> builder.add(ItematicDataComponentTypes.USE_DURATION, ticks));
         builder.add(ItematicDataComponentTypes.USE_ANIMATION, this.animation);
+        this.remainder.ifPresent(remainder -> builder.add(DataComponentTypes.USE_REMAINDER, new UseRemainderComponent(remainder)));
     }
 
     private boolean isUnuseable(Pass pass) {
@@ -97,30 +110,42 @@ public record UseableItemComponent(UseDurationDataComponent ticks, UseAction ani
     public static class Builder {
         private IntegerProvider ticks;
         private UseAction animation = UseAction.NONE;
+        private RegistryEntry<Item> remainder;
         private Set<Pass> passes = Pass.DEFAULT_PASSES;
 
         private Builder() {}
 
         public UseableItemComponent build() {
             return new UseableItemComponent(
-                this.ticks == null ? UseDurationDataComponent.INDEFINITE : new UseDurationDataComponent(this.ticks),
+                Optional.ofNullable(this.ticks).map(UseDurationDataComponent::new),
                 this.animation,
+                Optional.ofNullable(this.remainder).map(ItemStack::new),
                 this.passes
             );
         }
 
-        public Builder ticks(int ticks) {
+        public Builder useFor(int ticks) {
             this.ticks = new ConstantIntegerProvider(ticks);
             return this;
         }
 
-        public Builder ticks(IntegerProvider ticks) {
+        public Builder useFor(IntegerProvider ticks) {
             this.ticks = ticks;
+            return this;
+        }
+
+        public Builder useIndefinitely() {
+            this.ticks = IndefiniteIntegerProvider.INSTANCE;
             return this;
         }
 
         public Builder animation(UseAction animation) {
             this.animation = animation;
+            return this;
+        }
+
+        public Builder remainder(RegistryEntry<Item> remainder) {
+            this.remainder = remainder;
             return this;
         }
 

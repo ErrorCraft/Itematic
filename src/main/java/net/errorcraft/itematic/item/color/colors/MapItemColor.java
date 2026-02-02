@@ -23,6 +23,7 @@ public record MapItemColor() implements ItemColor<MapItemColor> {
         if (tintIndex == 0) {
             return DEFAULT_COLOR;
         }
-        return ColorHelper.Argb.fullAlpha(stack.getOrDefault(DataComponentTypes.MAP_COLOR, MapColorComponent.DEFAULT).rgb());
+
+        return ColorHelper.fullAlpha(stack.getOrDefault(DataComponentTypes.MAP_COLOR, MapColorComponent.DEFAULT).rgb());
     }
 }

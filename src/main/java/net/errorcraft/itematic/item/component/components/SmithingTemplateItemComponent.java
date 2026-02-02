@@ -23,8 +23,8 @@ public record SmithingTemplateItemComponent(RegistryEntry<SmithingTemplate> temp
     public static final Codec<SmithingTemplateItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryFixedCodec.of(ItematicRegistryKeys.SMITHING_TEMPLATE).fieldOf("template").forGetter(SmithingTemplateItemComponent::template)
     ).apply(instance, SmithingTemplateItemComponent::new));
-    private static final Formatting TITLE_FORMATTING = SmithingTemplateItemAccessor.getTitleFormatting();
     private static final Formatting DESCRIPTION_FORMATTING = SmithingTemplateItemAccessor.getDescriptionFormatting();
+    private static final Text SMITHING_TEMPLATE_TEXT = SmithingTemplateItemAccessor.getSmithingTemplateText();
     private static final Text APPLIES_TO_TEXT = SmithingTemplateItemAccessor.getAppliesToText();
     private static final Text INGREDIENTS_TEXT = SmithingTemplateItemAccessor.getIngredientsText();
 
@@ -48,7 +48,7 @@ public record SmithingTemplateItemComponent(RegistryEntry<SmithingTemplate> temp
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         SmithingTemplate template = this.template.value();
-        tooltip.add(template.titleText().formatted(TITLE_FORMATTING));
+        tooltip.add(SMITHING_TEMPLATE_TEXT);
         tooltip.add(ScreenTexts.EMPTY);
         tooltip.add(APPLIES_TO_TEXT);
         tooltip.add(ScreenTexts.space().append(template.appliesToText().formatted(DESCRIPTION_FORMATTING)));

@@ -31,14 +31,14 @@ public class WeaponItemComponentTestSuite {
             context.assertTrue(zombie.tryAttack(victim), "Expected attack to be successful");
             Assert.areDoublesEqual(
                 victim.getHealth(),
-                MAX_HEALTH_VICTIM - zombie.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
+                MAX_HEALTH_VICTIM - zombie.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE),
                 (value, expected) -> "Expected health to be " + expected + ", got " + value + " instead"
             );
         }).completeIfSuccessful();
     }
 
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-    public void zombieAttackingWithIronSwordDealsDamageFromIronSword(TestContext context) {
+    public void zombieAttackingWithIronSwordDealsCorrectDamage(TestContext context) {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.IRON_SWORD);
         ZombieEntity zombie = TestUtil.createEntity(context, EntityType.ZOMBIE, entity -> entity.setStackInHand(Hand.MAIN_HAND, stack));
@@ -48,14 +48,14 @@ public class WeaponItemComponentTestSuite {
             context.assertTrue(zombie.tryAttack(victim), "Expected attack to be successful");
             Assert.areDoublesEqual(
                 victim.getHealth(),
-                MAX_HEALTH_VICTIM - TestUtil.getItemComponent(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
+                MAX_HEALTH_VICTIM - zombie.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) - TestUtil.getItemComponent(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
                 (value, expected) -> "Expected health to be " + expected + ", got " + value + " instead"
             );
         }).completeIfSuccessful();
     }
 
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-    public void piglinAttackingWithIronSwordDealsDamageFromIronSword(TestContext context) {
+    public void piglinAttackingWithIronSwordDealsCorrectDamage(TestContext context) {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.IRON_SWORD);
         PiglinEntity piglin = TestUtil.createEntity(context, EntityType.PIGLIN, entity -> entity.setStackInHand(Hand.MAIN_HAND, stack));
@@ -65,14 +65,14 @@ public class WeaponItemComponentTestSuite {
             context.assertTrue(piglin.tryAttack(victim), "Expected attack to be successful");
             Assert.areDoublesEqual(
                 victim.getHealth(),
-                MAX_HEALTH_VICTIM - TestUtil.getItemComponent(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
+                MAX_HEALTH_VICTIM - piglin.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) - TestUtil.getItemComponent(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
                 (value, expected) -> "Expected health to be " + expected + ", got " + value + " instead"
             );
         }).completeIfSuccessful();
     }
 
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-    public void piglinAttackingWithGoldenSwordDealsDamageFromTrueBaseValueAttackDamageAttributeAndGoldenSword(TestContext context) {
+    public void piglinAttackingWithGoldenSwordDealsCorrectDamage(TestContext context) {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.GOLDEN_SWORD);
         PiglinEntity piglin = TestUtil.createEntity(context, EntityType.PIGLIN, entity -> entity.setStackInHand(Hand.MAIN_HAND, stack));
@@ -82,7 +82,7 @@ public class WeaponItemComponentTestSuite {
             context.assertTrue(piglin.tryAttack(victim), "Expected attack to be successful");
             Assert.areDoublesEqual(
                 victim.getHealth(),
-                MAX_HEALTH_VICTIM - piglin.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) - TestUtil.getItemComponent(stack, ItemComponentTypes.WEAPON).attackDamage().rules().getFirst().damage().orElseThrow(),
+                MAX_HEALTH_VICTIM - piglin.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) - TestUtil.getItemComponent(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
                 (value, expected) -> "Expected health to be " + expected + ", got " + value + " instead"
             );
         }).completeIfSuccessful();
@@ -90,7 +90,7 @@ public class WeaponItemComponentTestSuite {
 
     private static PigEntity spawnVictim(TestContext context) {
         PigEntity victim = TestUtil.createEntity(context, EntityType.PIG, entity -> {
-            Objects.requireNonNull(entity.getAttributes().getCustomInstance(EntityAttributes.GENERIC_MAX_HEALTH))
+            Objects.requireNonNull(entity.getAttributes().getCustomInstance(EntityAttributes.MAX_HEALTH))
                 .setBaseValue(MAX_HEALTH_VICTIM);
             entity.setHealth((float) MAX_HEALTH_VICTIM);
         });

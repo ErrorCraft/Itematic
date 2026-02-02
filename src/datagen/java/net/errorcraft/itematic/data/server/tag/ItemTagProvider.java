@@ -32,26 +32,6 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.NETHERITE_INGOT);
         this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_TURTLE_ARMOR)
             .add(ItemKeys.TURTLE_SCUTE);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_ELYTRA)
-            .add(ItemKeys.PHANTOM_MEMBRANE);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_WOODEN_TOOL)
-            .forceAddTag(ItemTags.PLANKS);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_STONE_TOOL)
-            .forceAddTag(ItemTags.STONE_TOOL_MATERIALS);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_GOLDEN_TOOL)
-            .add(ItemKeys.GOLD_INGOT);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_IRON_TOOL)
-            .add(ItemKeys.IRON_INGOT);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_DIAMOND_TOOL)
-            .add(ItemKeys.DIAMOND);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_NETHERITE_TOOL)
-            .add(ItemKeys.NETHERITE_INGOT);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_MACE)
-            .add(ItemKeys.BREEZE_ROD);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_SHIELD)
-            .forceAddTag(ItemTags.PLANKS);
-        this.getOrCreateTagBuilder(ItematicItemTags.FURNACE_MINECART_FUEL)
-            .add(ItemKeys.COAL, ItemKeys.CHARCOAL);
         this.getOrCreateTagBuilder(ItematicItemTags.BOW_AMMUNITION)
             .forceAddTag(ItemTags.ARROWS);
         this.getOrCreateTagBuilder(ItematicItemTags.CROSSBOW_AMMUNITION)
@@ -1305,6 +1285,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.TURTLE_HELMET)
             .add(ItemKeys.PHANTOM_MEMBRANE);
         this.getOrCreateTagBuilder(ItematicItemTags.BANNER_PATTERNS)
+            .add(ItemKeys.FIELD_MASONED_BANNER_PATTERN)
+            .add(ItemKeys.BORDURE_INDENTED_BANNER_PATTERN)
             .add(ItemKeys.FLOWER_BANNER_PATTERN)
             .add(ItemKeys.CREEPER_BANNER_PATTERN)
             .add(ItemKeys.SKULL_BANNER_PATTERN)

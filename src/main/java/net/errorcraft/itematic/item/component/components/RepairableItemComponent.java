@@ -5,14 +5,22 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.RepairableComponent;
 import net.minecraft.item.Item;
+import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.registry.entry.RegistryEntryList;
 
-public record RepairableItemComponent(TagKey<Item> items) implements ItemComponent<RepairableItemComponent> {
+public record RepairableItemComponent(RegistryEntryList<Item> items) implements ItemComponent<RepairableItemComponent> {
     public static final Codec<RepairableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        TagKey.unprefixedCodec(RegistryKeys.ITEM).fieldOf("items").forGetter(RepairableItemComponent::items)
+        RegistryCodecs.entryList(RegistryKeys.ITEM).fieldOf("items").forGetter(RepairableItemComponent::items)
     ).apply(instance, RepairableItemComponent::new));
+
+    public static RepairableItemComponent of(RegistryEntryList<Item> items) {
+        return new RepairableItemComponent(items);
+    }
 
     @Override
     public ItemComponentType<RepairableItemComponent> type() {
@@ -24,7 +32,8 @@ public record RepairableItemComponent(TagKey<Item> items) implements ItemCompone
         return CODEC;
     }
 
-    public static RepairableItemComponent of(TagKey<Item> items) {
-        return new RepairableItemComponent(items);
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.REPAIRABLE, new RepairableComponent(this.items));
     }
 }

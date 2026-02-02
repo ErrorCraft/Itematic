@@ -11,6 +11,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EyeOfEnderEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.decoration.GlowItemFrameEntity;
@@ -19,7 +20,6 @@ import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.projectile.*;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -440,21 +440,21 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     }
 
     @Inject(
-        method = "create(Lnet/minecraft/world/World;)Lnet/minecraft/entity/Entity;",
+        method = "create(Lnet/minecraft/world/World;Lnet/minecraft/entity/SpawnReason;)Lnet/minecraft/entity/Entity;",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/EntityType$EntityFactory;create(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/World;)Lnet/minecraft/entity/Entity;"
         ),
         cancellable = true
     )
-    private void createUseEntityInitializerIfPresent(World world, CallbackInfoReturnable<@Nullable T> info) {
+    private void createUseEntityInitializerIfPresent(World world, SpawnReason reason, CallbackInfoReturnable<T> info) {
         if (this.initializer == null) {
             return;
         }
 
         EntityInitializer<?> initializer = this.initializer; // Copy to a local and set the field to null, so we don't get a StackOverflowError
         this.initializer = null;
-        info.setReturnValue((T) initializer.create(this.actionContext));
+        info.setReturnValue((T) initializer.create(this.actionContext, reason));
         this.actionContext = null;
     }
 

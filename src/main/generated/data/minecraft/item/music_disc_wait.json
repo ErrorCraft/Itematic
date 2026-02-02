@@ -1,6 +1,6 @@
 {
   "base": {
-    "rarity": "epic",
+    "rarity": "uncommon",
     "translation_key": "item.minecraft.music_disc_wait"
   },
   "components": {

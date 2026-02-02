@@ -1,12 +1,9 @@
 package net.errorcraft.itematic.access.entity;
 
-import net.errorcraft.itematic.item.ItemStackConsumer;
-import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Hand;
-import net.minecraft.world.World;
 
 public interface LivingEntityAccess {
     default boolean itematic$isHolding(RegistryKey<Item> key) {
@@ -15,7 +12,6 @@ public interface LivingEntityAccess {
     default ItemStack itematic$getAmmunition(ItemStack stack) {
         return ItemStack.EMPTY;
     }
-    default void itematic$eatFood(World world, ItemStack stack, FoodComponent food, ItemStackConsumer resultStackConsumer) {}
     default void itematic$startUsingHand(Hand hand, int ticks) {}
     default int itematic$itemUsedTicks() {
         return 0;

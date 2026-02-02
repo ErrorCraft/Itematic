@@ -13,18 +13,7 @@ public class ItematicItemTags {
     public static final TagKey<Item> REPAIRS_DIAMOND_ARMOR = of("repairs_diamond_armor");
     public static final TagKey<Item> REPAIRS_NETHERITE_ARMOR = of("repairs_netherite_armor");
     public static final TagKey<Item> REPAIRS_TURTLE_ARMOR = of("repairs_turtle_armor");
-    public static final TagKey<Item> REPAIRS_ELYTRA = of("repairs_elytra");
 
-    public static final TagKey<Item> REPAIRS_WOODEN_TOOL = of("repairs_wooden_tool");
-    public static final TagKey<Item> REPAIRS_STONE_TOOL = of("repairs_stone_tool");
-    public static final TagKey<Item> REPAIRS_GOLDEN_TOOL = of("repairs_golden_tool");
-    public static final TagKey<Item> REPAIRS_IRON_TOOL = of("repairs_iron_tool");
-    public static final TagKey<Item> REPAIRS_DIAMOND_TOOL = of("repairs_diamond_tool");
-    public static final TagKey<Item> REPAIRS_NETHERITE_TOOL = of("repairs_netherite_tool");
-    public static final TagKey<Item> REPAIRS_MACE = of("repairs_mace");
-    public static final TagKey<Item> REPAIRS_SHIELD = of("repairs_shield");
-
-    public static final TagKey<Item> FURNACE_MINECART_FUEL = of("furnace_minecart_fuel");
     public static final TagKey<Item> BOW_AMMUNITION = of("bow_ammunition");
     public static final TagKey<Item> CROSSBOW_AMMUNITION = of("crossbow_ammunition");
 

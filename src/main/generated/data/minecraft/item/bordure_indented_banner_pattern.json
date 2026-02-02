@@ -1,0 +1,12 @@
+{
+  "base": {
+    "rarity": "rare",
+    "translation_key": "item.minecraft.bordure_indented_banner_pattern"
+  },
+  "components": {
+    "minecraft:banner_pattern": {
+      "patterns": "minecraft:pattern_item/bordure_indented"
+    },
+    "minecraft:stackable": 1
+  }
+}

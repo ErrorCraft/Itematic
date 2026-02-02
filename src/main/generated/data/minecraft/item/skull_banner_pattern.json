@@ -1,12 +1,6 @@
 {
   "base": {
-    "rarity": "uncommon",
-    "tooltip": [
-      {
-        "color": "gray",
-        "translate": "item.minecraft.skull_banner_pattern.desc"
-      }
-    ],
+    "rarity": "rare",
     "translation_key": "item.minecraft.skull_banner_pattern"
   },
   "components": {

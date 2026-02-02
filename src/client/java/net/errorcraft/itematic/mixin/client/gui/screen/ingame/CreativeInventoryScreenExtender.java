@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -73,7 +73,7 @@ public abstract class CreativeInventoryScreenExtender extends AbstractInventoryS
         )
     )
     @SuppressWarnings("ConstantConditions")
-    private Stream<TagKey<Item>> streamTagsUseDynamicRegistry(DefaultedRegistry<Item> instance) {
+    private Stream<RegistryEntryList.Named<Item>> streamTagsUseDynamicRegistry(DefaultedRegistry<Item> instance) {
         return this.client.world.getRegistryManager()
             .get(RegistryKeys.ITEM)
             .streamTags();

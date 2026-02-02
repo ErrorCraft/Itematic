@@ -6,6 +6,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -27,7 +28,7 @@ public record ArmorStandEntityInitializer() implements EntityInitializer<ArmorSt
     }
 
     @Override
-    public ArmorStandEntity create(ActionContext context) {
+    public ArmorStandEntity create(ActionContext context, SpawnReason reason) {
         if (!mayCreate(context)) {
             return null;
         }
