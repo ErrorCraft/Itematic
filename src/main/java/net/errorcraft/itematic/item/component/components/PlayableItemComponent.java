@@ -91,7 +91,7 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
             return Optional.of(instrument);
         }
 
-        return lookup.getWrapperOrThrow(RegistryKeys.INSTRUMENT)
+        return lookup.getOrThrow(RegistryKeys.INSTRUMENT)
             .getOptional(this.instruments)
             .map(RegistryEntryList::stream)
             .flatMap(Stream::findFirst);

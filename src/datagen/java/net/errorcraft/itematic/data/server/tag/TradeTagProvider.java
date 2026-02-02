@@ -16,7 +16,7 @@ public class TradeTagProvider extends FabricTagProvider<Trade> {
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup arg) {
+    protected void configure(RegistryWrapper.WrapperLookup lookup) {
         this.getOrCreateTagBuilder(TradeTags.FARMER_NOVICE)
             .add(Trades.BUY_WHEAT)
             .add(Trades.BUY_POTATO)

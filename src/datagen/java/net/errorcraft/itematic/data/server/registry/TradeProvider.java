@@ -14,7 +14,7 @@ public class TradeProvider extends FabricDynamicRegistryProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup registries, Entries entries) {
-        DynamicRegistryProviderUtil.addAll(entries, registries.getWrapperOrThrow(ItematicRegistryKeys.TRADE));
+        DynamicRegistryProviderUtil.addAll(entries, registries.getOrThrow(ItematicRegistryKeys.TRADE));
     }
 
     @Override

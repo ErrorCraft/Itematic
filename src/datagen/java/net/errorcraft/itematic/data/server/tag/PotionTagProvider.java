@@ -21,8 +21,8 @@ public class PotionTagProvider extends FabricTagProvider<Potion> {
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup arg) {
-        RegistryWrapper.Impl<Potion> potions = arg.getWrapperOrThrow(RegistryKeys.POTION);
+    protected void configure(RegistryWrapper.WrapperLookup lookup) {
+        RegistryWrapper.Impl<Potion> potions = lookup.getOrThrow(RegistryKeys.POTION);
         BrewingRecipeRegistry brewingRecipeRegistry = BrewingRecipeRegistry.create(FeatureFlags.VANILLA_FEATURES);
         this.getOrCreateTagBuilder(PotionTags.TRADEABLE)
             .add(getAll(potions, potion -> !potion.value().getEffects().isEmpty() && brewingRecipeRegistry.isBrewable(potion)));

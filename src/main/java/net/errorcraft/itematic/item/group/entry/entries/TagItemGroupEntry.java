@@ -38,7 +38,7 @@ public class TagItemGroupEntry extends PossiblyHiddenItemGroupEntry {
 
     @Override
     protected Collection<ItemStack> createStacks(ItemGroup.DisplayContext context) {
-        return context.lookup().getWrapperOrThrow(RegistryKeys.ITEM).getOptional(this.tag)
+        return context.lookup().getOrThrow(RegistryKeys.ITEM).getOptional(this.tag)
             .map(RegistryEntryList.ListBacked::stream)
             .map(stream -> stream.map(ItemStack::new))
             .map(Stream::toList)

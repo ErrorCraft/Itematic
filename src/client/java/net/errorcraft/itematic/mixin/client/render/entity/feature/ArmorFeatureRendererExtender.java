@@ -87,18 +87,13 @@ public class ArmorFeatureRendererExtender<S extends BipedEntityRenderState, M ex
         method = "renderArmor",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/render/entity/feature/ArmorFeatureRenderer;getContextModel()Lnet/minecraft/client/render/entity/model/EntityModel;"
+            target = "Lnet/minecraft/client/render/entity/model/BipedEntityModel;setAngles(Lnet/minecraft/client/render/entity/state/BipedEntityRenderState;)V"
         ),
         cancellable = true
     )
-    private void storeArmorItemComponent(MatrixStack matrices, VertexConsumerProvider vertexConsumers, ItemStack stack, EquipmentSlot armorSlot, int light, A model, CallbackInfo info, @Local(argsOnly = true) ItemStack itemStack, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
-        Optional<ArmorItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.ARMOR);
-        if (optionalComponent.isEmpty()) {
-            info.cancel();
-            return;
-        }
-
-        armorItemComponent.set(optionalComponent.get());
+    private void storeArmorItemComponent(MatrixStack matrices, VertexConsumerProvider vertexConsumers, S state, ItemStack stack, EquipmentSlot slot, int light, A armorModel, CallbackInfo info, @Share("armorItemComponent") LocalRef<ArmorItemComponent> armorItemComponent) {
+        stack.itematic$getComponent(ItemComponentTypes.ARMOR)
+            .ifPresentOrElse(armorItemComponent::set, info::cancel);
     }
 
     @Redirect(

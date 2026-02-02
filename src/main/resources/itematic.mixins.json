@@ -284,7 +284,6 @@
     "item.RangedWeaponItemAccessor",
     "item.SmithingTemplateItemAccessor",
     "item.SpawnEggItemAccessor",
-    "item.WindChargeItemAccessor",
     "item.tooltip.BundleTooltipDataExtender",
     "loot.ContainerComponentModifierExtender",
     "loot.ContainerComponentModifiersExtender$BundleContentsExtender",

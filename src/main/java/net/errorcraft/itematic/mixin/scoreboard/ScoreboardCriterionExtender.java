@@ -32,13 +32,13 @@ public class ScoreboardCriterionExtender implements ScoreboardCriterionAccess {
         method = "getOrCreateStatCriterion(Lnet/minecraft/stat/StatType;Lnet/minecraft/util/Identifier;)Ljava/util/Optional;",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/Registry;getOrEmpty(Lnet/minecraft/util/Identifier;)Ljava/util/Optional;"
+            target = "Lnet/minecraft/registry/Registry;getOptionalValue(Lnet/minecraft/util/Identifier;)Ljava/util/Optional;"
         )
     )
     private static <T> Optional<RegistryEntry.Reference<T>> getOrEmptyUseDynamicRegistry(Registry<T> instance, Identifier id) {
         RegistryKey<? extends Registry<T>> key = instance.getKey();
         return ScoreboardCriterionUtil.lookup()
-            .getWrapperOrThrow(key)
+            .getOrThrow(key)
             .getOptional(RegistryKey.of(key, id));
     }
 

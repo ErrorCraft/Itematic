@@ -19,6 +19,7 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.village.VillagerProfession;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,7 +41,8 @@ public class GatherItemsVillagerTaskExtender {
         method = "keepRunning(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/VillagerEntity;J)V",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/entity/passive/VillagerEntity;ITEM_FOOD_VALUES:Ljava/util/Map;"
+            target = "Lnet/minecraft/entity/passive/VillagerEntity;ITEM_FOOD_VALUES:Ljava/util/Map;",
+            opcode = Opcodes.GETSTATIC
         )
     )
     private Map<Item, Integer> getItemFoodPointsUseRegistryKey(ServerWorld serverWorld) {
@@ -60,7 +62,7 @@ public class GatherItemsVillagerTaskExtender {
         at = @At("HEAD")
     )
     private static void storeItemAccess(VillagerEntity entity, VillagerEntity target, CallbackInfoReturnable<Set<Item>> info, @Share("itemAccess")LocalRef<Registry<Item>> itemRegistry) {
-        itemRegistry.set(entity.getWorld().getRegistryManager().get(RegistryKeys.ITEM));
+        itemRegistry.set(entity.getWorld().getRegistryManager().getOrThrow(RegistryKeys.ITEM));
     }
 
     @Redirect(
@@ -75,8 +77,9 @@ public class GatherItemsVillagerTaskExtender {
         if (tag == null) {
             return ImmutableSet.of();
         }
+
         return itemRegistry.get()
-            .getEntryList(tag)
+            .getOptional(tag)
             .stream()
             .flatMap(RegistryEntryList::stream)
             .map(RegistryEntry::value)
@@ -87,7 +90,8 @@ public class GatherItemsVillagerTaskExtender {
         method = "keepRunning(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/VillagerEntity;J)V",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/item/Items;WHEAT:Lnet/minecraft/item/Item;"
+            target = "Lnet/minecraft/item/Items;WHEAT:Lnet/minecraft/item/Item;",
+            opcode = Opcodes.GETSTATIC
         )
     )
     private Item keepRunningGetWheatUseDynamicRegistry(ServerWorld serverWorld) {
@@ -116,6 +120,7 @@ public class GatherItemsVillagerTaskExtender {
         if (foundItem.get() == null) {
             return ItemStack.EMPTY;
         }
+
         return new ItemStack(foundItem.get(), count);
     }
 }

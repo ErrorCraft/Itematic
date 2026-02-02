@@ -111,8 +111,10 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
             return;
         }
 
-        Registry<Trade> trades = context.getWorld().getRegistryManager().get(ItematicRegistryKeys.TRADE);
-        this.fillRecipesFromPool(trades.getEntryList(tag).orElseThrow(), 2, context);
+        Registry<Trade> trades = context.getWorld()
+            .getRegistryManager()
+            .getOrThrow(ItematicRegistryKeys.TRADE);
+        this.fillRecipesFromPool(trades.getOrThrow(tag), 2, context);
     }
 
     @Override

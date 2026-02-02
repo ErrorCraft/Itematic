@@ -16,7 +16,7 @@ public class ItemGroupEntryProviderTagProvider extends FabricTagProvider<ItemGro
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup arg) {
+    protected void configure(RegistryWrapper.WrapperLookup lookup) {
         this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.BUILDING_BLOCKS)
             .add(ItemGroupEntryProviderKeys.BUILDING_BLOCKS);
         this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.COLORED_BLOCKS)

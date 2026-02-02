@@ -36,7 +36,7 @@ public class RecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
 
     @Override
     protected void configure(BiConsumer<Identifier, Recipe<?>> provider, RegistryWrapper.WrapperLookup lookup) {
-        RegistryWrapper.Impl<Item> items = lookup.getWrapperOrThrow(RegistryKeys.ITEM);
+        RegistryWrapper.Impl<Item> items = lookup.getOrThrow(RegistryKeys.ITEM);
         provider.accept(
             Identifier.ofVanilla("honey_bottle"),
             shapelessRecipe(RecipeCategory.MISC, items.getOrThrow(ItemKeys.HONEY_BOTTLE))

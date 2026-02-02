@@ -131,10 +131,11 @@ public class RecipeBookGroupExtender implements RecipeBookGroupAccess {
     public List<ItemStack> itematic$icons(Registry<Item> registry) {
         List<ItemStack> stacks = new ArrayList<>();
         for (RegistryKey<Item> item : this.iconKeys) {
-            registry.getEntry(item)
+            registry.getOptional(item)
                 .map(ItemStack::new)
                 .ifPresent(stacks::add);
         }
+
         return stacks;
     }
 }

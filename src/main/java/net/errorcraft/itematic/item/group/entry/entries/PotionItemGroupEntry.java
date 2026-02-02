@@ -42,7 +42,7 @@ public class PotionItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     @Override
     protected Collection<ItemStack> createStacks(ItemGroup.DisplayContext context) {
         return context.lookup()
-            .getWrapperOrThrow(RegistryKeys.POTION)
+            .getOrThrow(RegistryKeys.POTION)
             .streamEntries()
             .map(entry -> PotionContentsComponentUtil.setPotion(new ItemStack(this.item), entry))
             .toList();

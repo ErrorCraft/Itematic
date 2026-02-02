@@ -31,7 +31,7 @@ public record EnchantmentItemGroupEntry(RegistryEntry<Item> item) implements Ite
 
     @Override
     public void addStacks(ItemGroup.DisplayContext context, ItemGroup.Entries entries) {
-        context.lookup().getWrapperOrThrow(RegistryKeys.ENCHANTMENT).streamEntries()
+        context.lookup().getOrThrow(RegistryKeys.ENCHANTMENT).streamEntries()
             .forEach(enchantment -> IntStream.rangeClosed(enchantment.value().getMinLevel(), enchantment.value().getMaxLevel())
                 .forEach(level -> entries.add(
                     this.createStack(enchantment, level),
