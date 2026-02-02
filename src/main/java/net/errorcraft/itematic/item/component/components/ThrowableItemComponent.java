@@ -72,13 +72,17 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
     }
 
     @Override
-    public void stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
+    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
         if (this.drawDuration.filter(drawDuration -> drawDuration.test(usedTicks)).isPresent()) {
             this.createEntity(world, user, stack, resultStackConsumer);
             if (user instanceof PlayerEntity player) {
                 player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
             }
+
+            return true;
         }
+
+        return false;
     }
 
     private ItemResult createEntity(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {

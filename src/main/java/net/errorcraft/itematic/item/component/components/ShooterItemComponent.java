@@ -86,8 +86,8 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
     }
 
     @Override
-    public void stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
-        this.method.stop(this, stack, world, user, usedTicks);
+    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
+        return this.method.stop(this, stack, world, user, usedTicks);
     }
 
     @Override

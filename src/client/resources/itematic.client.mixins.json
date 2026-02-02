@@ -31,6 +31,7 @@
     "gui.screen.world.LevelScreenProviderExtender",
     "gui.screen.world.PresetsScreenExtender$SuperflatPresetsListWidgetExtender$SuperflatPresetEntryExtender",
     "gui.tooltip.BundleTooltipComponentExtender",
+    "gui.tooltip.BundleTooltipSubmenuHandlerExtender",
     "gui.tooltip.TooltipComponentExtender",
     "network.AbstractClientPlayerEntityExtender",
     "network.ClientPlayerEntityExtender",

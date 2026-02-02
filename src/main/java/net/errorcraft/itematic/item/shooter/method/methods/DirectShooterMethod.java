@@ -60,15 +60,15 @@ public record DirectShooterMethod(RegistryEntry<SoundEvent> shootSound) implemen
     public void hold(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks) {}
 
     @Override
-    public void stop(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks) {
+    public boolean stop(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks) {
         ItemStack ammunition = user.itematic$getAmmunition(stack);
         if (ammunition.isEmpty()) {
-            return;
+            return false;
         }
 
         float pullProgress = this.pullProgress(usedTicks);
         if (pullProgress < 0.1f) {
-            return;
+            return false;
         }
 
         List<ItemStack> projectiles = RangedWeaponItemAccessor.load(stack, ammunition, user);
@@ -84,6 +84,8 @@ public record DirectShooterMethod(RegistryEntry<SoundEvent> shootSound) implemen
         if (user instanceof PlayerEntity playerEntity) {
             playerEntity.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         }
+
+        return true;
     }
 
     @Override
