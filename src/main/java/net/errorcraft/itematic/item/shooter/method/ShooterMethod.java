@@ -21,7 +21,7 @@ public interface ShooterMethod {
     void addComponents(ComponentMap.Builder builder);
     boolean tryShoot(ShooterItemComponent component, ItemStack stack, World world, LivingEntity user, Hand hand);
     void hold(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks);
-    void stop(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks);
+    boolean stop(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks);
     default void initializeProjectile(LivingEntity user, ProjectileEntity projectile, int index, float power, float uncertainty, float angle, boolean critical, @Nullable LivingEntity target) {
         if (critical && projectile instanceof PersistentProjectileEntity persistentProjectile) {
             persistentProjectile.setCritical(true);
