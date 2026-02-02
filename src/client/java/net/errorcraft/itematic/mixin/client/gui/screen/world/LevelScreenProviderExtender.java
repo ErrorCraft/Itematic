@@ -20,7 +20,7 @@ public interface LevelScreenProviderExtender {
         )
     )
     private static CustomizeFlatLevelScreen newCustomizeFlatLevelScreenSetItemLookup(CustomizeFlatLevelScreen original, @Local DynamicRegistryManager registryManager) {
-        ((CustomizeFlatLevelScreenAccess) original).itematic$setItemLookup(registryManager.getWrapperOrThrow(RegistryKeys.ITEM));
+        ((CustomizeFlatLevelScreenAccess) original).itematic$setItemLookup(registryManager.getOrThrow(RegistryKeys.ITEM));
         return original;
     }
 }

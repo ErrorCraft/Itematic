@@ -17,7 +17,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup arg) {
+    protected void configure(RegistryWrapper.WrapperLookup lookup) {
         this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_LEATHER_ARMOR)
             .add(ItemKeys.LEATHER);
         this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)

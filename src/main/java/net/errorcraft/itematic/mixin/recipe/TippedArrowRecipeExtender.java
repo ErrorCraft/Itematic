@@ -34,7 +34,7 @@ public class TippedArrowRecipeExtender {
         )
     )
     private ItemStack newItemStackForTippedArrowUseRegistryEntry(ItemConvertible item, int count, @Local(argsOnly = true) RegistryWrapper.WrapperLookup lookup) {
-        return lookup.getWrapperOrThrow(RegistryKeys.ITEM)
+        return lookup.getOrThrow(RegistryKeys.ITEM)
             .getOptional(ItemKeys.TIPPED_ARROW)
             .map(entry -> new ItemStack(entry, count))
             .orElse(ItemStack.EMPTY);

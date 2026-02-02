@@ -43,7 +43,10 @@ public class SetRandomPotionItemModifier extends ConditionalLootFunction {
     protected ItemStack process(ItemStack stack, LootContext context) {
         Optional<? extends RegistryEntry<Potion>> optionalPotion = this.options.flatMap(potions -> potions.getRandom(context.getRandom()));
         if (optionalPotion.isEmpty()) {
-            optionalPotion = context.getWorld().getRegistryManager().get(RegistryKeys.POTION).getRandom(context.getRandom());
+            optionalPotion = context.getWorld()
+                .getRegistryManager()
+                .getOrThrow(RegistryKeys.POTION)
+                .getRandom(context.getRandom());
         }
 
         optionalPotion.ifPresent(potion -> stack.apply(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT, potion, PotionContentsComponent::with));

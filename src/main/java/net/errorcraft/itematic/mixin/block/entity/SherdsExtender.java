@@ -201,7 +201,7 @@ public abstract class SherdsExtender implements SherdsAccess {
 
     @Override
     public List<RegistryEntry<Item>> itematic$entries(RegistryWrapper.WrapperLookup lookup) {
-        RegistryWrapper.Impl<Item> items = lookup.getWrapperOrThrow(RegistryKeys.ITEM);
+        RegistryWrapper.Impl<Item> items = lookup.getOrThrow(RegistryKeys.ITEM);
         return Stream.of(this.back, this.left, this.right, this.front)
             .map(optional -> optional.orElse(items.getOrThrow(ItemKeys.BRICK)))
             .toList();
@@ -209,7 +209,7 @@ public abstract class SherdsExtender implements SherdsAccess {
 
     @Override
     public List<RegistryEntry<Item>> itematic$entriesForwards(RegistryWrapper.WrapperLookup lookup) {
-        RegistryWrapper.Impl<Item> items = lookup.getWrapperOrThrow(RegistryKeys.ITEM);
+        RegistryWrapper.Impl<Item> items = lookup.getOrThrow(RegistryKeys.ITEM);
         return Stream.of(this.front, this.left, this.right, this.back)
             .map(optional -> optional.orElse(items.getOrThrow(ItemKeys.BRICK)))
             .toList();

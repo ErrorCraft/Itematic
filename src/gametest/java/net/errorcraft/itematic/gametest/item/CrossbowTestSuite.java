@@ -21,7 +21,7 @@ public class CrossbowTestSuite {
         ItemStack stack = world.itematic$createStack(ItemKeys.CROSSBOW);
         stack.addEnchantment(
             world.getRegistryManager()
-                .getWrapperOrThrow(RegistryKeys.ENCHANTMENT)
+                .getOrThrow(RegistryKeys.ENCHANTMENT)
                 .getOrThrow(Enchantments.INFINITY),
             1
         );

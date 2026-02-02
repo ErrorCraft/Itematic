@@ -16,7 +16,7 @@ public class BlockTagProvider extends FabricTagProvider<Block> {
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup arg) {
+    protected void configure(RegistryWrapper.WrapperLookup lookup) {
         this.getOrCreateTagBuilder(ItematicBlockTags.END_CRYSTAL_SPAWNABLE_ON)
             .add(BlockKeys.BEDROCK)
             .add(BlockKeys.OBSIDIAN);

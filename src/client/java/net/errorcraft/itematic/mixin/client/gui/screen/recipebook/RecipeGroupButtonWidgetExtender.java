@@ -26,6 +26,6 @@ public class RecipeGroupButtonWidgetExtender {
         if (world == null) {
             return List.of();
         }
-        return instance.itematic$icons(world.getRegistryManager().get(RegistryKeys.ITEM));
+        return instance.itematic$icons(world.getRegistryManager().getOrThrow(RegistryKeys.ITEM));
     }
 }

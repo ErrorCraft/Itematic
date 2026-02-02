@@ -37,6 +37,7 @@ public class DecoratedPotBlockExtender implements BlockAccess {
                 tooltip.add(new ItemStack(entry).getName().copyContentOnly().formatted(Formatting.GRAY));
             }
         }
+
         return true;
     }
 
@@ -44,7 +45,7 @@ public class DecoratedPotBlockExtender implements BlockAccess {
         method = "method_49815",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/entity/Sherds;stream()Ljava/util/List;"
+            target = "Lnet/minecraft/block/entity/Sherds;toList()Ljava/util/List;"
         )
     )
     @SuppressWarnings("DataFlowIssue")

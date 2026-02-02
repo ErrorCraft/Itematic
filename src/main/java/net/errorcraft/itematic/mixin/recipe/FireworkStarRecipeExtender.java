@@ -45,8 +45,8 @@ public class FireworkStarRecipeExtender {
         )
     )
     @SuppressWarnings("unchecked")
-    private <V> V getUseItemComponent(Map<Item, FireworkExplosionComponent.Type> instance, Object o, @Local ItemStack itemStack, @Share("fireworkTypeModifierItemComponent") LocalRef<FireworkShapeModifierItemComponent> fireworkTypeModifierItemComponent) {
-        return (V) itemStack.itematic$getComponent(ItemComponentTypes.FIREWORK_SHAPE_MODIFIER)
+    private <V> V getUseItemComponent(Map<Item, FireworkExplosionComponent.Type> instance, Object o, @Local ItemStack input) {
+        return (V) input.itematic$getComponent(ItemComponentTypes.FIREWORK_SHAPE_MODIFIER)
             .map(FireworkShapeModifierItemComponent::shape)
             .orElse(null);
     }
@@ -178,7 +178,7 @@ public class FireworkStarRecipeExtender {
         )
     )
     private ItemStack newItemStackForFireworkStarUseRegistryEntry(ItemConvertible item, @Local(argsOnly = true) RegistryWrapper.WrapperLookup lookup) {
-        return lookup.getWrapperOrThrow(RegistryKeys.ITEM)
+        return lookup.getOrThrow(RegistryKeys.ITEM)
             .getOptional(ItemKeys.FIREWORK_STAR)
             .map(ItemStack::new)
             .orElse(ItemStack.EMPTY);

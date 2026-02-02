@@ -49,7 +49,7 @@ public class CraftingDecoratedPotRecipeExtender {
      */
     @Overwrite
     public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        ItemStack stack = lookup.getWrapperOrThrow(RegistryKeys.ITEM)
+        ItemStack stack = lookup.getOrThrow(RegistryKeys.ITEM)
             .getOptional(ItemKeys.DECORATED_POT)
             .map(ItemStack::new)
             .orElse(ItemStack.EMPTY);

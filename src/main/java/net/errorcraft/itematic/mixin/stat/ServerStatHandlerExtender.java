@@ -33,7 +33,7 @@ public class ServerStatHandlerExtender extends StatHandler {
     )
     private <T, U> Function<Identifier, Optional<RegistryEntry.Reference<T>>> flatMapToEntryUseDynamicRegistry(Function<? super T, ? extends Optional<? extends U>> mapper, @Local(argsOnly = true) StatType<T> type) {
         return id -> this.server.getRegistryManager()
-            .get(type.getRegistry().getKey())
+            .getOrThrow(type.getRegistry().getKey())
             .getEntry(id);
     }
 
@@ -57,7 +57,7 @@ public class ServerStatHandlerExtender extends StatHandler {
     )
     private <T> Identifier getStatIdUseDynamicRegistry(Stat<T> stat) {
         return this.server.getRegistryManager()
-            .get(stat.getType().getRegistry().getKey())
+            .getOrThrow(stat.getType().getRegistry().getKey())
             .getId(stat.getValue());
     }
 }

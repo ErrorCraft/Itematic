@@ -15,19 +15,15 @@ public class ItemAccess {
     private final Registry<Item> registry;
 
     public ItemAccess(DynamicRegistryManager registryManager) {
-        this.registry = registryManager.get(RegistryKeys.ITEM);
+        this.registry = registryManager.getOrThrow(RegistryKeys.ITEM);
     }
 
     public RegistryEntry.Reference<Item> getEntry(RegistryKey<Item> key) {
-        return this.registry.entryOf(key);
+        return this.registry.getOrThrow(key);
     }
 
     public Optional<RegistryEntry.Reference<Item>> getOptionalEntry(RegistryKey<Item> key) {
-        return this.registry.getEntry(key);
-    }
-
-    public Optional<RegistryEntry.Reference<Item>> getOptionalEntry(int id) {
-        return this.registry.getEntry(id);
+        return this.registry.getOptional(key);
     }
 
     public Stream<RegistryEntry.Reference<Item>> streamEntries() {

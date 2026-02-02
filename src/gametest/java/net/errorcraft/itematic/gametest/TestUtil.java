@@ -50,7 +50,7 @@ public class TestUtil {
     public static ItemStack createItemStackWithEnchantment(ServerWorld world, RegistryKey<Item> item, RegistryKey<Enchantment> enchantment) {
         ItemStack stack = world.itematic$createStack(item);
         RegistryEntry<Enchantment> enchantmentEntry = world.getRegistryManager()
-            .getWrapperOrThrow(RegistryKeys.ENCHANTMENT)
+            .getOrThrow(RegistryKeys.ENCHANTMENT)
             .getOrThrow(enchantment);
         stack.addEnchantment(enchantmentEntry, 1);
         return stack;

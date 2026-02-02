@@ -14,7 +14,7 @@ public class ItemGroupEntryProviderProvider extends FabricDynamicRegistryProvide
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup registries, Entries entries) {
-        DynamicRegistryProviderUtil.addAll(entries, registries.getWrapperOrThrow(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER));
+        DynamicRegistryProviderUtil.addAll(entries, registries.getOrThrow(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER));
     }
 
     @Override

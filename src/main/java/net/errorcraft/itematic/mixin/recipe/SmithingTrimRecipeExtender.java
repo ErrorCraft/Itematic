@@ -20,7 +20,7 @@ public class SmithingTrimRecipeExtender {
         )
     )
     private ItemStack newItemStackForIronChestplateUseRegistryEntry(ItemConvertible item, RegistryWrapper.WrapperLookup lookup) {
-        return lookup.getWrapperOrThrow(RegistryKeys.ITEM)
+        return lookup.getOrThrow(RegistryKeys.ITEM)
             .getOptional(ItemKeys.IRON_CHESTPLATE)
             .map(ItemStack::new)
             .orElse(ItemStack.EMPTY);

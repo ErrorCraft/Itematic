@@ -107,7 +107,7 @@ public abstract class ServerPlayerEntityExtender extends PlayerEntity {
     private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key) {
         RegistryEntry<Item> itemEntry = this.getWorld()
             .getRegistryManager()
-            .get(RegistryKeys.ITEM)
+            .getOrThrow(RegistryKeys.ITEM)
             .getEntry((Item) key);
         return instance.itematic$getOrCreateStat(itemEntry);
     }

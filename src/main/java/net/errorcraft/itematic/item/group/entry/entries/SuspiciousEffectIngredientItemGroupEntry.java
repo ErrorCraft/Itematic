@@ -42,7 +42,7 @@ public class SuspiciousEffectIngredientItemGroupEntry extends PossiblyHiddenItem
     @Override
     protected Collection<ItemStack> createStacks(ItemGroup.DisplayContext context) {
         Set<ItemStack> set = ItemStackSet.create();
-        context.lookup().getWrapperOrThrow(RegistryKeys.ITEM)
+        context.lookup().getOrThrow(RegistryKeys.ITEM)
             .streamEntries()
             .map(RegistryEntry::value)
             .map(item -> item.itematic$getComponent(ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT))

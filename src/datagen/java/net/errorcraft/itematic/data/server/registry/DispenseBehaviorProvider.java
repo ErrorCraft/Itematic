@@ -14,7 +14,7 @@ public class DispenseBehaviorProvider extends FabricDynamicRegistryProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup registries, Entries entries) {
-        DynamicRegistryProviderUtil.addAll(entries, registries.getWrapperOrThrow(ItematicRegistryKeys.DISPENSE_BEHAVIOR));
+        DynamicRegistryProviderUtil.addAll(entries, registries.getOrThrow(ItematicRegistryKeys.DISPENSE_BEHAVIOR));
     }
 
     @Override
