@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.blaze_powder"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:blaze_powder",
+    "translation_key": "item.minecraft.blaze_powder"
   }
 }

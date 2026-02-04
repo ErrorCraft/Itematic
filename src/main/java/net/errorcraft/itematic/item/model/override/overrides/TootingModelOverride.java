@@ -24,6 +24,6 @@ public class TootingModelOverride implements ModelOverride {
 
     @Override
     public boolean isApplicable(ItemStack stack) {
-        return stack.itematic$hasComponent(ItemComponentTypes.PLAYABLE);
+        return stack.itematic$hasBehavior(ItemComponentTypes.PLAYABLE);
     }
 }

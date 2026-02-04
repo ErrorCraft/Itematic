@@ -1,11 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.wolf_armor"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "armor_type": "canine",
-      "material": "minecraft:armadillo"
+      "attribute_id": "minecraft:armor.body",
+      "defense": 11,
+      "knockback_resistance": 0.0,
+      "toughness": 0.0
     },
     "minecraft:damageable": {
       "break_sound": "minecraft:item.wolf_armor.break",
@@ -15,8 +14,11 @@
       "default_color": 0
     },
     "minecraft:equipment": {
+      "allowed_entities": "minecraft:wolf",
       "equip_sound": "minecraft:item.armor.equip_wolf",
-      "slot": "body"
+      "model": "minecraft:armadillo_scute",
+      "slot": "body",
+      "swappable": true
     },
     "minecraft:stackable": 1,
     "minecraft:tinted": {
@@ -25,5 +27,9 @@
         "index": 1
       }
     }
+  },
+  "display": {
+    "model": "minecraft:wolf_armor",
+    "translation_key": "item.minecraft.wolf_armor"
   }
 }

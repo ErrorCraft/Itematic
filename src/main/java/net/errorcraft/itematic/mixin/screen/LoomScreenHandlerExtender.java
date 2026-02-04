@@ -27,7 +27,7 @@ public class LoomScreenHandlerExtender {
         )
     )
     private boolean instanceOfBannerPatternItemUseItemComponent(Object reference, Class<BannerPatternItem> clazz, ItemStack stack, @Share("bannerPatternItemComponent") LocalRef<BannerPatternItemComponent> bannerPatternItemComponent) {
-        Optional<BannerPatternItemComponent> optionalComponent = stack.itematic$getComponent(ItemComponentTypes.BANNER_PATTERN);
+        Optional<BannerPatternItemComponent> optionalComponent = stack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN);
         optionalComponent.ifPresent(bannerPatternItemComponent::set);
         return optionalComponent.isPresent();
     }
@@ -60,7 +60,7 @@ public class LoomScreenHandlerExtender {
         )
     )
     private boolean instanceOfBannerItemUseItemComponent(Object reference, Class<BannerItem> clazz, @Local(ordinal = 1) ItemStack slotStack) {
-        return slotStack.itematic$getComponent(ItemComponentTypes.BANNER_PATTERN_HOLDER)
+        return slotStack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
             .map(BannerPatternHolderItemComponent::modifiable)
             .orElse(false);
     }
@@ -73,7 +73,7 @@ public class LoomScreenHandlerExtender {
         )
     )
     private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<BannerItem> clazz, @Local(ordinal = 1) ItemStack slotStack) {
-        return slotStack.itematic$hasComponent(ItemComponentTypes.DYE);
+        return slotStack.itematic$hasBehavior(ItemComponentTypes.DYE);
     }
 
     @ModifyConstant(
@@ -84,7 +84,7 @@ public class LoomScreenHandlerExtender {
         )
     )
     private boolean instanceOfBannerPatternItemUseItemComponentCheck(Object reference, Class<BannerPatternItem> clazz, @Local(ordinal = 1) ItemStack slotStack) {
-        return slotStack.itematic$hasComponent(ItemComponentTypes.BANNER_PATTERN);
+        return slotStack.itematic$hasBehavior(ItemComponentTypes.BANNER_PATTERN);
     }
 
     @Redirect(
@@ -106,7 +106,7 @@ public class LoomScreenHandlerExtender {
         )
     )
     private DyeColor getColorUseItemComponent(DyeItem instance, @Local(ordinal = 1) ItemStack dyeStack) {
-        return dyeStack.itematic$getComponent(ItemComponentTypes.DYE)
+        return dyeStack.itematic$getBehavior(ItemComponentTypes.DYE)
             .map(DyeItemComponent::color)
             .orElse(DyeColor.WHITE);
     }
@@ -121,7 +121,7 @@ public class LoomScreenHandlerExtender {
             )
         )
         private boolean instanceOfBannerItemUseItemComponent(Object reference, Class<BannerItem> clazz, ItemStack stack) {
-            return stack.itematic$getComponent(ItemComponentTypes.BANNER_PATTERN_HOLDER)
+            return stack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
                 .map(BannerPatternHolderItemComponent::modifiable)
                 .orElse(false);
         }
@@ -137,7 +137,7 @@ public class LoomScreenHandlerExtender {
             )
         )
         private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, ItemStack stack) {
-            return stack.itematic$hasComponent(ItemComponentTypes.DYE);
+            return stack.itematic$hasBehavior(ItemComponentTypes.DYE);
         }
     }
 
@@ -151,7 +151,7 @@ public class LoomScreenHandlerExtender {
             )
         )
         private boolean instanceOfBannerPatternItemUseItemComponentCheck(Object reference, Class<BannerPatternItem> clazz, ItemStack stack) {
-            return stack.itematic$hasComponent(ItemComponentTypes.BANNER_PATTERN);
+            return stack.itematic$hasBehavior(ItemComponentTypes.BANNER_PATTERN);
         }
     }
 }

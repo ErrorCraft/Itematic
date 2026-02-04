@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.flower_banner_pattern"
-  },
-  "components": {
+  "behavior": {
     "minecraft:banner_pattern": {
       "patterns": "minecraft:pattern_item/flower"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:flower_banner_pattern",
+    "translation_key": "item.minecraft.flower_banner_pattern"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.tnt_minecart"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:spawn_entity_from_item"
     },
@@ -12,5 +9,9 @@
       }
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:tnt_minecart",
+    "translation_key": "item.minecraft.tnt_minecart"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.allium"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:allium"
     },
@@ -18,6 +15,10 @@
         }
       ]
     }
+  },
+  "display": {
+    "model": "minecraft:allium",
+    "translation_key": "block.minecraft.allium"
   },
   "events": {
     "minecraft:use_on_block": {

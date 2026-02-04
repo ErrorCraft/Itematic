@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.cyan_candle"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:cyan_candle"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cyan_candle",
+    "translation_key": "block.minecraft.cyan_candle"
   }
 }

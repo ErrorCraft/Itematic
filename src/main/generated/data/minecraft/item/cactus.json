@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.cactus"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:cactus"
     },
@@ -10,6 +7,10 @@
       "level_increase_chance": 0.5
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cactus",
+    "translation_key": "block.minecraft.cactus"
   },
   "events": {
     "minecraft:use_on_block": {

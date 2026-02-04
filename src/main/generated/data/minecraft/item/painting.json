@@ -1,13 +1,14 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.painting"
-  },
-  "components": {
+  "behavior": {
     "minecraft:entity": {
       "entity": {
         "type": "minecraft:painting"
       }
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:painting",
+    "translation_key": "item.minecraft.painting"
   }
 }

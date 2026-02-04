@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.diamond"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:diamond",
+    "translation_key": "item.minecraft.diamond"
   }
 }

@@ -40,7 +40,7 @@ public class TridentIntegerProvider implements IntegerProvider {
             return false;
         }
 
-        return stack.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
+        return stack.itematic$getBehavior(ItemComponentTypes.DAMAGEABLE)
             .map(c -> c.isUsable(stack))
             .orElse(true);
     }

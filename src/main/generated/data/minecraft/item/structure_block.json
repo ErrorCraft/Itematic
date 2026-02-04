@@ -1,13 +1,14 @@
 {
-  "base": {
-    "rarity": "epic",
-    "translation_key": "block.minecraft.structure_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:structure_block",
       "operator_only": true
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:structure_block",
+    "rarity": "epic",
+    "translation_key": "block.minecraft.structure_block"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.crying_obsidian"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:crying_obsidian"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:crying_obsidian",
+    "translation_key": "block.minecraft.crying_obsidian"
   }
 }

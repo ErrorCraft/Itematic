@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "rare",
-    "translation_key": "item.minecraft.field_masoned_banner_pattern"
-  },
-  "components": {
+  "behavior": {
     "minecraft:banner_pattern": {
       "patterns": "minecraft:pattern_item/field_masoned"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:field_masoned_banner_pattern",
+    "rarity": "rare",
+    "translation_key": "item.minecraft.field_masoned_banner_pattern"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.glowstone"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:glowstone"
     },
@@ -10,5 +7,9 @@
       "behavior": "minecraft:charge_respawn_anchor"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:glowstone",
+    "translation_key": "block.minecraft.glowstone"
   }
 }

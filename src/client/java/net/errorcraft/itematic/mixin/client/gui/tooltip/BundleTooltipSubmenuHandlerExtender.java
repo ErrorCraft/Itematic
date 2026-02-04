@@ -18,6 +18,6 @@ public class BundleTooltipSubmenuHandlerExtender {
         )
     )
     private boolean isOfForBundleUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.ITEM_HOLDER);
+        return instance.itematic$hasBehavior(ItemComponentTypes.ITEM_HOLDER);
     }
 }

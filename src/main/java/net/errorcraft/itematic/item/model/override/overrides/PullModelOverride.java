@@ -18,13 +18,13 @@ public class PullModelOverride implements ClampedModelOverride {
             return 0.0f;
         }
 
-        return stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
+        return stack.itematic$getBehavior(ItemComponentTypes.SHOOTER)
             .map(shooter -> shooter.method().pullProgress(stack, target, target.itematic$itemUsedTicks()))
             .orElse(0.0f);
     }
 
     @Override
     public boolean isApplicable(ItemStack stack) {
-        return stack.itematic$hasComponent(ItemComponentTypes.SHOOTER);
+        return stack.itematic$hasBehavior(ItemComponentTypes.SHOOTER);
     }
 }

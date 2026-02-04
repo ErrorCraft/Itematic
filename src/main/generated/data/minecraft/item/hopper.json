@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.hopper"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:hopper"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:hopper",
+    "translation_key": "block.minecraft.hopper"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.budding_amethyst"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:budding_amethyst"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:budding_amethyst",
+    "translation_key": "block.minecraft.budding_amethyst"
   }
 }

@@ -27,7 +27,7 @@ public record PlaceBlockFromItemAction(ActionContextParameter position, boolean 
 
     @Override
     public boolean execute(ActionContext context) {
-        return context.stack().itematic$getComponent(ItemComponentTypes.BLOCK)
+        return context.stack().itematic$getBehavior(ItemComponentTypes.BLOCK)
             .map(component -> {
                 PlaceBlockAction action = PlaceBlockAction.of(component.block(), this.position, this.decrementCount);
                 return action.execute(context);

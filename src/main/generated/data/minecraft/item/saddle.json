@@ -1,12 +1,13 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.saddle"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:saddle"
     },
     "minecraft:saddle": {},
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:saddle",
+    "translation_key": "item.minecraft.saddle"
   }
 }

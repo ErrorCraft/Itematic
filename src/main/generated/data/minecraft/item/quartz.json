@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.quartz"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:quartz",
+    "translation_key": "item.minecraft.quartz"
   }
 }

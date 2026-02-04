@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.sand"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:sand"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:sand",
+    "translation_key": "block.minecraft.sand"
   }
 }

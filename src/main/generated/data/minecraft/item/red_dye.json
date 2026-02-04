@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.red_dye"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dye": "red",
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:red_dye",
+    "translation_key": "item.minecraft.red_dye"
   }
 }

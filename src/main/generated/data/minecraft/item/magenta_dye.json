@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.magenta_dye"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dye": "magenta",
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:magenta_dye",
+    "translation_key": "item.minecraft.magenta_dye"
   }
 }

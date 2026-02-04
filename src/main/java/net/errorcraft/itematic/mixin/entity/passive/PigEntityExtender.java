@@ -56,7 +56,7 @@ public abstract class PigEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "onStruckByLightning",
+        method = "method_63649",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"

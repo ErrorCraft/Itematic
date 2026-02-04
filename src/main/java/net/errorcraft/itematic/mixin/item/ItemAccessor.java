@@ -1,9 +1,8 @@
 package net.errorcraft.itematic.mixin.item;
 
-import com.google.common.collect.Interner;
-import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.registry.RegistryKeyedValue;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
@@ -22,8 +21,13 @@ public interface ItemAccessor {
 
     @Mixin(Item.Settings.class)
     interface SettingsAccessor {
-        @Accessor("COMPONENT_MAP_INTERNER")
-        static Interner<ComponentMap> componentInterner() {
+        @Accessor("ITEM_PREFIXED_TRANSLATION_KEY")
+        static RegistryKeyedValue<Item, String> itemNameSupplier() {
+            throw new AssertionError();
+        }
+
+        @Accessor("BLOCK_PREFIXED_TRANSLATION_KEY")
+        static RegistryKeyedValue<Item, String> blockNameSupplier() {
             throw new AssertionError();
         }
     }

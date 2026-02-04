@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.weathered_copper_door"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:weathered_copper_door"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:weathered_copper_door",
+    "translation_key": "block.minecraft.weathered_copper_door"
   }
 }

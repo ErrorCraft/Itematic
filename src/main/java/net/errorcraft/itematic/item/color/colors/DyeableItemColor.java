@@ -28,7 +28,7 @@ public record DyeableItemColor(int index) implements ItemColor<DyeableItemColor>
         if (tintIndex != this.index) {
             return DEFAULT_COLOR;
         }
-        return stack.itematic$getComponent(ItemComponentTypes.DYEABLE)
+        return stack.itematic$getBehavior(ItemComponentTypes.DYEABLE)
             .map(c -> c.getColor(stack))
             .orElse(DEFAULT_COLOR);
     }

@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.bolt_armor_trim_smithing_template"
-  },
-  "components": {
+  "behavior": {
     "minecraft:smithing_template": {
       "template": "minecraft:bolt_pattern"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:bolt_armor_trim_smithing_template",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.bolt_armor_trim_smithing_template"
   }
 }

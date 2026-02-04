@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.coast_armor_trim_smithing_template"
-  },
-  "components": {
+  "behavior": {
     "minecraft:smithing_template": {
       "template": "minecraft:coast_pattern"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:coast_armor_trim_smithing_template",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.coast_armor_trim_smithing_template"
   }
 }

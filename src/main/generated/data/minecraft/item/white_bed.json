@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.white_bed"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:white_bed"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:white_bed",
+    "translation_key": "block.minecraft.white_bed"
   }
 }

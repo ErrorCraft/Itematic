@@ -2,69 +2,53 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.AnimalArmorItem;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.item.equipment.ArmorMaterial;
+import net.minecraft.item.equipment.EquipmentType;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Optional;
 
-public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional<AnimalArmorItem.Type> armorType) implements ItemComponent<ArmorItemComponent> {
+public record ArmorItemComponent(int defense, double toughness, double knockbackResistance, Identifier attributeId) implements ItemComponent<ArmorItemComponent> {
     public static final Codec<ArmorItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.of(ItematicRegistryKeys.ARMOR_MATERIAL).fieldOf("material").forGetter(ArmorItemComponent::material),
-        StringIdentifiable.createCodec(AnimalArmorItem.Type::values).optionalFieldOf("armor_type").forGetter(ArmorItemComponent::armorType)
+        Codecs.NON_NEGATIVE_INT.fieldOf("defense").forGetter(ArmorItemComponent::defense),
+        ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("toughness").forGetter(ArmorItemComponent::toughness),
+        ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("knockback_resistance").forGetter(ArmorItemComponent::knockbackResistance),
+        Identifier.CODEC.fieldOf("attribute_id").forGetter(ArmorItemComponent::attributeId)
     ).apply(instance, ArmorItemComponent::new));
 
-    public static ArmorItemComponent of(RegistryEntry<ArmorMaterial> material) {
-        return new ArmorItemComponent(material, Optional.empty());
+    public static ArmorItemComponent of(ArmorMaterial material, EquipmentType type) {
+        return new ArmorItemComponent(
+            material.defense().get(type),
+            material.toughness(),
+            material.knockbackResistance(),
+            Identifier.ofVanilla("armor." + type.getName())
+        );
     }
 
-    public static ArmorItemComponent of(RegistryEntry<ArmorMaterial> material, AnimalArmorItem.Type armorType) {
-        return new ArmorItemComponent(material, Optional.of(armorType));
+    public static ItemComponent<?>[] from(ArmorMaterial material, EquipmentType type) {
+        return from(material, type, null);
     }
 
-    public static ItemComponent<?>[] of(ArmorItem.Type type, int damageFactor, RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound) {
+    public static ItemComponent<?>[] from(ArmorMaterial material, EquipmentType type, AnimalArmorItem.Type animalType) {
+        int durability = type.getMaxDamage(material.durability());
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
-            DamageableItemComponent.of(type.getMaxDamage(damageFactor)),
-            EquipmentItemComponent.of(type.getEquipmentSlot(), true, equipSound),
-            of(material)
-        };
-    }
-
-    public static ItemComponent<?>[] of(int durability, EquipmentSlot slot, RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound) {
-        return new ItemComponent<?>[] {
-            StackableItemComponent.of(1),
-            DamageableItemComponent.of(durability),
-            EquipmentItemComponent.of(slot, true, equipSound),
-            of(material)
-        };
-    }
-
-    public static ItemComponent<?>[] ofAnimal(RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound, AnimalArmorItem.Type type) {
-        return new ItemComponent<?>[] {
-            StackableItemComponent.of(1),
-            EquipmentItemComponent.of(EquipmentSlot.BODY, false, equipSound),
-            of(material, type)
-        };
-    }
-
-    public static ItemComponent<?>[] ofAnimal(RegistryEntry<ArmorMaterial> material, RegistryEntry<SoundEvent> equipSound, AnimalArmorItem.Type type, int damageFactor, RegistryEntry<SoundEvent> breakSound) {
-        return new ItemComponent<?>[] {
-            StackableItemComponent.of(1),
-            DamageableItemComponent.of(ArmorItem.Type.BODY.getMaxDamage(damageFactor), breakSound),
-            EquipmentItemComponent.of(EquipmentSlot.BODY, false, equipSound),
+            Optional.ofNullable(animalType)
+                .map(AnimalArmorItem.Type::itematic$breakSound)
+                .map(breakSound -> DamageableItemComponent.of(durability, breakSound))
+                .orElseGet(() -> DamageableItemComponent.of(durability)),
+            EquipmentItemComponent.of(material, type, animalType),
             of(material, type)
         };
     }
@@ -81,20 +65,38 @@ public record ArmorItemComponent(RegistryEntry<ArmorMaterial> material, Optional
 
     @Override
     public void addAttributeModifiers(AttributeModifiersComponent.Builder builder, ItemComponentSet components) {
-        if (!this.material.hasKeyAndValue()) {
-            return;
+        AttributeModifierSlot slot = components.get(ItemComponentTypes.EQUIPMENT)
+            .map(EquipmentItemComponent::slot)
+            .map(AttributeModifierSlot::forEquipmentSlot)
+            .orElse(AttributeModifierSlot.ARMOR);
+        builder.add(
+            EntityAttributes.ARMOR,
+            new EntityAttributeModifier(
+                this.attributeId,
+                this.defense,
+                EntityAttributeModifier.Operation.ADD_VALUE
+            ),
+            slot
+        );
+        builder.add(
+            EntityAttributes.ARMOR_TOUGHNESS,
+            new EntityAttributeModifier(
+                this.attributeId,
+                this.toughness,
+                EntityAttributeModifier.Operation.ADD_VALUE
+            ),
+            slot
+        );
+        if (this.knockbackResistance > 0.0d) {
+            builder.add(
+                EntityAttributes.KNOCKBACK_RESISTANCE,
+                new EntityAttributeModifier(
+                    this.attributeId,
+                    this.knockbackResistance,
+                    EntityAttributeModifier.Operation.ADD_VALUE
+                ),
+                slot
+            );
         }
-
-        components.get(ItemComponentTypes.EQUIPMENT)
-            .ifPresent(c -> this.material.value().addAttributes(builder, c.slot()));
-    }
-
-    public Identifier textureId() {
-        return this.armorType.map(type -> type.itematic$textureId(this.material))
-            .orElseGet(() -> this.textureId(false));
-    }
-
-    public Identifier textureId(boolean secondLayer) {
-        return this.material.value().textureId(secondLayer);
     }
 }

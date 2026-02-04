@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.cobbled_deepslate"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:cobbled_deepslate"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cobbled_deepslate",
+    "translation_key": "block.minecraft.cobbled_deepslate"
   }
 }

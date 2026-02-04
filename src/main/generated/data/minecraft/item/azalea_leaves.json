@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.azalea_leaves"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:azalea_leaves"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.3
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:azalea_leaves",
+    "translation_key": "block.minecraft.azalea_leaves"
   }
 }

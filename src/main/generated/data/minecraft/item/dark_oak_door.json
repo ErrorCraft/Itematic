@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dark_oak_door"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dark_oak_door"
     },
@@ -10,5 +7,9 @@
       "ticks": 200
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dark_oak_door",
+    "translation_key": "block.minecraft.dark_oak_door"
   }
 }

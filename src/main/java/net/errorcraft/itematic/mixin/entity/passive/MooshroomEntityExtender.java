@@ -96,7 +96,7 @@ public abstract class MooshroomEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isInForSmallFlowersUseItemComponentCheck(ItemStack instance, TagKey<Item> tag) {
-        return instance.itematic$hasComponent(ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT);
+        return instance.itematic$hasBehavior(ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT);
     }
 
     @Redirect(
@@ -107,7 +107,7 @@ public abstract class MooshroomEntityExtender extends MobEntityExtender {
         )
     )
     private SuspiciousStewIngredient suspiciousStewEffectsUseItemComponent(ItemConvertible item, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$getComponent(ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT)
+        return stack.itematic$getBehavior(ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT)
             .orElse(null);
     }
 

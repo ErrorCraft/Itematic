@@ -26,7 +26,7 @@ public class ComposterBlockExtender {
         )
     )
     private boolean containsKeyUseItemComponentCheck(Object2FloatMap<ItemConvertible> instance, Object o, ItemStack stack) {
-        return stack.itematic$hasComponent(ItemComponentTypes.COMPOSTABLE);
+        return stack.itematic$hasBehavior(ItemComponentTypes.COMPOSTABLE);
     }
 
     @Redirect(
@@ -38,7 +38,7 @@ public class ComposterBlockExtender {
         )
     )
     private static boolean containsKeyUseItemComponentCheckStatic(Object2FloatMap<ItemConvertible> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$hasComponent(ItemComponentTypes.COMPOSTABLE);
+        return stack.itematic$hasBehavior(ItemComponentTypes.COMPOSTABLE);
     }
 
     @Redirect(
@@ -50,7 +50,7 @@ public class ComposterBlockExtender {
         )
     )
     private static float getFloatUseItemComponent(Object2FloatMap<ItemConvertible> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$getComponent(ItemComponentTypes.COMPOSTABLE)
+        return stack.itematic$getBehavior(ItemComponentTypes.COMPOSTABLE)
             .map(CompostableItemComponent::levelIncreaseChance)
             .orElse(0.0f);
     }
@@ -88,7 +88,7 @@ public class ComposterBlockExtender {
             )
         )
         private boolean containsKeyUseItemComponentCheck(Object2FloatMap<ItemConvertible> instance, Object o, int slot, ItemStack stack) {
-            return stack.itematic$hasComponent(ItemComponentTypes.COMPOSTABLE);
+            return stack.itematic$hasBehavior(ItemComponentTypes.COMPOSTABLE);
         }
     }
 

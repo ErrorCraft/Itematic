@@ -1,10 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.iron_boots"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "material": "minecraft:iron"
+      "attribute_id": "minecraft:armor.boots",
+      "defense": 2,
+      "knockback_resistance": 0.0,
+      "toughness": 0.0
     },
     "minecraft:damageable": {
       "durability": 195
@@ -17,6 +17,7 @@
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_iron",
+      "model": "minecraft:iron",
       "slot": "feet",
       "swappable": true
     },
@@ -24,5 +25,9 @@
       "items": "#minecraft:repairs_iron_armor"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:iron_boots",
+    "translation_key": "item.minecraft.iron_boots"
   }
 }

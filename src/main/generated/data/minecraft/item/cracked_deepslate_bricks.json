@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.cracked_deepslate_bricks"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:cracked_deepslate_bricks"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cracked_deepslate_bricks",
+    "translation_key": "block.minecraft.cracked_deepslate_bricks"
   }
 }

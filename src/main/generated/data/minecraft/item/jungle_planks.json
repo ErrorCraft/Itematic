@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.jungle_planks"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:jungle_planks"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:jungle_planks",
+    "translation_key": "block.minecraft.jungle_planks"
   }
 }

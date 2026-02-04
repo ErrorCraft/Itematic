@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.bow"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 384
     },
@@ -31,5 +28,9 @@
         "type": "minecraft:shooter"
       }
     }
+  },
+  "display": {
+    "model": "minecraft:bow",
+    "translation_key": "item.minecraft.bow"
   }
 }

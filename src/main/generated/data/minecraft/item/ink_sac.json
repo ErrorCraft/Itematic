@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.ink_sac"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:ink_sac",
+    "translation_key": "item.minecraft.ink_sac"
   },
   "events": {
     "minecraft:use_on_block": {

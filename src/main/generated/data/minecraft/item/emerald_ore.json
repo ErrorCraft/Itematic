@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.emerald_ore"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:emerald_ore"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:emerald_ore",
+    "translation_key": "block.minecraft.emerald_ore"
   }
 }

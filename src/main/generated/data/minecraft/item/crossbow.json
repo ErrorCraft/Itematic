@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.crossbow"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 465
     },
@@ -51,5 +48,9 @@
         "type": "minecraft:shooter"
       }
     }
+  },
+  "display": {
+    "model": "minecraft:crossbow",
+    "translation_key": "item.minecraft.crossbow"
   }
 }

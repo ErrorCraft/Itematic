@@ -1,10 +1,11 @@
 {
-  "base": {
-    "rarity": "rare",
-    "translation_key": "item.minecraft.music_disc_otherside"
-  },
-  "components": {
+  "behavior": {
     "minecraft:playable_song": "minecraft:otherside",
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:music_disc_otherside",
+    "rarity": "rare",
+    "translation_key": "item.minecraft.music_disc_otherside"
   }
 }

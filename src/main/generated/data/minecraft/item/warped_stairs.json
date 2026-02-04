@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.warped_stairs"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:warped_stairs"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:warped_stairs",
+    "translation_key": "block.minecraft.warped_stairs"
   }
 }

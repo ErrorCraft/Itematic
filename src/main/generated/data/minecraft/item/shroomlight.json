@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.shroomlight"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:shroomlight"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.65
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:shroomlight",
+    "translation_key": "block.minecraft.shroomlight"
   }
 }

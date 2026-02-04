@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.waxed_oxidized_cut_copper_slab"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:waxed_oxidized_cut_copper_slab"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:waxed_oxidized_cut_copper_slab",
+    "translation_key": "block.minecraft.waxed_oxidized_cut_copper_slab"
   }
 }

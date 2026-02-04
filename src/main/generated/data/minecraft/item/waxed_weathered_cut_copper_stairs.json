@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.waxed_weathered_cut_copper_stairs"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:waxed_weathered_cut_copper_stairs"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:waxed_weathered_cut_copper_stairs",
+    "translation_key": "block.minecraft.waxed_weathered_cut_copper_stairs"
   }
 }

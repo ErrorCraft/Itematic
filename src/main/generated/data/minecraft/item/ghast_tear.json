@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.ghast_tear"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:ghast_tear",
+    "translation_key": "item.minecraft.ghast_tear"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.lily_of_the_valley"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:lily_of_the_valley"
     },
@@ -18,6 +15,10 @@
         }
       ]
     }
+  },
+  "display": {
+    "model": "minecraft:lily_of_the_valley",
+    "translation_key": "block.minecraft.lily_of_the_valley"
   },
   "events": {
     "minecraft:use_on_block": {

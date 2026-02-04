@@ -61,6 +61,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<StackableItemComponent> STACKABLE = register("stackable", new ItemComponentType<>(StackableItemComponent.CODEC));
     public static final ItemComponentType<AttributeModifiersItemComponent> ATTRIBUTE_MODIFIERS = register("attribute_modifiers", new ItemComponentType<>(AttributeModifiersItemComponent.CODEC));
     public static final ItemComponentType<OminousEffectProviderItemComponent> OMINOUS_EFFECT_PROVIDER = register("ominous_effect_provider", new ItemComponentType<>(OminousEffectProviderItemComponent.CODEC));
+    public static final ItemComponentType<GliderItemComponent> GLIDER = register("glider", new ItemComponentType<>(GliderItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

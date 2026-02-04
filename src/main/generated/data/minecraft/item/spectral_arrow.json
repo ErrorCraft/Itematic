@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.spectral_arrow"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_projectile"
     },
@@ -12,5 +9,9 @@
       }
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:spectral_arrow",
+    "translation_key": "item.minecraft.spectral_arrow"
   }
 }

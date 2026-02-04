@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.damaged_anvil"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:damaged_anvil"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:damaged_anvil",
+    "translation_key": "block.minecraft.damaged_anvil"
   }
 }

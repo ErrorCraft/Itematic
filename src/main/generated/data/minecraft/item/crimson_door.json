@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.crimson_door"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:crimson_door"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:crimson_door",
+    "translation_key": "block.minecraft.crimson_door"
   }
 }

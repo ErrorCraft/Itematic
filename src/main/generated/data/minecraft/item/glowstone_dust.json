@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.glowstone_dust"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:glowstone_dust",
+    "translation_key": "item.minecraft.glowstone_dust"
   }
 }

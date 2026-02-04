@@ -1,14 +1,15 @@
 {
-  "base": {
-    "glint": true,
-    "translation_key": "item.minecraft.end_crystal"
-  },
-  "components": {
+  "behavior": {
     "minecraft:entity": {
       "entity": {
         "type": "minecraft:end_crystal"
       }
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "glint": true,
+    "model": "minecraft:end_crystal",
+    "translation_key": "item.minecraft.end_crystal"
   }
 }

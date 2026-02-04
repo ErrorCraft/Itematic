@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.green_banner"
-  },
-  "components": {
+  "behavior": {
     "minecraft:banner_pattern_holder": {
       "color": "green"
     },
@@ -18,5 +15,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 16
+  },
+  "display": {
+    "model": "minecraft:green_banner",
+    "translation_key": "block.minecraft.green_banner"
   }
 }

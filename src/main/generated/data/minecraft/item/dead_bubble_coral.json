@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dead_bubble_coral"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dead_bubble_coral"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dead_bubble_coral",
+    "translation_key": "block.minecraft.dead_bubble_coral"
   }
 }

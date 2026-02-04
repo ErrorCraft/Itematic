@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.orange_dye"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dye": "orange",
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:orange_dye",
+    "translation_key": "item.minecraft.orange_dye"
   }
 }

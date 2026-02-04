@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.glow_berries"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:cave_vines"
     },
@@ -22,5 +19,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:glow_berries",
+    "translation_key": "item.minecraft.glow_berries"
   }
 }

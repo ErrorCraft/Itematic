@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.clay_ball"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:clay_ball",
+    "translation_key": "item.minecraft.clay_ball"
   }
 }

@@ -1,9 +1,5 @@
 {
-  "base": {
-    "rarity": "epic",
-    "translation_key": "item.minecraft.elytra"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 432,
       "preserve_item": true
@@ -13,12 +9,29 @@
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_elytra",
+      "model": "minecraft:elytra",
       "slot": "chest",
       "swappable": true
+    },
+    "minecraft:glider": {
+      "useable_if": {
+        "predicates": {
+          "minecraft:damage": {
+            "durability": {
+              "min": 2
+            }
+          }
+        }
+      }
     },
     "minecraft:repairable": {
       "items": "minecraft:phantom_membrane"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:elytra",
+    "rarity": "epic",
+    "translation_key": "item.minecraft.elytra"
   }
 }

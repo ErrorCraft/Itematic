@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.gilded_blackstone"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:gilded_blackstone"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:gilded_blackstone",
+    "translation_key": "block.minecraft.gilded_blackstone"
   }
 }

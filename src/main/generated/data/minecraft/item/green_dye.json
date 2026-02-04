@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.green_dye"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dye": "green",
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:green_dye",
+    "translation_key": "item.minecraft.green_dye"
   }
 }

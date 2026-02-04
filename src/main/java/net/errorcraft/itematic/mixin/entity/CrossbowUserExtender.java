@@ -41,7 +41,7 @@ public interface CrossbowUserExtender {
         )
     )
     private boolean instanceOfCrossbowItemUseItemComponent(Object reference, Class<CrossbowItem> clazz, @Local ItemStack heldStack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
-        Optional<ShooterItemComponent> optionalComponent = heldStack.itematic$getComponent(ItemComponentTypes.SHOOTER);
+        Optional<ShooterItemComponent> optionalComponent = heldStack.itematic$getBehavior(ItemComponentTypes.SHOOTER);
         optionalComponent.ifPresent(shooterItemComponent::set);
         return optionalComponent.isPresent();
     }

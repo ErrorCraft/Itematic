@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.light_blue_wool"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:light_blue_wool"
     },
@@ -10,5 +7,9 @@
       "ticks": 100
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:light_blue_wool",
+    "translation_key": "block.minecraft.light_blue_wool"
   }
 }

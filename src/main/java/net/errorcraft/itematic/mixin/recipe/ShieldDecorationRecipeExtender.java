@@ -40,7 +40,7 @@ public class ShieldDecorationRecipeExtender {
         )
     )
     private boolean instanceOfBannerItemUseItemComponent(Object reference, Class<BannerItem> clazz, @Local(ordinal = 2) ItemStack slotStack) {
-        return slotStack.itematic$getComponent(ItemComponentTypes.BANNER_PATTERN_HOLDER)
+        return slotStack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
             .map(BannerPatternHolderItemComponent::modifiable)
             .orElse(false);
     }
@@ -72,7 +72,7 @@ public class ShieldDecorationRecipeExtender {
         )
     )
     private DyeColor getColorUseItemComponent(BannerItem instance, @Local(ordinal = 0) ItemStack bannerStack) {
-        return bannerStack.itematic$getComponent(ItemComponentTypes.BANNER_PATTERN_HOLDER)
+        return bannerStack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
             .flatMap(BannerPatternHolderItemComponent::color)
             .orElse(DyeColor.WHITE);
     }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.weeping_vines"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:weeping_vines"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.5
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:weeping_vines",
+    "translation_key": "block.minecraft.weeping_vines"
   }
 }

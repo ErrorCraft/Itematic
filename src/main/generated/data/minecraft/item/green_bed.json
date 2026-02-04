@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.green_bed"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:green_bed"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:green_bed",
+    "translation_key": "block.minecraft.green_bed"
   }
 }

@@ -1,9 +1,5 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.ominous_bottle"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {
       "has_consume_particles": false,
       "sound": "minecraft:entity.generic.drink"
@@ -17,6 +13,11 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:ominous_bottle",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.ominous_bottle"
   },
   "events": {
     "minecraft:consume_item": {

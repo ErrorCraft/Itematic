@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.smooth_red_sandstone_stairs"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:smooth_red_sandstone_stairs"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:smooth_red_sandstone_stairs",
+    "translation_key": "block.minecraft.smooth_red_sandstone_stairs"
   }
 }

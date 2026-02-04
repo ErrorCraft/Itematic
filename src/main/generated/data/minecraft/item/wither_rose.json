@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.wither_rose"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:wither_rose"
     },
@@ -17,6 +14,10 @@
         }
       ]
     }
+  },
+  "display": {
+    "model": "minecraft:wither_rose",
+    "translation_key": "block.minecraft.wither_rose"
   },
   "events": {
     "minecraft:use_on_block": {

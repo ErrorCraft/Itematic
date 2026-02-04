@@ -43,7 +43,7 @@ public class ClientWorldExtender {
         )
     )
     private boolean instanceOfBlockItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, @Local ItemStack itemStack, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
-        Optional<BlockItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.BLOCK);
+        Optional<BlockItemComponent> optionalComponent = itemStack.itematic$getBehavior(ItemComponentTypes.BLOCK);
         optionalComponent.ifPresent(blockItemComponent::set);
         return optionalComponent.isPresent();
     }

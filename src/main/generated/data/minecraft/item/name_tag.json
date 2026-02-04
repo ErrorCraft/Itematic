@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.name_tag"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:name_tag",
+    "translation_key": "item.minecraft.name_tag"
   },
   "events": {
     "minecraft:use_on_entity": {

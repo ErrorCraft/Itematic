@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.polished_tuff_wall"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:polished_tuff_wall"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:polished_tuff_wall",
+    "translation_key": "block.minecraft.polished_tuff_wall"
   }
 }

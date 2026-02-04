@@ -11,7 +11,6 @@ import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.potion.Potion;
 import net.minecraft.text.Text;
 import net.minecraft.util.dynamic.Codecs;
 
@@ -46,7 +45,10 @@ public record PotionHolderItemComponent(float durationMultiplier) implements Ite
     }
 
     public String translationKey(ItemStack stack, String baseTranslationKey) {
-        return Potion.finishTranslationKey(stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion(), baseTranslationKey + ".effect.");
+        return stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT)
+            .potion()
+            .map(potion -> baseTranslationKey + ".effect." + potion.value().getBaseName())
+            .orElseGet(() -> baseTranslationKey + ".effect.empty");
     }
 
     public static PotionHolderItemComponent of(float durationMultiplier) {

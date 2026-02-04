@@ -1,19 +1,29 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.diamond_horse_armor"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "armor_type": "equestrian",
-      "material": "minecraft:diamond"
+      "attribute_id": "minecraft:armor.body",
+      "defense": 11,
+      "knockback_resistance": 0.0,
+      "toughness": 2.0
+    },
+    "minecraft:damageable": {
+      "break_sound": "minecraft:entity.item.break",
+      "durability": 528
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:equip_entity"
     },
     "minecraft:equipment": {
+      "allowed_entities": "minecraft:horse",
       "equip_sound": "minecraft:item.armor.equip_diamond",
-      "slot": "body"
+      "model": "minecraft:diamond",
+      "slot": "body",
+      "swappable": true
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:diamond_horse_armor",
+    "translation_key": "item.minecraft.diamond_horse_armor"
   }
 }

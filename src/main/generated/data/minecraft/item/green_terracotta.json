@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.green_terracotta"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:green_terracotta"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:green_terracotta",
+    "translation_key": "block.minecraft.green_terracotta"
   }
 }

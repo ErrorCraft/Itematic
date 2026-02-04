@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.gold_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:gold_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:gold_block",
+    "translation_key": "block.minecraft.gold_block"
   }
 }

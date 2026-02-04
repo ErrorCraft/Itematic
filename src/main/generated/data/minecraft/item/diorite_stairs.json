@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.diorite_stairs"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:diorite_stairs"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:diorite_stairs",
+    "translation_key": "block.minecraft.diorite_stairs"
   }
 }

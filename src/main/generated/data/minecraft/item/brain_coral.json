@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.brain_coral"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:brain_coral"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:brain_coral",
+    "translation_key": "block.minecraft.brain_coral"
   }
 }

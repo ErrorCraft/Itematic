@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.frogspawn"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:frogspawn",
       "passes": [
@@ -10,5 +7,9 @@
       ]
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:frogspawn",
+    "translation_key": "block.minecraft.frogspawn"
   }
 }

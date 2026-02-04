@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.fermented_spider_eye"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:fermented_spider_eye",
+    "translation_key": "item.minecraft.fermented_spider_eye"
   }
 }

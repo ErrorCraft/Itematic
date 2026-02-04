@@ -1,9 +1,5 @@
 {
-  "base": {
-    "rarity": "epic",
-    "translation_key": "item.minecraft.mace"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 500
     },
@@ -26,5 +22,10 @@
       "attack_speed": 0.15,
       "may_smash": true
     }
+  },
+  "display": {
+    "model": "minecraft:mace",
+    "rarity": "epic",
+    "translation_key": "item.minecraft.mace"
   }
 }

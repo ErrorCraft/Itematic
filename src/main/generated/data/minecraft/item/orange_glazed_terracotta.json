@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.orange_glazed_terracotta"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:orange_glazed_terracotta"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:orange_glazed_terracotta",
+    "translation_key": "block.minecraft.orange_glazed_terracotta"
   }
 }

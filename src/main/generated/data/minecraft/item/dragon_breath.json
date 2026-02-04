@@ -1,9 +1,10 @@
 {
-  "base": {
+  "behavior": {
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dragon_breath",
     "rarity": "uncommon",
     "translation_key": "item.minecraft.dragon_breath"
-  },
-  "components": {
-    "minecraft:stackable": 64
   }
 }

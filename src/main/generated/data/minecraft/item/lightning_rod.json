@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.lightning_rod"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:lightning_rod"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:lightning_rod",
+    "translation_key": "block.minecraft.lightning_rod"
   }
 }

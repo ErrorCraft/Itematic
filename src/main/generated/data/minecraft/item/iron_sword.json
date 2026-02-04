@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.iron_sword"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 250
     },
@@ -34,5 +31,9 @@
       },
       "attack_speed": 0.4
     }
+  },
+  "display": {
+    "model": "minecraft:iron_sword",
+    "translation_key": "item.minecraft.iron_sword"
   }
 }

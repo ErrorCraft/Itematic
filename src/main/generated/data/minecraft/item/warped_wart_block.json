@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.warped_wart_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:warped_wart_block"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.85
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:warped_wart_block",
+    "translation_key": "block.minecraft.warped_wart_block"
   }
 }

@@ -95,7 +95,7 @@ public record ItemColoringRecipe(CraftingRecipeCategory category, Ingredient ing
     }
 
     private boolean isExpectedColor(ItemStack stack) {
-        return stack.itematic$getComponent(ItemComponentTypes.DYE)
+        return stack.itematic$getBehavior(ItemComponentTypes.DYE)
             .map(DyeItemComponent::color)
             .map(color -> this.color == color)
             .orElse(false);

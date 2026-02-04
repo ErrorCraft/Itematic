@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.sunflower"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:sunflower"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.65
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:sunflower",
+    "translation_key": "block.minecraft.sunflower"
   }
 }

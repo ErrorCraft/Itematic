@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.raw_iron_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:raw_iron_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:raw_iron_block",
+    "translation_key": "block.minecraft.raw_iron_block"
   }
 }

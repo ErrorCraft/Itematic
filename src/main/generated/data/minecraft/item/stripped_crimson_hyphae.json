@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.stripped_crimson_hyphae"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:stripped_crimson_hyphae"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:stripped_crimson_hyphae",
+    "translation_key": "block.minecraft.stripped_crimson_hyphae"
   }
 }

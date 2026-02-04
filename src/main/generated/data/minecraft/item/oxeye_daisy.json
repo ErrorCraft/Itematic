@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.oxeye_daisy"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:oxeye_daisy"
     },
@@ -17,6 +14,10 @@
         }
       ]
     }
+  },
+  "display": {
+    "model": "minecraft:oxeye_daisy",
+    "translation_key": "block.minecraft.oxeye_daisy"
   },
   "events": {
     "minecraft:use_on_block": {

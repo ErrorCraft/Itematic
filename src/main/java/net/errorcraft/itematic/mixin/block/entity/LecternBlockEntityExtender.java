@@ -21,7 +21,7 @@ public class LecternBlockEntityExtender {
         )
     )
     private boolean isOfForWritableBookUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.WRITABLE);
+        return instance.itematic$hasBehavior(ItemComponentTypes.WRITABLE);
     }
 
     @Redirect(
@@ -40,6 +40,6 @@ public class LecternBlockEntityExtender {
         )
     )
     private boolean isOfForWrittenBookUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.TEXT_HOLDER);
+        return instance.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER);
     }
 }

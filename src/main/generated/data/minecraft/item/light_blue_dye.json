@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.light_blue_dye"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dye": "light_blue",
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:light_blue_dye",
+    "translation_key": "item.minecraft.light_blue_dye"
   }
 }

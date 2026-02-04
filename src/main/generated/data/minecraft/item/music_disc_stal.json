@@ -1,10 +1,11 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.music_disc_stal"
-  },
-  "components": {
+  "behavior": {
     "minecraft:playable_song": "minecraft:stal",
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:music_disc_stal",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.music_disc_stal"
   }
 }

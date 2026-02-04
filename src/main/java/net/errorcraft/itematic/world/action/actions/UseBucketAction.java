@@ -29,7 +29,7 @@ public record UseBucketAction(ActionContextParameter position) implements Action
     @Override
     public boolean execute(ActionContext context) {
         ItemStack stack = context.stack();
-        return stack.itematic$getComponent(ItemComponentTypes.BUCKET)
+        return stack.itematic$getBehavior(ItemComponentTypes.BUCKET)
             .map(c -> {
                 BlockPos pos = context.blockPos(this.position);
                 BlockHitResult hitResult = new BlockHitResult(pos.toCenterPos(), context.side(), pos, true);

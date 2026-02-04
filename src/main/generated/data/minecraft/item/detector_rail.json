@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.detector_rail"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:detector_rail"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:detector_rail",
+    "translation_key": "block.minecraft.detector_rail"
   }
 }

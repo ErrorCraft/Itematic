@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.lava_bucket"
-  },
-  "components": {
+  "behavior": {
     "minecraft:bucket": {
       "emptying_sound_event": "minecraft:item.bucket.empty_lava",
       "fluid": "minecraft:lava",
@@ -19,5 +16,9 @@
       "ticks": 20000
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:lava_bucket",
+    "translation_key": "item.minecraft.lava_bucket"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.stone_sword"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 131
     },
@@ -34,5 +31,9 @@
       },
       "attack_speed": 0.4
     }
+  },
+  "display": {
+    "model": "minecraft:stone_sword",
+    "translation_key": "item.minecraft.stone_sword"
   }
 }

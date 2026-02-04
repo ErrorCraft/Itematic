@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.brush"
-  },
-  "components": {
+  "behavior": {
     "minecraft:brush": {},
     "minecraft:damageable": {
       "durability": 64
@@ -21,5 +18,9 @@
         "amount": 200
       }
     }
+  },
+  "display": {
+    "model": "minecraft:brush",
+    "translation_key": "item.minecraft.brush"
   }
 }

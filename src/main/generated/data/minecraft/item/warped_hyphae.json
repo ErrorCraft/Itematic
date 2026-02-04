@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.warped_hyphae"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:warped_hyphae"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:warped_hyphae",
+    "translation_key": "block.minecraft.warped_hyphae"
   }
 }

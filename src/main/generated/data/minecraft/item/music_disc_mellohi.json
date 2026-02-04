@@ -1,10 +1,11 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.music_disc_mellohi"
-  },
-  "components": {
+  "behavior": {
     "minecraft:playable_song": "minecraft:mellohi",
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:music_disc_mellohi",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.music_disc_mellohi"
   }
 }

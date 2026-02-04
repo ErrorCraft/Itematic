@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.diamond_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:diamond_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:diamond_block",
+    "translation_key": "block.minecraft.diamond_block"
   }
 }

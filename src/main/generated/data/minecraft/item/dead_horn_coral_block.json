@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dead_horn_coral_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dead_horn_coral_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dead_horn_coral_block",
+    "translation_key": "block.minecraft.dead_horn_coral_block"
   }
 }

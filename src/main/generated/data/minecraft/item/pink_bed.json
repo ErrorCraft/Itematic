@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.pink_bed"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:pink_bed"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:pink_bed",
+    "translation_key": "block.minecraft.pink_bed"
   }
 }

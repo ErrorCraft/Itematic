@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.ender_pearl"
-  },
-  "components": {
+  "behavior": {
     "minecraft:cooldown": {
       "ticks": 20
     },
@@ -16,5 +13,9 @@
       "angle_offset": 0.0,
       "speed": 1.5
     }
+  },
+  "display": {
+    "model": "minecraft:ender_pearl",
+    "translation_key": "item.minecraft.ender_pearl"
   }
 }

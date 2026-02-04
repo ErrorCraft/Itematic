@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.amethyst_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:amethyst_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:amethyst_block",
+    "translation_key": "block.minecraft.amethyst_block"
   }
 }

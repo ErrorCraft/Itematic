@@ -59,7 +59,7 @@ public abstract class ServerPlayerEntityExtender extends PlayerEntity {
     )
     @Nullable
     private Packet<?> createSyncPacketUseItemComponent(NetworkSyncedItem instance, ItemStack stack, World world, PlayerEntity player) {
-        return stack.itematic$getComponent(ItemComponentTypes.MAP_HOLDER)
+        return stack.itematic$getBehavior(ItemComponentTypes.MAP_HOLDER)
             .map(c -> c.createSyncPacket(stack, world, player))
             .orElse(null);
     }
@@ -72,7 +72,7 @@ public abstract class ServerPlayerEntityExtender extends PlayerEntity {
         )
     )
     private boolean isOfForWrittenBookUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.TEXT_HOLDER);
+        return instance.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER);
     }
 
     @Inject(

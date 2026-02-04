@@ -3,7 +3,6 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -16,6 +15,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
@@ -26,7 +26,6 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ClickType;
-import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.math.Fraction;
 
@@ -42,6 +41,8 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
         SoundEvent.ENTRY_CODEC.fieldOf("remove_item_sound").forGetter(ItemHolderItemComponent::removeItemSound),
         SoundEvent.ENTRY_CODEC.fieldOf("empty_sound").forGetter(ItemHolderItemComponent::emptySound)
     ).apply(instance, ItemHolderItemComponent::new));
+    private static final int TICKS_AFTER_FIRST_THROW = BundleItemAccessor.ticksAfterFirstThrow();
+    private static final int TICKS_BETWEEN_THROWS = BundleItemAccessor.ticksBetweenThrows();
 
     public static ItemHolderItemComponent of(int capacity, ItemHolderRules rules, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) {
         return new ItemHolderItemComponent(Fraction.getFraction(capacity, 1), rules, insertItemSound, removeItemSound, emptySound);
@@ -58,14 +59,14 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        if (!BundleItemAccessor.dropAllBundledItems(stack, user)) {
-            return ItemResult.PASS;
+    public void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {
+        if (world.isClient() || !(user instanceof PlayerEntity player)) {
+            return;
         }
 
-        user.playSound(this.emptySound.value(), 0.8f, 0.8f + world.getRandom().nextFloat() * 0.4f);
-        user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
-        return ItemResult.SUCCEED;
+        if (usedTicks == 0 || (usedTicks >= TICKS_AFTER_FIRST_THROW && usedTicks % TICKS_BETWEEN_THROWS == 0)) {
+            this.removeAndDrop(stack, player);
+        }
     }
 
     @Override
@@ -199,13 +200,31 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
     }
 
     private void remove(Entity user, BundleContentsComponent.Builder bundleContentsBuilder, Consumer<ItemStack> onRemoved) {
-        World world = user.getWorld();
         ItemStack removedStack = bundleContentsBuilder.removeFirst();
         if (removedStack == null) {
             return;
         }
-        user.playSound(this.removeItemSound.value(), 0.8f, 0.8f + world.getRandom().nextFloat() * 0.4f);
+
+        user.playSound(this.removeItemSound.value(), 0.8f, 0.8f + user.getWorld().getRandom().nextFloat() * 0.4f);
         onRemoved.accept(removedStack);
+    }
+
+    private void removeAndDrop(ItemStack stack, PlayerEntity player) {
+        BundleContentsComponent.Builder newBuilder = this.createBuilder(stack);
+        if (newBuilder == null) {
+            return;
+        }
+
+        ItemStack removedStack = newBuilder.removeFirst();
+        if (removedStack == null) {
+            return;
+        }
+
+        player.dropItem(removedStack, true);
+        player.playSound(this.emptySound.value(), 0.8f, 0.8f + player.getWorld().getRandom().nextFloat() * 0.4f);
+        player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+
+        stack.set(DataComponentTypes.BUNDLE_CONTENTS, newBuilder.build());
     }
 
     private void playInsertItemSound(PlayerEntity user) {

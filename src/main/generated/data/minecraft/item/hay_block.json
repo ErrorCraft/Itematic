@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.hay_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:hay_block"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.85
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:hay_block",
+    "translation_key": "block.minecraft.hay_block"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.chorus_plant"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:chorus_plant"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:chorus_plant",
+    "translation_key": "block.minecraft.chorus_plant"
   }
 }

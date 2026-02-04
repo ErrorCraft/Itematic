@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.small_dripleaf"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:small_dripleaf"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.3
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:small_dripleaf",
+    "translation_key": "block.minecraft.small_dripleaf"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.red_bed"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:red_bed"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:red_bed",
+    "translation_key": "block.minecraft.red_bed"
   }
 }

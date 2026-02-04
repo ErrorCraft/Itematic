@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.white_tulip"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:white_tulip"
     },
@@ -18,6 +15,10 @@
         }
       ]
     }
+  },
+  "display": {
+    "model": "minecraft:white_tulip",
+    "translation_key": "block.minecraft.white_tulip"
   },
   "events": {
     "minecraft:use_on_block": {

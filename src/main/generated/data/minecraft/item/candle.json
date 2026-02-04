@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.candle"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:candle"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:candle",
+    "translation_key": "block.minecraft.candle"
   }
 }

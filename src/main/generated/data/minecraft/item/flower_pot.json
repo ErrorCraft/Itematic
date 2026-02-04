@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.flower_pot"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:flower_pot"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:flower_pot",
+    "translation_key": "block.minecraft.flower_pot"
   }
 }

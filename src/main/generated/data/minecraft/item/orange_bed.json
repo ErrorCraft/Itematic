@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.orange_bed"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:orange_bed"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:orange_bed",
+    "translation_key": "block.minecraft.orange_bed"
   }
 }

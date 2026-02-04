@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.daylight_detector"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:daylight_detector"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:daylight_detector",
+    "translation_key": "block.minecraft.daylight_detector"
   }
 }

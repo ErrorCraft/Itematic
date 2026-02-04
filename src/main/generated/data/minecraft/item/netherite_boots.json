@@ -1,10 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.netherite_boots"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "material": "minecraft:netherite"
+      "attribute_id": "minecraft:armor.boots",
+      "defense": 3,
+      "knockback_resistance": 0.10000000149011612,
+      "toughness": 3.0
     },
     "minecraft:damageable": {
       "durability": 481
@@ -17,6 +17,7 @@
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_netherite",
+      "model": "minecraft:netherite",
       "slot": "feet",
       "swappable": true
     },
@@ -27,5 +28,9 @@
       "items": "#minecraft:repairs_netherite_armor"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:netherite_boots",
+    "translation_key": "item.minecraft.netherite_boots"
   }
 }

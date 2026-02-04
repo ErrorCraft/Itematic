@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.polished_diorite"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:polished_diorite"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:polished_diorite",
+    "translation_key": "block.minecraft.polished_diorite"
   }
 }

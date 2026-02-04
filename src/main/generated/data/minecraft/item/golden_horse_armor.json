@@ -1,19 +1,29 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.golden_horse_armor"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "armor_type": "equestrian",
-      "material": "minecraft:gold"
+      "attribute_id": "minecraft:armor.body",
+      "defense": 7,
+      "knockback_resistance": 0.0,
+      "toughness": 0.0
+    },
+    "minecraft:damageable": {
+      "break_sound": "minecraft:entity.item.break",
+      "durability": 240
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:equip_entity"
     },
     "minecraft:equipment": {
+      "allowed_entities": "minecraft:horse",
       "equip_sound": "minecraft:item.armor.equip_gold",
-      "slot": "body"
+      "model": "minecraft:gold",
+      "slot": "body",
+      "swappable": true
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:golden_horse_armor",
+    "translation_key": "item.minecraft.golden_horse_armor"
   }
 }

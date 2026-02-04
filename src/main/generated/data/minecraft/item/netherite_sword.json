@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.netherite_sword"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 2031
     },
@@ -37,5 +34,9 @@
       },
       "attack_speed": 0.4
     }
+  },
+  "display": {
+    "model": "minecraft:netherite_sword",
+    "translation_key": "item.minecraft.netherite_sword"
   }
 }

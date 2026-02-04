@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.armadillo_scute"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:armadillo_scute",
+    "translation_key": "item.minecraft.armadillo_scute"
   }
 }

@@ -29,7 +29,7 @@ public class CraftingDecoratedPotRecipeExtender {
         )
     )
     private boolean isInForDecoratedPotIngredientsUseItemComponentCheck(ItemStack instance, TagKey<Item> tag) {
-        return !instance.isEmpty() && instance.itematic$hasComponent(ItemComponentTypes.DECORATED_POT_PATTERN);
+        return !instance.isEmpty() && instance.itematic$hasBehavior(ItemComponentTypes.DECORATED_POT_PATTERN);
     }
 
     @Redirect(

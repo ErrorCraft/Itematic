@@ -73,7 +73,7 @@ public abstract class SheepEntityExtender extends MobEntityExtender {
         )
     )
     private Optional<DyeItemComponent> instanceOfDyeItemUseItemComponent(Optional<Item> instance, Predicate<? super Object> predicate) {
-        return instance.flatMap(item -> item.itematic$getComponent(ItemComponentTypes.DYE));
+        return instance.flatMap(item -> item.itematic$getBehavior(ItemComponentTypes.DYE));
     }
 
     @Redirect(

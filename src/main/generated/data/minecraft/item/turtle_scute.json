@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.turtle_scute"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:turtle_scute",
+    "translation_key": "item.minecraft.turtle_scute"
   }
 }

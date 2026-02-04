@@ -27,7 +27,7 @@ public abstract class AbstractFurnaceRecipeBookScreenExtender extends RecipeBook
     public void itematic$initializeRecipeSpecific(World world) {
         this.fuels = world.itematic$getItemAccess()
             .streamEntries()
-            .filter(reference -> reference.value().itematic$hasComponent(ItemComponentTypes.FUEL))
+            .filter(reference -> reference.value().itematic$hasBehavior(ItemComponentTypes.FUEL))
             .map(ItemStack::new)
             .toList();
     }

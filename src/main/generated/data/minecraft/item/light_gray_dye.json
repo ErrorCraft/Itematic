@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.light_gray_dye"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dye": "light_gray",
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:light_gray_dye",
+    "translation_key": "item.minecraft.light_gray_dye"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.barrel"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:barrel"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:barrel",
+    "translation_key": "block.minecraft.barrel"
   }
 }

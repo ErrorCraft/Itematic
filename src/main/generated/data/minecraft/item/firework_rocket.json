@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.firework_rocket"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_firework_rocket"
     },
@@ -13,5 +10,9 @@
       }
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:firework_rocket",
+    "translation_key": "item.minecraft.firework_rocket"
   }
 }

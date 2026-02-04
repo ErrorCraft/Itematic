@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.slime_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:slime_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:slime_block",
+    "translation_key": "block.minecraft.slime_block"
   }
 }

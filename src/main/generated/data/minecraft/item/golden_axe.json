@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.golden_axe"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 32
     },
@@ -34,5 +31,9 @@
       "attack_speed": 0.25,
       "damage_per_hit": 2
     }
+  },
+  "display": {
+    "model": "minecraft:golden_axe",
+    "translation_key": "item.minecraft.golden_axe"
   }
 }

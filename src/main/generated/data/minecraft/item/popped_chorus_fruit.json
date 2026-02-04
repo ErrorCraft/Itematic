@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.popped_chorus_fruit"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:popped_chorus_fruit",
+    "translation_key": "item.minecraft.popped_chorus_fruit"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.globe_banner_pattern"
-  },
-  "components": {
+  "behavior": {
     "minecraft:banner_pattern": {
       "patterns": "minecraft:pattern_item/globe"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:globe_banner_pattern",
+    "translation_key": "item.minecraft.globe_banner_pattern"
   }
 }

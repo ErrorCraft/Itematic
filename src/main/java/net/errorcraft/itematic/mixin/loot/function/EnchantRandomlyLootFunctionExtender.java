@@ -25,7 +25,7 @@ public class EnchantRandomlyLootFunctionExtender {
         )
     )
     private boolean isOfForBookUseItemComponent(ItemStack instance, Item item) {
-        return instance.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
+        return instance.itematic$getBehavior(ItemComponentTypes.ENCHANTABLE)
             .flatMap(EnchantableItemComponent::transformsInto)
             .isPresent();
     }
@@ -38,7 +38,7 @@ public class EnchantRandomlyLootFunctionExtender {
         )
     )
     private static boolean isOfForBookUseItemComponentStatic(ItemStack instance, Item item, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
-        Optional<RegistryEntry<Item>> optionalItem = instance.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
+        Optional<RegistryEntry<Item>> optionalItem = instance.itematic$getBehavior(ItemComponentTypes.ENCHANTABLE)
             .flatMap(EnchantableItemComponent::transformsInto);
         optionalItem.ifPresent(transformsInto::set);
         return optionalItem.isPresent();

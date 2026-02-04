@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.chiseled_copper"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:chiseled_copper"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:chiseled_copper",
+    "translation_key": "block.minecraft.chiseled_copper"
   }
 }

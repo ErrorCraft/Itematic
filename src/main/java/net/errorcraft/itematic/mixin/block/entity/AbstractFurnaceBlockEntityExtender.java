@@ -28,7 +28,7 @@ public class AbstractFurnaceBlockEntityExtender {
         )
     )
     private int getFuelTicksUseDataComponent(FuelRegistry instance, ItemStack item) {
-        return item.itematic$getComponent(ItemComponentTypes.FUEL)
+        return item.itematic$getBehavior(ItemComponentTypes.FUEL)
             .map(FuelItemComponent::ticks)
             .orElse(0);
     }
@@ -116,16 +116,19 @@ public class AbstractFurnaceBlockEntityExtender {
         method = "isValid",
         at = @At(
             value = "INVOKE",
+            target = "Lnet/minecraft/item/FuelRegistry;isFuel(Lnet/minecraft/item/ItemStack;)Z"
+        )
+    )
+    private boolean isFuelUseItemComponentCheck(FuelRegistry instance, ItemStack item) {
+        return item.itematic$hasBehavior(ItemComponentTypes.FUEL);
+    }
+
+    @Redirect(
+        method = "isValid",
+        at = @At(
+            value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BUCKET:Lnet/minecraft/item/Item;",
-                opcode = Opcodes.GETSTATIC
-            )
-        ),
-        allow = 2
+        )
     )
     private boolean isValidIsOfForBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.BUCKET);
@@ -140,7 +143,7 @@ public class AbstractFurnaceBlockEntityExtender {
     )
     @SuppressWarnings("unchecked")
     private static <E> E setRemainderItemStackUseItemComponent(E element, @Local(ordinal = 0) Item item) {
-        return (E) item.itematic$getComponent(ItemComponentTypes.FUEL)
+        return (E) item.itematic$getBehavior(ItemComponentTypes.FUEL)
             .flatMap(FuelItemComponent::remainder)
             .orElse(ItemStack.EMPTY);
     }

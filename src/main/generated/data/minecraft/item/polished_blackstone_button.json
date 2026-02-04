@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.polished_blackstone_button"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:polished_blackstone_button"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:polished_blackstone_button",
+    "translation_key": "block.minecraft.polished_blackstone_button"
   }
 }

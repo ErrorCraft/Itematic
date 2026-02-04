@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.cake"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:cake"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 1.0
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:cake",
+    "translation_key": "block.minecraft.cake"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.chicken"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 2,
@@ -16,6 +13,10 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:chicken",
+    "translation_key": "item.minecraft.chicken"
   },
   "events": {
     "minecraft:consume_item": {

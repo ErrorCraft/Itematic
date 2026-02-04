@@ -39,10 +39,10 @@ public interface ItemStackAccess {
         return false;
     }
     default void itematic$damage(int amount, ActionContext context) {}
-    default <T extends ItemComponent<T>> boolean itematic$hasComponent(ItemComponentType<T> type) {
+    default <T extends ItemComponent<T>> boolean itematic$hasBehavior(ItemComponentType<T> type) {
         return false;
     }
-    default <T extends ItemComponent<T>> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
+    default <T extends ItemComponent<T>> Optional<T> itematic$getBehavior(ItemComponentType<T> type) {
         return Optional.empty();
     }
     default boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.sea_pickle"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:sea_pickle"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.65
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:sea_pickle",
+    "translation_key": "block.minecraft.sea_pickle"
   }
 }

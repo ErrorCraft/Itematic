@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.spruce_boat"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:spawn_entity_from_item"
     },
@@ -16,5 +13,9 @@
       "ticks": 1200
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:spruce_boat",
+    "translation_key": "item.minecraft.spruce_boat"
   }
 }

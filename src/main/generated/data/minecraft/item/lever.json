@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.lever"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:lever"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:lever",
+    "translation_key": "block.minecraft.lever"
   }
 }

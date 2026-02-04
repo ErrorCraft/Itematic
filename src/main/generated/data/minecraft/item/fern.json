@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.fern"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:fern"
     },
@@ -16,6 +13,10 @@
         "biome": "minecraft:plains"
       }
     }
+  },
+  "display": {
+    "model": "minecraft:fern",
+    "translation_key": "block.minecraft.fern"
   },
   "events": {
     "minecraft:use_on_block": {

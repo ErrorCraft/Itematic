@@ -28,7 +28,7 @@ public class ArmorDyeRecipeExtender {
         )
     )
     private boolean isInForDyeableUseItemComponentCheck(ItemStack instance, TagKey<Item> tag) {
-        return instance.itematic$hasComponent(ItemComponentTypes.DYEABLE);
+        return instance.itematic$hasBehavior(ItemComponentTypes.DYEABLE);
     }
 
     @ModifyConstant(
@@ -42,7 +42,7 @@ public class ArmorDyeRecipeExtender {
         )
     )
     private boolean instanceOfDyeItemUseItemComponent(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack inputStack, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
-        Optional<DyeItemComponent> optionalComponent = inputStack.itematic$getComponent(ItemComponentTypes.DYE);
+        Optional<DyeItemComponent> optionalComponent = inputStack.itematic$getBehavior(ItemComponentTypes.DYE);
         optionalComponent.ifPresent(dyeItemComponent::set);
         return optionalComponent.isPresent();
     }

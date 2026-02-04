@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.stone_axe"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 131
     },
@@ -34,5 +31,9 @@
       "attack_speed": 0.2,
       "damage_per_hit": 2
     }
+  },
+  "display": {
+    "model": "minecraft:stone_axe",
+    "translation_key": "item.minecraft.stone_axe"
   }
 }

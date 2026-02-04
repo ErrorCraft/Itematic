@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.exposed_copper_grate"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:exposed_copper_grate"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:exposed_copper_grate",
+    "translation_key": "block.minecraft.exposed_copper_grate"
   }
 }

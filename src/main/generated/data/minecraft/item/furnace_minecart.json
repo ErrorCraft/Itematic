@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.furnace_minecart"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:spawn_entity_from_item"
     },
@@ -12,5 +9,9 @@
       }
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:furnace_minecart",
+    "translation_key": "item.minecraft.furnace_minecart"
   }
 }

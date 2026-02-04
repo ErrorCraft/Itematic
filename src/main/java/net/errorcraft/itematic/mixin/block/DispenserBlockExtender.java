@@ -27,7 +27,7 @@ public class DispenserBlockExtender {
 
     @Unique
     private static Optional<DispenserBehavior> behavior(ItemStack stack) {
-        return stack.itematic$getComponent(ItemComponentTypes.DISPENSABLE)
+        return stack.itematic$getBehavior(ItemComponentTypes.DISPENSABLE)
             .map(DispensableItemComponent::behavior)
             .map(RegistryEntry::value);
     }

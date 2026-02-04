@@ -1,10 +1,11 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.music_disc_ward"
-  },
-  "components": {
+  "behavior": {
     "minecraft:playable_song": "minecraft:ward",
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:music_disc_ward",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.music_disc_ward"
   }
 }

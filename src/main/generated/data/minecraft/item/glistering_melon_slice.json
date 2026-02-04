@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.glistering_melon_slice"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:glistering_melon_slice",
+    "translation_key": "item.minecraft.glistering_melon_slice"
   }
 }

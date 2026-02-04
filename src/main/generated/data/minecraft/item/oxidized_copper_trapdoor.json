@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.oxidized_copper_trapdoor"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:oxidized_copper_trapdoor"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:oxidized_copper_trapdoor",
+    "translation_key": "block.minecraft.oxidized_copper_trapdoor"
   }
 }

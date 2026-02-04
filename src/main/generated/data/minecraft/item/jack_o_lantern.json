@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.jack_o_lantern"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:jack_o_lantern"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:jack_o_lantern",
+    "translation_key": "block.minecraft.jack_o_lantern"
   }
 }

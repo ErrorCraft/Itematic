@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.potato"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:potatoes"
     },
@@ -22,5 +19,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:potato",
+    "translation_key": "item.minecraft.potato"
   }
 }

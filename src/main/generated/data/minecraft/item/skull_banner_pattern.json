@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "rare",
-    "translation_key": "item.minecraft.skull_banner_pattern"
-  },
-  "components": {
+  "behavior": {
     "minecraft:banner_pattern": {
       "patterns": "minecraft:pattern_item/skull"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:skull_banner_pattern",
+    "rarity": "rare",
+    "translation_key": "item.minecraft.skull_banner_pattern"
   }
 }

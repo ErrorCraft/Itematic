@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.acacia_leaves"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:acacia_leaves"
     },
@@ -16,5 +13,9 @@
         "biome": "minecraft:plains"
       }
     }
+  },
+  "display": {
+    "model": "minecraft:acacia_leaves",
+    "translation_key": "block.minecraft.acacia_leaves"
   }
 }

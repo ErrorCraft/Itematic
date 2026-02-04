@@ -1,16 +1,15 @@
 package net.errorcraft.itematic.access.item;
 
-import net.errorcraft.itematic.item.armor.ArmorMaterial;
+import net.minecraft.entity.EntityType;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.sound.SoundEvent;
 
-public interface AnimalArmorItemTypeAccess extends StringIdentifiable {
-    @Override
-    default String asString() {
+public interface AnimalArmorItemTypeAccess {
+    default RegistryEntry<SoundEvent> itematic$breakSound() {
         return null;
-    }
-    default Identifier itematic$textureId(RegistryEntry<ArmorMaterial> armorMaterial) {
+    };
+    default RegistryEntryList<EntityType<?>> itematic$allowedEntities() {
         return null;
-    }
+    };
 }

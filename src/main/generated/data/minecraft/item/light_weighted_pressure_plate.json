@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.light_weighted_pressure_plate"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:light_weighted_pressure_plate"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:light_weighted_pressure_plate",
+    "translation_key": "block.minecraft.light_weighted_pressure_plate"
   }
 }

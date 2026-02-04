@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.blue_ice"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:blue_ice"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:blue_ice",
+    "translation_key": "block.minecraft.blue_ice"
   }
 }

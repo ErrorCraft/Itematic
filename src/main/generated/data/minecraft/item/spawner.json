@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.spawner"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:spawner"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:spawner",
+    "translation_key": "block.minecraft.spawner"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.soul_sand"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:soul_sand"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:soul_sand",
+    "translation_key": "block.minecraft.soul_sand"
   }
 }

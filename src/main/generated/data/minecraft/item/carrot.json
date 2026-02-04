@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.carrot"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:carrots"
     },
@@ -22,5 +19,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:carrot",
+    "translation_key": "item.minecraft.carrot"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.ender_eye"
-  },
-  "components": {
+  "behavior": {
     "minecraft:prevent_use_when_used_on_target": {
       "block": true
     },
@@ -16,6 +13,10 @@
       "angle_offset": 0.0,
       "speed": 0.0
     }
+  },
+  "display": {
+    "model": "minecraft:ender_eye",
+    "translation_key": "item.minecraft.ender_eye"
   },
   "events": {
     "minecraft:throw_projectile": {

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.snow"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:snow"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:snow",
+    "translation_key": "block.minecraft.snow"
   }
 }

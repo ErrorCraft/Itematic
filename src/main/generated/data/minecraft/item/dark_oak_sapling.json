@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dark_oak_sapling"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dark_oak_sapling"
     },
@@ -13,6 +10,10 @@
       "ticks": 100
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dark_oak_sapling",
+    "translation_key": "block.minecraft.dark_oak_sapling"
   },
   "events": {
     "minecraft:use_on_block": {

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.stick"
-  },
-  "components": {
+  "behavior": {
     "minecraft:fuel": {
       "ticks": 100
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:stick",
+    "translation_key": "item.minecraft.stick"
   }
 }

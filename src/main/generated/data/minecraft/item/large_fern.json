@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.large_fern"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:large_fern"
     },
@@ -16,5 +13,9 @@
         "biome": "minecraft:plains"
       }
     }
+  },
+  "display": {
+    "model": "minecraft:large_fern",
+    "translation_key": "block.minecraft.large_fern"
   }
 }

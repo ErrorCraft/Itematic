@@ -25,7 +25,7 @@ public class MeleeAttackTaskExtender {
         )
     )
     private static boolean instanceOfRangedWeaponItemUseItemComponentCheck(Object reference, Class<RangedWeaponItem> clazz, MobEntity mob, @Local(argsOnly = true) ItemStack stack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
-        Optional<ShooterItemComponent> optionalComponent = stack.itematic$getComponent(ItemComponentTypes.SHOOTER);
+        Optional<ShooterItemComponent> optionalComponent = stack.itematic$getBehavior(ItemComponentTypes.SHOOTER);
         optionalComponent.ifPresent(shooterItemComponent::set);
         return optionalComponent.isPresent();
     }

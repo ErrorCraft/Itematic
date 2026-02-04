@@ -40,7 +40,7 @@ public abstract class SmithingScreenExtender extends ForgingScreen<SmithingScree
     private void storeSmithingTemplate(CallbackInfo info, @Share("smithingTemplate") LocalRef<Optional<SmithingTemplate>> smithingTemplate) {
         smithingTemplate.set(this.handler.getSlot(0)
             .getStack()
-            .itematic$getComponent(ItemComponentTypes.SMITHING_TEMPLATE)
+            .itematic$getBehavior(ItemComponentTypes.SMITHING_TEMPLATE)
             .map(SmithingTemplateItemComponent::template)
             .map(RegistryEntry::value)
         );
@@ -78,7 +78,7 @@ public abstract class SmithingScreenExtender extends ForgingScreen<SmithingScree
         )
     )
     private boolean instanceOfSmithingTemplateItemUseItemComponentCheck(Object reference, Class<SmithingTemplateItem> clazz, @Local(ordinal = 0) ItemStack itemStack, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplate) {
-        Optional<SmithingTemplate> optionalSmithingTemplate = itemStack.itematic$getComponent(ItemComponentTypes.SMITHING_TEMPLATE)
+        Optional<SmithingTemplate> optionalSmithingTemplate = itemStack.itematic$getBehavior(ItemComponentTypes.SMITHING_TEMPLATE)
             .map(SmithingTemplateItemComponent::template)
             .map(RegistryEntry::value);
         optionalSmithingTemplate.ifPresent(smithingTemplate::set);

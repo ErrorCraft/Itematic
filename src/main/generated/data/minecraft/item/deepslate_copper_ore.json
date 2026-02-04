@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.deepslate_copper_ore"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:deepslate_copper_ore"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:deepslate_copper_ore",
+    "translation_key": "block.minecraft.deepslate_copper_ore"
   }
 }

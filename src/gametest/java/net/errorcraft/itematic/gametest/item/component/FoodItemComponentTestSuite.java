@@ -28,7 +28,7 @@ public class FoodItemComponentTestSuite {
         ItemStack stack = world.itematic$createStack(ItemKeys.APPLE);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
-        FoodItemComponent component = TestUtil.getItemComponent(stack, ItemComponentTypes.FOOD);
+        FoodItemComponent component = TestUtil.getItemBehavior(stack, ItemComponentTypes.FOOD);
         stack.use(world, player, Hand.MAIN_HAND);
         context.createTimedTaskRunner().expectMinDurationAndRun(
             TestUtil.getDataComponent(stack, ItematicDataComponentTypes.USE_DURATION).ticks(stack, player),
@@ -48,7 +48,7 @@ public class FoodItemComponentTestSuite {
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.SUSPICIOUS_STEW);
-        List<SuspiciousStewEffectsComponent.StewEffect> effects = TestUtil.getItemComponent(world.itematic$createStack(ItemKeys.DANDELION), ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT)
+        List<SuspiciousStewEffectsComponent.StewEffect> effects = TestUtil.getItemBehavior(world.itematic$createStack(ItemKeys.DANDELION), ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT)
             .effects();
         stack.set(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS, new SuspiciousStewEffectsComponent(effects));
         player.setStackInHand(Hand.MAIN_HAND, stack);

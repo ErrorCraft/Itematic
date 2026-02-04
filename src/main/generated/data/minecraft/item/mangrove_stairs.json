@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.mangrove_stairs"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:mangrove_stairs"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:mangrove_stairs",
+    "translation_key": "block.minecraft.mangrove_stairs"
   }
 }

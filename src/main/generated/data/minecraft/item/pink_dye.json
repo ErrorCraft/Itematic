@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.pink_dye"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dye": "pink",
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:pink_dye",
+    "translation_key": "item.minecraft.pink_dye"
   }
 }

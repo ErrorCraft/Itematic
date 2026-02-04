@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.podzol"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:podzol"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:podzol",
+    "translation_key": "block.minecraft.podzol"
   }
 }

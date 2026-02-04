@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.dried_kelp"
-  },
-  "components": {
+  "behavior": {
     "minecraft:compostable": {
       "level_increase_chance": 0.3
     },
@@ -19,5 +16,9 @@
         "amount": 16
       }
     }
+  },
+  "display": {
+    "model": "minecraft:dried_kelp",
+    "translation_key": "item.minecraft.dried_kelp"
   }
 }

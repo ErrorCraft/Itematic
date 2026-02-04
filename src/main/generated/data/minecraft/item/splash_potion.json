@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.splash_potion"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_bottle"
     },
@@ -24,5 +21,9 @@
         "type": "minecraft:potion"
       }
     }
+  },
+  "display": {
+    "model": "minecraft:splash_potion",
+    "translation_key": "item.minecraft.splash_potion"
   }
 }

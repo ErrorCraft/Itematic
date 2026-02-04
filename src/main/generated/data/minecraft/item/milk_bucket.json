@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.milk_bucket"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {
       "has_consume_particles": false,
       "sound": "minecraft:entity.generic.drink"
@@ -19,6 +16,10 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:milk_bucket",
+    "translation_key": "item.minecraft.milk_bucket"
   },
   "events": {
     "minecraft:consume_item": {

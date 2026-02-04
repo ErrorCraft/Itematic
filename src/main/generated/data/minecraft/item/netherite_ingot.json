@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.netherite_ingot"
-  },
-  "components": {
+  "behavior": {
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_fire"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:netherite_ingot",
+    "translation_key": "item.minecraft.netherite_ingot"
   }
 }

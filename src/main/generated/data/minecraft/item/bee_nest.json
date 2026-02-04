@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.bee_nest"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:bee_nest"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:bee_nest",
+    "translation_key": "block.minecraft.bee_nest"
   }
 }

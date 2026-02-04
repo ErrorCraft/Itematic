@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.snowball"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_projectile"
     },
@@ -16,5 +13,9 @@
       "angle_offset": 0.0,
       "speed": 1.5
     }
+  },
+  "display": {
+    "model": "minecraft:snowball",
+    "translation_key": "item.minecraft.snowball"
   }
 }

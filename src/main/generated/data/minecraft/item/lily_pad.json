@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.lily_pad"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:lily_pad",
       "passes": [
@@ -19,5 +16,9 @@
         "color": -9321636
       }
     }
+  },
+  "display": {
+    "model": "minecraft:lily_pad",
+    "translation_key": "block.minecraft.lily_pad"
   }
 }

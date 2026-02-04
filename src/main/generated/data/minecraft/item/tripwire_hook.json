@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.tripwire_hook"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:tripwire_hook"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:tripwire_hook",
+    "translation_key": "block.minecraft.tripwire_hook"
   }
 }

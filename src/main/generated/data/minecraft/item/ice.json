@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.ice"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:ice"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:ice",
+    "translation_key": "block.minecraft.ice"
   }
 }

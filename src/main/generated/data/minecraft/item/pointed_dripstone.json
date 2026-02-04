@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.pointed_dripstone"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:pointed_dripstone"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:pointed_dripstone",
+    "translation_key": "block.minecraft.pointed_dripstone"
   }
 }

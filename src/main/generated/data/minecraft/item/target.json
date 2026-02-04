@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.target"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:target"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:target",
+    "translation_key": "block.minecraft.target"
   }
 }

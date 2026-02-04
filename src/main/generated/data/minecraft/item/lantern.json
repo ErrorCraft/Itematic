@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.lantern"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:lantern"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:lantern",
+    "translation_key": "block.minecraft.lantern"
   }
 }

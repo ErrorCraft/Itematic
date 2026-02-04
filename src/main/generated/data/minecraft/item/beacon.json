@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "rare",
-    "translation_key": "block.minecraft.beacon"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:beacon"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:beacon",
+    "rarity": "rare",
+    "translation_key": "block.minecraft.beacon"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.stone_button"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:stone_button"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:stone_button",
+    "translation_key": "block.minecraft.stone_button"
   }
 }

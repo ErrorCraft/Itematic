@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.rabbit_stew"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 10,
@@ -20,5 +17,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:rabbit_stew",
+    "translation_key": "item.minecraft.rabbit_stew"
   }
 }

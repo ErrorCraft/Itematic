@@ -1,12 +1,13 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.bone_meal"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:use_item_on_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:bone_meal",
+    "translation_key": "item.minecraft.bone_meal"
   },
   "events": {
     "minecraft:use_on_block": {

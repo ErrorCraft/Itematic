@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.eye_armor_trim_smithing_template"
-  },
-  "components": {
+  "behavior": {
     "minecraft:smithing_template": {
       "template": "minecraft:eye_pattern"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:eye_armor_trim_smithing_template",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.eye_armor_trim_smithing_template"
   }
 }
