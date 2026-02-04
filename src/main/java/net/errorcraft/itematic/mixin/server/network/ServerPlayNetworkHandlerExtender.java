@@ -24,7 +24,7 @@ public class ServerPlayNetworkHandlerExtender {
         )
     )
     private boolean isOfForWritableBookUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.WRITABLE);
+        return instance.itematic$hasBehavior(ItemComponentTypes.WRITABLE);
     }
 
     @Redirect(
@@ -35,7 +35,7 @@ public class ServerPlayNetworkHandlerExtender {
         )
     )
     private boolean isOfForWritableBookUseItemComponentCheck(ItemStack instance, Item item, @Share("writable") LocalRef<WritableItemComponent> writable) {
-        Optional<WritableItemComponent> optionalWritable = instance.itematic$getComponent(ItemComponentTypes.WRITABLE);
+        Optional<WritableItemComponent> optionalWritable = instance.itematic$getBehavior(ItemComponentTypes.WRITABLE);
         optionalWritable.ifPresent(writable::set);
         return optionalWritable.isPresent();
     }

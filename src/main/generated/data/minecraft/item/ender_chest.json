@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.ender_chest"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:ender_chest"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:ender_chest",
+    "translation_key": "block.minecraft.ender_chest"
   }
 }

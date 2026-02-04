@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.coarse_dirt"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:coarse_dirt"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:coarse_dirt",
+    "translation_key": "block.minecraft.coarse_dirt"
   }
 }

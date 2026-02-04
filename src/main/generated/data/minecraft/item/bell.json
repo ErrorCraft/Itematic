@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.bell"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:bell"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:bell",
+    "translation_key": "block.minecraft.bell"
   }
 }

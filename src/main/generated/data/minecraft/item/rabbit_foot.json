@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.rabbit_foot"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:rabbit_foot",
+    "translation_key": "item.minecraft.rabbit_foot"
   }
 }

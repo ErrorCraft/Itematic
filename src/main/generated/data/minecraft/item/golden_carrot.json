@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.golden_carrot"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 6,
@@ -16,5 +13,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:golden_carrot",
+    "translation_key": "item.minecraft.golden_carrot"
   }
 }

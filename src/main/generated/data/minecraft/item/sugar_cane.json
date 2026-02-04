@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.sugar_cane"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:sugar_cane"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.5
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:sugar_cane",
+    "translation_key": "block.minecraft.sugar_cane"
   }
 }

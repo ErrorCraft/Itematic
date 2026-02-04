@@ -70,6 +70,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             if (client.world == null) {
                 items.set(Set.of());
             }
+
             this.statHandler = ((StatsScreenAccess) this.field_18752).itematic$statHandler();
             items.set(this.entries(client.world.getRegistryManager()));
         }
@@ -110,6 +111,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     if (this.hasNoStatFor(statType, entry)) {
                         continue;
                     }
+
                     entries.add(entry);
                     break;
                 }
@@ -119,6 +121,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     if (this.hasNoStatFor(statType, entry)) {
                         continue;
                     }
+
                     RegistryKey<Item> itemKey = entry.value().itematic$asItemKey();
                     items.getOptional(itemKey).ifPresent(entries::add);
                     break;
@@ -133,6 +136,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             if (!statType.itematic$hasStat(entry)) {
                 return true;
             }
+
             return this.statHandler.getStat(statType.itematic$getOrCreateStat(entry)) <= 0;
         }
 
@@ -146,7 +150,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 )
             )
             private boolean instanceOfBlockItemForFirstItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, StatsScreen.ItemStatsListWidget.Entry first, @Share("blockItemComponentFirst") LocalRef<BlockItemComponent> blockItemComponentFirst) {
-                Optional<BlockItemComponent> optionalComponent = first.getItem().itematic$getComponent(ItemComponentTypes.BLOCK);
+                Optional<BlockItemComponent> optionalComponent = first.getItem().itematic$getBehavior(ItemComponentTypes.BLOCK);
                 optionalComponent.ifPresent(blockItemComponentFirst::set);
                 return optionalComponent.isPresent();
             }
@@ -165,7 +169,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 )
             )
             private boolean instanceOfBlockItemForSecondItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, StatsScreen.ItemStatsListWidget.Entry first, StatsScreen.ItemStatsListWidget.Entry second, @Share("blockItemComponentSecond") LocalRef<BlockItemComponent> blockItemComponentSecond) {
-                Optional<BlockItemComponent> optionalComponent = first.getItem().itematic$getComponent(ItemComponentTypes.BLOCK);
+                Optional<BlockItemComponent> optionalComponent = first.getItem().itematic$getBehavior(ItemComponentTypes.BLOCK);
                 optionalComponent.ifPresent(blockItemComponentSecond::set);
                 return optionalComponent.isPresent();
             }
@@ -332,7 +336,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 )
             )
             private boolean instanceOfBlockItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
-                Optional<BlockItemComponent> optionalComponent = this.entry.value().itematic$getComponent(ItemComponentTypes.BLOCK);
+                Optional<BlockItemComponent> optionalComponent = this.entry.value().itematic$getBehavior(ItemComponentTypes.BLOCK);
                 optionalComponent.ifPresent(blockItemComponent::set);
                 return optionalComponent.isPresent();
             }

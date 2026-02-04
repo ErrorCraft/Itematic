@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.blackstone"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:blackstone"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:blackstone",
+    "translation_key": "block.minecraft.blackstone"
   }
 }

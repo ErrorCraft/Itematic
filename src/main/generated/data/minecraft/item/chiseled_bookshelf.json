@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.chiseled_bookshelf"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:chiseled_bookshelf"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:chiseled_bookshelf",
+    "translation_key": "block.minecraft.chiseled_bookshelf"
   }
 }

@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.rabbit_hide"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:rabbit_hide",
+    "translation_key": "item.minecraft.rabbit_hide"
   }
 }

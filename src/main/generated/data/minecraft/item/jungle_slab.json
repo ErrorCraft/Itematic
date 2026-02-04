@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.jungle_slab"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:jungle_slab"
     },
@@ -10,5 +7,9 @@
       "ticks": 150
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:jungle_slab",
+    "translation_key": "block.minecraft.jungle_slab"
   }
 }

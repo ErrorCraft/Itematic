@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.raw_iron"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:raw_iron",
+    "translation_key": "item.minecraft.raw_iron"
   }
 }

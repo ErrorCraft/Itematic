@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.mycelium"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:mycelium"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:mycelium",
+    "translation_key": "block.minecraft.mycelium"
   }
 }

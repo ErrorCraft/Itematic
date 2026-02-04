@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.spider_eye"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 2,
@@ -16,6 +13,10 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:spider_eye",
+    "translation_key": "item.minecraft.spider_eye"
   },
   "events": {
     "minecraft:consume_item": {

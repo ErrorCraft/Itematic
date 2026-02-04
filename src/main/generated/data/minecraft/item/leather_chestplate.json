@@ -1,10 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.leather_chestplate"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "material": "minecraft:leather"
+      "attribute_id": "minecraft:armor.chestplate",
+      "defense": 3,
+      "knockback_resistance": 0.0,
+      "toughness": 0.0
     },
     "minecraft:damageable": {
       "durability": 80
@@ -20,6 +20,7 @@
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_leather",
+      "model": "minecraft:leather",
       "slot": "chest",
       "swappable": true
     },
@@ -33,5 +34,9 @@
         "index": 0
       }
     }
+  },
+  "display": {
+    "model": "minecraft:leather_chestplate",
+    "translation_key": "item.minecraft.leather_chestplate"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.cherry_fence_gate"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:cherry_fence_gate"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cherry_fence_gate",
+    "translation_key": "block.minecraft.cherry_fence_gate"
   }
 }

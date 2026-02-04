@@ -24,7 +24,7 @@ public class ExplorationMapLootFunctionExtender {
         )
     )
     private boolean isOfForMapUseItemComponentCheck(ItemStack instance, Item item, @Share("mappableItemComponent") LocalRef<MappableItemComponent> mappableItemComponent) {
-        Optional<MappableItemComponent> optionalComponent = instance.itematic$getComponent(ItemComponentTypes.MAPPABLE);
+        Optional<MappableItemComponent> optionalComponent = instance.itematic$getBehavior(ItemComponentTypes.MAPPABLE);
         optionalComponent.ifPresent(mappableItemComponent::set);
         return optionalComponent.isPresent();
     }

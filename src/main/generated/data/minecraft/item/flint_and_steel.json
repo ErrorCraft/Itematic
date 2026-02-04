@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.flint_and_steel"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 64
     },
@@ -10,6 +7,10 @@
       "behavior": "minecraft:use_item_on_block"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:flint_and_steel",
+    "translation_key": "item.minecraft.flint_and_steel"
   },
   "events": {
     "minecraft:use_on_block": {

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.ochre_froglight"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:ochre_froglight"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:ochre_froglight",
+    "translation_key": "block.minecraft.ochre_froglight"
   }
 }

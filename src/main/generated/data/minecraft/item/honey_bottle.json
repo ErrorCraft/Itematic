@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.honey_bottle"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {
       "has_consume_particles": false,
       "sound": "minecraft:item.honey_bottle.drink"
@@ -23,6 +20,10 @@
         "amount": 40
       }
     }
+  },
+  "display": {
+    "model": "minecraft:honey_bottle",
+    "translation_key": "item.minecraft.honey_bottle"
   },
   "events": {
     "minecraft:consume_item": {

@@ -35,7 +35,7 @@ public record SaddleEntityAtPositionAction(ActionContextParameter position) impl
     @Override
     public boolean execute(ActionContext context) {
         ItemStack stack = context.stack();
-        return stack.itematic$getComponent(ItemComponentTypes.SADDLE)
+        return stack.itematic$getBehavior(ItemComponentTypes.SADDLE)
             .map(c -> {
                 BlockPos position = context.blockPos(this.position);
                 ServerWorld world = context.world();

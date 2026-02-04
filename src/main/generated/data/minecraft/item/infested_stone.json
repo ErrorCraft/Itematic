@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.infested_stone"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:infested_stone"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:infested_stone",
+    "translation_key": "block.minecraft.infested_stone"
   }
 }

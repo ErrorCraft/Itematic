@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.packed_mud"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:packed_mud"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:packed_mud",
+    "translation_key": "block.minecraft.packed_mud"
   }
 }

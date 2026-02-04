@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.mossy_cobblestone"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:mossy_cobblestone"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:mossy_cobblestone",
+    "translation_key": "block.minecraft.mossy_cobblestone"
   }
 }

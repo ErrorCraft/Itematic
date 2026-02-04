@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.light_blue_concrete_powder"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:light_blue_concrete_powder"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:light_blue_concrete_powder",
+    "translation_key": "block.minecraft.light_blue_concrete_powder"
   }
 }

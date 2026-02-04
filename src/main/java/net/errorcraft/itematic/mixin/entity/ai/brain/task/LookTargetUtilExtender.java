@@ -23,7 +23,7 @@ public class LookTargetUtilExtender {
         )
     )
     private static boolean instanceOfRangedWeaponItemUseItemComponentCheck(Object reference, Class<RangedWeaponItem> clazz, MobEntity mob, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
-        Optional<ShooterItemComponent> optionalComponent = mob.getMainHandStack().itematic$getComponent(ItemComponentTypes.SHOOTER);
+        Optional<ShooterItemComponent> optionalComponent = mob.getMainHandStack().itematic$getBehavior(ItemComponentTypes.SHOOTER);
         optionalComponent.ifPresent(shooterItemComponent::set);
         return optionalComponent.isPresent();
     }

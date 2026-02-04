@@ -34,7 +34,7 @@ public class FireworkStarRecipeExtender {
         )
     )
     private boolean containsKeyUseItemComponentCheck(Map<Item, FireworkExplosionComponent.Type> instance, Object o, @Local ItemStack itemStack) {
-        return itemStack.itematic$hasComponent(ItemComponentTypes.FIREWORK_SHAPE_MODIFIER);
+        return itemStack.itematic$hasBehavior(ItemComponentTypes.FIREWORK_SHAPE_MODIFIER);
     }
 
     @Redirect(
@@ -46,7 +46,7 @@ public class FireworkStarRecipeExtender {
     )
     @SuppressWarnings("unchecked")
     private <V> V getUseItemComponent(Map<Item, FireworkExplosionComponent.Type> instance, Object o, @Local ItemStack input) {
-        return (V) input.itematic$getComponent(ItemComponentTypes.FIREWORK_SHAPE_MODIFIER)
+        return (V) input.itematic$getBehavior(ItemComponentTypes.FIREWORK_SHAPE_MODIFIER)
             .map(FireworkShapeModifierItemComponent::shape)
             .orElse(null);
     }
@@ -121,7 +121,7 @@ public class FireworkStarRecipeExtender {
         )
     )
     private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local ItemStack itemStack) {
-        return itemStack.itematic$hasComponent(ItemComponentTypes.DYE);
+        return itemStack.itematic$hasBehavior(ItemComponentTypes.DYE);
     }
 
     @ModifyConstant(
@@ -132,7 +132,7 @@ public class FireworkStarRecipeExtender {
         )
     )
     private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local ItemStack ingredient, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
-        Optional<DyeItemComponent> optionalComponent = ingredient.itematic$getComponent(ItemComponentTypes.DYE);
+        Optional<DyeItemComponent> optionalComponent = ingredient.itematic$getBehavior(ItemComponentTypes.DYE);
         optionalComponent.ifPresent(dyeItemComponent::set);
         return optionalComponent.isPresent();
     }

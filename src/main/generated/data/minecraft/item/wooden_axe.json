@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.wooden_axe"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 59
     },
@@ -37,5 +34,9 @@
       "attack_speed": 0.2,
       "damage_per_hit": 2
     }
+  },
+  "display": {
+    "model": "minecraft:wooden_axe",
+    "translation_key": "item.minecraft.wooden_axe"
   }
 }

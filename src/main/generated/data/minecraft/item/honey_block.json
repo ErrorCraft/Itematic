@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.honey_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:honey_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:honey_block",
+    "translation_key": "block.minecraft.honey_block"
   }
 }

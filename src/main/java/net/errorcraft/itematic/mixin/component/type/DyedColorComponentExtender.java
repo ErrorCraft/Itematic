@@ -19,6 +19,6 @@ public class DyedColorComponentExtender {
         )
     )
     private static boolean isInForDyeableUseItemComponentCheck(ItemStack instance, TagKey<Item> tag) {
-        return instance.itematic$hasComponent(ItemComponentTypes.DYEABLE);
+        return instance.itematic$hasBehavior(ItemComponentTypes.DYEABLE);
     }
 }

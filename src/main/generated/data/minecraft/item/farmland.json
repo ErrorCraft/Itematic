@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.farmland"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:farmland"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:farmland",
+    "translation_key": "block.minecraft.farmland"
   }
 }

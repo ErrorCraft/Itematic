@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.sweet_berries"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:sweet_berry_bush"
     },
@@ -22,5 +19,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:sweet_berries",
+    "translation_key": "item.minecraft.sweet_berries"
   }
 }

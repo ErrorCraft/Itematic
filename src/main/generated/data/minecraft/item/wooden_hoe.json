@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.wooden_hoe"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 59
     },
@@ -37,6 +34,10 @@
       "attack_speed": 0.25,
       "damage_per_hit": 2
     }
+  },
+  "display": {
+    "model": "minecraft:wooden_hoe",
+    "translation_key": "item.minecraft.wooden_hoe"
   },
   "events": {
     "minecraft:use_on_block": "minecraft:use_hoe_on_block"

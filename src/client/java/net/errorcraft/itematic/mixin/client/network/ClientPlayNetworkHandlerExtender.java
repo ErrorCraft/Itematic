@@ -51,7 +51,7 @@ public abstract class ClientPlayNetworkHandlerExtender extends ClientCommonNetwo
         )
     )
     private static boolean isOfForTotemOfUndyingUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.LIFE_SAVING);
+        return instance.itematic$hasBehavior(ItemComponentTypes.LIFE_SAVING);
     }
 
     @Redirect(

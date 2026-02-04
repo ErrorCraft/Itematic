@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.calibrated_sculk_sensor"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:calibrated_sculk_sensor"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:calibrated_sculk_sensor",
+    "translation_key": "block.minecraft.calibrated_sculk_sensor"
   }
 }

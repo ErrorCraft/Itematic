@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ModelOverrideList.class)
 public class ModelOverrideListExtender {
     @Redirect(
-        method = "apply",
+        method = "getModel",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/item/ModelPredicateProviderRegistry;get(Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/Identifier;)Lnet/minecraft/client/item/ModelPredicateProvider;"
@@ -28,9 +28,11 @@ public class ModelOverrideListExtender {
         if (override == null) {
             return null;
         }
+
         if (!override.isApplicable(stack)) {
             return null;
         }
+
         return new ModelPredicateProviderWrapper(override);
     }
 }

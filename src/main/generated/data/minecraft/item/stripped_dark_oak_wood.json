@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.stripped_dark_oak_wood"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:stripped_dark_oak_wood"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:stripped_dark_oak_wood",
+    "translation_key": "block.minecraft.stripped_dark_oak_wood"
   }
 }

@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.feather"
-  },
-  "components": {
+  "behavior": {
     "minecraft:firework_shape_modifier": "burst",
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:feather",
+    "translation_key": "item.minecraft.feather"
   }
 }

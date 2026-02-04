@@ -50,7 +50,7 @@ public class BrewingStandBlockEntityExtender {
         )
     )
     private boolean isOfForPotionUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.POTION_HOLDER);
+        return instance.itematic$hasBehavior(ItemComponentTypes.POTION_HOLDER);
     }
 
     @Redirect(

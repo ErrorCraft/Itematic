@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.decorated_pot"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:decorated_pot"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:decorated_pot",
+    "translation_key": "block.minecraft.decorated_pot"
   }
 }

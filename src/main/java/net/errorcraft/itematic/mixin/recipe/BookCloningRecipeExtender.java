@@ -57,6 +57,6 @@ public class BookCloningRecipeExtender {
         )
     )
     private boolean instanceOfWrittenBookItemUseItemComponentCheck(Object reference, Class<WrittenBookItem> clazz, @Local ItemStack inputStack) {
-        return inputStack.itematic$hasComponent(ItemComponentTypes.TEXT_HOLDER);
+        return inputStack.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER);
     }
 }

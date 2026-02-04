@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.black_dye"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dye": "black",
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:black_dye",
+    "translation_key": "item.minecraft.black_dye"
   }
 }

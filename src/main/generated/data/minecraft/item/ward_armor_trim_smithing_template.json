@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.ward_armor_trim_smithing_template"
-  },
-  "components": {
+  "behavior": {
     "minecraft:smithing_template": {
       "template": "minecraft:ward_pattern"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:ward_armor_trim_smithing_template",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.ward_armor_trim_smithing_template"
   }
 }

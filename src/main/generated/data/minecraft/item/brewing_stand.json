@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.brewing_stand"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:brewing_stand"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:brewing_stand",
+    "translation_key": "block.minecraft.brewing_stand"
   }
 }

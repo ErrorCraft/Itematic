@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.waxed_oxidized_chiseled_copper"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:waxed_oxidized_chiseled_copper"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:waxed_oxidized_chiseled_copper",
+    "translation_key": "block.minecraft.waxed_oxidized_chiseled_copper"
   }
 }

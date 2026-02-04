@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.magma_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:magma_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:magma_block",
+    "translation_key": "block.minecraft.magma_block"
   }
 }

@@ -22,7 +22,7 @@ public class DecoratedPotBlockEntityRendererExtender {
         )
     )
     private static RegistryKey<DecoratedPotPattern> fromSherdUseItemComponent(Item sherd) {
-        return sherd.itematic$getComponent(ItemComponentTypes.DECORATED_POT_PATTERN)
+        return sherd.itematic$getBehavior(ItemComponentTypes.DECORATED_POT_PATTERN)
             .map(DecoratedPotPatternItemComponent::pattern)
             .flatMap(RegistryEntry::getKey)
             .orElse(null);

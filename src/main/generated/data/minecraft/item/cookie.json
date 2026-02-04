@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.cookie"
-  },
-  "components": {
+  "behavior": {
     "minecraft:compostable": {
       "level_increase_chance": 0.85
     },
@@ -19,5 +16,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:cookie",
+    "translation_key": "item.minecraft.cookie"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.nether_sprouts"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:nether_sprouts"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.5
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:nether_sprouts",
+    "translation_key": "block.minecraft.nether_sprouts"
   }
 }

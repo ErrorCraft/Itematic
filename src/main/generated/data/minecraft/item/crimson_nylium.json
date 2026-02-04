@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.crimson_nylium"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:crimson_nylium"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:crimson_nylium",
+    "translation_key": "block.minecraft.crimson_nylium"
   }
 }

@@ -27,7 +27,7 @@ public abstract class ItemFrameEntityExtender extends AbstractDecorationEntity {
         )
     )
     private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
+        return instance.itematic$hasBehavior(ItemComponentTypes.MAP_HOLDER);
     }
 
     @Redirect(

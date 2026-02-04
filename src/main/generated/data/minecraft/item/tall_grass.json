@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.tall_grass"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:tall_grass"
     },
@@ -16,5 +13,9 @@
         "biome": "minecraft:plains"
       }
     }
+  },
+  "display": {
+    "model": "minecraft:tall_grass",
+    "translation_key": "block.minecraft.tall_grass"
   }
 }

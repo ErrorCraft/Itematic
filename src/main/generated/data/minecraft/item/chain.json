@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.chain"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:chain"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:chain",
+    "translation_key": "block.minecraft.chain"
   }
 }

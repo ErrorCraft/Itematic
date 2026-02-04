@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.redstone"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:redstone_wire"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:redstone",
+    "translation_key": "item.minecraft.redstone"
   }
 }

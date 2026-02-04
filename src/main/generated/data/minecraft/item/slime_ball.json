@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.slime_ball"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:slime_ball",
+    "translation_key": "item.minecraft.slime_ball"
   }
 }

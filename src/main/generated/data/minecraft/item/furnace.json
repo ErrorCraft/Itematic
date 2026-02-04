@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.furnace"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:furnace"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:furnace",
+    "translation_key": "block.minecraft.furnace"
   }
 }

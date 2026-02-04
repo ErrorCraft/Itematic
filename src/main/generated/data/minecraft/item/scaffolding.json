@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.scaffolding"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:scaffolding"
     },
@@ -10,5 +7,9 @@
       "ticks": 50
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:scaffolding",
+    "translation_key": "block.minecraft.scaffolding"
   }
 }

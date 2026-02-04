@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.map"
-  },
-  "components": {
+  "behavior": {
     "minecraft:mappable": {
       "transforms_into": "minecraft:filled_map"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:map",
+    "translation_key": "item.minecraft.map"
   }
 }

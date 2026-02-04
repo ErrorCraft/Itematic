@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.tube_coral"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:tube_coral"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:tube_coral",
+    "translation_key": "block.minecraft.tube_coral"
   }
 }

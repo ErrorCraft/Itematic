@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.golden_sword"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 32
     },
@@ -34,5 +31,9 @@
       },
       "attack_speed": 0.4
     }
+  },
+  "display": {
+    "model": "minecraft:golden_sword",
+    "translation_key": "item.minecraft.golden_sword"
   }
 }

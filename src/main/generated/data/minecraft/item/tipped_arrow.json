@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.tipped_arrow"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_projectile"
     },
@@ -20,5 +17,9 @@
         "type": "minecraft:potion"
       }
     }
+  },
+  "display": {
+    "model": "minecraft:tipped_arrow",
+    "translation_key": "item.minecraft.tipped_arrow"
   }
 }

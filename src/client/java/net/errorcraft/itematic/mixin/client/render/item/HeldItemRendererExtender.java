@@ -44,7 +44,7 @@ public class HeldItemRendererExtender {
         )
     )
     private static boolean isOfForBowUseItemComponent(ItemStack instance, Item item) {
-        return instance.itematic$getComponent(ItemComponentTypes.SHOOTER)
+        return instance.itematic$getBehavior(ItemComponentTypes.SHOOTER)
             .map(ShooterItemComponent::method)
             .filter(method -> method.type() == ShooterMethodTypes.DIRECT)
             .isPresent();
@@ -66,7 +66,7 @@ public class HeldItemRendererExtender {
         )
     )
     private boolean isOfForCrossbowUseItemComponent(ItemStack instance, Item item, AbstractClientPlayerEntity player, @Share("useDuration") LocalIntRef useDuration) {
-        Optional<ShooterItemComponent> optionalShooter = instance.itematic$getComponent(ItemComponentTypes.SHOOTER);
+        Optional<ShooterItemComponent> optionalShooter = instance.itematic$getBehavior(ItemComponentTypes.SHOOTER);
         if (optionalShooter.isEmpty()) {
             return false;
         }
@@ -181,7 +181,7 @@ public class HeldItemRendererExtender {
         )
     )
     private static boolean isOfForCrossbowUseItemComponentStatic(ItemStack instance, Item item) {
-        return instance.itematic$getComponent(ItemComponentTypes.SHOOTER)
+        return instance.itematic$getBehavior(ItemComponentTypes.SHOOTER)
             .map(ShooterItemComponent::method)
             .filter(method -> method.type() == ShooterMethodTypes.CHARGEABLE)
             .isPresent();
@@ -203,6 +203,6 @@ public class HeldItemRendererExtender {
         )
     )
     private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
+        return instance.itematic$hasBehavior(ItemComponentTypes.MAP_HOLDER);
     }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.gravel"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:gravel"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:gravel",
+    "translation_key": "block.minecraft.gravel"
   }
 }

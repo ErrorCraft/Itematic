@@ -84,7 +84,7 @@ public class EntityPlacer extends Placer {
     }
 
     private boolean tryModifySpawnerBlock() {
-        if (!this.stack.itematic$hasComponent(ItemComponentTypes.SPAWN_EGG)) {
+        if (!this.stack.itematic$hasBehavior(ItemComponentTypes.SPAWN_EGG)) {
             return false;
         }
         if (!this.blockState.isOf(Blocks.SPAWNER)) {

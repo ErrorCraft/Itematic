@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.brick"
-  },
-  "components": {
+  "behavior": {
     "minecraft:decorated_pot_pattern": {
       "pattern": "minecraft:blank"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:brick",
+    "translation_key": "item.minecraft.brick"
   }
 }

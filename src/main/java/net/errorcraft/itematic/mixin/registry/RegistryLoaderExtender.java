@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.ItemUtil;
-import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
@@ -41,7 +40,6 @@ public class RegistryLoaderExtender {
         return new ImmutableList.Builder<RegistryLoader.Entry<?>>()
             .addAll(original)
             .add(createEntry(RegistryKeys.ITEM, ItemUtil.CODEC))
-            .add(createEntry(ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterial.CODEC))
             .add(createEntry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
             .add(createEntry(ItematicRegistryKeys.TRADE, Trade.CODEC))
             .add(createEntry(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
@@ -62,7 +60,6 @@ public class RegistryLoaderExtender {
         return new ImmutableList.Builder<RegistryLoader.Entry<?>>()
             .addAll(original)
             .add(createEntry(RegistryKeys.ITEM, ItemUtil.CODEC))
-            .add(createEntry(ItematicRegistryKeys.ARMOR_MATERIAL, ArmorMaterial.CODEC))
             .add(createEntry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
             .add(createEntry(ItematicRegistryKeys.TRADE, Trade.CODEC))
             .add(createEntry(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))

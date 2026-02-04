@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.petrified_oak_slab"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:petrified_oak_slab"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:petrified_oak_slab",
+    "translation_key": "block.minecraft.petrified_oak_slab"
   }
 }

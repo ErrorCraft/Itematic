@@ -1,10 +1,11 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.music_disc_blocks"
-  },
-  "components": {
+  "behavior": {
     "minecraft:playable_song": "minecraft:blocks",
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:music_disc_blocks",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.music_disc_blocks"
   }
 }

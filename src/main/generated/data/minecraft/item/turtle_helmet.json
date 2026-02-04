@@ -1,10 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.turtle_helmet"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "material": "minecraft:turtle"
+      "attribute_id": "minecraft:armor.helmet",
+      "defense": 2,
+      "knockback_resistance": 0.0,
+      "toughness": 0.0
     },
     "minecraft:damageable": {
       "durability": 275
@@ -17,6 +17,7 @@
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_turtle",
+      "model": "minecraft:turtle_scute",
       "slot": "head",
       "swappable": true
     },
@@ -24,5 +25,9 @@
       "items": "#minecraft:repairs_turtle_armor"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:turtle_helmet",
+    "translation_key": "item.minecraft.turtle_helmet"
   }
 }

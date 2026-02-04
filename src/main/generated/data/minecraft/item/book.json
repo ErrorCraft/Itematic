@@ -1,12 +1,13 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.book"
-  },
-  "components": {
+  "behavior": {
     "minecraft:enchantable": {
       "enchantability": 1,
       "transforms_into": "minecraft:enchanted_book"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:book",
+    "translation_key": "item.minecraft.book"
   }
 }

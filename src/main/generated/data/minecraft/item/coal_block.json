@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.coal_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:coal_block"
     },
@@ -10,5 +7,9 @@
       "ticks": 16000
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:coal_block",
+    "translation_key": "block.minecraft.coal_block"
   }
 }

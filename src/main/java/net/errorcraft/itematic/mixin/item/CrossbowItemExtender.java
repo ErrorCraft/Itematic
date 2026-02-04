@@ -19,7 +19,7 @@ public class CrossbowItemExtender {
         cancellable = true
     )
     private static void getAmmunitionUseItemComponent(LivingEntity shooter, ItemStack crossbow, CallbackInfoReturnable<Boolean> info) {
-        if (!crossbow.itematic$hasComponent(ItemComponentTypes.SHOOTER)) {
+        if (!crossbow.itematic$hasBehavior(ItemComponentTypes.SHOOTER)) {
             info.setReturnValue(false);
         }
     }
@@ -32,7 +32,7 @@ public class CrossbowItemExtender {
         )
     )
     private static ItemStack getAmmunitionUseItemComponent(LivingEntity instance, ItemStack stack) {
-        if (stack.itematic$hasComponent(ItemComponentTypes.SHOOTER)) {
+        if (stack.itematic$hasBehavior(ItemComponentTypes.SHOOTER)) {
             instance.itematic$getAmmunition(stack);
         }
 

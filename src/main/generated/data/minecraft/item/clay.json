@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.clay"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:clay"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:clay",
+    "translation_key": "block.minecraft.clay"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.crimson_fence_gate"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:crimson_fence_gate"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:crimson_fence_gate",
+    "translation_key": "block.minecraft.crimson_fence_gate"
   }
 }

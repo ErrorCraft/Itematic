@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.iron_bars"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:iron_bars"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:iron_bars",
+    "translation_key": "block.minecraft.iron_bars"
   }
 }

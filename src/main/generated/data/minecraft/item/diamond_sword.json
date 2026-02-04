@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.diamond_sword"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 1561
     },
@@ -34,5 +31,9 @@
       },
       "attack_speed": 0.4
     }
+  },
+  "display": {
+    "model": "minecraft:diamond_sword",
+    "translation_key": "item.minecraft.diamond_sword"
   }
 }

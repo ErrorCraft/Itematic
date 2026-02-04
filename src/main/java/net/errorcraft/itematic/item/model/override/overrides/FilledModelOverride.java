@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 public class FilledModelOverride implements ClampedModelOverride {
     @Override
     public float applyUnclamped(ItemStack stack, @Nullable World world, @Nullable LivingEntity target, int seed) {
-        return stack.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+        return stack.itematic$getBehavior(ItemComponentTypes.ITEM_HOLDER)
             .map(c -> c.occupancy(stack))
             .map(Fraction::floatValue)
             .orElse(0.0f);
@@ -19,6 +19,6 @@ public class FilledModelOverride implements ClampedModelOverride {
 
     @Override
     public boolean isApplicable(ItemStack stack) {
-        return stack.itematic$hasComponent(ItemComponentTypes.ITEM_HOLDER);
+        return stack.itematic$hasBehavior(ItemComponentTypes.ITEM_HOLDER);
     }
 }

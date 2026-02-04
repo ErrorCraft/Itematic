@@ -1,10 +1,11 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.music_disc_wait"
-  },
-  "components": {
+  "behavior": {
     "minecraft:playable_song": "minecraft:wait",
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:music_disc_wait",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.music_disc_wait"
   }
 }

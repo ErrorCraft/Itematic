@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.salmon"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 2,
@@ -16,5 +13,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:salmon",
+    "translation_key": "item.minecraft.salmon"
   }
 }

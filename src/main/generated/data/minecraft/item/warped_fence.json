@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.warped_fence"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:warped_fence"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:warped_fence",
+    "translation_key": "block.minecraft.warped_fence"
   }
 }

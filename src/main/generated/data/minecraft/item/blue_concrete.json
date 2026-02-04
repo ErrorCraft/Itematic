@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.blue_concrete"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:blue_concrete"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:blue_concrete",
+    "translation_key": "block.minecraft.blue_concrete"
   }
 }

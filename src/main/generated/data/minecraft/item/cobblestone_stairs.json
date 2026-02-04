@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.cobblestone_stairs"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:cobblestone_stairs"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cobblestone_stairs",
+    "translation_key": "block.minecraft.cobblestone_stairs"
   }
 }

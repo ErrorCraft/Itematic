@@ -98,7 +98,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
     }
 
     private void createEntity(ActionContext context) {
-        context.stack().itematic$getComponent(ItemComponentTypes.PROJECTILE)
+        context.stack().itematic$getBehavior(ItemComponentTypes.PROJECTILE)
             .map(c -> c.createEntity(context, ActionContextParameter.TARGET, this.angleOffset, this.speed, 1.0f))
             .ifPresent(projectile -> {
                 context.world().spawnEntity(projectile);

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.copper_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:copper_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:copper_block",
+    "translation_key": "block.minecraft.copper_block"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.warped_slab"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:warped_slab"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:warped_slab",
+    "translation_key": "block.minecraft.warped_slab"
   }
 }

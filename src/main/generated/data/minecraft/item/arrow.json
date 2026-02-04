@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.arrow"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_projectile"
     },
@@ -12,5 +9,9 @@
       }
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:arrow",
+    "translation_key": "item.minecraft.arrow"
   }
 }

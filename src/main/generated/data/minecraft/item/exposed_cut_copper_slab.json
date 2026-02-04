@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.exposed_cut_copper_slab"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:exposed_cut_copper_slab"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:exposed_cut_copper_slab",
+    "translation_key": "block.minecraft.exposed_cut_copper_slab"
   }
 }

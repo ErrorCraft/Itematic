@@ -1,10 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.diamond_leggings"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "material": "minecraft:diamond"
+      "attribute_id": "minecraft:armor.leggings",
+      "defense": 6,
+      "knockback_resistance": 0.0,
+      "toughness": 2.0
     },
     "minecraft:damageable": {
       "durability": 495
@@ -17,6 +17,7 @@
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_diamond",
+      "model": "minecraft:diamond",
       "slot": "legs",
       "swappable": true
     },
@@ -24,5 +25,9 @@
       "items": "#minecraft:repairs_diamond_armor"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:diamond_leggings",
+    "translation_key": "item.minecraft.diamond_leggings"
   }
 }

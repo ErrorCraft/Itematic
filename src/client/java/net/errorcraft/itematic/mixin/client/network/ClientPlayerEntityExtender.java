@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.client.network;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.Item;
@@ -12,17 +11,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityExtender {
     @Redirect(
-        method = "tickMovement",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForElytraUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.ELYTRA);
-    }
-
-    @Redirect(
         method = "useBook",
         at = @At(
             value = "INVOKE",
@@ -30,6 +18,6 @@ public class ClientPlayerEntityExtender {
         )
     )
     private boolean isOfForWritableBookUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.WRITABLE);
+        return instance.itematic$hasBehavior(ItemComponentTypes.WRITABLE);
     }
 }

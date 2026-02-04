@@ -1,9 +1,5 @@
 {
-  "base": {
-    "item_bar_style": "minecraft:bundle",
-    "translation_key": "item.minecraft.bundle"
-  },
-  "components": {
+  "behavior": {
     "minecraft:item_holder": {
       "capacity": {
         "denominator": 1,
@@ -45,6 +41,17 @@
         }
       ]
     },
-    "minecraft:stackable": 1
+    "minecraft:stackable": 1,
+    "minecraft:useable": {
+      "ticks": {
+        "type": "minecraft:constant",
+        "amount": 60
+      }
+    }
+  },
+  "display": {
+    "item_bar_style": "minecraft:bundle",
+    "model": "minecraft:bundle",
+    "translation_key": "item.minecraft.bundle"
   }
 }

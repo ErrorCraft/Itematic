@@ -43,7 +43,7 @@ public abstract class LoomScreenExtender extends HandledScreen<LoomScreenHandler
     )
     private DyeColor getColorUseItemComponent(BannerItem instance, @Local(ordinal = 3) Slot outputSlot) {
         return outputSlot.getStack()
-            .itematic$getComponent(ItemComponentTypes.BANNER_PATTERN_HOLDER)
+            .itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
             .flatMap(BannerPatternHolderItemComponent::color)
             .orElse(DyeColor.WHITE);
     }

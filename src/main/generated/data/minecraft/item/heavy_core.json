@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "epic",
-    "translation_key": "block.minecraft.heavy_core"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:heavy_core"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:heavy_core",
+    "rarity": "epic",
+    "translation_key": "block.minecraft.heavy_core"
   }
 }

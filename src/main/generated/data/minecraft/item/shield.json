@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.shield"
-  },
-  "components": {
+  "behavior": {
     "minecraft:banner_pattern_holder": {},
     "minecraft:damageable": {
       "durability": 336
@@ -11,7 +8,6 @@
       "behavior": "minecraft:equip_entity"
     },
     "minecraft:equipment": {
-      "equip_sound": "minecraft:item.armor.equip_generic",
       "slot": "offhand"
     },
     "minecraft:repairable": {
@@ -24,5 +20,9 @@
         "type": "minecraft:indefinite"
       }
     }
+  },
+  "display": {
+    "model": "minecraft:shield",
+    "translation_key": "item.minecraft.shield"
   }
 }

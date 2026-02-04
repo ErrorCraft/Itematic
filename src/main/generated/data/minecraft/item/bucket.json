@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.bucket"
-  },
-  "components": {
+  "behavior": {
     "minecraft:bucket": {
       "fluid": "minecraft:empty"
     },
@@ -10,5 +7,9 @@
       "behavior": "minecraft:use_bucket"
     },
     "minecraft:stackable": 16
+  },
+  "display": {
+    "model": "minecraft:bucket",
+    "translation_key": "item.minecraft.bucket"
   }
 }

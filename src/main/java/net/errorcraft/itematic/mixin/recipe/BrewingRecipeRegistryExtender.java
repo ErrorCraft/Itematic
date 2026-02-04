@@ -46,7 +46,7 @@ public class BrewingRecipeRegistryExtender implements BrewingRecipeRegistryAcces
      */
     @Overwrite
     private boolean isPotionType(ItemStack stack) {
-        return stack.itematic$hasComponent(ItemComponentTypes.POTION_HOLDER);
+        return stack.itematic$hasBehavior(ItemComponentTypes.POTION_HOLDER);
     }
 
     /**

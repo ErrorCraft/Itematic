@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.wooden_pickaxe"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 59
     },
@@ -37,5 +34,9 @@
       "attack_speed": 0.3,
       "damage_per_hit": 2
     }
+  },
+  "display": {
+    "model": "minecraft:wooden_pickaxe",
+    "translation_key": "item.minecraft.wooden_pickaxe"
   }
 }

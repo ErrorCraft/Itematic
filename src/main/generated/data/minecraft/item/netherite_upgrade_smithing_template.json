@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.netherite_upgrade_smithing_template"
-  },
-  "components": {
+  "behavior": {
     "minecraft:smithing_template": {
       "template": "minecraft:netherite_upgrade"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:netherite_upgrade_smithing_template",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.netherite_upgrade_smithing_template"
   }
 }

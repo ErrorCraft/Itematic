@@ -1,13 +1,14 @@
 {
-  "base": {
-    "glint": true,
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.enchanted_book"
-  },
-  "components": {
+  "behavior": {
     "minecraft:enchantment_holder": {
       "grinding_transforms_into": "minecraft:book"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "glint": true,
+    "model": "minecraft:enchanted_book",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.enchanted_book"
   }
 }

@@ -6,7 +6,7 @@ import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateType;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateTypes;
 import net.errorcraft.itematic.mixin.item.SmithingTemplateItemAccessor;
-import net.minecraft.item.trim.ArmorTrimPattern;
+import net.minecraft.item.equipment.trim.ArmorTrimPattern;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;

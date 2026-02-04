@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "rare",
-    "translation_key": "block.minecraft.conduit"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:conduit"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:conduit",
+    "rarity": "rare",
+    "translation_key": "block.minecraft.conduit"
   }
 }

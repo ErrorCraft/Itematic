@@ -1,11 +1,12 @@
 {
-  "base": {
-    "glint": true,
-    "translation_key": "item.minecraft.written_book"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 16,
     "minecraft:text_holder": {}
+  },
+  "display": {
+    "glint": true,
+    "model": "minecraft:written_book",
+    "translation_key": "item.minecraft.written_book"
   },
   "events": {
     "minecraft:use": {

@@ -338,7 +338,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         cancellable = true
     )
     private void checkStackableItemComponent(CallbackInfoReturnable<Integer> info) {
-        if (!this.itematic$hasComponent(ItemComponentTypes.STACKABLE)) {
+        if (!this.itematic$hasBehavior(ItemComponentTypes.STACKABLE)) {
             info.setReturnValue(ItemUtil.UNSTACKABLE_MAX_STACK_SIZE);
         }
     }
@@ -444,7 +444,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         cancellable = true
     )
     public void containsDataComponentUseItemBehaviorComponent(ItemStack ingredient, CallbackInfoReturnable<Boolean> info) {
-        if (!this.itematic$hasComponent(ItemComponentTypes.REPAIRABLE)) {
+        if (!this.itematic$hasBehavior(ItemComponentTypes.REPAIRABLE)) {
             info.setReturnValue(false);
         }
     }
@@ -457,7 +457,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         )
     )
     public boolean containsDataComponentUseItemBehaviorComponent(boolean original) {
-        return original && this.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
+        return original && this.itematic$hasBehavior(ItemComponentTypes.ENCHANTABLE);
     }
 
     @Inject(
@@ -494,7 +494,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         cancellable = true
     )
     private void checkForChargeableShooter(CallbackInfoReturnable<Boolean> info) {
-        this.itematic$getComponent(ItemComponentTypes.SHOOTER)
+        this.itematic$getBehavior(ItemComponentTypes.SHOOTER)
             .map(ShooterItemComponent::method)
             .filter(method -> method.type() == ShooterMethodTypes.CHARGEABLE)
             .ifPresent(method -> info.setReturnValue(true));
@@ -522,15 +522,12 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "getName",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
-        ),
+        method = "getItemName",
+        at = @At("HEAD"),
         cancellable = true
     )
-    private void getNameGetItemCheckNullEntry(CallbackInfoReturnable<Text> info) {
-        if (this.entry == null) {
+    private void checkEmptyStack(CallbackInfoReturnable<Text> info) {
+        if (this.isEmpty()) {
             info.setReturnValue(Text.empty());
         }
     }
@@ -543,7 +540,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         )
     )
     private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
-        return this.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
+        return this.itematic$hasBehavior(ItemComponentTypes.MAP_HOLDER);
     }
 
     @WrapWithCondition(
@@ -607,7 +604,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         at = @At("RETURN")
     )
     private int limitDamageApplied(int original) {
-        return this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
+        return this.itematic$getBehavior(ItemComponentTypes.DAMAGEABLE)
             .map(c -> Math.min(c.maximumDamage((ItemStack)(Object) this) - this.getDamage(), original))
             .orElse(original);
     }
@@ -667,7 +664,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         )
     )
     private ActionResult.Success doNotModifyResultingItemStackIfNotUseable(ActionResult.Success instance, ItemStack newHandStack, Operation<ActionResult.Success> original) {
-        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+        if (!this.itematic$hasBehavior(ItemComponentTypes.USEABLE)) {
             return instance;
         }
 
@@ -680,7 +677,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         cancellable = true
     )
     private void checkForUseableBehavior(LivingEntity user, ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
-        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+        if (!this.itematic$hasBehavior(ItemComponentTypes.USEABLE)) {
             info.setReturnValue((ItemStack)(Object) this);
         }
     }
@@ -778,17 +775,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
-    public <T extends ItemComponent<T>> boolean itematic$hasComponent(ItemComponentType<T> type) {
-        return this.entry != null && this.entry.value().itematic$hasComponent(type);
+    public <T extends ItemComponent<T>> boolean itematic$hasBehavior(ItemComponentType<T> type) {
+        return this.entry != null && this.entry.value().itematic$hasBehavior(type);
     }
 
     @Override
-    public <T extends ItemComponent<T>> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
+    public <T extends ItemComponent<T>> Optional<T> itematic$getBehavior(ItemComponentType<T> type) {
         if (this.entry == null) {
             return Optional.empty();
         }
 
-        return this.entry.value().itematic$getComponent(type);
+        return this.entry.value().itematic$getBehavior(type);
     }
 
     @Override
@@ -840,7 +837,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     @Override
     public double itematic$attackSpeedMultiplier() {
-        if (!this.itematic$hasComponent(ItemComponentTypes.WEAPON)) {
+        if (!this.itematic$hasBehavior(ItemComponentTypes.WEAPON)) {
             return 1.0d;
         }
 

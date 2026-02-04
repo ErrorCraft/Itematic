@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.cauldron"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:cauldron"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cauldron",
+    "translation_key": "block.minecraft.cauldron"
   }
 }

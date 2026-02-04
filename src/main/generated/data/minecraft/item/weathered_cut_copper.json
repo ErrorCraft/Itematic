@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.weathered_cut_copper"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:weathered_cut_copper"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:weathered_cut_copper",
+    "translation_key": "block.minecraft.weathered_cut_copper"
   }
 }

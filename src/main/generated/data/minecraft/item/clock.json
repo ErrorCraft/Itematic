@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.clock"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:clock",
+    "translation_key": "item.minecraft.clock"
   }
 }

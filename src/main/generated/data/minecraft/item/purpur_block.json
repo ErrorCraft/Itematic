@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.purpur_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:purpur_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:purpur_block",
+    "translation_key": "block.minecraft.purpur_block"
   }
 }

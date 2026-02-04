@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.anvil"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:anvil"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:anvil",
+    "translation_key": "block.minecraft.anvil"
   }
 }

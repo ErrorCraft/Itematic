@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.spruce_leaves"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:spruce_leaves"
     },
@@ -16,5 +13,9 @@
         "color": -10380959
       }
     }
+  },
+  "display": {
+    "model": "minecraft:spruce_leaves",
+    "translation_key": "block.minecraft.spruce_leaves"
   }
 }

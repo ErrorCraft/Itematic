@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.bone_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:bone_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:bone_block",
+    "translation_key": "block.minecraft.bone_block"
   }
 }

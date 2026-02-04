@@ -42,7 +42,7 @@ public record FireworkItemComponent() implements ItemComponent<FireworkItemCompo
 
     @Override
     public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        if (!user.isFallFlying()) {
+        if (!user.isGliding()) {
             return ItemResult.PASS;
         }
 

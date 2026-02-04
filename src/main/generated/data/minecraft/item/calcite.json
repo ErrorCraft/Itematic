@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.calcite"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:calcite"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:calcite",
+    "translation_key": "block.minecraft.calcite"
   }
 }

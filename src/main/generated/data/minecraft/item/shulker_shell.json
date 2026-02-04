@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.shulker_shell"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:shulker_shell",
+    "translation_key": "item.minecraft.shulker_shell"
   }
 }

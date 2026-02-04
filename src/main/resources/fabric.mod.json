@@ -120,9 +120,6 @@
       "net/minecraft/class_4059\u0024class_9076": [
         "net/errorcraft/itematic/access/item/AnimalArmorItemTypeAccess"
       ],
-      "net/minecraft/class_4073": [
-        "net/errorcraft/itematic/access/client/render/entity/feature/HorseArmorFeatureRendererAccess"
-      ],
       "net/minecraft/class_4538": [
         "net/errorcraft/itematic/access/world/WorldViewAccess"
       ],
@@ -140,9 +137,6 @@
       ],
       "net/minecraft/class_8526": [
         "net/errorcraft/itematic/access/block/entity/SherdsAccess"
-      ],
-      "net/minecraft/class_9085": [
-        "net/errorcraft/itematic/access/client/render/entity/feature/WolfArmorFeatureRendererAccess"
       ],
       "net/minecraft/class_9276": [
         "net/errorcraft/itematic/access/component/type/BundleContentsComponentAccess"

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.granite_wall"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:granite_wall"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:granite_wall",
+    "translation_key": "block.minecraft.granite_wall"
   }
 }

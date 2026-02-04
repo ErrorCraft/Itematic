@@ -1,10 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.leather_boots"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "material": "minecraft:leather"
+      "attribute_id": "minecraft:armor.boots",
+      "defense": 1,
+      "knockback_resistance": 0.0,
+      "toughness": 0.0
     },
     "minecraft:damageable": {
       "durability": 65
@@ -20,6 +20,7 @@
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_leather",
+      "model": "minecraft:leather",
       "slot": "feet",
       "swappable": true
     },
@@ -33,5 +34,9 @@
         "index": 0
       }
     }
+  },
+  "display": {
+    "model": "minecraft:leather_boots",
+    "translation_key": "item.minecraft.leather_boots"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.jungle_log"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:jungle_log"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:jungle_log",
+    "translation_key": "block.minecraft.jungle_log"
   }
 }

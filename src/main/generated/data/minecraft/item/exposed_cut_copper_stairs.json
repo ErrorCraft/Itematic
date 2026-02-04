@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.exposed_cut_copper_stairs"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:exposed_cut_copper_stairs"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:exposed_cut_copper_stairs",
+    "translation_key": "block.minecraft.exposed_cut_copper_stairs"
   }
 }

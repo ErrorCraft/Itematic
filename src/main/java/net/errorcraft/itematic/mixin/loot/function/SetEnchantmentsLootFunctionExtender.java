@@ -25,7 +25,7 @@ public class SetEnchantmentsLootFunctionExtender {
         )
     )
     private boolean isOfForBookUseItemComponent(ItemStack instance, Item item, @Share("transformedEntry") LocalRef<RegistryEntry<Item>> transformedEntry) {
-        Optional<RegistryEntry<Item>> optionalItem = instance.itematic$getComponent(ItemComponentTypes.ENCHANTABLE)
+        Optional<RegistryEntry<Item>> optionalItem = instance.itematic$getBehavior(ItemComponentTypes.ENCHANTABLE)
             .flatMap(EnchantableItemComponent::transformsInto);
         optionalItem.ifPresent(transformedEntry::set);
         return optionalItem.isPresent();

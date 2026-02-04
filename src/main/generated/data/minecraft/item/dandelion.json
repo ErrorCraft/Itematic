@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dandelion"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dandelion"
     },
@@ -18,6 +15,10 @@
         }
       ]
     }
+  },
+  "display": {
+    "model": "minecraft:dandelion",
+    "translation_key": "block.minecraft.dandelion"
   },
   "events": {
     "minecraft:use_on_block": {

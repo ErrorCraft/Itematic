@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.tuff"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:tuff"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:tuff",
+    "translation_key": "block.minecraft.tuff"
   }
 }

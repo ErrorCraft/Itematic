@@ -16,7 +16,7 @@ public class ItemColorsExtender {
      */
     @Overwrite
     public int getColor(ItemStack item, int tintIndex) {
-        return item.itematic$getComponent(ItemComponentTypes.TINTED)
+        return item.itematic$getBehavior(ItemComponentTypes.TINTED)
             .map(TintedItemComponent::tint)
             .map(c -> c.color(item, tintIndex))
             .orElse(ItemColor.DEFAULT_COLOR);

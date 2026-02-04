@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.mangrove_roots"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:mangrove_roots"
     },
@@ -13,5 +10,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:mangrove_roots",
+    "translation_key": "block.minecraft.mangrove_roots"
   }
 }

@@ -11,7 +11,6 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.util.math.Box;
 
 import java.util.List;
@@ -33,7 +32,11 @@ public record EquipEntityAtPositionAction(ActionContextParameter position) imple
     @Override
     public boolean execute(ActionContext context) {
         ItemStack equipment = context.stack();
-        List<LivingEntity> entities = context.world().getEntitiesByClass(LivingEntity.class, new Box(context.blockPos(this.position)), EntityPredicates.EXCEPT_SPECTATOR.and(new EntityPredicates.Equipable(equipment)));
+        List<LivingEntity> entities = context.world().getEntitiesByClass(
+            LivingEntity.class,
+            new Box(context.blockPos(this.position)),
+            entity -> entity.canEquipFromDispenser(equipment)
+        );
         if (entities.isEmpty()) {
             return false;
         }

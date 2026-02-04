@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.registry;
 
-import net.errorcraft.itematic.item.armor.ArmorMaterial;
 import net.errorcraft.itematic.item.color.ItemColorType;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
@@ -25,7 +24,6 @@ import net.minecraft.util.Identifier;
 
 public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<ItemComponentType<?>>> ITEM_COMPONENT_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("item_component_type"));
-    public static final RegistryKey<Registry<ArmorMaterial>> ARMOR_MATERIAL = RegistryKey.ofRegistry(Identifier.ofVanilla("armor_material"));
     public static final RegistryKey<Registry<ItemColorType<?>>> ITEM_COLOR_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("item_color_type"));
     public static final RegistryKey<Registry<DispenseBehavior>> DISPENSE_BEHAVIOR = RegistryKey.ofRegistry(Identifier.ofVanilla("dispense_behavior"));
     public static final RegistryKey<Registry<ItemEvent>> ITEM_EVENT = RegistryKey.ofRegistry(Identifier.ofVanilla("item_event"));

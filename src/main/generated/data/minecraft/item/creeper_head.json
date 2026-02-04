@@ -1,9 +1,5 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "block.minecraft.creeper_head"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": {
         "type": "minecraft:attached_to_side",
@@ -16,10 +12,14 @@
       "behavior": "minecraft:equip_entity_head"
     },
     "minecraft:equipment": {
-      "equip_sound": "minecraft:item.armor.equip_generic",
       "slot": "head"
     },
     "minecraft:firework_shape_modifier": "creeper",
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:creeper_head",
+    "rarity": "uncommon",
+    "translation_key": "block.minecraft.creeper_head"
   }
 }

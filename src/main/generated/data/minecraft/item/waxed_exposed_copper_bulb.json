@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.waxed_exposed_copper_bulb"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:waxed_exposed_copper_bulb"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:waxed_exposed_copper_bulb",
+    "translation_key": "block.minecraft.waxed_exposed_copper_bulb"
   }
 }

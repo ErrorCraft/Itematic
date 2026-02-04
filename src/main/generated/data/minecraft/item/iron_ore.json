@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.iron_ore"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:iron_ore"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:iron_ore",
+    "translation_key": "block.minecraft.iron_ore"
   }
 }

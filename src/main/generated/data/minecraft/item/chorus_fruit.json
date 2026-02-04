@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.chorus_fruit"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "always_edible": true,
@@ -17,6 +14,10 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:chorus_fruit",
+    "translation_key": "item.minecraft.chorus_fruit"
   },
   "events": {
     "minecraft:consume_item": {

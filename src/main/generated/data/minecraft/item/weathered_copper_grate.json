@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.weathered_copper_grate"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:weathered_copper_grate"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:weathered_copper_grate",
+    "translation_key": "block.minecraft.weathered_copper_grate"
   }
 }

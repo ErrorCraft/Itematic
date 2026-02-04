@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.recovery_compass"
-  },
-  "components": {
+  "behavior": {
     "minecraft:pointable": {
       "points_to": "minecraft:last_death"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:recovery_compass",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.recovery_compass"
   }
 }

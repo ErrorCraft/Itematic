@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.stone_pickaxe"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 131
     },
@@ -34,5 +31,9 @@
       "attack_speed": 0.3,
       "damage_per_hit": 2
     }
+  },
+  "display": {
+    "model": "minecraft:stone_pickaxe",
+    "translation_key": "item.minecraft.stone_pickaxe"
   }
 }

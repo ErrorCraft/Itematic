@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.nether_brick_fence"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:nether_brick_fence"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:nether_brick_fence",
+    "translation_key": "block.minecraft.nether_brick_fence"
   }
 }

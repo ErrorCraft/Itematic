@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.respawn_anchor"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:respawn_anchor"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:respawn_anchor",
+    "translation_key": "block.minecraft.respawn_anchor"
   }
 }

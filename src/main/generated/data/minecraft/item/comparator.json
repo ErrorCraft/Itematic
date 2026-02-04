@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.comparator"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:comparator"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:comparator",
+    "translation_key": "block.minecraft.comparator"
   }
 }

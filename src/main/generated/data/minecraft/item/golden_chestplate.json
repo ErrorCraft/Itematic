@@ -1,13 +1,13 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.golden_chestplate"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "material": "minecraft:gold"
+      "attribute_id": "minecraft:armor.chestplate",
+      "defense": 5,
+      "knockback_resistance": 0.0,
+      "toughness": 0.0
     },
     "minecraft:damageable": {
-      "durability": 112
+      "durability": 240
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:equip_entity"
@@ -17,6 +17,7 @@
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_gold",
+      "model": "minecraft:gold",
       "slot": "chest",
       "swappable": true
     },
@@ -24,5 +25,9 @@
       "items": "#minecraft:repairs_golden_armor"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:golden_chestplate",
+    "translation_key": "item.minecraft.golden_chestplate"
   }
 }

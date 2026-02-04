@@ -40,7 +40,7 @@ public abstract class AbstractClientPlayerEntityExtender extends PlayerEntity {
         )
     )
     private float fovMultiplierForSpyglassUseItemComponent(float original) {
-        return this.getActiveItem().itematic$getComponent(ItemComponentTypes.ZOOM)
+        return this.getActiveItem().itematic$getBehavior(ItemComponentTypes.ZOOM)
             .map(ZoomItemComponent::fieldOfViewMultiplier)
             .orElse(original);
     }

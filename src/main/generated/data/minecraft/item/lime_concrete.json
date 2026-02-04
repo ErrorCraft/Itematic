@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.lime_concrete"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:lime_concrete"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:lime_concrete",
+    "translation_key": "block.minecraft.lime_concrete"
   }
 }

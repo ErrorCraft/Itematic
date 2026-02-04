@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.redstone_torch"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": {
         "type": "minecraft:attached_to_side",
@@ -12,5 +9,9 @@
       }
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:redstone_torch",
+    "translation_key": "block.minecraft.redstone_torch"
   }
 }

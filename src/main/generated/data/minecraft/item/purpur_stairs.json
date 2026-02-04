@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.purpur_stairs"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:purpur_stairs"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:purpur_stairs",
+    "translation_key": "block.minecraft.purpur_stairs"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.torchflower"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:torchflower"
     },
@@ -18,6 +15,10 @@
         }
       ]
     }
+  },
+  "display": {
+    "model": "minecraft:torchflower",
+    "translation_key": "block.minecraft.torchflower"
   },
   "events": {
     "minecraft:use_on_block": {

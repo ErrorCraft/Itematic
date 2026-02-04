@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.soul_campfire"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:soul_campfire"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:soul_campfire",
+    "translation_key": "block.minecraft.soul_campfire"
   }
 }

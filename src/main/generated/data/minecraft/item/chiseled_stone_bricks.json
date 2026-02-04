@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.chiseled_stone_bricks"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:chiseled_stone_bricks"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:chiseled_stone_bricks",
+    "translation_key": "block.minecraft.chiseled_stone_bricks"
   }
 }

@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "block.minecraft.sniffer_egg"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:sniffer_egg"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:sniffer_egg",
+    "rarity": "uncommon",
+    "translation_key": "block.minecraft.sniffer_egg"
   }
 }

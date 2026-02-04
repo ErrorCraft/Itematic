@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.mushroom_stew"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 6,
@@ -20,5 +17,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:mushroom_stew",
+    "translation_key": "item.minecraft.mushroom_stew"
   }
 }

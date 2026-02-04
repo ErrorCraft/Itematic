@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.fire_charge"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_charge"
     },
@@ -13,6 +10,10 @@
       }
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:fire_charge",
+    "translation_key": "item.minecraft.fire_charge"
   },
   "events": {
     "minecraft:use_on_block": {

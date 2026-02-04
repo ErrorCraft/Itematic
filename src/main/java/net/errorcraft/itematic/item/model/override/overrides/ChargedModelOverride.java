@@ -20,6 +20,6 @@ public class ChargedModelOverride implements ModelOverride {
 
     @Override
     public boolean isApplicable(ItemStack stack) {
-        return stack.itematic$hasComponent(ItemComponentTypes.SHOOTER);
+        return stack.itematic$hasBehavior(ItemComponentTypes.SHOOTER);
     }
 }

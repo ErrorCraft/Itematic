@@ -1,12 +1,13 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.glass_bottle"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:glass_bottle"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:glass_bottle",
+    "translation_key": "item.minecraft.glass_bottle"
   },
   "events": {
     "minecraft:use_on_block": {

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.light_gray_candle"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:light_gray_candle"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:light_gray_candle",
+    "translation_key": "block.minecraft.light_gray_candle"
   }
 }

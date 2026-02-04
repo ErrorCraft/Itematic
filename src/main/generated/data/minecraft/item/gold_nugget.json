@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.gold_nugget"
-  },
-  "components": {
+  "behavior": {
     "minecraft:firework_shape_modifier": "star",
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:gold_nugget",
+    "translation_key": "item.minecraft.gold_nugget"
   }
 }

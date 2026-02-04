@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.campfire"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:campfire"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:campfire",
+    "translation_key": "block.minecraft.campfire"
   }
 }

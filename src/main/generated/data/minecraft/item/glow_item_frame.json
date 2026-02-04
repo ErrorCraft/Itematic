@@ -1,13 +1,14 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.glow_item_frame"
-  },
-  "components": {
+  "behavior": {
     "minecraft:entity": {
       "entity": {
         "type": "minecraft:glow_item_frame"
       }
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:glow_item_frame",
+    "translation_key": "item.minecraft.glow_item_frame"
   }
 }

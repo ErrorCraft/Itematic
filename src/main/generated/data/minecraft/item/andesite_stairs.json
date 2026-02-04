@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.andesite_stairs"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:andesite_stairs"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:andesite_stairs",
+    "translation_key": "block.minecraft.andesite_stairs"
   }
 }

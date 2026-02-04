@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.brick_wall"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:brick_wall"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:brick_wall",
+    "translation_key": "block.minecraft.brick_wall"
   }
 }

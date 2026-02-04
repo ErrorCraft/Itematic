@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.cocoa_beans"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:cocoa"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.65
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cocoa_beans",
+    "translation_key": "item.minecraft.cocoa_beans"
   }
 }

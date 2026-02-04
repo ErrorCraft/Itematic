@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.smoker"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:smoker"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:smoker",
+    "translation_key": "block.minecraft.smoker"
   }
 }

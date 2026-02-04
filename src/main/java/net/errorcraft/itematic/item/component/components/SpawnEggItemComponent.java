@@ -38,7 +38,7 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
     }
 
     public Optional<MobEntity> spawnBaby(PlayerEntity user, MobEntity entity, EntityType<? extends MobEntity> entityType, ServerWorld world, Vec3d pos, ItemStack stack) {
-        Optional<EntityItemComponent> entityItemComponent = stack.itematic$getComponent(ItemComponentTypes.ENTITY);
+        Optional<EntityItemComponent> entityItemComponent = stack.itematic$getBehavior(ItemComponentTypes.ENTITY);
         if (entityItemComponent.isEmpty()) {
             return Optional.empty();
         }

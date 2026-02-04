@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.cyan_concrete"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:cyan_concrete"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cyan_concrete",
+    "translation_key": "block.minecraft.cyan_concrete"
   }
 }

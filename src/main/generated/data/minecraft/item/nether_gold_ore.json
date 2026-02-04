@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.nether_gold_ore"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:nether_gold_ore"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:nether_gold_ore",
+    "translation_key": "block.minecraft.nether_gold_ore"
   }
 }

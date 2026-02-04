@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dead_brain_coral_fan"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": {
         "type": "minecraft:attached_to_side",
@@ -12,5 +9,9 @@
       }
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dead_brain_coral_fan",
+    "translation_key": "block.minecraft.dead_brain_coral_fan"
   }
 }

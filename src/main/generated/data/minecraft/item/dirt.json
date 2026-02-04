@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dirt"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dirt"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dirt",
+    "translation_key": "block.minecraft.dirt"
   }
 }

@@ -13,8 +13,11 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ConsumableItemComponent;
 import net.errorcraft.itematic.item.component.components.LifeSavingItemComponent;
+import net.minecraft.component.ComponentType;
+import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -22,7 +25,6 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.Equipment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -32,6 +34,7 @@ import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Unit;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -60,9 +63,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public abstract boolean isHolding(Predicate<ItemStack> predicate);
 
     @Shadow
-    public abstract Hand getActiveHand();
-
-    @Shadow
     public abstract void setCurrentHand(Hand hand);
 
     @Shadow
@@ -80,9 +80,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Shadow
     public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
 
-    @Shadow
-    public abstract void spawnItemParticles(ItemStack stack, int count);
-
     @Unique
     private int itemUsedTicks;
 
@@ -90,26 +87,29 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         super(type, world);
     }
 
-    @Redirect(
+    @Inject(
         method = "getPreferredEquipmentSlot",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/Equipment;fromStack(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/Equipment;"
-        )
+        at = @At("HEAD"),
+        cancellable = true
     )
-    private static Equipment equipmentFromStackUseItemComponentStatic(ItemStack stack) {
-        return stack.itematic$getComponent(ItemComponentTypes.EQUIPMENT).orElse(null);
+    private void checkPresenceEquipmentBehaviorEquipmentSlot(ItemStack stack, CallbackInfoReturnable<EquipmentSlot> info) {
+        if (!stack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+            info.setReturnValue(EquipmentSlot.MAINHAND);
+        }
     }
 
-    @Redirect(
+    @Inject(
         method = "onEquipStack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Equipment;fromStack(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/Equipment;"
-        )
+            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+        ),
+        cancellable = true
     )
-    private Equipment equipmentFromStackUseItemComponent(ItemStack stack) {
-        return stack.itematic$getComponent(ItemComponentTypes.EQUIPMENT).orElse(null);
+    private void checkPresenceEquipmentBehavior(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo info) {
+        if (!newStack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+            info.cancel();
+        }
     }
 
     @Inject(
@@ -118,7 +118,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void getAmmunitionUseItemComponent(ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
-        if (stack.itematic$hasComponent(ItemComponentTypes.SHOOTER)) {
+        if (stack.itematic$hasBehavior(ItemComponentTypes.SHOOTER)) {
             info.setReturnValue(this.itematic$getAmmunition(stack));
         }
     }
@@ -211,7 +211,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean isOfForTotemOfUndyingUseItemComponent(ItemStack instance, Item item, @Share("lifeSavingItemComponent") LocalRef<LifeSavingItemComponent> lifeSavingItemComponent) {
-        Optional<LifeSavingItemComponent> optionalComponent = instance.itematic$getComponent(ItemComponentTypes.LIFE_SAVING);
+        Optional<LifeSavingItemComponent> optionalComponent = instance.itematic$getBehavior(ItemComponentTypes.LIFE_SAVING);
         optionalComponent.ifPresent(lifeSavingItemComponent::set);
         return optionalComponent.isPresent();
     }
@@ -328,20 +328,58 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void shouldSpawnParticles(ItemStack stack, int count, CallbackInfo info) {
-        if (!this.activeItemStack.itematic$getComponent(ItemComponentTypes.CONSUMABLE).map(ConsumableItemComponent::hasConsumeParticles).orElse(false)) {
+        if (!this.activeItemStack.itematic$getBehavior(ItemComponentTypes.CONSUMABLE).map(ConsumableItemComponent::hasConsumeParticles).orElse(false)) {
             info.cancel();
         }
     }
 
     @Redirect(
-        method = "isFallFlyingAllowed",
+        method = "canGlideWith",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
         )
     )
-    private boolean isOfForElytraUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.ELYTRA);
+    private static boolean containsGliderUseItemComponent(ItemStack instance, ComponentType<Unit> type) {
+        return instance.itematic$getBehavior(ItemComponentTypes.GLIDER)
+            .map(glider -> glider.canUse(instance))
+            .orElse(false);
+    }
+
+    @Redirect(
+        method = "canGlideWith",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;willBreakNextUse()Z"
+        )
+    )
+    private static boolean doNotCheckBreakOnUse(ItemStack instance) {
+        return false;
+    }
+
+    @Inject(
+        method = "canEquipFromDispenser",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+        ),
+        cancellable = true
+    )
+    private void checkPresenceEquipmentBehaviorBoolean(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
+        if (!stack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+            info.setReturnValue(false);
+        }
+    }
+
+    @Redirect(
+        method = "canEquipFromDispenser",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/component/type/EquippableComponent;dispensable()Z"
+        )
+    )
+    private boolean dispensableAlwaysTrue(EquippableComponent instance) {
+        return true;
     }
 
     @Redirect(
@@ -416,7 +454,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Unique
     private Double getBaseAttackDamage(ItemStack stack) {
-        if (!stack.itematic$hasComponent(ItemComponentTypes.WEAPON)) {
+        if (!stack.itematic$hasBehavior(ItemComponentTypes.WEAPON)) {
             return null;
         }
 

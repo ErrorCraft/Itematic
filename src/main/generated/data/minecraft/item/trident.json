@@ -1,9 +1,5 @@
 {
-  "base": {
-    "rarity": "rare",
-    "translation_key": "item.minecraft.trident"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 250,
       "preserve_item": true
@@ -42,6 +38,11 @@
       },
       "attack_speed": 0.275
     }
+  },
+  "display": {
+    "model": "minecraft:trident",
+    "rarity": "rare",
+    "translation_key": "item.minecraft.trident"
   },
   "events": {
     "minecraft:stopped_using": {
