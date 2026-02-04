@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.note_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:note_block"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:note_block",
+    "translation_key": "block.minecraft.note_block"
   }
 }

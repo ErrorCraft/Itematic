@@ -1,10 +1,5 @@
 {
-  "base": {
-    "glint": true,
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.experience_bottle"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_bottle"
     },
@@ -18,5 +13,11 @@
       "angle_offset": -20.0,
       "speed": 0.7
     }
+  },
+  "display": {
+    "glint": true,
+    "model": "minecraft:experience_bottle",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.experience_bottle"
   }
 }

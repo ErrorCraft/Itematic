@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.writable_book"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 1,
     "minecraft:writable": {
       "transforms_into": "minecraft:written_book"
     }
+  },
+  "display": {
+    "model": "minecraft:writable_book",
+    "translation_key": "item.minecraft.writable_book"
   }
 }

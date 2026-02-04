@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dark_prismarine"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dark_prismarine"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dark_prismarine",
+    "translation_key": "block.minecraft.dark_prismarine"
   }
 }

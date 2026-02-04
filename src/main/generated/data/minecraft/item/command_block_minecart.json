@@ -1,9 +1,5 @@
 {
-  "base": {
-    "rarity": "epic",
-    "translation_key": "item.minecraft.command_block_minecart"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:spawn_entity_from_item"
     },
@@ -13,5 +9,10 @@
       }
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:command_block_minecart",
+    "rarity": "epic",
+    "translation_key": "item.minecraft.command_block_minecart"
   }
 }

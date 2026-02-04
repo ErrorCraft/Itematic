@@ -1,9 +1,5 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.totem_of_undying"
-  },
-  "components": {
+  "behavior": {
     "minecraft:life_saving": {
       "effects": [
         {
@@ -26,5 +22,10 @@
       ]
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:totem_of_undying",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.totem_of_undying"
   }
 }

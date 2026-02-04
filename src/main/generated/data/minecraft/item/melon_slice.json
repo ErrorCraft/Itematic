@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.melon_slice"
-  },
-  "components": {
+  "behavior": {
     "minecraft:compostable": {
       "level_increase_chance": 0.5
     },
@@ -19,5 +16,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:melon_slice",
+    "translation_key": "item.minecraft.melon_slice"
   }
 }

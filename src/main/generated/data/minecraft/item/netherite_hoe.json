@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.netherite_hoe"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 2031
     },
@@ -37,6 +34,10 @@
       "attack_speed": 1.0,
       "damage_per_hit": 2
     }
+  },
+  "display": {
+    "model": "minecraft:netherite_hoe",
+    "translation_key": "item.minecraft.netherite_hoe"
   },
   "events": {
     "minecraft:use_on_block": "minecraft:use_hoe_on_block"

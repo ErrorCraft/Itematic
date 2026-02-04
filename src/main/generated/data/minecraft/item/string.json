@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.string"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:tripwire"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:string",
+    "translation_key": "item.minecraft.string"
   }
 }

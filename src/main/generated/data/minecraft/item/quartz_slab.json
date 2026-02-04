@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.quartz_slab"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:quartz_slab"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:quartz_slab",
+    "translation_key": "block.minecraft.quartz_slab"
   }
 }

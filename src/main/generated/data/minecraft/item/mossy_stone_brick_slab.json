@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.mossy_stone_brick_slab"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:mossy_stone_brick_slab"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:mossy_stone_brick_slab",
+    "translation_key": "block.minecraft.mossy_stone_brick_slab"
   }
 }

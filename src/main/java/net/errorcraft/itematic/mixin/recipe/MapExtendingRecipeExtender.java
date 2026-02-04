@@ -56,13 +56,13 @@ public class MapExtendingRecipeExtender {
         )
     )
     private static boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
+        return instance.itematic$hasBehavior(ItemComponentTypes.MAP_HOLDER);
     }
 
     @Unique
     private static boolean isValid(ItemStack stack, int index) {
         if (index == MAP_SLOT) {
-            return stack.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
+            return stack.itematic$hasBehavior(ItemComponentTypes.MAP_HOLDER);
         }
 
         return stack.itematic$isOf(ItemKeys.PAPER);

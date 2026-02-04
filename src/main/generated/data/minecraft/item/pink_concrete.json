@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.pink_concrete"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:pink_concrete"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:pink_concrete",
+    "translation_key": "block.minecraft.pink_concrete"
   }
 }

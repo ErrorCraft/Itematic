@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.bubble_coral"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:bubble_coral"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:bubble_coral",
+    "translation_key": "block.minecraft.bubble_coral"
   }
 }

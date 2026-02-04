@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.magenta_stained_glass_pane"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:magenta_stained_glass_pane"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:magenta_stained_glass_pane",
+    "translation_key": "block.minecraft.magenta_stained_glass_pane"
   }
 }

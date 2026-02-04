@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.carved_pumpkin"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:carved_pumpkin"
     },
@@ -13,9 +10,12 @@
       "behavior": "minecraft:place_carved_pumpkin"
     },
     "minecraft:equipment": {
-      "equip_sound": "minecraft:item.armor.equip_generic",
       "slot": "head"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:carved_pumpkin",
+    "translation_key": "block.minecraft.carved_pumpkin"
   }
 }

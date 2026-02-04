@@ -1,9 +1,5 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.goat_horn"
-  },
-  "components": {
+  "behavior": {
     "minecraft:playable": {
       "instruments": "minecraft:goat_horns"
     },
@@ -14,5 +10,10 @@
         "type": "minecraft:playable"
       }
     }
+  },
+  "display": {
+    "model": "minecraft:goat_horn",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.goat_horn"
   }
 }

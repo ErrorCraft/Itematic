@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.rose_bush"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:rose_bush"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.65
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:rose_bush",
+    "translation_key": "block.minecraft.rose_bush"
   }
 }

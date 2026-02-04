@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dripstone_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dripstone_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dripstone_block",
+    "translation_key": "block.minecraft.dripstone_block"
   }
 }

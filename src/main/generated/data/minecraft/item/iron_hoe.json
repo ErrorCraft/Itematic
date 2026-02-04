@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.iron_hoe"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 250
     },
@@ -34,6 +31,10 @@
       "attack_speed": 0.75,
       "damage_per_hit": 2
     }
+  },
+  "display": {
+    "model": "minecraft:iron_hoe",
+    "translation_key": "item.minecraft.iron_hoe"
   },
   "events": {
     "minecraft:use_on_block": "minecraft:use_hoe_on_block"

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.pumpkin_pie"
-  },
-  "components": {
+  "behavior": {
     "minecraft:compostable": {
       "level_increase_chance": 1.0
     },
@@ -19,5 +16,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:pumpkin_pie",
+    "translation_key": "item.minecraft.pumpkin_pie"
   }
 }

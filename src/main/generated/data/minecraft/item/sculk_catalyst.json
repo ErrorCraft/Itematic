@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.sculk_catalyst"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:sculk_catalyst"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:sculk_catalyst",
+    "translation_key": "block.minecraft.sculk_catalyst"
   }
 }

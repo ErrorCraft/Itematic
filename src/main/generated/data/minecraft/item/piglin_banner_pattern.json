@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.piglin_banner_pattern"
-  },
-  "components": {
+  "behavior": {
     "minecraft:banner_pattern": {
       "patterns": "minecraft:pattern_item/piglin"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:piglin_banner_pattern",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.piglin_banner_pattern"
   }
 }

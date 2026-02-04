@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.waxed_oxidized_copper_grate"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:waxed_oxidized_copper_grate"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:waxed_oxidized_copper_grate",
+    "translation_key": "block.minecraft.waxed_oxidized_copper_grate"
   }
 }

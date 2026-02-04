@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.deepslate_tile_stairs"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:deepslate_tile_stairs"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:deepslate_tile_stairs",
+    "translation_key": "block.minecraft.deepslate_tile_stairs"
   }
 }

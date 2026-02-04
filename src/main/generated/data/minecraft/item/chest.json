@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.chest"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:chest"
     },
@@ -13,5 +10,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:chest",
+    "translation_key": "block.minecraft.chest"
   }
 }

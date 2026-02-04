@@ -27,7 +27,7 @@ public record SpawnEntityFromItemAction(ActionContextParameter position) impleme
     @Override
     public boolean execute(ActionContext context) {
         return context.stack()
-            .itematic$getComponent(ItemComponentTypes.ENTITY)
+            .itematic$getBehavior(ItemComponentTypes.ENTITY)
             .map(itemComponent -> EntityPlacer.action(context, this.position, itemComponent)
                 .place()
                 .succeeds())

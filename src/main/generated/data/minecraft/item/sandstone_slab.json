@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.sandstone_slab"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:sandstone_slab"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:sandstone_slab",
+    "translation_key": "block.minecraft.sandstone_slab"
   }
 }

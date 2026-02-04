@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.cow_spawn_egg"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:spawn_entity_from_item"
     },
@@ -27,5 +24,9 @@
         ]
       }
     }
+  },
+  "display": {
+    "model": "minecraft:cow_spawn_egg",
+    "translation_key": "item.minecraft.cow_spawn_egg"
   }
 }

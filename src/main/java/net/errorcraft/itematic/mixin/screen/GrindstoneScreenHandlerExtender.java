@@ -25,7 +25,7 @@ public class GrindstoneScreenHandlerExtender {
         )
     )
     private boolean isOfForEnchantedBookUseItemComponent(ItemStack instance, Item item, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
-        Optional<RegistryEntry<Item>> optionalItem = instance.itematic$getComponent(ItemComponentTypes.ENCHANTMENT_HOLDER)
+        Optional<RegistryEntry<Item>> optionalItem = instance.itematic$getBehavior(ItemComponentTypes.ENCHANTMENT_HOLDER)
             .map(EnchantmentHolderItemComponent::grindingTransformsInto);
         optionalItem.ifPresent(transformsInto::set);
         return optionalItem.isPresent();
@@ -55,7 +55,7 @@ public class GrindstoneScreenHandlerExtender {
             )
         )
         private boolean isDamageableUseItemComponentCheck(ItemStack instance) {
-            return instance.itematic$hasComponent(ItemComponentTypes.ENCHANTABLE);
+            return instance.itematic$hasBehavior(ItemComponentTypes.ENCHANTABLE);
         }
     }
 }

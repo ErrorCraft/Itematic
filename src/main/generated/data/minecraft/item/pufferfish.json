@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.pufferfish"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 1,
@@ -16,6 +13,10 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:pufferfish",
+    "translation_key": "item.minecraft.pufferfish"
   },
   "events": {
     "minecraft:consume_item": {

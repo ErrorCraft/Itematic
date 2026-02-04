@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dead_fire_coral"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dead_fire_coral"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dead_fire_coral",
+    "translation_key": "block.minecraft.dead_fire_coral"
   }
 }

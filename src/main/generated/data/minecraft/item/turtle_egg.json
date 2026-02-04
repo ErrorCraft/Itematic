@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.turtle_egg"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:turtle_egg"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:turtle_egg",
+    "translation_key": "block.minecraft.turtle_egg"
   }
 }

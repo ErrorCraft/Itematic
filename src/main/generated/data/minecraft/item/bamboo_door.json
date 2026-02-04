@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.bamboo_door"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:bamboo_door"
     },
@@ -10,5 +7,9 @@
       "ticks": 200
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:bamboo_door",
+    "translation_key": "block.minecraft.bamboo_door"
   }
 }

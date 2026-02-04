@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.blaze_rod"
-  },
-  "components": {
+  "behavior": {
     "minecraft:fuel": {
       "ticks": 2400
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:blaze_rod",
+    "translation_key": "item.minecraft.blaze_rod"
   }
 }

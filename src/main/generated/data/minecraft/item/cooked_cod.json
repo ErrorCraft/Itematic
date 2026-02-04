@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.cooked_cod"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 5,
@@ -16,5 +13,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:cooked_cod",
+    "translation_key": "item.minecraft.cooked_cod"
   }
 }

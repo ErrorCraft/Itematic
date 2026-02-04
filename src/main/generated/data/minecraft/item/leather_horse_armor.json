@@ -1,11 +1,14 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.leather_horse_armor"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "armor_type": "equestrian",
-      "material": "minecraft:leather"
+      "attribute_id": "minecraft:armor.body",
+      "defense": 3,
+      "knockback_resistance": 0.0,
+      "toughness": 0.0
+    },
+    "minecraft:damageable": {
+      "break_sound": "minecraft:entity.item.break",
+      "durability": 80
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:equip_entity"
@@ -14,8 +17,11 @@
       "default_color": -6265536
     },
     "minecraft:equipment": {
+      "allowed_entities": "minecraft:horse",
       "equip_sound": "minecraft:item.armor.equip_leather",
-      "slot": "body"
+      "model": "minecraft:leather",
+      "slot": "body",
+      "swappable": true
     },
     "minecraft:stackable": 1,
     "minecraft:tinted": {
@@ -24,5 +30,9 @@
         "index": 0
       }
     }
+  },
+  "display": {
+    "model": "minecraft:leather_horse_armor",
+    "translation_key": "item.minecraft.leather_horse_armor"
   }
 }

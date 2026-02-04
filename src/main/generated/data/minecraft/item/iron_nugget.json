@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.iron_nugget"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:iron_nugget",
+    "translation_key": "item.minecraft.iron_nugget"
   }
 }

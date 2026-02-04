@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.shears"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 238
     },
@@ -34,5 +31,9 @@
         }
       ]
     }
+  },
+  "display": {
+    "model": "minecraft:shears",
+    "translation_key": "item.minecraft.shears"
   }
 }

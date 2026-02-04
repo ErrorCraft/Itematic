@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.sticky_piston"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:sticky_piston"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:sticky_piston",
+    "translation_key": "block.minecraft.sticky_piston"
   }
 }

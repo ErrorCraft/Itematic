@@ -1,23 +1,25 @@
 package net.errorcraft.itematic.mixin.client.render.entity.feature;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ElytraFeatureRenderer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.render.entity.state.BipedEntityRenderState;
+import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ElytraFeatureRenderer.class)
-public class ElytraFeatureRendererExtender {
-    @Redirect(
+public class ElytraFeatureRendererExtender<S extends BipedEntityRenderState> {
+    @Inject(
         method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/BipedEntityRenderState;FF)V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
+        at = @At("HEAD"),
+        cancellable = true
     )
-    private boolean isOfForElytraUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.ELYTRA);
+    private void checkPresenceEquipmentBehavior(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, S bipedEntityRenderState, float f, float g, CallbackInfo info) {
+        if (!bipedEntityRenderState.equippedChestStack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+            info.cancel();
+        }
     }
 }

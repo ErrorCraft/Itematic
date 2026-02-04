@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.ancient_debris"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:ancient_debris"
     },
@@ -10,5 +7,9 @@
       "damage": "minecraft:is_fire"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:ancient_debris",
+    "translation_key": "block.minecraft.ancient_debris"
   }
 }

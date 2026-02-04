@@ -56,15 +56,15 @@ public class TestUtil {
         return stack;
     }
 
-    public static <T extends ItemComponent<T>> T getItemComponent(ItemStack stack, ItemComponentType<T> type) {
-        return stack.itematic$getComponent(type)
-            .orElseThrow(() -> new GameTestException("Item " + stack.itematic$key() + " does not contain the " + ItematicRegistries.ITEM_COMPONENT_TYPE.getKey(type).orElseThrow() + " item component"));
+    public static <T extends ItemComponent<T>> T getItemBehavior(ItemStack stack, ItemComponentType<T> type) {
+        return stack.itematic$getBehavior(type)
+            .orElseThrow(() -> new GameTestException("Item " + stack.itematic$key() + " does not have the " + ItematicRegistries.ITEM_COMPONENT_TYPE.getKey(type).orElseThrow() + " behavior"));
     }
 
     public static <T> T getDataComponent(ItemStack stack, ComponentType<T> type) {
         T component = stack.get(type);
         if (component == null) {
-            throw new GameTestException("Item stack does not contain the " + type + " component");
+            throw new GameTestException("Item stack does not contain the " + type + " data component");
         }
 
         return component;

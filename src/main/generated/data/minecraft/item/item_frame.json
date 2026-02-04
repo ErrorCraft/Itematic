@@ -1,13 +1,14 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.item_frame"
-  },
-  "components": {
+  "behavior": {
     "minecraft:entity": {
       "entity": {
         "type": "minecraft:item_frame"
       }
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:item_frame",
+    "translation_key": "item.minecraft.item_frame"
   }
 }

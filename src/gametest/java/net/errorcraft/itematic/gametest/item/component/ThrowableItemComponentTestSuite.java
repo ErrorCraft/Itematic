@@ -107,7 +107,7 @@ public class ThrowableItemComponentTestSuite {
     public void throwingTridentSpawnsTridentAtEyePosition(TestContext context) {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.TRIDENT);
-        int minDrawDuration = TestUtil.getItemComponent(stack, ItemComponentTypes.THROWABLE)
+        int minDrawDuration = TestUtil.getItemBehavior(stack, ItemComponentTypes.THROWABLE)
             .drawDuration()
             .flatMap(NumberRange.IntRange::min)
             .orElseThrow(() -> new GameTestException("Trident does not have a minimum draw duration"));

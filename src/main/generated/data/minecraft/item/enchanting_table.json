@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.enchanting_table"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:enchanting_table"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:enchanting_table",
+    "translation_key": "block.minecraft.enchanting_table"
   }
 }

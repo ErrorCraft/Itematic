@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.armor_stand"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:spawn_entity_from_item"
     },
@@ -12,5 +9,9 @@
       }
     },
     "minecraft:stackable": 16
+  },
+  "display": {
+    "model": "minecraft:armor_stand",
+    "translation_key": "item.minecraft.armor_stand"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.redstone_lamp"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:redstone_lamp"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:redstone_lamp",
+    "translation_key": "block.minecraft.redstone_lamp"
   }
 }

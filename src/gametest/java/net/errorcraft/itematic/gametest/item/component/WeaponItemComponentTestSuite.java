@@ -48,7 +48,7 @@ public class WeaponItemComponentTestSuite {
             context.assertTrue(zombie.tryAttack(victim), "Expected attack to be successful");
             Assert.areDoublesEqual(
                 victim.getHealth(),
-                MAX_HEALTH_VICTIM - zombie.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) - TestUtil.getItemComponent(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
+                MAX_HEALTH_VICTIM - zombie.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) - TestUtil.getItemBehavior(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
                 (value, expected) -> "Expected health to be " + expected + ", got " + value + " instead"
             );
         }).completeIfSuccessful();
@@ -65,7 +65,7 @@ public class WeaponItemComponentTestSuite {
             context.assertTrue(piglin.tryAttack(victim), "Expected attack to be successful");
             Assert.areDoublesEqual(
                 victim.getHealth(),
-                MAX_HEALTH_VICTIM - piglin.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) - TestUtil.getItemComponent(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
+                MAX_HEALTH_VICTIM - piglin.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) - TestUtil.getItemBehavior(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
                 (value, expected) -> "Expected health to be " + expected + ", got " + value + " instead"
             );
         }).completeIfSuccessful();
@@ -82,7 +82,7 @@ public class WeaponItemComponentTestSuite {
             context.assertTrue(piglin.tryAttack(victim), "Expected attack to be successful");
             Assert.areDoublesEqual(
                 victim.getHealth(),
-                MAX_HEALTH_VICTIM - piglin.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) - TestUtil.getItemComponent(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
+                MAX_HEALTH_VICTIM - piglin.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) - TestUtil.getItemBehavior(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
                 (value, expected) -> "Expected health to be " + expected + ", got " + value + " instead"
             );
         }).completeIfSuccessful();

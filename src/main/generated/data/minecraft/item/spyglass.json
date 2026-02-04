@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.spyglass"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 1,
     "minecraft:useable": {
       "animation": "spyglass",
@@ -16,5 +13,9 @@
       "start_using_sound": "minecraft:item.spyglass.use",
       "stop_using_sound": "minecraft:item.spyglass.stop_using"
     }
+  },
+  "display": {
+    "model": "minecraft:spyglass",
+    "translation_key": "item.minecraft.spyglass"
   }
 }

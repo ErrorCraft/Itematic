@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.muddy_mangrove_roots"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:muddy_mangrove_roots"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:muddy_mangrove_roots",
+    "translation_key": "block.minecraft.muddy_mangrove_roots"
   }
 }

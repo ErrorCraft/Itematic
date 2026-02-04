@@ -6,16 +6,8 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 public class SoundEventKeys {
-    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_CHAIN = of("item.armor.equip_chain");
-    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_DIAMOND = of("item.armor.equip_diamond");
     public static final RegistryKey<SoundEvent> ARMOR_EQUIP_ELYTRA = of("item.armor.equip_elytra");
     public static final RegistryKey<SoundEvent> ARMOR_EQUIP_GENERIC = of("item.armor.equip_generic");
-    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_GOLD = of("item.armor.equip_gold");
-    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_IRON = of("item.armor.equip_iron");
-    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_LEATHER = of("item.armor.equip_leather");
-    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_NETHERITE = of("item.armor.equip_netherite");
-    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_TURTLE = of("item.armor.equip_turtle");
-    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_WOLF = of("item.armor.equip_wolf");
     public static final RegistryKey<SoundEvent> BOTTLE_EMPTY = of("item.bottle.empty");
     public static final RegistryKey<SoundEvent> BOTTLE_FILL = of("item.bottle.fill");
     public static final RegistryKey<SoundEvent> BUCKET_EMPTY = of("item.bucket.empty");
@@ -32,11 +24,10 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> FIRE_CHARGE_USE = of("item.firecharge.use");
     public static final RegistryKey<SoundEvent> FIRE_EXTINGUISH = of("block.fire.extinguish");
     public static final RegistryKey<SoundEvent> FLINT_AND_STEEL_USE = of("item.flintandsteel.use");
-    public static final RegistryKey<SoundEvent> GENERIC_DRINK = of("entity.generic.drink");
     public static final RegistryKey<SoundEvent> GENERIC_SPLASH = of("entity.generic.splash");
     public static final RegistryKey<SoundEvent> HOE_TILL = of("item.hoe.till");
     public static final RegistryKey<SoundEvent> HONEY_BOTTLE_DRINK = of("item.honey_bottle.drink");
-    public static final RegistryKey<SoundEvent> HORSE_SADDLE = of("entity.horse.saddle");
+    public static final RegistryKey<SoundEvent> LLAMA_SWAG = of("entity.llama.swag");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_5 = of("music_disc.5");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_11 = of("music_disc.11");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_13 = of("music_disc.13");
@@ -61,7 +52,6 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> SPYGLASS_USE = of("item.spyglass.use");
     public static final RegistryKey<SoundEvent> SPYGLASS_STOP_USING = of("item.spyglass.stop_using");
     public static final RegistryKey<SoundEvent> TNT_PRIMED = of("entity.tnt.primed");
-    public static final RegistryKey<SoundEvent> WOLF_ARMOR_BREAK = of("item.wolf_armor.break");
 
     private SoundEventKeys() {}
 

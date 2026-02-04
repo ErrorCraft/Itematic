@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.lapis_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:lapis_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:lapis_block",
+    "translation_key": "block.minecraft.lapis_block"
   }
 }

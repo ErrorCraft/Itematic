@@ -1,5 +1,6 @@
 {
-  "base": {
+  "display": {
+    "model": "minecraft:air",
     "translation_key": "block.minecraft.air"
   }
 }

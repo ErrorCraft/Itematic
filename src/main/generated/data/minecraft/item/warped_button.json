@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.warped_button"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:warped_button"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:warped_button",
+    "translation_key": "block.minecraft.warped_button"
   }
 }

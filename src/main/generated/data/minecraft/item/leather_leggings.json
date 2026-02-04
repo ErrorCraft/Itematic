@@ -1,10 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.leather_leggings"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "material": "minecraft:leather"
+      "attribute_id": "minecraft:armor.leggings",
+      "defense": 2,
+      "knockback_resistance": 0.0,
+      "toughness": 0.0
     },
     "minecraft:damageable": {
       "durability": 75
@@ -20,6 +20,7 @@
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_leather",
+      "model": "minecraft:leather",
       "slot": "legs",
       "swappable": true
     },
@@ -33,5 +34,9 @@
         "index": 0
       }
     }
+  },
+  "display": {
+    "model": "minecraft:leather_leggings",
+    "translation_key": "item.minecraft.leather_leggings"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.carrot_on_a_stick"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 25
     },
@@ -11,6 +8,10 @@
       "damage_per_use": 7,
       "target": "minecraft:pig"
     }
+  },
+  "display": {
+    "model": "minecraft:carrot_on_a_stick",
+    "translation_key": "item.minecraft.carrot_on_a_stick"
   },
   "events": {
     "minecraft:break_item": {

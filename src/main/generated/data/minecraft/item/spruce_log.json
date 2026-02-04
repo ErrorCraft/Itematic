@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.spruce_log"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:spruce_log"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:spruce_log",
+    "translation_key": "block.minecraft.spruce_log"
   }
 }

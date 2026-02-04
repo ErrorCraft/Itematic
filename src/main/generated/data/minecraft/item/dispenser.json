@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dispenser"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dispenser"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dispenser",
+    "translation_key": "block.minecraft.dispenser"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.large_amethyst_bud"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:large_amethyst_bud"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:large_amethyst_bud",
+    "translation_key": "block.minecraft.large_amethyst_bud"
   }
 }

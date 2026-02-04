@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.smooth_quartz"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:smooth_quartz"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:smooth_quartz",
+    "translation_key": "block.minecraft.smooth_quartz"
   }
 }

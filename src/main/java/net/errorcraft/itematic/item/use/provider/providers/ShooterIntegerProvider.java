@@ -30,7 +30,7 @@ public class ShooterIntegerProvider implements IntegerProvider {
             return OptionalInt.empty();
         }
 
-        return stack.itematic$getComponent(ItemComponentTypes.SHOOTER)
+        return stack.itematic$getBehavior(ItemComponentTypes.SHOOTER)
             .map(shooter -> shooter.useDuration(stack, user))
             .orElseGet(OptionalInt::empty);
     }

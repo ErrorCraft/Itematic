@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.beetroot"
-  },
-  "components": {
+  "behavior": {
     "minecraft:compostable": {
       "level_increase_chance": 0.65
     },
@@ -19,5 +16,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:beetroot",
+    "translation_key": "item.minecraft.beetroot"
   }
 }

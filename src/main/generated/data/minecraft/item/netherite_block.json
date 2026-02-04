@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.netherite_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:netherite_block"
     },
@@ -10,5 +7,9 @@
       "damage": "minecraft:is_fire"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:netherite_block",
+    "translation_key": "block.minecraft.netherite_block"
   }
 }

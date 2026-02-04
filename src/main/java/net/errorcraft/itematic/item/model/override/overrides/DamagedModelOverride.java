@@ -15,6 +15,6 @@ public class DamagedModelOverride implements ModelOverride {
 
     @Override
     public boolean isApplicable(ItemStack stack) {
-        return stack.itematic$hasComponent(ItemComponentTypes.DAMAGEABLE);
+        return stack.itematic$hasBehavior(ItemComponentTypes.DAMAGEABLE);
     }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.coal_ore"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:coal_ore"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:coal_ore",
+    "translation_key": "block.minecraft.coal_ore"
   }
 }

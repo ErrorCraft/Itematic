@@ -13,7 +13,7 @@ public interface ContainerComponentModifiersExtender {
     class BundleContentsExtender implements ContainerComponentModifierAccess<BundleContentsComponent> {
         @Override
         public BundleContentsComponent itematic$create(ItemStack stack, BundleContentsComponent component, Stream<ItemStack> newContents) {
-            return stack.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+            return stack.itematic$getBehavior(ItemComponentTypes.ITEM_HOLDER)
                 .map(c -> c.createBuilder(stack, component))
                 .map(BundleContentsComponent.Builder::clear)
                 .map(builder -> {

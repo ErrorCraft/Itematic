@@ -1,10 +1,11 @@
 {
-  "base": {
-    "rarity": "rare",
-    "translation_key": "item.minecraft.music_disc_pigstep"
-  },
-  "components": {
+  "behavior": {
     "minecraft:playable_song": "minecraft:pigstep",
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:music_disc_pigstep",
+    "rarity": "rare",
+    "translation_key": "item.minecraft.music_disc_pigstep"
   }
 }

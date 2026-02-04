@@ -33,6 +33,7 @@ public class ItematicDataComponentTypes {
     public static final ComponentType<CrossbowItem.LoadingSounds> SHOOTER_DEFAULT_CHARGING_SOUNDS = DataComponentTypesAccessor.register("shooter_default_charging_sounds", builder -> builder.codec(CrossbowItem.LoadingSounds.CODEC).packetCodec(ChargingSoundsUtil.PACKET_CODEC).cache());
     public static final ComponentType<ChargeableShooterMethod.ChargedPowerRules> SHOOTER_CHARGED_POWER_RULES = DataComponentTypesAccessor.register("shooter_charged_power_rules", builder -> builder.codec(ChargeableShooterMethod.ChargedPowerRules.CODEC).packetCodec(ChargeableShooterMethod.ChargedPowerRules.PACKET_CODEC));
     public static final ComponentType<RegistryEntry<SoundEvent>> SHOOTER_SHOOT_SOUND = DataComponentTypesAccessor.register("shooter_shoot_sound", builder -> builder.codec(SoundEvent.ENTRY_CODEC).packetCodec(SoundEvent.ENTRY_PACKET_CODEC));
+    public static final ComponentType<GliderDataComponent> GLIDER = DataComponentTypesAccessor.register("glider", builder -> builder.codec(GliderDataComponent.CODEC).packetCodec(GliderDataComponent.PACKET_CODEC).cache());
 
     private ItematicDataComponentTypes() {}
 

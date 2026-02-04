@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.composter"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:composter"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:composter",
+    "translation_key": "block.minecraft.composter"
   }
 }

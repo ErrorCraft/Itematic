@@ -23,7 +23,7 @@ public class ProjectileUtilExtender {
         )
     )
     private static PersistentProjectileEntity createProjectileUseItemComponent(ArrowItem instance, World world, ItemStack projectile, LivingEntity shooter, ItemStack shotFrom) {
-        Entity entity = projectile.itematic$getComponent(ItemComponentTypes.PROJECTILE)
+        Entity entity = projectile.itematic$getBehavior(ItemComponentTypes.PROJECTILE)
             .map(c -> c.createEntity(world, shooter, projectile, 1.0f, 1.0f))
             .orElse(null);
         if (entity instanceof PersistentProjectileEntity persistentProjectileEntity) {

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.warped_fungus"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:warped_fungus"
     },
@@ -10,6 +7,10 @@
       "level_increase_chance": 0.65
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:warped_fungus",
+    "translation_key": "block.minecraft.warped_fungus"
   },
   "events": {
     "minecraft:use_on_block": {

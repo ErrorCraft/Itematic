@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.torchflower_seeds"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:torchflower_crop"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.3
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:torchflower_seeds",
+    "translation_key": "item.minecraft.torchflower_seeds"
   }
 }

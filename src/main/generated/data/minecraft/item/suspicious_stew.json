@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.suspicious_stew"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "always_edible": true,
@@ -21,6 +18,10 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:suspicious_stew",
+    "translation_key": "item.minecraft.suspicious_stew"
   },
   "events": {
     "minecraft:consume_item": {

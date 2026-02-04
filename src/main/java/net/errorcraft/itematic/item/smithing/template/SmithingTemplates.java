@@ -5,8 +5,8 @@ import net.errorcraft.itematic.item.smithing.template.templates.ItemUpgradeSmith
 import net.errorcraft.itematic.item.smithing.template.templates.TrimPatternSmithingTemplate;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.minecraft.item.Item;
-import net.minecraft.item.trim.ArmorTrimPattern;
-import net.minecraft.item.trim.ArmorTrimPatterns;
+import net.minecraft.item.equipment.trim.ArmorTrimPattern;
+import net.minecraft.item.equipment.trim.ArmorTrimPatterns;
 import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKey;

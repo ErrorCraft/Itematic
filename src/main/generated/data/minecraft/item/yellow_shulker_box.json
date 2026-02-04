@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.yellow_shulker_box"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:yellow_shulker_box"
     },
@@ -10,5 +7,9 @@
       "behavior": "minecraft:place_block_from_item"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:yellow_shulker_box",
+    "translation_key": "block.minecraft.yellow_shulker_box"
   }
 }

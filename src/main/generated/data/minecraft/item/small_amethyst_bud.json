@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.small_amethyst_bud"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:small_amethyst_bud"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:small_amethyst_bud",
+    "translation_key": "block.minecraft.small_amethyst_bud"
   }
 }

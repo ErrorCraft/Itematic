@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.oak_trapdoor"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:oak_trapdoor"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:oak_trapdoor",
+    "translation_key": "block.minecraft.oak_trapdoor"
   }
 }

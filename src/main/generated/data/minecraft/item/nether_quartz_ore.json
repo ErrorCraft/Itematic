@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.nether_quartz_ore"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:nether_quartz_ore"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:nether_quartz_ore",
+    "translation_key": "block.minecraft.nether_quartz_ore"
   }
 }

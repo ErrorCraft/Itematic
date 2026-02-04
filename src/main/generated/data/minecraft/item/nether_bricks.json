@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.nether_bricks"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:nether_bricks"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:nether_bricks",
+    "translation_key": "block.minecraft.nether_bricks"
   }
 }

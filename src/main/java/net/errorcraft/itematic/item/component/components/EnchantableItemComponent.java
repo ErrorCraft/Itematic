@@ -10,6 +10,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.EnchantableComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.equipment.ArmorMaterial;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
@@ -22,6 +23,10 @@ public record EnchantableItemComponent(int enchantability, Optional<RegistryEntr
         Codecs.POSITIVE_INT.fieldOf("enchantability").forGetter(EnchantableItemComponent::enchantability),
         RegistryFixedCodec.of(RegistryKeys.ITEM).optionalFieldOf("transforms_into").forGetter(EnchantableItemComponent::transformsInto)
     ).apply(instance, EnchantableItemComponent::new));
+
+    public static EnchantableItemComponent of(ArmorMaterial material) {
+        return of(material.enchantmentValue());
+    }
 
     public static EnchantableItemComponent of(ToolMaterial material) {
         return of(material.enchantmentValue());

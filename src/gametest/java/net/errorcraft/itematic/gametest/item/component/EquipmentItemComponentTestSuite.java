@@ -24,7 +24,7 @@ public class EquipmentItemComponentTestSuite {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.LEATHER_HELMET);
         player.setStackInHand(Hand.MAIN_HAND, stack);
-        EquipmentItemComponent component = TestUtil.getItemComponent(stack, ItemComponentTypes.EQUIPMENT);
+        EquipmentItemComponent component = TestUtil.getItemBehavior(stack, ItemComponentTypes.EQUIPMENT);
         stack.use(world, player, Hand.MAIN_HAND);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(player.getEquippedStack(component.slot()), ItemKeys.LEATHER_HELMET));
     }
@@ -35,7 +35,7 @@ public class EquipmentItemComponentTestSuite {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.SHIELD);
         player.setStackInHand(Hand.MAIN_HAND, stack);
-        EquipmentItemComponent component = TestUtil.getItemComponent(stack, ItemComponentTypes.EQUIPMENT);
+        EquipmentItemComponent component = TestUtil.getItemBehavior(stack, ItemComponentTypes.EQUIPMENT);
         stack.use(world, player, Hand.MAIN_HAND);
         context.addInstantFinalTask(() -> Assert.itemStackIsEmpty(player.getEquippedStack(component.slot())));
     }

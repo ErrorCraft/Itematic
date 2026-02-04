@@ -30,7 +30,7 @@ public record OccupancyHeldItemsWithPenaltyItemHolderRule(Fraction penalty) impl
 
     @Override
     public Fraction occupancy(ItemStack stack) {
-        return stack.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+        return stack.itematic$getBehavior(ItemComponentTypes.ITEM_HOLDER)
             .map(c -> c.occupancy(stack))
             .map(this.penalty::add)
             .orElse(this.penalty);

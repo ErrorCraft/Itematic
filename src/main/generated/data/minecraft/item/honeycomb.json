@@ -1,12 +1,13 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.honeycomb"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dispensable": {
       "behavior": "minecraft:wax_block"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:honeycomb",
+    "translation_key": "item.minecraft.honeycomb"
   },
   "events": {
     "minecraft:use_on_block": {

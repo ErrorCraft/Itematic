@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.crimson_stairs"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:crimson_stairs"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:crimson_stairs",
+    "translation_key": "block.minecraft.crimson_stairs"
   }
 }

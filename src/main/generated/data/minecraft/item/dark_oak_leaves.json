@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dark_oak_leaves"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dark_oak_leaves"
     },
@@ -16,5 +13,9 @@
         "biome": "minecraft:plains"
       }
     }
+  },
+  "display": {
+    "model": "minecraft:dark_oak_leaves",
+    "translation_key": "block.minecraft.dark_oak_leaves"
   }
 }

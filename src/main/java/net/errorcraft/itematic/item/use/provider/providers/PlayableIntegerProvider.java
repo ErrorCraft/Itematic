@@ -29,7 +29,7 @@ public class PlayableIntegerProvider implements IntegerProvider {
 
     @Override
     public OptionalInt get(ItemStack stack, LivingEntity user) {
-        return stack.itematic$getComponent(ItemComponentTypes.PLAYABLE)
+        return stack.itematic$getBehavior(ItemComponentTypes.PLAYABLE)
             .flatMap(component -> component.instrument(stack, user.getRegistryManager()))
             .map(RegistryEntry::value)
             .map(instrument -> OptionalInt.of(MathHelper.floor(instrument.useDuration() * SharedConstants.TICKS_PER_SECOND)))

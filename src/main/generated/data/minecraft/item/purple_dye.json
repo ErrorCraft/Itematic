@@ -1,9 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.purple_dye"
-  },
-  "components": {
+  "behavior": {
     "minecraft:dye": "purple",
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:purple_dye",
+    "translation_key": "item.minecraft.purple_dye"
   }
 }

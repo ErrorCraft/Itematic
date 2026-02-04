@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.beehive"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:beehive"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:beehive",
+    "translation_key": "block.minecraft.beehive"
   }
 }

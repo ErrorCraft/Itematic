@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.black_concrete"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:black_concrete"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:black_concrete",
+    "translation_key": "block.minecraft.black_concrete"
   }
 }

@@ -40,6 +40,7 @@ public record ItemPredicateExtraFields(Optional<Set<ItemComponentType<?>>> behav
         if (!this.testBehavior(stack)) {
             return false;
         }
+
         return this.testDataComponents(stack);
     }
 
@@ -47,11 +48,13 @@ public record ItemPredicateExtraFields(Optional<Set<ItemComponentType<?>>> behav
         if (this.behavior.isEmpty()) {
             return true;
         }
+
         for (ItemComponentType<?> type : this.behavior.get()) {
-            if (!stack.itematic$hasComponent(type)) {
+            if (!stack.itematic$hasBehavior(type)) {
                 return false;
             }
         }
+
         return true;
     }
 

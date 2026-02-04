@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.pitcher_plant"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:pitcher_plant"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.85
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:pitcher_plant",
+    "translation_key": "block.minecraft.pitcher_plant"
   }
 }

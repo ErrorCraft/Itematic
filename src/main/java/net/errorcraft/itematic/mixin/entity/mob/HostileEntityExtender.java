@@ -38,7 +38,7 @@ public class HostileEntityExtender extends PathAwareEntity implements LivingEnti
         )
     )
     private boolean instanceOfRangedWeaponItemUseItemComponent(Object reference, Class<RangedWeaponItem> clazz, @Local(argsOnly = true) ItemStack itemStack, @Share("heldAmmunitionDataComponent") LocalRef<ItemListDataComponent> heldAmmunitionDataComponentReference) {
-        if (!itemStack.itematic$hasComponent(ItemComponentTypes.SHOOTER)) {
+        if (!itemStack.itematic$hasBehavior(ItemComponentTypes.SHOOTER)) {
             return false;
         }
         ItemListDataComponent heldAmmunitionDataComponent = itemStack.get(ItematicDataComponentTypes.SHOOTER_HELD_AMMUNITION);

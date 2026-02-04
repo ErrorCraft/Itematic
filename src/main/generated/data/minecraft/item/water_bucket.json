@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.water_bucket"
-  },
-  "components": {
+  "behavior": {
     "minecraft:bucket": {
       "emptying_sound_event": "minecraft:item.bucket.empty",
       "fluid": "minecraft:water",
@@ -12,5 +9,9 @@
       "behavior": "minecraft:use_bucket"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:water_bucket",
+    "translation_key": "item.minecraft.water_bucket"
   }
 }

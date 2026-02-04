@@ -1,9 +1,10 @@
 {
-  "base": {
+  "behavior": {
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:nautilus_shell",
     "rarity": "uncommon",
     "translation_key": "item.minecraft.nautilus_shell"
-  },
-  "components": {
-    "minecraft:stackable": 64
   }
 }

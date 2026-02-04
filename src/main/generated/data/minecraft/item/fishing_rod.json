@@ -1,12 +1,13 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.fishing_rod"
-  },
-  "components": {
+  "behavior": {
     "minecraft:castable": {},
     "minecraft:fuel": {
       "ticks": 300
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:fishing_rod",
+    "translation_key": "item.minecraft.fishing_rod"
   }
 }

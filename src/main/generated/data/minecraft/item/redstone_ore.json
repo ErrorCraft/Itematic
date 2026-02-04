@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.redstone_ore"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:redstone_ore"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:redstone_ore",
+    "translation_key": "block.minecraft.redstone_ore"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.wheat"
-  },
-  "components": {
+  "behavior": {
     "minecraft:compostable": {
       "level_increase_chance": 0.65
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:wheat",
+    "translation_key": "item.minecraft.wheat"
   }
 }

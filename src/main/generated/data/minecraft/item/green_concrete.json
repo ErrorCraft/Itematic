@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.green_concrete"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:green_concrete"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:green_concrete",
+    "translation_key": "block.minecraft.green_concrete"
   }
 }

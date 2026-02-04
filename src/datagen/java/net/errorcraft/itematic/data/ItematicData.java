@@ -21,7 +21,6 @@ public class ItematicData implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(ItemProvider::new);
-        pack.addProvider(ArmorMaterialProvider::new);
         pack.addProvider(AtlasProvider::new);
         pack.addProvider(ItemTagProvider::new);
         pack.addProvider(BlockTagProvider::new);

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dead_bush"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dead_bush"
     },
@@ -10,6 +7,10 @@
       "ticks": 100
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dead_bush",
+    "translation_key": "block.minecraft.dead_bush"
   },
   "events": {
     "minecraft:use_on_block": {

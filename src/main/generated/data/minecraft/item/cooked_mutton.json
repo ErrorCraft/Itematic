@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.cooked_mutton"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 6,
@@ -16,5 +13,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:cooked_mutton",
+    "translation_key": "item.minecraft.cooked_mutton"
   }
 }

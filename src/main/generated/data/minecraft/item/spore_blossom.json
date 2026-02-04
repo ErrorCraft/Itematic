@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.spore_blossom"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:spore_blossom"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.65
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:spore_blossom",
+    "translation_key": "block.minecraft.spore_blossom"
   }
 }

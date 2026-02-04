@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.breeze_rod"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:breeze_rod",
+    "translation_key": "item.minecraft.breeze_rod"
   }
 }

@@ -22,7 +22,7 @@ public class BrewingStandScreenHandlerExtender {
             )
         )
         private static boolean matchesIsOfUseItemComponentCheck(ItemStack instance, Item item) {
-            return instance.itematic$hasComponent(ItemComponentTypes.POTION_HOLDER);
+            return instance.itematic$hasBehavior(ItemComponentTypes.POTION_HOLDER);
         }
 
         @Redirect(

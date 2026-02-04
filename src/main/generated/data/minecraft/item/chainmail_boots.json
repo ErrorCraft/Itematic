@@ -1,11 +1,10 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.chainmail_boots"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "material": "minecraft:chainmail"
+      "attribute_id": "minecraft:armor.boots",
+      "defense": 1,
+      "knockback_resistance": 0.0,
+      "toughness": 0.0
     },
     "minecraft:damageable": {
       "durability": 195
@@ -18,6 +17,7 @@
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_chain",
+      "model": "minecraft:chainmail",
       "slot": "feet",
       "swappable": true
     },
@@ -25,5 +25,10 @@
       "items": "#minecraft:repairs_chainmail_armor"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:chainmail_boots",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.chainmail_boots"
   }
 }

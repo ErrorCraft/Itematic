@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.glow_lichen"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:glow_lichen"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.5
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:glow_lichen",
+    "translation_key": "block.minecraft.glow_lichen"
   }
 }

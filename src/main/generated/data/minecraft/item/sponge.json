@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.sponge"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:sponge"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:sponge",
+    "translation_key": "block.minecraft.sponge"
   }
 }

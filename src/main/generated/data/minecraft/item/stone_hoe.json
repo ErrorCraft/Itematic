@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.stone_hoe"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 131
     },
@@ -34,6 +31,10 @@
       "attack_speed": 0.5,
       "damage_per_hit": 2
     }
+  },
+  "display": {
+    "model": "minecraft:stone_hoe",
+    "translation_key": "item.minecraft.stone_hoe"
   },
   "events": {
     "minecraft:use_on_block": "minecraft:use_hoe_on_block"

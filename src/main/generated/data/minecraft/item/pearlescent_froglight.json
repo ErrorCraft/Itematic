@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.pearlescent_froglight"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:pearlescent_froglight"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:pearlescent_froglight",
+    "translation_key": "block.minecraft.pearlescent_froglight"
   }
 }

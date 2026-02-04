@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.twisting_vines"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:twisting_vines"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.5
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:twisting_vines",
+    "translation_key": "block.minecraft.twisting_vines"
   }
 }

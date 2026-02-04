@@ -28,7 +28,7 @@ public class AngleModelOverride implements ModelOverride {
         if (target == null) {
             return 0.0f;
         }
-        return stack.itematic$getComponent(ItemComponentTypes.POINTABLE)
+        return stack.itematic$getBehavior(ItemComponentTypes.POINTABLE)
             .map(PointableItemComponent::pointsTo)
             .map(RegistryEntry::value)
             .map(p -> this.getAngle(p.createPos(stack, world, target), target, world))
@@ -37,7 +37,7 @@ public class AngleModelOverride implements ModelOverride {
 
     @Override
     public boolean isApplicable(ItemStack stack) {
-        return stack.itematic$hasComponent(ItemComponentTypes.POINTABLE);
+        return stack.itematic$hasBehavior(ItemComponentTypes.POINTABLE);
     }
 
     private float getAngle(GlobalPos pos, Entity target, World world) {

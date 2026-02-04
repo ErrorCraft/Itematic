@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.prismarine_slab"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:prismarine_slab"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:prismarine_slab",
+    "translation_key": "block.minecraft.prismarine_slab"
   }
 }

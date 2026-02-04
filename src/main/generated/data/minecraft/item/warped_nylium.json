@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.warped_nylium"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:warped_nylium"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:warped_nylium",
+    "translation_key": "block.minecraft.warped_nylium"
   }
 }

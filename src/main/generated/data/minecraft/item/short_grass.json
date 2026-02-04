@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.short_grass"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:short_grass"
     },
@@ -16,5 +13,9 @@
         "biome": "minecraft:plains"
       }
     }
+  },
+  "display": {
+    "model": "minecraft:short_grass",
+    "translation_key": "block.minecraft.short_grass"
   }
 }

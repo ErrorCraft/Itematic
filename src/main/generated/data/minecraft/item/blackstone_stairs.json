@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.blackstone_stairs"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:blackstone_stairs"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:blackstone_stairs",
+    "translation_key": "block.minecraft.blackstone_stairs"
   }
 }

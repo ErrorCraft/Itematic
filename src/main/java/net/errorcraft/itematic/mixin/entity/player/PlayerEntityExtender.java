@@ -54,17 +54,6 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
     }
 
     @Redirect(
-        method = "checkFallFlying",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForElytraUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.ELYTRA);
-    }
-
-    @Redirect(
         method = "damageShield",
         at = @At(
             value = "INVOKE",
@@ -133,7 +122,7 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
         )
     )
     private boolean isOfUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.ZOOM);
+        return instance.itematic$hasBehavior(ItemComponentTypes.ZOOM);
     }
 
     @Override

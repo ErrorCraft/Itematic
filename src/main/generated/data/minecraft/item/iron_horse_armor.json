@@ -1,19 +1,29 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.iron_horse_armor"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "armor_type": "equestrian",
-      "material": "minecraft:iron"
+      "attribute_id": "minecraft:armor.body",
+      "defense": 5,
+      "knockback_resistance": 0.0,
+      "toughness": 0.0
+    },
+    "minecraft:damageable": {
+      "break_sound": "minecraft:entity.item.break",
+      "durability": 240
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:equip_entity"
     },
     "minecraft:equipment": {
+      "allowed_entities": "minecraft:horse",
       "equip_sound": "minecraft:item.armor.equip_iron",
-      "slot": "body"
+      "model": "minecraft:iron",
+      "slot": "body",
+      "swappable": true
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:iron_horse_armor",
+    "translation_key": "item.minecraft.iron_horse_armor"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.stonecutter"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:stonecutter"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:stonecutter",
+    "translation_key": "block.minecraft.stonecutter"
   }
 }

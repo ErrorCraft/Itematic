@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.lectern"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:lectern"
     },
@@ -10,5 +7,9 @@
       "ticks": 300
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:lectern",
+    "translation_key": "block.minecraft.lectern"
   }
 }

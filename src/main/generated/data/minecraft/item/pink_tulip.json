@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.pink_tulip"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:pink_tulip"
     },
@@ -18,6 +15,10 @@
         }
       ]
     }
+  },
+  "display": {
+    "model": "minecraft:pink_tulip",
+    "translation_key": "block.minecraft.pink_tulip"
   },
   "events": {
     "minecraft:use_on_block": {

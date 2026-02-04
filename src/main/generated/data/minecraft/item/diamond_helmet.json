@@ -1,10 +1,10 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.diamond_helmet"
-  },
-  "components": {
+  "behavior": {
     "minecraft:armor": {
-      "material": "minecraft:diamond"
+      "attribute_id": "minecraft:armor.helmet",
+      "defense": 3,
+      "knockback_resistance": 0.0,
+      "toughness": 2.0
     },
     "minecraft:damageable": {
       "durability": 363
@@ -17,6 +17,7 @@
     },
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_diamond",
+      "model": "minecraft:diamond",
       "slot": "head",
       "swappable": true
     },
@@ -24,5 +25,9 @@
       "items": "#minecraft:repairs_diamond_armor"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:diamond_helmet",
+    "translation_key": "item.minecraft.diamond_helmet"
   }
 }

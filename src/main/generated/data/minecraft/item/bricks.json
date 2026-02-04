@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.bricks"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:bricks"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:bricks",
+    "translation_key": "block.minecraft.bricks"
   }
 }

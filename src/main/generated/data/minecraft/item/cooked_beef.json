@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.cooked_beef"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 8,
@@ -16,5 +13,9 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:cooked_beef",
+    "translation_key": "item.minecraft.cooked_beef"
   }
 }

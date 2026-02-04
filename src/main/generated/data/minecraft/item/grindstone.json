@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.grindstone"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:grindstone"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:grindstone",
+    "translation_key": "block.minecraft.grindstone"
   }
 }

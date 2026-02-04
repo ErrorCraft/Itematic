@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dropper"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dropper"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dropper",
+    "translation_key": "block.minecraft.dropper"
   }
 }

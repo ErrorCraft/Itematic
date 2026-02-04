@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.coal"
-  },
-  "components": {
+  "behavior": {
     "minecraft:fuel": {
       "ticks": 1600
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:coal",
+    "translation_key": "item.minecraft.coal"
   }
 }

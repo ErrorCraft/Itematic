@@ -1,13 +1,14 @@
 {
-  "base": {
-    "glint": true,
-    "rarity": "rare",
-    "translation_key": "item.minecraft.nether_star"
-  },
-  "components": {
+  "behavior": {
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_explosion"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "glint": true,
+    "model": "minecraft:nether_star",
+    "rarity": "rare",
+    "translation_key": "item.minecraft.nether_star"
   }
 }

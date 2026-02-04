@@ -1,11 +1,8 @@
 package net.errorcraft.itematic.mixin.item;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BundleItem;
-import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
-import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(BundleItem.class)
 public interface BundleItemAccessor {
@@ -14,8 +11,18 @@ public interface BundleItemAccessor {
         throw new AssertionError();
     }
 
-    @Invoker("dropAllBundledItems")
-    static boolean dropAllBundledItems(ItemStack stack, PlayerEntity player) {
+    @Accessor("field_54109")
+    static int ticksAfterFirstThrow() {
+        throw new AssertionError();
+    }
+
+    @Accessor("field_54110")
+    static int ticksBetweenThrows() {
+        throw new AssertionError();
+    }
+
+    @Accessor("field_54111")
+    static int useDuration() {
         throw new AssertionError();
     }
 }

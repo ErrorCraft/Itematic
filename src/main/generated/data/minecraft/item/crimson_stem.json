@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.crimson_stem"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:crimson_stem"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:crimson_stem",
+    "translation_key": "block.minecraft.crimson_stem"
   }
 }

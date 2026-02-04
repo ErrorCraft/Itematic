@@ -45,7 +45,7 @@ public class SuspiciousEffectIngredientItemGroupEntry extends PossiblyHiddenItem
         context.lookup().getOrThrow(RegistryKeys.ITEM)
             .streamEntries()
             .map(RegistryEntry::value)
-            .map(item -> item.itematic$getComponent(ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT))
+            .map(item -> item.itematic$getBehavior(ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT))
             .flatMap(Optional::stream)
             .forEach(c -> {
                 ItemStack stack = new ItemStack(this.item);

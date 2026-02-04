@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.dried_kelp_block"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:dried_kelp_block"
     },
@@ -13,5 +10,9 @@
       "ticks": 4001
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dried_kelp_block",
+    "translation_key": "block.minecraft.dried_kelp_block"
   }
 }

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.polished_tuff_slab"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:polished_tuff_slab"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:polished_tuff_slab",
+    "translation_key": "block.minecraft.polished_tuff_slab"
   }
 }

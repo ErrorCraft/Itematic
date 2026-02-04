@@ -29,7 +29,7 @@ public record ShootProjectileFromItemAction(ActionContextParameter position, flo
     @Override
     public boolean execute(ActionContext context) {
         return context.stack()
-            .itematic$getComponent(ItemComponentTypes.PROJECTILE)
+            .itematic$getBehavior(ItemComponentTypes.PROJECTILE)
             .map(c -> c.createEntity(context, this.position, 0.0f, this.power, this.uncertainty))
             .map(entity -> {
                 context.world().spawnEntity(entity);

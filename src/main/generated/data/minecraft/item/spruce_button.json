@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.spruce_button"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:spruce_button"
     },
@@ -10,5 +7,9 @@
       "ticks": 100
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:spruce_button",
+    "translation_key": "block.minecraft.spruce_button"
   }
 }

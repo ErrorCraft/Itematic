@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.archer_pottery_sherd"
-  },
-  "components": {
+  "behavior": {
     "minecraft:decorated_pot_pattern": {
       "pattern": "minecraft:archer"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:archer_pottery_sherd",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.archer_pottery_sherd"
   }
 }

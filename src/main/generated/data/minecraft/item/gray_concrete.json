@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.gray_concrete"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:gray_concrete"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:gray_concrete",
+    "translation_key": "block.minecraft.gray_concrete"
   }
 }

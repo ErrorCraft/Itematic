@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.cyan_carpet"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:cyan_carpet"
     },
@@ -10,12 +7,22 @@
       "behavior": "minecraft:equip_entity"
     },
     "minecraft:equipment": {
-      "equip_sound": "minecraft:entity.horse.saddle",
-      "slot": "body"
+      "allowed_entities": [
+        "minecraft:llama",
+        "minecraft:trader_llama"
+      ],
+      "equip_sound": "minecraft:entity.llama.swag",
+      "model": "minecraft:cyan_carpet",
+      "slot": "body",
+      "swappable": true
     },
     "minecraft:fuel": {
       "ticks": 67
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cyan_carpet",
+    "translation_key": "block.minecraft.cyan_carpet"
   }
 }

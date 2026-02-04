@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.tadpole_bucket"
-  },
-  "components": {
+  "behavior": {
     "minecraft:bucket": {
       "emptying_sound_event": "minecraft:item.bucket.empty_tadpole",
       "entity": {
@@ -18,5 +15,9 @@
       "behavior": "minecraft:use_bucket"
     },
     "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:tadpole_bucket",
+    "translation_key": "item.minecraft.tadpole_bucket"
   }
 }

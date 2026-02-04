@@ -4,7 +4,7 @@ import net.errorcraft.itematic.item.model.override.ClampedModelOverride;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.trim.ArmorTrim;
+import net.minecraft.item.equipment.trim.ArmorTrim;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,7 +15,8 @@ public class TrimTypeModelOverride implements ClampedModelOverride {
         if (trim == null) {
             return 0.0f;
         }
-        return trim.getMaterial().value().itemModelIndex();
+
+        return trim.material().value().itemModelIndex();
     }
 
     @Override

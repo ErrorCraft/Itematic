@@ -1,8 +1,9 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.raw_copper"
-  },
-  "components": {
+  "behavior": {
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:raw_copper",
+    "translation_key": "item.minecraft.raw_copper"
   }
 }

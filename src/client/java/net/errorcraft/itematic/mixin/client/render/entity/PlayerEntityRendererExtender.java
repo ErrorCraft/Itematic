@@ -20,7 +20,7 @@ public class PlayerEntityRendererExtender {
         )
     )
     private static boolean isOfForCrossbowUseItemComponent(ItemStack instance, Item item) {
-        return instance.itematic$getComponent(ItemComponentTypes.SHOOTER)
+        return instance.itematic$getBehavior(ItemComponentTypes.SHOOTER)
             .map(ShooterItemComponent::method)
             .filter(method -> method.type() == ShooterMethodTypes.CHARGEABLE)
             .isPresent();

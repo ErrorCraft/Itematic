@@ -36,7 +36,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static Block getBlockFromItemUseItemComponent(Item item) {
-        return item.itematic$getComponent(ItemComponentTypes.BLOCK)
+        return item.itematic$getBehavior(ItemComponentTypes.BLOCK)
             .map(BlockItemComponent::block)
             .map(BlockPicker::defaultBlock)
             .map(RegistryEntry::value)
@@ -62,7 +62,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static boolean isInForDyeableItemUseItemComponentCheck(ItemStack instance, TagKey<Item> tag, @Share("dyeableItemComponent") LocalRef<DyeableItemComponent> dyeableItemComponent) {
-        return instance.itematic$hasComponent(ItemComponentTypes.DYEABLE);
+        return instance.itematic$hasBehavior(ItemComponentTypes.DYEABLE);
     }
 
     @Redirect(

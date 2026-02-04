@@ -4,10 +4,10 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.EquipmentItemComponent;
+import net.errorcraft.itematic.item.component.components.BlockItemComponent;
+import net.minecraft.block.Block;
 import net.minecraft.client.render.entity.feature.HeadFeatureRenderer;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ArmorItem;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,27 +20,30 @@ public class HeadFeatureRendererExtender {
     @ModifyConstant(
         method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/LivingEntityRenderState;FF)V",
         constant = @Constant(
-            classValue = ArmorItem.class,
+            classValue = BlockItem.class,
             ordinal = 0
         )
     )
-    private boolean renderInstanceOfArmorItemUseItemComponentCheck(Object reference, Class<ArmorItem> clazz, @Local ItemStack itemStack, @Share("equipmentItemComponent") LocalRef<EquipmentItemComponent> equipmentItemComponent) {
-        Optional<EquipmentItemComponent> optionalComponent = itemStack.itematic$getComponent(ItemComponentTypes.EQUIPMENT);
-        optionalComponent.ifPresent(equipmentItemComponent::set);
+    private boolean instanceOfBlockItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, @Local ItemStack itemStack, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
+        Optional<BlockItemComponent> optionalComponent = itemStack.itematic$getBehavior(ItemComponentTypes.BLOCK);
+        optionalComponent.ifPresent(blockItemComponent::set);
         return optionalComponent.isPresent();
     }
 
     @ModifyVariable(
         method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/LivingEntityRenderState;FF)V",
-        at = @At("LOAD"),
+        at = @At(
+            value = "LOAD",
+            ordinal = 0
+        ),
         slice = @Slice(
             from = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/client/render/block/entity/SkullBlockEntityRenderer;renderSkull(Lnet/minecraft/util/math/Direction;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/block/entity/SkullBlockEntityModel;Lnet/minecraft/client/render/RenderLayer;)V"
+                target = "Lnet/minecraft/client/render/entity/feature/HeadFeatureRenderer;getContextModel()Lnet/minecraft/client/render/entity/model/EntityModel;"
             )
         )
     )
-    private Item renderCastToArmorItemUseNull(Item instance) {
+    private Item castToBlockItemUseNull(Item instance) {
         return null;
     }
 
@@ -48,10 +51,10 @@ public class HeadFeatureRendererExtender {
         method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/LivingEntityRenderState;FF)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ArmorItem;getSlotType()Lnet/minecraft/entity/EquipmentSlot;"
+            target = "Lnet/minecraft/item/BlockItem;getBlock()Lnet/minecraft/block/Block;"
         )
     )
-    private EquipmentSlot renderGetSlotTypeUseItemComponent(ArmorItem instance, @Share("equipmentItemComponent") LocalRef<EquipmentItemComponent> equipmentItemComponent) {
-        return equipmentItemComponent.get().slot();
+    private Block getBlockUseItemComponent(BlockItem instance, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
+        return blockItemComponent.get().block().defaultBlock().value();
     }
 }

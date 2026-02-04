@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.wind_charge"
-  },
-  "components": {
+  "behavior": {
     "minecraft:cooldown": {
       "ticks": 10
     },
@@ -19,5 +16,9 @@
       "angle_offset": 0.0,
       "speed": 1.5
     }
+  },
+  "display": {
+    "model": "minecraft:wind_charge",
+    "translation_key": "item.minecraft.wind_charge"
   }
 }

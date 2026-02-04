@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.lodestone"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:lodestone"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:lodestone",
+    "translation_key": "block.minecraft.lodestone"
   }
 }

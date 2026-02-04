@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.bedrock"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:bedrock"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:bedrock",
+    "translation_key": "block.minecraft.bedrock"
   }
 }

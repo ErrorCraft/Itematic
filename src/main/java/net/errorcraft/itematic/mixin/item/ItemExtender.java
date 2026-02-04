@@ -1,11 +1,10 @@
 package net.errorcraft.itematic.mixin.item;
 
-import com.google.common.collect.Interner;
 import net.errorcraft.itematic.access.item.ItemAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
-import net.errorcraft.itematic.item.ItemBase;
+import net.errorcraft.itematic.item.ItemDisplay;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
@@ -23,6 +22,7 @@ import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;
+import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.ToolComponent;
@@ -47,12 +47,10 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ClickType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.StringHelper;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -71,13 +69,35 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     private ComponentMap components;
 
     @Unique
-    private static final Interner<ComponentMap> COMPONENT_INTERNER = ItemAccessor.SettingsAccessor.componentInterner();
-    @Unique
-    private ItemBase base;
+    private ItemDisplay display;
+
     @Unique
     private ItemComponentSet itemComponents;
+
     @Unique
     private ItemEventMap events;
+
+    @Redirect(
+        method = "<init>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/Item$Settings;getTranslationKey()Ljava/lang/String;"
+        )
+    )
+    private String getTranslationKeyReturnNull(Item.Settings instance) {
+        return null;
+    }
+
+    @Redirect(
+        method = "<init>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/Item$Settings;getModelId()Lnet/minecraft/util/Identifier;"
+        )
+    )
+    private Identifier getModelIdReturnNull(Item.Settings instance) {
+        return null;
+    }
 
     @Inject(
         method = "getMaxCount",
@@ -85,7 +105,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     private void checkStackableItemComponent(CallbackInfoReturnable<Integer> info) {
-        if (!this.itematic$hasComponent(ItemComponentTypes.STACKABLE)) {
+        if (!this.itematic$hasBehavior(ItemComponentTypes.STACKABLE)) {
             info.setReturnValue(ItemUtil.UNSTACKABLE_MAX_STACK_SIZE);
         }
     }
@@ -252,9 +272,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         at = @At("HEAD")
     )
     private void onItemEntityDestroyedUseItemComponent(ItemEntity entity, CallbackInfo info) {
-        this.itematic$getComponent(ItemComponentTypes.BLOCK)
+        this.itematic$getBehavior(ItemComponentTypes.BLOCK)
             .ifPresent(c -> c.onDestroyed(entity));
-        this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+        this.itematic$getBehavior(ItemComponentTypes.ITEM_HOLDER)
             .ifPresent(c -> c.onDestroyed(entity));
     }
 
@@ -301,7 +321,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             this.itematic$invokeEvent(ItemEvents.FINISHED_USING, context);
         }
 
-        this.itematic$getComponent(ItemComponentTypes.CONSUMABLE)
+        this.itematic$getBehavior(ItemComponentTypes.CONSUMABLE)
             .ifPresent(c -> c.consume(user, stack, stackReference::set, world, user.getActiveHand()));
         info.setReturnValue(stackReference.get());
     }
@@ -359,7 +379,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        this.base.tooltip()
+        this.display.tooltip()
             .ifPresent(tooltip::addAll);
         for (ItemComponent<?> component : this.itemComponents) {
             component.appendTooltip(stack, context, tooltip, type);
@@ -372,7 +392,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     private void useDebugStickItemComponent(BlockState state, World world, BlockPos pos, PlayerEntity miner, CallbackInfoReturnable<Boolean> info) {
-        this.itematic$getComponent(ItemComponentTypes.DEBUG_STICK)
+        this.itematic$getBehavior(ItemComponentTypes.DEBUG_STICK)
             .ifPresent(c -> {
                 c.use(miner, state, world, pos);
                 info.setReturnValue(false);
@@ -407,7 +427,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     public void checkPointableItemComponent(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
-        if (this.itematic$hasComponent(ItemComponentTypes.POINTABLE) && stack.contains(DataComponentTypes.LODESTONE_TRACKER)) {
+        if (this.itematic$hasBehavior(ItemComponentTypes.POINTABLE) && stack.contains(DataComponentTypes.LODESTONE_TRACKER)) {
             info.setReturnValue(true);
         }
     }
@@ -418,7 +438,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public boolean canBeNested() {
-        return this.itematic$getComponent(ItemComponentTypes.BLOCK)
+        return this.itematic$getBehavior(ItemComponentTypes.BLOCK)
             .map(BlockItemComponent::canBeNested)
             .orElse(true);
     }
@@ -429,7 +449,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public SoundEvent getBreakSound() {
-        return this.itematic$getComponent(ItemComponentTypes.DAMAGEABLE)
+        return this.itematic$getBehavior(ItemComponentTypes.DAMAGEABLE)
             .flatMap(DamageableItemComponent::breakSound)
             .map(RegistryEntry::value)
             .orElse(SoundEvents.ENTITY_ITEM_BREAK);
@@ -441,7 +461,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public boolean isNetworkSynced() {
-        return this.itematic$hasComponent(ItemComponentTypes.MAP_HOLDER);
+        return this.itematic$hasBehavior(ItemComponentTypes.MAP_HOLDER);
     }
 
     @Inject(
@@ -450,7 +470,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     public void getUseActionUseItemComponent(ItemStack stack, CallbackInfoReturnable<UseAction> info) {
-        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+        if (!this.itematic$hasBehavior(ItemComponentTypes.USEABLE)) {
             info.setReturnValue(UseAction.NONE);
             return;
         }
@@ -464,7 +484,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public int getMaxUseTime(ItemStack stack, LivingEntity user) {
-        if (!this.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+        if (!this.itematic$hasBehavior(ItemComponentTypes.USEABLE)) {
             return 0;
         }
 
@@ -478,26 +498,27 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
     /**
      * @author ErrorCraft
-     * @reason Uses the ItemBase implementation for data-driven items.
+     * @reason Uses the ItemDisplay implementation for data-driven items.
      */
     @Overwrite
-    public String getTranslationKey() {
-        return this.base.translationKey();
+    public final String getTranslationKey() {
+        return this.display.translationKey();
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public String getTranslationKey(ItemStack stack) {
-        return this.itematic$getComponent(ItemComponentTypes.POINTABLE)
+    @Inject(
+        method = "getName(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/text/Text;",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void getName(ItemStack stack, CallbackInfoReturnable<Text> info) {
+        this.itematic$getBehavior(ItemComponentTypes.POINTABLE)
             .flatMap(c -> c.lodestoneTranslationKey(stack))
-            .or(() -> this.itematic$getComponent(ItemComponentTypes.POTION_HOLDER)
-                .map(c -> c.translationKey(stack, this.getTranslationKey())))
-            .or(() -> this.itematic$getComponent(ItemComponentTypes.BANNER_PATTERN_HOLDER)
-                .flatMap(c -> c.translationKey(stack, this.getTranslationKey())))
-            .orElseGet(this::getTranslationKey);
+            .or(() -> this.itematic$getBehavior(ItemComponentTypes.POTION_HOLDER)
+                .map(c -> c.translationKey(stack, this.display.translationKey())))
+            .or(() -> this.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
+                .flatMap(c -> c.translationKey(stack, this.display.translationKey())))
+            .map(Text::translatable)
+            .ifPresent(info::setReturnValue);
     }
 
     /**
@@ -506,7 +527,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public Optional<TooltipData> getTooltipData(ItemStack stack) {
-        return this.itematic$getComponent(ItemComponentTypes.ITEM_HOLDER)
+        return this.itematic$getBehavior(ItemComponentTypes.ITEM_HOLDER)
             .flatMap(c -> c.tooltipData(stack));
     }
 
@@ -516,7 +537,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     private void checkTextHolderItemComponent(ItemStack stack, CallbackInfoReturnable<Text> info) {
-        if (!stack.itematic$hasComponent(ItemComponentTypes.TEXT_HOLDER)) {
+        if (!stack.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER)) {
             return;
         }
 
@@ -533,28 +554,28 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
-    public ItemBase itematic$itemBase() {
-        return this.base;
+    public ItemDisplay itematic$display() {
+        return this.display;
     }
 
     @Override
-    public void itematic$setItemBase(ItemBase base) {
-        this.base = base;
+    public void itematic$setDisplay(ItemDisplay display) {
+        this.display = display;
     }
 
     @Override
-    public ItemComponentSet itematic$components() {
+    public ItemComponentSet itematic$behavior() {
         return this.itemComponents;
     }
 
     @Override
-    public void itematic$setComponents(ItemComponentSet components) {
+    public void itematic$setBehavior(ItemComponentSet components) {
         this.itemComponents = components;
         this.components = this.initializeComponents();
     }
 
     @Override
-    public <T extends ItemComponent<T>> boolean itematic$hasComponent(ItemComponentType<T> type) {
+    public <T extends ItemComponent<T>> boolean itematic$hasBehavior(ItemComponentType<T> type) {
         if (this.itemComponents == null) {
             return false;
         }
@@ -562,7 +583,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
-    public <T extends ItemComponent<T>> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
+    public <T extends ItemComponent<T>> Optional<T> itematic$getBehavior(ItemComponentType<T> type) {
         if (this.itemComponents == null) {
             return Optional.empty();
         }
@@ -586,7 +607,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
     @Override
     public boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
-        return this.itematic$getComponent(ItemComponentTypes.FOOD)
+        return this.itematic$getBehavior(ItemComponentTypes.FOOD)
             .map(c -> c.mayStartUsing(user, stack))
             .orElse(true);
     }
@@ -601,10 +622,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         if (target == null) {
             return;
         }
+
         ItemStack newStack = stackReference.get();
         if (stack == newStack) {
             return;
         }
+
         target.setStackInHand(hand, newStack);
     }
 
@@ -612,7 +635,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     private ComponentMap initializeComponents() {
         ComponentMap.Builder componentsBuilder = ComponentMap.builder()
             .addAll(DataComponentTypes.DEFAULT_ITEM_COMPONENTS);
-        this.base.addComponents(componentsBuilder);
+        this.display.addComponents(componentsBuilder);
         AttributeModifiersComponent.Builder attributeModifiersBuilder = AttributeModifiersComponent.builder();
         for (ItemComponent<?> component : this.itemComponents) {
             component.addComponents(componentsBuilder);
@@ -624,7 +647,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             componentsBuilder.add(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributeModifiers);
         }
 
-        return COMPONENT_INTERNER.intern(componentsBuilder.build());
+        return componentsBuilder.build();
     }
 
     @Mixin(Item.Settings.class)
@@ -638,6 +661,17 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         )
         private ItemStack newItemStackUseEmptyItemStack(ItemConvertible item) {
             return ItemStack.EMPTY;
+        }
+
+        @Redirect(
+            method = "getValidatedComponents",
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/component/ComponentMap$Builder;add(Lnet/minecraft/component/ComponentType;Ljava/lang/Object;)Lnet/minecraft/component/ComponentMap$Builder;"
+            )
+        )
+        private <T> ComponentMap.Builder doNotAddDataComponents(ComponentMap.Builder instance, ComponentType<T> type, @Nullable T value) {
+            return instance;
         }
     }
 }

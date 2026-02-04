@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.chipped_anvil"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:chipped_anvil"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:chipped_anvil",
+    "translation_key": "block.minecraft.chipped_anvil"
   }
 }

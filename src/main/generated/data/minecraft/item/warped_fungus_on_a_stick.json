@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.warped_fungus_on_a_stick"
-  },
-  "components": {
+  "behavior": {
     "minecraft:damageable": {
       "durability": 100
     },
@@ -10,6 +7,10 @@
     "minecraft:steering": {
       "target": "minecraft:strider"
     }
+  },
+  "display": {
+    "model": "minecraft:warped_fungus_on_a_stick",
+    "translation_key": "item.minecraft.warped_fungus_on_a_stick"
   },
   "events": {
     "minecraft:break_item": {

@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.horn_coral"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:horn_coral"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:horn_coral",
+    "translation_key": "block.minecraft.horn_coral"
   }
 }

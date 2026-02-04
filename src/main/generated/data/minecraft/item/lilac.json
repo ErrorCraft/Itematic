@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.lilac"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:lilac"
     },
@@ -10,5 +7,9 @@
       "level_increase_chance": 0.65
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:lilac",
+    "translation_key": "block.minecraft.lilac"
   }
 }

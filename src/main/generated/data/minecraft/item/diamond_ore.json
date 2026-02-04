@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.diamond_ore"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:diamond_ore"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:diamond_ore",
+    "translation_key": "block.minecraft.diamond_ore"
   }
 }

@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.poisonous_potato"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 2,
@@ -16,6 +13,10 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:poisonous_potato",
+    "translation_key": "item.minecraft.poisonous_potato"
   },
   "events": {
     "minecraft:consume_item": {

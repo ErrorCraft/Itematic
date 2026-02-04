@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.access.item;
 
-import net.errorcraft.itematic.item.ItemBase;
+import net.errorcraft.itematic.item.ItemDisplay;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -15,18 +15,18 @@ import net.minecraft.world.World;
 import java.util.Optional;
 
 public interface ItemAccess {
-    default ItemBase itematic$itemBase() {
+    default ItemDisplay itematic$display() {
         return null;
     }
-    default void itematic$setItemBase(ItemBase base) {}
-    default ItemComponentSet itematic$components() {
+    default void itematic$setDisplay(ItemDisplay display) {}
+    default ItemComponentSet itematic$behavior() {
         return null;
     }
-    default void itematic$setComponents(ItemComponentSet components) {}
-    default <T extends ItemComponent<T>> boolean itematic$hasComponent(ItemComponentType<T> type) {
+    default void itematic$setBehavior(ItemComponentSet components) {}
+    default <T extends ItemComponent<T>> boolean itematic$hasBehavior(ItemComponentType<T> type) {
         return false;
     }
-    default <T extends ItemComponent<T>> Optional<T> itematic$getComponent(ItemComponentType<T> type) {
+    default <T extends ItemComponent<T>> Optional<T> itematic$getBehavior(ItemComponentType<T> type) {
         return Optional.empty();
     }
     default ItemEventMap itematic$events() {

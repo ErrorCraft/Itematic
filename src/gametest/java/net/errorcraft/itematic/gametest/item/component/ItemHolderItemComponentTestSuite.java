@@ -109,7 +109,7 @@ public class ItemHolderItemComponentTestSuite {
 
     private static void addToBundleContentsComponent(ItemStack origin, ItemStack stackToAdd) {
         BundleContentsComponent.Builder builder = Objects.requireNonNull(
-            TestUtil.getItemComponent(origin, ItemComponentTypes.ITEM_HOLDER).createBuilder(origin)
+            TestUtil.getItemBehavior(origin, ItemComponentTypes.ITEM_HOLDER).createBuilder(origin)
         );
         builder.add(stackToAdd);
         origin.set(DataComponentTypes.BUNDLE_CONTENTS, builder.build());

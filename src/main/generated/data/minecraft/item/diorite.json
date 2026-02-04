@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.diorite"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:diorite"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:diorite",
+    "translation_key": "block.minecraft.diorite"
   }
 }

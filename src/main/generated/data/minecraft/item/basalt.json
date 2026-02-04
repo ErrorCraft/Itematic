@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.basalt"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:basalt"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:basalt",
+    "translation_key": "block.minecraft.basalt"
   }
 }

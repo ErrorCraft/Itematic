@@ -1,13 +1,14 @@
 {
-  "base": {
-    "rarity": "epic",
-    "translation_key": "block.minecraft.jigsaw"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:jigsaw",
       "operator_only": true
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:jigsaw",
+    "rarity": "epic",
+    "translation_key": "block.minecraft.jigsaw"
   }
 }

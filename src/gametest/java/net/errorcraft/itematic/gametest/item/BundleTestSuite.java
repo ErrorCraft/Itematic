@@ -72,7 +72,7 @@ public class BundleTestSuite {
                 Assert.itemStackIsOf(bundleContents.get(0), ItemKeys.BUNDLE);
             });
             context.assertEquals(
-                TestUtil.getItemComponent(bundleStack, ItemComponentTypes.ITEM_HOLDER).occupancy(bundleStack),
+                TestUtil.getItemBehavior(bundleStack, ItemComponentTypes.ITEM_HOLDER).occupancy(bundleStack),
                 BundleContentsComponentAccessor.nestedBundleOccupancy(),
                 "occupancy"
             );

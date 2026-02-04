@@ -1,12 +1,13 @@
 {
-  "base": {
-    "rarity": "uncommon",
-    "translation_key": "item.minecraft.snout_armor_trim_smithing_template"
-  },
-  "components": {
+  "behavior": {
     "minecraft:smithing_template": {
       "template": "minecraft:snout_pattern"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:snout_armor_trim_smithing_template",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.snout_armor_trim_smithing_template"
   }
 }

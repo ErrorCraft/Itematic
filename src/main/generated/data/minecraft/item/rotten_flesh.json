@@ -1,8 +1,5 @@
 {
-  "base": {
-    "translation_key": "item.minecraft.rotten_flesh"
-  },
-  "components": {
+  "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
       "nutrition": 4,
@@ -16,6 +13,10 @@
         "amount": 32
       }
     }
+  },
+  "display": {
+    "model": "minecraft:rotten_flesh",
+    "translation_key": "item.minecraft.rotten_flesh"
   },
   "events": {
     "minecraft:consume_item": {

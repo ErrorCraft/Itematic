@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.end_portal_frame"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:end_portal_frame"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:end_portal_frame",
+    "translation_key": "block.minecraft.end_portal_frame"
   }
 }

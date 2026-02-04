@@ -35,7 +35,7 @@ public class DyeItemModifier extends ConditionalLootFunction {
 
     @Override
     protected ItemStack process(ItemStack stack, LootContext context) {
-        if (!stack.itematic$hasComponent(ItemComponentTypes.DYEABLE)) {
+        if (!stack.itematic$hasBehavior(ItemComponentTypes.DYEABLE)) {
             return stack;
         }
         List<DyeItem> dyes = new ArrayList<>();

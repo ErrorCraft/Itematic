@@ -1,11 +1,12 @@
 {
-  "base": {
-    "translation_key": "block.minecraft.end_rod"
-  },
-  "components": {
+  "behavior": {
     "minecraft:block": {
       "block": "minecraft:end_rod"
     },
     "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:end_rod",
+    "translation_key": "block.minecraft.end_rod"
   }
 }
