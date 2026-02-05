@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
 public class ComposterBlockTestSuite {
-    private static final BlockPos COMPOSTER_POSITION = new BlockPos(1, 2, 1);
+    private static final BlockPos COMPOSTER_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(templateName = "itematic:block.composter.empty")
     public void usingCompostableItemOnComposterIncreasesLevel(TestContext context) {

@@ -28,7 +28,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameMode;
 
 public class DispenserBehaviorTestSuite {
-    private static final BlockPos DISPENSER_POSITION = new BlockPos(2, 2, 3);
+    private static final BlockPos DISPENSER_POSITION = new BlockPos(2, 1, 3);
     private static final BlockPos BUTTON_POSITION = DISPENSER_POSITION.add(0, 1, 0);
     private static final BlockPos OUTPUT_POSITION = DISPENSER_POSITION.add(0, 0, -1);
     private static final BlockPos ABOVE_OUTPUT_POSITION = OUTPUT_POSITION.add(0, 1, 0);

@@ -8,7 +8,7 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.BlockPos;
 
 public class SheepEntityTestSuite {
-    private static final BlockPos SPAWN_POSITION = new BlockPos(1, 2, 1);
+    private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(templateName = "itematic:entity.platform")
     @SuppressWarnings("DataFlowIssue")

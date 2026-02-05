@@ -1,7 +1,0 @@
-{
-  "type": "minecraft:item_coloring",
-  "category": "misc",
-  "color": "lime",
-  "ingredient": "#minecraft:shulker_boxes",
-  "result": "minecraft:lime_shulker_box"
-}

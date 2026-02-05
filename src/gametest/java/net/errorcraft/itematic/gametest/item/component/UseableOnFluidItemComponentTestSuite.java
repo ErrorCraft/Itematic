@@ -18,8 +18,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 
 public class UseableOnFluidItemComponentTestSuite {
-    private static final BlockPos SPAWN_POSITION_ON_LAND = new BlockPos(2, 6, 0);
-    private static final BlockPos SPAWN_POSITION_IN_WATER = new BlockPos(2, 2, 2);
+    private static final BlockPos SPAWN_POSITION_ON_LAND = new BlockPos(2, 5, 0);
+    private static final BlockPos SPAWN_POSITION_IN_WATER = new BlockPos(2, 1, 2);
     private static final BlockPos LOOK_AT_WATER_POSITION_ON_LAND = SPAWN_POSITION_ON_LAND.add(0, -1, 1);
     private static final BlockPos ABOVE_LOOK_AT_WATER_POSITION_ON_LAND = LOOK_AT_WATER_POSITION_ON_LAND.add(0, 1, 0);
     private static final BlockPos LOOK_AT_AIR_POSITION_ON_LAND = SPAWN_POSITION_ON_LAND.add(0, 1, 4);

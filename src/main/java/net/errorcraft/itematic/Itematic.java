@@ -15,7 +15,6 @@ import net.errorcraft.itematic.loot.context.ItematicLootContextParameters;
 import net.errorcraft.itematic.loot.context.ItematicLootContextTypes;
 import net.errorcraft.itematic.loot.function.ItematicItemModifierTypes;
 import net.errorcraft.itematic.loot.predicate.ItematicPredicateTypes;
-import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
@@ -35,7 +34,6 @@ public class Itematic implements ModInitializer {
         ItematicPredicateTypes.init();
         ItematicLootContextParameters.init();
         SmithingTemplateTypes.init();
-        ItematicRecipeSerializers.init();
         BlockPickerTypes.init();
         ItematicItemModifierTypes.init();
         TradeModifierTypes.init();

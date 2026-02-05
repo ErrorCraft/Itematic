@@ -12,16 +12,11 @@ import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.color.colors.*;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
-import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
-import net.errorcraft.itematic.item.holder.rule.rules.FractionItemHolderRule;
-import net.errorcraft.itematic.item.holder.rule.rules.OccupancyHeldItemsWithPenaltyItemHolderRule;
-import net.errorcraft.itematic.item.holder.rule.rules.RejectItemHolderRule;
 import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.pointer.PointerKeys;
 import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
@@ -29,9 +24,7 @@ import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
-import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
 import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
-import net.errorcraft.itematic.mixin.item.BundleItemAccessor;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.potion.PotionKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
@@ -64,7 +57,7 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
-import net.minecraft.entity.vehicle.*;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
 import net.minecraft.item.consume.UseAction;
@@ -97,7 +90,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.FoliageColors;
 import net.minecraft.world.event.GameEvent;
-import org.apache.commons.lang3.math.Fraction;
 
 import java.util.List;
 
@@ -5544,35 +5536,35 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.MINECART, MinecartEntity::new), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.MINECART), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHEST_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CHEST_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.CHEST_MINECART, ChestMinecartEntity::new), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.CHEST_MINECART), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.FURNACE_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.FURNACE_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.FURNACE_MINECART, FurnaceMinecartEntity::new), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.FURNACE_MINECART), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TNT_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TNT_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.TNT_MINECART, TntMinecartEntity::new), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.TNT_MINECART), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOPPER_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.HOPPER_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.HOPPER_MINECART, HopperMinecartEntity::new), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.HOPPER_MINECART), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.COMMAND_BLOCK_MINECART, create(
@@ -5581,7 +5573,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.COMMAND_BLOCK_MINECART, CommandBlockMinecartEntity::new), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.COMMAND_BLOCK_MINECART), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.OAK_BOAT, create(
@@ -10525,26 +10517,135 @@ public class ItemUtil {
                     .itemBarStyle(ItemBarStyleKeys.BUNDLE)
                     .build(),
                 ItemComponentSet.builder()
-                    .with(StackableItemComponent.of(1))
-                    .with(UseableItemComponent.builder()
-                        .useFor(BundleItemAccessor.useDuration())
-                        .build())
-                    .with(ItemHolderItemComponent.of(
-                        1,
-                        ItemHolderRules.builder()
-                            .rule(RejectItemHolderRule.INSTANCE, ItemPredicate.Builder.create()
-                                .itematic$items(this.items.getOrThrow(ItematicItemTags.BANNED_BUNDLE_ITEMS))
-                                .build())
-                            .rule(OccupancyHeldItemsWithPenaltyItemHolderRule.of(BundleContentsComponentAccessor.nestedBundleOccupancy()), ItemPredicate.Builder.create()
-                                .itematic$behavior(ItemComponentTypes.ITEM_HOLDER)
-                                .build())
-                            .rule(FractionItemHolderRule.of(Fraction.ONE), ItemPredicate.Builder.create()
-                                .itematic$dataComponents(DataComponentTypes.BEES)
-                                .build())
-                            .build(),
-                        this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT),
-                        this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE),
-                        this.soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)))
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WHITE_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.WHITE_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.ORANGE_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.MAGENTA_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.LIGHT_BLUE_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.YELLOW_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.LIME_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.PINK_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.GRAY_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.LIGHT_GRAY_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.CYAN_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.PURPLE_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.BLUE_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.BROWN_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.GREEN_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.RED_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.BLACK_BUNDLE)
+                    .itemBarStyle(ItemBarStyleKeys.BUNDLE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(ItemHolderItemComponent.of(this.items, this.soundEvents))
                     .build()
             ));
             this.registerable.register(ItemKeys.CLOCK, create(

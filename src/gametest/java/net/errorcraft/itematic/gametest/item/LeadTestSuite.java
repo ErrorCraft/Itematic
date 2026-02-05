@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
 public class LeadTestSuite {
-    private static final BlockPos PLACED_ENTITY_POSITION = new BlockPos(1, 2, 0);
+    private static final BlockPos PLACED_ENTITY_POSITION = new BlockPos(1, 1, 0);
 
     @GameTest(templateName = "itematic:item.lead.platform")
     public void usingLeadOnHorseLeashesHorse(TestContext context) {

@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
 public class GrindstoneTestSuite {
-    private static final BlockPos BLOCK_POSITION = new BlockPos(1, 2, 1);
+    private static final BlockPos BLOCK_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(templateName = "itematic:block.grindstone")
     public void placingEnchantedItemInGrindstoneDisenchantsItem(TestContext context) {

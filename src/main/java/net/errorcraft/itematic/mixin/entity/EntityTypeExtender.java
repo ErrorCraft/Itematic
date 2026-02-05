@@ -93,7 +93,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<MinecartEntity> setMinecartInitializerCodec(EntityType.Builder<MinecartEntity> type) {
-        type.itematic$initializerCodec(minecartInitializerCodecCreator(MinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator());
         return type;
     }
 
@@ -112,7 +112,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<ChestMinecartEntity> setChestMinecartInitializerCodec(EntityType.Builder<ChestMinecartEntity> type) {
-        type.itematic$initializerCodec(minecartInitializerCodecCreator(ChestMinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator());
         return type;
     }
 
@@ -131,7 +131,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<FurnaceMinecartEntity> setFurnaceMinecartInitializerCodec(EntityType.Builder<FurnaceMinecartEntity> type) {
-        type.itematic$initializerCodec(minecartInitializerCodecCreator(FurnaceMinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator());
         return type;
     }
 
@@ -150,7 +150,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<TntMinecartEntity> setTntMinecartInitializerCodec(EntityType.Builder<TntMinecartEntity> type) {
-        type.itematic$initializerCodec(minecartInitializerCodecCreator(TntMinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator());
         return type;
     }
 
@@ -169,7 +169,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<SpawnerMinecartEntity> setSpawnerMinecartInitializerCodec(EntityType.Builder<SpawnerMinecartEntity> type) {
-        type.itematic$initializerCodec(minecartInitializerCodecCreator(SpawnerMinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator());
         return type;
     }
 
@@ -188,7 +188,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<HopperMinecartEntity> setHopperMinecartInitializerCodec(EntityType.Builder<HopperMinecartEntity> type) {
-        type.itematic$initializerCodec(minecartInitializerCodecCreator(HopperMinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator());
         return type;
     }
 
@@ -207,7 +207,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<CommandBlockMinecartEntity> setCommandBlockMinecartInitializerCodec(EntityType.Builder<CommandBlockMinecartEntity> type) {
-        type.itematic$initializerCodec(minecartInitializerCodecCreator(CommandBlockMinecartEntity::new));
+        type.itematic$initializerCodec(minecartInitializerCodecCreator());
         return type;
     }
 
@@ -475,8 +475,8 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     }
 
     @Unique
-    private static <T extends AbstractMinecartEntity> EntityInitializerCodecCreator<T> minecartInitializerCodecCreator(MinecartEntityInitializer.Creator<T> creator) {
-        return type -> MinecartEntityInitializer.createCodec(type, creator);
+    private static <T extends AbstractMinecartEntity> EntityInitializerCodecCreator<T> minecartInitializerCodecCreator() {
+        return type -> MapCodec.unit(new MinecartEntityInitializer<>(type));
     }
 
     @Unique

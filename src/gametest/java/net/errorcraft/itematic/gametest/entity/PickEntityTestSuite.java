@@ -13,7 +13,7 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 
 public class PickEntityTestSuite {
-    private static final BlockPos SPAWN_POSITION = new BlockPos(1, 2, 1);
+    private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(templateName = "itematic:entity.platform")
     public void getPickStackOnArmadilloGivesArmadilloSpawnEggItemStack(TestContext context) {

@@ -55,7 +55,7 @@ public record ArmorItemComponent(int defense, double toughness, double knockback
     public static ItemComponent<?>[] fromDamageable(ArmorMaterial material, EquipmentType type, AnimalArmorItem.Type animalType) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
-            DamageableItemComponent.of(type.getMaxDamage(material.durability())),
+            DamageableItemComponent.of(type.getMaxDamage(material.durability()), animalType.itematic$breakSound()),
             EquipmentItemComponent.of(material, type, animalType),
             of(material, type)
         };

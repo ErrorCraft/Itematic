@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
 public class EnchantingTableTestSuite {
-    private static final BlockPos BLOCK_POSITION = new BlockPos(1, 2, 1);
+    private static final BlockPos BLOCK_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(templateName = "itematic:block.enchanting_table")
     public void placingEnchantableItemWithoutEnchantmentsSuggestsEnchantments(TestContext context) {

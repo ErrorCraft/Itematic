@@ -4,12 +4,18 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.item.ItemStackConsumer;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
+import net.errorcraft.itematic.item.holder.rule.rules.FractionItemHolderRule;
+import net.errorcraft.itematic.item.holder.rule.rules.OccupancyHeldItemsWithPenaltyItemHolderRule;
+import net.errorcraft.itematic.item.holder.rule.rules.RejectItemHolderRule;
+import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
 import net.errorcraft.itematic.mixin.item.BundleItemAccessor;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
@@ -17,10 +23,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.tooltip.BundleTooltipData;
 import net.minecraft.item.tooltip.TooltipData;
+import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundEvent;
@@ -46,6 +55,32 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
 
     public static ItemHolderItemComponent of(int capacity, ItemHolderRules rules, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) {
         return new ItemHolderItemComponent(Fraction.getFraction(capacity, 1), rules, insertItemSound, removeItemSound, emptySound);
+    }
+
+    public static ItemComponent<?>[] of(RegistryEntryLookup<Item> items, RegistryEntryLookup<SoundEvent> soundEvents) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(1),
+            UseableItemComponent.builder()
+                .useFor(BundleItemAccessor.useDuration())
+                .build(),
+            of(
+                1,
+                ItemHolderRules.builder()
+                    .rule(RejectItemHolderRule.INSTANCE, ItemPredicate.Builder.create()
+                        .itematic$items(items.getOrThrow(ItematicItemTags.BANNED_BUNDLE_ITEMS))
+                        .build())
+                    .rule(OccupancyHeldItemsWithPenaltyItemHolderRule.of(BundleContentsComponentAccessor.nestedBundleOccupancy()), ItemPredicate.Builder.create()
+                        .itematic$behavior(ItemComponentTypes.ITEM_HOLDER)
+                        .build())
+                    .rule(FractionItemHolderRule.of(Fraction.ONE), ItemPredicate.Builder.create()
+                        .itematic$dataComponents(DataComponentTypes.BEES)
+                        .build())
+                    .build(),
+                soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT),
+                soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE),
+                soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)
+            )
+        };
     }
 
     @Override

@@ -9,7 +9,7 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 
 public class PickBlockTestSuite {
-    private static final BlockPos BLOCK_POSITION = new BlockPos(1, 2, 1);
+    private static final BlockPos BLOCK_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(templateName = "itematic:block.piston_head")
     public void getPickStackOnPistonHeadGivesPistonItemStack(TestContext context) {

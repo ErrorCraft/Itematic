@@ -16,7 +16,6 @@ import net.errorcraft.itematic.item.placement.EntityPlacer;
 import net.errorcraft.itematic.mixin.item.DecorationItemAccessor;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
 import net.errorcraft.itematic.mixin.item.SpawnEggItemAccessor;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.serialization.SetCodec;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
