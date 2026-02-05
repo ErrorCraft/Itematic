@@ -34,18 +34,10 @@ public abstract class WolfEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "interactMob",
+        method = "shouldArmorAbsorbDamage",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/item/Items;WOLF_ARMOR:Lnet/minecraft/item/Item;",
-                opcode = Opcodes.GETSTATIC
-            )
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
     private boolean isOfForWolfArmorUseRegistryKeyCheck(ItemStack instance, Item item) {

@@ -9,7 +9,6 @@ import net.minecraft.resource.ResourceFinder;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceReloader;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.profiler.Profiler;
 import org.slf4j.Logger;
 
 import java.io.BufferedReader;
@@ -25,7 +24,7 @@ public class ItemBarStyleLoader implements ResourceReloader {
     private final Map<Identifier, ItemBarStyle> styles = new HashMap<>();
 
     @Override
-    public CompletableFuture<Void> reload(Synchronizer synchronizer, ResourceManager manager, Profiler prepareProfiler, Profiler applyProfiler, Executor prepareExecutor, Executor applyExecutor) {
+    public CompletableFuture<Void> reload(Synchronizer synchronizer, ResourceManager manager, Executor prepareExecutor, Executor applyExecutor) {
         return CompletableFuture.supplyAsync(() -> FINDER.findResources(manager), prepareExecutor)
             .thenCompose(synchronizer::whenPrepared)
             .thenAcceptAsync(this::apply, applyExecutor);

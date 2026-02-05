@@ -5,7 +5,7 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.block.BlockState;
-import net.minecraft.component.ComponentMapImpl;
+import net.minecraft.component.MergedComponentMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,7 +21,7 @@ public interface ItemStackAccess {
     default RegistryKey<Item> itematic$key() {
         return null;
     }
-    default void itematic$setComponents(ComponentMapImpl components) {}
+    default void itematic$setComponents(MergedComponentMap components) {}
     default void itematic$tryIncrement(int count) {}
     default int itematic$tryDecrement(int amount) {
         return 0;
@@ -48,10 +48,10 @@ public interface ItemStackAccess {
     default boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
         return false;
     }
-    default boolean itematic$canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
+    default boolean itematic$hasEventListener(ItemEvent event) {
         return false;
     }
-    default boolean itematic$isNetworkSynced() {
+    default boolean itematic$canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
         return false;
     }
     default boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {

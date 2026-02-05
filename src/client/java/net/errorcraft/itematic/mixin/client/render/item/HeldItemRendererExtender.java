@@ -186,23 +186,4 @@ public class HeldItemRendererExtender {
             .filter(method -> method.type() == ShooterMethodTypes.CHARGEABLE)
             .isPresent();
     }
-
-    @Redirect(
-        method = "renderFirstPersonItem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/item/Items;FILLED_MAP:Lnet/minecraft/item/Item;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.MAP_HOLDER);
-    }
 }

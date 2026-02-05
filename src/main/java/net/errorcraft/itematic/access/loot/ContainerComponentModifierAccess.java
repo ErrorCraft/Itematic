@@ -5,5 +5,5 @@ import net.minecraft.item.ItemStack;
 import java.util.stream.Stream;
 
 public interface ContainerComponentModifierAccess<T> {
-    T itematic$create(ItemStack stack, T component, Stream<ItemStack> newContents);
+    T itematic$apply(ItemStack stack, T component, Stream<ItemStack> newContents);
 }

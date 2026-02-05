@@ -18,8 +18,7 @@
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_iron",
       "model": "minecraft:iron",
-      "slot": "feet",
-      "swappable": true
+      "slot": "feet"
     },
     "minecraft:repairable": {
       "items": "#minecraft:repairs_iron_armor"

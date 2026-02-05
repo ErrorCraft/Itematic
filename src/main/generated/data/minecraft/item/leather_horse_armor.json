@@ -6,10 +6,6 @@
       "knockback_resistance": 0.0,
       "toughness": 0.0
     },
-    "minecraft:damageable": {
-      "break_sound": "minecraft:entity.item.break",
-      "durability": 80
-    },
     "minecraft:dispensable": {
       "behavior": "minecraft:equip_entity"
     },
@@ -20,8 +16,7 @@
       "allowed_entities": "minecraft:horse",
       "equip_sound": "minecraft:item.armor.equip_leather",
       "model": "minecraft:leather",
-      "slot": "body",
-      "swappable": true
+      "slot": "body"
     },
     "minecraft:stackable": 1,
     "minecraft:tinted": {

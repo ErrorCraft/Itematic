@@ -9,12 +9,10 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapColorComponent;
 import net.minecraft.component.type.MapDecorationsComponent;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
@@ -54,9 +52,5 @@ public record MapHolderItemComponent() implements ItemComponent<MapHolderItemCom
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         DUMMY.appendTooltip(stack, context, tooltip, type);
-    }
-
-    public Packet<?> createSyncPacket(ItemStack stack, World world, PlayerEntity player) {
-        return DUMMY.createSyncPacket(stack, world, player);
     }
 }

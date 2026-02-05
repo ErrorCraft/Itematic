@@ -17,6 +17,7 @@ import net.errorcraft.itematic.mixin.item.DecorationItemAccessor;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
 import net.errorcraft.itematic.mixin.item.SpawnEggItemAccessor;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.serialization.SetCodec;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EntityType;
@@ -46,7 +47,7 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
     public static final Codec<EntityItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         EntityInitializer.CODEC.fieldOf("entity").forGetter(EntityItemComponent::entity),
         Codec.BOOL.optionalFieldOf("allow_item_data", false).forGetter(EntityItemComponent::allowItemData),
-        ItematicCodecs.setCodec(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(EntityItemComponent::passes)
+        SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(EntityItemComponent::passes)
     ).apply(instance, EntityItemComponent::new));
     private static final MapCodec<EntityType<?>> ENTITY_TYPE_MAP_CODEC = SpawnEggItemAccessor.entityTypeMapCodec();
     private static final Text RANDOM_TEXT = DecorationItemAccessor.randomText();

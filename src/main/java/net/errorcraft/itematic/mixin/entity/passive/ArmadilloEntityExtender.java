@@ -3,7 +3,6 @@ package net.errorcraft.itematic.mixin.entity.passive;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.ArmadilloEntity;
 import net.minecraft.item.Item;
@@ -31,17 +30,6 @@ public abstract class ArmadilloEntityExtender extends MobEntityExtender {
     )
     private boolean isOfForBrushUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.BRUSH);
-    }
-
-    @Redirect(
-        method = "mobTick",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/ArmadilloEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
-        )
-    )
-    private ItemEntity dropItemForArmadilloScuteUseRegistryKey(ArmadilloEntity instance, ItemConvertible itemConvertible) {
-        return this.itematic$dropItem(ItemKeys.ARMADILLO_SCUTE);
     }
 
     @Redirect(

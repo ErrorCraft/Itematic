@@ -6,7 +6,10 @@ import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.ItemListDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.player.PlayerAbilities;
@@ -15,6 +18,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.RangedWeaponItem;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
@@ -24,6 +28,7 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
@@ -43,14 +48,14 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
     }
 
     @Redirect(
-        method = "updateTurtleHelmet",
+        method = "tick",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/entity/player/PlayerEntity;isEquipped(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean isOfForTurtleHelmetUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.TURTLE_HELMET);
+    private boolean isEquippedForTurtleHelmetUseRegistryKeyCheck(PlayerEntity instance, Item item) {
+        return this.isEquipped(ItemKeys.TURTLE_HELMET);
     }
 
     @Redirect(
@@ -142,5 +147,23 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
         }
 
         return this.abilities.creativeMode ? this.getWorld().itematic$createStack(ItemKeys.ARROW) : ItemStack.EMPTY;
+    }
+
+    @Unique
+    @SuppressWarnings("SameParameterValue")
+    private boolean isEquipped(RegistryKey<Item> item) {
+        for (EquipmentSlot slot : EquipmentSlot.VALUES) {
+            ItemStack equippedStack = this.getEquippedStack(slot);
+            if (!equippedStack.itematic$isOf(item)) {
+                continue;
+            }
+
+            EquippableComponent equippable = equippedStack.get(DataComponentTypes.EQUIPPABLE);
+            if (equippable != null && equippable.slot() == slot) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -3,9 +3,9 @@ package net.errorcraft.itematic.gametest.item.component;
 import net.errorcraft.itematic.gametest.Assert;
 import net.errorcraft.itematic.gametest.TestUtil;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.EquipmentItemComponent;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -24,9 +24,9 @@ public class EquipmentItemComponentTestSuite {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.LEATHER_HELMET);
         player.setStackInHand(Hand.MAIN_HAND, stack);
-        EquipmentItemComponent component = TestUtil.getItemBehavior(stack, ItemComponentTypes.EQUIPMENT);
+        EquippableComponent equippable = TestUtil.getDataComponent(stack, DataComponentTypes.EQUIPPABLE);
         stack.use(world, player, Hand.MAIN_HAND);
-        context.addInstantFinalTask(() -> Assert.itemStackIsOf(player.getEquippedStack(component.slot()), ItemKeys.LEATHER_HELMET));
+        context.addInstantFinalTask(() -> Assert.itemStackIsOf(player.getEquippedStack(equippable.slot()), ItemKeys.LEATHER_HELMET));
     }
 
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
@@ -35,9 +35,9 @@ public class EquipmentItemComponentTestSuite {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.SHIELD);
         player.setStackInHand(Hand.MAIN_HAND, stack);
-        EquipmentItemComponent component = TestUtil.getItemBehavior(stack, ItemComponentTypes.EQUIPMENT);
+        EquippableComponent equippable = TestUtil.getDataComponent(stack, DataComponentTypes.EQUIPPABLE);
         stack.use(world, player, Hand.MAIN_HAND);
-        context.addInstantFinalTask(() -> Assert.itemStackIsEmpty(player.getEquippedStack(component.slot())));
+        context.addInstantFinalTask(() -> Assert.itemStackIsEmpty(player.getEquippedStack(equippable.slot())));
     }
 
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)

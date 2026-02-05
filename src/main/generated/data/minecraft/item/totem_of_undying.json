@@ -1,31 +1,37 @@
 {
   "behavior": {
-    "minecraft:life_saving": {
-      "effects": [
-        {
-          "id": "minecraft:regeneration",
-          "amplifier": 1,
-          "duration": 900,
-          "show_icon": true
-        },
-        {
-          "id": "minecraft:absorption",
-          "amplifier": 1,
-          "duration": 100,
-          "show_icon": true
-        },
-        {
-          "id": "minecraft:fire_resistance",
-          "duration": 800,
-          "show_icon": true
-        }
-      ]
-    },
     "minecraft:stackable": 1
   },
   "display": {
     "model": "minecraft:totem_of_undying",
     "rarity": "uncommon",
     "translation_key": "item.minecraft.totem_of_undying"
+  },
+  "events": {
+    "minecraft:before_death_holder": {
+      "action": {
+        "type": "minecraft:add_status_effects",
+        "effects": [
+          {
+            "id": "minecraft:regeneration",
+            "amplifier": 1,
+            "duration": 900,
+            "show_icon": true
+          },
+          {
+            "id": "minecraft:absorption",
+            "amplifier": 1,
+            "duration": 100,
+            "show_icon": true
+          },
+          {
+            "id": "minecraft:fire_resistance",
+            "duration": 800,
+            "show_icon": true
+          }
+        ],
+        "entity": "this"
+      }
+    }
   }
 }

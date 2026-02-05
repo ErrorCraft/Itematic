@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.client.network;
 
 import net.errorcraft.itematic.access.network.listener.ClientPlayPacketListenerAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.mixin.item.ItemGroupsAccessor;
 import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
 import net.errorcraft.itematic.world.action.actions.TwirlPlayerAction;
@@ -11,8 +11,8 @@ import net.minecraft.client.network.ClientCommonNetworkHandler;
 import net.minecraft.client.network.ClientConnectionState;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.component.ComponentType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.ClientConnection;
@@ -44,18 +44,18 @@ public abstract class ClientPlayNetworkHandlerExtender extends ClientCommonNetwo
     }
 
     @Redirect(
-        method = "getActiveTotemOfUndying",
+        method = "getActiveDeathProtector",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
         )
     )
-    private static boolean isOfForTotemOfUndyingUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.LIFE_SAVING);
+    private static <T> boolean containsDeathProtectionDataComponentUseEventListenerCheck(ItemStack instance, ComponentType<T> type) {
+        return instance.itematic$hasEventListener(ItemEvents.BEFORE_DEATH_HOLDER);
     }
 
     @Redirect(
-        method = "getActiveTotemOfUndying",
+        method = "getActiveDeathProtector",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"

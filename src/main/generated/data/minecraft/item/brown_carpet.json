@@ -13,8 +13,7 @@
       ],
       "equip_sound": "minecraft:entity.llama.swag",
       "model": "minecraft:brown_carpet",
-      "slot": "body",
-      "swappable": true
+      "slot": "body"
     },
     "minecraft:fuel": {
       "ticks": 67

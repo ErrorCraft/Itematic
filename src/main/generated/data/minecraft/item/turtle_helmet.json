@@ -18,8 +18,7 @@
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_turtle",
       "model": "minecraft:turtle_scute",
-      "slot": "head",
-      "swappable": true
+      "slot": "head"
     },
     "minecraft:repairable": {
       "items": "#minecraft:repairs_turtle_armor"
