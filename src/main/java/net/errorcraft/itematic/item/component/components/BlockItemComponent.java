@@ -12,7 +12,7 @@ import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.item.placement.block.picker.pickers.AttachedToSideBlockPicker;
 import net.errorcraft.itematic.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.serialization.SetCodec;
 import net.minecraft.block.Block;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.component.ComponentMap;
@@ -42,7 +42,7 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
     public static final Codec<BlockItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         BlockPicker.CODEC.fieldOf("block").forGetter(BlockItemComponent::block),
         Codec.BOOL.optionalFieldOf("operator_only", false).forGetter(BlockItemComponent::operatorOnly),
-        ItematicCodecs.setCodec(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(BlockItemComponent::passes)
+        SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(BlockItemComponent::passes)
     ).apply(instance, BlockItemComponent::new));
 
     public static BlockItemComponent of(BlockPicker<?> block, boolean operatorOnly, Set<Pass> passes) {

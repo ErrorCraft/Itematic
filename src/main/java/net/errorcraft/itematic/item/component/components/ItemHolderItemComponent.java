@@ -200,7 +200,7 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
     }
 
     private void remove(Entity user, BundleContentsComponent.Builder bundleContentsBuilder, Consumer<ItemStack> onRemoved) {
-        ItemStack removedStack = bundleContentsBuilder.removeFirst();
+        ItemStack removedStack = bundleContentsBuilder.removeSelected();
         if (removedStack == null) {
             return;
         }
@@ -215,7 +215,7 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
             return;
         }
 
-        ItemStack removedStack = newBuilder.removeFirst();
+        ItemStack removedStack = newBuilder.removeSelected();
         if (removedStack == null) {
             return;
         }

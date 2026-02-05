@@ -7,7 +7,6 @@
       "toughness": 0.0
     },
     "minecraft:damageable": {
-      "break_sound": "minecraft:item.wolf_armor.break",
       "durability": 64
     },
     "minecraft:dyeable": {
@@ -17,8 +16,7 @@
       "allowed_entities": "minecraft:wolf",
       "equip_sound": "minecraft:item.armor.equip_wolf",
       "model": "minecraft:armadillo_scute",
-      "slot": "body",
-      "swappable": true
+      "slot": "body"
     },
     "minecraft:stackable": 1,
     "minecraft:tinted": {

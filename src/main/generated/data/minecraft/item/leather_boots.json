@@ -21,8 +21,7 @@
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_leather",
       "model": "minecraft:leather",
-      "slot": "feet",
-      "swappable": true
+      "slot": "feet"
     },
     "minecraft:repairable": {
       "items": "#minecraft:repairs_leather_armor"

@@ -13,17 +13,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityExtender {
     @Redirect(
-        method = "damage",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForNetherStarReturnFalse(ItemStack instance, Item item) {
-        return false;
-    }
-
-    @Redirect(
         method = "onPlayerCollision",
         at = @At(
             value = "INVOKE",

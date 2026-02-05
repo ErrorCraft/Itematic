@@ -32,7 +32,7 @@ public class ArmorFeatureRendererExtender<S extends BipedEntityRenderState, M ex
         at = @At("HEAD"),
         cancellable = true
     )
-    private void checkPresenceEquipmentBehavior(MatrixStack matrices, VertexConsumerProvider vertexConsumers, S state, ItemStack stack, EquipmentSlot slot, int light, A armorModel, CallbackInfo info) {
+    private void checkPresenceEquipmentBehavior(MatrixStack matrices, VertexConsumerProvider vertexConsumers, ItemStack stack, EquipmentSlot slot, int light, A armorModel, CallbackInfo info) {
         if (!stack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
             info.cancel();
         }

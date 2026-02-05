@@ -106,7 +106,11 @@ public class BundleContentsComponentExtender implements BundleContentsComponentA
         }
 
         @Redirect(
-            method = { "getMaxAllowed", "add(Lnet/minecraft/item/ItemStack;)I", "removeFirst" },
+            method = {
+                "getMaxAllowed",
+                "add(Lnet/minecraft/item/ItemStack;)I",
+                "removeSelected"
+            },
             at = @At(
                 value = "INVOKE",
                 target = "Lnet/minecraft/component/type/BundleContentsComponent;getOccupancy(Lnet/minecraft/item/ItemStack;)Lorg/apache/commons/lang3/math/Fraction;"
@@ -131,11 +135,12 @@ public class BundleContentsComponentExtender implements BundleContentsComponentA
             method = "add(Lnet/minecraft/item/ItemStack;)I",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/component/type/BundleContentsComponent$Builder;addInternal(Lnet/minecraft/item/ItemStack;)I"
+                target = "Lnet/minecraft/component/type/BundleContentsComponent$Builder;getInsertionIndex(Lnet/minecraft/item/ItemStack;)I"
             ),
             cancellable = true
         )
         private void splitOverMultipleItemStacks(ItemStack stack, CallbackInfoReturnable<Integer> info, @Local int countToAdd) {
+            // The assumption that an overflowing item stack doesn't fit no longer applies due to data-driven occupancies
             info.setReturnValue(countToAdd);
             for (ItemStack heldStack : this.stacks) {
                 if (!ItemStack.areItemsAndComponentsEqual(heldStack, stack)) {

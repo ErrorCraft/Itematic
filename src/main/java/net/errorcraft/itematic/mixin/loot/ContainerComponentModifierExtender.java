@@ -14,20 +14,20 @@ import java.util.stream.Stream;
 @Mixin(ContainerComponentModifier.class)
 public interface ContainerComponentModifierExtender<T> extends ContainerComponentModifierAccess<T> {
     @Shadow
-    T create(T var1, Stream<ItemStack> var2);
+    T apply(T component, Stream<ItemStack> contents);
 
     @Redirect(
         method = "apply(Lnet/minecraft/item/ItemStack;Ljava/lang/Object;Ljava/util/stream/Stream;)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/loot/ContainerComponentModifier;create(Ljava/lang/Object;Ljava/util/stream/Stream;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/loot/ContainerComponentModifier;apply(Ljava/lang/Object;Ljava/util/stream/Stream;)Ljava/lang/Object;"
         )
     )
-    private T useStackAwareVersion(ContainerComponentModifier<T> instance, T object, Stream<ItemStack> contents, @Local(argsOnly = true) ItemStack stack) {
-        return this.itematic$create(stack, object, contents);
+    private T useStackAwareVersion(ContainerComponentModifier<T> instance, T component, Stream<ItemStack> newContents, @Local(argsOnly = true) ItemStack stack) {
+        return this.itematic$apply(stack, component, newContents);
     }
 
-    default T itematic$create(ItemStack stack, T component, Stream<ItemStack> newContents) {
-        return this.create(component, newContents);
+    default T itematic$apply(ItemStack stack, T component, Stream<ItemStack> newContents) {
+        return this.apply(component, newContents);
     }
 }

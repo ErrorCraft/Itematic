@@ -45,7 +45,6 @@
     "render.block.entity.DecoratedPotBlockEntityRendererExtender",
     "render.entity.FishingBobberEntityRendererExtender",
     "render.entity.ItemEntityRendererExtender",
-    "render.entity.ItemFrameEntityRendererExtender",
     "render.entity.PlayerEntityRendererExtender",
     "render.entity.feature.ArmorFeatureRendererExtender",
     "render.entity.feature.CapeFeatureRendererExtender",

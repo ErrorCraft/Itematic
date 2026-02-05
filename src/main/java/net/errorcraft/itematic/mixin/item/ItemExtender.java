@@ -455,15 +455,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .orElse(SoundEvents.ENTITY_ITEM_BREAK);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean isNetworkSynced() {
-        return this.itematic$hasBehavior(ItemComponentTypes.MAP_HOLDER);
-    }
-
     @Inject(
         method = "getUseAction",
         at = @At("HEAD"),
@@ -603,6 +594,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Override
     public boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
         return this.events.invokeEvent(event, context);
+    }
+
+    @Override
+    public boolean itematic$hasEventListener(ItemEvent event) {
+        return this.events.hasListener(event);
     }
 
     @Override

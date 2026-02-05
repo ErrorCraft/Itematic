@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.mixin.screen;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.CartographyTableScreenHandler;
@@ -14,26 +13,10 @@ import org.spongepowered.asm.mixin.injection.Slice;
 @Mixin(CartographyTableScreenHandler.class)
 public class CartographyTableScreenHandlerExtender {
     @Redirect(
-        method = "quickMove",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/item/Items;FILLED_MAP:Lnet/minecraft/item/Item;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.MAP_HOLDER);
-    }
-
-    @Redirect(
-        method = { "method_17382", "quickMove" },
+        method = {
+            "method_17382",
+            "quickMove"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
@@ -52,7 +35,10 @@ public class CartographyTableScreenHandlerExtender {
     }
 
     @Redirect(
-        method = { "method_17382", "quickMove" },
+        method = {
+            "method_17382",
+            "quickMove"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
@@ -71,7 +57,10 @@ public class CartographyTableScreenHandlerExtender {
     }
 
     @Redirect(
-        method = { "method_17382", "quickMove" },
+        method = {
+            "method_17382",
+            "quickMove"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
@@ -87,21 +76,6 @@ public class CartographyTableScreenHandlerExtender {
     )
     private boolean isOfForMapUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.MAP);
-    }
-
-    @Mixin(targets = "net/minecraft/screen/CartographyTableScreenHandler$3")
-    public static class MapSlotExtender {
-        @Redirect(
-            method = "canInsert",
-            at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-                ordinal = 0
-            )
-        )
-        private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
-            return instance.itematic$hasBehavior(ItemComponentTypes.MAP_HOLDER);
-        }
     }
 
     @Mixin(targets = "net/minecraft/screen/CartographyTableScreenHandler$4")

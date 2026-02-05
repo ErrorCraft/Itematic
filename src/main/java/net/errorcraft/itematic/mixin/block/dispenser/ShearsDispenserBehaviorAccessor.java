@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.block.dispenser;
 
 import net.minecraft.block.dispenser.ShearsDispenserBehavior;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +15,7 @@ public interface ShearsDispenserBehaviorAccessor {
     }
 
     @Invoker("tryShearEntity")
-    static boolean tryShearEntity(ServerWorld world, BlockPos pos) {
+    static boolean tryShearEntity(ServerWorld world, BlockPos pos, ItemStack shears) {
         throw new AssertionError();
     }
 }

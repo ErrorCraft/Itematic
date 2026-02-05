@@ -67,19 +67,4 @@ public class BrewingStandScreenHandlerExtender {
             return instance.itematic$isOf(ItemKeys.GLASS_BOTTLE);
         }
     }
-
-    @Mixin(targets = "net/minecraft/screen/BrewingStandScreenHandler$FuelSlot")
-    public static class FuelSlotExtender {
-        @Redirect(
-            method = "matches",
-            at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-                ordinal = 0
-            )
-        )
-        private static boolean isOfForBlazePowderUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.itematic$isOf(ItemKeys.BLAZE_POWDER);
-        }
-    }
 }

@@ -12,7 +12,7 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.providers.ConstantIntegerProvider;
 import net.errorcraft.itematic.item.use.provider.providers.IndefiniteIntegerProvider;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.serialization.SetCodec;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.UseRemainderComponent;
@@ -35,7 +35,7 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
         UseDurationDataComponent.CODEC.optionalFieldOf("ticks").forGetter(UseableItemComponent::ticks),
         UseAction.CODEC.optionalFieldOf("animation", UseAction.NONE).forGetter(UseableItemComponent::animation),
         ItemStack.CODEC.optionalFieldOf("remainder").forGetter(UseableItemComponent::remainder),
-        ItematicCodecs.setCodec(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(UseableItemComponent::passes)
+        SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(UseableItemComponent::passes)
     ).apply(instance, UseableItemComponent::new));
 
     public static Builder builder() {

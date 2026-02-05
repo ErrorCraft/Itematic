@@ -28,18 +28,6 @@ public class BrewingStandBlockEntityExtender {
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
             ordinal = 0
-        )
-    )
-    private boolean isOfForBlazePowderUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BLAZE_POWDER);
-    }
-
-    @Redirect(
-        method = "isValid",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 0
         ),
         slice = @Slice(
             from = @At(
@@ -107,18 +95,6 @@ public class BrewingStandBlockEntityExtender {
     )
     private static ItemStack craftUseDynamicRegistryManager(BrewingRecipeRegistry instance, ItemStack ingredient, ItemStack input, World world) {
         return instance.itematic$craft(ingredient, input, world);
-    }
-
-    @Redirect(
-        method = "tick",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 0
-        )
-    )
-    private static boolean isOfForBlazePowderUseRegistryKeyCheckStatic(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BLAZE_POWDER);
     }
 
     @Inject(

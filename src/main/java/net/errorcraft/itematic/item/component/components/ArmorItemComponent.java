@@ -9,6 +9,7 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.AnimalArmorItem;
@@ -16,8 +17,6 @@ import net.minecraft.item.equipment.ArmorMaterial;
 import net.minecraft.item.equipment.EquipmentType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
-
-import java.util.Optional;
 
 public record ArmorItemComponent(int defense, double toughness, double knockbackResistance, Identifier attributeId) implements ItemComponent<ArmorItemComponent> {
     public static final Codec<ArmorItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -37,17 +36,26 @@ public record ArmorItemComponent(int defense, double toughness, double knockback
     }
 
     public static ItemComponent<?>[] from(ArmorMaterial material, EquipmentType type) {
-        return from(material, type, null);
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(1),
+            DamageableItemComponent.of(type.getMaxDamage(material.durability())),
+            EquipmentItemComponent.of(material, type),
+            of(material, type)
+        };
     }
 
     public static ItemComponent<?>[] from(ArmorMaterial material, EquipmentType type, AnimalArmorItem.Type animalType) {
-        int durability = type.getMaxDamage(material.durability());
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
-            Optional.ofNullable(animalType)
-                .map(AnimalArmorItem.Type::itematic$breakSound)
-                .map(breakSound -> DamageableItemComponent.of(durability, breakSound))
-                .orElseGet(() -> DamageableItemComponent.of(durability)),
+            EquipmentItemComponent.of(material, type, animalType),
+            of(material, type)
+        };
+    }
+
+    public static ItemComponent<?>[] fromDamageable(ArmorMaterial material, EquipmentType type, AnimalArmorItem.Type animalType) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(1),
+            DamageableItemComponent.of(type.getMaxDamage(material.durability())),
             EquipmentItemComponent.of(material, type, animalType),
             of(material, type)
         };
@@ -66,7 +74,8 @@ public record ArmorItemComponent(int defense, double toughness, double knockback
     @Override
     public void addAttributeModifiers(AttributeModifiersComponent.Builder builder, ItemComponentSet components) {
         AttributeModifierSlot slot = components.get(ItemComponentTypes.EQUIPMENT)
-            .map(EquipmentItemComponent::slot)
+            .map(EquipmentItemComponent::equippable)
+            .map(EquippableComponent::slot)
             .map(AttributeModifierSlot::forEquipmentSlot)
             .orElse(AttributeModifierSlot.ARMOR);
         builder.add(

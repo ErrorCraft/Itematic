@@ -8,7 +8,8 @@
       "behavior": "minecraft:equip_entity"
     },
     "minecraft:equipment": {
-      "slot": "offhand"
+      "slot": "offhand",
+      "swappable": false
     },
     "minecraft:repairable": {
       "items": "#minecraft:wooden_tool_materials"
