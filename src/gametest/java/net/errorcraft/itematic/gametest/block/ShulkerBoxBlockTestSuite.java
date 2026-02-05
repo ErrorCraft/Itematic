@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
 public class ShulkerBoxBlockTestSuite {
-    private static final BlockPos BLOCK_POSITION = new BlockPos(1, 2, 1);
+    private static final BlockPos BLOCK_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(templateName = "itematic:block.shulker_box")
     public void breakingShulkerBoxInCreativeModeDropsShulkerBox(TestContext context) {

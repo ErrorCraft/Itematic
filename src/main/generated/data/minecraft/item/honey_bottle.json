@@ -5,6 +5,7 @@
       "sound": "minecraft:item.honey_bottle.drink"
     },
     "minecraft:food": {
+      "always_edible": true,
       "nutrition": 6,
       "saturation": 1.2
     },

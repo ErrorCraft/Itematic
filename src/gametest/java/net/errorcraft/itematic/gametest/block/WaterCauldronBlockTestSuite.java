@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
 public class WaterCauldronBlockTestSuite {
-    private static final BlockPos WATER_CAULDRON_POSITION = new BlockPos(1, 2, 1);
+    private static final BlockPos WATER_CAULDRON_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(templateName = "itematic:block.water_cauldron")
     public void usingColoredShulkerBoxOnWaterCauldronClearsColor(TestContext context) {

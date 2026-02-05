@@ -18,7 +18,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameMode;
 
 public class BlockItemComponentTestSuite {
-    private static final BlockPos GROUND_POSITION = new BlockPos(1, 1, 0);
+    private static final BlockPos GROUND_POSITION = new BlockPos(1, 0, 0);
     private static final BlockPos PLACED_BLOCK_POSITION = GROUND_POSITION.add(0, 1, 0);
     private static final BlockPos ABOVE_PLACED_BLOCK_POSITION = PLACED_BLOCK_POSITION.add(0, 1, 0);
     private static final BlockPos WALL_POSITION = GROUND_POSITION.add(0, 1, 1);

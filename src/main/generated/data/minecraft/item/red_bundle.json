@@ -1,0 +1,57 @@
+{
+  "behavior": {
+    "minecraft:item_holder": {
+      "capacity": {
+        "denominator": 1,
+        "numerator": 1
+      },
+      "empty_sound": "minecraft:item.bundle.drop_contents",
+      "insert_item_sound": "minecraft:item.bundle.insert",
+      "remove_item_sound": "minecraft:item.bundle.remove_one",
+      "rules": [
+        {
+          "type": "minecraft:reject",
+          "condition": {
+            "items": "#minecraft:banned_bundle_items"
+          }
+        },
+        {
+          "type": "minecraft:occupancy_held_items_with_penalty",
+          "condition": {
+            "behavior": [
+              "minecraft:item_holder"
+            ]
+          },
+          "penalty": {
+            "denominator": 16,
+            "numerator": 1
+          }
+        },
+        {
+          "type": "minecraft:fraction",
+          "condition": {
+            "data_components": [
+              "minecraft:bees"
+            ]
+          },
+          "fraction": {
+            "denominator": 1,
+            "numerator": 1
+          }
+        }
+      ]
+    },
+    "minecraft:stackable": 1,
+    "minecraft:useable": {
+      "ticks": {
+        "type": "minecraft:constant",
+        "amount": 60
+      }
+    }
+  },
+  "display": {
+    "item_bar_style": "minecraft:bundle",
+    "model": "minecraft:red_bundle",
+    "translation_key": "item.minecraft.red_bundle"
+  }
+}

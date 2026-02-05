@@ -1,7 +1,0 @@
-{
-  "type": "minecraft:item_coloring",
-  "category": "misc",
-  "color": "pink",
-  "ingredient": "#minecraft:shulker_boxes",
-  "result": "minecraft:pink_shulker_box"
-}

@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
 public class ThrowableItemComponentTestSuite {
-    private static final BlockPos SPAWN_POSITION = new BlockPos(1, 2, 1);
+    private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(templateName = "itematic:item.component.throwable.platform")
     public void throwingEggSpawnsEggAtEyePosition(TestContext context) {

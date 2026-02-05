@@ -15,7 +15,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameMode;
 
 public class FlowerPotItemTestSuite {
-    private static final BlockPos FLOWER_POT_POSITION = new BlockPos(1, 2, 1);
+    private static final BlockPos FLOWER_POT_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(templateName = "itematic:item.flower_pot.platform.flower_pot")
     public void usingOakSaplingOnFlowerPotReplacesFlowerPot(TestContext context) {

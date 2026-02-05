@@ -8,8 +8,8 @@ import net.minecraft.sound.SoundEvent;
 public interface AnimalArmorItemTypeAccess {
     default RegistryEntry<SoundEvent> itematic$breakSound() {
         return null;
-    };
+    }
     default RegistryEntryList<EntityType<?>> itematic$allowedEntities() {
         return null;
-    };
+    }
 }

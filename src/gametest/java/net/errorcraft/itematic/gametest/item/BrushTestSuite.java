@@ -13,7 +13,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameMode;
 
 public class BrushTestSuite {
-    private static final BlockPos BLOCK_POSITION = new BlockPos(2, 1, 2);
+    private static final BlockPos BLOCK_POSITION = new BlockPos(2, 0, 2);
 
     @GameTest(templateName = "itematic:item.brush.platform")
     public void usingBrushDoesNotStartBrushing(TestContext context) {
