@@ -7531,7 +7531,7 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.WOLF_ARMOR, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WOLF_ARMOR).build(),
                 ItemComponentSet.builder()
-                    .with(ArmorItemComponent.from(ArmorMaterials.ARMADILLO_SCUTE, EquipmentType.BODY, AnimalArmorItem.Type.CANINE))
+                    .with(ArmorItemComponent.fromDamageable(ArmorMaterials.ARMADILLO_SCUTE, EquipmentType.BODY, AnimalArmorItem.Type.CANINE))
                     .with(DyeableItemComponent.of(0x000000))
                     .with(TintedItemComponent.of(DyeableItemColor.of(1)))
                     .build()
@@ -10811,10 +10811,14 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(LifeSavingItemComponent.of(
-                        new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 900, 1),
-                        new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 100, 1),
-                        new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 800, 0)
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.BEFORE_DEATH_HOLDER, ActionEntry.of(
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 900, 1),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 100, 1),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 800, 0)
+                        )
                     ))
                     .build()
             ));

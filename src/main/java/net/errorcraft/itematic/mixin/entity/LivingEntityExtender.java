@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.access.entity.LivingEntityAccess;
 import net.errorcraft.itematic.access.entity.attribute.AttributeContainerAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
@@ -12,8 +12,11 @@ import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ConsumableItemComponent;
-import net.errorcraft.itematic.item.component.components.LifeSavingItemComponent;
+import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.component.ComponentType;
+import net.minecraft.component.type.DeathProtectionComponent;
 import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -22,15 +25,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Hand;
@@ -48,7 +50,6 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
 import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
@@ -204,20 +205,23 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Redirect(
-        method = "tryUseTotem",
+        method = "tryUseDeathProtector",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
         )
     )
-    private boolean isOfForTotemOfUndyingUseItemComponent(ItemStack instance, Item item, @Share("lifeSavingItemComponent") LocalRef<LifeSavingItemComponent> lifeSavingItemComponent) {
-        Optional<LifeSavingItemComponent> optionalComponent = instance.itematic$getBehavior(ItemComponentTypes.LIFE_SAVING);
-        optionalComponent.ifPresent(lifeSavingItemComponent::set);
-        return optionalComponent.isPresent();
+    @SuppressWarnings("unchecked")
+    private <T> T getDeathProtectionDataComponentUseEventListenerCheck(ItemStack instance, ComponentType<T> type) {
+        if (instance.itematic$hasEventListener(ItemEvents.BEFORE_DEATH_HOLDER)) {
+            return (T) DeathProtectionComponent.TOTEM_OF_UNDYING;
+        }
+
+        return null;
     }
 
     @Redirect(
-        method = "tryUseTotem",
+        method = "tryUseDeathProtector",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
@@ -227,27 +231,23 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         return instance.itematic$getOrCreateStat(stack.getRegistryEntry());
     }
 
-    @Inject(
-        method = "tryUseTotem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;clearStatusEffects()Z",
-            shift = At.Shift.AFTER
-        )
-    )
-    private void addEffectsFromLifeSavingItemComponent(DamageSource source, CallbackInfoReturnable<Boolean> info, @Share("lifeSavingItemComponent") LocalRef<LifeSavingItemComponent> lifeSavingItemComponent) {
-        lifeSavingItemComponent.get().apply((LivingEntity)(Object) this);
-    }
-
     @Redirect(
-        method = "tryUseTotem",
+        method = "tryUseDeathProtector",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;)Z"
+            target = "Lnet/minecraft/component/type/DeathProtectionComponent;applyDeathEffects(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;)V"
         )
     )
-    private boolean doNotAddStatusEffects(LivingEntity instance, StatusEffectInstance effect) {
-        return false;
+    private void invokeBeforeDeathHolderEvent(DeathProtectionComponent instance, ItemStack stack, LivingEntity entity) {
+        if (!(entity.getWorld() instanceof ServerWorld serverWorld)) {
+            return;
+        }
+
+        ActionContext context = ActionContext.builder(serverWorld)
+            .entityPosition(ActionContextParameter.THIS, entity)
+            .stack(stack)
+            .build();
+        stack.itematic$invokeEvent(ItemEvents.BEFORE_DEATH_HOLDER, context);
     }
 
     @Inject(
@@ -380,6 +380,21 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     )
     private boolean dispensableAlwaysTrue(EquippableComponent instance) {
         return true;
+    }
+
+    @WrapOperation(
+        method = "canEquip",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+        )
+    )
+    private Object checkPresenceEquipmentBehavior(ItemStack instance, ComponentType<EquippableComponent> type, Operation<Object> original) {
+        if (instance.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+            return null;
+        }
+
+        return original.call(instance, type);
     }
 
     @Redirect(

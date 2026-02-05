@@ -12,7 +12,7 @@ public interface ContainerComponentModifiersExtender {
     @Mixin(targets = "net/minecraft/loot/ContainerComponentModifiers$2")
     class BundleContentsExtender implements ContainerComponentModifierAccess<BundleContentsComponent> {
         @Override
-        public BundleContentsComponent itematic$create(ItemStack stack, BundleContentsComponent component, Stream<ItemStack> newContents) {
+        public BundleContentsComponent itematic$apply(ItemStack stack, BundleContentsComponent component, Stream<ItemStack> newContents) {
             return stack.itematic$getBehavior(ItemComponentTypes.ITEM_HOLDER)
                 .map(c -> c.createBuilder(stack, component))
                 .map(BundleContentsComponent.Builder::clear)

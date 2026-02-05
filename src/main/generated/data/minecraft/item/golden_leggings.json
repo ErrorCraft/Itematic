@@ -7,7 +7,7 @@
       "toughness": 0.0
     },
     "minecraft:damageable": {
-      "durability": 225
+      "durability": 105
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:equip_entity"
@@ -18,8 +18,7 @@
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_gold",
       "model": "minecraft:gold",
-      "slot": "legs",
-      "swappable": true
+      "slot": "legs"
     },
     "minecraft:repairable": {
       "items": "#minecraft:repairs_golden_armor"

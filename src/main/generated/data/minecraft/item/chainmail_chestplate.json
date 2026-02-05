@@ -18,8 +18,7 @@
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_chain",
       "model": "minecraft:chainmail",
-      "slot": "chest",
-      "swappable": true
+      "slot": "chest"
     },
     "minecraft:repairable": {
       "items": "#minecraft:repairs_chainmail_armor"

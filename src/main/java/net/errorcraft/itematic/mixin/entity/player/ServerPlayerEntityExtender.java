@@ -1,21 +1,18 @@
 package net.errorcraft.itematic.mixin.entity.player;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.GameProfile;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.NetworkSyncedItem;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,51 +25,15 @@ public abstract class ServerPlayerEntityExtender extends PlayerEntity {
         super(world, pos, yaw, gameProfile);
     }
 
-    @Redirect(
-        method = "playerTick",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
-        )
-    )
-    private Item getItemReturnNull(ItemStack instance) {
-        return null;
-    }
-
-    @Redirect(
-        method = "playerTick",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;isNetworkSynced()Z"
-        )
-    )
-    private boolean isNetworkSyncedUseItemStackVersion(Item instance, @Local ItemStack stack) {
-        return stack.itematic$isNetworkSynced();
-    }
-
-    @Redirect(
-        method = "playerTick",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/NetworkSyncedItem;createSyncPacket(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;)Lnet/minecraft/network/packet/Packet;"
-        )
-    )
-    @Nullable
-    private Packet<?> createSyncPacketUseItemComponent(NetworkSyncedItem instance, ItemStack stack, World world, PlayerEntity player) {
-        return stack.itematic$getBehavior(ItemComponentTypes.MAP_HOLDER)
-            .map(c -> c.createSyncPacket(stack, world, player))
-            .orElse(null);
-    }
-
-    @Redirect(
+    @Inject(
         method = "useBook",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
+        at = @At("HEAD"),
+        cancellable = true
     )
-    private boolean isOfForWrittenBookUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER);
+    private void checkPresenceTextHolderBehavior(ItemStack book, Hand hand, CallbackInfo info) {
+        if (!book.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER)) {
+            info.cancel();
+        }
     }
 
     @Inject(

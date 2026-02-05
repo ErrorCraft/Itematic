@@ -18,8 +18,7 @@
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_netherite",
       "model": "minecraft:netherite",
-      "slot": "chest",
-      "swappable": true
+      "slot": "chest"
     },
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_fire"

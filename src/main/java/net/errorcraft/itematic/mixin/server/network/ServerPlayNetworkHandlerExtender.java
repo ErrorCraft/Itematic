@@ -1,10 +1,11 @@
 package net.errorcraft.itematic.mixin.server.network;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.WritableItemComponent;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -16,28 +17,28 @@ import java.util.Optional;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public class ServerPlayNetworkHandlerExtender {
-    @Redirect(
+    @ModifyExpressionValue(
         method = "updateBookContent",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
         )
     )
-    private boolean isOfForWritableBookUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.WRITABLE);
+    private boolean containsWritableBookContentDataComponentAlsoCheckItemBehaviorComponent(boolean original, @Local ItemStack stack) {
+        return original && stack.itematic$hasBehavior(ItemComponentTypes.WRITABLE);
     }
 
-    @Redirect(
+    @ModifyExpressionValue(
         method = "addBook",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
         )
     )
-    private boolean isOfForWritableBookUseItemComponentCheck(ItemStack instance, Item item, @Share("writable") LocalRef<WritableItemComponent> writable) {
-        Optional<WritableItemComponent> optionalWritable = instance.itematic$getBehavior(ItemComponentTypes.WRITABLE);
+    private boolean containsWritableBookContentDataComponentAlsoCheckAndStoreItemBehaviorComponent(boolean original, @Local ItemStack stack, @Share("writable") LocalRef<WritableItemComponent> writable) {
+        Optional<WritableItemComponent> optionalWritable = stack.itematic$getBehavior(ItemComponentTypes.WRITABLE);
         optionalWritable.ifPresent(writable::set);
-        return optionalWritable.isPresent();
+        return original && optionalWritable.isPresent();
     }
 
     @Redirect(

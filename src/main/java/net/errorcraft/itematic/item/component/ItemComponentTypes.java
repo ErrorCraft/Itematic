@@ -53,7 +53,6 @@ public class ItemComponentTypes {
     public static final ItemComponentType<ZoomItemComponent> ZOOM = register("zoom", new ItemComponentType<>(ZoomItemComponent.CODEC));
     public static final ItemComponentType<ItemHolderItemComponent> ITEM_HOLDER = register("item_holder", new ItemComponentType<>(ItemHolderItemComponent.CODEC));
     public static final ItemComponentType<ImmuneToDamageItemComponent> IMMUNE_TO_DAMAGE = register("immune_to_damage", new ItemComponentType<>(ImmuneToDamageItemComponent.CODEC));
-    public static final ItemComponentType<LifeSavingItemComponent> LIFE_SAVING = register("life_saving", new ItemComponentType<>(LifeSavingItemComponent.CODEC));
     public static final ItemComponentType<UnlockRecipesItemComponent> UNLOCK_RECIPES = register("unlock_recipes", new ItemComponentType<>(UnlockRecipesItemComponent.CODEC));
     public static final ItemComponentType<DebugStickItemComponent> DEBUG_STICK = register("debug_stick", new ItemComponentType<>(DebugStickItemComponent.CODEC));
     public static final ItemComponentType<SuspiciousEffectIngredientItemComponent> SUSPICIOUS_EFFECT_INGREDIENT = register("suspicious_effect_ingredient", new ItemComponentType<>(SuspiciousEffectIngredientItemComponent.CODEC));

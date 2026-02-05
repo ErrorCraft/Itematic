@@ -29,6 +29,6 @@ public record ShearAtPositionAction(ActionContextParameter position) implements 
     public boolean execute(ActionContext context) {
         ServerWorld world = context.world();
         BlockPos pos = context.blockPos(this.position);
-        return ShearsDispenserBehaviorAccessor.tryShearBlock(world, pos) || ShearsDispenserBehaviorAccessor.tryShearEntity(world, pos);
+        return ShearsDispenserBehaviorAccessor.tryShearBlock(world, pos) || ShearsDispenserBehaviorAccessor.tryShearEntity(world, pos, context.stack());
     }
 }

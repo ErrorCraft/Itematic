@@ -28,7 +28,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.ComponentHolder;
 import net.minecraft.component.ComponentMap;
-import net.minecraft.component.ComponentMapImpl;
+import net.minecraft.component.MergedComponentMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -92,7 +92,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     @Shadow
     @Final
     @Mutable
-    ComponentMapImpl components;
+    MergedComponentMap components;
 
     @Shadow
     public abstract boolean isEmpty();
@@ -114,9 +114,6 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     @Shadow
     public abstract int getCount();
-
-    @Shadow
-    protected abstract ItemStack applyRemainderAndCooldown(LivingEntity user, ItemStack stack);
 
     @Unique
     private final Set<ItemEvent> activeEvents = new HashSet<>();
@@ -189,7 +186,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = "<init>(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/ComponentMapImpl;)V",
+        method = "<init>(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/MergedComponentMap;)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemConvertible;asItem()Lnet/minecraft/item/Item;"
@@ -217,18 +214,18 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/component/ComponentMapImpl;create(Lnet/minecraft/component/ComponentMap;Lnet/minecraft/component/ComponentChanges;)Lnet/minecraft/component/ComponentMapImpl;"
+            target = "Lnet/minecraft/component/MergedComponentMap;create(Lnet/minecraft/component/ComponentMap;Lnet/minecraft/component/ComponentChanges;)Lnet/minecraft/component/MergedComponentMap;"
         )
     )
-    private static ComponentMapImpl createComponentMapReturnNullToPreventNullPointerException(ComponentMap baseComponents, ComponentChanges changes) {
+    private static MergedComponentMap createComponentMapReturnNullToPreventNullPointerException(ComponentMap baseComponents, ComponentChanges changes) {
         return null;
     }
 
     @Inject(
-        method = "<init>(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/ComponentMapImpl;)V",
+        method = "<init>(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/MergedComponentMap;)V",
         at = @At("TAIL")
     )
-    private void checkItemValue(ItemConvertible item, int count, ComponentMapImpl components, CallbackInfo info) {
+    private void checkItemValue(ItemConvertible item, int count, MergedComponentMap components, CallbackInfo info) {
         if (item != null) {
             LOGGER.warn(Util.stackTraceMessage("Tried to create an item stack from an item or item-like value directly. This is no longer supported and should be modified to use a holder instead."));
         }
@@ -312,10 +309,10 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         method = "copy",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/ComponentMapImpl;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/MergedComponentMap;)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, int count, ComponentMapImpl components) {
+    private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, int count, MergedComponentMap components) {
         ItemStack copy = new ItemStack(this.entry, count);
         copy.itematic$setComponents(components);
         return copy;
@@ -456,7 +453,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
             target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
         )
     )
-    public boolean containsDataComponentUseItemBehaviorComponent(boolean original) {
+    public boolean containsEnchantableDataComponentAlsoCheckItemBehaviorComponent(boolean original) {
         return original && this.itematic$hasBehavior(ItemComponentTypes.ENCHANTABLE);
     }
 
@@ -530,17 +527,6 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.isEmpty()) {
             info.setReturnValue(Text.empty());
         }
-    }
-
-    @Redirect(
-        method = "getTooltip",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForFilledMapUseItemComponentCheck(ItemStack instance, Item item) {
-        return this.itematic$hasBehavior(ItemComponentTypes.MAP_HOLDER);
     }
 
     @WrapWithCondition(
@@ -617,7 +603,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
             shift = At.Shift.AFTER
         )
     )
-    private void invokeDamageToolEvent(int damage, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
+    private void invokeDamageItemEvent(int damage, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
@@ -632,7 +618,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
             target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"
         )
     )
-    private void invokeBreakToolEvent(int damage, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
+    private void invokeBreakItemEvent(int damage, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
@@ -718,7 +704,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
-    public void itematic$setComponents(ComponentMapImpl components) {
+    public void itematic$setComponents(MergedComponentMap components) {
         this.components = components;
     }
 
@@ -805,6 +791,15 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
+    public boolean itematic$hasEventListener(ItemEvent event) {
+        if (this.entry == null) {
+            return false;
+        }
+
+        return this.entry.value().itematic$hasEventListener(event);
+    }
+
+    @Override
     public boolean itematic$canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
         if (this.entry == null) {
             return true;
@@ -815,15 +810,6 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
 
         return this.entry.value().canMine(state, world, pos, miner);
-    }
-
-    @Override
-    public boolean itematic$isNetworkSynced() {
-        if (this.entry == null) {
-            return false;
-        }
-
-        return this.entry.value().isNetworkSynced();
     }
 
     @Override
@@ -848,10 +834,10 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     private void setFields(RegistryEntry<Item> entry) {
         this.entry = entry;
         if (entry.hasKeyAndValue()) {
-            this.components = new ComponentMapImpl(entry.value().getComponents());
+            this.components = new MergedComponentMap(entry.value().getComponents());
             entry.value().postProcessComponents((ItemStack)(Object) this);
         } else {
-            this.components = new ComponentMapImpl(ComponentMap.EMPTY);
+            this.components = new MergedComponentMap(ComponentMap.EMPTY);
         }
     }
 
@@ -859,10 +845,10 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     private void setFields(RegistryEntry<Item> entry, ComponentChanges changes) {
         this.entry = entry;
         if (entry.hasKeyAndValue()) {
-            this.components = ComponentMapImpl.create(entry.value().getComponents(), changes);
+            this.components = MergedComponentMap.create(entry.value().getComponents(), changes);
             entry.value().postProcessComponents((ItemStack)(Object) this);
         } else {
-            this.components = new ComponentMapImpl(ComponentMap.EMPTY);
+            this.components = new MergedComponentMap(ComponentMap.EMPTY);
         }
     }
 

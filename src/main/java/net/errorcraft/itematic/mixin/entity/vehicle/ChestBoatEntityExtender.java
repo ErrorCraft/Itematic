@@ -18,7 +18,6 @@ public abstract class ChestBoatEntityExtender extends BoatEntityExtender {
     @Override
     protected RegistryKey<Item> asItemKey() {
         return switch (this.getVariant()) {
-            default -> ItemKeys.OAK_CHEST_BOAT;
             case SPRUCE -> ItemKeys.SPRUCE_CHEST_BOAT;
             case BIRCH -> ItemKeys.BIRCH_CHEST_BOAT;
             case JUNGLE -> ItemKeys.JUNGLE_CHEST_BOAT;
@@ -27,6 +26,7 @@ public abstract class ChestBoatEntityExtender extends BoatEntityExtender {
             case DARK_OAK -> ItemKeys.DARK_OAK_CHEST_BOAT;
             case MANGROVE -> ItemKeys.MANGROVE_CHEST_BOAT;
             case BAMBOO -> ItemKeys.BAMBOO_CHEST_RAFT;
+            default -> ItemKeys.OAK_CHEST_BOAT;
         };
     }
 }

@@ -12,7 +12,7 @@ import java.util.Map;
 public class ItemEventMap {
     public static final ItemEventMap EMPTY = new ItemEventMap();
     public static final Codec<ItemEventMap> CODEC = Codec.simpleMap(ItematicRegistries.ITEM_EVENT.getCodec(), ActionEntry.REGISTRY_CODEC, ItematicRegistries.ITEM_EVENT)
-        .xmap(ItemEventMap::new, v -> v.events)
+        .xmap(ItemEventMap::new, map -> map.events)
         .codec();
 
     private final Map<ItemEvent, RegistryEntry<ActionEntry>> events;
@@ -34,9 +34,14 @@ public class ItemEventMap {
         if (entry == null) {
             return false;
         }
+
         return entry.value()
             .execute(context)
             .orElse(false);
+    }
+
+    public boolean hasListener(ItemEvent event) {
+        return this.events.containsKey(event);
     }
 
     public static class Builder {
@@ -54,6 +59,7 @@ public class ItemEventMap {
             if (this.events.containsKey(event)) {
                 throw new IllegalArgumentException("Duplicate entry for item event " + event);
             }
+
             this.events.put(event, entry);
             return this;
         }

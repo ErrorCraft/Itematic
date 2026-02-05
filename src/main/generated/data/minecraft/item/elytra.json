@@ -10,8 +10,7 @@
     "minecraft:equipment": {
       "equip_sound": "minecraft:item.armor.equip_elytra",
       "model": "minecraft:elytra",
-      "slot": "chest",
-      "swappable": true
+      "slot": "chest"
     },
     "minecraft:glider": {
       "useable_if": {

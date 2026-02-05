@@ -10,7 +10,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,18 +23,6 @@ public abstract class PandaEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "method_6504",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 0
-        )
-    )
-    private static boolean isOfForBambooUseItemTagCheck(ItemStack instance, Item item) {
-        return instance.isIn(ItemTags.PANDA_FOOD);
-    }
-
-    @Redirect(
         method = "interactMob",
         at = @At(
             value = "NEW",
@@ -44,29 +31,6 @@ public abstract class PandaEntityExtender extends MobEntityExtender {
     )
     private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, int count, @Local(ordinal = 0) ItemStack stack) {
         return new ItemStack(stack.getRegistryEntry(), count);
-    }
-
-    @Redirect(
-        method = "canEat",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForCakeUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.CAKE);
-    }
-
-    @Redirect(
-        method = { "method_6504" },
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 1
-        )
-    )
-    private static boolean isOfForCakeUseRegistryKeyCheckStatic(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.CAKE);
     }
 
     @Override
