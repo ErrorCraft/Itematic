@@ -55,7 +55,7 @@ public class EntityPlacer extends Placer {
     public static EntityPlacer spawned(ItemUsageContext context, ItemStack stack, ItemStackConsumer resultStackConsumer, EntityItemComponent entityItemComponent) {
         World world = context.getWorld();
         BlockPos blockPos = context.getBlockPos();
-        return new EntityPlacer(context.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), entityItemComponent.getEntityInitializer(stack), context.getSide(), true, SpawnReason.SPAWN_EGG, null, entityItemComponent.allowItemData(), context.getHand());
+        return new EntityPlacer(context.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), entityItemComponent.getEntityInitializer(stack), context.getSide(), true, SpawnReason.SPAWN_ITEM_USE, null, entityItemComponent.allowItemData(), context.getHand());
     }
 
     public static EntityPlacer action(ActionContext context, ActionContextParameter position, EntityItemComponent entityItemComponent) {

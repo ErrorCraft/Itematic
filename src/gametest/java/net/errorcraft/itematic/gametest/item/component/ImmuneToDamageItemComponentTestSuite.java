@@ -12,7 +12,7 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 
 public class ImmuneToDamageItemComponentTestSuite {
-    private static final BlockPos SPAWN_POSITION = new BlockPos(1, 2, 1);
+    private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
     public void explodingNetherStarKeepsItemAlive(TestContext context) {

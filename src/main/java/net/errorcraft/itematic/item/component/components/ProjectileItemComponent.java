@@ -81,7 +81,7 @@ public record ProjectileItemComponent(EntityInitializer<?> entity) implements It
     }
 
     public Entity createEntity(ActionContext context, ActionContextParameter position, float angleOffset, float speed, float uncertainty) {
-        Entity entity = this.entity.create(context, SpawnReason.SPAWN_EGG);
+        Entity entity = this.entity.create(context, SpawnReason.SPAWN_ITEM_USE);
         if (entity == null) {
             return null;
         }

@@ -27,6 +27,15 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
     public static final SpawnEggItemComponent INSTANCE = new SpawnEggItemComponent();
     public static final Codec<SpawnEggItemComponent> CODEC = Codec.unit(INSTANCE);
 
+    public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, int primaryColor, int secondaryColor, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+        return new ItemComponent<?>[] {
+            EntityItemComponent.of(SimpleEntityInitializer.of(entity.value()), true, EntityItemComponent.Pass.BLOCK, EntityItemComponent.Pass.FLUID),
+            INSTANCE,
+            TintedItemComponent.of(IndexItemColor.of(primaryColor, secondaryColor)),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
+        };
+    }
+
     @Override
     public ItemComponentType<SpawnEggItemComponent> type() {
         return ItemComponentTypes.SPAWN_EGG;
@@ -42,33 +51,29 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
         if (entityItemComponent.isEmpty()) {
             return Optional.empty();
         }
+
         if (entityItemComponent.get().getEntityInitializer(stack).type() != entityType) {
             return Optional.empty();
         }
+
         MobEntity mobEntity = this.createEntity(entity, entityType, world);
         if (mobEntity == null) {
             return Optional.empty();
         }
+
         if (!mobEntity.itematic$trySetBaby(true)) {
             return Optional.empty();
         }
+
         mobEntity.refreshPositionAfterTeleport(pos);
         Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (customName != null) {
             mobEntity.setCustomName(customName);
         }
+
         world.spawnEntityAndPassengers(mobEntity);
         stack.decrementUnlessCreative(1, user);
         return Optional.of(mobEntity);
-    }
-
-    public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, int primaryColor, int secondaryColor, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
-        return new ItemComponent<?>[] {
-            EntityItemComponent.of(SimpleEntityInitializer.of(entity.value()), true, EntityItemComponent.Pass.BLOCK, EntityItemComponent.Pass.FLUID),
-            INSTANCE,
-            TintedItemComponent.of(IndexItemColor.of(primaryColor, secondaryColor)),
-            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
-        };
     }
 
     private MobEntity createEntity(MobEntity entity, EntityType<? extends MobEntity> entityType, ServerWorld world) {
@@ -76,6 +81,6 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
             return passiveEntity.createChild(world, passiveEntity);
         }
 
-        return entityType.create(world, SpawnReason.SPAWN_EGG);
+        return entityType.create(world, SpawnReason.SPAWN_ITEM_USE);
     }
 }

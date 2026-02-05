@@ -39,8 +39,8 @@ public abstract class RawShapedRecipeExtender implements RawShapedRecipeAccess {
     public DefaultedList<ItemStack> itematic$remainder(CraftingRecipeInput input) {
         boolean actuallyMirrored = !this.symmetrical && this.matches(input, true);
         DefaultedList<ItemStack> remainders = DefaultedList.ofSize(input.size(), ItemStack.EMPTY);
-        for(int y = 0; y < this.height; y++) {
-            for(int x = 0; x < this.width; x++) {
+        for (int y = 0; y < this.height; y++) {
+            for (int x = 0; x < this.width; x++) {
                 int index = actuallyMirrored ?
                     this.width - x - 1 + y * this.width :
                     x + y * this.width;

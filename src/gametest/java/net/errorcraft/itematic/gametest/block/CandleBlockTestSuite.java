@@ -15,7 +15,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameMode;
 
 public class CandleBlockTestSuite {
-    private static final BlockPos GROUND_POSITION = new BlockPos(1, 1, 1);
+    private static final BlockPos GROUND_POSITION = new BlockPos(1, 0, 1);
     private static final BlockPos PLACED_BLOCK_POSITION = GROUND_POSITION.add(0, 1, 0);
 
     @GameTest(templateName = "itematic:block.white_candle")

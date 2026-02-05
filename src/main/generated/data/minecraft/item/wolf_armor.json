@@ -7,6 +7,7 @@
       "toughness": 0.0
     },
     "minecraft:damageable": {
+      "break_sound": "minecraft:item.wolf_armor.break",
       "durability": 64
     },
     "minecraft:dyeable": {
