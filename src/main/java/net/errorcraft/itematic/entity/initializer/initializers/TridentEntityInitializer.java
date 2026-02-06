@@ -1,8 +1,6 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
@@ -14,10 +12,9 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 
-public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implements EntityInitializer<TridentEntity> {
-    public static final MapCodec<TridentEntityInitializer> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codec.BOOL.optionalFieldOf("prevent_spawn_from_riptide", false).forGetter(TridentEntityInitializer::preventSpawnFromRiptide)
-    ).apply(instance, TridentEntityInitializer::new));
+public class TridentEntityInitializer implements EntityInitializer<TridentEntity> {
+    public static final TridentEntityInitializer INSTANCE = new TridentEntityInitializer();
+    public static final MapCodec<TridentEntityInitializer> CODEC = MapCodec.unit(INSTANCE);
 
     @Override
     public EntityType<?> type() {
@@ -31,7 +28,7 @@ public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implemen
         float spinAttackStrength = user != null ?
             EnchantmentHelper.getTridentSpinAttackStrength(stack, user) :
             0.0f;
-        if (this.preventSpawnFromRiptide && spinAttackStrength > 0.0f) {
+        if (spinAttackStrength > 0.0f) {
             return null;
         }
 
@@ -40,10 +37,6 @@ public record TridentEntityInitializer(boolean preventSpawnFromRiptide) implemen
         stack.decrementUnlessCreative(1, context.player(ActionContextParameter.THIS).orElse(null));
         entity.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
         return entity;
-    }
-
-    public static TridentEntityInitializer of(boolean preventSpawnFromRiptide) {
-        return new TridentEntityInitializer(preventSpawnFromRiptide);
     }
 
     private TridentEntity create(ActionContext context, ItemStack stack) {

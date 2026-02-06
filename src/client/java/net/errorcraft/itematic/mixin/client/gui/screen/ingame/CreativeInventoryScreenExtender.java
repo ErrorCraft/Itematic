@@ -6,8 +6,8 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
@@ -27,9 +27,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.stream.Stream;
 
 @Mixin(CreativeInventoryScreen.class)
-public abstract class CreativeInventoryScreenExtender extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeScreenHandler> {
-    public CreativeInventoryScreenExtender(CreativeInventoryScreen.CreativeScreenHandler screenHandler, PlayerInventory playerInventory, Text text) {
-        super(screenHandler, playerInventory, text);
+public abstract class CreativeInventoryScreenExtender extends HandledScreen<CreativeInventoryScreen.CreativeScreenHandler> {
+    public CreativeInventoryScreenExtender(CreativeInventoryScreen.CreativeScreenHandler handler, PlayerInventory inventory, Text title) {
+        super(handler, inventory, title);
     }
 
     @Definition(id = "getCreativeHotbarStorage", method = "Lnet/minecraft/client/MinecraftClient;getCreativeHotbarStorage()Lnet/minecraft/client/option/HotbarStorage;")

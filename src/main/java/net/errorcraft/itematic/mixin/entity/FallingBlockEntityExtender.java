@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,10 +23,10 @@ public abstract class FallingBlockEntityExtender extends Entity {
         method = "tick",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/FallingBlockEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+            target = "Lnet/minecraft/entity/FallingBlockEntity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity dropItemUseRegistryKey(FallingBlockEntity instance, ItemConvertible itemConvertible, @Local Block block) {
-        return this.itematic$dropItem(block.itematic$asItemKey());
+    private ItemEntity dropItemUseRegistryKey(FallingBlockEntity instance, ServerWorld world, ItemConvertible itemConvertible, @Local Block block) {
+        return this.itematic$dropItem(world, block.itematic$asItemKey());
     }
 }

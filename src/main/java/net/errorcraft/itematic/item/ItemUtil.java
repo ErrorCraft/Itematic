@@ -57,7 +57,6 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
-import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
 import net.minecraft.item.consume.UseAction;
@@ -5437,7 +5436,7 @@ public class ItemUtil {
                         .build())
                     .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE + 1, 0.275d))
                     .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
-                    .with(ProjectileItemComponent.of(TridentEntityInitializer.of(true)))
+                    .with(ProjectileItemComponent.of(TridentEntityInitializer.INSTANCE))
                     .with(EnchantableItemComponent.of(1))
                     .build(),
                 ItemEventMap.builder()
@@ -5580,7 +5579,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.OAK_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.OAK), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.OAK_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5588,7 +5587,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.OAK_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.OAK), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.OAK_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5596,7 +5595,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.SPRUCE_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.SPRUCE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.SPRUCE_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5604,7 +5603,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.SPRUCE_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.SPRUCE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.SPRUCE_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5612,7 +5611,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BIRCH_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.BIRCH), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.BIRCH_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5620,7 +5619,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BIRCH_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.BIRCH), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.BIRCH_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5628,7 +5627,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.JUNGLE_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.JUNGLE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.JUNGLE_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5636,7 +5635,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.JUNGLE_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.JUNGLE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.JUNGLE_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5644,7 +5643,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ACACIA_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.ACACIA), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.ACACIA_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5652,7 +5651,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ACACIA_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.ACACIA), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.ACACIA_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5660,7 +5659,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHERRY_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.CHERRY), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.CHERRY_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5668,7 +5667,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHERRY_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.CHERRY), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.CHERRY_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5676,7 +5675,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.DARK_OAK_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.DARK_OAK), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.DARK_OAK_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5684,7 +5683,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.DARK_OAK_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.DARK_OAK), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.DARK_OAK_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5692,7 +5691,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MANGROVE_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.MANGROVE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.MANGROVE_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5700,7 +5699,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MANGROVE_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.MANGROVE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.MANGROVE_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5708,7 +5707,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BAMBOO_RAFT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new BoatEntityInitializer(BoatEntity.Type.BAMBOO), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.BAMBOO_RAFT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));
@@ -5716,7 +5715,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BAMBOO_CHEST_RAFT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new ChestBoatEntityInitializer(BoatEntity.Type.BAMBOO), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.BAMBOO_CHEST_RAFT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FurnaceBlockEntityUtil.BOAT_FUEL_TIME))
                     .build()
             ));

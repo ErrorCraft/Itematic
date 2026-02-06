@@ -50,44 +50,6 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         slice = @Slice(
             from = @At(
                 value = "CONSTANT",
-                args = "stringValue=boat"
-            )
-        )
-    )
-    private static EntityType.Builder<BoatEntity> setBoatEntityInitializerCodec(EntityType.Builder<BoatEntity> type) {
-        type.itematic$initializerCodec(BoatEntityInitializer.CODEC);
-        return type;
-    }
-
-    @ModifyArg(
-        method = "<clinit>",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "CONSTANT",
-                args = "stringValue=chest_boat"
-            )
-        )
-    )
-    private static EntityType.Builder<ChestBoatEntity> setChestBoatEntityInitializerCodec(EntityType.Builder<ChestBoatEntity> type) {
-        type.itematic$initializerCodec(ChestBoatEntityInitializer.CODEC);
-        return type;
-    }
-
-    @ModifyArg(
-        method = "<clinit>",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "CONSTANT",
                 args = "stringValue=minecart"
             )
         )

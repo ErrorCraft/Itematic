@@ -59,7 +59,6 @@
     "render.item.BuiltinModelItemRendererExtender",
     "render.item.HeldItemRendererExtender",
     "render.item.ItemRendererExtender",
-    "render.model.BakedModelManagerExtender",
     "render.model.json.ModelOverrideListExtender",
     "toast.RecipeToastExtender",
     "tutorial.CraftPlanksTutorialStepHandlerExtender",

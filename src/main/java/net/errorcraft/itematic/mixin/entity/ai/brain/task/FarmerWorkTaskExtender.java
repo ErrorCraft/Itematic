@@ -42,8 +42,8 @@ public class FarmerWorkTaskExtender {
             target = "net/minecraft/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForBreadUseCreateStack(ItemConvertible item, int count, VillagerEntity entity) {
-        return entity.getWorld().itematic$createStack(ItemKeys.BREAD, count);
+    private ItemStack newItemStackForBreadUseCreateStack(ItemConvertible item, int count, @Local(argsOnly = true) VillagerEntity villager) {
+        return villager.getWorld().itematic$createStack(ItemKeys.BREAD, count);
     }
 
     @Redirect(

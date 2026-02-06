@@ -8,6 +8,7 @@ import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,11 +26,11 @@ public abstract class AbstractDonkeyEntityExtender extends AbstractHorseEntity {
         method = "dropInventory",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/AbstractDonkeyEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+            target = "Lnet/minecraft/entity/passive/AbstractDonkeyEntity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity dropItemForChestUseRegistryKey(AbstractDonkeyEntity instance, ItemConvertible itemConvertible) {
-        return this.itematic$dropItem(ItemKeys.CHEST);
+    private ItemEntity dropItemForChestUseRegistryKey(AbstractDonkeyEntity instance, ServerWorld world, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(world, ItemKeys.CHEST);
     }
 
     @Redirect(

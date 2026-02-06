@@ -5,8 +5,7 @@
     },
     "minecraft:entity": {
       "entity": {
-        "type": "minecraft:boat",
-        "variant": "birch"
+        "type": "minecraft:birch_boat"
       }
     },
     "minecraft:fuel": {

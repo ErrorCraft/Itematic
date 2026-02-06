@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -40,11 +41,11 @@ public abstract class StriderEntityExtender extends MobEntityExtender {
         method = "dropInventory",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/StriderEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+            target = "Lnet/minecraft/entity/passive/StriderEntity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity dropItemForSaddleUseRegistryKey(StriderEntity instance, ItemConvertible itemConvertible) {
-        return this.itematic$dropItem(ItemKeys.SADDLE);
+    private ItemEntity dropItemForSaddleUseRegistryKey(StriderEntity instance, ServerWorld world, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(world, ItemKeys.SADDLE);
     }
 
     @Redirect(

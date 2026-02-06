@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,11 +37,11 @@ public abstract class CreeperEntityExtender extends MobEntityExtender {
         method = "dropEquipment",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/mob/CreeperEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+            target = "Lnet/minecraft/entity/mob/CreeperEntity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity dropItemForCreeperHeadUseRegistryKey(CreeperEntity instance, ItemConvertible itemConvertible) {
-        return this.itematic$dropItem(ItemKeys.CREEPER_HEAD);
+    private ItemEntity dropItemForCreeperHeadUseRegistryKey(CreeperEntity instance, ServerWorld world, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(world, ItemKeys.CREEPER_HEAD);
     }
 
     @Override

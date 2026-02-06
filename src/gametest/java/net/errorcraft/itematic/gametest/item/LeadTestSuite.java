@@ -40,11 +40,11 @@ public class LeadTestSuite {
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         world.spawnEntity(player);
-        BoatEntity boat = TestUtil.createEntityAt(context, EntityType.BOAT, PLACED_ENTITY_POSITION, entity -> {});
+        BoatEntity boat = TestUtil.createEntityAt(context, EntityType.OAK_BOAT, PLACED_ENTITY_POSITION, entity -> {});
         context.addInstantFinalTask(() -> {
             ActionResult result = boat.interact(player, Hand.MAIN_HAND);
-            context.assertTrue(result.isAccepted(), "Expected interaction with Boat to be successful");
-            context.assertTrue(boat.isLeashed(), "Expected Boat to be leashed");
+            context.assertTrue(result.isAccepted(), "Expected interaction with Oak Boat to be successful");
+            context.assertTrue(boat.isLeashed(), "Expected Oak Boat to be leashed");
         });
     }
 }

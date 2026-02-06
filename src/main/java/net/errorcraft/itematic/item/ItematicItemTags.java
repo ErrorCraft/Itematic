@@ -130,6 +130,7 @@ public class ItematicItemTags {
     public static final TagKey<Item> MINECARTS = of("item_group/minecarts");
     public static final TagKey<Item> TOOLS = of("item_group/tools");
     public static final TagKey<Item> BUCKETS = of("item_group/buckets");
+    public static final TagKey<Item> BUNDLES = of("item_group/bundles");
     public static final TagKey<Item> BOATS = of("item_group/boats");
     public static final TagKey<Item> MUSIC_DISCS = of("item_group/music_discs");
     public static final TagKey<Item> SWORDS = of("item_group/swords");

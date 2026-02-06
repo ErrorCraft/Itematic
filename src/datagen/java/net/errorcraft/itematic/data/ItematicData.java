@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.data;
 
-import net.errorcraft.itematic.data.client.AtlasProvider;
 import net.errorcraft.itematic.data.client.ItemBarStyleProvider;
 import net.errorcraft.itematic.data.server.RecipeProvider;
 import net.errorcraft.itematic.data.server.registry.*;
@@ -21,7 +20,6 @@ public class ItematicData implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(ItemProvider::new);
-        pack.addProvider(AtlasProvider::new);
         pack.addProvider(ItemTagProvider::new);
         pack.addProvider(BlockTagProvider::new);
         pack.addProvider(ItemGroupEntryProviderProvider::new);
