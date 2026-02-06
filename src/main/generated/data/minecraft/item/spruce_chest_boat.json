@@ -5,8 +5,7 @@
     },
     "minecraft:entity": {
       "entity": {
-        "type": "minecraft:chest_boat",
-        "variant": "spruce"
+        "type": "minecraft:spruce_chest_boat"
       }
     },
     "minecraft:fuel": {

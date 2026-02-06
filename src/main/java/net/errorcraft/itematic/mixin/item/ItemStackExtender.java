@@ -8,7 +8,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.ImmuneToDamageComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.ItematicItemTags;
@@ -32,7 +31,6 @@ import net.minecraft.component.MergedComponentMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
@@ -506,16 +504,6 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             info.setReturnValue(false);
         }
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean takesDamageFrom(DamageSource source) {
-        ImmuneToDamageComponent immuneToDamage = this.get(ItematicDataComponentTypes.IMMUNE_TO_DAMAGE);
-        return immuneToDamage == null || immuneToDamage.damage(source);
     }
 
     @Inject(

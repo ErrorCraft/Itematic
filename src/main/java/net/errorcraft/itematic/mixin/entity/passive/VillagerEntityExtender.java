@@ -45,7 +45,7 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
             remap = false
         )
     )
-    private boolean containsForGatherableItemsUseItemTagCheck(ImmutableSet<Item> instance, Object o, ItemStack stack) {
+    private boolean containsForGatherableItemsUseItemTagCheck(ImmutableSet<Item> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
         TagKey<Item> tag = this.getVillagerData().getProfession().itematic$gatherableItemsTag();
         if (tag == null) {
             return false;

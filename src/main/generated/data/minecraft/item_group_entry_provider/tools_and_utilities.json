@@ -16,7 +16,10 @@
     "minecraft:brush",
     "minecraft:name_tag",
     "minecraft:lead",
-    "minecraft:bundle",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/bundles"
+    },
     "minecraft:compass",
     "minecraft:recovery_compass",
     "minecraft:clock",

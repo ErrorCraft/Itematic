@@ -28,7 +28,7 @@ public class WeaponItemComponentTestSuite {
         world.spawnEntity(zombie);
         PigEntity victim = spawnVictim(context);
         context.createTimedTaskRunner().expectMinDurationAndRun(1, () -> {
-            context.assertTrue(zombie.tryAttack(victim), "Expected attack to be successful");
+            context.assertTrue(zombie.tryAttack(world, victim), "Expected attack to be successful");
             Assert.areDoublesEqual(
                 victim.getHealth(),
                 MAX_HEALTH_VICTIM - zombie.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE),
@@ -45,7 +45,7 @@ public class WeaponItemComponentTestSuite {
         world.spawnEntity(zombie);
         PigEntity victim = spawnVictim(context);
         context.createTimedTaskRunner().expectMinDurationAndRun(1, () -> {
-            context.assertTrue(zombie.tryAttack(victim), "Expected attack to be successful");
+            context.assertTrue(zombie.tryAttack(world, victim), "Expected attack to be successful");
             Assert.areDoublesEqual(
                 victim.getHealth(),
                 MAX_HEALTH_VICTIM - zombie.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) - TestUtil.getItemBehavior(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
@@ -62,7 +62,7 @@ public class WeaponItemComponentTestSuite {
         world.spawnEntity(piglin);
         PigEntity victim = spawnVictim(context);
         context.createTimedTaskRunner().expectMinDurationAndRun(1, () -> {
-            context.assertTrue(piglin.tryAttack(victim), "Expected attack to be successful");
+            context.assertTrue(piglin.tryAttack(world, victim), "Expected attack to be successful");
             Assert.areDoublesEqual(
                 victim.getHealth(),
                 MAX_HEALTH_VICTIM - piglin.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) - TestUtil.getItemBehavior(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),
@@ -79,7 +79,7 @@ public class WeaponItemComponentTestSuite {
         world.spawnEntity(piglin);
         PigEntity victim = spawnVictim(context);
         context.createTimedTaskRunner().expectMinDurationAndRun(1, () -> {
-            context.assertTrue(piglin.tryAttack(victim), "Expected attack to be successful");
+            context.assertTrue(piglin.tryAttack(world, victim), "Expected attack to be successful");
             Assert.areDoublesEqual(
                 victim.getHealth(),
                 MAX_HEALTH_VICTIM - piglin.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE) - TestUtil.getItemBehavior(stack, ItemComponentTypes.WEAPON).attackDamage().defaultDamage(),

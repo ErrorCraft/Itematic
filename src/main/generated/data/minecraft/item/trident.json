@@ -9,8 +9,7 @@
     },
     "minecraft:projectile": {
       "entity": {
-        "type": "minecraft:trident",
-        "prevent_spawn_from_riptide": true
+        "type": "minecraft:trident"
       }
     },
     "minecraft:stackable": 1,

@@ -8,11 +8,8 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
 
 public record PotionItemComponent() implements ItemComponent<PotionItemComponent> {
     public static final PotionItemComponent INSTANCE = new PotionItemComponent();
@@ -30,20 +27,9 @@ public record PotionItemComponent() implements ItemComponent<PotionItemComponent
 
     @Override
     public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackConsumer resultStackConsumer) {
-        if (!world.isClient()) {
-            this.applyEffects(user, stack);
-        }
-        user.emitGameEvent(GameEvent.DRINK);
-    }
-
-    private void applyEffects(LivingEntity target, ItemStack stack) {
-        PlayerEntity player = target instanceof PlayerEntity playerEntity ? playerEntity : null;
-        for (StatusEffectInstance effectInstance : stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).getEffects()) {
-            if (effectInstance.getEffectType().value().isInstant()) {
-                effectInstance.getEffectType().value().applyInstantEffect(player, player, target, effectInstance.getAmplifier(), 1.0d);
-                continue;
-            }
-            target.addStatusEffect(new StatusEffectInstance(effectInstance));
+        PotionContentsComponent potionContents = stack.get(DataComponentTypes.POTION_CONTENTS);
+        if (potionContents != null) {
+            potionContents.apply(user);
         }
     }
 }

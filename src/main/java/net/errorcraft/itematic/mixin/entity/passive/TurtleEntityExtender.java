@@ -9,6 +9,7 @@ import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,11 +26,11 @@ public abstract class TurtleEntityExtender extends MobEntityExtender {
         method = "onGrowUp",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/TurtleEntity;dropItem(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/entity/ItemEntity;"
+            target = "Lnet/minecraft/entity/passive/TurtleEntity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity dropItemForTurtleScuteUseRegistryKey(TurtleEntity instance, ItemConvertible itemConvertible, int yOffset) {
-        return this.itematic$dropItem(ItemKeys.TURTLE_SCUTE, yOffset);
+    private ItemEntity dropItemForTurtleScuteUseRegistryKey(TurtleEntity instance, ServerWorld world, ItemConvertible itemConvertible, int yOffset) {
+        return this.itematic$dropItem(world, ItemKeys.TURTLE_SCUTE, yOffset);
     }
 
     @Override

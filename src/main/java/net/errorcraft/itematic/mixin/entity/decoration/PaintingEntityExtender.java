@@ -7,6 +7,7 @@ import net.minecraft.entity.decoration.AbstractDecorationEntity;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,11 +23,11 @@ public abstract class PaintingEntityExtender extends AbstractDecorationEntity {
         method = "onBreak",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/decoration/painting/PaintingEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+            target = "Lnet/minecraft/entity/decoration/painting/PaintingEntity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity dropItemForPaintingUseRegistryKey(PaintingEntity instance, ItemConvertible itemConvertible) {
-        return this.itematic$dropItem(ItemKeys.PAINTING);
+    private ItemEntity dropItemForPaintingUseRegistryKey(PaintingEntity instance, ServerWorld world, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(world, ItemKeys.PAINTING);
     }
 
     @Redirect(

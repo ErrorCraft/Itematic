@@ -238,7 +238,7 @@ public class ItemGroupEntryProviders {
             .add(items.getOrThrow(ItemKeys.BRUSH))
             .add(items.getOrThrow(ItemKeys.NAME_TAG))
             .add(items.getOrThrow(ItemKeys.LEAD))
-            .add(items.getOrThrow(ItemKeys.BUNDLE))
+            .add(ItematicItemTags.BUNDLES)
             .add(items.getOrThrow(ItemKeys.COMPASS))
             .add(items.getOrThrow(ItemKeys.RECOVERY_COMPASS))
             .add(items.getOrThrow(ItemKeys.CLOCK))

@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.Leashable;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -18,10 +19,10 @@ public interface LeashableExtender {
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/Entity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+            target = "Lnet/minecraft/entity/Entity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private static ItemEntity dropItemForLeadUseRegistryKey(Entity instance, ItemConvertible item) {
-        return instance.itematic$dropItem(ItemKeys.LEAD);
+    private static ItemEntity dropItemForLeadUseRegistryKey(Entity instance, ServerWorld world, ItemConvertible item) {
+        return instance.itematic$dropItem(world, ItemKeys.LEAD);
     }
 }

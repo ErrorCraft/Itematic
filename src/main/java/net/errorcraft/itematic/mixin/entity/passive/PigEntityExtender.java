@@ -15,6 +15,7 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -81,11 +82,11 @@ public abstract class PigEntityExtender extends MobEntityExtender {
         method = "dropInventory",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/PigEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+            target = "Lnet/minecraft/entity/passive/PigEntity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity dropItemForSaddleUseRegistryKey(PigEntity instance, ItemConvertible itemConvertible) {
-        return this.itematic$dropItem(ItemKeys.SADDLE);
+    private ItemEntity dropItemForSaddleUseRegistryKey(PigEntity instance, ServerWorld world, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(world, ItemKeys.SADDLE);
     }
 
     @Redirect(
