@@ -9,6 +9,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,11 +26,11 @@ public abstract class WitherEntityExtender extends MobEntityExtender {
         method = "dropEquipment",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/boss/WitherEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+            target = "Lnet/minecraft/entity/boss/WitherEntity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
         )
     )
-    private ItemEntity dropItemForNetherStarUseRegistryKey(WitherEntity instance, ItemConvertible itemConvertible) {
-        return this.itematic$dropItem(ItemKeys.NETHER_STAR);
+    private ItemEntity dropItemForNetherStarUseRegistryKey(WitherEntity instance, ServerWorld world, ItemConvertible itemConvertible) {
+        return this.itematic$dropItem(world, ItemKeys.NETHER_STAR);
     }
 
     @Override

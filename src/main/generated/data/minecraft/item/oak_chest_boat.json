@@ -5,8 +5,7 @@
     },
     "minecraft:entity": {
       "entity": {
-        "type": "minecraft:chest_boat",
-        "variant": "oak"
+        "type": "minecraft:oak_chest_boat"
       }
     },
     "minecraft:fuel": {

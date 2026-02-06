@@ -19,7 +19,7 @@ public class TotemOfUndyingTestSuite {
         ServerWorld world = context.getWorld();
         ItemStack stack = world.itematic$createStack(ItemKeys.TOTEM_OF_UNDYING);
         player.setStackInHand(Hand.MAIN_HAND, stack);
-        player.damage(world.getDamageSources().fall(), Float.MAX_VALUE);
+        player.damage(world, world.getDamageSources().fall(), Float.MAX_VALUE);
         context.addInstantFinalTask(() -> {
             Assert.areFloatsEqual(player.getHealth(), 1.0f, (value, expected) -> "Expected health to be " + expected + ", got " + value + " instead");
             context.expectEntityHasEffect(player, StatusEffects.REGENERATION, 1);

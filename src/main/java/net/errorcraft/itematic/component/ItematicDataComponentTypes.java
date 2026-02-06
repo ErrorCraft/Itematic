@@ -18,7 +18,6 @@ import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.math.Fraction;
 
 public class ItematicDataComponentTypes {
-    public static final ComponentType<ImmuneToDamageComponent> IMMUNE_TO_DAMAGE = DataComponentTypesAccessor.register("immune_to_damage", builder -> builder.codec(ImmuneToDamageComponent.CODEC).packetCodec(ImmuneToDamageComponent.PACKET_CODEC));
     public static final ComponentType<UseDurationDataComponent> USE_DURATION = DataComponentTypesAccessor.register("use_duration", builder -> builder.codec(UseDurationDataComponent.CODEC).packetCodec(UseDurationDataComponent.PACKET_CODEC).cache());
     public static final ComponentType<UseAction> USE_ANIMATION = DataComponentTypesAccessor.register("use_animation", builder -> builder.codec(UseAction.CODEC).packetCodec(UseAction.PACKET_CODEC).cache());
     public static final ComponentType<ItemListDataComponent> SHOOTER_AMMUNITION = DataComponentTypesAccessor.register("shooter_ammunition", builder -> builder.codec(ItemListDataComponent.CODEC).packetCodec(ItemListDataComponent.PACKET_CODEC).cache());

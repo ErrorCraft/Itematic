@@ -14,7 +14,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potions;
@@ -119,7 +118,7 @@ public class DispenserBehaviorTestSuite {
         blockEntity.addToFirstFreeSlot(stack);
         context.pushButton(BUTTON_POSITION);
         context.runAtTick(4, () -> context.addFinalTask(() -> {
-            context.expectEntityWithData(OUTPUT_POSITION, EntityType.BOAT, BoatEntity::getVariant, BoatEntity.Type.SPRUCE);
+            context.expectEntityAt(EntityType.SPRUCE_BOAT, OUTPUT_POSITION);
             Assert.itemStackIsEmpty(blockEntity.getStack(0));
         }));
     }
