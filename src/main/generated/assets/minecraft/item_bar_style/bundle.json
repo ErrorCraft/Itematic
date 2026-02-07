@@ -1,7 +1,21 @@
 {
   "color": {
-    "type": "minecraft:constant",
-    "color": -9402369
+    "type": "minecraft:first_to_pass_condition",
+    "entries": [
+      {
+        "color": {
+          "type": "minecraft:constant",
+          "color": -43948
+        },
+        "condition": {
+          "range": 1.0
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:constant",
+      "color": -9402369
+    }
   },
   "progress": "minecraft:item_holder_occupancy",
   "textures": [

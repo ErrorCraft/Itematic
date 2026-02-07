@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.client.item.bar;
 
-import net.errorcraft.itematic.client.item.bar.color.provider.ConstantColorProvider;
+import net.errorcraft.itematic.client.item.bar.color.provider.FirstToPassConditionColorProvider;
 import net.errorcraft.itematic.client.item.bar.color.provider.HueShiftColorProvider;
 import net.errorcraft.itematic.client.item.bar.progress.ProgressProvider;
 import net.errorcraft.itematic.item.ItemBarStyleKeys;
@@ -36,7 +36,13 @@ public class ItemBarStyles {
         ));
         provider.accept(ItemBarStyleKeys.BUNDLE, new ItemBarStyle(
             ProgressProvider.ITEM_HOLDER_OCCUPANCY,
-            new ConstantColorProvider(BundleItemAccessor.itemBarColor()),
+            FirstToPassConditionColorProvider.of(
+                BundleItemAccessor.itemBarColor(),
+                FirstToPassConditionColorProvider.Entry.of(
+                    BundleItemAccessor.fullItemBarColor(),
+                    1.0f
+                )
+            ),
             List.of(
                 Identifier.ofVanilla("item_bar/progress/0"),
                 Identifier.ofVanilla("item_bar/progress/0"),

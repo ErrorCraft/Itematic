@@ -51,13 +51,16 @@ public class FluidPlacer extends Placer {
         if (this.player != null && (!this.world.canPlayerModifyAt(this.player, this.blockPos) || !this.player.canPlaceOn(offset, this.direction, this.stack))) {
             return ItemResult.PASS;
         }
+
         if (this.fluid.matchesKey(FluidKeys.EMPTY)) {
             return this.tryDrainFluid();
         }
+
         BlockPos actualBlockPos = this.getActualPosition(offset);
         if (!this.tryPlaceFluid(actualBlockPos, this.allowOffset)) {
             return ItemResult.PASS;
         }
+
         return ItemResult.SUCCEED;
     }
 
@@ -65,9 +68,11 @@ public class FluidPlacer extends Placer {
         if (!this.allowOffset) {
             return this.blockPos;
         }
+
         if (this.blockState.getBlock() instanceof FluidFillable && this.fluid.matchesKey(FluidKeys.WATER)) {
             return this.blockPos;
         }
+
         return offset;
     }
 
@@ -75,10 +80,12 @@ public class FluidPlacer extends Placer {
         if (!(this.blockState.getBlock() instanceof FluidDrainable fluidDrainable)) {
             return ItemResult.PASS;
         }
+
         ItemStack drainedItemStack = fluidDrainable.tryDrainFluid(this.player, this.world, this.blockPos, this.blockState);
         if (drainedItemStack.isEmpty()) {
             return ItemResult.PASS;
         }
+
         this.applyPlayerEffects(fluidDrainable, drainedItemStack);
         this.world.emitGameEvent(this.player, GameEvent.FLUID_PICKUP, this.blockPos);
         this.resultStackConsumer.set(drainedItemStack);
@@ -103,24 +110,30 @@ public class FluidPlacer extends Placer {
         if (!(fluid instanceof FlowableFluid flowableFluid)) {
             return false;
         }
+
         BlockState blockState = this.world.getBlockState(pos);
         boolean canPlace = blockState.canBucketPlace(fluid);
         if (!blockState.isAir() && !canPlace && !(blockState.getBlock() instanceof FluidFillable fluidFillable && fluidFillable.canFillWithFluid(this.player, this.world, pos, blockState, fluid))) {
             return allowOffset && this.tryPlaceFluid(this.blockPos.offset(this.direction), false);
         }
+
         if (this.tryEvaporate(pos)) {
             return true;
         }
+
         if (this.tryFillWater(blockState, pos, flowableFluid)) {
             return true;
         }
+
         if (!this.world.isClient() && canPlace && !blockState.isLiquid()) {
             this.world.breakBlock(pos, true);
         }
+
         if (this.world.setBlockState(pos, fluid.getDefaultState().getBlockState(), Block.NOTIFY_ALL_AND_REDRAW) || blockState.getFluidState().isStill()) {
             this.playEmptyingSound(pos);
             return true;
         }
+
         return false;
     }
 
@@ -128,13 +141,16 @@ public class FluidPlacer extends Placer {
         if (!this.world.getDimension().ultrawarm()) {
             return false;
         }
+
         if (!this.fluid.isIn(FluidTags.WATER)) {
             return false;
         }
+
         this.world.playSound(this.player, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5f, 2.6f + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.8f);
-        for (int i = 0; i < 8; ++i) {
+        for (int i = 0; i < 8; i++) {
             this.world.addParticle(ParticleTypes.LARGE_SMOKE, pos.getX() + Math.random(), pos.getY() + Math.random(), pos.getZ() + Math.random(), 0.0d, 0.0d, 0.0d);
         }
+
         return true;
     }
 
@@ -142,9 +158,11 @@ public class FluidPlacer extends Placer {
         if (!(blockState.getBlock() instanceof FluidFillable fluidFillable)) {
             return false;
         }
+
         if (!this.fluid.matchesKey(FluidKeys.WATER)) {
             return false;
         }
+
         fluidFillable.tryFillWithFluid(this.world, pos, blockState, flowableFluid.getStill(false));
         this.playEmptyingSound(pos);
         return true;
@@ -154,6 +172,7 @@ public class FluidPlacer extends Placer {
         if (this.emptyingSound == null) {
             return;
         }
+
         this.world.playSound(this.player, pos, this.emptyingSound.value(), SoundCategory.BLOCKS, 1.0f, 1.0f);
         this.world.emitGameEvent(this.player, GameEvent.FLUID_PLACE, pos);
     }

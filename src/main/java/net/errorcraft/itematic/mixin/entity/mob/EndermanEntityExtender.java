@@ -21,17 +21,6 @@ public abstract class EndermanEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "isPlayerStaring",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForCarvedPumpkinUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.CARVED_PUMPKIN);
-    }
-
-    @Redirect(
         method = "dropEquipment",
         at = @At(
             value = "NEW",

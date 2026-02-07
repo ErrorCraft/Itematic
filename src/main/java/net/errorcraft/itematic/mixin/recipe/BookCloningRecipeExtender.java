@@ -51,12 +51,12 @@ public class BookCloningRecipeExtender {
     }
 
     @ModifyConstant(
-        method = "getRemainder(Lnet/minecraft/recipe/input/CraftingRecipeInput;)Lnet/minecraft/util/collection/DefaultedList;",
+        method = "getRecipeRemainders",
         constant = @Constant(
             classValue = WrittenBookItem.class
         )
     )
-    private boolean instanceOfWrittenBookItemUseItemComponentCheck(Object reference, Class<WrittenBookItem> clazz, @Local ItemStack inputStack) {
+    private boolean instanceOfWrittenBookItemUseItemComponentCheck(Object reference, Class<WrittenBookItem> clazz, @Local(ordinal = 0) ItemStack inputStack) {
         return inputStack.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER);
     }
 }
