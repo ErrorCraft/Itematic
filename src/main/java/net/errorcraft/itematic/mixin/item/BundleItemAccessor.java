@@ -11,6 +11,11 @@ public interface BundleItemAccessor {
         throw new AssertionError();
     }
 
+    @Accessor("FULL_ITEM_BAR_COLOR")
+    static int fullItemBarColor() {
+        throw new AssertionError();
+    }
+
     @Accessor("field_54109")
     static int ticksAfterFirstThrow() {
         throw new AssertionError();

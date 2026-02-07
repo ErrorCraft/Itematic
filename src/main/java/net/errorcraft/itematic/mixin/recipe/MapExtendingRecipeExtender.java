@@ -37,7 +37,7 @@ public class MapExtendingRecipeExtender {
         )
     )
     private boolean matchesUseRegistryKeyCheck(ShapedRecipe instance, CraftingRecipeInput input, World world) {
-        for (int i = 0; i < input.getStackCount(); ++i) {
+        for (int i = 0; i < input.getStackCount(); i++) {
             ItemStack stack = input.getStackInSlot(i);
             if (!isValid(stack, i)) {
                 return false;

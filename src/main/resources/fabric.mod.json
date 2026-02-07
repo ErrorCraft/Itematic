@@ -36,12 +36,6 @@
   "accessWidener": "itematic.classtweaker",
   "custom": {
     "loom:injected_interfaces": {
-      "net/minecraft/class_314": [
-        "net/errorcraft/itematic/access/client/recipebook/RecipeBookGroupAccess"
-      ],
-      "net/minecraft/class_507": [
-        "net/errorcraft/itematic/access/client/gui/screen/recipebook/RecipeBookWidgetAccess"
-      ],
       "net/minecraft/class_1297": [
         "net/errorcraft/itematic/access/entity/EntityAccess"
       ],

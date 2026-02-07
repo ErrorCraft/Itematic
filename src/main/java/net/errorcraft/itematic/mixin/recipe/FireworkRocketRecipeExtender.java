@@ -85,18 +85,4 @@ public class FireworkRocketRecipeExtender {
             .map(entry -> new ItemStack(entry, count))
             .orElse(ItemStack.EMPTY);
     }
-
-    @Redirect(
-        method = "getResult",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack newItemStackForFireworkRocketUseRegistryEntry(ItemConvertible item, RegistryWrapper.WrapperLookup lookup) {
-        return lookup.getOrThrow(RegistryKeys.ITEM)
-            .getOptional(ItemKeys.FIREWORK_ROCKET)
-            .map(ItemStack::new)
-            .orElse(ItemStack.EMPTY);
-    }
 }

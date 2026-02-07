@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.client.item.bar.color.provider.ConstantColorProvider;
+import net.errorcraft.itematic.client.item.bar.color.provider.FirstToPassConditionColorProvider;
 import net.errorcraft.itematic.client.item.bar.color.provider.HueShiftColorProvider;
 import net.minecraft.util.Identifier;
 
@@ -19,6 +20,7 @@ public class ColorProviderTypes {
 
     public static final ColorProviderType<ConstantColorProvider> CONSTANT = register(ColorProviderTypeKeys.CONSTANT, ConstantColorProvider.CODEC);
     public static final ColorProviderType<HueShiftColorProvider> HUE_SHIFT = register(ColorProviderTypeKeys.HUE_SHIFT, HueShiftColorProvider.CODEC);
+    public static final ColorProviderType<FirstToPassConditionColorProvider> FIRST_TO_PASS_CONDITION = register(ColorProviderTypeKeys.FIRST_TO_PASS_CONDITION, FirstToPassConditionColorProvider.CODEC);
 
     private ColorProviderTypes() {}
 

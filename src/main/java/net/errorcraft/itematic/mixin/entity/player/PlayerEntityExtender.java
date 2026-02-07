@@ -139,7 +139,7 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
         }
 
         ItemListDataComponent ammunition = stack.getOrDefault(ItematicDataComponentTypes.SHOOTER_AMMUNITION, ItemListDataComponent.DEFAULT);
-        for (int i = 0; i < this.inventory.size(); ++i) {
+        for (int i = 0; i < this.inventory.size(); i++) {
             ItemStack inventoryStack = this.inventory.getStack(i);
             if (ammunition.isValidFor(inventoryStack)) {
                 return inventoryStack;
