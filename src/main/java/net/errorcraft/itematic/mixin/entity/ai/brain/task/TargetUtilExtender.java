@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
-import net.minecraft.entity.ai.brain.task.LookTargetUtil;
+import net.minecraft.entity.ai.brain.task.TargetUtil;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.RangedWeaponItem;
@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.*;
 
 import java.util.Optional;
 
-@Mixin(LookTargetUtil.class)
-public class LookTargetUtilExtender {
+@Mixin(TargetUtil.class)
+public class TargetUtilExtender {
     @ModifyConstant(
         method = "isTargetWithinAttackRange",
         constant = @Constant(

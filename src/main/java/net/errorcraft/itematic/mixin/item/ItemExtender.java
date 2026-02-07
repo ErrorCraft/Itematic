@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.item;
 
+import com.google.common.annotations.VisibleForTesting;
 import net.errorcraft.itematic.access.item.ItemAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.UseDurationDataComponent;
@@ -492,6 +493,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemDisplay implementation for data-driven items.
      */
     @Overwrite
+    @VisibleForTesting
     public final String getTranslationKey() {
         return this.display.translationKey();
     }

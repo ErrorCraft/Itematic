@@ -1,28 +1,26 @@
 package net.errorcraft.itematic.mixin.recipe;
 
+import net.errorcraft.itematic.access.recipe.RecipeAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 import net.minecraft.recipe.SmithingTrimRecipe;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.recipe.display.RecipeDisplay;
+import net.minecraft.recipe.display.SlotDisplay;
+import net.minecraft.recipe.display.SmithingRecipeDisplay;
+import net.minecraft.registry.RegistryEntryLookup;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.List;
 
 @Mixin(SmithingTrimRecipe.class)
-public class SmithingTrimRecipeExtender {
-    @Redirect(
-        method = "getResult",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack newItemStackForIronChestplateUseRegistryEntry(ItemConvertible item, RegistryWrapper.WrapperLookup lookup) {
-        return lookup.getOrThrow(RegistryKeys.ITEM)
-            .getOptional(ItemKeys.IRON_CHESTPLATE)
-            .map(ItemStack::new)
-            .orElse(ItemStack.EMPTY);
+public class SmithingTrimRecipeExtender implements RecipeAccess {
+    @Override
+    public List<RecipeDisplay> itematic$displays(RegistryEntryLookup<Item> items) {
+        return List.of(
+            new SmithingRecipeDisplay(
+                SlotDisplay.SmithingTrimSlotDisplay.INSTANCE,
+                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.SMITHING_TABLE))
+            )
+        );
     }
 }

@@ -6,7 +6,6 @@ import net.errorcraft.itematic.access.client.MinecraftClientAccess;
 import net.errorcraft.itematic.client.item.bar.ItemBarStyleLoader;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -46,7 +45,7 @@ public abstract class DrawContextExtender {
     }
 
     @ModifyExpressionValue(
-        method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
+        method = "drawItemBar",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isItemBarVisible()Z"
@@ -57,28 +56,27 @@ public abstract class DrawContextExtender {
         if (itemBarStyleId == null) {
             return false;
         }
-        return this.itemBarStyles.get(itemBarStyleId).map(itemBarStyle -> itemBarStyle.isVisible(stack))
+
+        return this.itemBarStyles.get(itemBarStyleId)
+            .map(itemBarStyle -> itemBarStyle.isVisible(stack))
             .orElse(false);
     }
 
     @Inject(
-        method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
+        method = "drawItemBar",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;getItemBarStep()I"
         )
     )
-    private void renderItemBarFromDataComponent(TextRenderer textRenderer, ItemStack stack, int x, int y, String countOverride, CallbackInfo info) {
+    private void renderItemBarFromDataComponent(ItemStack stack, int x, int y, CallbackInfo info) {
         Identifier itemBarStyleId = stack.get(ItematicDataComponentTypes.ITEM_BAR_STYLE);
         if (itemBarStyleId == null) {
             return;
         }
 
         this.itemBarStyles.get(itemBarStyleId).ifPresent(itemBarStyle -> {
-            if (stack.getCount() == 1 && countOverride == null) {
-                this.matrices.translate(0.0f, 0.0f, 200.0f);
-            }
-
+            this.matrices.translate(0.0f, 0.0f, 200.0f);
             this.drawGuiTexture(
                 RenderLayer::getGuiTextured,
                 itemBarStyle.progressTexture(stack),
@@ -92,21 +90,17 @@ public abstract class DrawContextExtender {
     }
 
     @Redirect(
-        method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
+        method = "drawItemBar",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/DrawContext;fill(Lnet/minecraft/client/render/RenderLayer;IIIII)V"
+            target = "Lnet/minecraft/client/gui/DrawContext;fill(Lnet/minecraft/client/render/RenderLayer;IIIIII)V"
         ),
         slice = @Slice(
             from = @At(
                 value = "INVOKE",
                 target = "Lnet/minecraft/item/ItemStack;isItemBarVisible()Z"
-            ),
-            to = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/network/ClientPlayerEntity;getItemCooldownManager()Lnet/minecraft/entity/player/ItemCooldownManager;"
             )
         )
     )
-    private void doNotRenderOriginalItemBar(DrawContext instance, RenderLayer layer, int x1, int y1, int x2, int y2, int color) {}
+    private void doNotRenderOriginalItemBar(DrawContext instance, RenderLayer layer, int x1, int y1, int x2, int y2, int z, int color) {}
 }
