@@ -390,7 +390,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private Object checkPresenceEquipmentBehavior(ItemStack instance, ComponentType<EquippableComponent> type, Operation<Object> original) {
-        if (instance.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+        if (!instance.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
             return null;
         }
 

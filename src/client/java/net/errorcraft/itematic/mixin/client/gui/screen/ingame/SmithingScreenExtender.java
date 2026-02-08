@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.ingame;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
@@ -8,6 +10,8 @@ import net.errorcraft.itematic.item.component.components.SmithingTemplateItemCom
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.minecraft.client.gui.screen.ingame.ForgingScreen;
 import net.minecraft.client.gui.screen.ingame.SmithingScreen;
+import net.minecraft.component.ComponentType;
+import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -68,6 +72,21 @@ public abstract class SmithingScreenExtender extends ForgingScreen<SmithingScree
     )
     private Optional<List<Identifier>> getEmptyAdditionsSlotTexturesFromSmithingTemplate(Optional<SmithingTemplateItem> instance, Function<SmithingTemplateItem, List<Identifier>> mapper, @Share("smithingTemplate") LocalRef<Optional<SmithingTemplate>> smithingTemplate) {
         return smithingTemplate.get().map(SmithingTemplate::emptyAdditionsSlotTextures);
+    }
+
+    @WrapOperation(
+        method = "equipArmorStand",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+        )
+    )
+    private Object checkPresenceEquipmentBehavior(ItemStack instance, ComponentType<EquippableComponent> type, Operation<Object> original) {
+        if (!instance.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+            return null;
+        }
+
+        return original.call(instance, type);
     }
 
     @ModifyConstant(

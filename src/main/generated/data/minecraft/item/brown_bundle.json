@@ -45,7 +45,7 @@
     "minecraft:useable": {
       "ticks": {
         "type": "minecraft:constant",
-        "amount": 60
+        "amount": 200
       }
     }
   },

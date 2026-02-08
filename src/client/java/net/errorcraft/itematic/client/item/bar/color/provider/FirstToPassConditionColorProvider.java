@@ -48,13 +48,13 @@ public record FirstToPassConditionColorProvider(List<Entry> entries, ColorProvid
         }
     }
 
-    public record Condition(NumberRangeUtil.FloatRange range) {
+    public record Condition(NumberRangeUtil.FloatRange progress) {
         public static final Codec<Condition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            NumberRangeUtil.FloatRange.CODEC.fieldOf("range").forGetter(Condition::range)
+            NumberRangeUtil.FloatRange.CODEC.fieldOf("progress").forGetter(Condition::progress)
         ).apply(instance, Condition::new));
 
         public boolean test(float progress) {
-            return this.range.test(progress);
+            return this.progress.test(progress);
         }
     }
 }

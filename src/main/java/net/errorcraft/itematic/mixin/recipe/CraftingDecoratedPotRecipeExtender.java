@@ -32,17 +32,6 @@ public class CraftingDecoratedPotRecipeExtender {
         return !instance.isEmpty() && instance.itematic$hasBehavior(ItemComponentTypes.DECORATED_POT_PATTERN);
     }
 
-    @Redirect(
-        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForAirUseIsEmptyCheck(ItemStack instance, Item item) {
-        return instance.isEmpty();
-    }
-
     /**
      * @author ErrorCraft
      * @reason Uses a registry entry for data-driven items.
