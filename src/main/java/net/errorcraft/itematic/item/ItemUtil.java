@@ -6756,7 +6756,10 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARVED_PUMPKIN)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
-                    .with(EquipmentItemComponent.ofStatic(EquipmentSlot.HEAD))
+                    .with(EquipmentItemComponent.of(EquippableComponent.builder(EquipmentSlot.HEAD)
+                        .swappable(false)
+                        .cameraOverlay(Identifier.ofVanilla("misc/pumpkinblur"))
+                        .build()))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_CARVED_PUMPKIN)))
                     .build()
             ));

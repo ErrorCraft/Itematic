@@ -71,14 +71,12 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
         return new EquipmentItemComponent(equippable);
     }
 
-    public static EquipmentItemComponent ofStatic(EquipmentSlot slot) {
-        return new EquipmentItemComponent(EquippableComponent.builder(slot).build());
-    }
-
     public static ItemComponent<?>[] skull(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             BlockItemComponent.attachedToSide(attachedBlock, otherBlock, Direction.DOWN),
-            ofStatic(EquipmentSlot.HEAD),
+            new EquipmentItemComponent(EquippableComponent.builder(EquipmentSlot.HEAD)
+                .swappable(false)
+                .build()),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY_HEAD)),
             FireworkShapeModifierItemComponent.of(FireworkExplosionComponent.Type.CREEPER)
         };

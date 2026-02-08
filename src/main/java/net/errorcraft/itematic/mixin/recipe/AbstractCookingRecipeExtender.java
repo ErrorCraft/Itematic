@@ -12,13 +12,23 @@ import net.minecraft.recipe.display.RecipeDisplay;
 import net.minecraft.recipe.display.SlotDisplay;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKey;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
 
 @Mixin(AbstractCookingRecipe.class)
 public abstract class AbstractCookingRecipeExtender extends SingleStackRecipe implements RecipeAccess {
+    @Shadow
+    @Final
+    private float experience;
+
+    @Shadow
+    @Final
+    private int cookingTime;
+
     public AbstractCookingRecipeExtender(String group, Ingredient ingredient, ItemStack result) {
         super(group, ingredient, result);
     }
@@ -30,7 +40,9 @@ public abstract class AbstractCookingRecipeExtender extends SingleStackRecipe im
                 this.ingredient().toDisplay(),
                 SlotDisplay.AnyFuelSlotDisplay.INSTANCE,
                 new SlotDisplay.StackSlotDisplay(this.result()),
-                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(this.cookerItemKey()))
+                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(this.cookerItemKey())),
+                this.cookingTime,
+                this.experience
             )
         );
     }

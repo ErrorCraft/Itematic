@@ -1,22 +1,22 @@
-package net.errorcraft.itematic.loot.context;
+package net.errorcraft.itematic.util.context;
 
 import net.errorcraft.itematic.mixin.loot.context.LootContextTypesAccessor;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootContextType;
+import net.minecraft.util.context.ContextType;
 
-public class ItematicLootContextTypes {
-    public static final LootContextType ACTION = LootContextTypesAccessor.register("action", builder ->
+public class ItematicContextTypes {
+    public static final ContextType ACTION = LootContextTypesAccessor.register("action", builder ->
         builder.allow(LootContextParameters.THIS_ENTITY)
             .require(LootContextParameters.ORIGIN)
             .allow(LootContextParameters.TOOL)
-            .allow(ItematicLootContextParameters.SIDE)
+            .allow(ItematicContextParameters.SIDE)
     );
-    public static final LootContextType TRADE = LootContextTypesAccessor.register("trade", builder ->
+    public static final ContextType TRADE = LootContextTypesAccessor.register("trade", builder ->
         builder.require(LootContextParameters.THIS_ENTITY)
             .require(LootContextParameters.ORIGIN)
     );
 
-    private ItematicLootContextTypes() {}
+    private ItematicContextTypes() {}
 
     public static void init() {}
 }

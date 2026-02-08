@@ -30,17 +30,27 @@ public class ShieldDecorationRecipeExtender {
     }
 
     @ModifyConstant(
-        method = {
-            "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
-            "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;"
-        },
+        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
         constant = @Constant(
             classValue = BannerItem.class,
             ordinal = 0
         )
     )
-    private boolean instanceOfBannerItemUseItemComponent(Object reference, Class<BannerItem> clazz, @Local(ordinal = 2) ItemStack slotStack) {
-        return slotStack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
+    private boolean instanceOfBannerItemUseItemComponentMatches(Object reference, Class<BannerItem> clazz, @Local ItemStack inputStack) {
+        return inputStack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
+            .map(BannerPatternHolderItemComponent::modifiable)
+            .orElse(false);
+    }
+
+    @ModifyConstant(
+        method = "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
+        constant = @Constant(
+            classValue = BannerItem.class,
+            ordinal = 0
+        )
+    )
+    private boolean instanceOfBannerItemUseItemComponentCraft(Object reference, Class<BannerItem> clazz, @Local(ordinal = 2) ItemStack inputStack) {
+        return inputStack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
             .map(BannerPatternHolderItemComponent::modifiable)
             .orElse(false);
     }

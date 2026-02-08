@@ -26,7 +26,7 @@ public interface BundleItemAccessor {
         throw new AssertionError();
     }
 
-    @Accessor("field_54111")
+    @Accessor("MAX_USE_TIME")
     static int useDuration() {
         throw new AssertionError();
     }

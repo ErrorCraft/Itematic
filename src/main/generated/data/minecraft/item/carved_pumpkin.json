@@ -10,7 +10,9 @@
       "behavior": "minecraft:place_carved_pumpkin"
     },
     "minecraft:equipment": {
-      "slot": "head"
+      "camera_overlay": "minecraft:misc/pumpkinblur",
+      "slot": "head",
+      "swappable": false
     },
     "minecraft:stackable": 64
   },

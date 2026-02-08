@@ -32,19 +32,29 @@ public class ArmorDyeRecipeExtender {
     }
 
     @ModifyConstant(
-        method = {
-            "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
-            "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;"
-        },
+        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
         constant = @Constant(
             classValue = DyeItem.class,
             ordinal = 0
         )
     )
-    private boolean instanceOfDyeItemUseItemComponent(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack inputStack, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
-        Optional<DyeItemComponent> optionalComponent = inputStack.itematic$getBehavior(ItemComponentTypes.DYE);
-        optionalComponent.ifPresent(dyeItemComponent::set);
-        return optionalComponent.isPresent();
+    private boolean instanceOfDyeItemUseItemComponentForMatches(Object reference, Class<DyeItem> clazz, @Local ItemStack inputStack, @Share("dye") LocalRef<DyeItemComponent> dye) {
+        Optional<DyeItemComponent> optionalDye = inputStack.itematic$getBehavior(ItemComponentTypes.DYE);
+        optionalDye.ifPresent(dye::set);
+        return optionalDye.isPresent();
+    }
+
+    @ModifyConstant(
+        method = "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
+        constant = @Constant(
+            classValue = DyeItem.class,
+            ordinal = 0
+        )
+    )
+    private boolean instanceOfDyeItemUseItemComponentForCraft(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack inputStack, @Share("dye") LocalRef<DyeItemComponent> dye) {
+        Optional<DyeItemComponent> optionalDye = inputStack.itematic$getBehavior(ItemComponentTypes.DYE);
+        optionalDye.ifPresent(dye::set);
+        return optionalDye.isPresent();
     }
 
     @ModifyVariable(
@@ -65,7 +75,7 @@ public class ArmorDyeRecipeExtender {
         )
     )
     @SuppressWarnings("unchecked")
-    private <E> E addDyeItemUseItemComponent(E e, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
-        return (E) DyeItem.byColor(dyeItemComponent.get().color());
+    private <E> E addDyeItemUseItemComponent(E e, @Share("dye") LocalRef<DyeItemComponent> dye) {
+        return (E) DyeItem.byColor(dye.get().color());
     }
 }

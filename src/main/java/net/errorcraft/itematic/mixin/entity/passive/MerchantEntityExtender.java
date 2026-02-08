@@ -2,15 +2,15 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.DynamicOps;
-import net.errorcraft.itematic.loot.context.ItematicLootContextTypes;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.util.context.ItematicContextTypes;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.loot.context.LootWorldContext;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryOps;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -69,10 +69,11 @@ public abstract class MerchantEntityExtender extends MobEntityExtender {
         if (!(this.getWorld() instanceof ServerWorld world)) {
             return;
         }
-        LootContextParameterSet set = new LootContextParameterSet.Builder(world)
+
+        LootWorldContext set = new LootWorldContext.Builder(world)
             .add(LootContextParameters.THIS_ENTITY, this)
             .add(LootContextParameters.ORIGIN, this.getPos())
-            .build(ItematicLootContextTypes.TRADE);
+            .build(ItematicContextTypes.TRADE);
         LootContext context = new LootContext.Builder(set).build(Optional.empty());
         this.fillRecipes(context);
     }

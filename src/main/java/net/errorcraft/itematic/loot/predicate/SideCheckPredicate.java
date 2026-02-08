@@ -2,8 +2,8 @@ package net.errorcraft.itematic.loot.predicate;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.loot.context.ItematicLootContextParameters;
 import net.errorcraft.itematic.serialization.SetCodec;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.LootConditionType;
 import net.minecraft.loot.context.LootContext;
@@ -23,7 +23,7 @@ public record SideCheckPredicate(Set<Direction> sides) implements LootCondition 
 
     @Override
     public boolean test(LootContext context) {
-        return this.sides.contains(context.get(ItematicLootContextParameters.SIDE));
+        return this.sides.contains(context.get(ItematicContextParameters.SIDE));
     }
 
     public static LootCondition.Builder builder(Direction... sides) {
