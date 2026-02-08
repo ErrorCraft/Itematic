@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.item.ItemKeys;
@@ -39,10 +38,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -121,17 +118,6 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     @Unique
     private ActionContext context;
-
-    @Redirect(
-        method = "<clinit>",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/registry/DefaultedRegistry;getEntryCodec()Lcom/mojang/serialization/Codec;"
-        )
-    )
-    private static Codec<RegistryEntry<Item>> registryEntryCodecDoNotUseStaticItemRegistry(DefaultedRegistry<Item> instance) {
-        return RegistryFixedCodec.of(RegistryKeys.ITEM);
-    }
 
     @Inject(
         method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V",
