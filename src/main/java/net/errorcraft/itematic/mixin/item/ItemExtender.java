@@ -1,11 +1,13 @@
 package net.errorcraft.itematic.mixin.item;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemDisplay;
+import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
@@ -42,7 +44,10 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.consume.UseAction;
 import net.minecraft.item.tooltip.TooltipData;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.registry.DefaultedRegistry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -77,6 +82,28 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
     @Unique
     private ItemEventMap events;
+
+    @Redirect(
+        method = "<clinit>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/registry/DefaultedRegistry;getEntryCodec()Lcom/mojang/serialization/Codec;"
+        )
+    )
+    private static Codec<RegistryEntry<Item>> getEntryCodecDoNotUseStaticItemRegistry(DefaultedRegistry<Item> instance) {
+        return RegistryFixedCodec.of(RegistryKeys.ITEM);
+    }
+
+    @Redirect(
+        method = "method_65043",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/registry/entry/RegistryEntry;matches(Lnet/minecraft/registry/entry/RegistryEntry;)Z"
+        )
+    )
+    private static boolean matchesForAirUseRegistryKey(RegistryEntry<Item> instance, RegistryEntry<Item> entry) {
+        return instance.matchesKey(ItemKeys.AIR);
+    }
 
     @Redirect(
         method = "<init>",
