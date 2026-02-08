@@ -14,7 +14,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(TagEntry.class)
 public class TagEntryExtender {
     @Redirect(
-        method = { "generateLoot", "grow" },
+        method = {
+            "generateLoot",
+            "grow"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/registry/DefaultedRegistry;iterateEntries(Lnet/minecraft/registry/tag/TagKey;)Ljava/lang/Iterable;"

@@ -287,7 +287,6 @@
     "loot.ContainerComponentModifiersExtender$BundleContentsExtender",
     "loot.condition.LootConditionTypesAccessor",
     "loot.context.LootContextTypesAccessor",
-    "loot.entry.ItemEntryExtender",
     "loot.entry.TagEntryExtender",
     "loot.function.EnchantRandomlyLootFunctionExtender",
     "loot.function.ExplorationMapLootFunctionExtender",
