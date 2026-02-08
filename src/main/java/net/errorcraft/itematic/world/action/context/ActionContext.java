@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.world.action.context;
 
 import net.errorcraft.itematic.item.ItemStackConsumer;
-import net.errorcraft.itematic.loot.context.ItematicLootContextParameters;
-import net.errorcraft.itematic.loot.context.ItematicLootContextTypes;
 import net.errorcraft.itematic.util.PositionUtil;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextTypes;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.minecraft.block.Block;
@@ -16,8 +16,8 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.loot.context.LootWorldContext;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.function.CommandFunctionManager;
@@ -93,12 +93,12 @@ public class ActionContext {
     }
 
     public LootContext createLootContext(ActionContextParameters parameters) {
-        LootContextParameterSet set = new LootContextParameterSet.Builder(this.world)
+        LootWorldContext set = new LootWorldContext.Builder(this.world)
             .add(LootContextParameters.THIS_ENTITY, this.entities.get(parameters.entity()))
             .add(LootContextParameters.ORIGIN, this.position(parameters.position()))
             .add(LootContextParameters.TOOL, this.stack)
-            .add(ItematicLootContextParameters.SIDE, this.side)
-            .build(ItematicLootContextTypes.ACTION);
+            .add(ItematicContextParameters.SIDE, this.side)
+            .build(ItematicContextTypes.ACTION);
         return new LootContext.Builder(set).build(Optional.empty());
     }
 

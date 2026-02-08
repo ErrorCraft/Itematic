@@ -24,7 +24,7 @@ public class BannerDuplicateRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfBannerItemUseItemComponentCheck(Object reference, Class<BannerItem> clazz, @Local(ordinal = 2) ItemStack inputStack, @Share("dyeColor") LocalRef<DyeColor> dyeColor) {
+    private boolean instanceOfBannerItemUseItemComponentCheck(Object reference, Class<BannerItem> clazz, @Local ItemStack inputStack, @Share("dyeColor") LocalRef<DyeColor> dyeColor) {
         Optional<DyeColor> optionalDyeColor = inputStack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
             .flatMap(BannerPatternHolderItemComponent::color);
         optionalDyeColor.ifPresent(dyeColor::set);

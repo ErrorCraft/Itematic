@@ -131,18 +131,17 @@ public class FireworkStarRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local ItemStack ingredient, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
-        Optional<DyeItemComponent> optionalComponent = ingredient.itematic$getBehavior(ItemComponentTypes.DYE);
-        optionalComponent.ifPresent(dyeItemComponent::set);
-        return optionalComponent.isPresent();
+    private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local ItemStack ingredient, @Share("dye") LocalRef<DyeItemComponent> dye) {
+        Optional<DyeItemComponent> optionalDye = ingredient.itematic$getBehavior(ItemComponentTypes.DYE);
+        optionalDye.ifPresent(dye::set);
+        return optionalDye.isPresent();
     }
 
     @Redirect(
         method = "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;",
-            ordinal = 1
+            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
         ),
         slice = @Slice(
             from = @At(
@@ -163,8 +162,8 @@ public class FireworkStarRecipeExtender {
             target = "Lnet/minecraft/item/DyeItem;getColor()Lnet/minecraft/util/DyeColor;"
         )
     )
-    private DyeColor getColorUseItemComponent(DyeItem instance, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
-        return dyeItemComponent.get().color();
+    private DyeColor getColorUseItemComponent(DyeItem instance, @Share("dye") LocalRef<DyeItemComponent> dye) {
+        return dye.get().color();
     }
 
     @Redirect(

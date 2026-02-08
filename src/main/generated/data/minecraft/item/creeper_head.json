@@ -12,7 +12,8 @@
       "behavior": "minecraft:equip_entity_head"
     },
     "minecraft:equipment": {
-      "slot": "head"
+      "slot": "head",
+      "swappable": false
     },
     "minecraft:firework_shape_modifier": "creeper",
     "minecraft:stackable": 64

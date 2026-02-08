@@ -8,7 +8,7 @@ import net.minecraft.client.recipebook.RecipeBookType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.book.RecipeBookGroup;
+import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,8 +31,8 @@ public class RecipeBookWidgetExtender {
         @Redirect(
             method = {
                 "<init>(Lnet/minecraft/client/recipebook/RecipeBookType;)V",
-                "<init>(Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeBookGroup;)V",
-                "<init>(Lnet/minecraft/item/Item;Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeBookGroup;)V"
+                "<init>(Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeBookCategory;)V",
+                "<init>(Lnet/minecraft/item/Item;Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeBookCategory;)V"
             },
             at = @At(
                 value = "NEW",
@@ -53,19 +53,19 @@ public class RecipeBookWidgetExtender {
         }
 
         @Inject(
-            method = "<init>(Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeBookGroup;)V",
+            method = "<init>(Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeBookCategory;)V",
             at = @At("TAIL")
         )
-        private void setIcons(Item primaryIcon, RecipeBookGroup group, CallbackInfo info) {
+        private void setIcons(Item primaryIcon, RecipeBookCategory category, CallbackInfo info) {
             this.primaryIconItem = Registries.ITEM.getKey(primaryIcon).orElseThrow();
             this.secondaryIconItem = Optional.empty();
         }
 
         @Inject(
-            method = "<init>(Lnet/minecraft/item/Item;Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeBookGroup;)V",
+            method = "<init>(Lnet/minecraft/item/Item;Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeBookCategory;)V",
             at = @At("TAIL")
         )
-        private void setIcons(Item primaryIcon, Item secondaryIcon, RecipeBookGroup group, CallbackInfo info) {
+        private void setIcons(Item primaryIcon, Item secondaryIcon, RecipeBookCategory category, CallbackInfo info) {
             this.primaryIconItem = Registries.ITEM.getKey(primaryIcon).orElseThrow();
             this.secondaryIconItem = Optional.of(Registries.ITEM.getKey(secondaryIcon).orElseThrow());
         }
