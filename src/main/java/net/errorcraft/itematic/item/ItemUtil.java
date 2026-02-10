@@ -31,6 +31,7 @@ import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMeth
 import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
+import net.errorcraft.itematic.item.use.provider.providers.IndefiniteIntegerProvider;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
 import net.errorcraft.itematic.mixin.item.*;
@@ -7098,6 +7099,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(UseableItemComponent.builder()
+                        .useFor(IndefiniteIntegerProvider.INSTANCE)
                         .animation(UseAction.BLOCK)
                         .build())
                     .with(DamageableItemComponent.of(336))
@@ -10282,7 +10284,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(ZoomItemComponent.of(SpyglassItem.FOV_MULTIPLIER, this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
                     .with(UseableItemComponent.builder()
-                        .ticks(SpyglassItem.MAX_USE_TIME)
+                        .useFor(SpyglassItem.MAX_USE_TIME)
                         .animation(UseAction.SPYGLASS)
                         .build())
                     .build()

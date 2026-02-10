@@ -46,7 +46,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
     public static ItemComponent<?>[] trident(float speed, float angleOffset, int minDrawDuration) {
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
-                .ticks(TridentIntegerProvider.INSTANCE)
+                .useFor(TridentIntegerProvider.INSTANCE)
                 .animation(UseAction.SPEAR)
                 .build(),
             new ThrowableItemComponent(speed, angleOffset, Optional.of(NumberRange.IntRange.atLeast(minDrawDuration)))
@@ -72,13 +72,17 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
     }
 
     @Override
-    public void stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
+    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
         if (this.drawDuration.filter(drawDuration -> drawDuration.test(usedTicks)).isPresent()) {
             this.createEntity(world, user, stack, resultStackConsumer);
             if (user instanceof PlayerEntity player) {
                 player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
             }
+
+            return true;
         }
+
+        return false;
     }
 
     private ActionResult createEntity(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {

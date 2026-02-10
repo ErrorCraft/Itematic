@@ -11,6 +11,7 @@ public class IntegerProviderTypes {
     public static final IntegerProviderType<ShooterIntegerProvider> SHOOTER = register(IntegerProviderTypeKeys.SHOOTER, new IntegerProviderType<>(ShooterIntegerProvider.CODEC, ShooterIntegerProvider.PACKET_CODEC));
     public static final IntegerProviderType<TridentIntegerProvider> TRIDENT = register(IntegerProviderTypeKeys.TRIDENT, new IntegerProviderType<>(TridentIntegerProvider.CODEC, TridentIntegerProvider.PACKET_CODEC));
     public static final IntegerProviderType<ConditionIntegerProvider> CONDITION = register(IntegerProviderTypeKeys.CONDITION, new IntegerProviderType<>(ConditionIntegerProvider.CODEC, ConditionIntegerProvider.PACKET_CODEC));
+    public static final IntegerProviderType<IndefiniteIntegerProvider> INDEFINITE = register(IntegerProviderTypeKeys.INDEFINITE, new IntegerProviderType<>(IndefiniteIntegerProvider.CODEC, IndefiniteIntegerProvider.PACKET_CODEC));
 
     private IntegerProviderTypes() {}
 

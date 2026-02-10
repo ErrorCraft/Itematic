@@ -15,11 +15,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -31,19 +28,17 @@ import net.minecraft.world.World;
 
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
-public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) implements ItemComponent<ConsumableItemComponent> {
+public record ConsumableItemComponent(boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) implements ItemComponent<ConsumableItemComponent> {
     private static final RegistryEntry<SoundEvent> DEFAULT_SOUND = Registries.SOUND_EVENT.getEntry(SoundEvents.ENTITY_GENERIC_EAT);
     public static final Codec<ConsumableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).optionalFieldOf("result_item").forGetter(ConsumableItemComponent::resultItem),
         Codec.BOOL.optionalFieldOf("has_consume_particles", true).forGetter(ConsumableItemComponent::hasConsumeParticles),
         SoundEvent.ENTRY_CODEC.optionalFieldOf("sound", DEFAULT_SOUND).forGetter(ConsumableItemComponent::sound)
     ).apply(instance, ConsumableItemComponent::new));
 
-    public static ConsumableItemComponent of(RegistryEntry<Item> resultItem, boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) {
-        return new ConsumableItemComponent(Optional.ofNullable(resultItem), hasConsumeParticles, sound);
+    public static ConsumableItemComponent of(boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) {
+        return new ConsumableItemComponent(hasConsumeParticles, sound);
     }
 
     public static Builder builder(int useDuration) {
@@ -77,9 +72,8 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, 
                 .build();
             stack.itematic$invokeEvent(ItemEvents.CONSUME_ITEM, context);
         }
-        this.resultItem.map(ItemStack::new)
-            .map(resultStack -> ItemUsage.exchangeStack(stack, player, resultStack))
-            .ifPresentOrElse(resultStackConsumer::set, () -> stack.decrementUnlessCreative(1, user));
+
+        stack.decrementUnlessCreative(1, user);
         if (player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.CONSUME_ITEM.trigger(serverPlayer, stack);
         }
@@ -102,11 +96,12 @@ public record ConsumableItemComponent(Optional<RegistryEntry<Item>> resultItem, 
         public ItemComponent<?>[] build() {
             Set<ItemComponent<?>> behavior = new HashSet<>();
             behavior.add(UseableItemComponent.builder()
-                .ticks(this.useDuration)
+                .useFor(this.useDuration)
                 .animation(this.useAnimation)
+                .remainder(this.resultItem)
                 .build()
             );
-            behavior.add(ConsumableItemComponent.of(this.resultItem, this.hasConsumeParticles, this.consumeSound));
+            behavior.add(ConsumableItemComponent.of(this.hasConsumeParticles, this.consumeSound));
             if (this.food != null) {
                 behavior.add(this.food);
             }

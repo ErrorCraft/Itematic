@@ -5,12 +5,15 @@
   "components": {
     "minecraft:consumable": {
       "has_consume_particles": false,
-      "result_item": "minecraft:bucket",
       "sound": "minecraft:entity.generic.drink"
     },
     "minecraft:stackable": 1,
     "minecraft:useable": {
       "animation": "drink",
+      "remainder": {
+        "id": "minecraft:bucket",
+        "count": 1
+      },
       "ticks": {
         "type": "minecraft:constant",
         "amount": 32

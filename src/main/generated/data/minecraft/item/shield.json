@@ -19,7 +19,10 @@
     },
     "minecraft:stackable": 1,
     "minecraft:useable": {
-      "animation": "block"
+      "animation": "block",
+      "ticks": {
+        "type": "minecraft:indefinite"
+      }
     }
   }
 }

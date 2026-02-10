@@ -6,6 +6,7 @@ import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMapImpl;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -39,6 +40,9 @@ public interface ItemStackAccess {
         return false;
     }
     default void itematic$damage(int amount, ActionContext context) {}
+    default ItemStack itematic$applyUseEffects(LivingEntity user, ItemStack stackBeforeUse) {
+        return ItemStack.EMPTY;
+    }
     default <T extends ItemComponent<T>> boolean itematic$hasComponent(ItemComponentType<T> type) {
         return false;
     }

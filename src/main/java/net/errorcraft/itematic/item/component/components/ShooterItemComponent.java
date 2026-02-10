@@ -48,7 +48,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
     public static ItemComponent<?>[] of(UseAction animation, RegistryEntryList<Item> heldAmmunition, RegistryEntryList<Item> ammunition, int range, ShooterMethod method, ItemDamageRulesDataComponent.Rule... rules) {
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
-                .ticks(ShooterIntegerProvider.INSTANCE)
+                .useFor(ShooterIntegerProvider.INSTANCE)
                 .animation(animation)
                 .build(),
             new ShooterItemComponent(
@@ -86,8 +86,8 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
     }
 
     @Override
-    public void stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
-        this.method.stop(this, stack, world, user, usedTicks);
+    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
+        return this.method.stop(this, stack, world, user, usedTicks);
     }
 
     @Override

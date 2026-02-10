@@ -37,7 +37,7 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
     public static ItemComponent<?>[] of(TagKey<Instrument> instruments) {
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
-                .ticks(PlayableIntegerProvider.INSTANCE)
+                .useFor(PlayableIntegerProvider.INSTANCE)
                 .animation(UseAction.TOOT_HORN)
                 .build(),
             new PlayableItemComponent(instruments)
