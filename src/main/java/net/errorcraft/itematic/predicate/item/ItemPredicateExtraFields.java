@@ -6,7 +6,7 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.network.codec.PacketCodecUtil;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.serialization.SetCodec;
 import net.minecraft.component.ComponentType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
@@ -20,8 +20,8 @@ import java.util.Set;
 
 public record ItemPredicateExtraFields(Optional<Set<ItemComponentType<?>>> behavior, Optional<Set<ComponentType<?>>> dataComponents) {
     public static final MapCodec<ItemPredicateExtraFields> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ItematicCodecs.setCodec(ItematicRegistries.ITEM_COMPONENT_TYPE.getCodec()).optionalFieldOf("behavior").forGetter(ItemPredicateExtraFields::behavior),
-        ItematicCodecs.setCodec(Registries.DATA_COMPONENT_TYPE.getCodec()).optionalFieldOf("data_components").forGetter(ItemPredicateExtraFields::dataComponents)
+        SetCodec.forRegistry(ItematicRegistries.ITEM_COMPONENT_TYPE).optionalFieldOf("behavior").forGetter(ItemPredicateExtraFields::behavior),
+        SetCodec.forRegistry(Registries.DATA_COMPONENT_TYPE).optionalFieldOf("data_components").forGetter(ItemPredicateExtraFields::dataComponents)
     ).apply(instance, ItemPredicateExtraFields::new));
     public static final PacketCodec<RegistryByteBuf, ItemPredicateExtraFields> PACKET_CODEC = PacketCodec.tuple(
         PacketCodecs.registryValue(ItematicRegistryKeys.ITEM_COMPONENT_TYPE).collect(PacketCodecUtil::set).collect(PacketCodecs::optional), ItemPredicateExtraFields::behavior,

@@ -23,7 +23,8 @@ public class FoodComponentExtender {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
+            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
+            remap = false
         )
     )
     private static Function<RecordCodecBuilder.Instance<FoodComponent>, ? extends App<RecordCodecBuilder.Mu<FoodComponent>, FoodComponent>> removeUnusedFields(Function<RecordCodecBuilder.Instance<FoodComponent>, ? extends App<RecordCodecBuilder.Mu<FoodComponent>, FoodComponent>> builder) {
