@@ -12,10 +12,11 @@
       "behavior": "minecraft:use_bucket"
     },
     "minecraft:fuel": {
+      "remainder": {
+        "id": "minecraft:bucket",
+        "count": 1
+      },
       "ticks": 20000
-    },
-    "minecraft:recipe_remainder": {
-      "item": "minecraft:bucket"
     },
     "minecraft:stackable": 1
   }

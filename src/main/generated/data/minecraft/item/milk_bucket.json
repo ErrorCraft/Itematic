@@ -8,9 +8,6 @@
       "result_item": "minecraft:bucket",
       "sound": "minecraft:entity.generic.drink"
     },
-    "minecraft:recipe_remainder": {
-      "item": "minecraft:bucket"
-    },
     "minecraft:stackable": 1,
     "minecraft:useable": {
       "animation": "drink",

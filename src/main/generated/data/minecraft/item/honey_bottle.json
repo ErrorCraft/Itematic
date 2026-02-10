@@ -12,9 +12,6 @@
       "nutrition": 6,
       "saturation": 1.2
     },
-    "minecraft:recipe_remainder": {
-      "item": "minecraft:glass_bottle"
-    },
     "minecraft:stackable": 16,
     "minecraft:useable": {
       "animation": "drink",
