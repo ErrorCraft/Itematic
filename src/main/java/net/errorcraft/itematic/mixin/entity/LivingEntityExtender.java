@@ -234,7 +234,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean isOfForElytraUseEventListenerCheck(ItemStack instance, Item item) {
+    private boolean isOfForTotemOfUndyingUseEventListenerCheck(ItemStack instance, Item item) {
         return instance.itematic$hasEventListener(ItemEvents.BEFORE_DEATH_HOLDER);
     }
 
