@@ -37,10 +37,10 @@ public record WeaponItemComponent(int damagePerHit, WeaponAttackDamageDataCompon
     ).apply(instance, WeaponItemComponent::new));
     private static final MaceItem DUMMY = new MaceItem(new Item.Settings());
 
-    public static WeaponItemComponent of(int damagePerHit, double attackDamage, double attackSpeed, WeaponAttackDamageDataComponent.Rule... rules) {
+    public static WeaponItemComponent of(int damagePerHit, double attackDamage, double attackSpeed) {
         return new WeaponItemComponent(
             damagePerHit,
-            new WeaponAttackDamageDataComponent(List.of(rules), attackDamage),
+            new WeaponAttackDamageDataComponent(List.of(), attackDamage),
             attackSpeed,
             false
         );
