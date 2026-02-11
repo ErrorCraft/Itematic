@@ -9,6 +9,7 @@
     "fabric-gametest": [
       "net.errorcraft.itematic.gametest.block.AnvilBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.BeehiveBlockTestSuite",
+      "net.errorcraft.itematic.gametest.block.BrewingStandBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.CandleBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.ComposterBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.DispenserBehaviorTestSuite",
@@ -37,6 +38,7 @@
       "net.errorcraft.itematic.gametest.item.HoneyBottleTestSuite",
       "net.errorcraft.itematic.gametest.item.LeadTestSuite",
       "net.errorcraft.itematic.gametest.item.SignTestSuite",
+      "net.errorcraft.itematic.gametest.item.TotemOfUndyingTestSuite",
       "net.errorcraft.itematic.gametest.item.component.BlockItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.ConsumableItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.EquipmentItemComponentTestSuite",

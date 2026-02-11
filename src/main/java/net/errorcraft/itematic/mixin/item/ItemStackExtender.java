@@ -804,6 +804,15 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
+    public boolean itematic$hasEventListener(ItemEvent event) {
+        if (this.entry == null) {
+            return false;
+        }
+
+        return this.entry.value().itematic$hasEventListener(event);
+    }
+
+    @Override
     public boolean itematic$canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
         if (this.entry == null) {
             return true;

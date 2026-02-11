@@ -52,6 +52,9 @@ public interface ItemStackAccess {
     default boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
         return false;
     }
+    default boolean itematic$hasEventListener(ItemEvent beforeDeathHolder) {
+        return false;
+    }
     default boolean itematic$canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
         return false;
     }

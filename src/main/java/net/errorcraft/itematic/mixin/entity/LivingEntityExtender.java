@@ -13,7 +13,6 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ConsumableItemComponent;
-import net.errorcraft.itematic.item.component.components.LifeSavingItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
@@ -24,7 +23,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Equipment;
@@ -49,7 +47,6 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
 import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
@@ -237,10 +234,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean isOfForTotemOfUndyingUseItemComponent(ItemStack instance, Item item, @Share("lifeSavingItemComponent") LocalRef<LifeSavingItemComponent> lifeSavingItemComponent) {
-        Optional<LifeSavingItemComponent> optionalComponent = instance.itematic$getComponent(ItemComponentTypes.LIFE_SAVING);
-        optionalComponent.ifPresent(lifeSavingItemComponent::set);
-        return optionalComponent.isPresent();
+    private boolean isOfForElytraUseEventListenerCheck(ItemStack instance, Item item) {
+        return instance.itematic$hasEventListener(ItemEvents.BEFORE_DEATH_HOLDER);
     }
 
     @Redirect(
@@ -254,16 +249,23 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         return instance.itematic$getOrCreateStat(stack.getRegistryEntry());
     }
 
-    @Inject(
+    @Redirect(
         method = "tryUseTotem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;clearStatusEffects()Z",
-            shift = At.Shift.AFTER
+            target = "Lnet/minecraft/entity/LivingEntity;clearStatusEffects()Z"
         )
     )
-    private void addEffectsFromLifeSavingItemComponent(DamageSource source, CallbackInfoReturnable<Boolean> info, @Share("lifeSavingItemComponent") LocalRef<LifeSavingItemComponent> lifeSavingItemComponent) {
-        lifeSavingItemComponent.get().apply((LivingEntity)(Object) this);
+    private boolean addEffectsFromLifeSavingItemComponent(LivingEntity instance, @Local(ordinal = 0) ItemStack stack) {
+        if (!(this.getWorld() instanceof ServerWorld serverWorld)) {
+            return false;
+        }
+
+        ActionContext context = ActionContext.builder(serverWorld)
+            .entityPosition(ActionContextParameter.THIS, this)
+            .stack(stack)
+            .build();
+        return stack.itematic$invokeEvent(ItemEvents.BEFORE_DEATH_HOLDER, context);
     }
 
     @Redirect(

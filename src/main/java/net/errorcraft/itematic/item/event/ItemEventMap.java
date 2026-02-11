@@ -39,6 +39,10 @@ public class ItemEventMap {
             .orElse(false);
     }
 
+    public boolean hasListener(ItemEvent event) {
+        return this.events.containsKey(event);
+    }
+
     public static class Builder {
         private final Map<ItemEvent, RegistryEntry<ActionEntry>> events = new HashMap<>();
 

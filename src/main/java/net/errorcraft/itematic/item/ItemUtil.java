@@ -10603,10 +10603,16 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(LifeSavingItemComponent.of(
-                        new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 900, 1),
-                        new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 100, 1),
-                        new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 800, 0)
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.BEFORE_DEATH_HOLDER, ActionEntry.of(
+                        UncheckedSequenceHandler.builder()
+                            .add(ClearStatusEffectsAction.of(ActionContextParameter.THIS))
+                            .add(AddStatusEffectsAction.of(
+                                new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 900, 1),
+                                new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 100, 1),
+                                new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 800, 0)
+                            ))
                     ))
                     .build()
             ));

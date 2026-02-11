@@ -36,6 +36,9 @@ public interface ItemAccess {
     default boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
         return false;
     }
+    default boolean itematic$hasEventListener(ItemEvent event) {
+        return false;
+    }
     default boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return true;
     }
