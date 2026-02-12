@@ -25,7 +25,6 @@ public class ItemComponentTypes {
     public static final ItemComponentType<DyeItemComponent> DYE = register("dye", new ItemComponentType<>(DyeItemComponent.CODEC));
     public static final ItemComponentType<DyeableItemComponent> DYEABLE = register("dyeable", new ItemComponentType<>(DyeableItemComponent.CODEC));
     public static final ItemComponentType<TintedItemComponent> TINTED = register("tinted", new ItemComponentType<>(TintedItemComponent.CODEC));
-    public static final ItemComponentType<UseableOnFluidItemComponent> USEABLE_ON_FLUID = register("useable_on_fluid", new ItemComponentType<>(UseableOnFluidItemComponent.CODEC));
     public static final ItemComponentType<SpawnEggItemComponent> SPAWN_EGG = register("spawn_egg", new ItemComponentType<>(SpawnEggItemComponent.CODEC));
     public static final ItemComponentType<DispensableItemComponent> DISPENSABLE = register("dispensable", new ItemComponentType<>(DispensableItemComponent.CODEC));
     public static final ItemComponentType<ShooterItemComponent> SHOOTER = register("shooter", new ItemComponentType<>(ShooterItemComponent.CODEC));
@@ -54,11 +53,9 @@ public class ItemComponentTypes {
     public static final ItemComponentType<ZoomItemComponent> ZOOM = register("zoom", new ItemComponentType<>(ZoomItemComponent.CODEC));
     public static final ItemComponentType<ItemHolderItemComponent> ITEM_HOLDER = register("item_holder", new ItemComponentType<>(ItemHolderItemComponent.CODEC));
     public static final ItemComponentType<ImmuneToDamageItemComponent> IMMUNE_TO_DAMAGE = register("immune_to_damage", new ItemComponentType<>(ImmuneToDamageItemComponent.CODEC));
-    public static final ItemComponentType<LifeSavingItemComponent> LIFE_SAVING = register("life_saving", new ItemComponentType<>(LifeSavingItemComponent.CODEC));
     public static final ItemComponentType<UnlockRecipesItemComponent> UNLOCK_RECIPES = register("unlock_recipes", new ItemComponentType<>(UnlockRecipesItemComponent.CODEC));
     public static final ItemComponentType<DebugStickItemComponent> DEBUG_STICK = register("debug_stick", new ItemComponentType<>(DebugStickItemComponent.CODEC));
     public static final ItemComponentType<SuspiciousEffectIngredientItemComponent> SUSPICIOUS_EFFECT_INGREDIENT = register("suspicious_effect_ingredient", new ItemComponentType<>(SuspiciousEffectIngredientItemComponent.CODEC));
-    public static final ItemComponentType<RecipeRemainderItemComponent> RECIPE_REMAINDER = register("recipe_remainder", new ItemComponentType<>(RecipeRemainderItemComponent.CODEC));
     public static final ItemComponentType<CastableItemComponent> CASTABLE = register("castable", new ItemComponentType<>(CastableItemComponent.CODEC));
     public static final ItemComponentType<StackableItemComponent> STACKABLE = register("stackable", new ItemComponentType<>(StackableItemComponent.CODEC));
     public static final ItemComponentType<AttributeModifiersItemComponent> ATTRIBUTE_MODIFIERS = register("attribute_modifiers", new ItemComponentType<>(AttributeModifiersItemComponent.CODEC));

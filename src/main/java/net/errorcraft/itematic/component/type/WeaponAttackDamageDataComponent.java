@@ -11,11 +11,9 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.predicate.item.ItemPredicate;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.registry.tag.TagKey;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +35,7 @@ public record WeaponAttackDamageDataComponent(List<Rule> rules, double defaultDa
                 return rule.damage.get();
             }
         }
+
         return this.defaultDamage;
     }
 
@@ -46,7 +45,8 @@ public record WeaponAttackDamageDataComponent(List<Rule> rules, double defaultDa
                 return rule.addBase.get();
             }
         }
-        return false;
+
+        return true;
     }
 
     public record Rule(Optional<RegistryEntryList<EntityType<?>>> entities, Optional<ItemPredicate> item, Optional<Double> damage, Optional<Boolean> addBase) {
@@ -64,20 +64,12 @@ public record WeaponAttackDamageDataComponent(List<Rule> rules, double defaultDa
             Rule::new
         );
 
-        public static Rule addsToBase(TagKey<EntityType<?>> entityTypes, double damage) {
-            return new Rule(
-                Optional.ofNullable(Registries.ENTITY_TYPE.getOrCreateEntryList(entityTypes)),
-                Optional.empty(),
-                Optional.of(damage),
-                Optional.of(true)
-            );
-        }
-
         @SuppressWarnings("deprecation")
         public boolean matches(ItemStack stack, Entity entity) {
             if (this.entities.isPresent() && !this.entities.get().contains(entity.getType().getRegistryEntry())) {
                 return false;
             }
+
             return this.item.map(item -> item.test(stack))
                 .orElse(true);
         }

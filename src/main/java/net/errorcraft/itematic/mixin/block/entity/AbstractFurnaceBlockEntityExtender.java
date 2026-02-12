@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.FuelItemComponent;
-import net.errorcraft.itematic.item.component.components.RecipeRemainderItemComponent;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
@@ -146,9 +145,9 @@ public class AbstractFurnaceBlockEntityExtender {
     )
     @SuppressWarnings("unchecked")
     private static <E> E setRemainderItemStackUseItemComponent(E element, @Local(ordinal = 0) Item item) {
-        return (E) item.itematic$getComponent(ItemComponentTypes.RECIPE_REMAINDER)
-            .map(RecipeRemainderItemComponent::item)
-            .map(ItemStack::new)
+        return (E) item.itematic$getComponent(ItemComponentTypes.FUEL)
+            .flatMap(FuelItemComponent::remainder)
+            .map(ItemStack::copy)
             .orElse(ItemStack.EMPTY);
     }
 }

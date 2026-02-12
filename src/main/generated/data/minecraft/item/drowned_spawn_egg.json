@@ -10,7 +10,11 @@
       "allow_item_data": true,
       "entity": {
         "type": "minecraft:drowned"
-      }
+      },
+      "passes": [
+        "block",
+        "fluid"
+      ]
     },
     "minecraft:spawn_egg": {},
     "minecraft:stackable": 64,
@@ -22,7 +26,6 @@
           7969893
         ]
       }
-    },
-    "minecraft:useable_on_fluid": {}
+    }
   }
 }

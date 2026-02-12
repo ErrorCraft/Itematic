@@ -81,9 +81,6 @@
       "net/minecraft/class_1845\u0024class_9665": [
         "net/errorcraft/itematic/access/recipe/BrewingRecipeRegistryBuilderAccess"
       ],
-      "net/minecraft/class_1856": [
-        "net/errorcraft/itematic/access/recipe/IngredientAccess"
-      ],
       "net/minecraft/class_1856\u0024class_1859": [
         "net/errorcraft/itematic/access/recipe/IngredientEntryAccess"
       ],

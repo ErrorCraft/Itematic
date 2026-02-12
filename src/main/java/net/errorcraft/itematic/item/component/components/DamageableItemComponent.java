@@ -2,7 +2,6 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -21,7 +20,6 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.dynamic.Codecs;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,10 +55,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
             WeaponItemComponent.of(
                 1,
                 attackDamage,
-                0.4d,
-                Arrays.stream(proficientEntityTypeTags)
-                    .map(proficientEntityTypeTag -> WeaponAttackDamageDataComponent.Rule.addsToBase(proficientEntityTypeTag, attackDamage - 1.0d))
-                    .toArray(WeaponAttackDamageDataComponent.Rule[]::new)
+                0.4d
             ),
             EnchantableItemComponent.of(material),
             RepairableItemComponent.of(repairItemsTag)
@@ -102,10 +97,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
             WeaponItemComponent.of(
                 2,
                 realAttackDamage,
-                attackSpeed,
-                Arrays.stream(proficientEntityTypeTags)
-                    .map(proficientEntityTypeTag -> WeaponAttackDamageDataComponent.Rule.addsToBase(proficientEntityTypeTag, realAttackDamage - 1.0d))
-                    .toArray(WeaponAttackDamageDataComponent.Rule[]::new)
+                attackSpeed
             ),
             EnchantableItemComponent.of(material),
             RepairableItemComponent.of(repairItemsTag)

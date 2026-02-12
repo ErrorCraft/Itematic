@@ -31,6 +31,7 @@ import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMeth
 import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
+import net.errorcraft.itematic.item.use.provider.providers.IndefiniteIntegerProvider;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
 import net.errorcraft.itematic.mixin.item.*;
@@ -199,7 +200,6 @@ public class ItemUtil {
                         .noConsumeParticles()
                         .consumeSound(this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_DRINK))
                         .build())
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ClearStatusEffectsAction.of(ActionContextParameter.THIS)))
@@ -421,6 +421,17 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ConsumableItemComponent.builder(FoodComponents.CHICKEN).build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
+                            RandomChanceLootCondition.builder(0.3f).build()
+                        ),
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 600)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_CHICKEN, create(
@@ -484,6 +495,15 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ConsumableItemComponent.builder(FoodComponents.PUFFERFISH).build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 1200, 1),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.HUNGER), 300, 2),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.NAUSEA), 300)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKED_COD, create(
@@ -548,6 +568,17 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ConsumableItemComponent.builder(FoodComponents.ROTTEN_FLESH).build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
+                            RandomChanceLootCondition.builder(0.8f).build()
+                        ),
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.HUNGER), 600)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPIDER_EYE, create(
@@ -555,6 +586,13 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ConsumableItemComponent.builder(FoodComponents.SPIDER_EYE).build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 100)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.POISONOUS_POTATO, create(
@@ -562,6 +600,17 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ConsumableItemComponent.builder(FoodComponents.POISONOUS_POTATO).build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        ActionRequirements.of(
+                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
+                            RandomChanceLootCondition.builder(0.6f).build()
+                        ),
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 100)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_APPLE, create(
@@ -571,6 +620,14 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ConsumableItemComponent.builder(FoodComponents.GOLDEN_APPLE).build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 100, 1),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 2400)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENCHANTED_GOLDEN_APPLE, create(
@@ -581,6 +638,16 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ConsumableItemComponent.builder(FoodComponents.ENCHANTED_GOLDEN_APPLE).build())
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
+                        AddStatusEffectsAction.of(
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 400, 1),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.RESISTANCE), 6000),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 6000),
+                            new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 2400)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_CARROT, create(
@@ -609,7 +676,6 @@ public class ItemUtil {
                         .noConsumeParticles()
                         .consumeSound(this.soundEvents.getOrThrow(SoundEventKeys.HONEY_BOTTLE_DRINK))
                         .build())
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
@@ -7100,6 +7166,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(UseableItemComponent.builder()
+                        .useFor(IndefiniteIntegerProvider.INSTANCE)
                         .animation(UseAction.BLOCK)
                         .build())
                     .with(DamageableItemComponent.of(336))
@@ -9497,15 +9564,13 @@ public class ItemUtil {
                 ItemBase.Builder.forItem(ItemKeys.WATER_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.WATER), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY), this.items, this.dispenseBehaviors))
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LAVA_BUCKET, create(
                 ItemBase.Builder.forItem(ItemKeys.LAVA_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.fluid(this.fluids.getOrThrow(FluidKeys.LAVA), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_LAVA), this.items, this.dispenseBehaviors))
-                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.LAVA_FUEL_TIME))
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.BUCKET)))
+                    .with(FuelItemComponent.of(FurnaceBlockEntityUtil.LAVA_FUEL_TIME, this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POWDER_SNOW_BUCKET, create(
@@ -10286,7 +10351,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(ZoomItemComponent.of(SpyglassItem.FOV_MULTIPLIER, this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
                     .with(UseableItemComponent.builder()
-                        .ticks(SpyglassItem.MAX_USE_TIME)
+                        .useFor(SpyglassItem.MAX_USE_TIME)
                         .animation(UseAction.SPYGLASS)
                         .build())
                     .build()
@@ -10530,7 +10595,6 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(RecipeRemainderItemComponent.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TOTEM_OF_UNDYING, create(
@@ -10539,10 +10603,16 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(LifeSavingItemComponent.of(
-                        new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 900, 1),
-                        new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 100, 1),
-                        new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 800, 0)
+                    .build(),
+                ItemEventMap.builder()
+                    .add(ItemEvents.BEFORE_DEATH_HOLDER, ActionEntry.of(
+                        UncheckedSequenceHandler.builder()
+                            .add(ClearStatusEffectsAction.of(ActionContextParameter.THIS))
+                            .add(AddStatusEffectsAction.of(
+                                new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 900, 1),
+                                new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 100, 1),
+                                new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 800, 0)
+                            ))
                     ))
                     .build()
             ));

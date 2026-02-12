@@ -5,31 +5,6 @@
   "components": {
     "minecraft:consumable": {},
     "minecraft:food": {
-      "effects": [
-        {
-          "effect": {
-            "id": "minecraft:poison",
-            "amplifier": 1,
-            "duration": 1200,
-            "show_icon": true
-          }
-        },
-        {
-          "effect": {
-            "id": "minecraft:hunger",
-            "amplifier": 2,
-            "duration": 300,
-            "show_icon": true
-          }
-        },
-        {
-          "effect": {
-            "id": "minecraft:nausea",
-            "duration": 300,
-            "show_icon": true
-          }
-        }
-      ],
       "nutrition": 1,
       "saturation": 0.2
     },
@@ -39,6 +14,33 @@
       "ticks": {
         "type": "minecraft:constant",
         "amount": 32
+      }
+    }
+  },
+  "events": {
+    "minecraft:consume_item": {
+      "action": {
+        "type": "minecraft:add_status_effects",
+        "effects": [
+          {
+            "id": "minecraft:poison",
+            "amplifier": 1,
+            "duration": 1200,
+            "show_icon": true
+          },
+          {
+            "id": "minecraft:hunger",
+            "amplifier": 2,
+            "duration": 300,
+            "show_icon": true
+          },
+          {
+            "id": "minecraft:nausea",
+            "duration": 300,
+            "show_icon": true
+          }
+        ],
+        "entity": "this"
       }
     }
   }

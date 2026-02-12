@@ -4,27 +4,43 @@
     "translation_key": "item.minecraft.totem_of_undying"
   },
   "components": {
-    "minecraft:life_saving": {
-      "effects": [
+    "minecraft:stackable": 1
+  },
+  "events": {
+    "minecraft:before_death_holder": {
+      "action": [
         {
-          "id": "minecraft:regeneration",
-          "amplifier": 1,
-          "duration": 900,
-          "show_icon": true
+          "action": {
+            "type": "minecraft:clear_status_effects",
+            "entity": "this"
+          }
         },
         {
-          "id": "minecraft:absorption",
-          "amplifier": 1,
-          "duration": 100,
-          "show_icon": true
-        },
-        {
-          "id": "minecraft:fire_resistance",
-          "duration": 800,
-          "show_icon": true
+          "action": {
+            "type": "minecraft:add_status_effects",
+            "effects": [
+              {
+                "id": "minecraft:regeneration",
+                "amplifier": 1,
+                "duration": 900,
+                "show_icon": true
+              },
+              {
+                "id": "minecraft:absorption",
+                "amplifier": 1,
+                "duration": 100,
+                "show_icon": true
+              },
+              {
+                "id": "minecraft:fire_resistance",
+                "duration": 800,
+                "show_icon": true
+              }
+            ],
+            "entity": "this"
+          }
         }
       ]
-    },
-    "minecraft:stackable": 1
+    }
   }
 }

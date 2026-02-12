@@ -10,6 +10,7 @@ public class IntegerProviderTypeKeys {
     public static final RegistryKey<IntegerProviderType<?>> SHOOTER = of("shooter");
     public static final RegistryKey<IntegerProviderType<?>> TRIDENT = of("trident");
     public static final RegistryKey<IntegerProviderType<?>> CONDITION = of("condition");
+    public static final RegistryKey<IntegerProviderType<?>> INDEFINITE = of("indefinite");
 
     private IntegerProviderTypeKeys() {}
 

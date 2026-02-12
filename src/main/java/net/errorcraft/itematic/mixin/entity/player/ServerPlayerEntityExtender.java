@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.entity.player;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.GameProfile;
+import net.errorcraft.itematic.access.entity.LivingEntityAccess;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -23,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityExtender extends PlayerEntity {
+public abstract class ServerPlayerEntityExtender extends PlayerEntity implements LivingEntityAccess {
     public ServerPlayerEntityExtender(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
         super(world, pos, yaw, gameProfile);
     }
@@ -110,5 +111,12 @@ public abstract class ServerPlayerEntityExtender extends PlayerEntity {
             .get(RegistryKeys.ITEM)
             .getEntry((Item) key);
         return instance.itematic$getOrCreateStat(itemEntry);
+    }
+
+    @Override
+    public void itematic$addOrDropStack(ItemStack stack) {
+        if (!this.getInventory().insertStack(stack)) {
+            this.dropStack(stack);
+        }
     }
 }

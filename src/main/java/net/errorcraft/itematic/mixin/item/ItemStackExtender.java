@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.item;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -8,6 +9,8 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.ImmuneToDamageComponent;
+import net.errorcraft.itematic.component.type.UseCooldownDataComponent;
+import net.errorcraft.itematic.component.type.UseRemainderDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.ItematicItemTags;
@@ -157,9 +160,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         at = @At("TAIL")
     )
     private void componentChangesConstructorSetFields(RegistryEntry<Item> item, int count, ComponentChanges changes, CallbackInfo info) {
-        this.entry = item;
-        this.components = ComponentMapImpl.create(item.value().getComponents(), changes);
-        item.value().postProcessComponents((ItemStack)(Object) this);
+        this.setFields(item, changes);
     }
 
     @Redirect(
@@ -285,6 +286,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     @Overwrite
     public RegistryEntry<Item> getRegistryEntry() {
         return this.entry;
+    }
+
+    @ModifyExpressionValue(
+        method = "getItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"
+        )
+    )
+    private boolean isEmptyCheckUnboundRegistryEntry(boolean original) {
+        return original || !this.entry.hasKeyAndValue();
     }
 
     @Redirect(
@@ -652,6 +664,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         return this.count + " " + this.itematic$key().getValue().toString();
     }
 
+    @Inject(
+        method = "hashCode",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private static void checkEmptyStack(ItemStack stack, CallbackInfoReturnable<Integer> info) {
+        if (stack != null && (stack.isEmpty() || !stack.getRegistryEntry().hasKeyAndValue())) {
+            info.setReturnValue(0);
+        }
+    }
+
     @Override
     public boolean canBeEnchantedWith(RegistryEntry<Enchantment> enchantment, EnchantingContext context) {
         // Use the original implementation again
@@ -725,6 +748,32 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
+    @SuppressWarnings("DataFlowIssue")
+    public ItemStack itematic$applyUseEffects(LivingEntity user, ItemStack stackBeforeUsing) {
+        if (!stackBeforeUsing.itematic$hasComponent(ItemComponentTypes.USEABLE)) {
+            return (ItemStack)(Object) this;
+        }
+
+        UseRemainderDataComponent useRemainder = stackBeforeUsing.get(ItematicDataComponentTypes.USE_REMAINDER);
+        ItemStack trueRemainder = (ItemStack)(Object) this;
+        if (useRemainder != null) {
+            trueRemainder = useRemainder.convert(
+                (ItemStack)(Object) this,
+                stackBeforeUsing.getCount(),
+                user.isInCreativeMode(),
+                user::itematic$addOrDropStack
+            );
+        }
+
+        UseCooldownDataComponent useCooldown = stackBeforeUsing.get(ItematicDataComponentTypes.USE_COOLDOWN);
+        if (useCooldown != null) {
+            useCooldown.set(stackBeforeUsing, user);
+        }
+
+        return trueRemainder;
+    }
+
+    @Override
     public <T extends ItemComponent<T>> boolean itematic$hasComponent(ItemComponentType<T> type) {
         return this.entry != null && this.entry.value().itematic$hasComponent(type);
     }
@@ -752,6 +801,15 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         boolean result = this.entry.value().itematic$invokeEvent(event, context);
         this.activeEvents.remove(event);
         return result;
+    }
+
+    @Override
+    public boolean itematic$hasEventListener(ItemEvent event) {
+        if (this.entry == null) {
+            return false;
+        }
+
+        return this.entry.value().itematic$hasEventListener(event);
     }
 
     @Override
@@ -799,6 +857,17 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         this.entry = entry;
         if (entry.hasKeyAndValue()) {
             this.components = new ComponentMapImpl(entry.value().getComponents());
+            entry.value().postProcessComponents((ItemStack)(Object) this);
+        } else {
+            this.components = new ComponentMapImpl(ComponentMap.EMPTY);
+        }
+    }
+
+    @Unique
+    private void setFields(RegistryEntry<Item> entry, ComponentChanges changes) {
+        this.entry = entry;
+        if (entry.hasKeyAndValue()) {
+            this.components = ComponentMapImpl.create(entry.value().getComponents(), changes);
             entry.value().postProcessComponents((ItemStack)(Object) this);
         } else {
             this.components = new ComponentMapImpl(ComponentMap.EMPTY);
