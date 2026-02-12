@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.client.network;
 
 import net.errorcraft.itematic.access.network.listener.ClientPlayPacketListenerAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
 import net.errorcraft.itematic.world.action.actions.TwirlPlayerAction;
 import net.minecraft.client.MinecraftClient;
@@ -36,8 +36,8 @@ public abstract class ClientPlayNetworkHandlerExtender extends ClientCommonNetwo
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private static boolean isOfForTotemOfUndyingUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasComponent(ItemComponentTypes.LIFE_SAVING);
+    private static boolean isOfForTotemOfUndyingUseEventListenerCheck(ItemStack instance, Item item) {
+        return instance.itematic$hasEventListener(ItemEvents.BEFORE_DEATH_HOLDER);
     }
 
     @Redirect(

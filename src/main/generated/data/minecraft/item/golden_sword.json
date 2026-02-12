@@ -30,13 +30,7 @@
     "minecraft:weapon": {
       "attack_damage": {
         "default_damage": 4.0,
-        "rules": [
-          {
-            "add_base": true,
-            "damage": 3.0,
-            "entities": "#minecraft:proficient_with_golden_weapons"
-          }
-        ]
+        "rules": []
       },
       "attack_speed": 0.4
     }

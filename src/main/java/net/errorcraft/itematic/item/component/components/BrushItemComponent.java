@@ -19,7 +19,7 @@ public record BrushItemComponent() implements ItemComponent<BrushItemComponent> 
     public static ItemComponent<?>[] of(int brushTicks) {
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
-                .ticks(brushTicks)
+                .useFor(brushTicks)
                 .animation(UseAction.BRUSH)
                 .passes(UseableItemComponent.Pass.BLOCK)
                 .build(),

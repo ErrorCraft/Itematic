@@ -11,7 +11,10 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.*;
+import net.errorcraft.itematic.item.component.components.BlockItemComponent;
+import net.errorcraft.itematic.item.component.components.DamageableItemComponent;
+import net.errorcraft.itematic.item.component.components.EnchantableItemComponent;
+import net.errorcraft.itematic.item.component.components.RepairableItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
@@ -90,7 +93,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     public void useUseItemComponent(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
-        ItemStack stack = user.getStackInHand(hand);
+        ItemStack stack = user.getStackInHand(hand).copy();
+        ItemStack stackBeforeUsing = stack.copy();
         StackReference stackReference = StackReferenceUtil.of(stack);
         ActionResult result = ActionResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
@@ -108,6 +112,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .build();
             this.itematic$invokeEvent(ItemEvents.USE, context);
         }
+
+        if (stack.getMaxUseTime(user) <= 0 && result.isAccepted()) {
+            ItemStack remainder = stackReference.get().itematic$applyUseEffects(user, stackBeforeUsing);
+            stackReference.set(remainder);
+        }
+
         info.setReturnValue(new TypedActionResult<>(result, stackReference.get()));
     }
 
@@ -246,10 +256,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+        ItemStack stackBeforeUsing = stack.copy();
+        boolean result = false;
         int usedTicks = user.itematic$itemUsedTicks();
         StackReference stackReference = StackReferenceUtil.of(stack);
         for (ItemComponent<?> component : this.itemComponents) {
-            component.stopUsing(stack, world, user, usedTicks, remainingUseTicks, stackReference::set);
+            result |= component.stopUsing(stack, world, user, usedTicks, remainingUseTicks, stackReference::set);
         }
 
         if (world instanceof ServerWorld serverWorld) {
@@ -257,6 +269,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .entityPosition(ActionContextParameter.THIS, user)
                 .build();
             this.itematic$invokeEvent(ItemEvents.STOPPED_USING, context);
+        }
+
+        if (result) {
+            stackReference.set(stackReference.get().itematic$applyUseEffects(user, stackBeforeUsing));
         }
 
         tryUpdateItemStack(user, Hand.MAIN_HAND, stack, stackReference);
@@ -268,6 +284,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     public void finishUsingUseItemComponent(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> info) {
+        ItemStack stackBeforeUsing = stack.copy();
         int usedTicks = user.itematic$itemUsedTicks();
         StackReference stackReference = StackReferenceUtil.of(stack);
         for (ItemComponent<?> component : this.itemComponents) {
@@ -283,6 +300,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
         this.itematic$getComponent(ItemComponentTypes.CONSUMABLE)
             .ifPresent(c -> c.consume(user, stack, stackReference::set, world, user.getActiveHand()));
+        stackReference.set(stackReference.get().itematic$applyUseEffects(user, stackBeforeUsing));
         info.setReturnValue(stackReference.get());
     }
 
@@ -424,15 +442,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         if (this.itematic$hasComponent(ItemComponentTypes.POINTABLE) && stack.contains(DataComponentTypes.LODESTONE_TRACKER)) {
             info.setReturnValue(true);
         }
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean hasRecipeRemainder() {
-        return this.itematic$hasComponent(ItemComponentTypes.RECIPE_REMAINDER);
     }
 
     /**
@@ -619,19 +628,15 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
-    public boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
-        return this.itematic$getComponent(ItemComponentTypes.FOOD)
-            .map(c -> c.mayStartUsing(user))
-            .orElse(true);
+    public boolean itematic$hasEventListener(ItemEvent event) {
+        return this.events.hasListener(event);
     }
 
     @Override
-    public ItemStack getRecipeRemainder(ItemStack stack) {
-        // Use the ItemComponent implementation for data-driven items, so we don't get a NullPointerException
-        return this.itematic$getComponent(ItemComponentTypes.RECIPE_REMAINDER)
-            .map(RecipeRemainderItemComponent::item)
-            .map(ItemStack::new)
-            .orElse(ItemStack.EMPTY);
+    public boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+        return this.itematic$getComponent(ItemComponentTypes.FOOD)
+            .map(c -> c.mayStartUsing(user, stack))
+            .orElse(true);
     }
 
     @Override
@@ -644,10 +649,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         if (target == null) {
             return;
         }
+
         ItemStack newStack = stackReference.get();
         if (stack == newStack) {
             return;
         }
+
         target.setStackInHand(hand, newStack);
     }
 
@@ -661,10 +668,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             component.addComponents(componentsBuilder);
             component.addAttributeModifiers(attributeModifiersBuilder, this.itemComponents);
         }
+
         AttributeModifiersComponent attributeModifiers = attributeModifiersBuilder.build();
         if (!attributeModifiers.modifiers().isEmpty()) {
             componentsBuilder.add(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributeModifiers);
         }
+
         return COMPONENT_INTERNER.intern(componentsBuilder.build());
     }
 }

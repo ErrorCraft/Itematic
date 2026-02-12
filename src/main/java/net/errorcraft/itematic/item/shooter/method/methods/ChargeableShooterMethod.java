@@ -110,18 +110,19 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Load
     }
 
     @Override
-    public void stop(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks) {
+    public boolean stop(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks) {
         if (usedTicks < CrossbowItem.getPullTime(stack, user)) {
-            return;
+            return false;
         }
 
         if (CrossbowItem.isCharged(stack) || !chargeProjectiles(user, stack)) {
-            return;
+            return false;
         }
 
         CrossbowItem.LoadingSounds chargingSounds = this.chargingSounds(stack);
         float pitch = MathHelper.lerp(world.getRandom().nextFloat(), 0.87f, 1.2f);
         chargingSounds.end().ifPresent(sound -> world.playSound(null, user.getX(), user.getY(), user.getZ(), sound.value(), user.getSoundCategory(), 1.0f, pitch));
+        return true;
     }
 
     @Override

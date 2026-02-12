@@ -23,4 +23,5 @@ public interface LivingEntityAccess {
     default double itematic$getAttackDamage() {
         return 0.0d;
     }
+    default void itematic$addOrDropStack(ItemStack stack) {}
 }

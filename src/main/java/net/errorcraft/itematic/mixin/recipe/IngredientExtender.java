@@ -1,5 +1,8 @@
 package net.errorcraft.itematic.mixin.recipe;
 
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.recipe.IngredientAccess;
 import net.errorcraft.itematic.access.recipe.IngredientEntryAccess;
 import net.minecraft.item.Item;
@@ -11,18 +14,13 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -30,11 +28,30 @@ import java.util.stream.Stream;
 public class IngredientExtender implements IngredientAccess {
     @Shadow
     @Final
+    @Mutable
+    public static Codec<Ingredient> ALLOW_EMPTY_CODEC;
+
+    @Shadow
+    @Final
+    @Mutable
+    public static Codec<Ingredient> DISALLOW_EMPTY_CODEC;
+
+    @Shadow
+    @Final
     private Ingredient.Entry[] entries;
 
     @Shadow
     @Nullable
     private ItemStack[] matchingStacks;
+
+    @Unique
+    private Optional<ItemStack> remainder = Optional.empty();
+
+    static {
+        // Modify the codec fields in a static initializer block due to Fabric API using a cancellable @Inject for their own additions, which makes @ModifyReturnValue not work
+        ALLOW_EMPTY_CODEC = addRemainder(ALLOW_EMPTY_CODEC);
+        DISALLOW_EMPTY_CODEC = addRemainder(DISALLOW_EMPTY_CODEC);
+    }
 
     @Redirect(
         method = "<clinit>",
@@ -88,6 +105,41 @@ public class IngredientExtender implements IngredientAccess {
                 .toArray(ItemStack[]::new);
         }
         return this.matchingStacks;
+    }
+
+    @Override
+    public Optional<ItemStack> itematic$remainder() {
+        return this.remainder;
+    }
+
+    @Override
+    public void itematic$setRemainder(Optional<ItemStack> remainder) {
+        this.remainder = remainder;
+    }
+
+    @Unique
+    private static Codec<Ingredient> addRemainder(Codec<Ingredient> original) {
+        Codec<Ingredient> fullCodec = RecordCodecBuilder.create(instance -> instance.group(
+            original.fieldOf("items").forGetter(Function.identity()),
+            ItemStack.CODEC.optionalFieldOf("remainder").forGetter(Ingredient::itematic$remainder)
+        ).apply(instance, IngredientExtender::setFields));
+        return Codec.either(original, fullCodec)
+            .xmap(
+                either -> either.map(Function.identity(), Function.identity()),
+                ingredient -> {
+                    if (ingredient.itematic$remainder().isEmpty()) {
+                        return Either.left(ingredient);
+                    }
+
+                    return Either.right(ingredient);
+                }
+            );
+    }
+
+    @Unique
+    private static Ingredient setFields(Ingredient ingredient, Optional<ItemStack> remainder) {
+        ingredient.itematic$setRemainder(remainder);
+        return ingredient;
     }
 
     @Mixin(Ingredient.Entry.class)
