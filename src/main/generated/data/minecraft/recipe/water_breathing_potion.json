@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": "minecraft:pufferfish",
+  "base": "minecraft:awkward",
+  "result": "minecraft:water_breathing"
+}

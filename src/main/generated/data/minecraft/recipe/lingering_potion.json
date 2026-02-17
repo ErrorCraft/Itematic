@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:brewing_amplify",
+  "addition": {
+    "items": "minecraft:dragon_breath",
+    "remainder": {
+      "id": "minecraft:glass_bottle",
+      "count": 1
+    }
+  },
+  "base": "minecraft:splash_potion",
+  "result": "minecraft:lingering_potion"
+}

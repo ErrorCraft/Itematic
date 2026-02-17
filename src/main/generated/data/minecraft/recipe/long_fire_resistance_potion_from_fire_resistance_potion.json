@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": "minecraft:redstone",
+  "base": "minecraft:fire_resistance",
+  "result": "minecraft:long_fire_resistance"
+}

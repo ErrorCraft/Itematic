@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": "minecraft:rabbit_foot",
+  "base": "minecraft:awkward",
+  "result": "minecraft:leaping"
+}

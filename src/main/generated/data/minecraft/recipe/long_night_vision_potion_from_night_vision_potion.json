@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": "minecraft:redstone",
+  "base": "minecraft:night_vision",
+  "result": "minecraft:long_night_vision"
+}
