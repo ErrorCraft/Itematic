@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.screen;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.BrewingRecipeRegistry;
@@ -36,8 +36,8 @@ public class BrewingStandScreenHandlerExtender {
                 ordinal = 0
             )
         )
-        private static boolean matchesIsOfUseItemComponentCheck(ItemStack instance, Item item) {
-            return instance.itematic$hasBehavior(ItemComponentTypes.POTION_HOLDER);
+        private static boolean matchesIsOfUseItemTagCheck(ItemStack instance, Item item) {
+            return instance.isIn(ItematicItemTags.BREWING_INPUTS);
         }
 
         @Redirect(

@@ -3,7 +3,7 @@ package net.errorcraft.itematic.recipe.display.slot;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.PotionContentsComponentUtil;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -15,6 +15,7 @@ import net.minecraft.recipe.display.SlotDisplayContexts;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.util.context.ContextParameterMap;
 
@@ -41,11 +42,12 @@ public record PotionSlotDisplay(RegistryEntry<Potion> potion) implements SlotDis
         }
 
         return lookup.getOrThrow(RegistryKeys.ITEM)
-            .getOptional(ItemKeys.POTION)
+            .getOptional(ItematicItemTags.BREWING_INPUTS)
+            .stream()
+            .flatMap(RegistryEntryList.ListBacked::stream)
             .map(ItemStack::new)
             .map(stack -> PotionContentsComponentUtil.setPotion(stack, this.potion))
-            .map(fromStack::toDisplayed)
-            .stream();
+            .map(fromStack::toDisplayed);
     }
 
     @Override

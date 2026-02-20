@@ -1,17 +1,19 @@
 package net.errorcraft.itematic.mixin.block.entity;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
 import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
+import net.errorcraft.itematic.screen.BrewingStandMenuDelegate;
 import net.minecraft.block.entity.BrewingStandBlockEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.BrewingRecipeRegistry;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.ServerRecipeManager;
+import net.minecraft.recipe.*;
+import net.minecraft.screen.BrewingStandScreenHandler;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
@@ -30,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import java.util.Optional;
 
 @Mixin(BrewingStandBlockEntity.class)
-public class BrewingStandBlockEntityExtender {
+public class BrewingStandBlockEntityExtender implements RecipeInputProvider {
     @Shadow
     @Final
     private static int INPUT_SLOT_INDEX;
@@ -143,8 +145,8 @@ public class BrewingStandBlockEntityExtender {
             )
         )
     )
-    private boolean isOfForPotionUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.POTION_HOLDER);
+    private boolean isOfForPotionUseItemTagCheck(ItemStack instance, Item item) {
+        return instance.isIn(ItematicItemTags.BREWING_INPUTS);
     }
 
     @Redirect(
@@ -190,6 +192,22 @@ public class BrewingStandBlockEntityExtender {
     )
     private boolean isOfForGlassBottleUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.GLASS_BOTTLE);
+    }
+
+    @ModifyReturnValue(
+        method = "createScreenHandler",
+        at = @At("TAIL")
+    )
+    private ScreenHandler useDelegate(ScreenHandler original) {
+        return new BrewingStandMenuDelegate((BrewingStandScreenHandler) original);
+    }
+
+    @Override
+    public void provideRecipeInputs(RecipeFinder finder) {
+        finder.addInput(this.inventory.get(INPUT_SLOT_INDEX));
+        for (int i = 0; i < 3; i++) {
+            finder.addInput(this.inventory.get(i));
+        }
     }
 
     @Unique

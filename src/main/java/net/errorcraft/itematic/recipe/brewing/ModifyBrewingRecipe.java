@@ -3,6 +3,7 @@ package net.errorcraft.itematic.recipe.brewing;
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
 import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
 import net.errorcraft.itematic.recipe.display.BrewingRecipeDisplay;
@@ -27,6 +28,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
     public ModifyBrewingRecipe(String group, RegistryEntry<Potion> base, Ingredient addition, RegistryEntry<Potion> result) {
@@ -51,7 +53,15 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
 
     @Override
     public IngredientPlacement getIngredientPlacement() {
-        return IngredientPlacement.NONE; // todo
+        return IngredientPlacement.NONE;
+    }
+
+    @Override
+    public IngredientPlacement itematic$ingredientPlacement(RegistryEntryLookup<Item> items) {
+        return IngredientPlacement.forMultipleSlots(List.of(
+            items.getOptional(ItematicItemTags.BREWING_INPUTS).map(Ingredient::fromTag),
+            Optional.of(this.addition())
+        ));
     }
 
     @Override

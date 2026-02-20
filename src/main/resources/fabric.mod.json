@@ -24,6 +24,10 @@
     ],
     "fabric-datagen": [
       "net.errorcraft.itematic.data.ItematicData"
+    ],
+    "mm:early_risers": [
+      "net.errorcraft.itematic.mm.ItematicEarlyRiser",
+      "net.errorcraft.itematic.mm.client.ItematicClientEarlyRiser"
     ]
   },
   "mixins": [

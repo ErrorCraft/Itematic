@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.recipe.brewing;
 
 import com.mojang.serialization.MapCodec;
+import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
 import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
@@ -10,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.potion.Potions;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.IngredientPlacement;
 import net.minecraft.recipe.Recipe;
@@ -20,8 +22,10 @@ import net.minecraft.recipe.display.SlotDisplay;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
     public AmplifyBrewingRecipe(String group, RegistryEntry<Item> base, Ingredient addition, RegistryEntry<Item> result) {
@@ -45,7 +49,10 @@ public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
 
     @Override
     public IngredientPlacement getIngredientPlacement() {
-        return IngredientPlacement.NONE; // todo
+        return IngredientPlacement.forMultipleSlots(List.of(
+            Optional.of(Ingredient.fromTag(RegistryEntryList.of(this.base()))),
+            Optional.of(this.addition())
+        ));
     }
 
     @Override
@@ -57,12 +64,16 @@ public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
     public List<RecipeDisplay> itematic$displays(RegistryEntryLookup<Item> items) {
         return List.of(
             new BrewingRecipeDisplay(
-                new SlotDisplay.ItemSlotDisplay(this.base()),
+                new SlotDisplay.StackSlotDisplay(displayStack(this.base())),
                 this.addition().toDisplay(),
-                new SlotDisplay.ItemSlotDisplay(this.result()),
+                new SlotDisplay.StackSlotDisplay(displayStack(this.result())),
                 new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.BREWING_STAND))
             )
         );
+    }
+
+    private static ItemStack displayStack(RegistryEntry<Item> item) {
+        return PotionContentsComponentUtil.setPotion(new ItemStack(item), Potions.WATER);
     }
 
     public static class Serializer implements RecipeSerializer<AmplifyBrewingRecipe> {
