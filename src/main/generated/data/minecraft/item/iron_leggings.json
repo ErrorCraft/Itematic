@@ -1,11 +1,14 @@
 {
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:armor.leggings",
+      "type": "minecraft:armor",
+      "amount": 5.0,
+      "operation": "add_value",
+      "slot": "legs"
+    }
+  ],
   "behavior": {
-    "minecraft:armor": {
-      "attribute_id": "minecraft:armor.leggings",
-      "defense": 5,
-      "knockback_resistance": 0.0,
-      "toughness": 0.0
-    },
     "minecraft:damageable": {
       "durability": 225
     },

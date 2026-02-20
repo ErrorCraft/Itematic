@@ -25,25 +25,19 @@ import net.minecraft.item.equipment.EquipmentType;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public record EquipmentItemComponent(EquippableComponent equippable) implements ItemComponent<EquipmentItemComponent> {
     public static final Codec<EquipmentItemComponent> CODEC = EquippableComponent.CODEC.xmap(EquipmentItemComponent::new, EquipmentItemComponent::equippable);
 
-    public static EquipmentItemComponent of(ArmorMaterial material, EquipmentType type) {
-        return new EquipmentItemComponent(EquippableComponent.builder(type.getEquipmentSlot())
-            .swappable(true)
-            .equipSound(material.equipSound())
-            .model(material.modelId())
-            .build());
+    public static EquipmentItemComponent of(EquippableComponent equippable) {
+        return new EquipmentItemComponent(equippable);
     }
 
-    public static EquipmentItemComponent of(ArmorMaterial material, EquipmentType type, AnimalArmorItem.Type animalType) {
+    private static EquipmentItemComponent of(ArmorMaterial material, EquipmentType type, AnimalArmorItem.Type animalType) {
         return new EquipmentItemComponent(EquippableComponent.builder(type.getEquipmentSlot())
             .swappable(true)
             .equipSound(material.equipSound())
@@ -52,23 +46,31 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
             .build());
     }
 
-    public static EquipmentItemComponent of(EquipmentSlot slot, boolean swappable, RegistryEntry<SoundEvent> equipSound) {
-        return new EquipmentItemComponent(EquippableComponent.builder(slot)
-            .swappable(swappable)
-            .equipSound(equipSound)
-            .build());
+    public static ItemComponent<?>[] from(ArmorMaterial material, EquipmentType type) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(1),
+            of(EquippableComponent.builder(type.getEquipmentSlot())
+                .swappable(true)
+                .equipSound(material.equipSound())
+                .model(material.modelId())
+                .build()),
+            DamageableItemComponent.of(type.getMaxDamage(material.durability())),
+        };
     }
 
-    public static EquipmentItemComponent of(EquipmentSlot slot, boolean swappable, RegistryEntry<SoundEvent> equipSound, Identifier model) {
-        return new EquipmentItemComponent(EquippableComponent.builder(slot)
-            .swappable(swappable)
-            .equipSound(equipSound)
-            .model(model)
-            .build());
+    public static ItemComponent<?>[] from(ArmorMaterial material, EquipmentType type, AnimalArmorItem.Type animalType) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(1),
+            of(material, type, animalType)
+        };
     }
 
-    public static EquipmentItemComponent of(EquippableComponent equippable) {
-        return new EquipmentItemComponent(equippable);
+    public static ItemComponent<?>[] fromDamageable(ArmorMaterial material, EquipmentType type, AnimalArmorItem.Type animalType) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(1),
+            DamageableItemComponent.of(type.getMaxDamage(material.durability()), animalType.itematic$breakSound()),
+            of(material, type, animalType)
+        };
     }
 
     public static ItemComponent<?>[] skull(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
