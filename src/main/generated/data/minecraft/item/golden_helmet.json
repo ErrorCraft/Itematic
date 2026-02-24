@@ -1,11 +1,14 @@
 {
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:armor.helmet",
+      "type": "minecraft:armor",
+      "amount": 2.0,
+      "operation": "add_value",
+      "slot": "head"
+    }
+  ],
   "behavior": {
-    "minecraft:armor": {
-      "attribute_id": "minecraft:armor.helmet",
-      "defense": 2,
-      "knockback_resistance": 0.0,
-      "toughness": 0.0
-    },
     "minecraft:damageable": {
       "durability": 77
     },

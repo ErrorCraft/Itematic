@@ -1,11 +1,21 @@
 {
-  "behavior": {
-    "minecraft:armor": {
-      "attribute_id": "minecraft:armor.chestplate",
-      "defense": 8,
-      "knockback_resistance": 0.0,
-      "toughness": 2.0
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:armor.chestplate",
+      "type": "minecraft:armor",
+      "amount": 8.0,
+      "operation": "add_value",
+      "slot": "chest"
     },
+    {
+      "id": "minecraft:armor.chestplate",
+      "type": "minecraft:armor_toughness",
+      "amount": 2.0,
+      "operation": "add_value",
+      "slot": "chest"
+    }
+  ],
+  "behavior": {
     "minecraft:damageable": {
       "durability": 528
     },

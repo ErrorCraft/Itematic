@@ -1,11 +1,28 @@
 {
-  "behavior": {
-    "minecraft:armor": {
-      "attribute_id": "minecraft:armor.leggings",
-      "defense": 6,
-      "knockback_resistance": 0.10000000149011612,
-      "toughness": 3.0
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:armor.leggings",
+      "type": "minecraft:armor",
+      "amount": 6.0,
+      "operation": "add_value",
+      "slot": "legs"
     },
+    {
+      "id": "minecraft:armor.leggings",
+      "type": "minecraft:armor_toughness",
+      "amount": 3.0,
+      "operation": "add_value",
+      "slot": "legs"
+    },
+    {
+      "id": "minecraft:armor.leggings",
+      "type": "minecraft:knockback_resistance",
+      "amount": 0.10000000149011612,
+      "operation": "add_value",
+      "slot": "legs"
+    }
+  ],
+  "behavior": {
     "minecraft:damageable": {
       "durability": 555
     },
