@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.block.ComposterBlockUtil;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
+import net.errorcraft.itematic.component.AttributeModifiersComponentUtil;
 import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.ItematicEntityTypeTags;
@@ -101,6 +102,7 @@ public class ItemUtil {
     public static final int UNSTACKABLE_MAX_STACK_SIZE = 1;
     public static final Codec<Item> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
         ItemBase.CODEC.fieldOf("base").forGetter(Item::itematic$itemBase),
+        AttributeModifiersComponentUtil.LIST_CODEC.optionalFieldOf("attribute_modifiers", AttributeModifiersComponent.DEFAULT).forGetter(Item::itematic$attributeModifiers),
         ItemComponentSet.CODEC.optionalFieldOf("components", ItemComponentSet.EMPTY).forGetter(Item::itematic$components),
         ItemEventMap.CODEC.optionalFieldOf("events", ItemEventMap.EMPTY).forGetter(Item::itematic$events)
     ).apply(instance, ItemUtil::create));
@@ -123,8 +125,13 @@ public class ItemUtil {
     }
 
     private static Item create(ItemBase base, ItemComponentSet components, ItemEventMap events) {
+        return create(base, AttributeModifiersComponent.DEFAULT, components, events);
+    }
+
+    private static Item create(ItemBase base, AttributeModifiersComponent attributeModifiers, ItemComponentSet components, ItemEventMap events) {
         Item item = new Item(new Item.Settings());
         item.itematic$setItemBase(base);
+        item.itematic$setAttributeModifiers(attributeModifiers);
         item.itematic$setComponents(components);
         item.itematic$setEvents(events);
         return item;

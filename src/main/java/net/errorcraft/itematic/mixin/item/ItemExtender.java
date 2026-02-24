@@ -72,6 +72,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Unique
     private ItemBase base;
     @Unique
+    private AttributeModifiersComponent attributeModifiers;
+    @Unique
     private ItemComponentSet itemComponents;
     @Unique
     private ItemEventMap events;
@@ -586,6 +588,16 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
+    public AttributeModifiersComponent itematic$attributeModifiers() {
+        return this.attributeModifiers;
+    }
+
+    @Override
+    public void itematic$setAttributeModifiers(AttributeModifiersComponent attributeModifiers) {
+        this.attributeModifiers = attributeModifiers;
+    }
+
+    @Override
     public ItemComponentSet itematic$components() {
         return this.itemComponents;
     }
@@ -601,6 +613,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         if (this.itemComponents == null) {
             return false;
         }
+
         return this.itemComponents.contains(type);
     }
 
@@ -609,6 +622,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         if (this.itemComponents == null) {
             return Optional.empty();
         }
+
         return this.itemComponents.get(type);
     }
 
@@ -664,6 +678,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .addAll(DataComponentTypes.DEFAULT_ITEM_COMPONENTS);
         this.base.addComponents(componentsBuilder);
         AttributeModifiersComponent.Builder attributeModifiersBuilder = AttributeModifiersComponent.builder();
+        this.attributeModifiers.modifiers().forEach(entry -> attributeModifiersBuilder.add(
+            entry.attribute(),
+            entry.modifier(),
+            entry.slot()
+        ));
         for (ItemComponent<?> component : this.itemComponents) {
             component.addComponents(componentsBuilder);
             component.addAttributeModifiers(attributeModifiersBuilder, this.itemComponents);
