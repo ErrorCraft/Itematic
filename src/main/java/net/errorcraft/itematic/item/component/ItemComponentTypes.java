@@ -58,7 +58,6 @@ public class ItemComponentTypes {
     public static final ItemComponentType<SuspiciousEffectIngredientItemComponent> SUSPICIOUS_EFFECT_INGREDIENT = register("suspicious_effect_ingredient", new ItemComponentType<>(SuspiciousEffectIngredientItemComponent.CODEC));
     public static final ItemComponentType<CastableItemComponent> CASTABLE = register("castable", new ItemComponentType<>(CastableItemComponent.CODEC));
     public static final ItemComponentType<StackableItemComponent> STACKABLE = register("stackable", new ItemComponentType<>(StackableItemComponent.CODEC));
-    public static final ItemComponentType<AttributeModifiersItemComponent> ATTRIBUTE_MODIFIERS = register("attribute_modifiers", new ItemComponentType<>(AttributeModifiersItemComponent.CODEC));
     public static final ItemComponentType<OminousEffectProviderItemComponent> OMINOUS_EFFECT_PROVIDER = register("ominous_effect_provider", new ItemComponentType<>(OminousEffectProviderItemComponent.CODEC));
 
     private ItemComponentTypes() {}
