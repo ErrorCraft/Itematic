@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.block.ComposterBlockUtil;
 import net.errorcraft.itematic.block.entity.FurnaceBlockEntityUtil;
+import net.errorcraft.itematic.component.AttributeModifiersComponentUtil;
 import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
@@ -96,7 +97,7 @@ public class ItemUtil {
     public static final int UNSTACKABLE_MAX_STACK_SIZE = 1;
     public static final Codec<Item> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
         ItemDisplay.CODEC.fieldOf("display").forGetter(Item::itematic$display),
-        AttributeModifiersProvider.CODEC.optionalFieldOf("attribute_modifiers", AttributeModifiersProvider.EMPTY).forGetter(Item::itematic$attributeModifiers),
+        AttributeModifiersComponentUtil.LIST_CODEC.optionalFieldOf("attribute_modifiers", AttributeModifiersComponent.DEFAULT).forGetter(Item::itematic$attributeModifiers),
         ItemComponentSet.CODEC.optionalFieldOf("behavior", ItemComponentSet.EMPTY).forGetter(Item::itematic$behavior),
         ItemEventMap.CODEC.optionalFieldOf("events", ItemEventMap.EMPTY).forGetter(Item::itematic$events)
     ).apply(instance, ItemUtil::create));
@@ -119,14 +120,14 @@ public class ItemUtil {
     }
 
     private static Item create(ItemDisplay display, ItemComponentSet components, ItemEventMap events) {
-        return create(display, AttributeModifiersProvider.EMPTY, components, events);
+        return create(display, AttributeModifiersComponent.DEFAULT, components, events);
     }
 
-    private static Item create(ItemDisplay display, AttributeModifiersProvider attributeModifiers, ItemComponentSet components) {
+    private static Item create(ItemDisplay display, AttributeModifiersComponent attributeModifiers, ItemComponentSet components) {
         return create(display, attributeModifiers, components, ItemEventMap.EMPTY);
     }
 
-    private static Item create(ItemDisplay display, AttributeModifiersProvider attributeModifiers, ItemComponentSet components, ItemEventMap events) {
+    private static Item create(ItemDisplay display, AttributeModifiersComponent attributeModifiers, ItemComponentSet components, ItemEventMap events) {
         Item item = new Item(new Item.Settings());
         item.itematic$setDisplay(display);
         item.itematic$setAttributeModifiers(attributeModifiers);
@@ -7261,7 +7262,7 @@ public class ItemUtil {
         private void bootstrapArmor() {
             this.registerable.register(ItemKeys.LEATHER_HELMET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LEATHER_HELMET).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.LEATHER, EquipmentType.HELMET),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.LEATHER, EquipmentType.HELMET),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.LEATHER, EquipmentType.HELMET))
                     .with(EnchantableItemComponent.of(ArmorMaterials.LEATHER))
@@ -7273,7 +7274,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.LEATHER_CHESTPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LEATHER_CHESTPLATE).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.LEATHER, EquipmentType.CHESTPLATE),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.LEATHER, EquipmentType.CHESTPLATE),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.LEATHER, EquipmentType.CHESTPLATE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.LEATHER))
@@ -7285,7 +7286,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.LEATHER_LEGGINGS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LEATHER_LEGGINGS).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.LEATHER, EquipmentType.LEGGINGS),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.LEATHER, EquipmentType.LEGGINGS),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.LEATHER, EquipmentType.LEGGINGS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.LEATHER))
@@ -7297,7 +7298,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.LEATHER_BOOTS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LEATHER_BOOTS).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.LEATHER, EquipmentType.BOOTS),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.LEATHER, EquipmentType.BOOTS),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.LEATHER, EquipmentType.BOOTS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.LEATHER))
@@ -7311,7 +7312,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHAINMAIL_HELMET)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.CHAIN, EquipmentType.HELMET),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.CHAIN, EquipmentType.HELMET),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.CHAIN, EquipmentType.HELMET))
                     .with(EnchantableItemComponent.of(ArmorMaterials.CHAIN))
@@ -7323,7 +7324,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHAINMAIL_CHESTPLATE)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.CHAIN, EquipmentType.CHESTPLATE),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.CHAIN, EquipmentType.CHESTPLATE),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.CHAIN, EquipmentType.CHESTPLATE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.CHAIN))
@@ -7335,7 +7336,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHAINMAIL_LEGGINGS)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.CHAIN, EquipmentType.LEGGINGS),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.CHAIN, EquipmentType.LEGGINGS),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.CHAIN, EquipmentType.LEGGINGS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.CHAIN))
@@ -7347,7 +7348,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHAINMAIL_BOOTS)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.CHAIN, EquipmentType.BOOTS),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.CHAIN, EquipmentType.BOOTS),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.CHAIN, EquipmentType.BOOTS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.CHAIN))
@@ -7357,7 +7358,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.IRON_HELMET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.IRON, EquipmentType.HELMET),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.IRON, EquipmentType.HELMET),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.IRON, EquipmentType.HELMET))
                     .with(EnchantableItemComponent.of(ArmorMaterials.IRON))
@@ -7367,7 +7368,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.IRON_CHESTPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.IRON_CHESTPLATE).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.IRON, EquipmentType.CHESTPLATE),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.IRON, EquipmentType.CHESTPLATE),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.IRON, EquipmentType.CHESTPLATE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.IRON))
@@ -7377,7 +7378,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.IRON_LEGGINGS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.IRON_LEGGINGS).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.IRON, EquipmentType.LEGGINGS),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.IRON, EquipmentType.LEGGINGS),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.IRON, EquipmentType.LEGGINGS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.IRON))
@@ -7387,7 +7388,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.IRON_BOOTS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.IRON_BOOTS).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.IRON, EquipmentType.BOOTS),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.IRON, EquipmentType.BOOTS),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.IRON, EquipmentType.BOOTS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.IRON))
@@ -7397,7 +7398,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.DIAMOND_HELMET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DIAMOND_HELMET).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.DIAMOND, EquipmentType.HELMET),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.DIAMOND, EquipmentType.HELMET),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.DIAMOND, EquipmentType.HELMET))
                     .with(EnchantableItemComponent.of(ArmorMaterials.DIAMOND))
@@ -7407,7 +7408,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.DIAMOND_CHESTPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DIAMOND_CHESTPLATE).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.DIAMOND, EquipmentType.CHESTPLATE),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.DIAMOND, EquipmentType.CHESTPLATE),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.DIAMOND, EquipmentType.CHESTPLATE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.DIAMOND))
@@ -7417,7 +7418,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.DIAMOND_LEGGINGS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DIAMOND_LEGGINGS).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.DIAMOND, EquipmentType.LEGGINGS),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.DIAMOND, EquipmentType.LEGGINGS),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.DIAMOND, EquipmentType.LEGGINGS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.DIAMOND))
@@ -7427,7 +7428,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.DIAMOND_BOOTS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DIAMOND_BOOTS).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.DIAMOND, EquipmentType.BOOTS),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.DIAMOND, EquipmentType.BOOTS),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.DIAMOND, EquipmentType.BOOTS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.DIAMOND))
@@ -7437,7 +7438,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.GOLDEN_HELMET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GOLDEN_HELMET).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.GOLD, EquipmentType.HELMET),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.GOLD, EquipmentType.HELMET),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.GOLD, EquipmentType.HELMET))
                     .with(EnchantableItemComponent.of(ArmorMaterials.GOLD))
@@ -7447,7 +7448,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.GOLDEN_CHESTPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GOLDEN_CHESTPLATE).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.GOLD, EquipmentType.CHESTPLATE),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.GOLD, EquipmentType.CHESTPLATE),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.GOLD, EquipmentType.CHESTPLATE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.GOLD))
@@ -7457,7 +7458,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.GOLDEN_LEGGINGS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GOLDEN_LEGGINGS).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.GOLD, EquipmentType.LEGGINGS),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.GOLD, EquipmentType.LEGGINGS),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.GOLD, EquipmentType.LEGGINGS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.GOLD))
@@ -7467,7 +7468,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.GOLDEN_BOOTS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GOLDEN_BOOTS).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.GOLD, EquipmentType.BOOTS),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.GOLD, EquipmentType.BOOTS),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.GOLD, EquipmentType.BOOTS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.GOLD))
@@ -7477,7 +7478,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.NETHERITE_HELMET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.NETHERITE_HELMET).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.NETHERITE, EquipmentType.HELMET),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.NETHERITE, EquipmentType.HELMET),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.NETHERITE, EquipmentType.HELMET))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
@@ -7488,7 +7489,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.NETHERITE_CHESTPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.NETHERITE_CHESTPLATE).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.NETHERITE, EquipmentType.CHESTPLATE),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.NETHERITE, EquipmentType.CHESTPLATE),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.NETHERITE, EquipmentType.CHESTPLATE))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
@@ -7499,7 +7500,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.NETHERITE_LEGGINGS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.NETHERITE_LEGGINGS).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.NETHERITE, EquipmentType.LEGGINGS),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.NETHERITE, EquipmentType.LEGGINGS),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.NETHERITE, EquipmentType.LEGGINGS))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
@@ -7510,7 +7511,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.NETHERITE_BOOTS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.NETHERITE_BOOTS).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.NETHERITE, EquipmentType.BOOTS),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.NETHERITE, EquipmentType.BOOTS),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.NETHERITE, EquipmentType.BOOTS))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
@@ -7521,7 +7522,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.TURTLE_HELMET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TURTLE_HELMET).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.TURTLE_SCUTE, EquipmentType.HELMET),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.TURTLE_SCUTE, EquipmentType.HELMET),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.TURTLE_SCUTE, EquipmentType.HELMET))
                     .with(EnchantableItemComponent.of(ArmorMaterials.TURTLE_SCUTE))
@@ -7531,7 +7532,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.LEATHER_HORSE_ARMOR, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LEATHER_HORSE_ARMOR).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.LEATHER, EquipmentType.BODY),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.LEATHER, EquipmentType.BODY),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.LEATHER, EquipmentType.BODY, AnimalArmorItem.Type.EQUESTRIAN))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7541,7 +7542,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.IRON_HORSE_ARMOR, create(
                 ItemDisplay.Builder.forItem(ItemKeys.IRON_HORSE_ARMOR).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.IRON, EquipmentType.BODY),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.IRON, EquipmentType.BODY),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.IRON, EquipmentType.BODY, AnimalArmorItem.Type.EQUESTRIAN))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7549,7 +7550,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.GOLDEN_HORSE_ARMOR, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GOLDEN_HORSE_ARMOR).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.GOLD, EquipmentType.BODY),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.GOLD, EquipmentType.BODY),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.GOLD, EquipmentType.BODY, AnimalArmorItem.Type.EQUESTRIAN))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7557,7 +7558,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.DIAMOND_HORSE_ARMOR, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DIAMOND_HORSE_ARMOR).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.DIAMOND, EquipmentType.BODY),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.DIAMOND, EquipmentType.BODY),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.from(ArmorMaterials.DIAMOND, EquipmentType.BODY, AnimalArmorItem.Type.EQUESTRIAN))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7565,7 +7566,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.WOLF_ARMOR, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WOLF_ARMOR).build(),
-                AttributeModifiersProvider.armor(ArmorMaterials.ARMADILLO_SCUTE, EquipmentType.BODY),
+                AttributeModifiersComponentUtil.armor(ArmorMaterials.ARMADILLO_SCUTE, EquipmentType.BODY),
                 ItemComponentSet.builder()
                     .with(EquipmentItemComponent.fromDamageable(ArmorMaterials.ARMADILLO_SCUTE, EquipmentType.BODY, AnimalArmorItem.Type.CANINE))
                     .with(DyeableItemComponent.of(0x000000))

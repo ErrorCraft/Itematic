@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.access.item;
 
-import net.errorcraft.itematic.item.AttributeModifiersProvider;
 import net.errorcraft.itematic.item.ItemDisplay;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
@@ -14,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ItemAccess {
@@ -22,10 +20,10 @@ public interface ItemAccess {
         return null;
     }
     default void itematic$setDisplay(ItemDisplay display) {}
-    default AttributeModifiersProvider itematic$attributeModifiers() {
+    default AttributeModifiersComponent itematic$attributeModifiers() {
         return null;
     }
-    default void itematic$setAttributeModifiers(AttributeModifiersProvider attributeModifiers) {}
+    default void itematic$setAttributeModifiers(AttributeModifiersComponent attributeModifiers) {}
     default ItemComponentSet itematic$behavior() {
         return null;
     }

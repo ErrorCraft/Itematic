@@ -6,7 +6,10 @@ import net.errorcraft.itematic.access.item.ItemAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.inventory.StackReferenceUtil;
-import net.errorcraft.itematic.item.*;
+import net.errorcraft.itematic.item.ItemDisplay;
+import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.item.ItemResult;
+import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -24,6 +27,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.ToolComponent;
 import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -74,7 +78,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     private ItemDisplay display;
 
     @Unique
-    private AttributeModifiersProvider attributeModifiers;
+    private AttributeModifiersComponent attributeModifiers;
 
     @Unique
     private ItemComponentSet itemComponents;
@@ -583,12 +587,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
-    public AttributeModifiersProvider itematic$attributeModifiers() {
+    public AttributeModifiersComponent itematic$attributeModifiers() {
         return this.attributeModifiers;
     }
 
     @Override
-    public void itematic$setAttributeModifiers(AttributeModifiersProvider attributeModifiers) {
+    public void itematic$setAttributeModifiers(AttributeModifiersComponent attributeModifiers) {
         this.attributeModifiers = attributeModifiers;
     }
 
@@ -672,9 +676,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         ComponentMap.Builder componentsBuilder = ComponentMap.builder()
             .addAll(DataComponentTypes.DEFAULT_ITEM_COMPONENTS);
         this.display.addComponents(componentsBuilder);
-        this.attributeModifiers.addTo(componentsBuilder);
         for (ItemComponent<?> component : this.itemComponents) {
             component.addComponents(componentsBuilder);
+        }
+
+        if (!this.attributeModifiers.modifiers().isEmpty()) {
+            componentsBuilder.add(DataComponentTypes.ATTRIBUTE_MODIFIERS, this.attributeModifiers);
         }
 
         return componentsBuilder.build();
