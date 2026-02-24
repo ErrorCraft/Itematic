@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": "minecraft:redstone",
+  "base": "minecraft:slow_falling",
+  "result": "minecraft:long_slow_falling"
+}

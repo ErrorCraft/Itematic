@@ -1,9 +1,10 @@
 package net.errorcraft.itematic.mixin.screen;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.BrewingRecipeRegistry;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,6 +12,20 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 public class BrewingStandScreenHandlerExtender {
+    @Mixin(targets = "net/minecraft/screen/BrewingStandScreenHandler$IngredientSlot")
+    public static class IngredientSlotExtender {
+        @Redirect(
+            method = "canInsert",
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/recipe/BrewingRecipeRegistry;isValidIngredient(Lnet/minecraft/item/ItemStack;)Z"
+            )
+        )
+        private static boolean isAlwaysValidIngredient(BrewingRecipeRegistry instance, ItemStack stack) {
+            return true;
+        }
+    }
+
     @Mixin(targets = "net/minecraft/screen/BrewingStandScreenHandler$PotionSlot")
     public static class PotionSlotExtender {
         @Redirect(
@@ -21,8 +36,8 @@ public class BrewingStandScreenHandlerExtender {
                 ordinal = 0
             )
         )
-        private static boolean matchesIsOfUseItemComponentCheck(ItemStack instance, Item item) {
-            return instance.itematic$hasBehavior(ItemComponentTypes.POTION_HOLDER);
+        private static boolean matchesIsOfUseItemTagCheck(ItemStack instance, Item item) {
+            return instance.isIn(ItematicItemTags.BREWING_INPUTS);
         }
 
         @Redirect(

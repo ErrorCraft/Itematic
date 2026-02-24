@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": "minecraft:golden_carrot",
+  "base": "minecraft:awkward",
+  "result": "minecraft:night_vision"
+}

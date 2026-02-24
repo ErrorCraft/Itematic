@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": "minecraft:redstone",
+  "base": "minecraft:swiftness",
+  "result": "minecraft:long_swiftness"
+}
