@@ -7,6 +7,7 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -19,6 +20,10 @@ public interface ItemAccess {
         return null;
     }
     default void itematic$setDisplay(ItemDisplay display) {}
+    default AttributeModifiersComponent itematic$attributeModifiers() {
+        return null;
+    }
+    default void itematic$setAttributeModifiers(AttributeModifiersComponent attributeModifiers) {}
     default ItemComponentSet itematic$behavior() {
         return null;
     }
