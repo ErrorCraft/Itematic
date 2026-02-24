@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": "minecraft:redstone",
+  "base": "minecraft:invisibility",
+  "result": "minecraft:long_invisibility"
+}

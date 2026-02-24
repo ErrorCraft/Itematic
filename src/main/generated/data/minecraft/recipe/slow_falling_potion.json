@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": "minecraft:phantom_membrane",
+  "base": "minecraft:awkward",
+  "result": "minecraft:slow_falling"
+}

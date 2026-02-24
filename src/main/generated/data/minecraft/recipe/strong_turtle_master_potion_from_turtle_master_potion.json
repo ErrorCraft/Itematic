@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": "minecraft:glowstone_dust",
+  "base": "minecraft:turtle_master",
+  "result": "minecraft:strong_turtle_master"
+}

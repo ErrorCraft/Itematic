@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
 import net.minecraft.item.Item;
+import net.minecraft.recipe.IngredientPlacement;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.ServerRecipeManager;
 import net.minecraft.recipe.display.RecipeDisplay;
@@ -30,13 +31,24 @@ public class ServerRecipeManagerExtender {
 
     @Inject(
         method = "initialize",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/recipe/ServerRecipeManager;collectServerRecipes(Ljava/lang/Iterable;Lnet/minecraft/resource/featuretoggle/FeatureSet;)Ljava/util/List;"
-        )
+        at = @At("HEAD")
     )
     private void setTempItemLookup(FeatureSet features, CallbackInfo info) {
         tempItemLookup = this.registries.getOrThrow(RegistryKeys.ITEM);
+    }
+
+    @Redirect(
+        method = {
+            "method_64989",
+            "collectServerRecipes"
+        },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/recipe/Recipe;getIngredientPlacement()Lnet/minecraft/recipe/IngredientPlacement;"
+        )
+    )
+    private static IngredientPlacement getIngredientPlacementUseDynamicRegistry(Recipe<?> instance) {
+        return ((RecipeAccess) instance).itematic$ingredientPlacement(tempItemLookup);
     }
 
     @Redirect(
@@ -52,11 +64,7 @@ public class ServerRecipeManagerExtender {
 
     @Inject(
         method = "initialize",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/recipe/ServerRecipeManager;collectServerRecipes(Ljava/lang/Iterable;Lnet/minecraft/resource/featuretoggle/FeatureSet;)Ljava/util/List;",
-            shift = At.Shift.AFTER
-        )
+        at = @At("RETURN")
     )
     private void resetTempItemLookup(FeatureSet features, CallbackInfo info) {
         tempItemLookup = null;
