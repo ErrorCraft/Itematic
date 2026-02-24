@@ -1,11 +1,14 @@
 {
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:armor.body",
+      "type": "minecraft:armor",
+      "amount": 11.0,
+      "operation": "add_value",
+      "slot": "body"
+    }
+  ],
   "behavior": {
-    "minecraft:armor": {
-      "attribute_id": "minecraft:armor.body",
-      "defense": 11,
-      "knockback_resistance": 0.0,
-      "toughness": 0.0
-    },
     "minecraft:damageable": {
       "break_sound": "minecraft:item.wolf_armor.break",
       "durability": 64

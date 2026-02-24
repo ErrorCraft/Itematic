@@ -78,6 +78,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     private ItemDisplay display;
 
     @Unique
+    private AttributeModifiersComponent attributeModifiers;
+
+    @Unique
     private ItemComponentSet itemComponents;
 
     @Unique
@@ -584,6 +587,16 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
+    public AttributeModifiersComponent itematic$attributeModifiers() {
+        return this.attributeModifiers;
+    }
+
+    @Override
+    public void itematic$setAttributeModifiers(AttributeModifiersComponent attributeModifiers) {
+        this.attributeModifiers = attributeModifiers;
+    }
+
+    @Override
     public ItemComponentSet itematic$behavior() {
         return this.itemComponents;
     }
@@ -599,6 +612,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         if (this.itemComponents == null) {
             return false;
         }
+
         return this.itemComponents.contains(type);
     }
 
@@ -607,6 +621,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         if (this.itemComponents == null) {
             return Optional.empty();
         }
+
         return this.itemComponents.get(type);
     }
 
@@ -661,15 +676,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         ComponentMap.Builder componentsBuilder = ComponentMap.builder()
             .addAll(DataComponentTypes.DEFAULT_ITEM_COMPONENTS);
         this.display.addComponents(componentsBuilder);
-        AttributeModifiersComponent.Builder attributeModifiersBuilder = AttributeModifiersComponent.builder();
         for (ItemComponent<?> component : this.itemComponents) {
             component.addComponents(componentsBuilder);
-            component.addAttributeModifiers(attributeModifiersBuilder, this.itemComponents);
         }
 
-        AttributeModifiersComponent attributeModifiers = attributeModifiersBuilder.build();
-        if (!attributeModifiers.modifiers().isEmpty()) {
-            componentsBuilder.add(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributeModifiers);
+        if (!this.attributeModifiers.modifiers().isEmpty()) {
+            componentsBuilder.add(DataComponentTypes.ATTRIBUTE_MODIFIERS, this.attributeModifiers);
         }
 
         return componentsBuilder.build();

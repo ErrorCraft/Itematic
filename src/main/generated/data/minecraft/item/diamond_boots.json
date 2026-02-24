@@ -1,11 +1,21 @@
 {
-  "behavior": {
-    "minecraft:armor": {
-      "attribute_id": "minecraft:armor.boots",
-      "defense": 3,
-      "knockback_resistance": 0.0,
-      "toughness": 2.0
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:armor.boots",
+      "type": "minecraft:armor",
+      "amount": 3.0,
+      "operation": "add_value",
+      "slot": "feet"
     },
+    {
+      "id": "minecraft:armor.boots",
+      "type": "minecraft:armor_toughness",
+      "amount": 2.0,
+      "operation": "add_value",
+      "slot": "feet"
+    }
+  ],
+  "behavior": {
     "minecraft:damageable": {
       "durability": 429
     },
