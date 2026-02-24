@@ -13,6 +13,11 @@ import net.errorcraft.itematic.item.smithing.template.SmithingTemplateTypes;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
 import net.errorcraft.itematic.loot.function.ItematicItemModifierTypes;
 import net.errorcraft.itematic.loot.predicate.ItematicPredicateTypes;
+import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
+import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
+import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
+import net.errorcraft.itematic.recipe.display.ItematicRecipeDisplaySerializers;
+import net.errorcraft.itematic.recipe.display.slot.ItematicSlotDisplaySerializers;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.util.context.ItematicContextTypes;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
@@ -41,5 +46,10 @@ public class Itematic implements ModInitializer {
         IntegerProviderTypes.init();
         ItemHolderRuleTypes.init();
         ShooterMethodTypes.init();
+        ItematicRecipeTypes.init();
+        ItematicRecipeSerializers.init();
+        ItematicRecipeBookCategories.init();
+        ItematicRecipeDisplaySerializers.init();
+        ItematicSlotDisplaySerializers.init();
     }
 }
