@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": {
+    "item": "minecraft:redstone"
+  },
+  "base": "minecraft:strength",
+  "result": "minecraft:long_strength"
+}

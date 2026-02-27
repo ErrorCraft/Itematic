@@ -1394,5 +1394,22 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.TORCHFLOWER)
             .add(ItemKeys.RED_MUSHROOM)
             .add(ItemKeys.BROWN_MUSHROOM);
+        this.getOrCreateTagBuilder(ItematicItemTags.BREWING_INPUTS)
+            .add(ItemKeys.POTION)
+            .add(ItemKeys.SPLASH_POTION)
+            .add(ItemKeys.LINGERING_POTION);
+        this.getOrCreateTagBuilder(ItematicItemTags.MUNDANE_POTION_ADDITIONS)
+            .add(ItemKeys.REDSTONE)
+            .add(ItemKeys.MAGMA_CREAM)
+            .add(ItemKeys.GLISTERING_MELON_SLICE)
+            .add(ItemKeys.STONE)
+            .add(ItemKeys.RABBIT_FOOT)
+            .add(ItemKeys.SLIME_BLOCK)
+            .add(ItemKeys.SPIDER_EYE)
+            .add(ItemKeys.GHAST_TEAR)
+            .add(ItemKeys.BLAZE_POWDER)
+            .add(ItemKeys.SUGAR)
+            .add(ItemKeys.COBWEB)
+            .add(ItemKeys.BREEZE_ROD);
     }
 }
