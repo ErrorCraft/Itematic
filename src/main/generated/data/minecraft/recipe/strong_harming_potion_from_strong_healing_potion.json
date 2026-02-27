@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": {
+    "item": "minecraft:fermented_spider_eye"
+  },
+  "base": "minecraft:strong_healing",
+  "result": "minecraft:strong_harming"
+}

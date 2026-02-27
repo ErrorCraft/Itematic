@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": {
+    "item": "minecraft:glowstone_dust"
+  },
+  "base": "minecraft:water",
+  "result": "minecraft:thick"
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": {
+    "tag": "minecraft:mundane_potion_additions"
+  },
+  "base": "minecraft:water",
+  "result": "minecraft:mundane"
+}

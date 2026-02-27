@@ -4,6 +4,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.BrewingRecipeRegistry;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,6 +12,20 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 public class BrewingStandScreenHandlerExtender {
+    @Mixin(targets = "net/minecraft/screen/BrewingStandScreenHandler$IngredientSlot")
+    public static class IngredientSlotExtender {
+        @Redirect(
+            method = "canInsert",
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/recipe/BrewingRecipeRegistry;isValidIngredient(Lnet/minecraft/item/ItemStack;)Z"
+            )
+        )
+        private static boolean isAlwaysValidIngredient(BrewingRecipeRegistry instance, ItemStack stack) {
+            return true;
+        }
+    }
+
     @Mixin(targets = "net/minecraft/screen/BrewingStandScreenHandler$PotionSlot")
     public static class PotionSlotExtender {
         @Redirect(
