@@ -24,6 +24,10 @@
     ],
     "fabric-datagen": [
       "net.errorcraft.itematic.data.ItematicData"
+    ],
+    "mm:early_risers": [
+      "net.errorcraft.itematic.mm.ItematicEarlyRiser",
+      "net.errorcraft.itematic.mm.client.ItematicClientEarlyRiser"
     ]
   },
   "mixins": [
@@ -74,12 +78,6 @@
       ],
       "net/minecraft/class_1839": [
         "net/minecraft/util/StringIdentifiable"
-      ],
-      "net/minecraft/class_1845": [
-        "net/errorcraft/itematic/access/recipe/BrewingRecipeRegistryAccess"
-      ],
-      "net/minecraft/class_1845\u0024class_9665": [
-        "net/errorcraft/itematic/access/recipe/BrewingRecipeRegistryBuilderAccess"
       ],
       "net/minecraft/class_1856\u0024class_1859": [
         "net/errorcraft/itematic/access/recipe/IngredientEntryAccess"

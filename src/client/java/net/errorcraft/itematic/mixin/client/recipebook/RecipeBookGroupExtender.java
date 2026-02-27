@@ -1,11 +1,17 @@
 package net.errorcraft.itematic.mixin.client.recipebook;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.access.client.recipebook.RecipeBookGroupAccess;
+import net.errorcraft.itematic.client.recipebook.ItematicRecipeBookGroups;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
 import net.minecraft.client.recipebook.RecipeBookGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import org.spongepowered.asm.mixin.Final;
@@ -13,12 +19,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(RecipeBookGroup.class)
+@SuppressWarnings("DataFlowIssue")
 public class RecipeBookGroupExtender implements RecipeBookGroupAccess {
     @Shadow
     @Final
@@ -114,6 +123,9 @@ public class RecipeBookGroupExtender implements RecipeBookGroupAccess {
         ((RecipeBookGroupExtender)(Object) SMITHING).iconKeys = List.of(ItemKeys.NETHERITE_CHESTPLATE);
         ((RecipeBookGroupExtender)(Object) CAMPFIRE).iconKeys = List.of(ItemKeys.PORKCHOP);
         ((RecipeBookGroupExtender)(Object) UNKNOWN).iconKeys = List.of(ItemKeys.BARRIER);
+        ((RecipeBookGroupExtender)(Object) ItematicRecipeBookGroups.BREWING_SEARCH).iconKeys = List.of(ItemKeys.COMPASS);
+        ((RecipeBookGroupExtender)(Object) ItematicRecipeBookGroups.BREWING_MODIFY).iconKeys = List.of(ItemKeys.NETHER_WART, ItemKeys.MAGMA_CREAM);
+        ((RecipeBookGroupExtender)(Object) ItematicRecipeBookGroups.BREWING_AMPLIFY).iconKeys = List.of(ItemKeys.SPLASH_POTION, ItemKeys.LINGERING_POTION);
     }
 
     @Redirect(
@@ -127,6 +139,35 @@ public class RecipeBookGroupExtender implements RecipeBookGroupAccess {
         return ItemStack.EMPTY;
     }
 
+    @ModifyExpressionValue(
+        method = "<clinit>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/google/common/collect/ImmutableMap;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableMap;",
+            remap = false
+        )
+    )
+    private static ImmutableMap<RecipeBookGroup, List<RecipeBookGroup>> addCustomEntries(ImmutableMap<RecipeBookGroup, List<RecipeBookGroup>> original) {
+        return ImmutableMap.<RecipeBookGroup, List<RecipeBookGroup>>builder()
+            .putAll(original)
+            .put(
+                ItematicRecipeBookGroups.BREWING_SEARCH,
+                ImmutableList.of(ItematicRecipeBookGroups.BREWING_MODIFY, ItematicRecipeBookGroups.BREWING_AMPLIFY)
+            )
+            .build();
+    }
+
+    @Inject(
+        method = "getGroups",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private static void checkForCustomEntries(RecipeBookCategory category, CallbackInfoReturnable<List<RecipeBookGroup>> info) {
+        if (category == ItematicRecipeBookCategories.BREWING) {
+            info.setReturnValue(ItematicRecipeBookGroups.BREWING);
+        }
+    }
+
     @Override
     public List<ItemStack> itematic$icons(Registry<Item> registry) {
         List<ItemStack> stacks = new ArrayList<>();
@@ -135,6 +176,7 @@ public class RecipeBookGroupExtender implements RecipeBookGroupAccess {
                 .map(ItemStack::new)
                 .ifPresent(stacks::add);
         }
+
         return stacks;
     }
 }

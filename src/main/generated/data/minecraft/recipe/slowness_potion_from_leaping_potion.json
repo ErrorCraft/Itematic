@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": {
+    "item": "minecraft:fermented_spider_eye"
+  },
+  "base": "minecraft:leaping",
+  "result": "minecraft:slowness"
+}

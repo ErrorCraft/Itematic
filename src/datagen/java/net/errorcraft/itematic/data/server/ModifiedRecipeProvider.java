@@ -28,8 +28,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 @SuppressWarnings("SameParameterValue")
-public class RecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
-    public RecipeProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
+    public ModifiedRecipeProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
         super(dataOutput, registriesFuture, DataOutput.OutputType.DATA_PACK, "recipe", Recipe.CODEC);
     }
 
@@ -130,7 +130,7 @@ public class RecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
 
     @Override
     public String getName() {
-        return "Recipes";
+        return "Modified Recipes";
     }
 
     private static ItemColoringRecipe colorShulkerBox(DyeColor color, RegistryEntry<Item> result) {
