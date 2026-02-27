@@ -1,27 +1,142 @@
 package net.errorcraft.itematic.mixin.block.entity;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
+import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
+import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
+import net.errorcraft.itematic.screen.BrewingStandMenuDelegate;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.BrewingStandBlockEntity;
+import net.minecraft.block.entity.LockableContainerBlockEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.BrewingRecipeRegistry;
+import net.minecraft.recipe.*;
+import net.minecraft.screen.BrewingStandScreenHandler;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldEvents;
 import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Optional;
 
 @Mixin(BrewingStandBlockEntity.class)
-public class BrewingStandBlockEntityExtender {
+public abstract class BrewingStandBlockEntityExtender extends LockableContainerBlockEntity implements RecipeInputProvider {
+    @Shadow
+    @Final
+    private static int INPUT_SLOT_INDEX;
+
+    @Shadow
+    private DefaultedList<ItemStack> inventory;
+
+    @Unique
+    private final RecipeManager.MatchGetter<BrewingRecipeInput, BrewingRecipe<?>> matcher = RecipeManager.createCachedMatchGetter(ItematicRecipeTypes.BREWING);
+
+    protected BrewingStandBlockEntityExtender(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
+        super(blockEntityType, blockPos, blockState);
+    }
+
+    @Redirect(
+        method = "tick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/block/entity/BrewingStandBlockEntity;canCraft(Lnet/minecraft/recipe/BrewingRecipeRegistry;Lnet/minecraft/util/collection/DefaultedList;)Z"
+        )
+    )
+    @SuppressWarnings("DataFlowIssue")
+    private static boolean useRecipe(BrewingRecipeRegistry brewingRecipeRegistry, DefaultedList<ItemStack> slots, World world, @Local(argsOnly = true) BrewingStandBlockEntity blockEntity) {
+        BrewingStandBlockEntityExtender blockEntityExtender = (BrewingStandBlockEntityExtender)(Object) blockEntity;
+        if (!blockEntityExtender.acceptsRecipes()) {
+            return false;
+        }
+
+        if (!(world instanceof ServerWorld serverWorld)) {
+            return false;
+        }
+
+        ItemStack addition = slots.get(INPUT_SLOT_INDEX);
+        for (int i = 0; i < 3; i++) {
+            ItemStack base = slots.get(i);
+            BrewingRecipeInput input = new BrewingRecipeInput(base, addition);
+            if (blockEntityExtender.matcher.getFirstMatch(input, serverWorld).isPresent()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Redirect(
+        method = "tick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/block/entity/BrewingStandBlockEntity;craft(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/collection/DefaultedList;)V"
+        )
+    )
+    @SuppressWarnings("DataFlowIssue")
+    private static void useRecipe(World world, BlockPos pos, DefaultedList<ItemStack> slots, @Local(argsOnly = true) BrewingStandBlockEntity blockEntity) {
+        if (!(world instanceof ServerWorld serverWorld)) {
+            return;
+        }
+
+        BrewingStandBlockEntityExtender blockEntityExtender = (BrewingStandBlockEntityExtender)(Object) blockEntity;
+        BrewingRecipe<?> recipe = null;
+        ItemStack addition = slots.get(INPUT_SLOT_INDEX);
+        for (int i = 0; i < 3; i++) {
+            BrewingRecipeInput input = new BrewingRecipeInput(slots.get(i), addition);
+            if (recipe != null && recipe.matches(input, world)) {
+                ItemStack result = recipe.craft(input, world.getRegistryManager());
+                slots.set(i, result);
+                continue;
+            }
+
+            Optional<RecipeEntry<BrewingRecipe<?>>> optionalRecipe = blockEntityExtender.matcher.getFirstMatch(input, serverWorld);
+            if (optionalRecipe.isPresent()) {
+                recipe = optionalRecipe.get().value();
+                ItemStack result = recipe.craft(input, world.getRegistryManager());
+                slots.set(i, result);
+            }
+        }
+
+        addition.decrement(1);
+        if (recipe != null) {
+            recipe.additionRemainder().ifPresent(remainder -> {
+                if (addition.isEmpty()) {
+                    slots.set(INPUT_SLOT_INDEX, remainder);
+                } else {
+                    ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), remainder);
+                }
+            });
+        }
+
+        world.syncWorldEvent(WorldEvents.BREWING_STAND_BREWS, pos, 0);
+    }
+
+    @Redirect(
+        method = "isValid",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/recipe/BrewingRecipeRegistry;isValidIngredient(Lnet/minecraft/item/ItemStack;)Z"
+        )
+    )
+    private boolean acceptAllItemsForInput(BrewingRecipeRegistry instance, ItemStack stack) {
+        return true;
+    }
+
     @Redirect(
         method = "isValid",
         at = @At(
@@ -99,17 +214,6 @@ public class BrewingStandBlockEntityExtender {
     }
 
     @Redirect(
-        method = "craft",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/recipe/BrewingRecipeRegistry;craft(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private static ItemStack craftUseDynamicRegistryManager(BrewingRecipeRegistry instance, ItemStack ingredient, ItemStack input, World world) {
-        return instance.itematic$craft(ingredient, input, world);
-    }
-
-    @Redirect(
         method = "tick",
         at = @At(
             value = "INVOKE",
@@ -121,24 +225,35 @@ public class BrewingStandBlockEntityExtender {
         return instance.itematic$isOf(ItemKeys.BLAZE_POWDER);
     }
 
-    @Inject(
-        method = "craft",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;decrement(I)V",
-            shift = At.Shift.AFTER
-        )
+    @ModifyReturnValue(
+        method = "createScreenHandler",
+        at = @At("TAIL")
     )
-    private static void setRemainderForDragonBreath(World world, BlockPos pos, DefaultedList<ItemStack> slots, CallbackInfo info, @Local LocalRef<ItemStack> ingredient) {
-        if (!ingredient.get().itematic$isOf(ItemKeys.DRAGON_BREATH)) {
-            return;
+    private ScreenHandler useDelegate(ScreenHandler original) {
+        return new BrewingStandMenuDelegate((BrewingStandScreenHandler) original, this.getWorld());
+    }
+
+    @Override
+    public void provideRecipeInputs(RecipeMatcher finder) {
+        finder.addInput(this.inventory.get(INPUT_SLOT_INDEX));
+        for (int i = 0; i < 3; i++) {
+            finder.addInput(this.inventory.get(i));
+        }
+    }
+
+    @Unique
+    private boolean acceptsRecipes() {
+        ItemStack addition = this.inventory.get(INPUT_SLOT_INDEX);
+        if (addition.isEmpty()) {
+            return false;
         }
 
-        ItemStack remainder = world.itematic$createStack(ItemKeys.GLASS_BOTTLE);
-        if (ingredient.get().isEmpty()) {
-            ingredient.set(remainder);
-        } else {
-            ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), remainder);
+        for (int i = 0; i < 3; i++) {
+            if (!this.inventory.get(i).isEmpty()) {
+                return true;
+            }
         }
+
+        return false;
     }
 }

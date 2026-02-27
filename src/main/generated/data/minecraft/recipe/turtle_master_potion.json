@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": {
+    "item": "minecraft:turtle_helmet"
+  },
+  "base": "minecraft:awkward",
+  "result": "minecraft:turtle_master"
+}

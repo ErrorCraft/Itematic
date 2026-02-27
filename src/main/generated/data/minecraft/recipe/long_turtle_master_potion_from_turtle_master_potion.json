@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:brewing_modify",
+  "addition": {
+    "item": "minecraft:redstone"
+  },
+  "base": "minecraft:turtle_master",
+  "result": "minecraft:long_turtle_master"
+}
