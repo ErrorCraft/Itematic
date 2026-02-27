@@ -26,6 +26,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation "com.github.Chocohead:Fabric-ASM:v2.3"
+	include "com.github.Chocohead:Fabric-ASM:v2.3"
 }
 
 processResources {
