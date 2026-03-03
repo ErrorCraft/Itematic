@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:turtle_helmet",
   "base": "minecraft:awkward",
+  "reagent": "minecraft:turtle_helmet",
   "result": "minecraft:turtle_master"
 }

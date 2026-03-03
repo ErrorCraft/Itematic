@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:nether_wart",
   "base": "minecraft:water",
+  "reagent": "minecraft:nether_wart",
   "result": "minecraft:awkward"
 }

@@ -6,6 +6,8 @@ accessible    class    net/minecraft/client/gui/screen/GameModeSelectionScreen$G
 accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget
 accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry
 accessible    class    net/minecraft/client/gui/screen/world/CustomizeFlatLevelScreen$SuperflatLayersListWidget
+accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternativesWidget$AlternativeButtonWidget
+accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternativesWidget$AlternativeButtonWidget$InputSlot
 
 inject-interface    net/minecraft/util/DyeColor    net/errorcraft/itematic/access/util/DyeColorAccess
 inject-interface    net/minecraft/item/tooltip/BundleTooltipData    net/errorcraft/itematic/access/item/tooltip/BundleTooltipDataAccess

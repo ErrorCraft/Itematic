@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:glistering_melon_slice",
   "base": "minecraft:awkward",
+  "reagent": "minecraft:glistering_melon_slice",
   "result": "minecraft:healing"
 }

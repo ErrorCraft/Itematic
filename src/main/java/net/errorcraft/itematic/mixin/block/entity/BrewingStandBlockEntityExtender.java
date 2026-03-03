@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.block.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.errorcraft.itematic.access.block.entity.BrewingStandBlockEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
@@ -25,14 +26,14 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
 @Mixin(BrewingStandBlockEntity.class)
-public class BrewingStandBlockEntityExtender implements RecipeInputProvider {
+public class BrewingStandBlockEntityExtender implements RecipeInputProvider, BrewingStandBlockEntityAccess {
     @Shadow
     @Final
     private static int INPUT_SLOT_INDEX;
@@ -42,6 +43,9 @@ public class BrewingStandBlockEntityExtender implements RecipeInputProvider {
 
     @Unique
     private final ServerRecipeManager.MatchGetter<BrewingRecipeInput, BrewingRecipe<?>> matcher = ServerRecipeManager.createCachedMatchGetter(ItematicRecipeTypes.BREWING);
+
+    @Unique
+    private int maxBrewingTime;
 
     @Redirect(
         method = "tick",
@@ -61,10 +65,10 @@ public class BrewingStandBlockEntityExtender implements RecipeInputProvider {
             return false;
         }
 
-        ItemStack addition = slots.get(INPUT_SLOT_INDEX);
+        ItemStack reagent = slots.get(INPUT_SLOT_INDEX);
         for (int i = 0; i < 3; i++) {
             ItemStack base = slots.get(i);
-            BrewingRecipeInput input = new BrewingRecipeInput(base, addition);
+            BrewingRecipeInput input = new BrewingRecipeInput(base, reagent);
             if (blockEntityExtender.matcher.getFirstMatch(input, serverWorld).isPresent()) {
                 return true;
             }
@@ -88,9 +92,9 @@ public class BrewingStandBlockEntityExtender implements RecipeInputProvider {
 
         BrewingStandBlockEntityExtender blockEntityExtender = (BrewingStandBlockEntityExtender)(Object) blockEntity;
         BrewingRecipe<?> recipe = null;
-        ItemStack addition = slots.get(INPUT_SLOT_INDEX);
+        ItemStack reagent = slots.get(INPUT_SLOT_INDEX);
         for (int i = 0; i < 3; i++) {
-            BrewingRecipeInput input = new BrewingRecipeInput(slots.get(i), addition);
+            BrewingRecipeInput input = new BrewingRecipeInput(slots.get(i), reagent);
             if (recipe != null && recipe.matches(input, world)) {
                 ItemStack result = recipe.craft(input, world.getRegistryManager());
                 slots.set(i, result);
@@ -105,10 +109,10 @@ public class BrewingStandBlockEntityExtender implements RecipeInputProvider {
             }
         }
 
-        addition.decrement(1);
+        reagent.decrement(1);
         if (recipe != null) {
-            recipe.additionRemainder().ifPresent(remainder -> {
-                if (addition.isEmpty()) {
+            recipe.reagentRemainder().ifPresent(remainder -> {
+                if (reagent.isEmpty()) {
                     slots.set(INPUT_SLOT_INDEX, remainder);
                 } else {
                     ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), remainder);
@@ -117,6 +121,22 @@ public class BrewingStandBlockEntityExtender implements RecipeInputProvider {
         }
 
         world.syncWorldEvent(WorldEvents.BREWING_STAND_BREWS, pos, 0);
+    }
+
+    @ModifyConstant(
+        method = "tick",
+        constant = @Constant(
+            intValue = 400
+        )
+    )
+    @SuppressWarnings("DataFlowIssue")
+    private static int useRecipeForBrewingTime(int original, World world, @Local(argsOnly = true) BrewingStandBlockEntity blockEntity) {
+        if (world instanceof ServerWorld serverWorld) {
+            BrewingStandBlockEntityExtender blockEntityExtender = (BrewingStandBlockEntityExtender)(Object) blockEntity;
+            return blockEntityExtender.maxBrewingTime = blockEntityExtender.brewTime(serverWorld);
+        }
+
+        return BrewingRecipe.DEFAULT_BREWING_TIME;
     }
 
     @Redirect(
@@ -210,10 +230,20 @@ public class BrewingStandBlockEntityExtender implements RecipeInputProvider {
         }
     }
 
+    @Override
+    public int itematic$maxBrewingTime() {
+        return this.maxBrewingTime;
+    }
+
+    @Override
+    public void itematic$setMaxBrewingTime(int maxBrewingTime) {
+        this.maxBrewingTime = maxBrewingTime;
+    }
+
     @Unique
     private boolean acceptsRecipes() {
-        ItemStack addition = this.inventory.get(INPUT_SLOT_INDEX);
-        if (addition.isEmpty()) {
+        ItemStack reagent = this.inventory.get(INPUT_SLOT_INDEX);
+        if (reagent.isEmpty()) {
             return false;
         }
 
@@ -224,5 +254,60 @@ public class BrewingStandBlockEntityExtender implements RecipeInputProvider {
         }
 
         return false;
+    }
+
+    @Unique
+    private int brewTime(ServerWorld world) {
+        ItemStack reagent = this.inventory.get(INPUT_SLOT_INDEX);
+        for (int i = 0; i < 3; i++) {
+            BrewingRecipeInput input = new BrewingRecipeInput(this.inventory.get(i), reagent);
+            Optional<RecipeEntry<BrewingRecipe<?>>> optionalRecipe = this.matcher.getFirstMatch(input, world);
+            if (optionalRecipe.isPresent()) {
+                return optionalRecipe.get()
+                    .value()
+                    .brewingTime();
+            }
+        }
+
+        return BrewingRecipe.DEFAULT_BREWING_TIME;
+    }
+
+    @Mixin(targets = "net/minecraft/block/entity/BrewingStandBlockEntity$1")
+    public static class PropertyDelegateExtender {
+        @Shadow
+        @Final
+        BrewingStandBlockEntity field_17382;
+
+        @Inject(
+            method = "set",
+            at = @At("HEAD"),
+            cancellable = true
+        )
+        private void setMaxFuelTimeProperty(int index, int value, CallbackInfo info) {
+            if (index == 2) {
+                ((BrewingStandBlockEntityAccess) this.field_17382).itematic$setMaxBrewingTime(value);
+                info.cancel();
+            }
+        }
+
+        @Inject(
+            method = "get",
+            at = @At("HEAD"),
+            cancellable = true
+        )
+        private void getMaxFuelTimeProperty(int index, CallbackInfoReturnable<Integer> info) {
+            if (index == 2) {
+                int maxBrewingTime = ((BrewingStandBlockEntityAccess) this.field_17382).itematic$maxBrewingTime();
+                info.setReturnValue(maxBrewingTime);
+            }
+        }
+
+        @ModifyReturnValue(
+            method = "size",
+            at = @At("TAIL")
+        )
+        private int addMaxFuelTimeProperty(int original) {
+            return original + 1;
+        }
     }
 }

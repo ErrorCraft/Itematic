@@ -30,6 +30,8 @@
     "gui.screen.ingame.LoomScreenExtender",
     "gui.screen.ingame.SmithingScreenExtender",
     "gui.screen.recipebook.GhostRecipeAccessor",
+    "gui.screen.recipebook.RecipeAlternativesWidgetAccessor$AlternativeButtonWidgetAccessor",
+    "gui.screen.recipebook.RecipeAlternativesWidgetExtender$CraftingAlternativeButtonWidgetExtender",
     "gui.screen.recipebook.RecipeBookWidgetExtender",
     "gui.screen.recipebook.RecipeGroupButtonWidgetExtender",
     "gui.screen.world.LevelScreenProviderExtender",

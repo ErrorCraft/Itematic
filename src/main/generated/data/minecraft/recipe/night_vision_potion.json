@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:golden_carrot",
   "base": "minecraft:awkward",
+  "reagent": "minecraft:golden_carrot",
   "result": "minecraft:night_vision"
 }
