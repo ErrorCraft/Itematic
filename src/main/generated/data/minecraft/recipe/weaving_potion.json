@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:cobweb",
   "base": "minecraft:awkward",
+  "reagent": "minecraft:cobweb",
   "result": "minecraft:weaving"
 }

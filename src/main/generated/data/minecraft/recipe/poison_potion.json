@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:spider_eye",
   "base": "minecraft:awkward",
+  "reagent": "minecraft:spider_eye",
   "result": "minecraft:poison"
 }

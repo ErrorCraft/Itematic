@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:breeze_rod",
   "base": "minecraft:awkward",
+  "reagent": "minecraft:breeze_rod",
   "result": "minecraft:wind_charged"
 }

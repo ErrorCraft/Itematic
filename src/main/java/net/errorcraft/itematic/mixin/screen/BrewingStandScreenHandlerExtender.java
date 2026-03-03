@@ -1,17 +1,55 @@
 package net.errorcraft.itematic.mixin.screen;
 
+import net.errorcraft.itematic.access.screen.BrewingStandScreenHandlerAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.BrewingRecipeRegistry;
+import net.minecraft.screen.BrewingStandScreenHandler;
+import net.minecraft.screen.PropertyDelegate;
 import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-public class BrewingStandScreenHandlerExtender {
+@Mixin(BrewingStandScreenHandler.class)
+public class BrewingStandScreenHandlerExtender implements BrewingStandScreenHandlerAccess {
+    @Shadow
+    @Final
+    private PropertyDelegate propertyDelegate;
+
+    @ModifyArg(
+        method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/screen/ArrayPropertyDelegate;<init>(I)V"
+        )
+    )
+    private static int initAddMaxFuelTimeProperty(int size) {
+        return size + 1;
+    }
+
+    @ModifyArg(
+        method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/inventory/Inventory;Lnet/minecraft/screen/PropertyDelegate;)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/screen/BrewingStandScreenHandler;checkDataCount(Lnet/minecraft/screen/PropertyDelegate;I)V"
+        )
+    )
+    private static int checkDataCountAddMaxFuelTimeProperty(int expectedCount) {
+        return expectedCount + 1;
+    }
+
+    @Override
+    public int itematic$maxBrewingTime() {
+        return this.propertyDelegate.get(2);
+    }
+
     @Mixin(targets = "net/minecraft/screen/BrewingStandScreenHandler$IngredientSlot")
     public static class IngredientSlotExtender {
         @Redirect(

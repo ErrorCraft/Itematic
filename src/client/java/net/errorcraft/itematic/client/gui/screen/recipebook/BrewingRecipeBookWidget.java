@@ -62,7 +62,7 @@ public class BrewingRecipeBookWidget extends RecipeBookWidget<BrewingStandMenuDe
     protected void showGhostRecipe(GhostRecipe ghostRecipe, RecipeDisplay display, ContextParameterMap context) {
         if (display instanceof BrewingRecipeDisplay brewingRecipeDisplay) {
             ((GhostRecipeAccessor) ghostRecipe).itematic$addInputs(this.craftingScreenHandler.firstInputSlot(), context, brewingRecipeDisplay.base());
-            ((GhostRecipeAccessor) ghostRecipe).itematic$addInputs(this.craftingScreenHandler.ingredientSlot(), context, brewingRecipeDisplay.addition());
+            ((GhostRecipeAccessor) ghostRecipe).itematic$addInputs(this.craftingScreenHandler.ingredientSlot(), context, brewingRecipeDisplay.reagent());
         }
     }
 }

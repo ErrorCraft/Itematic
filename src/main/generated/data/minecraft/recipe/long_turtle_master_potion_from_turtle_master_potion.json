@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:redstone",
   "base": "minecraft:turtle_master",
+  "reagent": "minecraft:redstone",
   "result": "minecraft:long_turtle_master"
 }

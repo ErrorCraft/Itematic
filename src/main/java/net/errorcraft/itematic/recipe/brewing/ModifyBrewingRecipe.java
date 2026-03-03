@@ -31,8 +31,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
-    public ModifyBrewingRecipe(String group, RegistryEntry<Potion> base, Ingredient addition, RegistryEntry<Potion> result) {
-        super(group, base, addition, result);
+    public ModifyBrewingRecipe(String group, RegistryEntry<Potion> base, Ingredient reagent, RegistryEntry<Potion> result, int brewingTime) {
+        super(group, base, reagent, result, brewingTime);
+    }
+
+    public ModifyBrewingRecipe(RegistryEntry<Potion> base, Ingredient reagent, RegistryEntry<Potion> result) {
+        super("", base, reagent, result, DEFAULT_BREWING_TIME);
     }
 
     @Override
@@ -60,7 +64,7 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
     public IngredientPlacement itematic$ingredientPlacement(RegistryEntryLookup<Item> items) {
         return IngredientPlacement.forMultipleSlots(List.of(
             items.getOptional(ItematicItemTags.BREWING_INPUTS).map(Ingredient::fromTag),
-            Optional.of(this.addition())
+            Optional.of(this.reagent())
         ));
     }
 
@@ -74,7 +78,7 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
         return List.of(
             new BrewingRecipeDisplay(
                 new PotionSlotDisplay(this.base()),
-                this.addition().toDisplay(),
+                this.reagent().toDisplay(),
                 new PotionSlotDisplay(this.result()),
                 new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.BREWING_STAND))
             )

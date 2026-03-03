@@ -22,14 +22,14 @@ import java.util.Optional;
 
 public abstract class BrewingRecipeBuilder<T> {
     protected final RegistryEntry<T> base;
-    private final RegistryEntryList<Item> addition;
+    private final RegistryEntryList<Item> reagent;
     protected final RegistryEntry<T> result;
     private RegistryEntry<Item> remainder;
     private final Identifier name;
 
-    protected BrewingRecipeBuilder(RegistryEntry<T> base, RegistryEntryList<Item> addition, RegistryEntry<T> result, Identifier name) {
+    protected BrewingRecipeBuilder(RegistryEntry<T> base, RegistryEntryList<Item> reagent, RegistryEntry<T> result, Identifier name) {
         this.base = base;
-        this.addition = addition;
+        this.reagent = reagent;
         this.result = result;
         this.name = name;
     }
@@ -43,9 +43,9 @@ public abstract class BrewingRecipeBuilder<T> {
         RegistryKey<Recipe<?>> key = RegistryKey.of(RegistryKeys.RECIPE, this.name);
         Advancement.Builder advancementBuilder = exporter.getAdvancementBuilder()
             .criterion("has_the_recipe", RecipeUnlockedCriterion.create(key))
-            .criterion("has_addition", InventoryChangedCriterion.Conditions.items(
+            .criterion("has_reagent", InventoryChangedCriterion.Conditions.items(
                 ItemPredicate.Builder.create()
-                    .itematic$items(this.addition)
+                    .itematic$items(this.reagent)
             ))
             .criteriaMerger(AdvancementRequirements.CriterionMerger.OR)
             .rewards(AdvancementRewards.Builder.recipe(key));
@@ -59,9 +59,9 @@ public abstract class BrewingRecipeBuilder<T> {
 
     protected abstract BrewingRecipe<T> createRecipe();
 
-    protected Ingredient addition() {
-        Ingredient addition = Ingredient.fromTag(this.addition);
-        addition.itematic$setRemainder(Optional.ofNullable(this.remainder).map(ItemStack::new));
-        return addition;
+    protected Ingredient reagent() {
+        Ingredient reagent = Ingredient.fromTag(this.reagent);
+        reagent.itematic$setRemainder(Optional.ofNullable(this.remainder).map(ItemStack::new));
+        return reagent;
     }
 }

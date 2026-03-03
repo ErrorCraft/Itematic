@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:sugar",
   "base": "minecraft:awkward",
+  "reagent": "minecraft:sugar",
   "result": "minecraft:swiftness"
 }

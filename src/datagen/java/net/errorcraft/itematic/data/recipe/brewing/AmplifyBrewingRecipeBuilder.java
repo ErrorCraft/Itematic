@@ -8,16 +8,15 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.util.Identifier;
 
 public class AmplifyBrewingRecipeBuilder extends BrewingRecipeBuilder<Item> {
-    public AmplifyBrewingRecipeBuilder(RegistryEntry<Item> base, RegistryEntryList<Item> addition, RegistryEntry<Item> result, Identifier name) {
-        super(base, addition, result, name);
+    public AmplifyBrewingRecipeBuilder(RegistryEntry<Item> base, RegistryEntryList<Item> reagent, RegistryEntry<Item> result, Identifier name) {
+        super(base, reagent, result, name);
     }
 
     @Override
     protected BrewingRecipe<Item> createRecipe() {
         return new AmplifyBrewingRecipe(
-            "",
             this.base,
-            this.addition(),
+            this.reagent(),
             this.result
         );
     }

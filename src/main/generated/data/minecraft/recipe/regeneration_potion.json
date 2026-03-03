@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:ghast_tear",
   "base": "minecraft:awkward",
+  "reagent": "minecraft:ghast_tear",
   "result": "minecraft:regeneration"
 }

@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:redstone",
   "base": "minecraft:slowness",
+  "reagent": "minecraft:redstone",
   "result": "minecraft:long_slowness"
 }
