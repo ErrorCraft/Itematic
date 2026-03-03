@@ -16,7 +16,6 @@ public class AmplifyBrewingRecipeBuilder extends BrewingRecipeBuilder<Item> {
     @Override
     protected BrewingRecipe<Item> createRecipe() {
         return new AmplifyBrewingRecipe(
-            "",
             this.base,
             this.reagent,
             this.result

@@ -19,8 +19,12 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.collection.DefaultedList;
 
 public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
-    public AmplifyBrewingRecipe(String group, RegistryEntry<Item> base, Ingredient reagent, RegistryEntry<Item> result) {
-        super(group, base, reagent, result);
+    public AmplifyBrewingRecipe(String group, RegistryEntry<Item> base, Ingredient reagent, RegistryEntry<Item> result, int brewingTime) {
+        super(group, base, reagent, result, brewingTime);
+    }
+
+    public AmplifyBrewingRecipe(RegistryEntry<Item> base, Ingredient reagent, RegistryEntry<Item> result) {
+        super("", base, reagent, result, DEFAULT_BREWING_TIME);
     }
 
     @Override

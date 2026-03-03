@@ -17,7 +17,6 @@ public class ModifyBrewingRecipeBuilder extends BrewingRecipeBuilder<Potion> {
     @Override
     protected BrewingRecipe<Potion> createRecipe() {
         return new ModifyBrewingRecipe(
-            "",
             this.base,
             this.reagent,
             this.result
