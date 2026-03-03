@@ -9,16 +9,15 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.util.Identifier;
 
 public class ModifyBrewingRecipeBuilder extends BrewingRecipeBuilder<Potion> {
-    public ModifyBrewingRecipeBuilder(RegistryEntry<Potion> base, RegistryEntryList<Item> addition, RegistryEntry<Potion> result, Identifier name) {
-        super(base, addition, result, name);
+    public ModifyBrewingRecipeBuilder(RegistryEntry<Potion> base, RegistryEntryList<Item> reagent, RegistryEntry<Potion> result, Identifier name) {
+        super(base, reagent, result, name);
     }
 
     @Override
     protected BrewingRecipe<Potion> createRecipe() {
         return new ModifyBrewingRecipe(
-            "",
             this.base,
-            this.addition(),
+            this.reagent(),
             this.result
         );
     }

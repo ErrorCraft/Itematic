@@ -28,8 +28,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
-    public AmplifyBrewingRecipe(String group, RegistryEntry<Item> base, Ingredient addition, RegistryEntry<Item> result) {
-        super(group, base, addition, result);
+    public AmplifyBrewingRecipe(String group, RegistryEntry<Item> base, Ingredient reagent, RegistryEntry<Item> result, int brewingTime) {
+        super(group, base, reagent, result, brewingTime);
+    }
+
+    public AmplifyBrewingRecipe(RegistryEntry<Item> base, Ingredient reagent, RegistryEntry<Item> result) {
+        super("", base, reagent, result, DEFAULT_BREWING_TIME);
     }
 
     @Override
@@ -51,7 +55,7 @@ public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
     public IngredientPlacement getIngredientPlacement() {
         return IngredientPlacement.forMultipleSlots(List.of(
             Optional.of(Ingredient.fromTag(RegistryEntryList.of(this.base()))),
-            Optional.of(this.addition())
+            Optional.of(this.reagent())
         ));
     }
 
@@ -65,7 +69,7 @@ public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
         return List.of(
             new BrewingRecipeDisplay(
                 new SlotDisplay.StackSlotDisplay(displayStack(this.base())),
-                this.addition().toDisplay(),
+                this.reagent().toDisplay(),
                 new SlotDisplay.StackSlotDisplay(displayStack(this.result())),
                 new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.BREWING_STAND))
             )

@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:glowstone_dust",
   "base": "minecraft:poison",
+  "reagent": "minecraft:glowstone_dust",
   "result": "minecraft:strong_poison"
 }

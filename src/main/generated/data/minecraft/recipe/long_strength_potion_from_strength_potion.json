@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:redstone",
   "base": "minecraft:strength",
+  "reagent": "minecraft:redstone",
   "result": "minecraft:long_strength"
 }

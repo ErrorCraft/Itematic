@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:fermented_spider_eye",
   "base": "minecraft:strong_poison",
+  "reagent": "minecraft:fermented_spider_eye",
   "result": "minecraft:strong_harming"
 }

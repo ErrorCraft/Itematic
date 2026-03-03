@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:slime_block",
   "base": "minecraft:awkward",
+  "reagent": "minecraft:slime_block",
   "result": "minecraft:oozing"
 }

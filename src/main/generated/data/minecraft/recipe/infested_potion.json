@@ -1,6 +1,6 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": "minecraft:stone",
   "base": "minecraft:awkward",
+  "reagent": "minecraft:stone",
   "result": "minecraft:infested"
 }
