@@ -59,7 +59,7 @@ public class ItematicRecipeProvider extends RecipeProvider implements RecipeProv
                 .save(this.exporter);
             this.modify(PotionKeys.WATER, ItemKeys.GLOWSTONE_DUST, PotionKeys.THICK)
                 .save(this.exporter);
-            this.modify(PotionKeys.WATER, ItematicItemTags.MUNDANE_POTION_ADDITIONS, PotionKeys.MUNDANE)
+            this.modify(PotionKeys.WATER, ItematicItemTags.MUNDANE_POTION_REAGENTS, PotionKeys.MUNDANE)
                 .save(this.exporter);
             this.modify(PotionKeys.WATER, ItemKeys.NETHER_WART, PotionKeys.AWKWARD)
                 .save(this.exporter);
@@ -164,8 +164,8 @@ public class ItematicRecipeProvider extends RecipeProvider implements RecipeProv
                 .save(this.exporter);
         }
 
-        private AmplifyBrewingRecipeBuilder amplify(RegistryKey<Item> base, RegistryKey<Item> addition, RegistryKey<Item> result) {
-            RegistryEntry<Item> item = this.items.getOrThrow(addition);
+        private AmplifyBrewingRecipeBuilder amplify(RegistryKey<Item> base, RegistryKey<Item> reagent, RegistryKey<Item> result) {
+            RegistryEntry<Item> item = this.items.getOrThrow(reagent);
             return new AmplifyBrewingRecipeBuilder(
                 this.items.getOrThrow(base),
                 Ingredient.ofStacks(new ItemStack(item)),
@@ -175,24 +175,24 @@ public class ItematicRecipeProvider extends RecipeProvider implements RecipeProv
             );
         }
 
-        private ModifyBrewingRecipeBuilder modify(RegistryKey<Potion> base, RegistryKey<Item> addition, RegistryKey<Potion> result) {
-            RegistryEntry<Item> item = this.items.getOrThrow(addition);
+        private ModifyBrewingRecipeBuilder modify(RegistryKey<Potion> base, RegistryKey<Item> reagent, RegistryKey<Potion> result) {
+            RegistryEntry<Item> item = this.items.getOrThrow(reagent);
             return this.modify(base, Ingredient.ofStacks(new ItemStack(item)), RegistryEntryList.of(item), result, potionName(result));
         }
 
-        private ModifyBrewingRecipeBuilder modify(RegistryKey<Potion> base, TagKey<Item> addition, RegistryKey<Potion> result) {
-            return this.modify(base, Ingredient.fromTag(addition), this.items.getOrThrow(addition), result, potionName(result));
+        private ModifyBrewingRecipeBuilder modify(RegistryKey<Potion> base, TagKey<Item> reagent, RegistryKey<Potion> result) {
+            return this.modify(base, Ingredient.fromTag(reagent), this.items.getOrThrow(reagent), result, potionName(result));
         }
 
-        private ModifyBrewingRecipeBuilder modify(RegistryKey<Potion> base, RegistryKey<Item> addition, RegistryKey<Potion> result, String name) {
-            RegistryEntry<Item> item = this.items.getOrThrow(addition);
+        private ModifyBrewingRecipeBuilder modify(RegistryKey<Potion> base, RegistryKey<Item> reagent, RegistryKey<Potion> result, String name) {
+            RegistryEntry<Item> item = this.items.getOrThrow(reagent);
             return this.modify(base, Ingredient.ofStacks(new ItemStack(item)), RegistryEntryList.of(item), result, name);
         }
 
-        private ModifyBrewingRecipeBuilder modify(RegistryKey<Potion> base, Ingredient addition, RegistryEntryList<Item> conditionItems, RegistryKey<Potion> result, String name) {
+        private ModifyBrewingRecipeBuilder modify(RegistryKey<Potion> base, Ingredient reagent, RegistryEntryList<Item> conditionItems, RegistryKey<Potion> result, String name) {
             return new ModifyBrewingRecipeBuilder(
                 this.potions.getOrThrow(base),
-                addition,
+                reagent,
                 this.potions.getOrThrow(result),
                 conditionItems,
                 Identifier.ofVanilla(name)

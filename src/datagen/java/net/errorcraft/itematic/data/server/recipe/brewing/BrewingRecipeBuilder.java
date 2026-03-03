@@ -19,28 +19,28 @@ import java.util.Optional;
 
 public abstract class BrewingRecipeBuilder<T> {
     protected final RegistryEntry<T> base;
-    protected final Ingredient addition;
+    protected final Ingredient reagent;
     protected final RegistryEntry<T> result;
     private final RegistryEntryList<Item> conditionItems;
     private final Identifier name;
 
-    protected BrewingRecipeBuilder(RegistryEntry<T> base, Ingredient addition, RegistryEntry<T> result, RegistryEntryList<Item> conditionItems, Identifier name) {
+    protected BrewingRecipeBuilder(RegistryEntry<T> base, Ingredient reagent, RegistryEntry<T> result, RegistryEntryList<Item> conditionItems, Identifier name) {
         this.base = base;
-        this.addition = addition;
+        this.reagent = reagent;
         this.result = result;
         this.conditionItems = conditionItems;
         this.name = name;
     }
 
     public BrewingRecipeBuilder<T> remainder(RegistryEntry<Item> remainder) {
-        this.addition.itematic$setRemainder(Optional.of(new ItemStack(remainder)));
+        this.reagent.itematic$setRemainder(Optional.of(new ItemStack(remainder)));
         return this;
     }
 
     public void save(RecipeExporter exporter) {
         Advancement.Builder advancementBuilder = exporter.getAdvancementBuilder()
             .criterion("has_the_recipe", RecipeUnlockedCriterion.create(this.name))
-            .criterion("has_addition", InventoryChangedCriterion.Conditions.items(
+            .criterion("has_reagent", InventoryChangedCriterion.Conditions.items(
                 ItemPredicate.Builder.create()
                     .itematic$items(this.conditionItems)
             ))

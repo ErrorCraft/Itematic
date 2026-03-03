@@ -19,8 +19,8 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.collection.DefaultedList;
 
 public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
-    public AmplifyBrewingRecipe(String group, RegistryEntry<Item> base, Ingredient addition, RegistryEntry<Item> result) {
-        super(group, base, addition, result);
+    public AmplifyBrewingRecipe(String group, RegistryEntry<Item> base, Ingredient reagent, RegistryEntry<Item> result) {
+        super(group, base, reagent, result);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
     @Override
     public DefaultedList<Ingredient> getIngredients() {
         DefaultedList<Ingredient> ingredients = DefaultedList.ofSize(2);
-        ingredients.add(this.addition());
+        ingredients.add(this.reagent());
         ingredients.add(this.inputIngredient());
         return ingredients;
     }

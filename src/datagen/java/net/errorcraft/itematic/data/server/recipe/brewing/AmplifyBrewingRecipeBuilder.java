@@ -9,8 +9,8 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.util.Identifier;
 
 public class AmplifyBrewingRecipeBuilder extends BrewingRecipeBuilder<Item> {
-    public AmplifyBrewingRecipeBuilder(RegistryEntry<Item> base, Ingredient addition, RegistryEntry<Item> result, RegistryEntryList<Item> conditionItems, Identifier name) {
-        super(base, addition, result, conditionItems, name);
+    public AmplifyBrewingRecipeBuilder(RegistryEntry<Item> base, Ingredient reagent, RegistryEntry<Item> result, RegistryEntryList<Item> conditionItems, Identifier name) {
+        super(base, reagent, result, conditionItems, name);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class AmplifyBrewingRecipeBuilder extends BrewingRecipeBuilder<Item> {
         return new AmplifyBrewingRecipe(
             "",
             this.base,
-            this.addition,
+            this.reagent,
             this.result
         );
     }

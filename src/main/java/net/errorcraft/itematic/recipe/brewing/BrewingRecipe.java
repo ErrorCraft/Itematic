@@ -30,13 +30,13 @@ import java.util.Optional;
 public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, RecipeAccess {
     private final String group;
     private final RegistryEntry<T> base;
-    private final Ingredient addition;
+    private final Ingredient reagent;
     private final RegistryEntry<T> result;
 
-    protected BrewingRecipe(String group, RegistryEntry<T> base, Ingredient addition, RegistryEntry<T> result) {
+    protected BrewingRecipe(String group, RegistryEntry<T> base, Ingredient reagent, RegistryEntry<T> result) {
         this.group = group;
         this.base = base;
-        this.addition = addition;
+        this.reagent = reagent;
         this.result = result;
     }
 
@@ -45,7 +45,7 @@ public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, Re
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.optionalFieldOf("group", "").forGetter(R::getGroup),
             entryCodec.fieldOf("base").forGetter(R::base),
-            Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("addition").forGetter(R::addition),
+            Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("reagent").forGetter(R::reagent),
             entryCodec.fieldOf("result").forGetter(R::result)
         ).apply(instance, creator));
     }
@@ -55,7 +55,7 @@ public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, Re
         return PacketCodec.tuple(
             PacketCodecs.STRING, R::getGroup,
             entryPacketCodec, R::base,
-            Ingredient.PACKET_CODEC, R::addition,
+            Ingredient.PACKET_CODEC, R::reagent,
             entryPacketCodec, R::result,
             creator
         );
@@ -63,7 +63,7 @@ public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, Re
 
     @Override
     public boolean matches(BrewingRecipeInput input, World world) {
-        return this.addition.test(input.addition()) && this.matches(input.base());
+        return this.reagent.test(input.reagent()) && this.matches(input.base());
     }
 
     @Override
@@ -88,7 +88,7 @@ public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, Re
 
     @Override
     public boolean isEmpty() {
-        return this.addition.isEmpty();
+        return this.reagent.isEmpty();
     }
 
     @Override
@@ -99,21 +99,21 @@ public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, Re
     @Override
     public DefaultedList<Ingredient> itematic$ingredients(RegistryEntryLookup<Item> items) {
         DefaultedList<Ingredient> ingredients = DefaultedList.ofSize(2);
-        ingredients.add(this.addition());
+        ingredients.add(this.reagent());
         ingredients.add(this.inputIngredient(items));
         return ingredients;
     }
 
-    public Optional<ItemStack> additionRemainder() {
-        return this.addition.itematic$remainder().map(ItemStack::copy);
+    public Optional<ItemStack> reagentRemainder() {
+        return this.reagent.itematic$remainder().map(ItemStack::copy);
     }
 
     protected RegistryEntry<T> base() {
         return this.base;
     }
 
-    protected Ingredient addition() {
-        return this.addition;
+    public Ingredient reagent() {
+        return this.reagent;
     }
 
     protected RegistryEntry<T> result() {
@@ -121,9 +121,6 @@ public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, Re
     }
 
     public abstract Ingredient inputIngredient(RegistryEntryLookup<Item> items);
-    public Ingredient additionIngredient() {
-        return this.addition;
-    }
     protected abstract boolean matches(ItemStack base);
     protected abstract ItemStack craft(ItemStack base);
 }

@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:leaping",
+  "reagent": {
     "item": "minecraft:redstone"
   },
-  "base": "minecraft:leaping",
   "result": "minecraft:long_leaping"
 }

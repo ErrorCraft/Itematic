@@ -1398,7 +1398,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.POTION)
             .add(ItemKeys.SPLASH_POTION)
             .add(ItemKeys.LINGERING_POTION);
-        this.getOrCreateTagBuilder(ItematicItemTags.MUNDANE_POTION_ADDITIONS)
+        this.getOrCreateTagBuilder(ItematicItemTags.MUNDANE_POTION_REAGENTS)
             .add(ItemKeys.REDSTONE)
             .add(ItemKeys.MAGMA_CREAM)
             .add(ItemKeys.GLISTERING_MELON_SLICE)

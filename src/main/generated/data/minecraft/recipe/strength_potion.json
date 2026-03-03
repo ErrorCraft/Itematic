@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:awkward",
+  "reagent": {
     "item": "minecraft:blaze_powder"
   },
-  "base": "minecraft:awkward",
   "result": "minecraft:strength"
 }

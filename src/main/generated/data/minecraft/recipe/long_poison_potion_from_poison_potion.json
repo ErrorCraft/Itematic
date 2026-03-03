@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:poison",
+  "reagent": {
     "item": "minecraft:redstone"
   },
-  "base": "minecraft:poison",
   "result": "minecraft:long_poison"
 }

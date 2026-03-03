@@ -1,6 +1,7 @@
 {
   "type": "minecraft:brewing_amplify",
-  "addition": {
+  "base": "minecraft:splash_potion",
+  "reagent": {
     "items": {
       "item": "minecraft:dragon_breath"
     },
@@ -9,6 +10,5 @@
       "count": 1
     }
   },
-  "base": "minecraft:splash_potion",
   "result": "minecraft:lingering_potion"
 }

@@ -68,10 +68,10 @@ public abstract class BrewingStandBlockEntityExtender extends LockableContainerB
             return false;
         }
 
-        ItemStack addition = slots.get(INPUT_SLOT_INDEX);
+        ItemStack reagent = slots.get(INPUT_SLOT_INDEX);
         for (int i = 0; i < 3; i++) {
             ItemStack base = slots.get(i);
-            BrewingRecipeInput input = new BrewingRecipeInput(base, addition);
+            BrewingRecipeInput input = new BrewingRecipeInput(base, reagent);
             if (blockEntityExtender.matcher.getFirstMatch(input, serverWorld).isPresent()) {
                 return true;
             }
@@ -95,9 +95,9 @@ public abstract class BrewingStandBlockEntityExtender extends LockableContainerB
 
         BrewingStandBlockEntityExtender blockEntityExtender = (BrewingStandBlockEntityExtender)(Object) blockEntity;
         BrewingRecipe<?> recipe = null;
-        ItemStack addition = slots.get(INPUT_SLOT_INDEX);
+        ItemStack reagent = slots.get(INPUT_SLOT_INDEX);
         for (int i = 0; i < 3; i++) {
-            BrewingRecipeInput input = new BrewingRecipeInput(slots.get(i), addition);
+            BrewingRecipeInput input = new BrewingRecipeInput(slots.get(i), reagent);
             if (recipe != null && recipe.matches(input, world)) {
                 ItemStack result = recipe.craft(input, world.getRegistryManager());
                 slots.set(i, result);
@@ -112,10 +112,10 @@ public abstract class BrewingStandBlockEntityExtender extends LockableContainerB
             }
         }
 
-        addition.decrement(1);
+        reagent.decrement(1);
         if (recipe != null) {
-            recipe.additionRemainder().ifPresent(remainder -> {
-                if (addition.isEmpty()) {
+            recipe.reagentRemainder().ifPresent(remainder -> {
+                if (reagent.isEmpty()) {
                     slots.set(INPUT_SLOT_INDEX, remainder);
                 } else {
                     ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), remainder);
@@ -243,8 +243,8 @@ public abstract class BrewingStandBlockEntityExtender extends LockableContainerB
 
     @Unique
     private boolean acceptsRecipes() {
-        ItemStack addition = this.inventory.get(INPUT_SLOT_INDEX);
-        if (addition.isEmpty()) {
+        ItemStack reagent = this.inventory.get(INPUT_SLOT_INDEX);
+        if (reagent.isEmpty()) {
             return false;
         }
 
