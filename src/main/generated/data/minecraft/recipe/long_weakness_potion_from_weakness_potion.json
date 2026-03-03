@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:weakness",
+  "reagent": {
     "item": "minecraft:redstone"
   },
-  "base": "minecraft:weakness",
   "result": "minecraft:long_weakness"
 }

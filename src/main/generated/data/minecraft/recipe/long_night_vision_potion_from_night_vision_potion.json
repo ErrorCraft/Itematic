@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:night_vision",
+  "reagent": {
     "item": "minecraft:redstone"
   },
-  "base": "minecraft:night_vision",
   "result": "minecraft:long_night_vision"
 }

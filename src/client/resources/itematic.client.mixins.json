@@ -32,6 +32,7 @@
     "gui.screen.recipebook.AbstractFurnaceRecipeBookScreenExtender",
     "gui.screen.recipebook.RecipeAlternativesWidgetAccessor",
     "gui.screen.recipebook.RecipeAlternativesWidgetAccessor$AlternativeButtonWidgetExtender",
+    "gui.screen.recipebook.RecipeAlternativesWidgetAccessor$AlternativeButtonWidgetExtender$InputSlotAccessor",
     "gui.screen.recipebook.RecipeAlternativesWidgetAccessor$FurnaceAlternativeButtonWidgetExtender",
     "gui.screen.recipebook.RecipeBookGhostSlotsExtender$GhostInputSlotExtender",
     "gui.screen.recipebook.RecipeBookWidgetExtender",

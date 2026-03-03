@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:water_breathing",
+  "reagent": {
     "item": "minecraft:redstone"
   },
-  "base": "minecraft:water_breathing",
   "result": "minecraft:long_water_breathing"
 }

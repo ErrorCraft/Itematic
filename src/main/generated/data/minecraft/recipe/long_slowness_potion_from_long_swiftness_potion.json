@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:long_swiftness",
+  "reagent": {
     "item": "minecraft:fermented_spider_eye"
   },
-  "base": "minecraft:long_swiftness",
   "result": "minecraft:long_slowness"
 }

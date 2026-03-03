@@ -26,8 +26,12 @@ import net.minecraft.util.collection.DefaultedList;
 import java.util.stream.Stream;
 
 public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
-    public ModifyBrewingRecipe(String group, RegistryEntry<Potion> base, Ingredient addition, RegistryEntry<Potion> result) {
-        super(group, base, addition, result);
+    public ModifyBrewingRecipe(String group, RegistryEntry<Potion> base, Ingredient reagent, RegistryEntry<Potion> result, int brewingTime) {
+        super(group, base, reagent, result, brewingTime);
+    }
+
+    public ModifyBrewingRecipe(RegistryEntry<Potion> base, Ingredient reagent, RegistryEntry<Potion> result) {
+        super("", base, reagent, result, DEFAULT_BREWING_TIME);
     }
 
     @Override
@@ -58,7 +62,7 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
     @Override
     public DefaultedList<Ingredient> getIngredients() {
         DefaultedList<Ingredient> ingredients = DefaultedList.ofSize(2);
-        ingredients.add(this.addition());
+        ingredients.add(this.reagent());
         ingredients.add(Ingredient.fromTag(ItematicItemTags.BREWING_INPUTS));
         return ingredients;
     }

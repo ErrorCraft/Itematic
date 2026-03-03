@@ -45,7 +45,7 @@ public class BrewingRecipeBookWidget extends RecipeBookWidget {
             this.ghostSlots.addSlot(brewingRecipe.inputIngredient(items), firstInputSlot.x, firstInputSlot.y);
 
             Slot ingredientSlot = this.craftingScreenHandler.getSlot(BrewingStandMenuDelegate.INGREDIENT_SLOT);
-            this.ghostSlots.addSlot(brewingRecipe.additionIngredient(), ingredientSlot.x, ingredientSlot.y);
+            this.ghostSlots.addSlot(brewingRecipe.reagent(), ingredientSlot.x, ingredientSlot.y);
         }
     }
 }

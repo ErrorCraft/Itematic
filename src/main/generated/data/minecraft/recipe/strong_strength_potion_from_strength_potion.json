@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:strength",
+  "reagent": {
     "item": "minecraft:glowstone_dust"
   },
-  "base": "minecraft:strength",
   "result": "minecraft:strong_strength"
 }

@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_addition": {
+    "has_reagent": {
       "conditions": {
         "items": [
           {
-            "items": "#minecraft:mundane_potion_additions"
+            "items": "#minecraft:mundane_potion_reagents"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_addition"
+      "has_reagent"
     ]
   ],
   "rewards": {

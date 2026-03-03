@@ -161,7 +161,7 @@ public class ItematicItemTags {
     public static final TagKey<Item> PREVENTS_TAKING_POTTED_ITEM_OUT = of("prevents_taking_potted_item_out");
 
     public static final TagKey<Item> BREWING_INPUTS = of("brewing_inputs");
-    public static final TagKey<Item> MUNDANE_POTION_ADDITIONS = of("mundane_potion_additions");
+    public static final TagKey<Item> MUNDANE_POTION_REAGENTS = of("mundane_potion_reagents");
 
     private ItematicItemTags() {}
 

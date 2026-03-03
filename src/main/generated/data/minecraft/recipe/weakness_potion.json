@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:water",
+  "reagent": {
     "item": "minecraft:fermented_spider_eye"
   },
-  "base": "minecraft:water",
   "result": "minecraft:weakness"
 }

@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:strong_healing",
+  "reagent": {
     "item": "minecraft:fermented_spider_eye"
   },
-  "base": "minecraft:strong_healing",
   "result": "minecraft:strong_harming"
 }
