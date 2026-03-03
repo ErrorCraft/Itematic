@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:harming",
+  "reagent": {
     "item": "minecraft:glowstone_dust"
   },
-  "base": "minecraft:harming",
   "result": "minecraft:strong_harming"
 }

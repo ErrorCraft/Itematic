@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:slowness",
+  "reagent": {
     "item": "minecraft:glowstone_dust"
   },
-  "base": "minecraft:slowness",
   "result": "minecraft:strong_slowness"
 }

@@ -1,8 +1,8 @@
 {
   "type": "minecraft:brewing_modify",
-  "addition": {
+  "base": "minecraft:invisibility",
+  "reagent": {
     "item": "minecraft:redstone"
   },
-  "base": "minecraft:invisibility",
   "result": "minecraft:long_invisibility"
 }
