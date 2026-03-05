@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:resin_brick_stairs"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:resin_brick_stairs",
+    "translation_key": "block.minecraft.resin_brick_stairs"
+  }
+}

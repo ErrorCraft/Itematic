@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:stripped_pale_oak_log"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:stripped_pale_oak_log",
+    "translation_key": "block.minecraft.stripped_pale_oak_log"
+  }
+}

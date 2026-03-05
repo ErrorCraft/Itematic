@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.access.block.BlockAccess;
+import net.errorcraft.itematic.access.block.AbstractBlockAccess;
 import net.minecraft.block.DecoratedPotBlock;
 import net.minecraft.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.block.entity.Sherds;
@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @Mixin(DecoratedPotBlock.class)
-public class DecoratedPotBlockExtender implements BlockAccess {
+public class DecoratedPotBlockExtender implements AbstractBlockAccess {
     @ModifyExpressionValue(
         method = "appendTooltip",
         at = @At(

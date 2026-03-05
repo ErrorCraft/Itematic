@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.RegistryKey;
 
-public interface BlockAccess {
+public interface AbstractBlockAccess {
     default RegistryKey<Item> itematic$asItemKey() {
         return null;
     }

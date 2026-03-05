@@ -60,7 +60,7 @@ public record WeaponAttackDamageDataComponent(List<Rule> rules, double defaultDa
             PacketCodecs.registryEntryList(RegistryKeys.ENTITY_TYPE).collect(PacketCodecs::optional), Rule::entities,
             ItemPredicateUtil.PACKET_CODEC.collect(PacketCodecs::optional), Rule::item,
             PacketCodecs.DOUBLE.collect(PacketCodecs::optional), Rule::damage,
-            PacketCodecs.BOOL.collect(PacketCodecs::optional), Rule::addBase,
+            PacketCodecs.BOOLEAN.collect(PacketCodecs::optional), Rule::addBase,
             Rule::new
         );
 

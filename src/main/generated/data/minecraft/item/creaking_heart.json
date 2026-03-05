@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:creaking_heart"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:creaking_heart",
+    "translation_key": "block.minecraft.creaking_heart"
+  }
+}

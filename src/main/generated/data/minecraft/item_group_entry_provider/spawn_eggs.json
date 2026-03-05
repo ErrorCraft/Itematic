@@ -4,6 +4,7 @@
       "type": "tag",
       "tag": "minecraft:item_group/spawners"
     },
+    "minecraft:creaking_heart",
     "minecraft:allay_spawn_egg",
     "minecraft:armadillo_spawn_egg",
     "minecraft:axolotl_spawn_egg",
@@ -18,6 +19,7 @@
     "minecraft:chicken_spawn_egg",
     "minecraft:cod_spawn_egg",
     "minecraft:cow_spawn_egg",
+    "minecraft:creaking_spawn_egg",
     "minecraft:creeper_spawn_egg",
     "minecraft:dolphin_spawn_egg",
     "minecraft:donkey_spawn_egg",

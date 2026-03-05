@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.block;
 
-import net.errorcraft.itematic.access.block.BlockAccess;
+import net.errorcraft.itematic.access.block.AbstractBlockAccess;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ShulkerBoxBlock.class)
-public class ShulkerBoxBlockExtender implements BlockAccess {
+public class ShulkerBoxBlockExtender implements AbstractBlockAccess {
     @Redirect(
         method = "onBreak",
         at = @At(

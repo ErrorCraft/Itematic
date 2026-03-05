@@ -29,6 +29,7 @@ public class ItematicItemTags {
     public static final TagKey<Item> DARK_OAK_BUILDING_BLOCKS = of("item_group/dark_oak_building_blocks");
     public static final TagKey<Item> MANGROVE_BUILDING_BLOCKS = of("item_group/mangrove_building_blocks");
     public static final TagKey<Item> CHERRY_BUILDING_BLOCKS = of("item_group/cherry_building_blocks");
+    public static final TagKey<Item> PALE_OAK_BUILDING_BLOCKS = of("item_group/pale_oak_building_blocks");
     public static final TagKey<Item> BAMBOO_BUILDING_BLOCKS = of("item_group/bamboo_building_blocks");
     public static final TagKey<Item> CRIMSON_BUILDING_BLOCKS = of("item_group/crimson_building_blocks");
     public static final TagKey<Item> WARPED_BUILDING_BLOCKS = of("item_group/warped_building_blocks");
@@ -52,6 +53,7 @@ public class ItematicItemTags {
     public static final TagKey<Item> TUFF_BUILDING_BLOCKS = of("item_group/tuff_building_blocks");
     public static final TagKey<Item> BRICK_BUILDING_BLOCKS = of("item_group/brick_building_blocks");
     public static final TagKey<Item> MUD_BRICK_BUILDING_BLOCKS = of("item_group/mud_brick_building_blocks");
+    public static final TagKey<Item> RESIN_BRICK_BUILDING_BLOCKS = of("item_group/resin_brick_building_blocks");
     public static final TagKey<Item> SANDSTONE_BUILDING_BLOCKS = of("item_group/sandstone_building_blocks");
     public static final TagKey<Item> SMOOTH_SANDSTONE_BUILDING_BLOCKS = of("item_group/smooth_sandstone_building_blocks");
     public static final TagKey<Item> CUT_SANDSTONE_BUILDING_BLOCKS = of("item_group/cut_sandstone_building_blocks");

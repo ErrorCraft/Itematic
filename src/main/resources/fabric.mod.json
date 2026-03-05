@@ -82,9 +82,6 @@
       "net/minecraft/class_2073\u0024class_2074": [
         "net/errorcraft/itematic/access/predicate/item/ItemPredicateBuilderAccess"
       ],
-      "net/minecraft/class_2248": [
-        "net/errorcraft/itematic/access/block/BlockAccess"
-      ],
       "net/minecraft/class_2302": [
         "net/errorcraft/itematic/access/block/CropBlockAccess"
       ],
