@@ -3,6 +3,8 @@ package net.errorcraft.itematic.mixin.block;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.block.AbstractBlockAccess;
+import net.errorcraft.itematic.block.entity.SherdsUtil;
+import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.DecoratedPotBlock;
 import net.minecraft.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.block.entity.Sherds;
@@ -14,6 +16,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.world.WorldView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -73,6 +76,18 @@ public class DecoratedPotBlockExtender implements AbstractBlockAccess {
     )
     private static ItemStack newItemStackUseRegistryEntry(Item instance, @Local Iterator<RegistryEntry<Item>> iterator) {
         return new ItemStack(iterator.next());
+    }
+
+    @Redirect(
+        method = "getPickStack",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/block/entity/DecoratedPotBlockEntity;getStackWith(Lnet/minecraft/block/entity/Sherds;)Lnet/minecraft/item/ItemStack;"
+        )
+    )
+    private ItemStack getStackWithUseCreateStack(Sherds sherds, WorldView world) {
+        ItemStack stack = world.itematic$createStack(ItemKeys.DECORATED_POT);
+        return SherdsUtil.addSherdsToStack(stack, sherds);
     }
 
     @Override

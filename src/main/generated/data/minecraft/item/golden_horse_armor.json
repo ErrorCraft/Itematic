@@ -14,8 +14,8 @@
     },
     "minecraft:equipment": {
       "allowed_entities": "minecraft:horse",
+      "asset_id": "minecraft:gold",
       "equip_sound": "minecraft:item.armor.equip_gold",
-      "model": "minecraft:gold",
       "slot": "body"
     },
     "minecraft:stackable": 1

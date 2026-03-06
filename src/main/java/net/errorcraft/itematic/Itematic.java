@@ -1,11 +1,9 @@
 package net.errorcraft.itematic;
 
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.item.color.ItemColorTypes;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleTypes;
-import net.errorcraft.itematic.item.model.override.ModelOverrides;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPickerTypes;
 import net.errorcraft.itematic.item.pointer.Pointers;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
@@ -29,11 +27,9 @@ public class Itematic implements ModInitializer {
     @Override
     public void onInitialize() {
         ItemComponentTypes.init();
-        ItemColorTypes.init();
         ItemEvents.init();
         ActionTypes.init();
         ItematicContextTypes.init();
-        ModelOverrides.init();
         Pointers.init();
         SequenceHandlerTypes.init();
         ItematicPredicateTypes.init();

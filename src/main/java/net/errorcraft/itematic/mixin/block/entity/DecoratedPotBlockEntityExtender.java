@@ -2,14 +2,11 @@ package net.errorcraft.itematic.mixin.block.entity;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.block.entity.SherdsUtil;
-import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.block.entity.Sherds;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
@@ -21,18 +18,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class DecoratedPotBlockEntityExtender extends BlockEntity {
     public DecoratedPotBlockEntityExtender(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-    }
-
-    @Redirect(
-        method = "asStack",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;getDefaultStack()Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    @SuppressWarnings("DataFlowIssue")
-    private ItemStack newItemStackUseCreateStack(Item instance) {
-        return this.world.itematic$createStack(ItemKeys.DECORATED_POT);
     }
 
     @Redirect(

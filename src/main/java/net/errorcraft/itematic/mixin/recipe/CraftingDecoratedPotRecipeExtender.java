@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.mixin.recipe;
 
+import net.errorcraft.itematic.block.entity.SherdsUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.block.entity.SherdsAccessor;
 import net.minecraft.block.entity.Sherds;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingDecoratedPotRecipe;
@@ -52,7 +52,6 @@ public class CraftingDecoratedPotRecipeExtender {
             Optional.of(input.getStackInSlot(5).getRegistryEntry()),
             Optional.of(input.getStackInSlot(7).getRegistryEntry())
         );
-        stack.set(DataComponentTypes.POT_DECORATIONS, sherds);
-        return stack;
+        return SherdsUtil.addSherdsToStack(stack, sherds);
     }
 }

@@ -1,20 +1,17 @@
-package net.errorcraft.itematic.mixin.client.render.entity.model;
+package net.errorcraft.itematic.mixin.client.render.entity;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.client.render.entity.model.SkeletonEntityModel;
+import net.minecraft.client.render.entity.AbstractSkeletonEntityRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(SkeletonEntityModel.class)
-public class SkeletonEntityModelExtender {
+@Mixin(AbstractSkeletonEntityRenderer.class)
+public class AbstractSkeletonEntityRendererExtender {
     @Redirect(
-        method = {
-            "getArmPose(Lnet/minecraft/client/render/entity/state/SkeletonEntityRenderState;Lnet/minecraft/util/Arm;)Lnet/minecraft/client/render/entity/model/BipedEntityModel$ArmPose;",
-            "setAngles(Lnet/minecraft/client/render/entity/state/SkeletonEntityRenderState;)V"
-        },
+        method = "updateRenderState(Lnet/minecraft/entity/mob/AbstractSkeletonEntity;Lnet/minecraft/client/render/entity/state/SkeletonEntityRenderState;F)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"

@@ -26,8 +26,8 @@
       "enchantability": 10
     },
     "minecraft:equipment": {
+      "asset_id": "minecraft:diamond",
       "equip_sound": "minecraft:item.armor.equip_diamond",
-      "model": "minecraft:diamond",
       "slot": "legs"
     },
     "minecraft:repairable": {

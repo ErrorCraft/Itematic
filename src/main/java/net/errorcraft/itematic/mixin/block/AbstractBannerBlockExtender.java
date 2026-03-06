@@ -25,7 +25,7 @@ public abstract class AbstractBannerBlockExtender extends BlockWithEntity {
             target = "Lnet/minecraft/block/entity/BannerBlockEntity;getPickStack()Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack getPickStackUseCreateStack(BannerBlockEntity instance, WorldView world, BlockPos pos, BlockState state) {
-        return ((BannerBlockEntityAccess) instance).itematic$getPickStack(super.getPickStack(world, pos, state));
+    private ItemStack getPickStackUseCreateStack(BannerBlockEntity instance, WorldView world, BlockPos pos, BlockState state, boolean includeData) {
+        return ((BannerBlockEntityAccess) instance).itematic$getPickStack(super.getPickStack(world, pos, state, includeData));
     }
 }

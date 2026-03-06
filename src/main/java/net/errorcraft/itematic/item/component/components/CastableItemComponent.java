@@ -8,9 +8,11 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.minecraft.SharedConstants;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FishingBobberEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -20,9 +22,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
-public record CastableItemComponent() implements ItemComponent<CastableItemComponent> {
+public class CastableItemComponent implements ItemComponent<CastableItemComponent> {
     public static final CastableItemComponent INSTANCE = new CastableItemComponent();
     public static final Codec<CastableItemComponent> CODEC = Codec.unit(INSTANCE);
+
+    private CastableItemComponent() {}
 
     @Override
     public ItemComponentType<CastableItemComponent> type() {
@@ -39,6 +43,7 @@ public record CastableItemComponent() implements ItemComponent<CastableItemCompo
         if (!this.tryRetract(world, user, stack, resultStackConsumer)) {
             this.cast(world, user, stack);
         }
+
         return ItemResult.SUCCEED;
     }
 
@@ -63,8 +68,8 @@ public record CastableItemComponent() implements ItemComponent<CastableItemCompo
         world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_FISHING_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
         if (world instanceof ServerWorld serverWorld) {
             int luck = EnchantmentHelper.getFishingLuckBonus(serverWorld, stack, user);
-            int speed = (int) (EnchantmentHelper.getFishingTimeReduction(serverWorld, stack, user) * 20);
-            world.spawnEntity(new FishingBobberEntity(user, world, luck, speed, stack));
+            int speed = (int) (EnchantmentHelper.getFishingTimeReduction(serverWorld, stack, user) * SharedConstants.TICKS_PER_SECOND);
+            ProjectileEntity.spawn(new FishingBobberEntity(user, world, luck, speed), serverWorld, stack);
         }
 
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));

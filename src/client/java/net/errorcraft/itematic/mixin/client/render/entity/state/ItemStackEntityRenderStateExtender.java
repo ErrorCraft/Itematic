@@ -1,14 +1,14 @@
-package net.errorcraft.itematic.mixin.client.render.entity;
+package net.errorcraft.itematic.mixin.client.render.entity.state;
 
-import net.minecraft.client.render.entity.ItemEntityRenderer;
+import net.minecraft.client.render.entity.state.ItemStackEntityRenderState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(ItemEntityRenderer.class)
-public class ItemEntityRendererExtender {
+@Mixin(ItemStackEntityRenderState.class)
+public class ItemStackEntityRenderStateExtender {
     @Redirect(
         method = "getSeed",
         at = @At(

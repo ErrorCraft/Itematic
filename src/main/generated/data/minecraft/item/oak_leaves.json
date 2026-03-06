@@ -6,13 +6,7 @@
     "minecraft:compostable": {
       "level_increase_chance": 0.3
     },
-    "minecraft:stackable": 64,
-    "minecraft:tinted": {
-      "tint": {
-        "type": "minecraft:foliage",
-        "biome": "minecraft:plains"
-      }
-    }
+    "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:oak_leaves",

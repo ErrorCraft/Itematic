@@ -47,6 +47,11 @@
     },
     {
       "type": "stack",
+      "components": {
+        "minecraft:block_state": {
+          "level": "15"
+        }
+      },
       "item": "minecraft:light",
       "requires_permissions": true
     },
