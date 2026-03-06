@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.WorldView;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,6 +18,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(AbstractBlock.class)
 public abstract class AbstractBlockExtender implements AbstractBlockAccess {
+    @Shadow
+    public abstract Item asItem();
+
     @Shadow
     protected abstract Block asBlock();
 
@@ -31,7 +35,7 @@ public abstract class AbstractBlockExtender implements AbstractBlockAccess {
         )
     )
     private boolean isOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemUtil.keyFromBlock(this.asBlock()));
+        return instance.itematic$isOf(this.itematic$asItemKey());
     }
 
     @Redirect(
@@ -48,7 +52,8 @@ public abstract class AbstractBlockExtender implements AbstractBlockAccess {
     @Override
     public RegistryKey<Item> itematic$asItemKey() {
         if (this.itemKey == null) {
-            this.itemKey = ItemUtil.keyFromBlock(this.asBlock());
+            this.itemKey = Registries.ITEM.getKey(this.asItem())
+                .orElseGet(() -> ItemUtil.keyFromBlock(this.asBlock()));
         }
 
         return this.itemKey;

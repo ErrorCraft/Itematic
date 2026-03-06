@@ -1,15 +1,19 @@
 package net.errorcraft.itematic.mixin.block;
 
-import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.block.GlowLichenBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.MultifaceBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(GlowLichenBlock.class)
-public class GlowLichenBlockExtender {
+@Mixin(MultifaceBlock.class)
+public class MultifaceBlockExtender extends Block {
+    public MultifaceBlockExtender(Settings settings) {
+        super(settings);
+    }
+
     @Redirect(
         method = "canReplace",
         at = @At(
@@ -17,7 +21,7 @@ public class GlowLichenBlockExtender {
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
         )
     )
-    private boolean isOfForGlowLichenUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GLOW_LICHEN);
+    private boolean isOfUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(this.itematic$asItemKey());
     }
 }
