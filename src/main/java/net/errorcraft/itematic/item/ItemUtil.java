@@ -17,8 +17,6 @@ import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.fuel.FuelTimes;
-import net.errorcraft.itematic.item.pointer.Pointer;
-import net.errorcraft.itematic.item.pointer.PointerKeys;
 import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
 import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
@@ -140,7 +138,6 @@ public class ItemUtil {
         private final RegistryEntryLookup<DispenseBehavior> dispenseBehaviors;
         private final RegistryEntryLookup<SoundEvent> soundEvents;
         private final RegistryEntryLookup<Fluid> fluids;
-        private final RegistryEntryLookup<Pointer> pointers;
         private final RegistryEntryLookup<ActionEntry> actions;
         private final RegistryEntryLookup<SmithingTemplate> smithingTemplates;
         private final RegistryEntryLookup<DecoratedPotPattern> decoratedPotPatterns;
@@ -157,7 +154,6 @@ public class ItemUtil {
             this.dispenseBehaviors = registerable.getRegistryLookup(ItematicRegistryKeys.DISPENSE_BEHAVIOR);
             this.soundEvents = registerable.getRegistryLookup(RegistryKeys.SOUND_EVENT);
             this.fluids = registerable.getRegistryLookup(RegistryKeys.FLUID);
-            this.pointers = registerable.getRegistryLookup(ItematicRegistryKeys.POINTER);
             this.actions = registerable.getRegistryLookup(ItematicRegistryKeys.ACTION);
             this.smithingTemplates = registerable.getRegistryLookup(ItematicRegistryKeys.SMITHING_TEMPLATE);
             this.decoratedPotPatterns = registerable.getRegistryLookup(RegistryKeys.DECORATED_POT_PATTERN);
@@ -10771,16 +10767,16 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.COMPASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(PointableItemComponent.of(this.pointers.getOrThrow(PointerKeys.SPAWN_LOCATION), Util.createTranslationKey("item", Identifier.ofVanilla("lodestone_compass"))))
+                    .with(PointableItemComponent.of(Util.createTranslationKey("item", Identifier.ofVanilla("lodestone_compass"))))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         ActionRequirements.of(
                             ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
                             LocationCheckLootCondition.builder(
-                                    LocationPredicate.Builder.create()
-                                        .block(BlockPredicate.Builder.create()
-                                            .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value())))
+                                LocationPredicate.Builder.create()
+                                    .block(BlockPredicate.Builder.create()
+                                        .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value())))
                                 .build()
                         ),
                         PassingSequenceHandler.builder()
@@ -10795,7 +10791,6 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(PointableItemComponent.of(this.pointers.getOrThrow(PointerKeys.LAST_DEATH)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BUNDLE, create(

@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -55,7 +56,8 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;CROSSBOW:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/item/Items;CROSSBOW:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )
@@ -72,17 +74,6 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
     )
     private boolean isHoldingForCrossbowUseRegistryKeyCheck(PiglinEntity instance, Item item) {
         return instance.itematic$isHolding(ItemKeys.CROSSBOW);
-    }
-
-    @Redirect(
-        method = "prefersNewEquipment",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.CROSSBOW);
     }
 
     @Redirect(
@@ -106,7 +97,8 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/entity/EquipmentSlot;HEAD:Lnet/minecraft/entity/EquipmentSlot;"
+                target = "Lnet/minecraft/entity/EquipmentSlot;HEAD:Lnet/minecraft/entity/EquipmentSlot;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )
@@ -124,7 +116,8 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/entity/EquipmentSlot;CHEST:Lnet/minecraft/entity/EquipmentSlot;"
+                target = "Lnet/minecraft/entity/EquipmentSlot;CHEST:Lnet/minecraft/entity/EquipmentSlot;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )
@@ -142,7 +135,8 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/entity/EquipmentSlot;LEGS:Lnet/minecraft/entity/EquipmentSlot;"
+                target = "Lnet/minecraft/entity/EquipmentSlot;LEGS:Lnet/minecraft/entity/EquipmentSlot;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )
@@ -160,7 +154,8 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/entity/EquipmentSlot;FEET:Lnet/minecraft/entity/EquipmentSlot;"
+                target = "Lnet/minecraft/entity/EquipmentSlot;FEET:Lnet/minecraft/entity/EquipmentSlot;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )

@@ -280,7 +280,6 @@
     "item.KnowledgeBookItemExtender",
     "item.RangedWeaponItemAccessor",
     "item.SmithingTemplateItemAccessor",
-    "item.SpawnEggItemAccessor",
     "item.tooltip.BundleTooltipDataExtender",
     "loot.ContainerComponentModifierExtender",
     "loot.ContainerComponentModifiersExtender$BundleContentsExtender",

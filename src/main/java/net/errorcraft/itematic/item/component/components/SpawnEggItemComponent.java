@@ -52,7 +52,7 @@ public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponen
             return Optional.empty();
         }
 
-        if (entityItemComponent.get().getEntityInitializer(stack).type() != entityType) {
+        if (entityItemComponent.get().getEntityInitializer(stack, world.getRegistryManager()).type() != entityType) {
             return Optional.empty();
         }
 

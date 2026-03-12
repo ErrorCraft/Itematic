@@ -5,22 +5,23 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.pointer.Pointer;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LodestoneTrackerComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 
 import java.util.Optional;
 
-public record PointableItemComponent(RegistryEntry<Pointer> pointsTo, Optional<String> lodestoneTranslationKey) implements ItemComponent<PointableItemComponent> {
+public record PointableItemComponent(String lodestoneTranslationKey) implements ItemComponent<PointableItemComponent> {
     public static final Codec<PointableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Pointer.ENTRY_CODEC.fieldOf("points_to").forGetter(PointableItemComponent::pointsTo),
-        Codec.STRING.optionalFieldOf("lodestone_translation_key").forGetter(PointableItemComponent::lodestoneTranslationKey)
+        Codec.STRING.fieldOf("lodestone_translation_key").forGetter(PointableItemComponent::lodestoneTranslationKey)
     ).apply(instance, PointableItemComponent::new));
+
+    public static PointableItemComponent of(String lodestoneTranslationKey) {
+        return new PointableItemComponent(lodestoneTranslationKey);
+    }
 
     @Override
     public ItemComponentType<PointableItemComponent> type() {
@@ -34,34 +35,26 @@ public record PointableItemComponent(RegistryEntry<Pointer> pointsTo, Optional<S
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity holder, int slot, boolean selected) {
-        if (this.lodestoneTranslationKey.isEmpty()) {
-            return;
-        }
         if (!(world instanceof ServerWorld serverWorld)) {
             return;
         }
-        LodestoneTrackerComponent lodestoneTracker = stack.get(DataComponentTypes.LODESTONE_TRACKER);
-        if (lodestoneTracker == null) {
+
+        LodestoneTrackerComponent currentTracker = stack.get(DataComponentTypes.LODESTONE_TRACKER);
+        if (currentTracker == null) {
             return;
         }
-        LodestoneTrackerComponent lodestoneTrackerForCurrentWorld = lodestoneTracker.forWorld(serverWorld);
-        if (lodestoneTrackerForCurrentWorld != lodestoneTracker) {
-            stack.set(DataComponentTypes.LODESTONE_TRACKER, lodestoneTrackerForCurrentWorld);
+
+        LodestoneTrackerComponent newTracker = currentTracker.forWorld(serverWorld);
+        if (newTracker != currentTracker) {
+            stack.set(DataComponentTypes.LODESTONE_TRACKER, newTracker);
         }
     }
 
     public Optional<String> lodestoneTranslationKey(ItemStack stack) {
         if (stack.contains(DataComponentTypes.LODESTONE_TRACKER)) {
-            return this.lodestoneTranslationKey;
+            return Optional.of(this.lodestoneTranslationKey);
         }
+
         return Optional.empty();
-    }
-
-    public static PointableItemComponent of(RegistryEntry<Pointer> pointsTo) {
-        return new PointableItemComponent(pointsTo, Optional.empty());
-    }
-
-    public static PointableItemComponent of(RegistryEntry<Pointer> pointsTo, String lodestoneTranslationKey) {
-        return new PointableItemComponent(pointsTo, Optional.of(lodestoneTranslationKey));
     }
 }

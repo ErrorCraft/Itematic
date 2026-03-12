@@ -5,7 +5,6 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleTypes;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPickerTypes;
-import net.errorcraft.itematic.item.pointer.Pointers;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateTypes;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
@@ -30,7 +29,6 @@ public class Itematic implements ModInitializer {
         ItemEvents.init();
         ActionTypes.init();
         ItematicContextTypes.init();
-        Pointers.init();
         SequenceHandlerTypes.init();
         ItematicPredicateTypes.init();
         ItematicContextParameters.init();

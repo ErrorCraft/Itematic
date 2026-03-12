@@ -6,7 +6,6 @@ import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPickerType;
-import net.errorcraft.itematic.item.pointer.Pointer;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplateType;
@@ -26,7 +25,6 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<ItemEvent>> ITEM_EVENT = RegistryKey.ofRegistry(Identifier.ofVanilla("item_event"));
     public static final RegistryKey<Registry<ActionType<?>>> ACTION_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("action_type"));
     public static final RegistryKey<Registry<ItemGroupEntryProvider>> ITEM_GROUP_ENTRY_PROVIDER = RegistryKey.ofRegistry(Identifier.ofVanilla("item_group_entry_provider"));
-    public static final RegistryKey<Registry<Pointer>> POINTER = RegistryKey.ofRegistry(Identifier.ofVanilla("pointer"));
     public static final RegistryKey<Registry<Trade>> TRADE = RegistryKey.ofRegistry(Identifier.ofVanilla("trade"));
     public static final RegistryKey<Registry<ActionEntry>> ACTION = RegistryKey.ofRegistry(Identifier.ofVanilla("action"));
     public static final RegistryKey<Registry<SequenceHandlerType<?>>> SEQUENCE_HANDLER_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("sequence_handler_type"));

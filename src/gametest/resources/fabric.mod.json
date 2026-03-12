@@ -32,6 +32,7 @@
       "net.errorcraft.itematic.gametest.item.BowTestSuite",
       "net.errorcraft.itematic.gametest.item.BrushTestSuite",
       "net.errorcraft.itematic.gametest.item.BundleTestSuite",
+      "net.errorcraft.itematic.gametest.item.CompassTestSuite",
       "net.errorcraft.itematic.gametest.item.CrossbowTestSuite",
       "net.errorcraft.itematic.gametest.item.FishingRodTestSuite",
       "net.errorcraft.itematic.gametest.item.FlowerPotItemTestSuite",
