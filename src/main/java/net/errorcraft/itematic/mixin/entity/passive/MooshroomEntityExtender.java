@@ -11,7 +11,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -86,17 +85,6 @@ public abstract class MooshroomEntityExtender extends MobEntityExtender {
     )
     private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.SHEARS);
-    }
-
-    @Redirect(
-        method = "interactMob",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
-        )
-    )
-    private boolean isInForSmallFlowersUseItemComponentCheck(ItemStack instance, TagKey<Item> tag) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT);
     }
 
     @Redirect(

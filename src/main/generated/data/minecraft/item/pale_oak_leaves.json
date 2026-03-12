@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:pale_oak_leaves"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.3
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:pale_oak_leaves",
+    "translation_key": "block.minecraft.pale_oak_leaves"
+  }
+}

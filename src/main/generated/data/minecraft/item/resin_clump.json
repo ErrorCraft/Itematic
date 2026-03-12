@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:resin_clump"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:resin_clump",
+    "translation_key": "item.minecraft.resin_clump"
+  }
+}

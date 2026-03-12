@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
@@ -15,7 +14,6 @@ import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.placement.EntityPlacer;
 import net.errorcraft.itematic.mixin.item.DecorationItemAccessor;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
-import net.errorcraft.itematic.mixin.item.SpawnEggItemAccessor;
 import net.errorcraft.itematic.serialization.SetCodec;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
@@ -28,6 +26,7 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.RegistryEntryLookup;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -39,7 +38,6 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItemData, Set<Pass> passes) implements ItemComponent<EntityItemComponent> {
@@ -48,7 +46,6 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
         Codec.BOOL.optionalFieldOf("allow_item_data", false).forGetter(EntityItemComponent::allowItemData),
         SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(EntityItemComponent::passes)
     ).apply(instance, EntityItemComponent::new));
-    private static final MapCodec<EntityType<?>> ENTITY_TYPE_MAP_CODEC = SpawnEggItemAccessor.entityTypeMapCodec();
     private static final Text RANDOM_TEXT = DecorationItemAccessor.randomText();
 
     public static EntityItemComponent of(EntityInitializer<?> entity) {
@@ -139,16 +136,18 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
         }
     }
 
-    public EntityInitializer<?> getEntityInitializer(ItemStack stack) {
+    public EntityInitializer<?> getEntityInitializer(ItemStack stack, RegistryWrapper.WrapperLookup registries) {
         if (!this.allowItemData) {
             return this.entity;
         }
 
         NbtComponent entityData = stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT);
-        Optional<EntityInitializer<?>> initializer = entityData.get(ENTITY_TYPE_MAP_CODEC)
-            .result()
-            .map(SimpleEntityInitializer::new);
-        return initializer.orElse(this.entity);
+        EntityType<?> entityType = entityData.getRegistryValueOfId(registries, RegistryKeys.ENTITY_TYPE);
+        if (entityType == null) {
+            return this.entity;
+        }
+
+        return new SimpleEntityInitializer<>(entityType);
     }
 
     private boolean isUnuseable(Pass pass) {

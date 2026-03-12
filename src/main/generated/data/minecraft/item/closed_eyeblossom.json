@@ -1,0 +1,85 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:closed_eyeblossom"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.65
+    },
+    "minecraft:stackable": 64,
+    "minecraft:suspicious_effect_ingredient": {
+      "effects": [
+        {
+          "id": "minecraft:nausea",
+          "duration": 140
+        }
+      ]
+    }
+  },
+  "display": {
+    "model": "minecraft:closed_eyeblossom",
+    "translation_key": "block.minecraft.closed_eyeblossom"
+  },
+  "events": {
+    "minecraft:use_on_block": {
+      "action": {
+        "type": "minecraft:sequence",
+        "handler": "minecraft:passing",
+        "entries": [
+          {
+            "action": {
+              "type": "minecraft:set_block_state",
+              "position": "target",
+              "state": {
+                "Name": "minecraft:potted_closed_eyeblossom"
+              }
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:invoke_game_event",
+              "event": "minecraft:block_change",
+              "entity": "this",
+              "position": "target"
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:increment_stat",
+              "entity": "this",
+              "stat": {
+                "type": "minecraft:custom",
+                "entry": "minecraft:pot_flower"
+              }
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:decrement_item",
+              "amount": 1
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:swing_hand"
+            }
+          }
+        ]
+      },
+      "requirements": {
+        "conditions": {
+          "condition": "minecraft:location_check",
+          "predicate": {
+            "block": {
+              "blocks": "minecraft:flower_pot"
+            }
+          }
+        },
+        "context": {
+          "entity": "this",
+          "position": "target"
+        }
+      }
+    }
+  }
+}

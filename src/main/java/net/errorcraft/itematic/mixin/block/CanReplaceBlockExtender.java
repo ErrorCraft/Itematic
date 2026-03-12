@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.block;
 
-import net.errorcraft.itematic.item.ItemUtil;
 import net.minecraft.block.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +21,6 @@ public class CanReplaceBlockExtender extends Block {
         )
     )
     private boolean isOfUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemUtil.keyFromBlock(this));
+        return instance.itematic$isOf(this.itematic$asItemKey());
     }
 }

@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(FlowerPotBlock.class)
-public class FlowerPotBlockExtender extends BlockExtender {
+public abstract class FlowerPotBlockExtender extends AbstractBlockExtender {
     /**
      * @author ErrorCraft
      * @reason Uses the Action implementation for data-driven items.

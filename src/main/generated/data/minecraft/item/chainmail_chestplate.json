@@ -19,8 +19,8 @@
       "enchantability": 12
     },
     "minecraft:equipment": {
+      "asset_id": "minecraft:chainmail",
       "equip_sound": "minecraft:item.armor.equip_chain",
-      "model": "minecraft:chainmail",
       "slot": "chest"
     },
     "minecraft:repairable": {

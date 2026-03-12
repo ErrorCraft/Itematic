@@ -87,6 +87,7 @@
     "minecraft:honeycomb_block",
     "minecraft:slime_block",
     "minecraft:honey_block",
+    "minecraft:resin_block",
     {
       "type": "tag",
       "tag": "minecraft:item_group/froglights"

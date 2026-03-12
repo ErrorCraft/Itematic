@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.access.block.BlockAccess;
+import net.errorcraft.itematic.access.block.AbstractBlockAccess;
 import net.errorcraft.itematic.item.ItemAccess;
 import net.errorcraft.itematic.item.UnplaceableItemPlacementContext;
 import net.minecraft.block.Block;
@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(ScaffoldingBlock.class)
-public class ScaffoldingBlockExtender extends Block implements BlockAccess {
+public class ScaffoldingBlockExtender extends Block implements AbstractBlockAccess {
     @Shadow
     @Final
     public static int MAX_DISTANCE;
@@ -47,6 +47,7 @@ public class ScaffoldingBlockExtender extends Block implements BlockAccess {
                 .map(RegistryEntry::value)
                 .orElse(null);
         }
+
         return null;
     }
 
@@ -57,9 +58,11 @@ public class ScaffoldingBlockExtender extends Block implements BlockAccess {
         if (world.getBlockState(pos).isOf(this)) {
             return this.scaffoldingPlacementContext(context, world, pos);
         }
+
         if (ScaffoldingBlock.calculateDistance(world, pos) == MAX_DISTANCE) {
             return UnplaceableItemPlacementContext.of(context);
         }
+
         return context;
     }
 
@@ -72,15 +75,18 @@ public class ScaffoldingBlockExtender extends Block implements BlockAccess {
             if (this.tooHigh(context, world, mutable)) {
                 break;
             }
+
             BlockState state = world.getBlockState(mutable);
             if (!state.isOf(this)) {
                 return this.offsetPlacementContext(context, state, mutable, direction);
             }
+
             mutable.move(direction);
             if (direction.getAxis().isHorizontal()) {
                 distance++;
             }
         }
+
         return UnplaceableItemPlacementContext.of(context);
     }
 
@@ -89,9 +95,11 @@ public class ScaffoldingBlockExtender extends Block implements BlockAccess {
         if (context.shouldCancelInteraction()) {
             return context.hitsInsideBlock() ? context.getSide().getOpposite() : context.getSide();
         }
+
         if (context.getSide() == Direction.UP) {
             return context.getHorizontalPlayerFacing();
         }
+
         return Direction.UP;
     }
 
@@ -114,6 +122,7 @@ public class ScaffoldingBlockExtender extends Block implements BlockAccess {
         if (state.canReplace(context)) {
             return ItemPlacementContext.offset(context, pos, direction);
         }
+
         return UnplaceableItemPlacementContext.of(context);
     }
 }

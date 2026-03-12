@@ -1,0 +1,20 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": {
+        "type": "minecraft:attached_to_side",
+        "attached_block": "minecraft:pale_oak_sign",
+        "attached_side": "down",
+        "other_block": "minecraft:pale_oak_wall_sign"
+      }
+    },
+    "minecraft:fuel": {
+      "ticks": 200
+    },
+    "minecraft:stackable": 16
+  },
+  "display": {
+    "model": "minecraft:pale_oak_sign",
+    "translation_key": "block.minecraft.pale_oak_sign"
+  }
+}

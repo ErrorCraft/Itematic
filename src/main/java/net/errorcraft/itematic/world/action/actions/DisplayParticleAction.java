@@ -12,10 +12,10 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 
 public record DisplayParticleAction(ActionContextParameter position, ParticleEffect particle, int count, Vec3dProvider offset, Vec3dProvider delta, double speed, boolean force) implements Action<DisplayParticleAction> {
     public static final MapCodec<DisplayParticleAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -40,19 +40,23 @@ public record DisplayParticleAction(ActionContextParameter position, ParticleEff
     @Override
     public boolean execute(ActionContext context) {
         ServerWorld world = context.world();
-        Vec3d pos = context.position(this.position).add(this.offset.get(world.getRandom()));
-        return this.spawnParticles(world, pos);
-    }
-
-    private boolean spawnParticles(ServerWorld world, Vec3d pos) {
-        Vec3d delta = this.delta.get(world.getRandom());
-        int count = 0;
-        for (ServerPlayerEntity player : world.getPlayers()) {
-            if (world.spawnParticles(player, this.particle, this.force, pos.getX(), pos.getY(), pos.getZ(), this.count, delta.getX(), delta.getY(), delta.getZ(), this.speed)) {
-                count++;
-            }
-        }
-        return count > 0;
+        Random random = world.getRandom();
+        Vec3d pos = context.position(this.position).add(this.offset.get(random));
+        Vec3d delta = this.delta.get(random);
+        int amountOfPlayersShown = world.spawnParticles(
+            this.particle,
+            this.force,
+            false,
+            pos.getX(),
+            pos.getY(),
+            pos.getZ(),
+            this.count,
+            delta.getX(),
+            delta.getY(),
+            delta.getZ(),
+            this.speed
+        );
+        return amountOfPlayersShown > 0;
     }
 
     public static class Builder {

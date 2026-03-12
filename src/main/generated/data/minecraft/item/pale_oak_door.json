@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:pale_oak_door"
+    },
+    "minecraft:fuel": {
+      "ticks": 200
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:pale_oak_door",
+    "translation_key": "block.minecraft.pale_oak_door"
+  }
+}

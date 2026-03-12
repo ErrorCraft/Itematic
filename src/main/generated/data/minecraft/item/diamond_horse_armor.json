@@ -21,8 +21,8 @@
     },
     "minecraft:equipment": {
       "allowed_entities": "minecraft:horse",
+      "asset_id": "minecraft:diamond",
       "equip_sound": "minecraft:item.armor.equip_diamond",
-      "model": "minecraft:diamond",
       "slot": "body"
     },
     "minecraft:stackable": 1
