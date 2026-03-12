@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:resin_block"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:resin_block",
+    "translation_key": "block.minecraft.resin_block"
+  }
+}

@@ -15,7 +15,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPistonHeadGivesPistonItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.PISTON));
     }
 
@@ -23,7 +23,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnStickyPistonHeadGivesStickyPistonItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.STICKY_PISTON));
     }
 
@@ -31,7 +31,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnRedstoneWireGivesRedstoneItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.REDSTONE));
     }
 
@@ -39,7 +39,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnTripwireGivesStringItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.STRING));
     }
 
@@ -47,7 +47,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnWallTorchGivesTorchItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.TORCH));
     }
 
@@ -55,7 +55,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnRedstoneWallTorchGivesRedstoneTorchItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.REDSTONE_TORCH));
     }
 
@@ -63,7 +63,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnSoulWallTorchGivesSoulTorchItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.SOUL_TORCH));
     }
 
@@ -71,7 +71,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnOakWallSignGivesOakSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.OAK_SIGN));
     }
 
@@ -79,7 +79,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnSpruceWallSignGivesSpruceSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.SPRUCE_SIGN));
     }
 
@@ -87,7 +87,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBirchWallSignGivesBirchSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BIRCH_SIGN));
     }
 
@@ -95,7 +95,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnAcaciaWallSignGivesAcaciaSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.ACACIA_SIGN));
     }
 
@@ -103,15 +103,23 @@ public class PickBlockTestSuite {
     public void getPickStackOnCherryWallSignGivesCherrySignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CHERRY_SIGN));
+    }
+
+    @GameTest(templateName = "itematic:block.pale_oak_wall_sign")
+    public void getPickStackOnPaleOakWallSignGivesPaleOakSignItemStack(TestContext context) {
+        BlockState state = context.getBlockState(BLOCK_POSITION);
+        BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
+        context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.PALE_OAK_SIGN));
     }
 
     @GameTest(templateName = "itematic:block.jungle_wall_sign")
     public void getPickStackOnJungleWallSignGivesJungleSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.JUNGLE_SIGN));
     }
 
@@ -119,7 +127,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnDarkOakWallSignGivesDarkOakSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.DARK_OAK_SIGN));
     }
 
@@ -127,7 +135,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnMangroveWallSignGivesMangroveSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.MANGROVE_SIGN));
     }
 
@@ -135,7 +143,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBambooWallSignGivesBambooSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BAMBOO_SIGN));
     }
 
@@ -143,7 +151,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnCrimsonWallSignGivesCrimsonSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CRIMSON_SIGN));
     }
 
@@ -151,7 +159,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnWarpedWallSignGivesWarpedSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.WARPED_SIGN));
     }
 
@@ -159,7 +167,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnOakWallHangingSignGivesOakHangingSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.OAK_HANGING_SIGN));
     }
 
@@ -167,7 +175,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnSpruceWallHangingSignGivesSpruceHangingSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.SPRUCE_HANGING_SIGN));
     }
 
@@ -175,7 +183,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBirchWallHangingSignGivesBirchHangingSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BIRCH_HANGING_SIGN));
     }
 
@@ -183,7 +191,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnAcaciaWallHangingSignGivesAcaciaHangingSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.ACACIA_HANGING_SIGN));
     }
 
@@ -191,15 +199,23 @@ public class PickBlockTestSuite {
     public void getPickStackOnCherryWallHangingSignGivesCherryHangingSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CHERRY_HANGING_SIGN));
+    }
+
+    @GameTest(templateName = "itematic:block.pale_oak_wall_hanging_sign")
+    public void getPickStackOnPaleOakWallHangingSignGivesPaleOakHangingSignItemStack(TestContext context) {
+        BlockState state = context.getBlockState(BLOCK_POSITION);
+        BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
+        context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.PALE_OAK_HANGING_SIGN));
     }
 
     @GameTest(templateName = "itematic:block.jungle_wall_hanging_sign")
     public void getPickStackOnJungleWallHangingSignGivesJungleHangingSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.JUNGLE_HANGING_SIGN));
     }
 
@@ -207,7 +223,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnDarkOakWallHangingSignGivesDarkOakHangingSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.DARK_OAK_HANGING_SIGN));
     }
 
@@ -215,7 +231,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnMangroveWallHangingSignGivesMangroveHangingSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.MANGROVE_HANGING_SIGN));
     }
 
@@ -223,7 +239,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnCrimsonWallHangingSignGivesCrimsonHangingSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CRIMSON_HANGING_SIGN));
     }
 
@@ -231,7 +247,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnWarpedWallHangingSignGivesWarpedHangingSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.WARPED_HANGING_SIGN));
     }
 
@@ -239,7 +255,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBambooWallHangingSignGivesBambooHangingSignItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BAMBOO_HANGING_SIGN));
     }
 
@@ -247,7 +263,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnAttachedPumpkinStemGivesPumpkinSeedsItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.PUMPKIN_SEEDS));
     }
 
@@ -255,7 +271,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnAttachedMelonStemGivesMelonSeedsItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.MELON_SEEDS));
     }
 
@@ -263,7 +279,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPumpkinStemGivesPumpkinSeedsItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.PUMPKIN_SEEDS));
     }
 
@@ -271,7 +287,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnMelonStemGivesMelonSeedsItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.MELON_SEEDS));
     }
 
@@ -279,7 +295,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnCocoaGivesCocoaBeansItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.COCOA_BEANS));
     }
 
@@ -287,7 +303,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnCarrotsGivesCarrotItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CARROT));
     }
 
@@ -295,7 +311,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPotatoesGivesPotatoItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.POTATO));
     }
 
@@ -303,7 +319,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnTorchflowerCropGivesTorchflowerSeedsItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.TORCHFLOWER_SEEDS));
     }
 
@@ -311,7 +327,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPitcherCropGivesPitcherPodItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.PITCHER_POD));
     }
 
@@ -319,7 +335,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBeetrootsGivesBeetrootSeedsItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BEETROOT_SEEDS));
     }
 
@@ -327,7 +343,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnCaveVinesGivesGlowBerriesItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.GLOW_BERRIES));
     }
 
@@ -335,7 +351,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnCaveVinesPlantGivesGlowBerriesItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.GLOW_BERRIES));
     }
 
@@ -343,7 +359,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBigDripleafStemGivesBigDripleafItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BIG_DRIPLEAF));
     }
 
@@ -351,7 +367,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnTallSeagrassGivesSeagrassItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.SEAGRASS));
     }
 
@@ -359,7 +375,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnKelpPlantGivesKelpItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.KELP));
     }
 
@@ -367,7 +383,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnWaterCauldronGivesCauldronItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAULDRON));
     }
 
@@ -375,7 +391,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnLavaCauldronGivesCauldronItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAULDRON));
     }
 
@@ -383,7 +399,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPowderSnowCauldronGivesCauldronItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAULDRON));
     }
 
@@ -391,7 +407,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPowderSnowGivesPowderSnowBucketItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.POWDER_SNOW_BUCKET));
     }
 
@@ -399,7 +415,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedTorchflowerGivesTorchflowerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.TORCHFLOWER));
     }
 
@@ -407,7 +423,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedOakSaplingGivesOakSaplingItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.OAK_SAPLING));
     }
 
@@ -415,7 +431,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedSpruceSaplingGivesSpruceSaplingItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.SPRUCE_SAPLING));
     }
 
@@ -423,7 +439,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedBirchSaplingGivesBirchSaplingItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BIRCH_SAPLING));
     }
 
@@ -431,7 +447,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedJungleSaplingGivesJungleSaplingItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.JUNGLE_SAPLING));
     }
 
@@ -439,7 +455,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedAcaciaSaplingGivesAcaciaSaplingItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.ACACIA_SAPLING));
     }
 
@@ -447,7 +463,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedCherrySaplingGivesCherrySaplingItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CHERRY_SAPLING));
     }
 
@@ -455,7 +471,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedDarkOakSaplingGivesDarkOakSaplingItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.DARK_OAK_SAPLING));
     }
 
@@ -463,7 +479,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedMangrovePropaguleGivesMangrovePropaguleItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.MANGROVE_PROPAGULE));
     }
 
@@ -471,7 +487,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedFernGivesFernItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.FERN));
     }
 
@@ -479,7 +495,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedDandelionGivesDandelionItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.DANDELION));
     }
 
@@ -487,7 +503,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedPoppyGivesPoppyItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.POPPY));
     }
 
@@ -495,7 +511,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedBlueOrchidGivesBlueOrchidItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BLUE_ORCHID));
     }
 
@@ -503,7 +519,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedAlliumGivesAlliumItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.ALLIUM));
     }
 
@@ -511,7 +527,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedAzureBluetGivesAzureBluetItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.AZURE_BLUET));
     }
 
@@ -519,7 +535,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedRedTulipGivesRedTulipItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.RED_TULIP));
     }
 
@@ -527,7 +543,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedOrangeTulipGivesOrangeTulipItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.ORANGE_TULIP));
     }
 
@@ -535,7 +551,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedWhiteTulipGivesWhiteTulipItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.WHITE_TULIP));
     }
 
@@ -543,7 +559,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedPinkTulipGivesPinkTulipItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.PINK_TULIP));
     }
 
@@ -551,7 +567,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedOxeyeDaisyGivesOxeyeDaisyItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.OXEYE_DAISY));
     }
 
@@ -559,7 +575,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedCornflowerGivesCornflowerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CORNFLOWER));
     }
 
@@ -567,7 +583,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedLilyOfTheValleyGivesLilyOfTheValleyItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.LILY_OF_THE_VALLEY));
     }
 
@@ -575,7 +591,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedWitherRoseGivesWitherRoseItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.WITHER_ROSE));
     }
 
@@ -583,7 +599,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedRedMushroomGivesRedMushroomItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.RED_MUSHROOM));
     }
 
@@ -591,7 +607,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedBrownMushroomGivesBrownMushroomItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BROWN_MUSHROOM));
     }
 
@@ -599,7 +615,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedDeadBushGivesDeadBushItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.DEAD_BUSH));
     }
 
@@ -607,7 +623,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedCactusGivesCactusItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CACTUS));
     }
 
@@ -615,7 +631,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedBambooGivesBambooItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BAMBOO));
     }
 
@@ -623,7 +639,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedCrimsonFungusGivesCrimsonFungusItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CRIMSON_FUNGUS));
     }
 
@@ -631,7 +647,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedWarpedFungusGivesWarpedFungusItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.WARPED_FUNGUS));
     }
 
@@ -639,7 +655,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedCrimsonRootsGivesCrimsonRootsItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CRIMSON_ROOTS));
     }
 
@@ -647,7 +663,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedWarpedRootsGivesWarpedRootsItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.WARPED_ROOTS));
     }
 
@@ -655,7 +671,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedAzaleaBushGivesAzaleaItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.AZALEA));
     }
 
@@ -663,15 +679,31 @@ public class PickBlockTestSuite {
     public void getPickStackOnPottedFloweringAzaleaBushGivesFloweringAzaleaItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.FLOWERING_AZALEA));
+    }
+
+    @GameTest(templateName = "itematic:block.potted_open_eyeblossom")
+    public void getPickStackOnPottedOpenEyeblossomGivesOpenEyeblossomItemStack(TestContext context) {
+        BlockState state = context.getBlockState(BLOCK_POSITION);
+        BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
+        context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.OPEN_EYEBLOSSOM));
+    }
+
+    @GameTest(templateName = "itematic:block.potted_closed_eyeblossom")
+    public void getPickStackOnPottedClosedEyeblossomGivesClosedEyeblossomItemStack(TestContext context) {
+        BlockState state = context.getBlockState(BLOCK_POSITION);
+        BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
+        context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CLOSED_EYEBLOSSOM));
     }
 
     @GameTest(templateName = "itematic:block.skeleton_wall_skull")
     public void getPickStackOnSkeletonWallSkullGivesSkeletonSkullItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.SKELETON_SKULL));
     }
 
@@ -679,7 +711,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnWitherSkeletonWallSkullGivesWitherSkeletonSkullItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.WITHER_SKELETON_SKULL));
     }
 
@@ -687,7 +719,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnZombieWallHeadGivesZombieHeadItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.ZOMBIE_HEAD));
     }
 
@@ -695,7 +727,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPlayerWallHeadGivesPlayerHeadItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.PLAYER_HEAD));
     }
 
@@ -703,7 +735,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnCreeperWallHeadGivesCreeperHeadItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CREEPER_HEAD));
     }
 
@@ -711,7 +743,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnDragonWallHeadGivesDragonHeadItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.DRAGON_HEAD));
     }
 
@@ -719,7 +751,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPiglinWallHeadGivesPiglinHeadItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.PIGLIN_HEAD));
     }
 
@@ -727,7 +759,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnWhiteWallBannerGivesWhiteBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.WHITE_BANNER));
     }
 
@@ -735,7 +767,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnOrangeWallBannerGivesOrangeBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.ORANGE_BANNER));
     }
 
@@ -743,7 +775,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnMagentaWallBannerGivesMagentaBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.MAGENTA_BANNER));
     }
 
@@ -751,7 +783,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnLightBlueWallBannerGivesLightBlueBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.LIGHT_BLUE_BANNER));
     }
 
@@ -759,7 +791,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnYellowWallBannerGivesYellowBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.YELLOW_BANNER));
     }
 
@@ -767,7 +799,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnLimeWallBannerGivesLimeBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.LIME_BANNER));
     }
 
@@ -775,7 +807,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPinkWallBannerGivesPinkBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.PINK_BANNER));
     }
 
@@ -783,7 +815,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnGrayWallBannerGivesGrayBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.GRAY_BANNER));
     }
 
@@ -791,7 +823,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnLightGrayWallBannerGivesLightGrayBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.LIGHT_GRAY_BANNER));
     }
 
@@ -799,7 +831,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnCyanWallBannerGivesCyanBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CYAN_BANNER));
     }
 
@@ -807,7 +839,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPurpleWallBannerGivesPurpleBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.PURPLE_BANNER));
     }
 
@@ -815,7 +847,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBlueWallBannerGivesBlueBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BLUE_BANNER));
     }
 
@@ -823,7 +855,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBrownWallBannerGivesBrownBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BROWN_BANNER));
     }
 
@@ -831,7 +863,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnGreenWallBannerGivesGreenBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.GREEN_BANNER));
     }
 
@@ -839,7 +871,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnRedWallBannerGivesRedBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.RED_BANNER));
     }
 
@@ -847,7 +879,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBlackWallBannerGivesBlackBannerItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BLACK_BANNER));
     }
 
@@ -855,7 +887,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnDeadTubeCoralWallFanGivesDeadTubeCoralFanItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.DEAD_TUBE_CORAL_FAN));
     }
 
@@ -863,7 +895,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnDeadBrainCoralWallFanGivesDeadBrainCoralFanItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.DEAD_BRAIN_CORAL_FAN));
     }
 
@@ -871,7 +903,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnDeadBubbleCoralWallFanGivesDeadBubbleCoralFanItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.DEAD_BUBBLE_CORAL_FAN));
     }
 
@@ -879,7 +911,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnDeadFireCoralWallFanGivesDeadFireCoralFanItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.DEAD_FIRE_CORAL_FAN));
     }
 
@@ -887,7 +919,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnDeadHornCoralWallFanGivesDeadHornCoralFanItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.DEAD_HORN_CORAL_FAN));
     }
 
@@ -895,7 +927,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnTubeCoralWallFanGivesTubeCoralFanItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.TUBE_CORAL_FAN));
     }
 
@@ -903,7 +935,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBrainCoralWallFanGivesBrainCoralFanItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BRAIN_CORAL_FAN));
     }
 
@@ -911,7 +943,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBubbleCoralWallFanGivesBubbleCoralFanItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BUBBLE_CORAL_FAN));
     }
 
@@ -919,7 +951,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnFireCoralWallFanGivesFireCoralFanItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.FIRE_CORAL_FAN));
     }
 
@@ -927,7 +959,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnHornCoralWallFanGivesHornCoralFanItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.HORN_CORAL_FAN));
     }
 
@@ -935,7 +967,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBambooSaplingGivesBambooItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.BAMBOO));
     }
 
@@ -943,7 +975,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnSweetBerryBushGivesSweetBerriesItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.SWEET_BERRIES));
     }
 
@@ -951,7 +983,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnWeepingVinesPlantGivesWeepingVinesItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.WEEPING_VINES));
     }
 
@@ -959,7 +991,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnTwistingVinesPlantGivesTwistingVinesItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.TWISTING_VINES));
     }
 
@@ -967,7 +999,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -975,7 +1007,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnWhiteCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -983,7 +1015,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnOrangeCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -991,7 +1023,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnMagentaCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -999,7 +1031,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnLightBlueCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -1007,7 +1039,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnYellowCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -1015,7 +1047,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnLimeCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -1023,7 +1055,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPinkCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -1031,7 +1063,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnGrayCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -1039,7 +1071,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnLightGrayCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -1047,7 +1079,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnCyanCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -1055,7 +1087,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnPurpleCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -1063,7 +1095,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBlueCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -1071,7 +1103,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBrownCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -1079,7 +1111,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnGreenCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -1087,7 +1119,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnRedCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 
@@ -1095,7 +1127,7 @@ public class PickBlockTestSuite {
     public void getPickStackOnBlackCandleCakeGivesCakeItemStack(TestContext context) {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.getAbsolutePos(BLOCK_POSITION);
-        ItemStack stack = state.getBlock().getPickStack(context.getWorld(), absolutePos, state);
+        ItemStack stack = state.getPickStack(context.getWorld(), absolutePos, false);
         context.addInstantFinalTask(() -> Assert.itemStackIsOf(stack, ItemKeys.CAKE));
     }
 }

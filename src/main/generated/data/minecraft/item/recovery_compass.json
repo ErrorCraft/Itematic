@@ -1,8 +1,5 @@
 {
   "behavior": {
-    "minecraft:pointable": {
-      "points_to": "minecraft:last_death"
-    },
     "minecraft:stackable": 64
   },
   "display": {

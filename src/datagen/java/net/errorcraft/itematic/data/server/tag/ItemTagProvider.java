@@ -167,6 +167,20 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.CHERRY_TRAPDOOR)
             .add(ItemKeys.CHERRY_PRESSURE_PLATE)
             .add(ItemKeys.CHERRY_BUTTON);
+        this.getOrCreateTagBuilder(ItematicItemTags.PALE_OAK_BUILDING_BLOCKS)
+            .add(ItemKeys.PALE_OAK_LOG)
+            .add(ItemKeys.PALE_OAK_WOOD)
+            .add(ItemKeys.STRIPPED_PALE_OAK_LOG)
+            .add(ItemKeys.STRIPPED_PALE_OAK_WOOD)
+            .add(ItemKeys.PALE_OAK_PLANKS)
+            .add(ItemKeys.PALE_OAK_STAIRS)
+            .add(ItemKeys.PALE_OAK_SLAB)
+            .add(ItemKeys.PALE_OAK_FENCE)
+            .add(ItemKeys.PALE_OAK_FENCE_GATE)
+            .add(ItemKeys.PALE_OAK_DOOR)
+            .add(ItemKeys.PALE_OAK_TRAPDOOR)
+            .add(ItemKeys.PALE_OAK_PRESSURE_PLATE)
+            .add(ItemKeys.PALE_OAK_BUTTON);
         this.getOrCreateTagBuilder(ItematicItemTags.BAMBOO_BUILDING_BLOCKS)
             .add(ItemKeys.BAMBOO_BLOCK)
             .add(ItemKeys.STRIPPED_BAMBOO_BLOCK)
@@ -219,6 +233,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .addTag(ItematicItemTags.DARK_OAK_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.MANGROVE_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.CHERRY_BUILDING_BLOCKS)
+            .addTag(ItematicItemTags.PALE_OAK_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.BAMBOO_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.CRIMSON_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.WARPED_BUILDING_BLOCKS);
@@ -327,6 +342,12 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MUD_BRICK_STAIRS)
             .add(ItemKeys.MUD_BRICK_SLAB)
             .add(ItemKeys.MUD_BRICK_WALL);
+        this.getOrCreateTagBuilder(ItematicItemTags.RESIN_BRICK_BUILDING_BLOCKS)
+            .add(ItemKeys.RESIN_BRICKS)
+            .add(ItemKeys.RESIN_BRICK_STAIRS)
+            .add(ItemKeys.RESIN_BRICK_SLAB)
+            .add(ItemKeys.RESIN_BRICK_WALL)
+            .add(ItemKeys.CHISELED_RESIN_BRICKS);
         this.getOrCreateTagBuilder(ItematicItemTags.SANDSTONE_BUILDING_BLOCKS)
             .add(ItemKeys.SANDSTONE)
             .add(ItemKeys.SANDSTONE_STAIRS)
@@ -437,6 +458,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .addTag(ItematicItemTags.BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.PACKED_MUD)
             .addTag(ItematicItemTags.MUD_BRICK_BUILDING_BLOCKS)
+            .addTag(ItematicItemTags.RESIN_BRICK_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.SANDSTONE_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.SMOOTH_SANDSTONE_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.CUT_SANDSTONE_BUILDING_BLOCKS)
@@ -803,7 +825,10 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.SNOW);
         this.getOrCreateTagBuilder(ItematicItemTags.MOSS_BLOCKS)
             .add(ItemKeys.MOSS_BLOCK)
-            .add(ItemKeys.MOSS_CARPET);
+            .add(ItemKeys.MOSS_CARPET)
+            .add(ItemKeys.PALE_MOSS_BLOCK)
+            .add(ItemKeys.PALE_MOSS_CARPET)
+            .add(ItemKeys.PALE_HANGING_MOSS);
         this.getOrCreateTagBuilder(ItematicItemTags.STONE_LIKE_BLOCKS)
             .add(ItemKeys.STONE)
             .add(ItemKeys.DEEPSLATE)
@@ -864,6 +889,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MANGROVE_ROOTS)
             .add(ItemKeys.MUDDY_MANGROVE_ROOTS)
             .add(ItemKeys.CHERRY_LOG)
+            .add(ItemKeys.PALE_OAK_LOG)
             .add(ItemKeys.MUSHROOM_STEM)
             .add(ItemKeys.CRIMSON_STEM)
             .add(ItemKeys.WARPED_STEM);
@@ -876,6 +902,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.DARK_OAK_LEAVES)
             .add(ItemKeys.MANGROVE_LEAVES)
             .add(ItemKeys.CHERRY_LEAVES)
+            .add(ItemKeys.PALE_OAK_LEAVES)
             .add(ItemKeys.AZALEA_LEAVES)
             .add(ItemKeys.FLOWERING_AZALEA_LEAVES);
         this.getOrCreateTagBuilder(ItematicItemTags.MUSHROOM_LIKE_BLOCKS)
@@ -892,7 +919,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.ACACIA_SAPLING)
             .add(ItemKeys.DARK_OAK_SAPLING)
             .add(ItemKeys.MANGROVE_PROPAGULE)
-            .add(ItemKeys.CHERRY_SAPLING);
+            .add(ItemKeys.CHERRY_SAPLING)
+            .add(ItemKeys.PALE_OAK_SAPLING);
         this.getOrCreateTagBuilder(ItematicItemTags.PLANTS)
             .add(ItemKeys.AZALEA)
             .add(ItemKeys.FLOWERING_AZALEA)
@@ -904,6 +932,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.FERN)
             .add(ItemKeys.DEAD_BUSH)
             .add(ItemKeys.DANDELION)
+            .add(ItemKeys.OPEN_EYEBLOSSOM)
+            .add(ItemKeys.CLOSED_EYEBLOSSOM)
             .add(ItemKeys.POPPY)
             .add(ItemKeys.BLUE_ORCHID)
             .add(ItemKeys.ALLIUM)
@@ -1054,6 +1084,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MANGROVE_HANGING_SIGN)
             .add(ItemKeys.CHERRY_SIGN)
             .add(ItemKeys.CHERRY_HANGING_SIGN)
+            .add(ItemKeys.PALE_OAK_SIGN)
+            .add(ItemKeys.PALE_OAK_HANGING_SIGN)
             .add(ItemKeys.BAMBOO_SIGN)
             .add(ItemKeys.BAMBOO_HANGING_SIGN)
             .add(ItemKeys.CRIMSON_SIGN)
@@ -1159,6 +1191,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MANGROVE_CHEST_BOAT)
             .add(ItemKeys.CHERRY_BOAT)
             .add(ItemKeys.CHERRY_CHEST_BOAT)
+            .add(ItemKeys.PALE_OAK_BOAT)
+            .add(ItemKeys.PALE_OAK_CHEST_BOAT)
             .add(ItemKeys.BAMBOO_RAFT)
             .add(ItemKeys.BAMBOO_CHEST_RAFT);
         this.getOrCreateTagBuilder(ItematicItemTags.MUSIC_DISCS)

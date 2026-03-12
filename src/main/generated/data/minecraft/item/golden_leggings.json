@@ -19,8 +19,8 @@
       "enchantability": 25
     },
     "minecraft:equipment": {
+      "asset_id": "minecraft:gold",
       "equip_sound": "minecraft:item.armor.equip_gold",
-      "model": "minecraft:gold",
       "slot": "legs"
     },
     "minecraft:repairable": {

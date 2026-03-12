@@ -1,12 +1,7 @@
 {
   "behavior": {
     "minecraft:firework_explosion_holder": {},
-    "minecraft:stackable": 64,
-    "minecraft:tinted": {
-      "tint": {
-        "type": "minecraft:firework"
-      }
-    }
+    "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:firework_star",

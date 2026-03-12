@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -33,7 +34,10 @@ public abstract class DrownedEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = { "initEquipment", "shootAt" },
+        method = {
+            "initEquipment",
+            "shootAt"
+        },
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
@@ -54,7 +58,8 @@ public abstract class DrownedEntityExtender extends MobEntityExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;TRIDENT:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/item/Items;TRIDENT:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )
@@ -72,29 +77,13 @@ public abstract class DrownedEntityExtender extends MobEntityExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;NAUTILUS_SHELL:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/item/Items;NAUTILUS_SHELL:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )
     private boolean isOfForNautilusShellUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.NAUTILUS_SHELL);
-    }
-
-    @Redirect(
-        method = "prefersNewEquipment",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/item/Items;TRIDENT:Lnet/minecraft/item/Item;"
-            )
-        )
-    )
-    private boolean isOfForTridentUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.TRIDENT);
     }
 
     @Override

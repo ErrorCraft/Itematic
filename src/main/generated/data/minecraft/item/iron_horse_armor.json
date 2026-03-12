@@ -14,8 +14,8 @@
     },
     "minecraft:equipment": {
       "allowed_entities": "minecraft:horse",
+      "asset_id": "minecraft:iron",
       "equip_sound": "minecraft:item.armor.equip_iron",
-      "model": "minecraft:iron",
       "slot": "body"
     },
     "minecraft:stackable": 1

@@ -49,6 +49,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_PLANKS = register("acacia_planks");
     public static final RegistryKey<Item> CHERRY_PLANKS = register("cherry_planks");
     public static final RegistryKey<Item> DARK_OAK_PLANKS = register("dark_oak_planks");
+    public static final RegistryKey<Item> PALE_OAK_PLANKS = register("pale_oak_planks");
     public static final RegistryKey<Item> MANGROVE_PLANKS = register("mangrove_planks");
     public static final RegistryKey<Item> BAMBOO_PLANKS = register("bamboo_planks");
     public static final RegistryKey<Item> CRIMSON_PLANKS = register("crimson_planks");
@@ -61,6 +62,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_SAPLING = register("acacia_sapling");
     public static final RegistryKey<Item> CHERRY_SAPLING = register("cherry_sapling");
     public static final RegistryKey<Item> DARK_OAK_SAPLING = register("dark_oak_sapling");
+    public static final RegistryKey<Item> PALE_OAK_SAPLING = register("pale_oak_sapling");
     public static final RegistryKey<Item> MANGROVE_PROPAGULE = register("mangrove_propagule");
     public static final RegistryKey<Item> BEDROCK = register("bedrock");
     public static final RegistryKey<Item> SAND = register("sand");
@@ -144,6 +146,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> JUNGLE_LOG = register("jungle_log");
     public static final RegistryKey<Item> ACACIA_LOG = register("acacia_log");
     public static final RegistryKey<Item> CHERRY_LOG = register("cherry_log");
+    public static final RegistryKey<Item> PALE_OAK_LOG = register("pale_oak_log");
     public static final RegistryKey<Item> DARK_OAK_LOG = register("dark_oak_log");
     public static final RegistryKey<Item> MANGROVE_LOG = register("mangrove_log");
     public static final RegistryKey<Item> MANGROVE_ROOTS = register("mangrove_roots");
@@ -158,6 +161,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> STRIPPED_ACACIA_LOG = register("stripped_acacia_log");
     public static final RegistryKey<Item> STRIPPED_CHERRY_LOG = register("stripped_cherry_log");
     public static final RegistryKey<Item> STRIPPED_DARK_OAK_LOG = register("stripped_dark_oak_log");
+    public static final RegistryKey<Item> STRIPPED_PALE_OAK_LOG = register("stripped_pale_oak_log");
     public static final RegistryKey<Item> STRIPPED_MANGROVE_LOG = register("stripped_mangrove_log");
     public static final RegistryKey<Item> STRIPPED_CRIMSON_STEM = register("stripped_crimson_stem");
     public static final RegistryKey<Item> STRIPPED_WARPED_STEM = register("stripped_warped_stem");
@@ -168,6 +172,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> STRIPPED_ACACIA_WOOD = register("stripped_acacia_wood");
     public static final RegistryKey<Item> STRIPPED_CHERRY_WOOD = register("stripped_cherry_wood");
     public static final RegistryKey<Item> STRIPPED_DARK_OAK_WOOD = register("stripped_dark_oak_wood");
+    public static final RegistryKey<Item> STRIPPED_PALE_OAK_WOOD = register("stripped_pale_oak_wood");
     public static final RegistryKey<Item> STRIPPED_MANGROVE_WOOD = register("stripped_mangrove_wood");
     public static final RegistryKey<Item> STRIPPED_CRIMSON_HYPHAE = register("stripped_crimson_hyphae");
     public static final RegistryKey<Item> STRIPPED_WARPED_HYPHAE = register("stripped_warped_hyphae");
@@ -179,6 +184,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_WOOD = register("acacia_wood");
     public static final RegistryKey<Item> CHERRY_WOOD = register("cherry_wood");
     public static final RegistryKey<Item> DARK_OAK_WOOD = register("dark_oak_wood");
+    public static final RegistryKey<Item> PALE_OAK_WOOD = register("pale_oak_wood");
     public static final RegistryKey<Item> MANGROVE_WOOD = register("mangrove_wood");
     public static final RegistryKey<Item> CRIMSON_HYPHAE = register("crimson_hyphae");
     public static final RegistryKey<Item> WARPED_HYPHAE = register("warped_hyphae");
@@ -189,6 +195,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_LEAVES = register("acacia_leaves");
     public static final RegistryKey<Item> CHERRY_LEAVES = register("cherry_leaves");
     public static final RegistryKey<Item> DARK_OAK_LEAVES = register("dark_oak_leaves");
+    public static final RegistryKey<Item> PALE_OAK_LEAVES = register("pale_oak_leaves");
     public static final RegistryKey<Item> MANGROVE_LEAVES = register("mangrove_leaves");
     public static final RegistryKey<Item> AZALEA_LEAVES = register("azalea_leaves");
     public static final RegistryKey<Item> FLOWERING_AZALEA_LEAVES = register("flowering_azalea_leaves");
@@ -225,6 +232,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> RED_WOOL = register("red_wool");
     public static final RegistryKey<Item> BLACK_WOOL = register("black_wool");
     public static final RegistryKey<Item> DANDELION = register("dandelion");
+    public static final RegistryKey<Item> OPEN_EYEBLOSSOM = register("open_eyeblossom");
+    public static final RegistryKey<Item> CLOSED_EYEBLOSSOM = register("closed_eyeblossom");
     public static final RegistryKey<Item> POPPY = register("poppy");
     public static final RegistryKey<Item> BLUE_ORCHID = register("blue_orchid");
     public static final RegistryKey<Item> ALLIUM = register("allium");
@@ -251,9 +260,12 @@ public class ItemKeys {
     public static final RegistryKey<Item> TWISTING_VINES = register("twisting_vines");
     public static final RegistryKey<Item> SUGAR_CANE = register("sugar_cane");
     public static final RegistryKey<Item> KELP = register("kelp");
-    public static final RegistryKey<Item> MOSS_CARPET = register("moss_carpet");
     public static final RegistryKey<Item> PINK_PETALS = register("pink_petals");
+    public static final RegistryKey<Item> MOSS_CARPET = register("moss_carpet");
     public static final RegistryKey<Item> MOSS_BLOCK = register("moss_block");
+    public static final RegistryKey<Item> PALE_MOSS_CARPET = register("pale_moss_carpet");
+    public static final RegistryKey<Item> PALE_HANGING_MOSS = register("pale_hanging_moss");
+    public static final RegistryKey<Item> PALE_MOSS_BLOCK = register("pale_moss_block");
     public static final RegistryKey<Item> HANGING_ROOTS = register("hanging_roots");
     public static final RegistryKey<Item> BIG_DRIPLEAF = register("big_dripleaf");
     public static final RegistryKey<Item> SMALL_DRIPLEAF = register("small_dripleaf");
@@ -265,6 +277,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_SLAB = register("acacia_slab");
     public static final RegistryKey<Item> CHERRY_SLAB = register("cherry_slab");
     public static final RegistryKey<Item> DARK_OAK_SLAB = register("dark_oak_slab");
+    public static final RegistryKey<Item> PALE_OAK_SLAB = register("pale_oak_slab");
     public static final RegistryKey<Item> MANGROVE_SLAB = register("mangrove_slab");
     public static final RegistryKey<Item> BAMBOO_SLAB = register("bamboo_slab");
     public static final RegistryKey<Item> BAMBOO_MOSAIC_SLAB = register("bamboo_mosaic_slab");
@@ -305,6 +318,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> PURPUR_PILLAR = register("purpur_pillar");
     public static final RegistryKey<Item> PURPUR_STAIRS = register("purpur_stairs");
     public static final RegistryKey<Item> SPAWNER = register("spawner");
+    public static final RegistryKey<Item> CREAKING_HEART = register("creaking_heart");
     public static final RegistryKey<Item> CHEST = register("chest");
     public static final RegistryKey<Item> CRAFTING_TABLE = register("crafting_table");
     public static final RegistryKey<Item> FARMLAND = register("farmland");
@@ -324,6 +338,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_FENCE = register("acacia_fence");
     public static final RegistryKey<Item> CHERRY_FENCE = register("cherry_fence");
     public static final RegistryKey<Item> DARK_OAK_FENCE = register("dark_oak_fence");
+    public static final RegistryKey<Item> PALE_OAK_FENCE = register("pale_oak_fence");
     public static final RegistryKey<Item> MANGROVE_FENCE = register("mangrove_fence");
     public static final RegistryKey<Item> BAMBOO_FENCE = register("bamboo_fence");
     public static final RegistryKey<Item> CRIMSON_FENCE = register("crimson_fence");
@@ -367,6 +382,13 @@ public class ItemKeys {
     public static final RegistryKey<Item> MELON = register("melon");
     public static final RegistryKey<Item> VINE = register("vine");
     public static final RegistryKey<Item> GLOW_LICHEN = register("glow_lichen");
+    public static final RegistryKey<Item> RESIN_CLUMP = register("resin_clump");
+    public static final RegistryKey<Item> RESIN_BLOCK = register("resin_block");
+    public static final RegistryKey<Item> RESIN_BRICKS = register("resin_bricks");
+    public static final RegistryKey<Item> RESIN_BRICK_STAIRS = register("resin_brick_stairs");
+    public static final RegistryKey<Item> RESIN_BRICK_SLAB = register("resin_brick_slab");
+    public static final RegistryKey<Item> RESIN_BRICK_WALL = register("resin_brick_wall");
+    public static final RegistryKey<Item> CHISELED_RESIN_BRICKS = register("chiseled_resin_bricks");
     public static final RegistryKey<Item> BRICK_STAIRS = register("brick_stairs");
     public static final RegistryKey<Item> STONE_BRICK_STAIRS = register("stone_brick_stairs");
     public static final RegistryKey<Item> MUD_BRICK_STAIRS = register("mud_brick_stairs");
@@ -396,6 +418,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_STAIRS = register("acacia_stairs");
     public static final RegistryKey<Item> CHERRY_STAIRS = register("cherry_stairs");
     public static final RegistryKey<Item> DARK_OAK_STAIRS = register("dark_oak_stairs");
+    public static final RegistryKey<Item> PALE_OAK_STAIRS = register("pale_oak_stairs");
     public static final RegistryKey<Item> MANGROVE_STAIRS = register("mangrove_stairs");
     public static final RegistryKey<Item> BAMBOO_STAIRS = register("bamboo_stairs");
     public static final RegistryKey<Item> BAMBOO_MOSAIC_STAIRS = register("bamboo_mosaic_stairs");
@@ -697,6 +720,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_BUTTON = register("acacia_button");
     public static final RegistryKey<Item> CHERRY_BUTTON = register("cherry_button");
     public static final RegistryKey<Item> DARK_OAK_BUTTON = register("dark_oak_button");
+    public static final RegistryKey<Item> PALE_OAK_BUTTON = register("pale_oak_button");
     public static final RegistryKey<Item> MANGROVE_BUTTON = register("mangrove_button");
     public static final RegistryKey<Item> BAMBOO_BUTTON = register("bamboo_button");
     public static final RegistryKey<Item> CRIMSON_BUTTON = register("crimson_button");
@@ -712,6 +736,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_PRESSURE_PLATE = register("acacia_pressure_plate");
     public static final RegistryKey<Item> CHERRY_PRESSURE_PLATE = register("cherry_pressure_plate");
     public static final RegistryKey<Item> DARK_OAK_PRESSURE_PLATE = register("dark_oak_pressure_plate");
+    public static final RegistryKey<Item> PALE_OAK_PRESSURE_PLATE = register("pale_oak_pressure_plate");
     public static final RegistryKey<Item> MANGROVE_PRESSURE_PLATE = register("mangrove_pressure_plate");
     public static final RegistryKey<Item> BAMBOO_PRESSURE_PLATE = register("bamboo_pressure_plate");
     public static final RegistryKey<Item> CRIMSON_PRESSURE_PLATE = register("crimson_pressure_plate");
@@ -724,6 +749,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_DOOR = register("acacia_door");
     public static final RegistryKey<Item> CHERRY_DOOR = register("cherry_door");
     public static final RegistryKey<Item> DARK_OAK_DOOR = register("dark_oak_door");
+    public static final RegistryKey<Item> PALE_OAK_DOOR = register("pale_oak_door");
     public static final RegistryKey<Item> MANGROVE_DOOR = register("mangrove_door");
     public static final RegistryKey<Item> BAMBOO_DOOR = register("bamboo_door");
     public static final RegistryKey<Item> CRIMSON_DOOR = register("crimson_door");
@@ -744,6 +770,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_TRAPDOOR = register("acacia_trapdoor");
     public static final RegistryKey<Item> CHERRY_TRAPDOOR = register("cherry_trapdoor");
     public static final RegistryKey<Item> DARK_OAK_TRAPDOOR = register("dark_oak_trapdoor");
+    public static final RegistryKey<Item> PALE_OAK_TRAPDOOR = register("pale_oak_trapdoor");
     public static final RegistryKey<Item> MANGROVE_TRAPDOOR = register("mangrove_trapdoor");
     public static final RegistryKey<Item> BAMBOO_TRAPDOOR = register("bamboo_trapdoor");
     public static final RegistryKey<Item> CRIMSON_TRAPDOOR = register("crimson_trapdoor");
@@ -763,6 +790,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_FENCE_GATE = register("acacia_fence_gate");
     public static final RegistryKey<Item> CHERRY_FENCE_GATE = register("cherry_fence_gate");
     public static final RegistryKey<Item> DARK_OAK_FENCE_GATE = register("dark_oak_fence_gate");
+    public static final RegistryKey<Item> PALE_OAK_FENCE_GATE = register("pale_oak_fence_gate");
     public static final RegistryKey<Item> MANGROVE_FENCE_GATE = register("mangrove_fence_gate");
     public static final RegistryKey<Item> BAMBOO_FENCE_GATE = register("bamboo_fence_gate");
     public static final RegistryKey<Item> CRIMSON_FENCE_GATE = register("crimson_fence_gate");
@@ -779,6 +807,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> HOPPER_MINECART = register("hopper_minecart");
     public static final RegistryKey<Item> CARROT_ON_A_STICK = register("carrot_on_a_stick");
     public static final RegistryKey<Item> WARPED_FUNGUS_ON_A_STICK = register("warped_fungus_on_a_stick");
+    public static final RegistryKey<Item> PHANTOM_MEMBRANE = register("phantom_membrane");
     public static final RegistryKey<Item> ELYTRA = register("elytra");
     public static final RegistryKey<Item> OAK_BOAT = register("oak_boat");
     public static final RegistryKey<Item> OAK_CHEST_BOAT = register("oak_chest_boat");
@@ -794,6 +823,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> CHERRY_CHEST_BOAT = register("cherry_chest_boat");
     public static final RegistryKey<Item> DARK_OAK_BOAT = register("dark_oak_boat");
     public static final RegistryKey<Item> DARK_OAK_CHEST_BOAT = register("dark_oak_chest_boat");
+    public static final RegistryKey<Item> PALE_OAK_BOAT = register("pale_oak_boat");
+    public static final RegistryKey<Item> PALE_OAK_CHEST_BOAT = register("pale_oak_chest_boat");
     public static final RegistryKey<Item> MANGROVE_BOAT = register("mangrove_boat");
     public static final RegistryKey<Item> MANGROVE_CHEST_BOAT = register("mangrove_chest_boat");
     public static final RegistryKey<Item> BAMBOO_RAFT = register("bamboo_raft");
@@ -805,6 +836,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ARMADILLO_SCUTE = register("armadillo_scute");
     public static final RegistryKey<Item> WOLF_ARMOR = register("wolf_armor");
     public static final RegistryKey<Item> FLINT_AND_STEEL = register("flint_and_steel");
+    public static final RegistryKey<Item> BOWL = register("bowl");
     public static final RegistryKey<Item> APPLE = register("apple");
     public static final RegistryKey<Item> BOW = register("bow");
     public static final RegistryKey<Item> ARROW = register("arrow");
@@ -854,7 +886,6 @@ public class ItemKeys {
     public static final RegistryKey<Item> NETHERITE_AXE = register("netherite_axe");
     public static final RegistryKey<Item> NETHERITE_HOE = register("netherite_hoe");
     public static final RegistryKey<Item> STICK = register("stick");
-    public static final RegistryKey<Item> BOWL = register("bowl");
     public static final RegistryKey<Item> MUSHROOM_STEW = register("mushroom_stew");
     public static final RegistryKey<Item> STRING = register("string");
     public static final RegistryKey<Item> FEATHER = register("feather");
@@ -899,6 +930,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_SIGN = register("acacia_sign");
     public static final RegistryKey<Item> CHERRY_SIGN = register("cherry_sign");
     public static final RegistryKey<Item> DARK_OAK_SIGN = register("dark_oak_sign");
+    public static final RegistryKey<Item> PALE_OAK_SIGN = register("pale_oak_sign");
     public static final RegistryKey<Item> MANGROVE_SIGN = register("mangrove_sign");
     public static final RegistryKey<Item> BAMBOO_SIGN = register("bamboo_sign");
     public static final RegistryKey<Item> CRIMSON_SIGN = register("crimson_sign");
@@ -910,6 +942,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ACACIA_HANGING_SIGN = register("acacia_hanging_sign");
     public static final RegistryKey<Item> CHERRY_HANGING_SIGN = register("cherry_hanging_sign");
     public static final RegistryKey<Item> DARK_OAK_HANGING_SIGN = register("dark_oak_hanging_sign");
+    public static final RegistryKey<Item> PALE_OAK_HANGING_SIGN = register("pale_oak_hanging_sign");
     public static final RegistryKey<Item> MANGROVE_HANGING_SIGN = register("mangrove_hanging_sign");
     public static final RegistryKey<Item> BAMBOO_HANGING_SIGN = register("bamboo_hanging_sign");
     public static final RegistryKey<Item> CRIMSON_HANGING_SIGN = register("crimson_hanging_sign");
@@ -1020,8 +1053,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> GHAST_TEAR = register("ghast_tear");
     public static final RegistryKey<Item> GOLD_NUGGET = register("gold_nugget");
     public static final RegistryKey<Item> NETHER_WART = register("nether_wart");
-    public static final RegistryKey<Item> POTION = register("potion");
     public static final RegistryKey<Item> GLASS_BOTTLE = register("glass_bottle");
+    public static final RegistryKey<Item> POTION = register("potion");
     public static final RegistryKey<Item> SPIDER_EYE = register("spider_eye");
     public static final RegistryKey<Item> FERMENTED_SPIDER_EYE = register("fermented_spider_eye");
     public static final RegistryKey<Item> BLAZE_POWDER = register("blaze_powder");
@@ -1044,6 +1077,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> CHICKEN_SPAWN_EGG = register("chicken_spawn_egg");
     public static final RegistryKey<Item> COD_SPAWN_EGG = register("cod_spawn_egg");
     public static final RegistryKey<Item> COW_SPAWN_EGG = register("cow_spawn_egg");
+    public static final RegistryKey<Item> CREAKING_SPAWN_EGG = register("creaking_spawn_egg");
     public static final RegistryKey<Item> CREEPER_SPAWN_EGG = register("creeper_spawn_egg");
     public static final RegistryKey<Item> DOLPHIN_SPAWN_EGG = register("dolphin_spawn_egg");
     public static final RegistryKey<Item> DONKEY_SPAWN_EGG = register("donkey_spawn_egg");
@@ -1115,6 +1149,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> WIND_CHARGE = register("wind_charge");
     public static final RegistryKey<Item> WRITABLE_BOOK = register("writable_book");
     public static final RegistryKey<Item> WRITTEN_BOOK = register("written_book");
+    public static final RegistryKey<Item> BREEZE_ROD = register("breeze_rod");
     public static final RegistryKey<Item> MACE = register("mace");
     public static final RegistryKey<Item> ITEM_FRAME = register("item_frame");
     public static final RegistryKey<Item> GLOW_ITEM_FRAME = register("glow_item_frame");
@@ -1138,6 +1173,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> FIREWORK_STAR = register("firework_star");
     public static final RegistryKey<Item> ENCHANTED_BOOK = register("enchanted_book");
     public static final RegistryKey<Item> NETHER_BRICK = register("nether_brick");
+    public static final RegistryKey<Item> RESIN_BRICK = register("resin_brick");
     public static final RegistryKey<Item> PRISMARINE_SHARD = register("prismarine_shard");
     public static final RegistryKey<Item> PRISMARINE_CRYSTALS = register("prismarine_crystals");
     public static final RegistryKey<Item> RABBIT = register("rabbit");
@@ -1211,7 +1247,6 @@ public class ItemKeys {
     public static final RegistryKey<Item> MUSIC_DISC_PRECIPICE = register("music_disc_precipice");
     public static final RegistryKey<Item> DISC_FRAGMENT_5 = register("disc_fragment_5");
     public static final RegistryKey<Item> TRIDENT = register("trident");
-    public static final RegistryKey<Item> PHANTOM_MEMBRANE = register("phantom_membrane");
     public static final RegistryKey<Item> NAUTILUS_SHELL = register("nautilus_shell");
     public static final RegistryKey<Item> HEART_OF_THE_SEA = register("heart_of_the_sea");
     public static final RegistryKey<Item> CROSSBOW = register("crossbow");
@@ -1356,8 +1391,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> OMINOUS_TRIAL_KEY = register("ominous_trial_key");
     public static final RegistryKey<Item> VAULT = register("vault");
     public static final RegistryKey<Item> OMINOUS_BOTTLE = register("ominous_bottle");
-    public static final RegistryKey<Item> BREEZE_ROD = register("breeze_rod");
 
+    private ItemKeys() {}
 
     private static RegistryKey<Item> register(String name) {
         return RegistryKey.of(RegistryKeys.ITEM, Identifier.ofVanilla(name));

@@ -1,0 +1,17 @@
+{
+  "values": [
+    "minecraft:pale_oak_log",
+    "minecraft:pale_oak_wood",
+    "minecraft:stripped_pale_oak_log",
+    "minecraft:stripped_pale_oak_wood",
+    "minecraft:pale_oak_planks",
+    "minecraft:pale_oak_stairs",
+    "minecraft:pale_oak_slab",
+    "minecraft:pale_oak_fence",
+    "minecraft:pale_oak_fence_gate",
+    "minecraft:pale_oak_door",
+    "minecraft:pale_oak_trapdoor",
+    "minecraft:pale_oak_pressure_plate",
+    "minecraft:pale_oak_button"
+  ]
+}

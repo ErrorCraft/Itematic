@@ -11,12 +11,7 @@
         "type": "minecraft:arrow"
       }
     },
-    "minecraft:stackable": 64,
-    "minecraft:tinted": {
-      "tint": {
-        "type": "minecraft:potion"
-      }
-    }
+    "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:tipped_arrow",

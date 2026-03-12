@@ -6,13 +6,7 @@
     "minecraft:compostable": {
       "level_increase_chance": 0.3
     },
-    "minecraft:stackable": 64,
-    "minecraft:tinted": {
-      "tint": {
-        "type": "minecraft:constant",
-        "color": -8345771
-      }
-    }
+    "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:birch_leaves",

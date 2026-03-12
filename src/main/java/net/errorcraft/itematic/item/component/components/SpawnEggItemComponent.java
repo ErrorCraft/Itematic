@@ -2,7 +2,6 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
-import net.errorcraft.itematic.item.color.colors.IndexItemColor;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -23,18 +22,19 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.Optional;
 
-public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemComponent> {
+public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponent> {
     public static final SpawnEggItemComponent INSTANCE = new SpawnEggItemComponent();
     public static final Codec<SpawnEggItemComponent> CODEC = Codec.unit(INSTANCE);
 
-    public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, int primaryColor, int secondaryColor, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+    public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             EntityItemComponent.of(SimpleEntityInitializer.of(entity.value()), true, EntityItemComponent.Pass.BLOCK, EntityItemComponent.Pass.FLUID),
             INSTANCE,
-            TintedItemComponent.of(IndexItemColor.of(primaryColor, secondaryColor)),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
         };
     }
+
+    private SpawnEggItemComponent() {}
 
     @Override
     public ItemComponentType<SpawnEggItemComponent> type() {
@@ -52,7 +52,7 @@ public record SpawnEggItemComponent() implements ItemComponent<SpawnEggItemCompo
             return Optional.empty();
         }
 
-        if (entityItemComponent.get().getEntityInitializer(stack).type() != entityType) {
+        if (entityItemComponent.get().getEntityInitializer(stack, world.getRegistryManager()).type() != entityType) {
             return Optional.empty();
         }
 
