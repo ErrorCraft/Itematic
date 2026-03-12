@@ -14,16 +14,7 @@
       ]
     },
     "minecraft:spawn_egg": {},
-    "minecraft:stackable": 64,
-    "minecraft:tinted": {
-      "tint": {
-        "type": "minecraft:index",
-        "indices": [
-          9725844,
-          5060690
-        ]
-      }
-    }
+    "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:shulker_spawn_egg",

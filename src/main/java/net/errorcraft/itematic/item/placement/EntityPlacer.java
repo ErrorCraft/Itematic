@@ -55,13 +55,13 @@ public class EntityPlacer extends Placer {
     public static EntityPlacer spawned(ItemUsageContext context, ItemStack stack, ItemStackConsumer resultStackConsumer, EntityItemComponent entityItemComponent) {
         World world = context.getWorld();
         BlockPos blockPos = context.getBlockPos();
-        return new EntityPlacer(context.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), entityItemComponent.getEntityInitializer(stack), context.getSide(), true, SpawnReason.SPAWN_ITEM_USE, null, entityItemComponent.allowItemData(), context.getHand());
+        return new EntityPlacer(context.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), entityItemComponent.getEntityInitializer(stack, world.getRegistryManager()), context.getSide(), true, SpawnReason.SPAWN_ITEM_USE, null, entityItemComponent.allowItemData(), context.getHand());
     }
 
     public static EntityPlacer action(ActionContext context, ActionContextParameter position, EntityItemComponent entityItemComponent) {
         ItemStack stack = context.stack();
         BlockPos pos = context.blockPos(position);
-        return new EntityPlacer(stack, context.resultStackConsumer(), context.world(), pos, context.world().getBlockState(pos), context.player(ActionContextParameter.THIS).orElse(null), entityItemComponent.getEntityInitializer(stack), context.side(), false, SpawnReason.COMMAND, null, entityItemComponent.allowItemData(), context.hand());
+        return new EntityPlacer(stack, context.resultStackConsumer(), context.world(), pos, context.world().getBlockState(pos), context.player(ActionContextParameter.THIS).orElse(null), entityItemComponent.getEntityInitializer(stack, context.world().getRegistryManager()), context.side(), false, SpawnReason.COMMAND, null, entityItemComponent.allowItemData(), context.hand());
     }
 
     public static EntityPlacer action(ActionContext context, ActionContextParameter position, EntityInitializer<?> entityInitializer) {

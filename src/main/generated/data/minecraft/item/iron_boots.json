@@ -19,8 +19,8 @@
       "enchantability": 9
     },
     "minecraft:equipment": {
+      "asset_id": "minecraft:iron",
       "equip_sound": "minecraft:item.armor.equip_iron",
-      "model": "minecraft:iron",
       "slot": "feet"
     },
     "minecraft:repairable": {

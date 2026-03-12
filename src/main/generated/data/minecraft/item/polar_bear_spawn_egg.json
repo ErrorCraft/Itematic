@@ -14,16 +14,7 @@
       ]
     },
     "minecraft:spawn_egg": {},
-    "minecraft:stackable": 64,
-    "minecraft:tinted": {
-      "tint": {
-        "type": "minecraft:index",
-        "indices": [
-          15658718,
-          14014157
-        ]
-      }
-    }
+    "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:polar_bear_spawn_egg",

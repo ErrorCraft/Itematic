@@ -93,6 +93,7 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.HONEYCOMB_BLOCK)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.SLIME_BLOCK)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.HONEY_BLOCK)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.RESIN_BLOCK)),
             ItemGroupEntry.tag(ItematicItemTags.FROGLIGHTS),
             ItemGroupEntry.tag(ItematicItemTags.SCULK),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.COBWEB)),
@@ -305,6 +306,7 @@ public class ItemGroupEntryProviders {
             .add(items.getOrThrow(ItemKeys.ANCIENT_DEBRIS))
             .add(items.getOrThrow(ItemKeys.QUARTZ))
             .add(items.getOrThrow(ItemKeys.AMETHYST_SHARD))
+            .add(items.getOrThrow(ItemKeys.RESIN_CLUMP))
             .add(items.getOrThrow(ItemKeys.IRON_NUGGET))
             .add(items.getOrThrow(ItemKeys.GOLD_NUGGET))
             .add(items.getOrThrow(ItemKeys.IRON_INGOT))
@@ -349,6 +351,7 @@ public class ItemGroupEntryProviders {
             .add(items.getOrThrow(ItemKeys.BOWL))
             .add(items.getOrThrow(ItemKeys.BRICK))
             .add(items.getOrThrow(ItemKeys.NETHER_BRICK))
+            .add(items.getOrThrow(ItemKeys.RESIN_BRICK))
             .add(items.getOrThrow(ItemKeys.PAPER))
             .add(items.getOrThrow(ItemKeys.BOOK))
             .add(items.getOrThrow(ItemKeys.FIREWORK_STAR))
@@ -364,6 +367,7 @@ public class ItemGroupEntryProviders {
         );
         registerable.register(ItemGroupEntryProviderKeys.SPAWN_EGGS, ItemGroupEntryProvider.of(
             ItemGroupEntry.tag(ItematicItemTags.SPAWNERS),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.CREAKING_HEART)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.ALLAY_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.ARMADILLO_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.AXOLOTL_SPAWN_EGG)),
@@ -378,6 +382,7 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.CHICKEN_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.COD_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.COW_SPAWN_EGG)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.CREAKING_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.CREEPER_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.DOLPHIN_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.DONKEY_SPAWN_EGG)),

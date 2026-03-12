@@ -14,16 +14,7 @@
       ]
     },
     "minecraft:spawn_egg": {},
-    "minecraft:stackable": 64,
-    "minecraft:tinted": {
-      "tint": {
-        "type": "minecraft:index",
-        "indices": [
-          14283506,
-          8496292
-        ]
-      }
-    }
+    "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:snow_golem_spawn_egg",

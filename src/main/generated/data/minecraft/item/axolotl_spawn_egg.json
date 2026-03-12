@@ -14,16 +14,7 @@
       ]
     },
     "minecraft:spawn_egg": {},
-    "minecraft:stackable": 64,
-    "minecraft:tinted": {
-      "tint": {
-        "type": "minecraft:index",
-        "indices": [
-          16499171,
-          10890612
-        ]
-      }
-    }
+    "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:axolotl_spawn_egg",

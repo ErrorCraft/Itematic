@@ -19,8 +19,8 @@
       "enchantability": 9
     },
     "minecraft:equipment": {
+      "asset_id": "minecraft:turtle_scute",
       "equip_sound": "minecraft:item.armor.equip_turtle",
-      "model": "minecraft:turtle_scute",
       "slot": "head"
     },
     "minecraft:repairable": {

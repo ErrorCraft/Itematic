@@ -14,16 +14,7 @@
       ]
     },
     "minecraft:spawn_egg": {},
-    "minecraft:stackable": 64,
-    "minecraft:tinted": {
-      "tint": {
-        "type": "minecraft:index",
-        "indices": [
-          1315860,
-          5075616
-        ]
-      }
-    }
+    "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:wither_spawn_egg",

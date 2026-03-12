@@ -1,0 +1,23 @@
+{
+  "behavior": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:spawn_entity_from_item"
+    },
+    "minecraft:entity": {
+      "allow_item_data": true,
+      "entity": {
+        "type": "minecraft:creaking"
+      },
+      "passes": [
+        "block",
+        "fluid"
+      ]
+    },
+    "minecraft:spawn_egg": {},
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:creaking_spawn_egg",
+    "translation_key": "item.minecraft.creaking_spawn_egg"
+  }
+}

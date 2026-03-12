@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(PlayerEntityRenderer.class)
 public class PlayerEntityRendererExtender {
     @Redirect(
-        method = "updateHandState",
+        method = "getArmPose(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/Hand;)Lnet/minecraft/client/render/entity/model/BipedEntityModel$ArmPose;",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
@@ -24,5 +24,16 @@ public class PlayerEntityRendererExtender {
             .map(ShooterItemComponent::method)
             .filter(method -> method.type() == ShooterMethodTypes.CHARGEABLE)
             .isPresent();
+    }
+
+    @Redirect(
+        method = "updateRenderState(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;F)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        )
+    )
+    private static boolean isOfForSpyglassUseItemComponentCheck(ItemStack instance, Item item) {
+        return instance.itematic$hasBehavior(ItemComponentTypes.ZOOM);
     }
 }

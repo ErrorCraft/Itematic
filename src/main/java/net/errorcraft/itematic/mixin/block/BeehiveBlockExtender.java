@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.access.block.BlockAccess;
+import net.errorcraft.itematic.access.block.AbstractBlockAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.component.ComponentMap;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import java.util.List;
 
 @Mixin(BeehiveBlock.class)
-public class BeehiveBlockExtender implements BlockAccess {
+public class BeehiveBlockExtender implements AbstractBlockAccess {
     @Redirect(
         method = "onUseWithItem",
         at = @At(

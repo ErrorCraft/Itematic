@@ -15,7 +15,7 @@ public record TwirlS2CPacket(float spinAttackStrength) implements Packet<ClientP
     );
 
     @Override
-    public PacketType<? extends Packet<ClientPlayPacketListener>> getPacketId() {
+    public PacketType<? extends Packet<ClientPlayPacketListener>> getPacketType() {
         return ItematicPlayPackets.TWIRL;
     }
 

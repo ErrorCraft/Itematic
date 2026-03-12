@@ -23,6 +23,7 @@
     "#minecraft:item_group/brick_building_blocks",
     "minecraft:packed_mud",
     "#minecraft:item_group/mud_brick_building_blocks",
+    "#minecraft:item_group/resin_brick_building_blocks",
     "#minecraft:item_group/sandstone_building_blocks",
     "#minecraft:item_group/smooth_sandstone_building_blocks",
     "#minecraft:item_group/cut_sandstone_building_blocks",

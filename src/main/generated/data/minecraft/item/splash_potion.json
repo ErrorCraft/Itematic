@@ -15,11 +15,6 @@
     "minecraft:throwable": {
       "angle_offset": -20.0,
       "speed": 0.5
-    },
-    "minecraft:tinted": {
-      "tint": {
-        "type": "minecraft:potion"
-      }
     }
   },
   "display": {

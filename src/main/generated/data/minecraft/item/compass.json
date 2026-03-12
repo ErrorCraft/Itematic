@@ -1,8 +1,7 @@
 {
   "behavior": {
     "minecraft:pointable": {
-      "lodestone_translation_key": "item.minecraft.lodestone_compass",
-      "points_to": "minecraft:spawn_location"
+      "lodestone_translation_key": "item.minecraft.lodestone_compass"
     },
     "minecraft:stackable": 64
   },

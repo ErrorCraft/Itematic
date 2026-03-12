@@ -112,6 +112,10 @@ public class BlocksExtender {
 
     @Shadow
     @Final
+    public static Block PALE_OAK_WALL_SIGN;
+
+    @Shadow
+    @Final
     public static Block MANGROVE_WALL_SIGN;
 
     @Shadow
@@ -153,6 +157,10 @@ public class BlocksExtender {
     @Shadow
     @Final
     public static Block DARK_OAK_WALL_HANGING_SIGN;
+
+    @Shadow
+    @Final
+    public static Block PALE_OAK_WALL_HANGING_SIGN;
 
     @Shadow
     @Final
@@ -610,6 +618,14 @@ public class BlocksExtender {
     @Final
     public static Block BLACK_CANDLE_CAKE;
 
+    @Shadow
+    @Final
+    public static Block POTTED_OPEN_EYEBLOSSOM;
+
+    @Shadow
+    @Final
+    public static Block POTTED_CLOSED_EYEBLOSSOM;
+
     static {
         CAVE_AIR.itematic$setAsItemKey(ItemKeys.AIR);
         VOID_AIR.itematic$setAsItemKey(ItemKeys.AIR);
@@ -636,6 +652,7 @@ public class BlocksExtender {
         CHERRY_WALL_SIGN.itematic$setAsItemKey(ItemKeys.CHERRY_SIGN);
         JUNGLE_WALL_SIGN.itematic$setAsItemKey(ItemKeys.JUNGLE_SIGN);
         DARK_OAK_WALL_SIGN.itematic$setAsItemKey(ItemKeys.DARK_OAK_SIGN);
+        PALE_OAK_WALL_SIGN.itematic$setAsItemKey(ItemKeys.PALE_OAK_SIGN);
         MANGROVE_WALL_SIGN.itematic$setAsItemKey(ItemKeys.MANGROVE_SIGN);
         CRIMSON_WALL_SIGN.itematic$setAsItemKey(ItemKeys.CRIMSON_SIGN);
         WARPED_WALL_SIGN.itematic$setAsItemKey(ItemKeys.WARPED_SIGN);
@@ -647,6 +664,7 @@ public class BlocksExtender {
         CHERRY_WALL_HANGING_SIGN.itematic$setAsItemKey(ItemKeys.CHERRY_HANGING_SIGN);
         JUNGLE_WALL_HANGING_SIGN.itematic$setAsItemKey(ItemKeys.JUNGLE_HANGING_SIGN);
         DARK_OAK_WALL_HANGING_SIGN.itematic$setAsItemKey(ItemKeys.DARK_OAK_HANGING_SIGN);
+        PALE_OAK_WALL_HANGING_SIGN.itematic$setAsItemKey(ItemKeys.PALE_OAK_HANGING_SIGN);
         MANGROVE_WALL_HANGING_SIGN.itematic$setAsItemKey(ItemKeys.MANGROVE_HANGING_SIGN);
         CRIMSON_WALL_HANGING_SIGN.itematic$setAsItemKey(ItemKeys.CRIMSON_HANGING_SIGN);
         WARPED_WALL_HANGING_SIGN.itematic$setAsItemKey(ItemKeys.WARPED_HANGING_SIGN);
@@ -689,6 +707,8 @@ public class BlocksExtender {
         POTTED_WARPED_ROOTS.itematic$setAsItemKey(ItemKeys.WARPED_ROOTS);
         POTTED_AZALEA_BUSH.itematic$setAsItemKey(ItemKeys.AZALEA);
         POTTED_FLOWERING_AZALEA_BUSH.itematic$setAsItemKey(ItemKeys.FLOWERING_AZALEA);
+        POTTED_OPEN_EYEBLOSSOM.itematic$setAsItemKey(ItemKeys.OPEN_EYEBLOSSOM);
+        POTTED_CLOSED_EYEBLOSSOM.itematic$setAsItemKey(ItemKeys.CLOSED_EYEBLOSSOM);
         SKELETON_WALL_SKULL.itematic$setAsItemKey(ItemKeys.SKELETON_SKULL);
         WITHER_SKELETON_WALL_SKULL.itematic$setAsItemKey(ItemKeys.WITHER_SKELETON_SKULL);
         ZOMBIE_WALL_HEAD.itematic$setAsItemKey(ItemKeys.ZOMBIE_HEAD);

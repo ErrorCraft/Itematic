@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:pale_oak_fence_gate"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:pale_oak_fence_gate",
+    "translation_key": "block.minecraft.pale_oak_fence_gate"
+  }
+}

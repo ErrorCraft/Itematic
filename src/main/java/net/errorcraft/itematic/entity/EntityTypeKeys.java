@@ -21,6 +21,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> CHICKEN = of("chicken");
     public static final RegistryKey<EntityType<?>> COD = of("cod");
     public static final RegistryKey<EntityType<?>> COW = of("cow");
+    public static final RegistryKey<EntityType<?>> CREAKING = of("creaking");
     public static final RegistryKey<EntityType<?>> CREEPER = of("creeper");
     public static final RegistryKey<EntityType<?>> DOLPHIN = of("dolphin");
     public static final RegistryKey<EntityType<?>> DONKEY = of("donkey");

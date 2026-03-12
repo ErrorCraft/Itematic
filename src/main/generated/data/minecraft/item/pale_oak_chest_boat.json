@@ -1,0 +1,20 @@
+{
+  "behavior": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:spawn_entity_from_item"
+    },
+    "minecraft:entity": {
+      "entity": {
+        "type": "minecraft:pale_oak_chest_boat"
+      }
+    },
+    "minecraft:fuel": {
+      "ticks": 1200
+    },
+    "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:pale_oak_chest_boat",
+    "translation_key": "item.minecraft.pale_oak_chest_boat"
+  }
+}

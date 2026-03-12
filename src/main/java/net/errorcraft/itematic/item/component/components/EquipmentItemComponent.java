@@ -41,7 +41,7 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
         return new EquipmentItemComponent(EquippableComponent.builder(type.getEquipmentSlot())
             .swappable(true)
             .equipSound(material.equipSound())
-            .model(material.modelId())
+            .model(material.assetId())
             .allowedEntities(animalType.itematic$allowedEntities())
             .build());
     }
@@ -52,7 +52,7 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
             of(EquippableComponent.builder(type.getEquipmentSlot())
                 .swappable(true)
                 .equipSound(material.equipSound())
-                .model(material.modelId())
+                .model(material.assetId())
                 .build()),
             DamageableItemComponent.of(type.getMaxDamage(material.durability())),
         };

@@ -25,6 +25,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.GameTestException;
 import net.minecraft.test.PositionedException;
 import net.minecraft.test.TestContext;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -32,6 +33,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class TestUtil {
@@ -111,10 +113,15 @@ public class TestUtil {
         entity.setPosition(Vec3d.ofBottomCenter(absolutePos));
     }
 
-    public static void useStackOnBlockInside(TestContext context, PlayerEntity player, ItemStack stack, BlockPos pos, Direction direction) {
+    public static Optional<ItemStack> useStackOnBlockInside(TestContext context, PlayerEntity player, ItemStack stack, BlockPos pos, Direction direction) {
         BlockPos absolutePos = context.getAbsolutePos(pos);
         BlockHitResult hitResult = new BlockHitResult(Vec3d.ofCenter(absolutePos), direction, absolutePos, true);
-        stack.useOnBlock(new ItemUsageContext(player, Hand.MAIN_HAND, hitResult));
+        ActionResult result = stack.useOnBlock(new ItemUsageContext(player, Hand.MAIN_HAND, hitResult));
+        if (result instanceof ActionResult.Success success) {
+            return Optional.ofNullable(success.getNewHandStack());
+        }
+
+        return Optional.empty();
     }
 
     public static void useBlock(TestContext context, BlockPos pos, PlayerEntity player, Direction direction) {

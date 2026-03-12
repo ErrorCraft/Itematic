@@ -21,47 +21,47 @@ public interface TradeOffersAccessor {
         throw new AssertionError();
     }
 
-    @Accessor("NOVICE_SELL_XP")
+    @Accessor("NOVICE_SELL_EXPERIENCE")
     static int noviceSellTradeExperience() {
         throw new AssertionError();
     }
 
-    @Accessor("NOVICE_BUY_XP")
+    @Accessor("NOVICE_BUY_EXPERIENCE")
     static int noviceBuyTradeExperience() {
         throw new AssertionError();
     }
 
-    @Accessor("APPRENTICE_SELL_XP")
+    @Accessor("APPRENTICE_SELL_EXPERIENCE")
     static int apprenticeSellTradeExperience() {
         throw new AssertionError();
     }
 
-    @Accessor("APPRENTICE_BUY_XP")
+    @Accessor("APPRENTICE_BUY_EXPERIENCE")
     static int apprenticeBuyTradeExperience() {
         throw new AssertionError();
     }
 
-    @Accessor("JOURNEYMAN_SELL_XP")
+    @Accessor("JOURNEYMAN_SELL_EXPERIENCE")
     static int journeymanSellTradeExperience() {
         throw new AssertionError();
     }
 
-    @Accessor("JOURNEYMAN_BUY_XP")
+    @Accessor("JOURNEYMAN_BUY_EXPERIENCE")
     static int journeymanBuyTradeExperience() {
         throw new AssertionError();
     }
 
-    @Accessor("EXPERT_SELL_XP")
+    @Accessor("EXPERT_SELL_EXPERIENCE")
     static int expertSellTradeExperience() {
         throw new AssertionError();
     }
 
-    @Accessor("EXPERT_BUY_XP")
+    @Accessor("EXPERT_BUY_EXPERIENCE")
     static int expertBuyTradeExperience() {
         throw new AssertionError();
     }
 
-    @Accessor("MASTER_TRADE_XP")
+    @Accessor("MASTER_TRADE_EXPERIENCE")
     static int masterTradeExperience() {
         throw new AssertionError();
     }

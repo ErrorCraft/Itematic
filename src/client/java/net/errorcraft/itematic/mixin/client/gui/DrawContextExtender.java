@@ -10,9 +10,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,17 +42,6 @@ public abstract class DrawContextExtender {
     )
     private void setItemBarStyles(MinecraftClient client, MatrixStack matrices, VertexConsumerProvider.Immediate vertexConsumers, CallbackInfo info) {
         this.itemBarStyles = ((MinecraftClientAccess) client).itematic$itemBarStyles();
-    }
-
-    @Redirect(
-        method = "drawItem(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;IIII)V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
-        )
-    )
-    private boolean isInForBundlesReturnFalse(ItemStack instance, TagKey<Item> tag) {
-        return false;
     }
 
     @ModifyExpressionValue(
