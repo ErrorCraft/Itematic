@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.world.action.actions.SequenceAction;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.entry.RegistryElementCodec;
@@ -22,13 +23,18 @@ public record ActionEntry(Action<?> action, Optional<ActionRequirements> require
     public static final Codec<RegistryEntryList<ActionEntry>> REGISTRY_ENTRY_LIST_CODEC = RegistryCodecs.entryList(ItematicRegistryKeys.ACTION, CODEC, true);
 
     public Optional<Boolean> execute(ActionContext context) {
+        return Optional.empty();
+    }
+
+    public Optional<Boolean> execute(NewActionContext context) {
         if (!this.test(context)) {
             return Optional.empty();
         }
+
         return Optional.of(this.action.execute(context));
     }
 
-    private boolean test(ActionContext context) {
+    private boolean test(NewActionContext context) {
         return this.requirements.map(requirements -> requirements.test(context))
             .orElse(true);
     }

@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.action.sequence.handler.handlers;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.world.action.ActionEntry;
-import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
@@ -25,11 +25,12 @@ public record UncheckedSequenceHandler(RegistryEntryList<ActionEntry> entries) i
     }
 
     @Override
-    public boolean handle(ActionContext context) {
+    public boolean handle(NewActionContext context) {
         boolean result = false;
         for (RegistryEntry<ActionEntry> entry : this.entries) {
             result |= entry.value().execute(context).orElse(false);
         }
+
         return result;
     }
 

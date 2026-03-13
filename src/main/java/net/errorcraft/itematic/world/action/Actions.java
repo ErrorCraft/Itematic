@@ -61,7 +61,7 @@ public class Actions {
 
         registerable.register(USE_HOE_ON_BLOCK, ActionEntry.of(
             PassingSequenceHandler.builder()
-                .add(FirstToPassRequirementsSequenceHandler.tag(actions.getOrThrow(ActionTags.USE_HOE_ON_BLOCK)))
+                .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_HOE_ON_BLOCK)))
                 .add(DamageItemAction.of(1))
                 .add(SwingHandAction.INSTANCE)
                 .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.HOE_TILL), SoundCategory.BLOCKS))
@@ -88,7 +88,7 @@ public class Actions {
                 ).build()
             ),
             PassingSequenceHandler.builder()
-                .add(FirstToPassRequirementsSequenceHandler.tag(actions.getOrThrow(ActionTags.USE_SHOVEL_ON_BLOCK)))
+                .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_SHOVEL_ON_BLOCK)))
                 .add(DamageItemAction.of(1))
                 .add(SwingHandAction.INSTANCE)
         ));

@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
-import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
@@ -27,12 +27,13 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
     }
 
     @Override
-    public boolean handle(ActionContext context) {
+    public boolean handle(NewActionContext context) {
         for (Entry entry : this.entries) {
             if (!entry.execute(context)) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -73,10 +74,11 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
         public static final Codec<Entry> CODEC = Codec.either(ELEMENT_CODEC, ActionEntry.REGISTRY_CODEC)
             .xmap(either -> either.map(entry -> entry, Entry::required), entry -> entry.optional ? Either.left(entry) : Either.right(entry.action));
 
-        private boolean execute(ActionContext context) {
+        private boolean execute(NewActionContext context) {
             if (this.action.value().execute(context).orElse(false)) {
                 return true;
             }
+
             return this.optional;
         }
 
