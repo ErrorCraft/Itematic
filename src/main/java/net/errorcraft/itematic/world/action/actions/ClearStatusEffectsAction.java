@@ -6,18 +6,17 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.loot.context.LootContext;
 
-import java.util.Optional;
-
-public record ClearStatusEffectsAction(ActionContextParameter entity) implements Action<ClearStatusEffectsAction> {
+public record ClearStatusEffectsAction(LootContext.EntityTarget entity) implements Action<ClearStatusEffectsAction> {
     public static final MapCodec<ClearStatusEffectsAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ActionContextParameter.CODEC.fieldOf("entity").forGetter(ClearStatusEffectsAction::entity)
+        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(ClearStatusEffectsAction::entity)
     ).apply(instance, ClearStatusEffectsAction::new));
 
-    public static ClearStatusEffectsAction of(ActionContextParameter entity) {
+    public static ClearStatusEffectsAction of(LootContext.EntityTarget entity) {
         return new ClearStatusEffectsAction(entity);
     }
 
@@ -28,14 +27,16 @@ public record ClearStatusEffectsAction(ActionContextParameter entity) implements
 
     @Override
     public boolean execute(ActionContext context) {
-        Optional<Entity> optionalEntity = context.entity(this.entity);
-        if (optionalEntity.isEmpty()) {
-            return false;
+        return false;
+    }
+
+    @Override
+    public boolean execute(NewActionContext context) {
+        Entity entity = context.get(this.entity.getParameter());
+        if (entity instanceof LivingEntity target) {
+            return target.clearStatusEffects();
         }
-        if (optionalEntity.get() instanceof LivingEntity target) {
-            target.clearStatusEffects();
-            return true;
-        }
+
         return false;
     }
 }

@@ -8,25 +8,27 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public record ModifyBlockStateAction(ActionContextParameter position, Map<String, String> properties, boolean pushEntitiesUpwards) implements Action<ModifyBlockStateAction> {
+public record ModifyBlockStateAction(PositionTarget position, Map<String, String> properties, boolean pushEntitiesUpwards) implements Action<ModifyBlockStateAction> {
     public static final MapCodec<ModifyBlockStateAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ActionContextParameter.CODEC.fieldOf("position").forGetter(ModifyBlockStateAction::position),
+        PositionTarget.CODEC.fieldOf("position").forGetter(ModifyBlockStateAction::position),
         Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("properties").forGetter(ModifyBlockStateAction::properties),
         Codec.BOOL.optionalFieldOf("push_entities_upwards", false).forGetter(ModifyBlockStateAction::pushEntitiesUpwards)
     ).apply(instance, ModifyBlockStateAction::new));
 
-    public static Builder builder(ActionContextParameter position) {
+    public static Builder builder(PositionTarget position) {
         return new Builder(position);
     }
 
@@ -37,34 +39,53 @@ public record ModifyBlockStateAction(ActionContextParameter position, Map<String
 
     @Override
     public boolean execute(ActionContext context) {
+        return false;
+    }
+
+    @Override
+    public boolean execute(NewActionContext context) {
         ServerWorld world = context.world();
-        BlockPos pos = context.blockPos(this.position);
-        BlockState state = world.getBlockState(pos);
-        BlockState newState = state;
-        StateManager<Block, BlockState> stateManager = state.getBlock().getStateManager();
+        Vec3d pos = context.get(this.position.parameter());
+        if (pos == null) {
+            return false;
+        }
+
+        BlockPos blockPos = BlockPos.ofFloored(pos);
+        BlockState currentState = world.getBlockState(blockPos);
+        BlockState newState = this.modifyBlockState(currentState);
+        if (newState == currentState) {
+            return false;
+        }
+
+        if (this.pushEntitiesUpwards) {
+            Block.pushEntitiesUpBeforeBlockChange(currentState, newState, world, blockPos);
+        }
+
+        world.setBlockState(blockPos, newState);
+        return true;
+    }
+
+    private BlockState modifyBlockState(BlockState currentState) {
+        BlockState newState = currentState;
+        StateManager<Block, BlockState> stateManager = currentState.getBlock().getStateManager();
         for (String key : this.properties.keySet()) {
             Property<?> property = stateManager.getProperty(key);
             if (property == null) {
                 continue;
             }
+
             newState = BlockStateUtil.with(newState, property, this.properties.get(key));
         }
-        if (state == newState) {
-            return false;
-        }
-        if (this.pushEntitiesUpwards) {
-            Block.pushEntitiesUpBeforeBlockChange(state, newState, world, pos);
-        }
-        world.setBlockState(pos, newState);
-        return true;
+
+        return newState;
     }
 
     public static final class Builder {
-        private final ActionContextParameter position;
+        private final PositionTarget position;
         private final Map<String, String> properties = new HashMap<>();
         private boolean pushEntitiesUpwards = false;
 
-        private Builder(ActionContextParameter position) {
+        private Builder(PositionTarget position) {
             this.position = position;
         }
 

@@ -6,6 +6,7 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.minecraft.command.ReturnValueConsumer;
 import net.minecraft.server.command.ServerCommandSource;
@@ -29,13 +30,19 @@ public record RunFunctionAction(Identifier function, ActionContextParameters con
 
     @Override
     public boolean execute(ActionContext context) {
+        return false;
+    }
+
+    @Override
+    public boolean execute(NewActionContext context) {
         CommandFunctionManager functionManager = context.world().getServer().getCommandFunctionManager();
         Optional<CommandFunction<ServerCommandSource>> function = functionManager.getFunction(this.function);
         if (function.isEmpty()) {
             return false;
         }
+
         MutableBoolean success = new MutableBoolean();
-        ServerCommandSource source = context.createCommandSource(this.context, functionManager)
+        ServerCommandSource source = context.commandSource(functionManager)
             .mergeReturnValueConsumers((successful, returnValue) -> success.setValue(successful), ReturnValueConsumer::chain);
         functionManager.execute(function.get(), source);
         return success.booleanValue();

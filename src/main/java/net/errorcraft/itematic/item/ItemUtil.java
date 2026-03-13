@@ -32,6 +32,7 @@ import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionRequirements;
 import net.errorcraft.itematic.world.action.Actions;
 import net.errorcraft.itematic.world.action.actions.*;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
@@ -193,7 +194,7 @@ public class ItemUtil {
                         .build())
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ClearStatusEffectsAction.of(ActionContextParameter.THIS)))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ClearStatusEffectsAction.of(LootContext.EntityTarget.THIS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POTION, create(
@@ -333,7 +334,7 @@ public class ItemUtil {
                         .build())
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(TeleportAction.of(16, ActionContextParameter.THIS)))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(TeleportAction.of(16, LootContext.EntityTarget.THIS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BEETROOT, create(
@@ -9547,7 +9548,7 @@ public class ItemUtil {
                                 .build()
                         ),
                         PassingSequenceHandler.builder()
-                            .add(ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
+                            .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED_POSITION)
                                 .property(Properties.EYE, true)
                                 .pushEntitiesUpwards()
                                 .build())
@@ -10977,7 +10978,16 @@ public class ItemUtil {
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK)))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(FertilizeAction.INSTANCE))
+                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .add(FertilizeAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(InvokeGameEventAction.of(
+                                GameEvent.ITEM_INTERACT_FINISH,
+                                ActionContextParameter.THIS,
+                                ActionContextParameter.THIS
+                            ))
+                            .add(DecrementItemAction.of(1))
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.BONE, create(

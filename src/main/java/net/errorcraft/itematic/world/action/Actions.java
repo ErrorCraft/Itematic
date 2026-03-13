@@ -8,6 +8,7 @@ import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.actions.*;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
@@ -109,7 +110,7 @@ public class Actions {
                 .build()
             ),
             PassingSequenceHandler.builder()
-                .add(ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
+                .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED_POSITION)
                     .property(Properties.LIT, false)
                     .build())
                 .add(PlaySoundAction.builder(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.FIRE_EXTINGUISH), SoundCategory.BLOCKS)
@@ -152,7 +153,7 @@ public class Actions {
                                                     .exactMatch(Properties.WATERLOGGED, true))))))
                                 .build()
                         ),
-                        ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
+                        ModifyBlockStateAction.builder(PositionTarget.INTERACTED_POSITION)
                             .property(Properties.LIT, true)
                             .build()
                     )
