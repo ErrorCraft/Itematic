@@ -11,6 +11,7 @@ import net.minecraft.server.function.CommandFunctionManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.context.ContextParameter;
 import net.minecraft.util.context.ContextParameterMap;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,6 +40,16 @@ public class NewActionContext {
     @Nullable
     public <T> T get(ContextParameter<T> parameter) {
         return this.parameters.getNullable(parameter);
+    }
+
+    @Nullable
+    public BlockPos getBlockPos(ContextParameter<Vec3d> parameter) {
+        Vec3d pos = this.get(parameter);
+        if (pos == null) {
+            return null;
+        }
+
+        return BlockPos.ofFloored(pos);
     }
 
     public ItemStack resultStack() {

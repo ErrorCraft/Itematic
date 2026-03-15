@@ -8,8 +8,10 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.Entity;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -20,9 +22,9 @@ import net.minecraft.util.math.random.Random;
 
 import java.util.Optional;
 
-public record PlaySoundAction(ActionContextParameter position, RegistryEntry<SoundEvent> sound, Optional<SoundCategory> category, Range.FloatRange volume, Range.FloatRange pitch, boolean fromEntity) implements Action<PlaySoundAction> {
+public record PlaySoundAction(PositionTarget position, RegistryEntry<SoundEvent> sound, Optional<SoundCategory> category, Range.FloatRange volume, Range.FloatRange pitch, boolean fromEntity) implements Action<PlaySoundAction> {
     public static final MapCodec<PlaySoundAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ActionContextParameter.CODEC.fieldOf("position").forGetter(PlaySoundAction::position),
+        PositionTarget.CODEC.fieldOf("position").forGetter(PlaySoundAction::position),
         SoundEvent.ENTRY_CODEC.fieldOf("sound").forGetter(PlaySoundAction::sound),
         StringIdentifiable.createCodec(SoundCategory::values).optionalFieldOf("category").forGetter(PlaySoundAction::category),
         Range.FLOAT_CODEC.fieldOf("volume").forGetter(PlaySoundAction::volume),
@@ -30,20 +32,30 @@ public record PlaySoundAction(ActionContextParameter position, RegistryEntry<Sou
         Codec.BOOL.optionalFieldOf("from_entity", false).forGetter(PlaySoundAction::fromEntity)
     ).apply(instance, PlaySoundAction::new));
 
-    public static Builder builder(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
+    public static Builder builder(PositionTarget position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
         return new Builder(position, sound, category);
     }
 
-    public static PlaySoundAction of(ActionContextParameter position, RegistryEntry<SoundEvent> sound) {
-        return new PlaySoundAction(position, sound, Optional.empty(), Range.FloatRange.of(1.0f), Range.FloatRange.of(1.0f), false);
+    public static PlaySoundAction of(PositionTarget position, RegistryEntry<SoundEvent> sound) {
+        return new PlaySoundAction(
+            position,
+            sound,
+            Optional.empty(),
+            Range.FloatRange.of(1.0f),
+            Range.FloatRange.of(1.0f),
+            false
+        );
     }
 
-    public static PlaySoundAction of(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
-        return new PlaySoundAction(position, sound, Optional.of(category), Range.FloatRange.of(1.0f), Range.FloatRange.of(1.0f), false);
-    }
-
-    public static PlaySoundAction of(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category, float volume, float pitch) {
-        return new PlaySoundAction(position, sound, Optional.of(category), Range.FloatRange.of(volume), Range.FloatRange.of(pitch), false);
+    public static PlaySoundAction of(PositionTarget position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
+        return new PlaySoundAction(
+            position,
+            sound,
+            Optional.of(category),
+            Range.FloatRange.of(1.0f),
+            Range.FloatRange.of(1.0f),
+            false
+        );
     }
 
     @Override
@@ -53,7 +65,13 @@ public record PlaySoundAction(ActionContextParameter position, RegistryEntry<Sou
 
     @Override
     public boolean execute(ActionContext context) {
-        SoundCategory category = this.category(context.entity(ActionContextParameter.THIS).orElse(null));
+        return false;
+    }
+
+    @Override
+    public boolean execute(NewActionContext context) {
+        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
+        SoundCategory category = this.category(entity);
         if (category == null) {
             return false;
         }
@@ -63,15 +81,17 @@ public record PlaySoundAction(ActionContextParameter position, RegistryEntry<Sou
         float volume = this.volume.get(random);
         float pitch = this.pitch.get(random);
         long seed = random.nextLong();
-        context.entity(ActionContextParameter.THIS)
-            .filter(entity -> this.fromEntity)
-            .ifPresentOrElse(
-                entity -> world.playSoundFromEntity(null, entity, this.sound, category, volume, pitch, seed),
-                () -> {
-                    Vec3d pos = context.position(this.position);
-                    world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), this.sound, category, volume, pitch, seed);
-                }
-            );
+        if (this.fromEntity && entity != null) {
+            world.playSoundFromEntity(null, entity, this.sound, category, volume, pitch, seed);
+            return true;
+        }
+
+        Vec3d pos = context.get(this.position.parameter());
+        if (pos == null) {
+            return false;
+        }
+
+        world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), this.sound, category, volume, pitch, seed);
         return true;
     }
 
@@ -86,13 +106,13 @@ public record PlaySoundAction(ActionContextParameter position, RegistryEntry<Sou
     }
 
     public static class Builder {
-        private final ActionContextParameter position;
+        private final PositionTarget position;
         private final RegistryEntry<SoundEvent> sound;
         private final SoundCategory category;
         private Range.FloatRange volume = Range.FloatRange.of(1.0f);
         private Range.FloatRange pitch = Range.FloatRange.of(1.0f);
 
-        private Builder(ActionContextParameter position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
+        private Builder(PositionTarget position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
             this.position = position;
             this.sound = sound;
             this.category = category;

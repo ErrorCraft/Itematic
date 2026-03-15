@@ -10,6 +10,7 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionRequirements;
 import net.errorcraft.itematic.world.action.actions.*;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
@@ -171,7 +172,7 @@ public class DispenseBehaviors {
         registerable.register(SPAWN_TNT, DispenseBehavior.builder(
             PassingSequenceHandler.builder()
                 .add(SpawnEntityAction.of(ActionContextParameter.TARGET, SimpleEntityInitializer.of(EntityType.TNT)))
-                .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundCategory.BLOCKS)))
+                .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundCategory.BLOCKS)))
             .build()
         );
         registerable.register(USE_BUCKET, DispenseBehavior.builder(
@@ -188,7 +189,7 @@ public class DispenseBehaviors {
             .build()
         );
         registerable.register(WAX_BLOCK, DispenseBehavior.builder(
-            decrement(WaxBlockAction.of(ActionContextParameter.TARGET)))
+            decrement(WaxBlockAction.of(PositionTarget.INTERACTED_POSITION)))
             .build()
         );
     }

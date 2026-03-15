@@ -6,7 +6,8 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.EndPortalFrameBlock;
@@ -15,13 +16,13 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldEvents;
 
-public record LightEndPortalAction(ActionContextParameter position) implements Action<LightEndPortalAction> {
+public record LightEndPortalAction(PositionTarget position) implements Action<LightEndPortalAction> {
     public static final MapCodec<LightEndPortalAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ActionContextParameter.CODEC.fieldOf("position").forGetter(LightEndPortalAction::position)
+        PositionTarget.CODEC.fieldOf("position").forGetter(LightEndPortalAction::position)
     ).apply(instance, LightEndPortalAction::new));
     private static final int PORTAL_SIZE = 3;
 
-    public static LightEndPortalAction of(ActionContextParameter position) {
+    public static LightEndPortalAction of(PositionTarget position) {
         return new LightEndPortalAction(position);
     }
 
@@ -32,8 +33,13 @@ public record LightEndPortalAction(ActionContextParameter position) implements A
 
     @Override
     public boolean execute(ActionContext context) {
+        return false;
+    }
+
+    @Override
+    public boolean execute(NewActionContext context) {
         ServerWorld world = context.world();
-        BlockPos pos = context.blockPos(this.position);
+        BlockPos pos = context.getBlockPos(this.position.parameter());
         BlockPattern.Result result = EndPortalFrameBlock.getCompletedFramePattern()
             .searchAround(world, pos);
         if (result == null) {

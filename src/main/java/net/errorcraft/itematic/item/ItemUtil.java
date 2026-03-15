@@ -230,9 +230,9 @@ public class ItemUtil {
                             ).build()
                         ),
                         UncheckedSequenceHandler.builder()
-                            .add(PlaySoundAction.of(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_SPLASH), SoundCategory.BLOCKS))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_SPLASH), SoundCategory.BLOCKS))
                             .add(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
-                            .add(DisplayParticleAction.builder(ActionContextParameter.TARGET, ParticleTypes.SPLASH)
+                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED_POSITION, ParticleTypes.SPLASH)
                                 .count(5)
                                 .offset(Vec3dProvider.of(
                                     -0.5d, 0.5d,
@@ -241,9 +241,9 @@ public class ItemUtil {
                                 ))
                                 .speed(1.0d)
                                 .build())
-                            .add(PlaySoundAction.of(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_EMPTY), SoundCategory.BLOCKS))
-                            .add(SetBlockStateAction.of(ActionContextParameter.TARGET, this.blocks.getOrThrow(BlockKeys.MUD)))
-                            .add(SwingHandAction.INSTANCE)
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_EMPTY), SoundCategory.BLOCKS))
+                            .add(SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, this.blocks.getOrThrow(BlockKeys.MUD)))
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
             ));
@@ -257,7 +257,7 @@ public class ItemUtil {
                     .with(OminousEffectProviderItemComponent.INSTANCE)
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(PlaySoundAction.of(ActionContextParameter.THIS, this.soundEvents.getOrThrow(SoundEventKeys.OMINOUS_BOTTLE_DISPOSE))))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.OMINOUS_BOTTLE_DISPOSE))))
                     .build()
             ));
         }
@@ -5553,7 +5553,7 @@ public class ItemUtil {
                         PassingSequenceHandler.builder()
                             .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
                             .add(DamageItemAction.of(1))
-                            .add(PlaySoundAction.builder(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.FLINT_AND_STEEL_USE), SoundCategory.BLOCKS)
+                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.FLINT_AND_STEEL_USE), SoundCategory.BLOCKS)
                                 .pitch(0.8f, 1.2f)
                                 .build())
                     ))
@@ -9553,19 +9553,19 @@ public class ItemUtil {
                                 .pushEntitiesUpwards()
                                 .build())
                             .add(DecrementItemAction.of(1))
-                            .add(SwingHandAction.INSTANCE)
-                            .add(PlaySoundAction.of(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS))
-                            .add(DisplayParticleAction.builder(ActionContextParameter.TARGET, ParticleTypes.SMOKE)
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS))
+                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED_POSITION, ParticleTypes.SMOKE)
                                 .count(16)
                                 .offset(Vec3dProvider.of(
                                     -0.1875d, 0.1875d,
                                     0.8125d, 0.8125d,
                                     -0.1875d, 0.1875d))
                                 .build())
-                            .addOptional(LightEndPortalAction.of(ActionContextParameter.TARGET))
+                            .addOptional(LightEndPortalAction.of(PositionTarget.INTERACTED_POSITION))
                     ))
                     .add(ItemEvents.THROW_PROJECTILE, ActionEntry.of(
-                        PlaySoundAction.builder(ActionContextParameter.THIS, this.soundEvents.getOrThrow(SoundEventKeys.ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL)
+                        PlaySoundAction.builder(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL)
                             .pitch(0.33f, 0.5f)
                             .build()
                     ))
@@ -9596,7 +9596,7 @@ public class ItemUtil {
                         PassingSequenceHandler.builder()
                             .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
                             .add(DecrementItemAction.of(1))
-                            .add(PlaySoundAction.builder(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.FIRE_CHARGE_USE), SoundCategory.BLOCKS)
+                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.FIRE_CHARGE_USE), SoundCategory.BLOCKS)
                                 .pitch(0.8f, 1.2f)
                                 .build())
                     ))
@@ -10781,8 +10781,13 @@ public class ItemUtil {
                                 .build()
                         ),
                         PassingSequenceHandler.builder()
-                            .add(SetItemPointerLocationAction.of(ActionContextParameter.TARGET))
-                            .add(SwingHandAction.INSTANCE)
+                            .add(SetItemPointerLocationAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(PlaySoundAction.of(
+                                ActionContextParameter.TARGET,
+                                this.soundEvents.getOrThrow(SoundEventKeys.LODESTONE_COMPASS_LOCK),
+                                SoundCategory.PLAYERS
+                            ))
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
             ));
@@ -11012,7 +11017,7 @@ public class ItemUtil {
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
                             .add(MarkBannerOnItemAction.of(ActionContextParameter.TARGET))
-                            .add(SwingHandAction.INSTANCE)
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
             ));
@@ -11052,8 +11057,8 @@ public class ItemUtil {
                                     .add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(this.potions.getOrThrow(PotionKeys.WATER)))
                                     .build()))
                             .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, ActionContextParameter.TARGET, ActionContextParameter.THIS))
-                            .add(PlaySoundAction.of(ActionContextParameter.THIS, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundCategory.NEUTRAL))
-                            .add(SwingHandAction.INSTANCE)
+                            .add(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundCategory.NEUTRAL))
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
             ));
@@ -11169,7 +11174,7 @@ public class ItemUtil {
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
                             .add(AttachLeashedEntitiesOnBlockAction.INSTANCE)
-                            .add(SwingHandAction.INSTANCE)
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
             ));
@@ -11183,7 +11188,7 @@ public class ItemUtil {
                         PassingSequenceHandler.builder()
                             .add(SetEntityNameFromItemAction.of(ActionContextParameter.TARGET))
                             .add(DecrementItemAction.of(1))
-                            .add(SwingHandAction.INSTANCE)
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
             ));
@@ -11291,9 +11296,9 @@ public class ItemUtil {
                         FirstToPassRequirementsSequenceHandler.builder()
                             .add(Actions.waxSign(this.blocks, true))
                             .add(PassingSequenceHandler.builder()
-                                .add(WaxBlockAction.of(ActionContextParameter.TARGET))
+                                .add(WaxBlockAction.of(PositionTarget.INTERACTED_POSITION))
                                 .add(DecrementItemAction.of(1))
-                                .add(SwingHandAction.INSTANCE))))
+                                .add(SwingHandAction.of(LootContext.EntityTarget.THIS)))))
                     .build()
             ));
             this.registerable.register(ItemKeys.ECHO_SHARD, create(
