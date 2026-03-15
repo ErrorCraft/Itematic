@@ -166,7 +166,9 @@ public class Actions {
                                         .blocks(blocks, blocks.getOrThrow(BlockKeys.TNT).value())))
                                 .build()
                         ),
-                        PrimeTntAction.of(ActionContextParameter.TARGET)
+                        PassingSequenceHandler.builder()
+                            .add(PrimeTntAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(PlaySoundAction.of(ActionContextParameter.TARGET, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundCategory.BLOCKS))
                     )
                     .add(PlaceBlockAction.of(blocks.getOrThrow(BlockKeys.FIRE), ActionContextParameter.TARGET, false)))
                 .addOptional(SwingHandAction.INSTANCE)

@@ -6,17 +6,19 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.TntBlock;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
-public record PrimeTntAction(ActionContextParameter position) implements Action<PrimeTntAction> {
+public record PrimeTntAction(PositionTarget position) implements Action<PrimeTntAction> {
     public static final MapCodec<PrimeTntAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ActionContextParameter.CODEC.fieldOf("position").forGetter(PrimeTntAction::position)
+        PositionTarget.CODEC.fieldOf("position").forGetter(PrimeTntAction::position)
     ).apply(instance, PrimeTntAction::new));
 
-    public static PrimeTntAction of(ActionContextParameter position) {
+    public static PrimeTntAction of(PositionTarget position) {
         return new PrimeTntAction(position);
     }
 
@@ -27,13 +29,20 @@ public record PrimeTntAction(ActionContextParameter position) implements Action<
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockPos pos = context.blockPos(this.position);
-        ServerWorld world = context.world();
-        if (world.getBlockState(pos).getBlock() instanceof TntBlock) {
-            TntBlock.primeTnt(world, pos);
-            world.removeBlock(pos, false);
-            return true;
-        }
         return false;
+    }
+
+    @Override
+    public boolean execute(NewActionContext context) {
+        Vec3d pos = context.get(this.position.parameter());
+        if (pos == null) {
+            return false;
+        }
+
+        ServerWorld world = context.world();
+        BlockPos blockPos = BlockPos.ofFloored(pos);
+        TntBlock.primeTnt(world, blockPos);
+        world.removeBlock(blockPos, false);
+        return true;
     }
 }
