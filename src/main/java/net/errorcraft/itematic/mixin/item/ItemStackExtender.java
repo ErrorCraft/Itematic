@@ -18,8 +18,8 @@ import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.util.Util;
-import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.block.BlockState;
@@ -29,6 +29,7 @@ import net.minecraft.component.ComponentMap;
 import net.minecraft.component.MergedComponentMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
@@ -36,6 +37,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -117,7 +119,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     private RegistryEntry<Item> entry;
 
     @Unique
-    private ActionContext context;
+    private NewActionContext context;
 
     @Inject(
         method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V",
@@ -723,14 +725,15 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
-    public void itematic$damage(int amount, ActionContext context) {
-        if (context.player(ActionContextParameter.THIS).map(PlayerEntity::isCreative).orElse(false)) {
-            return;
-        }
-
+    public void itematic$damage(int amount, NewActionContext context) {
         this.context = context;
-        Entity entity = context.entity(ActionContextParameter.THIS).orElse(null);
-        this.damage(amount, context.world(), entity instanceof ServerPlayerEntity player ? player : null, item -> this.onItemBroken(item, entity, context));
+        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
+        this.damage(
+            amount,
+            context.world(),
+            entity instanceof ServerPlayerEntity player ? player : null,
+            item -> this.onItemBroken(item, entity, context)
+        );
         this.context = null;
     }
 
@@ -749,8 +752,8 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
-    public boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
-        if (this.entry == null) {
+    public boolean itematic$invokeEvent(ItemEvent event, NewActionContext context) {
+        if (this.isEmpty()) {
             return false;
         }
 
@@ -827,13 +830,12 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Unique
-    private void onItemBroken(Item item, Entity entity, ActionContext context) {
-        if (entity instanceof LivingEntity livingEntity) {
-            context.slot().ifPresent(slot -> livingEntity.sendEquipmentBreakStatus(item, slot));
+    private void onItemBroken(Item item, Entity entity, NewActionContext context) {
+        EquipmentSlot slot = context.get(ItematicContextParameters.EQUIPMENT_SLOT);
+        if (slot != null && entity instanceof LivingEntity livingEntity) {
+            livingEntity.sendEquipmentBreakStatus(item, slot);
         }
 
-        this.decrement(1);
         this.itematic$invokeEvent(ItemEvents.BREAK_ITEM, context);
-        this.setDamage(0);
     }
 }

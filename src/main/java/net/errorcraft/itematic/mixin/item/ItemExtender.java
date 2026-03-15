@@ -20,6 +20,7 @@ import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
@@ -636,7 +637,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
-    public boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
+    public boolean itematic$invokeEvent(ItemEvent event, NewActionContext context) {
         return this.events.invokeEvent(event, context);
     }
 

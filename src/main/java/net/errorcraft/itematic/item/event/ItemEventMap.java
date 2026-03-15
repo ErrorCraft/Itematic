@@ -3,7 +3,7 @@ package net.errorcraft.itematic.item.event;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.world.action.ActionEntry;
-import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.registry.entry.RegistryEntry;
 
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public class ItemEventMap {
         return new Builder();
     }
 
-    public boolean invokeEvent(ItemEvent event, ActionContext context) {
+    public boolean invokeEvent(ItemEvent event, NewActionContext context) {
         RegistryEntry<ActionEntry> entry = this.events.get(event);
         if (entry == null) {
             return false;
