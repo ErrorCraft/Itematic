@@ -1,17 +1,24 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
+import net.errorcraft.itematic.item.ItemStackUtil;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stat.Stats;
+import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.util.Hand;
 
-public record OpenBookFromItemAction() implements Action<OpenBookFromItemAction> {
+public class OpenBookFromItemAction implements Action<OpenBookFromItemAction> {
     public static final OpenBookFromItemAction INSTANCE = new OpenBookFromItemAction();
     public static final MapCodec<OpenBookFromItemAction> CODEC = MapCodec.unit(INSTANCE);
+
+    private OpenBookFromItemAction() {}
 
     @Override
     public ActionType<OpenBookFromItemAction> type() {
@@ -20,13 +27,27 @@ public record OpenBookFromItemAction() implements Action<OpenBookFromItemAction>
 
     @Override
     public boolean execute(ActionContext context) {
-        return context.player(ActionContextParameter.THIS)
-            .map(player -> {
-                ItemStack stack = context.stack();
-                player.useBook(stack, context.hand());
-                player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
-                return true;
-            })
-            .orElse(false);
+        return false;
+    }
+
+    @Override
+    public boolean execute(NewActionContext context) {
+        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
+        if (!(entity instanceof PlayerEntity player)) {
+            return false;
+        }
+
+        ItemStack stack = context.get(LootContextParameters.TOOL);
+        if (ItemStackUtil.isNullOrEmpty(stack)) {
+            return false;
+        }
+
+        Hand hand = context.get(ItematicContextParameters.HAND);
+        if (hand == null) {
+            return false;
+        }
+
+        player.useBook(stack, hand);
+        return true;
     }
 }

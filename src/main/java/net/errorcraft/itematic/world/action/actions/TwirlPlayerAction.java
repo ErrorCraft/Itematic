@@ -1,18 +1,21 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
+import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TridentItem;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -21,9 +24,11 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public record TwirlPlayerAction() implements Action<TwirlPlayerAction> {
+public class TwirlPlayerAction implements Action<TwirlPlayerAction> {
     public static final TwirlPlayerAction INSTANCE = new TwirlPlayerAction();
     public static final MapCodec<TwirlPlayerAction> CODEC = MapCodec.unit(INSTANCE);
+
+    private TwirlPlayerAction() {}
 
     @Override
     public ActionType<TwirlPlayerAction> type() {
@@ -32,12 +37,21 @@ public record TwirlPlayerAction() implements Action<TwirlPlayerAction> {
 
     @Override
     public boolean execute(ActionContext context) {
-        PlayerEntity player = context.player(ActionContextParameter.THIS).orElse(null);
-        if (player == null) {
+        return false;
+    }
+
+    @Override
+    public boolean execute(NewActionContext context) {
+        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
+        if (!(entity instanceof PlayerEntity player)) {
             return false;
         }
 
-        ItemStack stack = context.stack();
+        ItemStack stack = context.get(LootContextParameters.TOOL);
+        if (ItemStackUtil.isNullOrEmpty(stack)) {
+            return false;
+        }
+
         float spinAttackStrength = EnchantmentHelper.getTridentSpinAttackStrength(stack, player);
         if (spinAttackStrength <= 0.0f) {
             return false;

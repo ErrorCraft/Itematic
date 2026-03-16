@@ -69,7 +69,7 @@ public class DispenseBehaviors {
 
         registerable.register(BRUSH, DispenseBehavior.builder(
             PassingSequenceHandler.builder()
-                .add(BrushArmadilloAtPositionAction.of(ActionContextParameter.TARGET))
+                .add(BrushArmadilloAtPositionAction.of(PositionTarget.INTERACTED_POSITION))
                 .add(DamageItemAction.of(16)))
             .doNotDispenseOnFailure()
             .build()
@@ -84,12 +84,12 @@ public class DispenseBehaviors {
                                 .blocks(blocks, blocks.getOrThrow(BlockKeys.RESPAWN_ANCHOR).value())))
                         .build()
                 ),
-                decrement(ChargeRespawnAnchorAction.of(ActionContextParameter.TARGET))))
+                decrement(ChargeRespawnAnchorAction.of(PositionTarget.INTERACTED_POSITION))))
             .doNotDispenseOnFailure()
             .build()
         );
         registerable.register(EQUIP_CHEST, DispenseBehavior.builder(
-            decrement(EquipHorseWithChestAtPositionAction.of(ActionContextParameter.TARGET)))
+            decrement(EquipHorseWithChestAtPositionAction.of(PositionTarget.INTERACTED_POSITION)))
             .build()
         );
         registerable.register(EQUIP_ENTITY, DispenseBehavior.builder(

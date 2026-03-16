@@ -32,6 +32,7 @@ import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionRequirements;
 import net.errorcraft.itematic.world.action.Actions;
 import net.errorcraft.itematic.world.action.actions.*;
+import net.errorcraft.itematic.world.action.context.ItematicEntityTargets;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
@@ -78,6 +79,7 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.stat.Stats;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
@@ -593,7 +595,7 @@ public class ItemUtil {
                         .build())
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ApplySuspiciousStewEffectsFromItemAction.of(ActionContextParameter.THIS)))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ApplySuspiciousStewEffectsFromItemAction.of(LootContext.EntityTarget.THIS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ROTTEN_FLESH, create(
@@ -10783,7 +10785,7 @@ public class ItemUtil {
                         PassingSequenceHandler.builder()
                             .add(SetItemPointerLocationAction.of(PositionTarget.INTERACTED_POSITION))
                             .add(PlaySoundAction.of(
-                                ActionContextParameter.TARGET,
+                                PositionTarget.INTERACTED_POSITION,
                                 this.soundEvents.getOrThrow(SoundEventKeys.LODESTONE_COMPASS_LOCK),
                                 SoundCategory.PLAYERS
                             ))
@@ -11016,7 +11018,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(MarkBannerOnItemAction.of(ActionContextParameter.TARGET))
+                            .add(MarkBannerOnItemAction.of(PositionTarget.INTERACTED_POSITION))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
@@ -11102,7 +11104,14 @@ public class ItemUtil {
                     .with(TextHolderItemComponent.INSTANCE)
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE, ActionEntry.of(OpenBookFromItemAction.INSTANCE))
+                    .add(ItemEvents.USE, ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .add(OpenBookFromItemAction.INSTANCE)
+                            .add(IncrementStatAction.of(
+                                ActionContextParameter.THIS,
+                                Stats.USED.itematic$getOrCreateStat(this.items.getOrThrow(ItemKeys.WRITTEN_BOOK))
+                            ))
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAP, create(
@@ -11173,7 +11182,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(AttachLeashedEntitiesOnBlockAction.INSTANCE)
+                            .add(AttachLeashedEntitiesOnBlockAction.of(PositionTarget.INTERACTED_POSITION))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
@@ -11186,7 +11195,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_ENTITY, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(SetEntityNameFromItemAction.of(ActionContextParameter.TARGET))
+                            .add(SetEntityNameFromItemAction.of(ItematicEntityTargets.TARGET_ENTITY))
                             .add(DecrementItemAction.of(1))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
