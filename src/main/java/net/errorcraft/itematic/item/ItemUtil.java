@@ -727,7 +727,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         RemoveStatusEffectsAction.of(
-                            ActionContextParameter.THIS,
+                            LootContext.EntityTarget.THIS,
                             this.statusEffects.getOrThrow(StatusEffectKeys.POISON)
                         )
                     ))
@@ -10990,8 +10990,8 @@ public class ItemUtil {
                             .add(FertilizeAction.of(PositionTarget.INTERACTED_POSITION))
                             .add(InvokeGameEventAction.of(
                                 GameEvent.ITEM_INTERACT_FINISH,
-                                ActionContextParameter.THIS,
-                                ActionContextParameter.THIS
+                                PositionTarget.ORIGIN,
+                                LootContext.EntityTarget.THIS
                             ))
                             .add(DecrementItemAction.of(1))
                     ))
@@ -11058,7 +11058,7 @@ public class ItemUtil {
                                 ComponentChanges.builder()
                                     .add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(this.potions.getOrThrow(PotionKeys.WATER)))
                                     .build()))
-                            .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, ActionContextParameter.TARGET, ActionContextParameter.THIS))
+                            .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, PositionTarget.INTERACTED_POSITION, LootContext.EntityTarget.THIS))
                             .add(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundCategory.NEUTRAL))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
@@ -11108,7 +11108,7 @@ public class ItemUtil {
                         PassingSequenceHandler.builder()
                             .add(OpenBookFromItemAction.INSTANCE)
                             .add(IncrementStatAction.of(
-                                ActionContextParameter.THIS,
+                                LootContext.EntityTarget.THIS,
                                 Stats.USED.itematic$getOrCreateStat(this.items.getOrThrow(ItemKeys.WRITTEN_BOOK))
                             ))
                     ))

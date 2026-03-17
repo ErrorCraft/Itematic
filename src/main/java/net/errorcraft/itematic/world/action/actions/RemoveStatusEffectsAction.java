@@ -6,22 +6,23 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.loot.context.LootContext;
 import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 
-public record RemoveStatusEffectsAction(RegistryEntryList<StatusEffect> effects, ActionContextParameter entity) implements Action<RemoveStatusEffectsAction> {
+public record RemoveStatusEffectsAction(RegistryEntryList<StatusEffect> effects, LootContext.EntityTarget entity) implements Action<RemoveStatusEffectsAction> {
     public static final MapCodec<RemoveStatusEffectsAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         RegistryCodecs.entryList(RegistryKeys.STATUS_EFFECT).fieldOf("effects").forGetter(RemoveStatusEffectsAction::effects),
-        ActionContextParameter.CODEC.fieldOf("entity").forGetter(RemoveStatusEffectsAction::entity)
+        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(RemoveStatusEffectsAction::entity)
     ).apply(instance, RemoveStatusEffectsAction::new));
 
     @SafeVarargs
-    public static RemoveStatusEffectsAction of(ActionContextParameter entity, RegistryEntry<StatusEffect>... effects) {
+    public static RemoveStatusEffectsAction of(LootContext.EntityTarget entity, RegistryEntry<StatusEffect>... effects) {
         return new RemoveStatusEffectsAction(RegistryEntryList.of(effects), entity);
     }
 
@@ -32,9 +33,16 @@ public record RemoveStatusEffectsAction(RegistryEntryList<StatusEffect> effects,
 
     @Override
     public boolean execute(ActionContext context) {
-        return context.livingEntity(this.entity)
-            .map(this::removeStatusEffects)
-            .orElse(false);
+        return false;
+    }
+
+    @Override
+    public boolean execute(NewActionContext context) {
+        if (context.get(this.entity.getParameter()) instanceof LivingEntity target) {
+            return this.removeStatusEffects(target);
+        }
+
+        return false;
     }
 
     private boolean removeStatusEffects(LivingEntity target) {
@@ -42,6 +50,7 @@ public record RemoveStatusEffectsAction(RegistryEntryList<StatusEffect> effects,
         for (RegistryEntry<StatusEffect> effect : this.effects) {
             removedStatusEffects |= target.removeStatusEffect(effect);
         }
+
         return removedStatusEffects;
     }
 }

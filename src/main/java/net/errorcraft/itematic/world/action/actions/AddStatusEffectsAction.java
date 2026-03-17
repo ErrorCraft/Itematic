@@ -6,20 +6,21 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.loot.context.LootContext;
 
 import java.util.List;
 
-public record AddStatusEffectsAction(List<StatusEffectInstance> effects, ActionContextParameter entity) implements Action<AddStatusEffectsAction> {
+public record AddStatusEffectsAction(List<StatusEffectInstance> effects, LootContext.EntityTarget entity) implements Action<AddStatusEffectsAction> {
     public static final MapCodec<AddStatusEffectsAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         StatusEffectInstance.CODEC.listOf().fieldOf("effects").forGetter(AddStatusEffectsAction::effects),
-        ActionContextParameter.CODEC.fieldOf("entity").forGetter(AddStatusEffectsAction::entity)
+        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(AddStatusEffectsAction::entity)
     ).apply(instance, AddStatusEffectsAction::new));
 
     public static AddStatusEffectsAction of(StatusEffectInstance... effects) {
-        return new AddStatusEffectsAction(List.of(effects), ActionContextParameter.THIS);
+        return new AddStatusEffectsAction(List.of(effects), LootContext.EntityTarget.THIS);
     }
 
     @Override
@@ -29,9 +30,16 @@ public record AddStatusEffectsAction(List<StatusEffectInstance> effects, ActionC
 
     @Override
     public boolean execute(ActionContext context) {
-        return context.livingEntity(this.entity)
-            .map(this::addStatusEffects)
-            .orElse(false);
+        return false;
+    }
+
+    @Override
+    public boolean execute(NewActionContext context) {
+        if (context.get(this.entity.getParameter()) instanceof LivingEntity target) {
+            return this.addStatusEffects(target);
+        }
+
+        return false;
     }
 
     private boolean addStatusEffects(LivingEntity target) {

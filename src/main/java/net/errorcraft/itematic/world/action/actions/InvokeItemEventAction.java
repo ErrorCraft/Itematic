@@ -8,6 +8,9 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContextParameters;
 
 public record InvokeItemEventAction(ItemEvent event) implements Action<InvokeItemEventAction> {
     public static final MapCodec<InvokeItemEventAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -25,6 +28,12 @@ public record InvokeItemEventAction(ItemEvent event) implements Action<InvokeIte
 
     @Override
     public boolean execute(ActionContext context) {
-        return context.stack().itematic$invokeEvent(this.event, context);
+        return false;
+    }
+
+    @Override
+    public boolean execute(NewActionContext context) {
+        return context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
+            .itematic$invokeEvent(this.event, context);
     }
 }

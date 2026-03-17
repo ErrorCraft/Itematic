@@ -42,6 +42,10 @@ public class NewActionContext {
         return this.parameters.getNullable(parameter);
     }
 
+    public <T> T getOrDefault(ContextParameter<T> parameter, T defaultValue) {
+        return this.parameters.getOrDefault(parameter, defaultValue);
+    }
+
     @Nullable
     public BlockPos getBlockPos(ContextParameter<Vec3d> parameter) {
         Vec3d pos = this.get(parameter);

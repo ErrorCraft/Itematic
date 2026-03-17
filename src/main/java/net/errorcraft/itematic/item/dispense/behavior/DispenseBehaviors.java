@@ -93,11 +93,11 @@ public class DispenseBehaviors {
             .build()
         );
         registerable.register(EQUIP_ENTITY, DispenseBehavior.builder(
-            decrement(EquipEntityAtPositionAction.of(ActionContextParameter.TARGET)))
+            decrement(EquipEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION)))
             .build()
         );
         registerable.register(EQUIP_ENTITY_HEAD, DispenseBehavior.builder(
-            decrement(EquipEntityAtPositionAction.of(ActionContextParameter.TARGET)))
+            decrement(EquipEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION)))
             .doNotDispenseOnFailure()
             .build()
         );
@@ -114,7 +114,7 @@ public class DispenseBehaviors {
                             .build()
                     ),
                     UncheckedSequenceHandler.builder()
-                        .add(TakeHoneyAction.of(ActionContextParameter.TARGET))
+                        .add(TakeHoneyAction.of(PositionTarget.INTERACTED_POSITION))
                         .add(ExchangeItemAction.of(items.getOrThrow(ItemKeys.HONEY_BOTTLE))))
                 .add(InvokeItemEventAction.of(ItemEvents.USE_ON_BLOCK)))
             .build()
@@ -126,18 +126,18 @@ public class DispenseBehaviors {
         );
         registerable.register(PLACE_CARVED_PUMPKIN, DispenseBehavior.builder(
             decrement(FirstToSucceedSequenceHandler.builder()
-                .add(PlaceCarvedPumpkinAction.of(ActionContextParameter.TARGET))
-                .add(EquipEntityAtPositionAction.of(ActionContextParameter.TARGET))))
+                .add(PlaceCarvedPumpkinAction.of(PositionTarget.INTERACTED_POSITION))
+                .add(EquipEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION))))
             .doNotDispenseOnFailure()
             .build()
         );
         registerable.register(SADDLE, DispenseBehavior.builder(
-            SaddleEntityAtPositionAction.of(ActionContextParameter.TARGET))
+            SaddleEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION))
             .build()
         );
         registerable.register(SHEAR, DispenseBehavior.builder(
             PassingSequenceHandler.builder()
-                .add(ShearAtPositionAction.of(ActionContextParameter.TARGET))
+                .add(ShearAtPositionAction.of(PositionTarget.INTERACTED_POSITION))
                 .add(DamageItemAction.of(1)))
             .doNotDispenseOnFailure()
             .build()
@@ -176,7 +176,7 @@ public class DispenseBehaviors {
             .build()
         );
         registerable.register(USE_BUCKET, DispenseBehavior.builder(
-            UseBucketAction.of(ActionContextParameter.TARGET))
+            UseBucketAction.of(PositionTarget.INTERACTED_POSITION))
             .build()
         );
         registerable.register(USE_ITEM_ON_BLOCK, DispenseBehavior.builder(
@@ -199,7 +199,7 @@ public class DispenseBehaviors {
     }
     
     private static PassingSequenceHandler.Builder shootProjectile(float power, float uncertainty) {
-        return decrement(ShootProjectileFromItemAction.of(ActionContextParameter.TARGET, power, uncertainty));
+        return decrement(ShootProjectileFromItemAction.of(PositionTarget.INTERACTED_POSITION, power, uncertainty));
     }
 
     private static PassingSequenceHandler.Builder decrement(Action<?> action) {

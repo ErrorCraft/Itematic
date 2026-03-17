@@ -196,8 +196,8 @@ public class Actions {
             ),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, blocks.getOrThrow(pottedBlock)))
-                .add(InvokeGameEventAction.of(GameEvent.BLOCK_CHANGE, ActionContextParameter.TARGET, ActionContextParameter.THIS))
-                .add(IncrementStatAction.of(ActionContextParameter.THIS, Stats.CUSTOM.getOrCreateStat(Stats.POT_FLOWER)))
+                .add(InvokeGameEventAction.of(GameEvent.BLOCK_CHANGE, PositionTarget.INTERACTED_POSITION, LootContext.EntityTarget.THIS))
+                .add(IncrementStatAction.of(LootContext.EntityTarget.THIS, Stats.CUSTOM.getOrCreateStat(Stats.POT_FLOWER)))
                 .add(DecrementItemAction.of(1))
                 .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
         );
