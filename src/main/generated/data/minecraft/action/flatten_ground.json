@@ -29,6 +29,7 @@
     "terms": [
       {
         "condition": "minecraft:location_check",
+        "position": "interacted_position",
         "predicate": {
           "block": {
             "blocks": "#minecraft:flattenable_into_dirt_path"
@@ -47,6 +48,7 @@
       {
         "condition": "minecraft:location_check",
         "offsetY": 1,
+        "position": "interacted_position",
         "predicate": {
           "block": {
             "blocks": "#minecraft:air"

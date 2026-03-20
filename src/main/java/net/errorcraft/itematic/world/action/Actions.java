@@ -3,6 +3,7 @@ package net.errorcraft.itematic.world.action;
 import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionUtil;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
@@ -16,7 +17,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.loot.condition.AllOfLootCondition;
 import net.minecraft.loot.condition.InvertedLootCondition;
-import net.minecraft.loot.condition.LocationCheckLootCondition;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.particle.ParticleTypes;
@@ -74,7 +74,8 @@ public class Actions {
             SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, blocks.getOrThrow(BlockKeys.DIRT))
         ));
         registerable.register(TILL_ROOTED_DIRT, ActionEntry.of(
-            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+            LocationCheckLootConditionUtil.builder(
+                PositionTarget.INTERACTED_POSITION,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
                         .blocks(blocks, blocks.getOrThrow(BlockKeys.ROOTED_DIRT).value()))
@@ -99,7 +100,8 @@ public class Actions {
                 .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, soundEvents.getOrThrow(SoundEventKeys.SHOVEL_FLATTEN), SoundCategory.BLOCKS))
         ));
         registerable.register(EXTINGUISH_CAMPFIRE, ActionEntry.of(
-            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+            LocationCheckLootConditionUtil.builder(
+                PositionTarget.INTERACTED_POSITION,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
                         .tag(blocks, BlockTags.CAMPFIRES)
@@ -116,7 +118,8 @@ public class Actions {
                     .build())
                 .add(FirstToPassRequirementsSequenceHandler.builder()
                     .add(
-                        LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                        LocationCheckLootConditionUtil.builder(
+                            PositionTarget.INTERACTED_POSITION,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
                                     .state(StatePredicate.Builder.create()
@@ -132,13 +135,15 @@ public class Actions {
                 .add(FirstToPassRequirementsSequenceHandler.builder()
                     .add(
                         AllOfLootCondition.builder(
-                            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                            LocationCheckLootConditionUtil.builder(
+                                PositionTarget.INTERACTED_POSITION,
                                 LocationPredicate.Builder.create()
                                     .block(BlockPredicate.Builder.create()
                                         .state(StatePredicate.Builder.create()
                                             .exactMatch(Properties.LIT, false)))),
                             InvertedLootCondition.builder(
-                                LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                                LocationCheckLootConditionUtil.builder(
+                                    PositionTarget.INTERACTED_POSITION,
                                     LocationPredicate.Builder.create()
                                         .block(BlockPredicate.Builder.create()
                                             .state(StatePredicate.Builder.create()
@@ -149,7 +154,8 @@ public class Actions {
                             .build()
                     )
                     .add(
-                        LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                        LocationCheckLootConditionUtil.builder(
+                            PositionTarget.INTERACTED_POSITION,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
                                     .blocks(blocks, blocks.getOrThrow(BlockKeys.TNT).value()))
@@ -173,7 +179,8 @@ public class Actions {
 
     public static ActionEntry potBlock(RegistryEntryLookup<Block> blocks, RegistryKey<Block> pottedBlock) {
         return ActionEntry.of(
-            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+            LocationCheckLootConditionUtil.builder(
+                PositionTarget.INTERACTED_POSITION,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
                         .blocks(blocks, blocks.getOrThrow(BlockKeys.FLOWER_POT).value()))
@@ -189,7 +196,8 @@ public class Actions {
 
     private static ActionEntry modifySign(RegistryEntryLookup<Block> blocks, ModifySignAction action) {
         return ActionEntry.of(
-            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+            LocationCheckLootConditionUtil.builder(
+                PositionTarget.INTERACTED_POSITION,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
                         .tag(blocks, BlockTags.SIGNS))
@@ -203,14 +211,16 @@ public class Actions {
 
     private static LootCondition.Builder setBlockConditions(RegistryEntryLookup<Block> blocks, UnaryOperator<BlockPredicate.Builder> blockPredicateBuilder) {
         return AllOfLootCondition.builder(
-            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+            LocationCheckLootConditionUtil.builder(
+                PositionTarget.INTERACTED_POSITION,
                 LocationPredicate.Builder.create()
                     .block(blockPredicateBuilder.apply(BlockPredicate.Builder.create()))
             ),
             InvertedLootCondition.builder(
                 SideCheckPredicate.builder(Direction.DOWN)
             ),
-            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+            LocationCheckLootConditionUtil.builder(
+                PositionTarget.INTERACTED_POSITION,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
                         .tag(blocks, BlockTags.AIR)),

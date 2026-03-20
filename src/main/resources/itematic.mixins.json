@@ -284,6 +284,7 @@
     "item.tooltip.BundleTooltipDataExtender",
     "loot.ContainerComponentModifierExtender",
     "loot.ContainerComponentModifiersExtender$BundleContentsExtender",
+    "loot.condition.LocationCheckLootConditionExtender",
     "loot.condition.LootConditionTypesAccessor",
     "loot.context.LootContextTypesAccessor",
     "loot.entry.TagEntryExtender",

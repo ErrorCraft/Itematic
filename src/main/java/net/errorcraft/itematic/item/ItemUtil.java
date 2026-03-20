@@ -21,6 +21,7 @@ import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMeth
 import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
+import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionUtil;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
@@ -213,7 +214,8 @@ public class ItemUtil {
                             InvertedLootCondition.builder(
                                 SideCheckPredicate.builder(Direction.DOWN)
                             ),
-                            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                            LocationCheckLootConditionUtil.builder(
+                                PositionTarget.INTERACTED_POSITION,
                                 LocationPredicate.Builder.create()
                                     .block(BlockPredicate.Builder.create()
                                         .tag(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
@@ -9521,7 +9523,8 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                        LocationCheckLootConditionUtil.builder(
+                            PositionTarget.INTERACTED_POSITION,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
                                     .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
@@ -10753,7 +10756,8 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                        LocationCheckLootConditionUtil.builder(
+                            PositionTarget.INTERACTED_POSITION,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
                                     .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value()))
@@ -11020,7 +11024,8 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                        LocationCheckLootConditionUtil.builder(
+                            PositionTarget.INTERACTED_POSITION,
                             LocationPredicate.Builder.create()
                                 .fluid(FluidPredicate.Builder.create()
                                     .tag(this.fluids.getOrThrow(FluidTags.WATER)))

@@ -35,6 +35,7 @@
       },
       "requirements": {
         "condition": "minecraft:location_check",
+        "position": "interacted_position",
         "predicate": {
           "block": {
             "blocks": "#minecraft:signs"

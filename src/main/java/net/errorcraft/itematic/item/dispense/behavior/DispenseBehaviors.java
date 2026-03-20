@@ -4,6 +4,7 @@ import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionUtil;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.action.Action;
@@ -21,7 +22,6 @@ import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
-import net.minecraft.loot.condition.LocationCheckLootCondition;
 import net.minecraft.predicate.BlockPredicate;
 import net.minecraft.predicate.StatePredicate;
 import net.minecraft.predicate.entity.LocationPredicate;
@@ -73,7 +73,8 @@ public class DispenseBehaviors {
         );
         registerable.register(CHARGE_RESPAWN_ANCHOR, DispenseBehavior.builder(
             ActionEntry.of(
-                LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                LocationCheckLootConditionUtil.builder(
+                    PositionTarget.INTERACTED_POSITION,
                     LocationPredicate.Builder.create()
                         .block(BlockPredicate.Builder.create()
                             .blocks(blocks, blocks.getOrThrow(BlockKeys.RESPAWN_ANCHOR).value()))
@@ -98,7 +99,8 @@ public class DispenseBehaviors {
         registerable.register(GLASS_BOTTLE, DispenseBehavior.builder(
             FirstToPassRequirementsSequenceHandler.builder()
                 .add(
-                    LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                    LocationCheckLootConditionUtil.builder(
+                        PositionTarget.INTERACTED_POSITION,
                         LocationPredicate.Builder.create()
                             .block(BlockPredicate.Builder.create()
                                 .state(StatePredicate.Builder.create()

@@ -14,6 +14,7 @@
     "terms": [
       {
         "condition": "minecraft:location_check",
+        "position": "interacted_position",
         "predicate": {
           "block": {
             "blocks": "#minecraft:tillable_into_farmland"
@@ -32,6 +33,7 @@
       {
         "condition": "minecraft:location_check",
         "offsetY": 1,
+        "position": "interacted_position",
         "predicate": {
           "block": {
             "blocks": "#minecraft:air"

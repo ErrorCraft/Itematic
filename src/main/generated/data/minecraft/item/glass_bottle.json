@@ -48,6 +48,7 @@
       ],
       "requirements": {
         "condition": "minecraft:location_check",
+        "position": "interacted_position",
         "predicate": {
           "fluid": {
             "fluids": "#minecraft:water"

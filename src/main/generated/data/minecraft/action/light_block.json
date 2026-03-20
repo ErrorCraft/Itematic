@@ -21,6 +21,7 @@
                 "terms": [
                   {
                     "condition": "minecraft:location_check",
+                    "position": "interacted_position",
                     "predicate": {
                       "block": {
                         "state": {
@@ -33,6 +34,7 @@
                     "condition": "minecraft:inverted",
                     "term": {
                       "condition": "minecraft:location_check",
+                      "position": "interacted_position",
                       "predicate": {
                         "block": {
                           "state": {
@@ -70,6 +72,7 @@
               },
               "requirements": {
                 "condition": "minecraft:location_check",
+                "position": "interacted_position",
                 "predicate": {
                   "block": {
                     "blocks": "minecraft:tnt"
