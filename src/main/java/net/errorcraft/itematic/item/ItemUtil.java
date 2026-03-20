@@ -29,13 +29,10 @@ import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.ActionEntry;
-import net.errorcraft.itematic.world.action.ActionRequirements;
 import net.errorcraft.itematic.world.action.Actions;
 import net.errorcraft.itematic.world.action.actions.*;
 import net.errorcraft.itematic.world.action.context.ItematicEntityTargets;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
@@ -212,24 +209,21 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                            AllOfLootCondition.builder(
-                                InvertedLootCondition.builder(
-                                    SideCheckPredicate.builder(Direction.DOWN)
-                                ),
-                                LocationCheckLootCondition.builder(
-                                    LocationPredicate.Builder.create()
-                                        .block(BlockPredicate.Builder.create()
-                                            .tag(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
-                                ),
-                                MatchToolLootCondition.builder(
-                                    ItemPredicate.Builder.create()
-                                        .subPredicate(ItemSubPredicateTypes.POTION_CONTENTS, new PotionContentsPredicate(RegistryEntryList.of(
-                                            this.potions.getOrThrow(PotionKeys.WATER)
-                                        )))
-                                )
-                            ).build()
+                        AllOfLootCondition.builder(
+                            InvertedLootCondition.builder(
+                                SideCheckPredicate.builder(Direction.DOWN)
+                            ),
+                            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                                LocationPredicate.Builder.create()
+                                    .block(BlockPredicate.Builder.create()
+                                        .tag(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
+                            ),
+                            MatchToolLootCondition.builder(
+                                ItemPredicate.Builder.create()
+                                    .subPredicate(ItemSubPredicateTypes.POTION_CONTENTS, new PotionContentsPredicate(RegistryEntryList.of(
+                                        this.potions.getOrThrow(PotionKeys.WATER)
+                                    )))
+                            )
                         ),
                         UncheckedSequenceHandler.builder()
                             .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_SPLASH), SoundCategory.BLOCKS))
@@ -437,10 +431,7 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
-                            RandomChanceLootCondition.builder(0.3f).build()
-                        ),
+                        RandomChanceLootCondition.builder(0.3f),
                         AddStatusEffectsAction.of(
                             new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 600)
                         )
@@ -608,10 +599,7 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
-                            RandomChanceLootCondition.builder(0.8f).build()
-                        ),
+                        RandomChanceLootCondition.builder(0.8f),
                         AddStatusEffectsAction.of(
                             new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.HUNGER), 600)
                         )
@@ -644,10 +632,7 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
-                            RandomChanceLootCondition.builder(0.6f).build()
-                        ),
+                        RandomChanceLootCondition.builder(0.6f),
                         AddStatusEffectsAction.of(
                             new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 100)
                         )
@@ -5499,21 +5484,18 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.STOPPED_USING, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
-                            AllOfLootCondition.builder(
-                                EntityPropertiesLootCondition.builder(
-                                    LootContext.EntityTarget.THIS,
-                                    EntityPredicate.Builder.create()
-                                        .itematic$usedItemAtLeast(TridentItem.MIN_DRAW_DURATION)
-                                        .itematic$inWaterOrRain(true)
-                                ),
-                                MatchToolLootCondition.builder(
-                                    ItemPredicate.Builder.create()
-                                        .subPredicate(ItemSubPredicateTypes.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.of(
-                                            new EnchantmentPredicate(this.enchantments.getOrThrow(Enchantments.RIPTIDE), NumberRange.IntRange.ANY)
-                                        ))))
-                            ).build()
+                        AllOfLootCondition.builder(
+                            EntityPropertiesLootCondition.builder(
+                                LootContext.EntityTarget.THIS,
+                                EntityPredicate.Builder.create()
+                                    .itematic$usedItemAtLeast(TridentItem.MIN_DRAW_DURATION)
+                                    .itematic$inWaterOrRain(true)
+                            ),
+                            MatchToolLootCondition.builder(
+                                ItemPredicate.Builder.create()
+                                    .subPredicate(ItemSubPredicateTypes.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.of(
+                                        new EnchantmentPredicate(this.enchantments.getOrThrow(Enchantments.RIPTIDE), NumberRange.IntRange.ANY)
+                                    ))))
                         ),
                         PassingSequenceHandler.builder()
                             .add(TwirlPlayerAction.INSTANCE)
@@ -5818,7 +5800,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ARMOR_STAND).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(EntityItemComponent.from(new ArmorStandEntityInitializer(), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(ArmorStandEntityInitializer.INSTANCE, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_CRYSTAL, create(
@@ -9539,15 +9521,12 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                            LocationCheckLootCondition.builder(
-                                    LocationPredicate.Builder.create()
-                                        .block(BlockPredicate.Builder.create()
-                                            .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
-                                            .state(StatePredicate.Builder.create()
-                                                .exactMatch(Properties.EYE, false))))
-                                .build()
+                        LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                            LocationPredicate.Builder.create()
+                                .block(BlockPredicate.Builder.create()
+                                    .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
+                                    .state(StatePredicate.Builder.create()
+                                        .exactMatch(Properties.EYE, false)))
                         ),
                         PassingSequenceHandler.builder()
                             .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED_POSITION)
@@ -10774,13 +10753,10 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                            LocationCheckLootCondition.builder(
-                                LocationPredicate.Builder.create()
-                                    .block(BlockPredicate.Builder.create()
-                                        .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value())))
-                                .build()
+                        LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                            LocationPredicate.Builder.create()
+                                .block(BlockPredicate.Builder.create()
+                                    .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value()))
                         ),
                         PassingSequenceHandler.builder()
                             .add(SetItemPointerLocationAction.of(PositionTarget.INTERACTED_POSITION))
@@ -11044,13 +11020,10 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                            LocationCheckLootCondition.builder(
-                                LocationPredicate.Builder.create()
-                                    .fluid(FluidPredicate.Builder.create()
-                                        .tag(this.fluids.getOrThrow(FluidTags.WATER)))
-                            ).build()
+                        LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                            LocationPredicate.Builder.create()
+                                .fluid(FluidPredicate.Builder.create()
+                                    .tag(this.fluids.getOrThrow(FluidTags.WATER)))
                         ),
                         UncheckedSequenceHandler.builder()
                             .add(ExchangeItemAction.of(

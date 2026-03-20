@@ -7,7 +7,7 @@ import net.errorcraft.itematic.access.entity.EntityTypeBuilderAccess;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.EntityInitializerCodecCreator;
 import net.errorcraft.itematic.entity.initializer.initializers.*;
-import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EyeOfEnderEntity;
@@ -38,7 +38,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     private EntityInitializer<?> initializer;
 
     @Unique
-    private ActionContext actionContext;
+    private NewActionContext actionContext;
 
     @ModifyArg(
         method = "<clinit>",
@@ -431,7 +431,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     }
 
     @Override
-    public void itematic$setInitializer(EntityInitializer<?> initializer, ActionContext actionContext) {
+    public void itematic$setInitializer(EntityInitializer<?> initializer, NewActionContext actionContext) {
         this.initializer = initializer;
         this.actionContext = actionContext;
     }

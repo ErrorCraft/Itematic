@@ -18,7 +18,10 @@
       "action": {
         "type": "minecraft:exchange_item",
         "decrement_count": false,
-        "item": "minecraft:fishing_rod"
+        "item": {
+          "id": "minecraft:fishing_rod",
+          "count": 1
+        }
       }
     }
   }

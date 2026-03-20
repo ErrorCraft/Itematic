@@ -4,7 +4,6 @@ import com.chocohead.mm.api.ClassTinkerers;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.MappingResolver;
-import net.minecraft.util.context.ContextParameter;
 
 public class ItematicEarlyRiser implements Runnable {
     @Override
@@ -15,7 +14,8 @@ public class ItematicEarlyRiser implements Runnable {
             .addEnum("ITEMATIC$BREWING")
             .build();
         String lootContextEntityTarget = remapper.mapClassName("intermediary", "net.minecraft.class_47$class_50");
-        ClassTinkerers.enumBuilder(lootContextEntityTarget, String.class, ContextParameter.class)
+        String contextParameter = 'L' + remapper.mapClassName("intermediary", "net.minecraft.class_169") + ';';
+        ClassTinkerers.enumBuilder(lootContextEntityTarget, String.class, contextParameter)
             .addEnum("ITEMATIC$TARGET_ENTITY", "target_entity", ItematicContextParameters.TARGET_ENTITY)
             .build();
     }

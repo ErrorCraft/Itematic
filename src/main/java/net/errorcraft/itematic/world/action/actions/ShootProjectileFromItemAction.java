@@ -8,16 +8,19 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContextParameters;
 
-public record ShootProjectileFromItemAction(ActionContextParameter position, float power, float uncertainty) implements Action<ShootProjectileFromItemAction> {
+public record ShootProjectileFromItemAction(PositionTarget position, float power, float uncertainty) implements Action<ShootProjectileFromItemAction> {
     public static final MapCodec<ShootProjectileFromItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ActionContextParameter.CODEC.fieldOf("position").forGetter(ShootProjectileFromItemAction::position),
+        PositionTarget.CODEC.fieldOf("position").forGetter(ShootProjectileFromItemAction::position),
         Codec.FLOAT.fieldOf("power").forGetter(ShootProjectileFromItemAction::power),
         Codec.FLOAT.fieldOf("uncertainty").forGetter(ShootProjectileFromItemAction::uncertainty)
     ).apply(instance, ShootProjectileFromItemAction::new));
 
-    public static ShootProjectileFromItemAction of(ActionContextParameter position, float power, float uncertainty) {
+    public static ShootProjectileFromItemAction of(PositionTarget position, float power, float uncertainty) {
         return new ShootProjectileFromItemAction(position, power, uncertainty);
     }
 
@@ -28,7 +31,12 @@ public record ShootProjectileFromItemAction(ActionContextParameter position, flo
 
     @Override
     public boolean execute(ActionContext context) {
-        return context.stack()
+        return false;
+    }
+
+    @Override
+    public boolean execute(NewActionContext context) {
+        return context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
             .itematic$getBehavior(ItemComponentTypes.PROJECTILE)
             .map(c -> c.createEntity(context, this.position, 0.0f, this.power, this.uncertainty))
             .map(entity -> {

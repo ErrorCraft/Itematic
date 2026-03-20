@@ -7,7 +7,10 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BucketItemComponent;
 import net.errorcraft.itematic.item.component.components.EntityItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -19,6 +22,7 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -27,6 +31,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -39,9 +44,10 @@ public class EntityPlacer extends Placer {
     private final SpawnReason spawnReason;
     private final BiConsumer<Entity, ItemStack> spawnCallback;
     private final boolean allowItemData;
+    @Nullable
     private final Hand hand;
 
-    public EntityPlacer(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, EntityInitializer<?> initializer, Direction direction, boolean mayModifyBlock, SpawnReason spawnReason, BiConsumer<Entity, ItemStack> spawnCallback, boolean allowItemData, Hand hand) {
+    private EntityPlacer(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, EntityInitializer<?> initializer, Direction direction, boolean mayModifyBlock, SpawnReason spawnReason, BiConsumer<Entity, ItemStack> spawnCallback, boolean allowItemData, @Nullable Hand hand) {
         super(stack, resultStackConsumer, world, blockPos, blockState, player);
         this.initializer = initializer;
         this.direction = direction;
@@ -57,6 +63,32 @@ public class EntityPlacer extends Placer {
         BlockPos blockPos = context.getBlockPos();
         return new EntityPlacer(context.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), entityItemComponent.getEntityInitializer(stack, world.getRegistryManager()), context.getSide(), true, SpawnReason.SPAWN_ITEM_USE, null, entityItemComponent.allowItemData(), context.getHand());
     }
+
+    public static EntityPlacer action(NewActionContext context, PositionTarget position, EntityInitializer<?> entityInitializer) {
+        ItemStack stack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
+        BlockPos pos = context.getBlockPos(position.parameter());
+        if (pos == null) {
+            return null;
+        }
+
+        return new EntityPlacer(
+            stack,
+            context::exchangeStack,
+            context.world(),
+            pos,
+            context.world().getBlockState(pos),
+            context.get(LootContextParameters.THIS_ENTITY) instanceof PlayerEntity player ? player : null,
+            entityInitializer,
+            context.getOrDefault(ItematicContextParameters.SIDE, Direction.UP),
+            false,
+            SpawnReason.COMMAND,
+            null,
+            false,
+            context.get(ItematicContextParameters.HAND)
+        );
+    }
+
+    // old below
 
     public static EntityPlacer action(ActionContext context, ActionContextParameter position, EntityItemComponent entityItemComponent) {
         ItemStack stack = context.stack();
@@ -111,38 +143,54 @@ public class EntityPlacer extends Placer {
             return;
         }
         BlockPos offset = this.blockState.getCollisionShape(this.world, this.blockPos).isEmpty() ? this.blockPos : this.blockPos.offset(this.direction);
-        ActionContext context = ActionContext.builder(serverWorld, this.stack, this.resultStackConsumer, this.hand)
-            .entityPosition(ActionContextParameter.THIS, this.player)
-            .position(ActionContextParameter.TARGET, offset)
-            .side(this.direction)
-            .build();
-        Entity entity = this.createEntity(offset, context);
+        NewActionContext.Builder contextBuilder = this.addStackConsumer(NewActionContext.builder(serverWorld))
+            .addOptional(LootContextParameters.THIS_ENTITY, this.player)
+            .addOptional(LootContextParameters.ORIGIN, this.player, Entity::getPos)
+            .add(ItematicContextParameters.INTERACTED_POSITION, offset.toBottomCenterPos())
+            .add(ItematicContextParameters.SIDE, this.direction)
+            .add(LootContextParameters.TOOL, this.stack)
+            .addOptional(ItematicContextParameters.HAND, this.hand);
+        Entity entity = this.createEntity(offset, contextBuilder.build());
         if (entity == null) {
             return;
         }
+
         if (this.spawnCallback != null) {
             this.spawnCallback.accept(entity, this.stack);
         }
+
         this.tryDecrementStack();
         this.world.emitGameEvent(this.player, GameEvent.ENTITY_PLACE, entity.getBlockPos());
-        this.stack.itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, context.builderForCopy().entity(ActionContextParameter.TARGET, entity).build());
+
+        contextBuilder.add(ItematicContextParameters.TARGET_ENTITY, entity);
+        this.stack.itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, contextBuilder.build());
     }
 
-    private Entity createEntity(BlockPos offset, ActionContext context) {
+    private Entity createEntity(BlockPos offset, NewActionContext context) {
         if (this.world.isClient()) {
             return null;
         }
+
         if (this.allowItemData) {
             this.initializer.type().itematic$setInitializer(this.initializer, context);
             Entity entity = this.initializer.type().spawnFromItemStack((ServerWorld) this.world, this.stack, this.player, offset, this.spawnReason, true, !Objects.equals(this.blockPos, offset) && this.direction == Direction.UP);
             this.initializer.type().itematic$setInitializer(null, null);
             return entity;
         }
+
         Entity entity = this.initializer.create(context, this.spawnReason);
         if (entity != null) {
             entity.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(offset));
             ((ServerWorld) this.world).spawnEntityAndPassengers(entity);
         }
         return entity;
+    }
+
+    private NewActionContext.Builder addStackConsumer(NewActionContext.Builder builder) {
+        if (this.player != null) {
+            return builder.stackExchanger(this.player, this.stack);
+        }
+
+        return builder.stackExchanger(this.direction, this.blockPos.toCenterPos(), this.stack);
     }
 }

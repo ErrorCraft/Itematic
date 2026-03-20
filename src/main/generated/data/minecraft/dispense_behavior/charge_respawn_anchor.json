@@ -8,7 +8,7 @@
         {
           "action": {
             "type": "minecraft:charge_respawn_anchor",
-            "position": "target"
+            "position": "interacted_position"
           }
         },
         {
@@ -20,17 +20,11 @@
       ]
     },
     "requirements": {
-      "conditions": {
-        "condition": "minecraft:location_check",
-        "predicate": {
-          "block": {
-            "blocks": "minecraft:respawn_anchor"
-          }
+      "condition": "minecraft:location_check",
+      "predicate": {
+        "block": {
+          "blocks": "minecraft:respawn_anchor"
         }
-      },
-      "context": {
-        "entity": "this",
-        "position": "target"
       }
     }
   }

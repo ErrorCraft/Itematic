@@ -4,9 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.world.action.actions.SequenceAction;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
+import net.minecraft.loot.condition.LootCondition;
+import net.minecraft.loot.context.LootContext;
 import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.entry.RegistryElementCodec;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -14,16 +15,28 @@ import net.minecraft.registry.entry.RegistryEntryList;
 
 import java.util.Optional;
 
-public record ActionEntry(Action<?> action, Optional<ActionRequirements> requirements) {
+public record ActionEntry(Action<?> action, Optional<LootCondition> requirements) {
     public static final Codec<ActionEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Action.CODEC.fieldOf("action").forGetter(ActionEntry::action),
-        ActionRequirements.CODEC.optionalFieldOf("requirements").forGetter(ActionEntry::requirements)
+        LootCondition.CODEC.optionalFieldOf("requirements").forGetter(ActionEntry::requirements)
     ).apply(instance, ActionEntry::new));
     public static final Codec<RegistryEntry<ActionEntry>> REGISTRY_CODEC = RegistryElementCodec.of(ItematicRegistryKeys.ACTION, CODEC);
     public static final Codec<RegistryEntryList<ActionEntry>> REGISTRY_ENTRY_LIST_CODEC = RegistryCodecs.entryList(ItematicRegistryKeys.ACTION, CODEC, true);
 
-    public Optional<Boolean> execute(ActionContext context) {
-        return Optional.empty();
+    public static ActionEntry of(Action<?> action) {
+        return new ActionEntry(action, Optional.empty());
+    }
+
+    public static ActionEntry of(SequenceHandler.Builder<?, ?> builder) {
+        return new ActionEntry(SequenceAction.of(builder), Optional.empty());
+    }
+
+    public static ActionEntry of(LootCondition.Builder requirements, Action<?> action) {
+        return new ActionEntry(action, Optional.of(requirements.build()));
+    }
+
+    public static ActionEntry of(LootCondition.Builder requirements, SequenceHandler.Builder<?, ?> builder) {
+        return new ActionEntry(SequenceAction.of(builder), Optional.of(requirements.build()));
     }
 
     public Optional<Boolean> execute(NewActionContext context) {
@@ -35,23 +48,13 @@ public record ActionEntry(Action<?> action, Optional<ActionRequirements> require
     }
 
     private boolean test(NewActionContext context) {
-        return this.requirements.map(requirements -> requirements.test(context))
-            .orElse(true);
-    }
+        if (this.requirements.isEmpty()) {
+            return true;
+        }
 
-    public static ActionEntry of(Action<?> action) {
-        return new ActionEntry(action, Optional.empty());
-    }
-
-    public static ActionEntry of(SequenceHandler.Builder<?, ?> builder) {
-        return new ActionEntry(SequenceAction.of(builder), Optional.empty());
-    }
-
-    public static ActionEntry of(ActionRequirements requirements, Action<?> action) {
-        return new ActionEntry(action, Optional.of(requirements));
-    }
-
-    public static ActionEntry of(ActionRequirements requirements, SequenceHandler.Builder<?, ?> builder) {
-        return new ActionEntry(SequenceAction.of(builder), Optional.of(requirements));
+        LootCondition requirements = this.requirements.get();
+        LootContext lootContext = context.lootContext();
+        lootContext.markActive(LootContext.predicate(requirements));
+        return requirements.test(lootContext);
     }
 }

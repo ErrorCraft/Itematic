@@ -63,37 +63,31 @@
         ]
       },
       "requirements": {
-        "conditions": {
-          "condition": "minecraft:all_of",
-          "terms": [
-            {
-              "condition": "minecraft:entity_properties",
-              "entity": "this",
-              "predicate": {
-                "in_water_or_rain": true,
-                "used_item_ticks": {
-                  "min": 10
-                }
-              }
-            },
-            {
-              "condition": "minecraft:match_tool",
-              "predicate": {
-                "predicates": {
-                  "minecraft:enchantments": [
-                    {
-                      "enchantments": "minecraft:riptide"
-                    }
-                  ]
-                }
+        "condition": "minecraft:all_of",
+        "terms": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "in_water_or_rain": true,
+              "used_item_ticks": {
+                "min": 10
               }
             }
-          ]
-        },
-        "context": {
-          "entity": "this",
-          "position": "this"
-        }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "predicates": {
+                "minecraft:enchantments": [
+                  {
+                    "enchantments": "minecraft:riptide"
+                  }
+                ]
+              }
+            }
+          }
+        ]
       }
     }
   }

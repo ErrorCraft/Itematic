@@ -36,7 +36,7 @@
             "type": "minecraft:play_sound",
             "category": "block",
             "pitch": 1.0,
-            "position": "target",
+            "position": "interacted_position",
             "sound": "minecraft:entity.generic.splash",
             "volume": 1.0
           }
@@ -44,7 +44,10 @@
         {
           "action": {
             "type": "minecraft:exchange_item",
-            "item": "minecraft:glass_bottle"
+            "item": {
+              "id": "minecraft:glass_bottle",
+              "count": 1
+            }
           }
         },
         {
@@ -70,7 +73,7 @@
             "particle": {
               "type": "minecraft:splash"
             },
-            "position": "target",
+            "position": "interacted_position",
             "speed": 1.0
           }
         },
@@ -79,7 +82,7 @@
             "type": "minecraft:play_sound",
             "category": "block",
             "pitch": 1.0,
-            "position": "target",
+            "position": "interacted_position",
             "sound": "minecraft:item.bottle.empty",
             "volume": 1.0
           }
@@ -87,7 +90,7 @@
         {
           "action": {
             "type": "minecraft:set_block_state",
-            "position": "target",
+            "position": "interacted_position",
             "state": {
               "Name": "minecraft:mud"
             }
@@ -95,45 +98,40 @@
         },
         {
           "action": {
-            "type": "minecraft:swing_hand"
+            "type": "minecraft:swing_hand",
+            "entity": "this"
           }
         }
       ],
       "requirements": {
-        "conditions": {
-          "condition": "minecraft:all_of",
-          "terms": [
-            {
-              "condition": "minecraft:inverted",
-              "term": {
-                "condition": "minecraft:side_check",
-                "sides": [
-                  "down"
-                ]
-              }
-            },
-            {
-              "condition": "minecraft:location_check",
-              "predicate": {
-                "block": {
-                  "blocks": "#minecraft:convertable_to_mud"
-                }
-              }
-            },
-            {
-              "condition": "minecraft:match_tool",
-              "predicate": {
-                "predicates": {
-                  "minecraft:potion_contents": "minecraft:water"
-                }
+        "condition": "minecraft:all_of",
+        "terms": [
+          {
+            "condition": "minecraft:inverted",
+            "term": {
+              "condition": "minecraft:side_check",
+              "sides": [
+                "down"
+              ]
+            }
+          },
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": "#minecraft:convertable_to_mud"
               }
             }
-          ]
-        },
-        "context": {
-          "entity": "this",
-          "position": "target"
-        }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "predicates": {
+                "minecraft:potion_contents": "minecraft:water"
+              }
+            }
+          }
+        ]
       }
     }
   }

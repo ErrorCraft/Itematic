@@ -13,3 +13,4 @@ inject-interface    net/minecraft/util/DyeColor    net/errorcraft/itematic/acces
 inject-interface    net/minecraft/item/tooltip/BundleTooltipData    net/errorcraft/itematic/access/item/tooltip/BundleTooltipDataAccess
 inject-interface    net/minecraft/recipe/Ingredient    net/errorcraft/itematic/access/recipe/IngredientAccess
 inject-interface    net/minecraft/block/AbstractBlock    net/errorcraft/itematic/access/block/AbstractBlockAccess
+inject-interface    net/minecraft/util/context/ContextParameterMap$Builder    net/errorcraft/itematic/access/util/context/ContextParameterMapBuilderAccess

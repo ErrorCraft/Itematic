@@ -4,9 +4,9 @@ import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
-import net.errorcraft.itematic.world.action.ActionRequirements;
 import net.errorcraft.itematic.world.action.actions.SequenceAction;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.registry.entry.RegistryEntry;
 
 public interface SequenceHandler<T extends SequenceHandler<T>> {
@@ -21,19 +21,19 @@ public interface SequenceHandler<T extends SequenceHandler<T>> {
         default S add(Builder<?, ?> builder) {
             return this.add(SequenceAction.of(builder));
         }
-        default S add(ActionRequirements requirements, Builder<?, ?> builder) {
+        default S add(LootCondition.Builder requirements, Builder<?, ?> builder) {
             return this.add(requirements, SequenceAction.of(builder));
         }
         default S add(SequenceHandler<?> handler) {
             return this.add(SequenceAction.of(handler));
         }
-        default S add(ActionRequirements requirements, SequenceHandler<?> handler) {
+        default S add(LootCondition.Builder requirements, SequenceHandler<?> handler) {
             return this.add(requirements, SequenceAction.of(handler));
         }
         default S add(Action<?> action) {
             return this.add(ActionEntry.of(action));
         }
-        default S add(ActionRequirements requirements, Action<?> action) {
+        default S add(LootCondition.Builder requirements, Action<?> action) {
             return this.add(ActionEntry.of(requirements, action));
         }
         default S add(ActionEntry entry) {

@@ -5,14 +5,15 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.initializers.PersistentProjectileEntityInitializer;
 import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ExplosiveProjectileEntity;
@@ -20,10 +21,11 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Position;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public record ProjectileItemComponent(EntityInitializer<?> entity) implements ItemComponent<ProjectileItemComponent> {
@@ -53,42 +55,36 @@ public record ProjectileItemComponent(EntityInitializer<?> entity) implements It
         return CODEC;
     }
 
-    public Entity createEntity(World world, Entity user, ItemStack stack, float angleOffset, float speed) {
+    public Entity createEntity(World world, LivingEntity user, ItemStack stack, float angleOffset, float speed) {
         if (world.isClient()) {
             return null;
         }
 
-        return this.createEntity((ServerWorld) world, user, stack, ItemStackConsumer.EMPTY, angleOffset, speed, 1.0f);
-    }
-
-    public Entity createEntity(ServerWorld world, Entity user, ItemStack stack, ItemStackConsumer resultStackConsumer, float angleOffset, float speed, float uncertainty) {
-        ActionContext context = ActionContext.builder(world, stack, resultStackConsumer)
-            .entityPosition(ActionContextParameter.THIS, user)
-            .position(ActionContextParameter.TARGET, user.getEyePos().add(0.0d, -0.1d, 0.0d))
+        NewActionContext context = NewActionContext.builder((ServerWorld) world)
+            .stackExchanger(user, stack)
+            .add(LootContextParameters.TOOL, stack)
+            .add(LootContextParameters.THIS_ENTITY, user)
+            .add(LootContextParameters.ORIGIN, user.getPos())
+            .add(ItematicContextParameters.INTERACTED_POSITION, user.getEyePos().add(0.0d, -0.1d, 0.0d))
             .build();
-        return this.createEntity(context, ActionContextParameter.TARGET, angleOffset, speed, uncertainty);
+        return this.createEntity(context, PositionTarget.INTERACTED_POSITION, angleOffset, speed, 1.0f);
     }
 
-    public Entity createEntity(World world, Position position, ItemStack stack, float speed, float uncertainty) {
-        if (world.isClient()) {
-            return null;
-        }
-
-        ActionContext context = ActionContext.builder((ServerWorld) world, stack, ItemStackConsumer.EMPTY)
-            .position(ActionContextParameter.TARGET, position)
-            .build();
-        return this.createEntity(context, ActionContextParameter.TARGET, 0.0f, speed, uncertainty);
-    }
-
-    public Entity createEntity(ActionContext context, ActionContextParameter position, float angleOffset, float speed, float uncertainty) {
+    public Entity createEntity(NewActionContext context, PositionTarget positionTarget, float angleOffset, float speed, float uncertainty) {
         Entity entity = this.entity.create(context, SpawnReason.SPAWN_ITEM_USE);
         if (entity == null) {
             return null;
         }
 
-        entity.refreshPositionAfterTeleport(context.position(position));
-        if (entity instanceof ThrownItemEntity thrownItemEntity) {
-            thrownItemEntity.setItem(context.stack());
+        Vec3d position = context.get(positionTarget.parameter());
+        if (position == null) {
+            return null;
+        }
+
+        entity.refreshPositionAfterTeleport(position);
+        ItemStack stack = context.get(LootContextParameters.TOOL);
+        if (stack != null && entity instanceof ThrownItemEntity thrownItemEntity) {
+            thrownItemEntity.setItem(stack);
         }
 
         if (entity instanceof ProjectileEntity projectileEntity) {
@@ -98,11 +94,13 @@ public record ProjectileItemComponent(EntityInitializer<?> entity) implements It
         return entity;
     }
 
-    private void initializeProjectile(ActionContext context, ProjectileEntity projectileEntity, float angleOffset, float speed, float uncertainty) {
-        context.entity(ActionContextParameter.THIS).ifPresentOrElse(
-            user -> this.initializeProjectile(projectileEntity, user, angleOffset, speed, uncertainty),
-            () -> this.initializeProjectile(projectileEntity, context.side(), speed, uncertainty)
-        );
+    private void initializeProjectile(NewActionContext context, ProjectileEntity projectileEntity, float angleOffset, float speed, float uncertainty) {
+        Entity user = context.get(LootContextParameters.THIS_ENTITY);
+        if (user != null) {
+            this.initializeProjectile(projectileEntity, user, angleOffset, speed, uncertainty);
+        } else {
+            this.initializeProjectile(projectileEntity, context.getOrDefault(ItematicContextParameters.SIDE, Direction.UP), speed, uncertainty);
+        }
     }
 
     private void initializeProjectile(ProjectileEntity entity, Entity user, float angleOffset, float speed, float uncertainty) {

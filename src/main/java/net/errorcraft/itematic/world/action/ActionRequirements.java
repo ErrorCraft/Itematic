@@ -1,18 +1,14 @@
 package net.errorcraft.itematic.world.action;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
 
 public record ActionRequirements(LootCondition conditions) {
-    public static final Codec<ActionRequirements> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        LootCondition.CODEC.fieldOf("conditions").forGetter(ActionRequirements::conditions)
-    ).apply(instance, ActionRequirements::new));
+    public static final Codec<ActionRequirements> CODEC = LootCondition.CODEC.xmap(ActionRequirements::new, ActionRequirements::conditions);
 
-    public static ActionRequirements of(ActionContextParameters context, LootCondition conditions) {
+    public static ActionRequirements of(LootCondition conditions) {
         return new ActionRequirements(conditions);
     }
 

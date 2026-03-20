@@ -8,11 +8,8 @@ import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
-import net.errorcraft.itematic.world.action.ActionRequirements;
 import net.errorcraft.itematic.world.action.actions.*;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToSucceedSequenceHandler;
@@ -76,13 +73,10 @@ public class DispenseBehaviors {
         );
         registerable.register(CHARGE_RESPAWN_ANCHOR, DispenseBehavior.builder(
             ActionEntry.of(
-                ActionRequirements.of(
-                    ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                    LocationCheckLootCondition.builder(
-                        LocationPredicate.Builder.create()
-                            .block(BlockPredicate.Builder.create()
-                                .blocks(blocks, blocks.getOrThrow(BlockKeys.RESPAWN_ANCHOR).value())))
-                        .build()
+                LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                    LocationPredicate.Builder.create()
+                        .block(BlockPredicate.Builder.create()
+                            .blocks(blocks, blocks.getOrThrow(BlockKeys.RESPAWN_ANCHOR).value()))
                 ),
                 decrement(ChargeRespawnAnchorAction.of(PositionTarget.INTERACTED_POSITION))))
             .doNotDispenseOnFailure()
@@ -104,23 +98,21 @@ public class DispenseBehaviors {
         registerable.register(GLASS_BOTTLE, DispenseBehavior.builder(
             FirstToPassRequirementsSequenceHandler.builder()
                 .add(
-                    ActionRequirements.of(
-                        ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                        LocationCheckLootCondition.builder(
-                            LocationPredicate.Builder.create()
-                                .block(BlockPredicate.Builder.create()
-                                    .state(StatePredicate.Builder.create()
-                                        .exactMatch(BeehiveBlock.HONEY_LEVEL, BeehiveBlock.FULL_HONEY_LEVEL))))
-                            .build()
+                    LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                        LocationPredicate.Builder.create()
+                            .block(BlockPredicate.Builder.create()
+                                .state(StatePredicate.Builder.create()
+                                    .exactMatch(BeehiveBlock.HONEY_LEVEL, BeehiveBlock.FULL_HONEY_LEVEL)))
                     ),
                     UncheckedSequenceHandler.builder()
                         .add(TakeHoneyAction.of(PositionTarget.INTERACTED_POSITION))
-                        .add(ExchangeItemAction.of(items.getOrThrow(ItemKeys.HONEY_BOTTLE))))
+                        .add(ExchangeItemAction.of(items.getOrThrow(ItemKeys.HONEY_BOTTLE)))
+                )
                 .add(InvokeItemEventAction.of(ItemEvents.USE_ON_BLOCK)))
             .build()
         );
         registerable.register(PLACE_BLOCK_FROM_ITEM, DispenseBehavior.builder(
-            PlaceBlockFromItemAction.of(ActionContextParameter.TARGET, true))
+            PlaceBlockFromItemAction.of(PositionTarget.INTERACTED_POSITION, true))
             .doNotDispenseOnFailure()
             .build()
         );
@@ -166,12 +158,12 @@ public class DispenseBehaviors {
             .build()
         );
         registerable.register(SPAWN_ENTITY_FROM_ITEM, DispenseBehavior.builder(
-            SpawnEntityFromItemAction.of(ActionContextParameter.TARGET))
+            SpawnEntityFromItemAction.of(PositionTarget.INTERACTED_POSITION))
             .build()
         );
         registerable.register(SPAWN_TNT, DispenseBehavior.builder(
             PassingSequenceHandler.builder()
-                .add(SpawnEntityAction.of(ActionContextParameter.TARGET, SimpleEntityInitializer.of(EntityType.TNT)))
+                .add(SpawnEntityAction.of(PositionTarget.INTERACTED_POSITION, SimpleEntityInitializer.of(EntityType.TNT)))
                 .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundCategory.BLOCKS)))
             .build()
         );

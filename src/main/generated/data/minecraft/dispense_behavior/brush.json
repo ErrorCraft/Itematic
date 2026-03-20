@@ -8,7 +8,7 @@
         {
           "action": {
             "type": "minecraft:brush_armadillo_at_position",
-            "position": "target"
+            "position": "interacted_position"
           }
         },
         {

@@ -23,7 +23,7 @@
                 {
                   "action": {
                     "type": "minecraft:modify_sign",
-                    "position": "target",
+                    "position": "interacted_position",
                     "wax": true
                   }
                 },
@@ -35,23 +35,18 @@
                 },
                 {
                   "action": {
-                    "type": "minecraft:swing_hand"
+                    "type": "minecraft:swing_hand",
+                    "entity": "this"
                   }
                 }
               ]
             },
             "requirements": {
-              "conditions": {
-                "condition": "minecraft:location_check",
-                "predicate": {
-                  "block": {
-                    "blocks": "#minecraft:signs"
-                  }
+              "condition": "minecraft:location_check",
+              "predicate": {
+                "block": {
+                  "blocks": "#minecraft:signs"
                 }
-              },
-              "context": {
-                "entity": "this",
-                "position": "target"
               }
             }
           },
@@ -63,7 +58,7 @@
                 {
                   "action": {
                     "type": "minecraft:wax_block",
-                    "position": "target"
+                    "position": "interacted_position"
                   }
                 },
                 {
@@ -74,7 +69,8 @@
                 },
                 {
                   "action": {
-                    "type": "minecraft:swing_hand"
+                    "type": "minecraft:swing_hand",
+                    "entity": "this"
                   }
                 }
               ]

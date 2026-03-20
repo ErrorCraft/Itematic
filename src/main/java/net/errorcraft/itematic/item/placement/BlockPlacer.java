@@ -9,6 +9,8 @@ import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.mixin.block.BlockItemAccessor;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
@@ -22,6 +24,7 @@ import net.minecraft.item.AutomaticItemPlacementContext;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
@@ -49,8 +52,29 @@ public class BlockPlacer extends Placer {
         this.decrementStack = decrementStack;
     }
 
-    public static BlockPlacer of(ActionContext context, ActionContextParameter position, BlockPicker<?> block, boolean operatorOnly, boolean decrementStack) {
-        return of(context.createItemPlacementContext(position, block.defaultBlock()), context.resultStackConsumer(), block, operatorOnly, decrementStack);
+    public static BlockPlacer action(NewActionContext context, PositionTarget position, BlockPicker<?> block, boolean decrementCount) {
+        ItemPlacementContext placeContext = context.blockPlaceContext(position, block);
+        if (placeContext == null) {
+            return null;
+        }
+
+        BlockPos pos = context.getBlockPos(position.parameter());
+        if (pos == null) {
+            return null;
+        }
+
+        return new BlockPlacer(
+            context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY),
+            context::exchangeStack,
+            context.world(),
+            pos,
+            context.world().getBlockState(pos),
+            context.get(LootContextParameters.THIS_ENTITY) instanceof PlayerEntity player ? player : null,
+            block,
+            placeContext,
+            false,
+            decrementCount
+        );
     }
 
     public static BlockPlacer of(ItemUsageContext context, ItemStackConsumer resultStackConsumer, BlockPicker<?> block, boolean operatorOnly, boolean decrementStack) {

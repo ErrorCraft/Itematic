@@ -10,7 +10,7 @@
             "entity": {
               "type": "minecraft:tnt"
             },
-            "position": "target"
+            "position": "interacted_position"
           }
         },
         {
@@ -18,7 +18,7 @@
             "type": "minecraft:play_sound",
             "category": "block",
             "pitch": 1.0,
-            "position": "target",
+            "position": "interacted_position",
             "sound": "minecraft:entity.tnt.primed",
             "volume": 1.0
           }

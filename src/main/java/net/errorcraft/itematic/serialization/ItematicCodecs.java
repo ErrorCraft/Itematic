@@ -3,7 +3,6 @@ package net.errorcraft.itematic.serialization;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.mixin.util.dynamic.CodecsAccessor;
 import net.minecraft.util.dynamic.Codecs;
 import org.apache.commons.lang3.math.Fraction;
 
@@ -44,7 +43,14 @@ public class ItematicCodecs {
         if (maxInclusive <= 0.0f) {
             throw new IllegalArgumentException("maxInclusive must be positive, got " + maxInclusive + " instead");
         }
-        return CodecsAccessor.rangedFloat(0.0f, maxInclusive, value -> "Value must be positive and at most " + maxInclusive + ": " + value);
+
+        return Codecs.POSITIVE_FLOAT.validate(value -> {
+            if (value <= maxInclusive) {
+                return DataResult.success(value);
+            }
+
+            return DataResult.error(() -> "Value must be at most " + maxInclusive + ": " + value);
+        });
     }
 
     public static Codec<Fraction> positiveFraction(int maxInclusive) {

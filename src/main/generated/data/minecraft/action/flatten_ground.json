@@ -6,7 +6,7 @@
       {
         "action": {
           "type": "minecraft:set_block_state",
-          "position": "target",
+          "position": "interacted_position",
           "state": {
             "Name": "minecraft:dirt_path"
           }
@@ -17,7 +17,7 @@
           "type": "minecraft:play_sound",
           "category": "block",
           "pitch": 1.0,
-          "position": "target",
+          "position": "interacted_position",
           "sound": "minecraft:item.shovel.flatten",
           "volume": 1.0
         }
@@ -25,40 +25,34 @@
     ]
   },
   "requirements": {
-    "conditions": {
-      "condition": "minecraft:all_of",
-      "terms": [
-        {
-          "condition": "minecraft:location_check",
-          "predicate": {
-            "block": {
-              "blocks": "#minecraft:flattenable_into_dirt_path"
-            }
-          }
-        },
-        {
-          "condition": "minecraft:inverted",
-          "term": {
-            "condition": "minecraft:side_check",
-            "sides": [
-              "down"
-            ]
-          }
-        },
-        {
-          "condition": "minecraft:location_check",
-          "offsetY": 1,
-          "predicate": {
-            "block": {
-              "blocks": "#minecraft:air"
-            }
+    "condition": "minecraft:all_of",
+    "terms": [
+      {
+        "condition": "minecraft:location_check",
+        "predicate": {
+          "block": {
+            "blocks": "#minecraft:flattenable_into_dirt_path"
           }
         }
-      ]
-    },
-    "context": {
-      "entity": "this",
-      "position": "target"
-    }
+      },
+      {
+        "condition": "minecraft:inverted",
+        "term": {
+          "condition": "minecraft:side_check",
+          "sides": [
+            "down"
+          ]
+        }
+      },
+      {
+        "condition": "minecraft:location_check",
+        "offsetY": 1,
+        "predicate": {
+          "block": {
+            "blocks": "#minecraft:air"
+          }
+        }
+      }
+    ]
   }
 }

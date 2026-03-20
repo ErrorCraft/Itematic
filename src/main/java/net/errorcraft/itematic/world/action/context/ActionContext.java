@@ -2,10 +2,7 @@ package net.errorcraft.itematic.world.action.context;
 
 import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.util.PositionUtil;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.util.context.ItematicContextTypes;
 import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
@@ -15,12 +12,7 @@ import net.minecraft.item.AutomaticItemPlacementContext;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootWorldContext;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.function.CommandFunctionManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -86,26 +78,6 @@ public class ActionContext {
         }
 
         return builder(world, stack, resultStackConsumer, LivingEntity.getSlotForHand(hand));
-    }
-
-    public Builder builderForCopy() {
-        return this.builder;
-    }
-
-    public LootContext createLootContext(ActionContextParameters parameters) {
-        LootWorldContext set = new LootWorldContext.Builder(this.world)
-            .add(LootContextParameters.THIS_ENTITY, this.entities.get(parameters.entity()))
-            .add(LootContextParameters.ORIGIN, this.position(parameters.position()))
-            .add(LootContextParameters.TOOL, this.stack)
-            .add(ItematicContextParameters.SIDE, this.side)
-            .build(ItematicContextTypes.ACTION);
-        return new LootContext.Builder(set).build(Optional.empty());
-    }
-
-    public ServerCommandSource createCommandSource(ActionContextParameters parameters, CommandFunctionManager functionManager) {
-        return functionManager.getScheduledCommandSource()
-            .withEntity(this.entities.get(parameters.entity()))
-            .withPosition(this.positions.get(parameters.position()));
     }
 
     public ItemUsageContext createItemUsageContext(ActionContextParameter position) {

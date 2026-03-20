@@ -9,8 +9,6 @@ import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.actions.*;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
@@ -68,25 +66,26 @@ public class Actions {
                 .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, soundEvents.getOrThrow(SoundEventKeys.HOE_TILL), SoundCategory.BLOCKS))
         ));
         registerable.register(TILL_DIRT, ActionEntry.of(
-            setBlockRequirements(blocks, builder -> builder.tag(blocks, ItematicBlockTags.TILLABLE_INTO_FARMLAND), true),
+            setBlockConditions(blocks, builder -> builder.tag(blocks, ItematicBlockTags.TILLABLE_INTO_FARMLAND)),
             SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, blocks.getOrThrow(BlockKeys.FARMLAND))
         ));
         registerable.register(TILL_COARSE_DIRT, ActionEntry.of(
-            setBlockRequirements(blocks, builder -> builder.blocks(blocks, blocks.getOrThrow(BlockKeys.COARSE_DIRT).value()), true),
+            setBlockConditions(blocks, builder -> builder.blocks(blocks, blocks.getOrThrow(BlockKeys.COARSE_DIRT).value())),
             SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, blocks.getOrThrow(BlockKeys.DIRT))
         ));
         registerable.register(TILL_ROOTED_DIRT, ActionEntry.of(
-            setBlockRequirements(blocks, builder -> builder.blocks(blocks, blocks.getOrThrow(BlockKeys.ROOTED_DIRT).value()), false),
+            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                LocationPredicate.Builder.create()
+                    .block(BlockPredicate.Builder.create()
+                        .blocks(blocks, blocks.getOrThrow(BlockKeys.ROOTED_DIRT).value()))
+            ),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, blocks.getOrThrow(BlockKeys.DIRT)))
                 .add(DropItemFromBlockAction.of(PositionTarget.INTERACTED_POSITION, items.getOrThrow(ItemKeys.HANGING_ROOTS)))
         ));
         registerable.register(USE_SHOVEL_ON_BLOCK, ActionEntry.of(
-            ActionRequirements.of(
-                ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                InvertedLootCondition.builder(
-                    SideCheckPredicate.builder(Direction.DOWN)
-                ).build()
+            InvertedLootCondition.builder(
+                SideCheckPredicate.builder(Direction.DOWN)
             ),
             PassingSequenceHandler.builder()
                 .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_SHOVEL_ON_BLOCK)))
@@ -94,21 +93,18 @@ public class Actions {
                 .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
         ));
         registerable.register(FLATTEN_GROUND, ActionEntry.of(
-            setBlockRequirements(blocks, builder -> builder.tag(blocks, ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH), true),
+            setBlockConditions(blocks, builder -> builder.tag(blocks, ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, blocks.getOrThrow(BlockKeys.DIRT_PATH)))
                 .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, soundEvents.getOrThrow(SoundEventKeys.SHOVEL_FLATTEN), SoundCategory.BLOCKS))
         ));
         registerable.register(EXTINGUISH_CAMPFIRE, ActionEntry.of(
-            ActionRequirements.of(
-                ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                LocationCheckLootCondition.builder(
-                    LocationPredicate.Builder.create()
-                        .block(BlockPredicate.Builder.create()
-                            .tag(blocks, BlockTags.CAMPFIRES)
-                            .state(StatePredicate.Builder.create()
-                                .exactMatch(Properties.LIT, true))))
-                .build()
+            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                LocationPredicate.Builder.create()
+                    .block(BlockPredicate.Builder.create()
+                        .tag(blocks, BlockTags.CAMPFIRES)
+                        .state(StatePredicate.Builder.create()
+                            .exactMatch(Properties.LIT, true)))
             ),
             PassingSequenceHandler.builder()
                 .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED_POSITION)
@@ -120,14 +116,11 @@ public class Actions {
                     .build())
                 .add(FirstToPassRequirementsSequenceHandler.builder()
                     .add(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                            LocationCheckLootCondition.builder(
-                                LocationPredicate.Builder.create()
-                                    .block(BlockPredicate.Builder.create()
-                                        .state(StatePredicate.Builder.create()
-                                            .exactMatch(Properties.SIGNAL_FIRE, true))))
-                                .build()
+                        LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                            LocationPredicate.Builder.create()
+                                .block(BlockPredicate.Builder.create()
+                                    .state(StatePredicate.Builder.create()
+                                        .exactMatch(Properties.SIGNAL_FIRE, true)))
                         ),
                         campfireParticles(true)
                     )
@@ -138,40 +131,34 @@ public class Actions {
             PassingSequenceHandler.builder()
                 .add(FirstToPassRequirementsSequenceHandler.builder()
                     .add(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                            AllOfLootCondition.builder(
-                                LocationCheckLootCondition.builder(
+                        AllOfLootCondition.builder(
+                            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                                LocationPredicate.Builder.create()
+                                    .block(BlockPredicate.Builder.create()
+                                        .state(StatePredicate.Builder.create()
+                                            .exactMatch(Properties.LIT, false)))),
+                            InvertedLootCondition.builder(
+                                LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
                                     LocationPredicate.Builder.create()
                                         .block(BlockPredicate.Builder.create()
                                             .state(StatePredicate.Builder.create()
-                                                .exactMatch(Properties.LIT, false)))),
-                                InvertedLootCondition.builder(
-                                    LocationCheckLootCondition.builder(
-                                        LocationPredicate.Builder.create()
-                                            .block(BlockPredicate.Builder.create()
-                                                .state(StatePredicate.Builder.create()
-                                                    .exactMatch(Properties.WATERLOGGED, true))))))
-                                .build()
+                                                .exactMatch(Properties.WATERLOGGED, true)))))
                         ),
                         ModifyBlockStateAction.builder(PositionTarget.INTERACTED_POSITION)
                             .property(Properties.LIT, true)
                             .build()
                     )
                     .add(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                            LocationCheckLootCondition.builder(
-                                LocationPredicate.Builder.create()
-                                    .block(BlockPredicate.Builder.create()
-                                        .blocks(blocks, blocks.getOrThrow(BlockKeys.TNT).value())))
-                                .build()
+                        LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                            LocationPredicate.Builder.create()
+                                .block(BlockPredicate.Builder.create()
+                                    .blocks(blocks, blocks.getOrThrow(BlockKeys.TNT).value()))
                         ),
                         PassingSequenceHandler.builder()
                             .add(PrimeTntAction.of(PositionTarget.INTERACTED_POSITION))
                             .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundCategory.BLOCKS))
                     )
-                    .add(PlaceBlockAction.of(blocks.getOrThrow(BlockKeys.FIRE), ActionContextParameter.TARGET, false)))
+                    .add(PlaceBlockAction.of(blocks.getOrThrow(BlockKeys.FIRE), PositionTarget.INTERACTED_POSITION)))
                 .addOptional(SwingHandAction.of(LootContext.EntityTarget.THIS))
         ));
     }
@@ -186,13 +173,10 @@ public class Actions {
 
     public static ActionEntry potBlock(RegistryEntryLookup<Block> blocks, RegistryKey<Block> pottedBlock) {
         return ActionEntry.of(
-            ActionRequirements.of(
-                ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                LocationCheckLootCondition.builder(
-                    LocationPredicate.Builder.create()
-                        .block(BlockPredicate.Builder.create()
-                            .blocks(blocks, blocks.getOrThrow(BlockKeys.FLOWER_POT).value())))
-                    .build()
+            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                LocationPredicate.Builder.create()
+                    .block(BlockPredicate.Builder.create()
+                        .blocks(blocks, blocks.getOrThrow(BlockKeys.FLOWER_POT).value()))
             ),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, blocks.getOrThrow(pottedBlock)))
@@ -205,13 +189,10 @@ public class Actions {
 
     private static ActionEntry modifySign(RegistryEntryLookup<Block> blocks, ModifySignAction action) {
         return ActionEntry.of(
-            ActionRequirements.of(
-                ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                LocationCheckLootCondition.builder(
-                    LocationPredicate.Builder.create()
-                        .block(BlockPredicate.Builder.create()
-                            .tag(blocks, BlockTags.SIGNS)))
-                    .build()
+            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                LocationPredicate.Builder.create()
+                    .block(BlockPredicate.Builder.create()
+                        .tag(blocks, BlockTags.SIGNS))
             ),
             PassingSequenceHandler.builder()
                 .add(action)
@@ -220,30 +201,22 @@ public class Actions {
         );
     }
 
-    private static ActionRequirements setBlockRequirements(RegistryEntryLookup<Block> blocks, UnaryOperator<BlockPredicate.Builder> blockPredicateBuilder, boolean checkEmptySpace) {
-        return ActionRequirements.of(
-            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-            setBlockConditions(blocks, blockPredicateBuilder.apply(BlockPredicate.Builder.create()), checkEmptySpace).build()
-        );
-    }
-
-    private static LootCondition.Builder setBlockConditions(RegistryEntryLookup<Block> blocks, BlockPredicate.Builder blockPredicate, boolean checkEmptySpace) {
-        LootCondition.Builder locationCheckPredicate = LocationCheckLootCondition.builder(
-            LocationPredicate.Builder.create()
-                .block(blockPredicate));
-        if (!checkEmptySpace) {
-            return locationCheckPredicate;
-        }
+    private static LootCondition.Builder setBlockConditions(RegistryEntryLookup<Block> blocks, UnaryOperator<BlockPredicate.Builder> blockPredicateBuilder) {
         return AllOfLootCondition.builder(
-            locationCheckPredicate,
+            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
+                LocationPredicate.Builder.create()
+                    .block(blockPredicateBuilder.apply(BlockPredicate.Builder.create()))
+            ),
             InvertedLootCondition.builder(
                 SideCheckPredicate.builder(Direction.DOWN)
             ),
-            LocationCheckLootCondition.builder(
+            LocationCheckLootCondition.builder( // TODO: Use interacted_position position target
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
                         .tag(blocks, BlockTags.AIR)),
-                new BlockPos(0, 1, 0)));
+                new BlockPos(0, 1, 0)
+            )
+        );
     }
 
     private static UncheckedSequenceHandler.Builder campfireParticles(boolean signal) {

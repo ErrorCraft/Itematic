@@ -10,12 +10,15 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.use.provider.providers.TridentIntegerProvider;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.consume.UseAction;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
@@ -87,25 +90,38 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
 
     private ItemResult createEntity(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer)
-                .entityPosition(ActionContextParameter.THIS, user)
-                .position(ActionContextParameter.TARGET, user.getEyePos().add(0.0d, -0.1d, 0.0d))
-                .build();
-            this.createEntity(context);
+            NewActionContext.Builder contextBuilder = NewActionContext.builder(serverWorld)
+                .stackExchanger(user, stack)
+                .add(LootContextParameters.TOOL, stack)
+                .add(LootContextParameters.THIS_ENTITY, user)
+                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(ItematicContextParameters.INTERACTED_POSITION, user.getEyePos().add(0.0d, -0.1d, 0.0d));
+            this.createEntity(contextBuilder, serverWorld, stack);
         }
 
         return ItemResult.SUCCEED;
     }
 
-    private void createEntity(ActionContext context) {
-        context.stack().itematic$getBehavior(ItemComponentTypes.PROJECTILE)
-            .map(c -> c.createEntity(context, ActionContextParameter.TARGET, this.angleOffset, this.speed, 1.0f))
-            .ifPresent(projectile -> {
-                context.world().spawnEntity(projectile);
-                ActionContext projectileContext = context.builderForCopy()
-                    .entityPosition(ActionContextParameter.TARGET, projectile)
-                    .build();
-                context.stack().itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, projectileContext);
-            });
+    private void createEntity(NewActionContext.Builder contextBuilder, ServerWorld world, ItemStack stack) {
+        ProjectileItemComponent projectile = stack.itematic$getBehavior(ItemComponentTypes.PROJECTILE).orElse(null);
+        if (projectile == null) {
+            return;
+        }
+
+        Entity projectileEntity = projectile.createEntity(
+            contextBuilder.build(),
+            PositionTarget.INTERACTED_POSITION,
+            this.angleOffset,
+            this.speed,
+            1.0f
+        );
+        if (projectileEntity == null) {
+            return;
+        }
+
+        world.spawnEntity(projectileEntity);
+        NewActionContext projectileContext = contextBuilder.add(ItematicContextParameters.TARGET_ENTITY, projectileEntity)
+            .build();
+        stack.itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, projectileContext);
     }
 }

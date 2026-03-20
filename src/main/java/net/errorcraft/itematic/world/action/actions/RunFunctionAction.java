@@ -7,7 +7,6 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
 import net.minecraft.command.ReturnValueConsumer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.function.CommandFunction;
@@ -17,10 +16,9 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import java.util.Optional;
 
-public record RunFunctionAction(Identifier function, ActionContextParameters context) implements Action<RunFunctionAction> {
+public record RunFunctionAction(Identifier function) implements Action<RunFunctionAction> {
     public static final MapCodec<RunFunctionAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Identifier.CODEC.fieldOf("function").forGetter(RunFunctionAction::function),
-        ActionContextParameters.CODEC.fieldOf("context").forGetter(RunFunctionAction::context)
+        Identifier.CODEC.fieldOf("function").forGetter(RunFunctionAction::function)
     ).apply(instance, RunFunctionAction::new));
 
     @Override

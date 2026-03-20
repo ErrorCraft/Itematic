@@ -18,7 +18,8 @@
       },
       {
         "action": {
-          "type": "minecraft:swing_hand"
+          "type": "minecraft:swing_hand",
+          "entity": "this"
         }
       },
       {
@@ -26,7 +27,7 @@
           "type": "minecraft:play_sound",
           "category": "block",
           "pitch": 1.0,
-          "position": "target",
+          "position": "interacted_position",
           "sound": "minecraft:item.hoe.till",
           "volume": 1.0
         }
