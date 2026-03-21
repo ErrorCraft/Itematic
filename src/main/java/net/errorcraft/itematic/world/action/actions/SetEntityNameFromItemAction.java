@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
@@ -28,11 +27,6 @@ public record SetEntityNameFromItemAction(LootContext.EntityTarget entity) imple
     @Override
     public ActionType<SetEntityNameFromItemAction> type() {
         return ActionTypes.SET_ENTITY_NAME_FROM_ITEM;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

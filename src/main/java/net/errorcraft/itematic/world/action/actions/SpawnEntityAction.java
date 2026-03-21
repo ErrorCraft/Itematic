@@ -7,7 +7,6 @@ import net.errorcraft.itematic.item.placement.EntityPlacer;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 
@@ -24,11 +23,6 @@ public record SpawnEntityAction(PositionTarget position, EntityInitializer<?> en
     @Override
     public ActionType<SpawnEntityAction> type() {
         return ActionTypes.SPAWN_ENTITY;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

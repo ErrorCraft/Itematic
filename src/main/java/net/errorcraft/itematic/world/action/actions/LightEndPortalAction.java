@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
@@ -29,11 +28,6 @@ public record LightEndPortalAction(PositionTarget position) implements Action<Li
     @Override
     public ActionType<LightEndPortalAction> type() {
         return ActionTypes.LIGHT_END_PORTAL;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

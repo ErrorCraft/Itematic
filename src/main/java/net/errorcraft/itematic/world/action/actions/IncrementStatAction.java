@@ -6,7 +6,6 @@ import net.errorcraft.itematic.stat.StatUtil;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.loot.context.LootContext;
@@ -25,11 +24,6 @@ public record IncrementStatAction(LootContext.EntityTarget entity, Stat<?> stat)
     @Override
     public ActionType<IncrementStatAction> type() {
         return ActionTypes.INCREMENT_STAT;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

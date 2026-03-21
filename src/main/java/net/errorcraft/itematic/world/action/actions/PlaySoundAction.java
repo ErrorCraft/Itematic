@@ -7,7 +7,6 @@ import net.errorcraft.itematic.util.Range;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.Entity;
@@ -61,11 +60,6 @@ public record PlaySoundAction(PositionTarget position, RegistryEntry<SoundEvent>
     @Override
     public ActionType<PlaySoundAction> type() {
         return ActionTypes.PLAY_SOUND;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

@@ -7,7 +7,6 @@ import net.errorcraft.itematic.item.component.components.SaddleItemComponent;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.LivingEntity;
@@ -33,11 +32,6 @@ public record SaddleEntityAtPositionAction(PositionTarget position) implements A
     @Override
     public ActionType<SaddleEntityAtPositionAction> type() {
         return ActionTypes.SADDLE_ENTITY_AT_POSITION;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

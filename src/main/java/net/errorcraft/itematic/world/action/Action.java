@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.world.action.actions.SequenceAction;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
@@ -20,6 +19,5 @@ public interface Action<T extends Action<T>> {
     }));
 
     ActionType<T> type();
-    boolean execute(ActionContext context);
     boolean execute(NewActionContext context);
 }

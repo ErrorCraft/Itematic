@@ -7,7 +7,6 @@ import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
@@ -24,11 +23,6 @@ public record InvokeItemEventAction(ItemEvent event) implements Action<InvokeIte
     @Override
     public ActionType<InvokeItemEventAction> type() {
         return ActionTypes.INVOKE_ITEM_EVENT;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

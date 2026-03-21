@@ -6,7 +6,6 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -25,11 +24,6 @@ public record SequenceAction(SequenceHandler<?> handler) implements Action<Seque
     @Override
     public ActionType<SequenceAction> type() {
         return ActionTypes.SEQUENCE;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override
@@ -52,5 +46,7 @@ public record SequenceAction(SequenceHandler<?> handler) implements Action<Seque
         if (referenceEntry.value().action() instanceof SequenceAction action) {
             action.validate(validator);
         }
+
+        validator.remove(referenceEntry);
     }
 }

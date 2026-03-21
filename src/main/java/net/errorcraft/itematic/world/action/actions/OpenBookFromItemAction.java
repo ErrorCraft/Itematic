@@ -6,7 +6,6 @@ import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,11 +22,6 @@ public class OpenBookFromItemAction implements Action<OpenBookFromItemAction> {
     @Override
     public ActionType<OpenBookFromItemAction> type() {
         return ActionTypes.OPEN_BOOK_FROM_ITEM;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,11 +26,6 @@ public record AttachLeashedEntitiesOnBlockAction(PositionTarget position) implem
     @Override
     public ActionType<AttachLeashedEntitiesOnBlockAction> type() {
         return ActionTypes.ATTACH_LEASHED_ENTITIES_ON_BLOCK;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

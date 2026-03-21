@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.command.ReturnValueConsumer;
 import net.minecraft.server.command.ServerCommandSource;
@@ -24,11 +23,6 @@ public record RunFunctionAction(Identifier function) implements Action<RunFuncti
     @Override
     public ActionType<RunFunctionAction> type() {
         return ActionTypes.RUN_FUNCTION;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

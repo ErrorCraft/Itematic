@@ -6,7 +6,6 @@ import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -33,11 +32,6 @@ public class TwirlPlayerAction implements Action<TwirlPlayerAction> {
     @Override
     public ActionType<TwirlPlayerAction> type() {
         return ActionTypes.TWIRL_PLAYER;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

@@ -6,7 +6,6 @@ import net.errorcraft.itematic.mixin.block.dispenser.ShearsDispenserBehaviorAcce
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.item.ItemStack;
@@ -26,11 +25,6 @@ public record ShearAtPositionAction(PositionTarget position) implements Action<S
     @Override
     public ActionType<ShearAtPositionAction> type() {
         return ActionTypes.SHEAR_AT_POSITION;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

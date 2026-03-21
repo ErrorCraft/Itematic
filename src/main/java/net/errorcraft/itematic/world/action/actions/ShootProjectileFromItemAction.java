@@ -7,7 +7,6 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.item.ItemStack;
@@ -27,11 +26,6 @@ public record ShootProjectileFromItemAction(PositionTarget position, float power
     @Override
     public ActionType<ShootProjectileFromItemAction> type() {
         return ActionTypes.SHOOT_PROJECTILE_FROM_ITEM;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override

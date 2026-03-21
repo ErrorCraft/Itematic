@@ -6,7 +6,6 @@ import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.item.BoneMealItem;
@@ -28,11 +27,6 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
     @Override
     public ActionType<FertilizeAction> type() {
         return ActionTypes.FERTILIZE;
-    }
-
-    @Override
-    public boolean execute(ActionContext context) {
-        return false;
     }
 
     @Override
