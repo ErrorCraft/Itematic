@@ -13,8 +13,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ConsumableItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
-import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.type.DeathProtectionComponent;
 import net.minecraft.component.type.EquippableComponent;
@@ -29,6 +28,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
@@ -243,9 +243,11 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             return;
         }
 
-        ActionContext context = ActionContext.builder(serverWorld)
-            .entityPosition(ActionContextParameter.THIS, entity)
-            .stack(stack)
+        NewActionContext context = NewActionContext.builder(serverWorld)
+            .stackExchanger(entity, stack)
+            .add(LootContextParameters.THIS_ENTITY, entity)
+            .add(LootContextParameters.ORIGIN, entity.getPos())
+            .add(LootContextParameters.TOOL, stack)
             .build();
         stack.itematic$invokeEvent(ItemEvents.BEFORE_DEATH_HOLDER, context);
     }

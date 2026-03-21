@@ -2,16 +2,14 @@ package net.errorcraft.itematic.item.placement;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BucketItemComponent;
 import net.errorcraft.itematic.item.component.components.EntityItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -47,8 +45,8 @@ public class EntityPlacer extends Placer {
     @Nullable
     private final Hand hand;
 
-    private EntityPlacer(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, EntityInitializer<?> initializer, Direction direction, boolean mayModifyBlock, SpawnReason spawnReason, BiConsumer<Entity, ItemStack> spawnCallback, boolean allowItemData, @Nullable Hand hand) {
-        super(stack, resultStackConsumer, world, blockPos, blockState, player);
+    private EntityPlacer(ItemStack stack, ItemStackExchanger stackExchanger, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, EntityInitializer<?> initializer, Direction direction, boolean mayModifyBlock, SpawnReason spawnReason, BiConsumer<Entity, ItemStack> spawnCallback, boolean allowItemData, @Nullable Hand hand) {
+        super(stack, stackExchanger, world, blockPos, blockState, player);
         this.initializer = initializer;
         this.direction = direction;
         this.mayModifyBlock = mayModifyBlock;
@@ -58,10 +56,10 @@ public class EntityPlacer extends Placer {
         this.hand = hand;
     }
 
-    public static EntityPlacer spawned(ItemUsageContext context, ItemStack stack, ItemStackConsumer resultStackConsumer, EntityItemComponent entityItemComponent) {
+    public static EntityPlacer spawned(ItemUsageContext context, ItemStack stack, ItemStackExchanger stackExchanger, EntityItemComponent entityItemComponent) {
         World world = context.getWorld();
         BlockPos blockPos = context.getBlockPos();
-        return new EntityPlacer(context.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), entityItemComponent.getEntityInitializer(stack, world.getRegistryManager()), context.getSide(), true, SpawnReason.SPAWN_ITEM_USE, null, entityItemComponent.allowItemData(), context.getHand());
+        return new EntityPlacer(context.getStack(), stackExchanger, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), entityItemComponent.getEntityInitializer(stack, world.getRegistryManager()), context.getSide(), true, SpawnReason.SPAWN_ITEM_USE, null, entityItemComponent.allowItemData(), context.getHand());
     }
 
     public static EntityPlacer action(NewActionContext context, PositionTarget position, EntityInitializer<?> entityInitializer) {
@@ -73,7 +71,7 @@ public class EntityPlacer extends Placer {
 
         return new EntityPlacer(
             stack,
-            context::exchangeStack,
+            context.stackExchanger(),
             context.world(),
             pos,
             context.world().getBlockState(pos),
@@ -88,23 +86,9 @@ public class EntityPlacer extends Placer {
         );
     }
 
-    // old below
-
-    public static EntityPlacer action(ActionContext context, ActionContextParameter position, EntityItemComponent entityItemComponent) {
-        ItemStack stack = context.stack();
-        BlockPos pos = context.blockPos(position);
-        return new EntityPlacer(stack, context.resultStackConsumer(), context.world(), pos, context.world().getBlockState(pos), context.player(ActionContextParameter.THIS).orElse(null), entityItemComponent.getEntityInitializer(stack, context.world().getRegistryManager()), context.side(), false, SpawnReason.COMMAND, null, entityItemComponent.allowItemData(), context.hand());
-    }
-
-    public static EntityPlacer action(ActionContext context, ActionContextParameter position, EntityInitializer<?> entityInitializer) {
-        ItemStack stack = context.stack();
-        BlockPos pos = context.blockPos(position);
-        return new EntityPlacer(stack, context.resultStackConsumer(), context.world(), pos, context.world().getBlockState(pos), context.player(ActionContextParameter.THIS).orElse(null), entityInitializer, context.side(), false, SpawnReason.COMMAND, null, false, context.hand());
-    }
-
-    public static EntityPlacer bucket(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockHitResult result, PlayerEntity player, EntityInitializer<?> initializer, Hand hand) {
+    public static EntityPlacer bucket(ItemStack stack, ItemStackExchanger stackExchanger, World world, BlockHitResult result, PlayerEntity player, EntityInitializer<?> initializer, Hand hand) {
         BlockPos blockPos = result.getBlockPos();
-        return new EntityPlacer(stack, resultStackConsumer, world, blockPos, world.getBlockState(blockPos), player, initializer, result.getSide(), false, SpawnReason.BUCKET, BucketItemComponent::initializeBucketEntity, true, hand);
+        return new EntityPlacer(stack, stackExchanger, world, blockPos, world.getBlockState(blockPos), player, initializer, result.getSide(), false, SpawnReason.BUCKET, BucketItemComponent::initializeBucketEntity, true, hand);
     }
 
     @Override
@@ -146,7 +130,7 @@ public class EntityPlacer extends Placer {
         NewActionContext.Builder contextBuilder = this.addStackConsumer(NewActionContext.builder(serverWorld))
             .addOptional(LootContextParameters.THIS_ENTITY, this.player)
             .addOptional(LootContextParameters.ORIGIN, this.player, Entity::getPos)
-            .add(ItematicContextParameters.INTERACTED_POSITION, offset.toBottomCenterPos())
+            .add(ItematicContextParameters.INTERACTED_POSITION, offset.toCenterPos())
             .add(ItematicContextParameters.SIDE, this.direction)
             .add(LootContextParameters.TOOL, this.stack)
             .addOptional(ItematicContextParameters.HAND, this.hand);

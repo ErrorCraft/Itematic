@@ -1,13 +1,13 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
-import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;
@@ -17,6 +17,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
@@ -56,10 +57,11 @@ public record ToolItemComponent(ToolComponent tool) implements ItemComponent<Too
     }
 
     @Override
-    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner, ItemStackConsumer resultStackConsumer) {
+    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
         if (!world.isClient() && state.getHardness(world, pos) != 0.0f) {
-            this.useTool(stack, world, pos, miner, resultStackConsumer);
+            this.useTool(stack, world, pos, miner, stackExchanger);
         }
+
         return true;
     }
 
@@ -68,17 +70,23 @@ public record ToolItemComponent(ToolComponent tool) implements ItemComponent<Too
         builder.add(DataComponentTypes.TOOL, this.tool);
     }
 
-    private void useTool(ItemStack stack, World world, BlockPos pos, LivingEntity miner, ItemStackConsumer resultStackConsumer) {
+    private void useTool(ItemStack stack, World world, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
         if (!(world instanceof ServerWorld serverWorld)) {
             return;
         }
+
         ToolComponent tool = stack.get(DataComponentTypes.TOOL);
         if (tool == null) {
             return;
         }
-        ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, EquipmentSlot.MAINHAND)
-            .entityPosition(ActionContextParameter.THIS, miner)
-            .position(ActionContextParameter.TARGET, pos.toCenterPos())
+
+        NewActionContext context = NewActionContext.builder(serverWorld)
+            .stackExchanger(stackExchanger)
+            .add(LootContextParameters.THIS_ENTITY, miner)
+            .add(LootContextParameters.ORIGIN, miner.getPos())
+            .add(ItematicContextParameters.INTERACTED_POSITION, pos.toCenterPos())
+            .add(LootContextParameters.TOOL, stack)
+            .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
             .build();
         stack.itematic$invokeEvent(ItemEvents.USE_TOOL, context);
         stack.itematic$damage(tool.damagePerBlock(), context);

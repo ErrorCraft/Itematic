@@ -5,10 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
 import net.errorcraft.itematic.fluid.FluidKeys;
-import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -21,6 +19,7 @@ import net.errorcraft.itematic.item.placement.Placer;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.block.Block;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -30,10 +29,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
@@ -101,12 +98,13 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, this.getFluidHandling());
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return ItemResult.PASS;
         }
-        return this.place(world, user, hand, stack, resultStackConsumer, blockHitResult);
+
+        return this.place(world, user, hand, stack, stackExchanger, blockHitResult);
     }
 
     @Override
@@ -116,23 +114,23 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         }
     }
 
-    public ItemResult place(World world, @Nullable PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer, BlockHitResult blockHitResult) {
-        StackReference stackReference = StackReferenceUtil.of(stack);
+    public ItemResult place(World world, @Nullable PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger, BlockHitResult blockHitResult) {
         ItemResult result = ItemResult.PASS;
         if (this.fluid.isPresent()) {
-            FluidPlacer fluidPlacer = FluidPlacer.of(stack, stackReference::set, world, blockHitResult, user, this.fluid.get(), this.emptyingSound.orElse(null));
+            FluidPlacer fluidPlacer = FluidPlacer.of(stack, stackExchanger, world, blockHitResult, user, this.fluid.get(), this.emptyingSound.orElse(null));
             result = place(fluidPlacer, result);
         }
 
         if (this.block.isPresent()) {
             ItemUsageContext context = new ItemUsageContext(world, user, hand, stack, blockHitResult);
-            BlockPlacer blockPlacer = BlockPlacer.of(context, stackReference::set, this.block.get(), false, false);
+            BlockPlacer blockPlacer = BlockPlacer.of(context, stackExchanger, this.block.get(), false, false);
             result = place(blockPlacer, result);
         }
 
-        result = this.tryPlaceEntity(world, user, hand, stack, blockHitResult, stackReference, result);
+        result = this.tryPlaceEntity(world, user, hand, stack, blockHitResult, stackExchanger, result);
         if (result.succeeds()) {
-            resultStackConsumer.set(this.getResultStack(user, stack, stackReference.get()));
+            stack.decrement(1);
+            this.transformsInto.map(ItemStack::new).ifPresent(stackExchanger::exchange);
         }
 
         return result;
@@ -150,7 +148,7 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         return RaycastContext.FluidHandling.NONE;
     }
 
-    private ItemResult tryPlaceEntity(World world, @Nullable PlayerEntity user, Hand hand, ItemStack stack, BlockHitResult blockHitResult, StackReference stackReference, ItemResult currentResult) {
+    private ItemResult tryPlaceEntity(World world, @Nullable PlayerEntity user, Hand hand, ItemStack stack, BlockHitResult blockHitResult, ItemStackExchanger stackExchanger, ItemResult currentResult) {
         if (this.entity.isEmpty()) {
             return currentResult;
         }
@@ -163,26 +161,13 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
             return currentResult;
         }
 
-        EntityPlacer entityPlacer = EntityPlacer.bucket(stack, stackReference::set, world, blockHitResult, user, this.entity.get().entity, hand);
+        EntityPlacer entityPlacer = EntityPlacer.bucket(stack, stackExchanger, world, blockHitResult, user, this.entity.get().entity, hand);
         return place(entityPlacer, currentResult);
     }
 
     private static ItemResult place(Placer placer, ItemResult currentResult) {
         ItemResult result = placer.place();
         return currentResult.max(result);
-    }
-
-    private ItemStack getResultStack(@Nullable PlayerEntity player, ItemStack currentStack, ItemStack possibleNewStack) {
-        if (currentStack == possibleNewStack) {
-            possibleNewStack = this.transformsInto.map(ItemStack::new).orElse(possibleNewStack);
-        }
-
-        if (player == null) {
-            currentStack.decrement(1);
-            return possibleNewStack;
-        }
-
-        return ItemUsage.exchangeStack(currentStack, player, possibleNewStack);
     }
 
     public static void initializeBucketEntity(Entity entity, ItemStack stack) {

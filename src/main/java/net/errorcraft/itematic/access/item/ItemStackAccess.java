@@ -3,7 +3,6 @@ package net.errorcraft.itematic.access.item;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.event.ItemEvent;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.MergedComponentMap;
@@ -39,17 +38,12 @@ public interface ItemStackAccess {
     default boolean itematic$isOf(RegistryKey<Item> key) {
         return false;
     }
-    // TODO: Remove
-    default void itematic$damage(int amount, ActionContext context) {}
     default void itematic$damage(int amount, NewActionContext context) {}
     default <T extends ItemComponent<T>> boolean itematic$hasBehavior(ItemComponentType<T> type) {
         return false;
     }
     default <T extends ItemComponent<T>> Optional<T> itematic$getBehavior(ItemComponentType<T> type) {
         return Optional.empty();
-    }
-    default boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
-        return false;
     }
     default boolean itematic$invokeEvent(ItemEvent event, NewActionContext context) {
         return false;

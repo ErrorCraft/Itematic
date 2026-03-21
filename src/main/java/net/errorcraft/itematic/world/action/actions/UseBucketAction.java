@@ -69,7 +69,7 @@ public record UseBucketAction(PositionTarget position) implements Action<UseBuck
                 context.get(LootContextParameters.THIS_ENTITY) instanceof PlayerEntity player ? player : null,
                 hand,
                 stack,
-                context::exchangeStack,
+                context.stackExchanger(),
                 hitResult
             )
             .succeeds();

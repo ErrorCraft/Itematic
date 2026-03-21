@@ -3,7 +3,6 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -13,6 +12,7 @@ import net.errorcraft.itematic.item.placement.block.picker.pickers.AttachedToSid
 import net.errorcraft.itematic.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
 import net.errorcraft.itematic.serialization.SetCodec;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.block.Block;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.component.ComponentMap;
@@ -76,7 +76,7 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.FLUID)) {
             return ItemResult.PASS;
         }
@@ -87,15 +87,16 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
         }
 
         ItemUsageContext context = new ItemUsageContext(world, user, hand, stack, blockHitResult);
-        return this.place(context, resultStackConsumer);
+        return this.place(context, stackExchanger);
     }
 
     @Override
-    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.BLOCK)) {
             return ItemResult.PASS;
         }
-        return this.place(context, resultStackConsumer);
+
+        return this.place(context, stackExchanger);
     }
 
     @Override
@@ -123,8 +124,8 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
         return !this.passes.contains(pass);
     }
 
-    private ItemResult place(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
-        return BlockPlacer.of(context, resultStackConsumer, this.block, this.operatorOnly, true)
+    private ItemResult place(ItemUsageContext context, ItemStackExchanger stackExchanger) {
+        return BlockPlacer.of(context, stackExchanger, this.block, this.operatorOnly, true)
             .place();
     }
 

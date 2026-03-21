@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -15,6 +14,7 @@ import net.errorcraft.itematic.item.placement.EntityPlacer;
 import net.errorcraft.itematic.mixin.item.DecorationItemAccessor;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
 import net.errorcraft.itematic.serialization.SetCodec;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EntityType;
@@ -74,7 +74,7 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.FLUID)) {
             return ItemResult.PASS;
         }
@@ -89,11 +89,11 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
         }
 
         ItemUsageContext itemUsageContext = new ItemUsageContext(world, user, hand, stack, blockHitResult);
-        return this.place(itemUsageContext, resultStackConsumer);
+        return this.place(itemUsageContext, stackExchanger);
     }
 
     @Override
-    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.BLOCK)) {
             return ItemResult.PASS;
         }
@@ -102,7 +102,7 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
             return ItemResult.SUCCEED;
         }
 
-        return this.place(context, resultStackConsumer);
+        return this.place(context, stackExchanger);
     }
 
     @Override
@@ -154,8 +154,8 @@ public record EntityItemComponent(EntityInitializer<?> entity, boolean allowItem
         return !this.passes.contains(pass);
     }
 
-    private ItemResult place(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
-        return EntityPlacer.spawned(context, context.getStack(), resultStackConsumer, this)
+    private ItemResult place(ItemUsageContext context, ItemStackExchanger stackExchanger) {
+        return EntityPlacer.spawned(context, context.getStack(), stackExchanger, this)
             .place();
     }
 

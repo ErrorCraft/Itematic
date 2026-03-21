@@ -46,6 +46,10 @@ public class NewActionContext {
         return this.world;
     }
 
+    public ItemStackExchanger stackExchanger() {
+        return this.stackExchanger;
+    }
+
     public <T> boolean has(ContextParameter<T> parameter) {
         return this.parameters.contains(parameter);
     }
@@ -172,6 +176,19 @@ public class NewActionContext {
                 this.parameters.itematic$build(),
                 this.stackExchanger
             );
+        }
+
+        public Builder stackExchanger(ItemStackExchanger stackExchanger) {
+            this.stackExchanger = stackExchanger;
+            return this;
+        }
+
+        public Builder possibleStackExchanger(@Nullable LivingEntity consumingEntity, ItemStack initialStack) {
+            if (consumingEntity == null) {
+                return this;
+            }
+
+            return this.stackExchanger(consumingEntity, initialStack);
         }
 
         public Builder stackExchanger(LivingEntity consumingEntity, ItemStack initialStack) {

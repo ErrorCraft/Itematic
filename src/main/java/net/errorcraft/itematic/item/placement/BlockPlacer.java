@@ -4,14 +4,13 @@ import net.errorcraft.itematic.access.block.entity.BlockEntityAccess;
 import net.errorcraft.itematic.block.BlockStateUtil;
 import net.errorcraft.itematic.block.ShapeContextUtil;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.mixin.block.BlockItemAccessor;
-import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -44,8 +43,8 @@ public class BlockPlacer extends Placer {
     private final boolean operatorOnly;
     private final boolean decrementStack;
 
-    public BlockPlacer(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, BlockPicker<?> block, ItemPlacementContext context, boolean operatorOnly, boolean decrementStack) {
-        super(stack, resultStackConsumer, world, blockPos, blockState, player);
+    public BlockPlacer(ItemStack stack, ItemStackExchanger stackExchanger, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, BlockPicker<?> block, ItemPlacementContext context, boolean operatorOnly, boolean decrementStack) {
+        super(stack, stackExchanger, world, blockPos, blockState, player);
         this.block = block;
         this.context = context;
         this.operatorOnly = operatorOnly;
@@ -65,7 +64,7 @@ public class BlockPlacer extends Placer {
 
         return new BlockPlacer(
             context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY),
-            context::exchangeStack,
+            context.stackExchanger(),
             context.world(),
             pos,
             context.world().getBlockState(pos),
@@ -77,18 +76,18 @@ public class BlockPlacer extends Placer {
         );
     }
 
-    public static BlockPlacer of(ItemUsageContext context, ItemStackConsumer resultStackConsumer, BlockPicker<?> block, boolean operatorOnly, boolean decrementStack) {
+    public static BlockPlacer of(ItemUsageContext context, ItemStackExchanger stackExchanger, BlockPicker<?> block, boolean operatorOnly, boolean decrementStack) {
         World world = context.getWorld();
         BlockPos pos = context.getBlockPos();
         Direction side = context.getSide();
         ItemPlacementContext placementContext = block.placementContext(context.getPlayer() != null ? new ItemPlacementContext(context) : new AutomaticItemPlacementContext(world, pos, side, context.getStack(), world.isAir(pos.down()) ? side : Direction.UP));
-        return of(placementContext, resultStackConsumer, block, operatorOnly, decrementStack);
+        return of(placementContext, stackExchanger, block, operatorOnly, decrementStack);
     }
 
-    public static BlockPlacer of(ItemPlacementContext context, ItemStackConsumer resultStackConsumer, BlockPicker<?> block, boolean operatorOnly, boolean decrementStack) {
+    public static BlockPlacer of(ItemPlacementContext context, ItemStackExchanger stackExchanger, BlockPicker<?> block, boolean operatorOnly, boolean decrementStack) {
         World world = context.getWorld();
         BlockPos blockPos = context.getBlockPos();
-        return new BlockPlacer(context.getStack(), resultStackConsumer, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), block, context, operatorOnly, decrementStack);
+        return new BlockPlacer(context.getStack(), stackExchanger, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), block, context, operatorOnly, decrementStack);
     }
 
     @Override
@@ -118,9 +117,13 @@ public class BlockPlacer extends Placer {
         blockState.getBlock().onPlaced(this.world, this.blockPos, blockState, this.player, this.stack);
         if (this.player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.PLACED_BLOCK.trigger(serverPlayer, this.blockPos, this.stack);
-            ActionContext context = ActionContext.builder(serverPlayer.getServerWorld(), this.stack, this.resultStackConsumer, this.context.getHand())
-                .entityPosition(ActionContextParameter.THIS, serverPlayer)
-                .position(ActionContextParameter.TARGET, this.blockPos)
+            NewActionContext context = NewActionContext.builder(serverPlayer.getServerWorld())
+                .stackExchanger(this.stackExchanger)
+                .add(LootContextParameters.THIS_ENTITY, serverPlayer)
+                .add(LootContextParameters.ORIGIN, serverPlayer.getPos())
+                .add(ItematicContextParameters.INTERACTED_POSITION, this.blockPos.toCenterPos())
+                .add(LootContextParameters.TOOL, this.stack)
+                .add(ItematicContextParameters.HAND, this.context.getHand())
                 .build();
             this.stack.itematic$invokeEvent(ItemEvents.PLACED_BLOCK, context);
         }

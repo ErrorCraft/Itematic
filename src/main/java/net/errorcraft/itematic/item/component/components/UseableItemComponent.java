@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -13,6 +12,7 @@ import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.providers.ConstantIntegerProvider;
 import net.errorcraft.itematic.item.use.provider.providers.IndefiniteIntegerProvider;
 import net.errorcraft.itematic.serialization.SetCodec;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.UseRemainderComponent;
@@ -53,7 +53,7 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.NORMAL)) {
             return ItemResult.PASS;
         }
@@ -62,7 +62,7 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
     }
 
     @Override
-    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.BLOCK)) {
             return ItemResult.PASS;
         }
@@ -71,7 +71,7 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
     }
 
     @Override
-    public ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.ENTITY)) {
             return ItemResult.PASS;
         }

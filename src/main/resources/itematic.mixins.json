@@ -277,7 +277,7 @@
     "item.ItemGroupsExtender",
     "item.ItemPlacementContextExtender",
     "item.ItemStackExtender",
-    "item.ItemUsageExtender",
+    "item.ItemUsageContextExtender",
     "item.KnowledgeBookItemExtender",
     "item.RangedWeaponItemAccessor",
     "item.SmithingTemplateItemAccessor",
