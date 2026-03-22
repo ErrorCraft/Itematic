@@ -61,6 +61,8 @@ public class DispenseBehavior extends FallibleItemDispenserBehavior {
             .add(LootContextParameters.ORIGIN, pointer.centerPos())
             .add(ItematicContextParameters.INTERACTED_POSITION, outputPos)
             .add(ItematicContextParameters.SIDE, side)
+            .add(LootContextParameters.TOOL, stack)
+            .add(LootContextParameters.BLOCK_ENTITY, pointer.blockEntity())
             .build();
         Optional<Boolean> result = this.entry.value().execute(context);
         if (result.isEmpty()) {
