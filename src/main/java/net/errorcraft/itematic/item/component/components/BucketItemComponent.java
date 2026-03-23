@@ -134,7 +134,7 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
 
         result = this.tryPlaceEntity(world, user, hand, stack, blockHitResult, stackExchanger, result);
         if (result.succeeds()) {
-            stack.decrement(1);
+            stack.decrementUnlessCreative(1, user);
             this.transformsInto.map(ItemStack::new).ifPresent(stackExchanger::exchange);
         }
 
