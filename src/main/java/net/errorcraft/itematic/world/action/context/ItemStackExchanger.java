@@ -2,7 +2,6 @@ package net.errorcraft.itematic.world.action.context;
 
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
@@ -17,6 +16,11 @@ public class ItemStackExchanger {
     private final Consumer<ItemStack> dropper;
     private ItemStack currentStack;
 
+    private ItemStackExchanger(Consumer<ItemStack> dropper, ItemStack initialStack) {
+        this.dropper = Objects.requireNonNull(dropper);
+        this.currentStack = Objects.requireNonNull(initialStack);
+    }
+
     public static ItemStackExchanger forEntity(LivingEntity entity, ItemStack initialStack) {
         return new ItemStackExchanger(entity::giveOrDropStack, initialStack);
     }
@@ -24,15 +28,6 @@ public class ItemStackExchanger {
     public static ItemStackExchanger forDispenser(ServerWorld world, Direction side, Vec3d pos, ItemStack initialStack) {
         Consumer<ItemStack> dropper = stack -> ItemDispenserBehavior.spawnItem(world, stack, 6, side, pos);
         return new ItemStackExchanger(dropper, initialStack);
-    }
-
-    public static ItemStackExchanger forStackReference(StackReference stackReference) {
-        return new ItemStackExchanger(stackReference::set, stackReference.get());
-    }
-
-    public ItemStackExchanger(Consumer<ItemStack> dropper, ItemStack initialStack) {
-        this.dropper = Objects.requireNonNull(dropper);
-        this.currentStack = Objects.requireNonNull(initialStack);
     }
 
     public ItemStack result() {

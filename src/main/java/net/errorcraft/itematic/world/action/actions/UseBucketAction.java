@@ -52,20 +52,15 @@ public record UseBucketAction(PositionTarget position) implements Action<UseBuck
             return false;
         }
 
-        Hand hand = context.get(ItematicContextParameters.HAND);
-        if (hand == null) {
-            return false;
-        }
-
+        Hand hand = context.getOrDefault(ItematicContextParameters.HAND, Hand.MAIN_HAND);
         BlockHitResult hitResult = new BlockHitResult(pos, side, BlockPos.ofFloored(pos), true);
         return bucket.place(
-                context.world(),
-                context.get(LootContextParameters.THIS_ENTITY) instanceof PlayerEntity player ? player : null,
-                hand,
-                stack,
-                context.stackExchanger(),
-                hitResult
-            )
-            .succeeds();
+            context.world(),
+            context.get(LootContextParameters.THIS_ENTITY) instanceof PlayerEntity player ? player : null,
+            hand,
+            stack,
+            context.stackExchanger(),
+            hitResult
+        ).succeeds();
     }
 }

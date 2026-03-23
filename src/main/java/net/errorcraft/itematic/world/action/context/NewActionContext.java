@@ -43,7 +43,7 @@ public class NewActionContext {
     }
 
     public Builder extend() {
-        return new Builder(this.world, this.parameters);
+        return new Builder(this);
     }
 
     public ServerWorld world() {
@@ -174,9 +174,10 @@ public class NewActionContext {
             this.world = world;
         }
 
-        private Builder(ServerWorld world, ContextParameterMap parameters) {
-            this(world);
-            this.parameters.itematic$copy(parameters);
+        private Builder(NewActionContext currentContext) {
+            this.world = currentContext.world;
+            this.stackExchanger = currentContext.stackExchanger;
+            this.parameters.itematic$copy(currentContext.parameters);
         }
 
         public NewActionContext build() {

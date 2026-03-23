@@ -419,11 +419,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Overwrite
     public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
         boolean result = false;
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forStackReference(cursorStackReference);
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, otherStack);
         for (ItemComponent<?> component : this.itemComponents) {
             result |= component.clickedOnWithStack(stack, otherStack, slot, clickType, player, stackExchanger);
         }
 
+        cursorStackReference.set(stackExchanger.result());
         return result;
     }
 

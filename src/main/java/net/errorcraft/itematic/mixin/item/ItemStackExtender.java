@@ -825,7 +825,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
             this.components = MergedComponentMap.create(entry.value().getComponents(), changes);
             entry.value().postProcessComponents((ItemStack)(Object) this);
         } else {
-            this.components = new MergedComponentMap(ComponentMap.EMPTY);
+            this.components = MergedComponentMap.create(ComponentMap.EMPTY, changes);
         }
     }
 
