@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -16,12 +15,6 @@ import net.minecraft.server.world.ServerWorld;
 
 public class TridentEntityInitializer implements EntityInitializer<TridentEntity> {
     public static final TridentEntityInitializer INSTANCE = new TridentEntityInitializer();
-    public static final MapCodec<TridentEntityInitializer> CODEC = MapCodec.unit(INSTANCE);
-
-    @Override
-    public EntityType<?> type() {
-        return EntityType.TRIDENT;
-    }
 
     @Override
     public TridentEntity create(NewActionContext context, SpawnReason reason) {

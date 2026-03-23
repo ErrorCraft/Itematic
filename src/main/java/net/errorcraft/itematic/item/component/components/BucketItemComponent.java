@@ -2,8 +2,6 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.entity.initializer.EntityInitializer;
-import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemResult;
@@ -19,7 +17,10 @@ import net.errorcraft.itematic.item.placement.Placer;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -27,15 +28,19 @@ import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Bucketable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -153,7 +158,8 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
             return currentResult;
         }
 
-        if (this.entity.get().requireOtherSuccessfulPlacement && !currentResult.succeeds()) {
+        EntityTarget target = this.entity.get();
+        if (target.requireOtherSuccessfulPlacement && !currentResult.succeeds()) {
             return currentResult;
         }
 
@@ -161,8 +167,25 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
             return currentResult;
         }
 
-        EntityPlacer entityPlacer = EntityPlacer.bucket(stack, stackExchanger, world, blockHitResult, user, this.entity.get().entity, hand);
-        return place(entityPlacer, currentResult);
+        NewActionContext context = NewActionContext.builder((ServerWorld) world)
+            .stackExchanger(stackExchanger)
+            .addOptional(LootContextParameters.THIS_ENTITY, user)
+            .addOptional(LootContextParameters.ORIGIN, user, Entity::getPos)
+            .add(ItematicContextParameters.INTERACTED_POSITION, blockHitResult.getBlockPos().toCenterPos())
+            .add(LootContextParameters.TOOL, stack)
+            .add(ItematicContextParameters.HAND, hand)
+            .add(ItematicContextParameters.SIDE, blockHitResult.getSide())
+            .build();
+        EntityPlacer.of(
+            target.entity.value(),
+            context,
+            false,
+            SpawnReason.BUCKET,
+            BucketItemComponent::initializeBucketEntity,
+            true,
+            PositionTarget.INTERACTED_POSITION
+        ).place();
+        return ItemResult.CONSUME;
     }
 
     private static ItemResult place(Placer placer, ItemResult currentResult) {
@@ -177,14 +200,14 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
         }
     }
 
-    public record EntityTarget(EntityInitializer<?> entity, boolean requireOtherSuccessfulPlacement) {
+    public record EntityTarget(RegistryEntry<EntityType<?>> entity, boolean requireOtherSuccessfulPlacement) {
         public static final Codec<EntityTarget> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            EntityInitializer.CODEC.fieldOf("entity").forGetter(EntityTarget::entity),
+            Registries.ENTITY_TYPE.getEntryCodec().fieldOf("entity").forGetter(EntityTarget::entity),
             Codec.BOOL.optionalFieldOf("require_other_successful_placement", false).forGetter(EntityTarget::requireOtherSuccessfulPlacement)
         ).apply(instance, EntityTarget::new));
 
         public static EntityTarget ofRequired(RegistryEntry<EntityType<?>> entity) {
-            return new EntityTarget(SimpleEntityInitializer.of(entity.value()), true);
+            return new EntityTarget(entity, true);
         }
     }
 }

@@ -1,12 +1,10 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EyeOfEnderEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.item.ItemStack;
@@ -20,14 +18,8 @@ import net.minecraft.world.event.GameEvent;
 
 public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnderEntity> {
     public static final EyeOfEnderEntityInitializer INSTANCE = new EyeOfEnderEntityInitializer();
-    public static final MapCodec<EyeOfEnderEntityInitializer> CODEC = MapCodec.unit(INSTANCE);
 
     private EyeOfEnderEntityInitializer() {}
-
-    @Override
-    public EntityType<?> type() {
-        return EntityType.EYE_OF_ENDER;
-    }
 
     @Override
     public EyeOfEnderEntity create(NewActionContext context, SpawnReason reason) {

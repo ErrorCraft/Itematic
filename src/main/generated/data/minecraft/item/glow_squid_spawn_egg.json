@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:glow_squid"
-      },
+      "entity": "minecraft:glow_squid",
       "passes": [
         "block",
         "fluid"

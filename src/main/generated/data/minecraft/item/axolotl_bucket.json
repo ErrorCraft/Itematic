@@ -3,9 +3,7 @@
     "minecraft:bucket": {
       "emptying_sound_event": "minecraft:item.bucket.empty_axolotl",
       "entity": {
-        "entity": {
-          "type": "minecraft:axolotl"
-        },
+        "entity": "minecraft:axolotl",
         "require_other_successful_placement": true
       },
       "fluid": "minecraft:water",

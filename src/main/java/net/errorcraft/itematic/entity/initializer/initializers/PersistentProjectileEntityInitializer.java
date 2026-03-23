@@ -1,10 +1,8 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -14,7 +12,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public record PersistentProjectileEntityInitializer<T extends PersistentProjectileEntity>(EntityType<T> type, OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) implements EntityInitializer<T> {
+public record PersistentProjectileEntityInitializer<T extends PersistentProjectileEntity>(OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) implements EntityInitializer<T> {
+    public static <T extends PersistentProjectileEntity> EntityInitializer<T> of(OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) {
+        return new PersistentProjectileEntityInitializer<>(ownerCreator, simpleCreator);
+    }
+
     @Override
     public T create(NewActionContext context, SpawnReason reason) {
         if (context.get(LootContextParameters.THIS_ENTITY) instanceof LivingEntity entity) {
@@ -46,10 +48,6 @@ public record PersistentProjectileEntityInitializer<T extends PersistentProjecti
         );
         entity.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
         return entity;
-    }
-
-    public static <U extends PersistentProjectileEntity> MapCodec<EntityInitializer<U>> createCodec(EntityType<U> type, OwnerCreator<U> ownerCreator, SimpleCreator<U> simpleCreator) {
-        return MapCodec.unit(new PersistentProjectileEntityInitializer<>(type, ownerCreator, simpleCreator));
     }
 
     @FunctionalInterface

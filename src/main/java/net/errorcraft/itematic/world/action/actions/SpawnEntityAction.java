@@ -2,21 +2,25 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.item.placement.EntityPlacer;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 
-public record SpawnEntityAction(PositionTarget position, EntityInitializer<?> entity) implements Action<SpawnEntityAction> {
+public record SpawnEntityAction(PositionTarget position, RegistryEntry<EntityType<?>> entity) implements Action<SpawnEntityAction> {
     public static final MapCodec<SpawnEntityAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         PositionTarget.CODEC.fieldOf("position").forGetter(SpawnEntityAction::position),
-        EntityInitializer.CODEC.fieldOf("entity").forGetter(SpawnEntityAction::entity)
+        Registries.ENTITY_TYPE.getEntryCodec().fieldOf("entity").forGetter(SpawnEntityAction::entity)
     ).apply(instance, SpawnEntityAction::new));
 
-    public static SpawnEntityAction of(PositionTarget position, EntityInitializer<?> entity) {
+    public static SpawnEntityAction of(PositionTarget position, RegistryEntry<EntityType<?>> entity) {
         return new SpawnEntityAction(position, entity);
     }
 
@@ -27,11 +31,15 @@ public record SpawnEntityAction(PositionTarget position, EntityInitializer<?> en
 
     @Override
     public boolean execute(NewActionContext context) {
-        EntityPlacer placer = EntityPlacer.action(context, this.position, this.entity);
-        if (placer == null) {
-            return false;
-        }
-
-        return placer.place().succeeds();
+        Entity entity = EntityPlacer.of(
+            this.entity.value(),
+            context,
+            false,
+            SpawnReason.COMMAND,
+            null,
+            false,
+            this.position
+        ).place();
+        return entity != null;
     }
 }

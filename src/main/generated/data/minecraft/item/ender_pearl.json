@@ -4,9 +4,7 @@
       "ticks": 20
     },
     "minecraft:projectile": {
-      "entity": {
-        "type": "minecraft:ender_pearl"
-      }
+      "entity": "minecraft:ender_pearl"
     },
     "minecraft:stackable": 16,
     "minecraft:throwable": {

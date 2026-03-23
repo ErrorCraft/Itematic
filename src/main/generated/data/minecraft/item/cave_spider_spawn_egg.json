@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:cave_spider"
-      },
+      "entity": "minecraft:cave_spider",
       "passes": [
         "block",
         "fluid"

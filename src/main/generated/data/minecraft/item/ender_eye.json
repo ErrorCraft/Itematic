@@ -4,9 +4,7 @@
       "block": true
     },
     "minecraft:projectile": {
-      "entity": {
-        "type": "minecraft:eye_of_ender"
-      }
+      "entity": "minecraft:eye_of_ender"
     },
     "minecraft:stackable": 64,
     "minecraft:throwable": {

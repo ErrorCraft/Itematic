@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.item.dispense.behavior;
 
 import net.errorcraft.itematic.block.BlockKeys;
-import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
+import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionUtil;
@@ -63,14 +63,13 @@ public class DispenseBehaviors {
         RegistryEntryLookup<Block> blocks = registerable.getRegistryLookup(RegistryKeys.BLOCK);
         RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
         RegistryEntryLookup<SoundEvent> soundEvents = registerable.getRegistryLookup(RegistryKeys.SOUND_EVENT);
+        RegistryEntryLookup<EntityType<?>> entityTypes = registerable.getRegistryLookup(RegistryKeys.ENTITY_TYPE);
 
         registerable.register(BRUSH, DispenseBehavior.builder(
             PassingSequenceHandler.builder()
                 .add(BrushArmadilloAtPositionAction.of(PositionTarget.INTERACTED_POSITION))
-                .add(DamageItemAction.of(16)))
-            .doNotDispenseOnFailure()
-            .build()
-        );
+                .add(DamageItemAction.of(16))
+        ).doNotDispenseOnFailure().build());
         registerable.register(CHARGE_RESPAWN_ANCHOR, DispenseBehavior.builder(
             ActionEntry.of(
                 LocationCheckLootConditionUtil.builder(
@@ -79,23 +78,17 @@ public class DispenseBehaviors {
                         .block(BlockPredicate.Builder.create()
                             .blocks(blocks, blocks.getOrThrow(BlockKeys.RESPAWN_ANCHOR).value()))
                 ),
-                decrement(ChargeRespawnAnchorAction.of(PositionTarget.INTERACTED_POSITION))))
-            .doNotDispenseOnFailure()
-            .build()
-        );
+                decrement(ChargeRespawnAnchorAction.of(PositionTarget.INTERACTED_POSITION)))
+        ).doNotDispenseOnFailure().build());
         registerable.register(EQUIP_CHEST, DispenseBehavior.builder(
-            decrement(EquipHorseWithChestAtPositionAction.of(PositionTarget.INTERACTED_POSITION)))
-            .build()
-        );
+            decrement(EquipHorseWithChestAtPositionAction.of(PositionTarget.INTERACTED_POSITION))
+        ).build());
         registerable.register(EQUIP_ENTITY, DispenseBehavior.builder(
-            decrement(EquipEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION)))
-            .build()
-        );
+            decrement(EquipEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION))
+        ).build());
         registerable.register(EQUIP_ENTITY_HEAD, DispenseBehavior.builder(
-            decrement(EquipEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION)))
-            .doNotDispenseOnFailure()
-            .build()
-        );
+            decrement(EquipEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION))
+        ).doNotDispenseOnFailure().build());
         registerable.register(GLASS_BOTTLE, DispenseBehavior.builder(
             FirstToPassRequirementsSequenceHandler.builder()
                 .add(
@@ -110,82 +103,67 @@ public class DispenseBehaviors {
                         .add(TakeHoneyAction.of(PositionTarget.INTERACTED_POSITION))
                         .add(ExchangeItemAction.of(items.getOrThrow(ItemKeys.HONEY_BOTTLE)))
                 )
-                .add(InvokeItemEventAction.of(ItemEvents.USE_ON_BLOCK)))
-            .build()
-        );
+                .add(InvokeItemEventAction.of(ItemEvents.USE_ON_BLOCK))
+        ).build());
         registerable.register(PLACE_BLOCK_FROM_ITEM, DispenseBehavior.builder(
-            PlaceBlockFromItemAction.of(PositionTarget.INTERACTED_POSITION, true))
-            .doNotDispenseOnFailure()
-            .build()
-        );
+            PlaceBlockFromItemAction.of(PositionTarget.INTERACTED_POSITION, true)
+        ).doNotDispenseOnFailure().build());
         registerable.register(PLACE_CARVED_PUMPKIN, DispenseBehavior.builder(
             decrement(FirstToSucceedSequenceHandler.builder()
                 .add(PlaceCarvedPumpkinAction.of(PositionTarget.INTERACTED_POSITION))
-                .add(EquipEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION))))
-            .doNotDispenseOnFailure()
-            .build()
-        );
+                .add(EquipEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION)))
+        ).doNotDispenseOnFailure().build());
         registerable.register(SADDLE, DispenseBehavior.builder(
-            SaddleEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION))
-            .build()
-        );
+            SaddleEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION)
+        ).build());
         registerable.register(SHEAR, DispenseBehavior.builder(
             PassingSequenceHandler.builder()
                 .add(ShearAtPositionAction.of(PositionTarget.INTERACTED_POSITION))
-                .add(DamageItemAction.of(1)))
-            .doNotDispenseOnFailure()
-            .build()
-        );
+                .add(DamageItemAction.of(1))
+        ).doNotDispenseOnFailure().build());
         registerable.register(SHOOT_BOTTLE, DispenseBehavior.builder(
-            shootProjectile(1.1f * 1.25f, 6.0f * 0.5f))
-            .offset(DispenseBehavior.Offset.of(0.7d, 0.0d, 0.1d, 0.0d))
-            .build()
-        );
+            shootProjectile(1.1f * 1.25f, 6.0f * 0.5f)
+        ).offset(DispenseBehavior.Offset.of(0.7d, 0.0d, 0.1d, 0.0d)).build());
         registerable.register(SHOOT_CHARGE, DispenseBehavior.builder(
-            shootProjectile(1.0f, 20.0f / 3.0f))
-            .build()
-        );
+            shootProjectile(1.0f, 20.0f / 3.0f)
+        ).build());
         registerable.register(SHOOT_FIREWORK_ROCKET, DispenseBehavior.builder(
-            shootProjectile(1.0f, 0.5f))
-            .offset(DispenseBehavior.Offset.ofSide(
-                0.5d - EntityType.FIREWORK_ROCKET.getWidth() * 0.5d,
-                -EntityType.FIREWORK_ROCKET.getHeight() + 0.5d,
-                0.5d - EntityType.FIREWORK_ROCKET.getWidth() * 0.5d
-            ))
-            .build()
-        );
+            shootProjectile(1.0f, 0.5f)
+        ).offset(DispenseBehavior.Offset.ofSide(
+            0.5d - EntityType.FIREWORK_ROCKET.getWidth() * 0.5d,
+            -EntityType.FIREWORK_ROCKET.getHeight() + 0.5d,
+            0.5d - EntityType.FIREWORK_ROCKET.getWidth() * 0.5d
+        )).build());
         registerable.register(SHOOT_PROJECTILE, DispenseBehavior.builder(
-            shootProjectile(1.1f, 6.0f))
-            .offset(DispenseBehavior.Offset.of(0.7d, 0.0d, 0.1d, 0.0d))
-            .build()
-        );
+            shootProjectile(1.1f, 6.0f)
+        ).offset(DispenseBehavior.Offset.of(0.7d, 0.0d, 0.1d, 0.0d)).build());
         registerable.register(SPAWN_ENTITY_FROM_ITEM, DispenseBehavior.builder(
-            SpawnEntityFromItemAction.of(PositionTarget.INTERACTED_POSITION))
-            .build()
-        );
+            SpawnEntityFromItemAction.of(PositionTarget.INTERACTED_POSITION)
+        ).build());
         registerable.register(SPAWN_TNT, DispenseBehavior.builder(
             PassingSequenceHandler.builder()
-                .add(SpawnEntityAction.of(PositionTarget.INTERACTED_POSITION, SimpleEntityInitializer.of(EntityType.TNT)))
-                .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundCategory.BLOCKS)))
-            .build()
-        );
+                .add(SpawnEntityAction.of(
+                    PositionTarget.INTERACTED_POSITION,
+                    entityTypes.getOrThrow(EntityTypeKeys.TNT)
+                ))
+                .add(PlaySoundAction.of(
+                    PositionTarget.INTERACTED_POSITION,
+                    soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED),
+                    SoundCategory.BLOCKS
+                ))
+        ).build());
         registerable.register(USE_BUCKET, DispenseBehavior.builder(
-            UseBucketAction.of(PositionTarget.INTERACTED_POSITION))
-            .build()
-        );
+            UseBucketAction.of(PositionTarget.INTERACTED_POSITION)
+        ).build());
         registerable.register(USE_ITEM_ON_BLOCK, DispenseBehavior.builder(
-            InvokeItemEventAction.of(ItemEvents.USE_ON_BLOCK))
-            .doNotDispenseOnFailure()
-            .build()
-        );
+            InvokeItemEventAction.of(ItemEvents.USE_ON_BLOCK)
+        ).doNotDispenseOnFailure().build());
         registerable.register(USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM, DispenseBehavior.builder(
-            InvokeItemEventAction.of(ItemEvents.USE_ON_BLOCK))
-            .build()
-        );
+            InvokeItemEventAction.of(ItemEvents.USE_ON_BLOCK)
+        ).build());
         registerable.register(WAX_BLOCK, DispenseBehavior.builder(
-            decrement(WaxBlockAction.of(PositionTarget.INTERACTED_POSITION)))
-            .build()
-        );
+            decrement(WaxBlockAction.of(PositionTarget.INTERACTED_POSITION))
+        ).build());
     }
 
     private static RegistryKey<DispenseBehavior> of(String id) {

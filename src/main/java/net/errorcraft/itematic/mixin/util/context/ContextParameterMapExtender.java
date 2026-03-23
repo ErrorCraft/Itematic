@@ -17,6 +17,11 @@ public class ContextParameterMapExtender {
         private Map<ContextParameter<?>, Object> map;
 
         @Override
+        public void itematic$copy(ContextParameterMap other) {
+            this.map.putAll(((ContextParameterMapAccessor) other).itematic$parameters());
+        }
+
+        @Override
         public ContextParameterMap itematic$build() {
             return ContextParameterMapAccessor.create(this.map);
         }

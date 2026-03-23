@@ -1,10 +1,8 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.WindChargeEntity;
@@ -17,15 +15,9 @@ import net.minecraft.util.math.random.Random;
 
 public class WindChargeEntityInitializer implements EntityInitializer<WindChargeEntity> {
     public static final WindChargeEntityInitializer INSTANCE = new WindChargeEntityInitializer();
-    public static final MapCodec<WindChargeEntityInitializer> CODEC = MapCodec.unit(INSTANCE);
     private static final double VELOCITY_DEVIATION = 0.11485d;
 
     private WindChargeEntityInitializer() {}
-
-    @Override
-    public EntityType<?> type() {
-        return EntityType.WIND_CHARGE;
-    }
 
     @Override
     public WindChargeEntity create(NewActionContext context, SpawnReason reason) {

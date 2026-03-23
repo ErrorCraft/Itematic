@@ -1,12 +1,10 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.decoration.EndCrystalEntity;
@@ -18,16 +16,10 @@ import java.util.List;
 
 public class EndCrystalEntityInitializer implements EntityInitializer<EndCrystalEntity> {
     public static final EndCrystalEntityInitializer INSTANCE = new EndCrystalEntityInitializer();
-    public static final MapCodec<EndCrystalEntityInitializer> CODEC = MapCodec.unit(INSTANCE);
     private static final double HORIZONTAL_SEARCH_DISTANCE = 1.0d;
     private static final double VERTICAL_SEARCH_DISTANCE = 2.0d;
 
     private EndCrystalEntityInitializer() {}
-
-    @Override
-    public EntityType<?> type() {
-        return EntityType.END_CRYSTAL;
-    }
 
     @Override
     public EndCrystalEntity create(NewActionContext context, SpawnReason reason) {

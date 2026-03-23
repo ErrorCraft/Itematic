@@ -7,9 +7,7 @@
       "duration_multiplier": 0.125
     },
     "minecraft:projectile": {
-      "entity": {
-        "type": "minecraft:arrow"
-      }
+      "entity": "minecraft:arrow"
     },
     "minecraft:stackable": 64
   },

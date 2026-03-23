@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:wandering_trader"
-      },
+      "entity": "minecraft:wandering_trader",
       "passes": [
         "block",
         "fluid"

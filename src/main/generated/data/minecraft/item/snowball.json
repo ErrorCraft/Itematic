@@ -4,9 +4,7 @@
       "behavior": "minecraft:shoot_projectile"
     },
     "minecraft:projectile": {
-      "entity": {
-        "type": "minecraft:snowball"
-      }
+      "entity": "minecraft:snowball"
     },
     "minecraft:stackable": 16,
     "minecraft:throwable": {

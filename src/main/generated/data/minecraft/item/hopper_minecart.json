@@ -4,9 +4,7 @@
       "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
-      "entity": {
-        "type": "minecraft:hopper_minecart"
-      }
+      "entity": "minecraft:hopper_minecart"
     },
     "minecraft:stackable": 1
   },

@@ -1,10 +1,8 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.projectile.SmallFireballEntity;
@@ -16,15 +14,9 @@ import net.minecraft.util.math.random.Random;
 
 public class SmallFireballEntityInitializer implements EntityInitializer<SmallFireballEntity> {
     public static final SmallFireballEntityInitializer INSTANCE = new SmallFireballEntityInitializer();
-    public static final MapCodec<SmallFireballEntityInitializer> CODEC = MapCodec.unit(INSTANCE);
     private static final double VELOCITY_DEVIATION = 0.11485d;
 
     private SmallFireballEntityInitializer() {}
-
-    @Override
-    public EntityType<?> type() {
-        return EntityType.SMALL_FIREBALL;
-    }
 
     @Override
     public SmallFireballEntity create(NewActionContext context, SpawnReason reason) {

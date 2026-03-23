@@ -5,9 +5,7 @@
     },
     "minecraft:firework_shape_modifier": "large_ball",
     "minecraft:projectile": {
-      "entity": {
-        "type": "minecraft:small_fireball"
-      }
+      "entity": "minecraft:small_fireball"
     },
     "minecraft:stackable": 64
   },

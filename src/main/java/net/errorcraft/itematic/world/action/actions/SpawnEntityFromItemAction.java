@@ -2,9 +2,7 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.placement.EntityPlacer;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -29,15 +27,9 @@ public record SpawnEntityFromItemAction(PositionTarget position) implements Acti
 
     @Override
     public boolean execute(NewActionContext context) {
-        ItemStack stack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
-        return stack.itematic$getBehavior(ItemComponentTypes.ENTITY)
-            .map(entity -> EntityPlacer.action(
-                context,
-                this.position,
-                entity.getEntityInitializer(stack, context.world().getRegistryManager()))
-            )
-            .map(EntityPlacer::place)
-            .map(ItemResult::succeeds)
-            .orElse(false);
+        return context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
+            .itematic$getBehavior(ItemComponentTypes.ENTITY)
+            .map(entity -> entity.place(context))
+            .isPresent();
     }
 }

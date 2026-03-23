@@ -1,9 +1,7 @@
 {
   "behavior": {
     "minecraft:entity": {
-      "entity": {
-        "type": "minecraft:end_crystal"
-      }
+      "entity": "minecraft:end_crystal"
     },
     "minecraft:stackable": 64
   },

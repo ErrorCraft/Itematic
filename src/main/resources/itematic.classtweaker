@@ -16,3 +16,5 @@ inject-interface    net/minecraft/block/AbstractBlock    net/errorcraft/itematic
 inject-interface    net/minecraft/util/context/ContextParameterMap$Builder    net/errorcraft/itematic/access/util/context/ContextParameterMapBuilderAccess
 inject-interface    net/minecraft/loot/condition/LocationCheckLootCondition    net/errorcraft/itematic/access/loot/condition/LocationCheckLootConditionAccess
 inject-interface    net/minecraft/item/ItemUsageContext    net/errorcraft/itematic/access/item/ItemUsageContextAccess
+inject-interface    net/minecraft/entity/EntityType    net/errorcraft/itematic/access/entity/EntityTypeAccess<TT;>
+inject-interface    net/minecraft/entity/EntityType$Builder    net/errorcraft/itematic/access/entity/EntityTypeBuilderAccess<TT;>

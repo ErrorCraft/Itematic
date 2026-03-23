@@ -2,9 +2,6 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.entity.initializer.EntityInitializer;
-import net.errorcraft.itematic.entity.initializer.initializers.PersistentProjectileEntityInitializer;
-import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -22,27 +19,21 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public record ProjectileItemComponent(EntityInitializer<?> entity) implements ItemComponent<ProjectileItemComponent> {
+public record ProjectileItemComponent(RegistryEntry<EntityType<?>> entity) implements ItemComponent<ProjectileItemComponent> {
     public static final Codec<ProjectileItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        EntityInitializer.CODEC.fieldOf("entity").forGetter(ProjectileItemComponent::entity)
+        Registries.ENTITY_TYPE.getEntryCodec().fieldOf("entity").forGetter(ProjectileItemComponent::entity)
     ).apply(instance, ProjectileItemComponent::new));
 
-    public static ProjectileItemComponent of(EntityInitializer<?> entity) {
-        return new ProjectileItemComponent(entity);
-    }
-
     public static ProjectileItemComponent of(RegistryEntry<EntityType<?>> entity) {
-        return of(SimpleEntityInitializer.of(entity.value()));
-    }
-
-    public static <U extends PersistentProjectileEntity> ProjectileItemComponent persistentProjectile(EntityType<U> entityType, PersistentProjectileEntityInitializer.OwnerCreator<U> ownerCreator, PersistentProjectileEntityInitializer.SimpleCreator<U> simpleCreator) {
-        return of(new PersistentProjectileEntityInitializer<>(entityType, ownerCreator, simpleCreator));
+        return new ProjectileItemComponent(entity);
     }
 
     @Override
@@ -70,18 +61,25 @@ public record ProjectileItemComponent(EntityInitializer<?> entity) implements It
         return this.createEntity(context, PositionTarget.INTERACTED_POSITION, angleOffset, speed, 1.0f);
     }
 
-    public Entity createEntity(NewActionContext context, PositionTarget positionTarget, float angleOffset, float speed, float uncertainty) {
-        Entity entity = this.entity.create(context, SpawnReason.SPAWN_ITEM_USE);
+    public Entity createEntity(NewActionContext context, PositionTarget position, float angleOffset, float speed, float uncertainty) {
+        Vec3d pos = context.get(position.parameter());
+        if (pos == null) {
+            return null;
+        }
+
+        Entity entity = this.entity.value().itematic$create(
+            context,
+            SpawnReason.SPAWN_ITEM_USE,
+            BlockPos.ofFloored(pos),
+            null,
+            false,
+            false
+        );
         if (entity == null) {
             return null;
         }
 
-        Vec3d position = context.get(positionTarget.parameter());
-        if (position == null) {
-            return null;
-        }
-
-        entity.refreshPositionAfterTeleport(position);
+        entity.refreshPositionAfterTeleport(pos);
         ItemStack stack = context.get(LootContextParameters.TOOL);
         if (stack != null && entity instanceof ThrownItemEntity thrownItemEntity) {
             thrownItemEntity.setItem(stack);

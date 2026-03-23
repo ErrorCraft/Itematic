@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.NewActionContext;
@@ -19,14 +18,8 @@ import net.minecraft.util.math.Vec3d;
 
 public class ArmorStandEntityInitializer implements EntityInitializer<ArmorStandEntity> {
     public static final ArmorStandEntityInitializer INSTANCE = new ArmorStandEntityInitializer();
-    public static final MapCodec<ArmorStandEntityInitializer> CODEC = MapCodec.unit(INSTANCE);
 
     private ArmorStandEntityInitializer() {}
-
-    @Override
-    public EntityType<?> type() {
-        return EntityType.ARMOR_STAND;
-    }
 
     @Override
     public ArmorStandEntity create(NewActionContext context, SpawnReason reason) {

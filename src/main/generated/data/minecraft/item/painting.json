@@ -1,9 +1,7 @@
 {
   "behavior": {
     "minecraft:entity": {
-      "entity": {
-        "type": "minecraft:painting"
-      }
+      "entity": "minecraft:painting"
     },
     "minecraft:stackable": 64
   },

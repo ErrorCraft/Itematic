@@ -3,9 +3,7 @@
     "minecraft:bucket": {
       "emptying_sound_event": "minecraft:item.bucket.empty_tadpole",
       "entity": {
-        "entity": {
-          "type": "minecraft:tadpole"
-        },
+        "entity": "minecraft:tadpole",
         "require_other_successful_placement": true
       },
       "fluid": "minecraft:water",

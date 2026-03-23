@@ -8,9 +8,7 @@
       "enchantability": 1
     },
     "minecraft:projectile": {
-      "entity": {
-        "type": "minecraft:trident"
-      }
+      "entity": "minecraft:trident"
     },
     "minecraft:stackable": 1,
     "minecraft:throwable": {

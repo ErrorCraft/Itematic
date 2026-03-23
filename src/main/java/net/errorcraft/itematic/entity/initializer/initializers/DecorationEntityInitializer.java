@@ -19,7 +19,21 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public record DecorationEntityInitializer<T extends AbstractDecorationEntity>(EntityType<T> type, Creator<T> creator, PlacementChecker checker) implements EntityInitializer<T> {
+public record DecorationEntityInitializer<T extends AbstractDecorationEntity>(Creator<T> creator, PlacementChecker checker) implements EntityInitializer<T> {
+    public static EntityInitializer<PaintingEntity> ofPainting() {
+        return new DecorationEntityInitializer<>(
+            (world, pos, facing) -> PaintingEntity.placePainting(world, pos, facing).orElse(null),
+            DecorationEntityInitializer::mayPlacePainting
+        );
+    }
+
+    public static <T extends ItemFrameEntity> EntityInitializer<T> ofItemFrame(Creator<T> creator) {
+        return new DecorationEntityInitializer<>(
+            creator,
+            DecorationEntityInitializer::mayPlaceItemFrame
+        );
+    }
+
     @Override
     public T create(NewActionContext context, SpawnReason reason) {
         BlockPos pos = context.getBlockPos(ItematicContextParameters.INTERACTED_POSITION);
@@ -59,18 +73,6 @@ public record DecorationEntityInitializer<T extends AbstractDecorationEntity>(En
 
         entity.onPlace();
         return entity;
-    }
-
-    public static EntityInitializer<PaintingEntity> createPainting(EntityType<PaintingEntity> type) {
-        return create(type, ((world, pos, facing) -> PaintingEntity.placePainting(world, pos, facing).orElse(null)), DecorationEntityInitializer::mayPlacePainting);
-    }
-
-    public static <U extends ItemFrameEntity> EntityInitializer<U> createItemFrame(EntityType<U> type, Creator<U> creator) {
-        return create(type, creator, DecorationEntityInitializer::mayPlaceItemFrame);
-    }
-
-    private static <U extends AbstractDecorationEntity> EntityInitializer<U> create(EntityType<U> type, Creator<U> creator, PlacementChecker checker) {
-        return new DecorationEntityInitializer<>(type, creator, checker);
     }
 
     private static boolean mayPlacePainting(PlayerEntity player, BlockPos pos, Direction facing, ItemStack stack) {

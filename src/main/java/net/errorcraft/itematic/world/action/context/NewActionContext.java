@@ -42,6 +42,10 @@ public class NewActionContext {
         return new Builder(world);
     }
 
+    public Builder extend() {
+        return new Builder(this.world, this.parameters);
+    }
+
     public ServerWorld world() {
         return this.world;
     }
@@ -168,6 +172,11 @@ public class NewActionContext {
 
         private Builder(ServerWorld world) {
             this.world = world;
+        }
+
+        private Builder(ServerWorld world, ContextParameterMap parameters) {
+            this(world);
+            this.parameters.itematic$copy(parameters);
         }
 
         public NewActionContext build() {
