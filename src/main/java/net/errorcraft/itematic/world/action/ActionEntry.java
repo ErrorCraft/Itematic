@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.world.action.actions.SequenceAction;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
@@ -39,7 +39,7 @@ public record ActionEntry(Action<?> action, Optional<LootCondition> requirements
         return new ActionEntry(SequenceAction.of(builder), Optional.of(requirements.build()));
     }
 
-    public Optional<Boolean> execute(NewActionContext context) {
+    public Optional<Boolean> execute(ActionContext context) {
         if (!this.test(context)) {
             return Optional.empty();
         }
@@ -47,7 +47,7 @@ public record ActionEntry(Action<?> action, Optional<LootCondition> requirements
         return Optional.of(this.action.execute(context));
     }
 
-    private boolean test(NewActionContext context) {
+    private boolean test(ActionContext context) {
         if (this.requirements.isEmpty()) {
             return true;
         }

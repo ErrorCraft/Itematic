@@ -67,7 +67,6 @@
     "block.dispenser.ShearsDispenserBehaviorAccessor",
     "block.entity.AbstractFurnaceBlockEntityExtender",
     "block.entity.BannerBlockEntityExtender",
-    "block.entity.BlockEntityExtender",
     "block.entity.BrewingStandBlockEntityExtender",
     "block.entity.BrewingStandBlockEntityExtender$PropertyDelegateExtender",
     "block.entity.DecoratedPotBlockEntityExtender",

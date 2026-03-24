@@ -2,7 +2,7 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EyeOfEnderEntity;
@@ -22,7 +22,7 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
     private EyeOfEnderEntityInitializer() {}
 
     @Override
-    public EyeOfEnderEntity create(NewActionContext context, SpawnReason reason) {
+    public EyeOfEnderEntity create(ActionContext context, SpawnReason reason) {
         ServerWorld world = context.world();
         BlockPos blockPos = this.getBlockPos(context);
         if (blockPos == null) {
@@ -50,7 +50,7 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
         return entity;
     }
 
-    private Vec3d getPosition(NewActionContext context) {
+    private Vec3d getPosition(ActionContext context) {
         Entity entity = context.get(LootContextParameters.THIS_ENTITY);
         if (entity != null) {
             return new Vec3d(entity.getX(), entity.getBodyY(0.5d), entity.getZ());
@@ -59,7 +59,7 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
         return context.get(ItematicContextParameters.INTERACTED_POSITION);
     }
 
-    private BlockPos getBlockPos(NewActionContext context) {
+    private BlockPos getBlockPos(ActionContext context) {
         Entity entity = context.get(LootContextParameters.THIS_ENTITY);
         if (entity != null) {
             return entity.getBlockPos();

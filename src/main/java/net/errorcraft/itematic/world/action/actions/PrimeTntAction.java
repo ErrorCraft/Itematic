@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.TntBlock;
 import net.minecraft.server.world.ServerWorld;
@@ -27,7 +27,7 @@ public record PrimeTntAction(PositionTarget position) implements Action<PrimeTnt
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         Vec3d pos = context.get(this.position.parameter());
         if (pos == null) {
             return false;

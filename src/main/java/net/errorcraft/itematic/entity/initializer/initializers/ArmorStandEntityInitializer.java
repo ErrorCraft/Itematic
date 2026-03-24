@@ -2,7 +2,7 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -22,7 +22,7 @@ public class ArmorStandEntityInitializer implements EntityInitializer<ArmorStand
     private ArmorStandEntityInitializer() {}
 
     @Override
-    public ArmorStandEntity create(NewActionContext context, SpawnReason reason) {
+    public ArmorStandEntity create(ActionContext context, SpawnReason reason) {
         Vec3d position = context.get(ItematicContextParameters.INTERACTED_POSITION);
         if (position == null) {
             return null;
@@ -40,7 +40,7 @@ public class ArmorStandEntityInitializer implements EntityInitializer<ArmorStand
         return entity;
     }
 
-    private static boolean mayCreate(NewActionContext context, Vec3d position) {
+    private static boolean mayCreate(ActionContext context, Vec3d position) {
         if (!context.has(LootContextParameters.THIS_ENTITY)) {
             return true;
         }
@@ -54,7 +54,7 @@ public class ArmorStandEntityInitializer implements EntityInitializer<ArmorStand
         return world.isSpaceEmpty(null, box) && world.getOtherEntities(null, box).isEmpty();
     }
 
-    private static float getRoundedAngle(NewActionContext context) {
+    private static float getRoundedAngle(ActionContext context) {
         Entity entity = context.get(LootContextParameters.THIS_ENTITY);
         float angle = entity != null ? entity.getYaw() : 0.0f;
         return MathHelper.floor((MathHelper.wrapDegrees(angle - 180.0f) + 22.5f) / 45.0f) * 45.0f;

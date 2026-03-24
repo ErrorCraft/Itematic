@@ -6,7 +6,7 @@ import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -31,7 +31,7 @@ public record DropItemFromBlockAction(PositionTarget position, ItemStack item) i
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         BlockPos pos = context.getBlockPos(this.position.parameter());
         if (pos == null) {
             return false;

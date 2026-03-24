@@ -7,7 +7,7 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
@@ -29,7 +29,7 @@ public record ShootProjectileFromItemAction(PositionTarget position, float power
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         return context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
             .itematic$getBehavior(ItemComponentTypes.PROJECTILE)
             .map(c -> c.createEntity(context, this.position, 0.0f, this.power, this.uncertainty))

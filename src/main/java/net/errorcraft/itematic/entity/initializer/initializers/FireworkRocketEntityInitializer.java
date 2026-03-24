@@ -2,7 +2,7 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.item.ItemStack;
@@ -15,7 +15,7 @@ public class FireworkRocketEntityInitializer implements EntityInitializer<Firewo
     private FireworkRocketEntityInitializer() {}
 
     @Override
-    public FireworkRocketEntity create(NewActionContext context, SpawnReason reason) {
+    public FireworkRocketEntity create(ActionContext context, SpawnReason reason) {
         Vec3d pos = context.get(ItematicContextParameters.INTERACTED_POSITION);
         if (pos == null) {
             return null;

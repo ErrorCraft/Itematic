@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,7 +36,7 @@ public record ExchangeItemAction(ItemStack stack, boolean decrementCount) implem
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         if (this.decrementCount) {
             context.resultStack().decrement(1);
         }

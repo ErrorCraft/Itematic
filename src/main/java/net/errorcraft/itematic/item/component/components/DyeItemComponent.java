@@ -7,8 +7,8 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.actions.ModifySignAction;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -43,7 +43,7 @@ public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemC
 
         PlayerEntity player = context.getPlayer();
         ItemStack stack = context.getStack();
-        NewActionContext actionContext = NewActionContext.builder(world)
+        ActionContext actionContext = ActionContext.builder(world)
             .possibleStackExchanger(player, stack)
             .addOptional(LootContextParameters.THIS_ENTITY, player)
             .addOptional(LootContextParameters.ORIGIN, player, Entity::getPos)

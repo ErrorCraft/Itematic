@@ -13,8 +13,8 @@ import net.errorcraft.itematic.mixin.item.DecorationItemAccessor;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
 import net.errorcraft.itematic.serialization.SetCodec;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
@@ -168,7 +168,7 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, boolean a
             return;
         }
 
-        NewActionContext actionContext = NewActionContext.builder(world)
+        ActionContext actionContext = ActionContext.builder(world)
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParameters.THIS_ENTITY, context.getPlayer())
             .addOptional(LootContextParameters.ORIGIN, context.getPlayer(), Entity::getPos)
@@ -180,7 +180,7 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, boolean a
         this.place(actionContext);
     }
 
-    public Entity place(NewActionContext context) {
+    public Entity place(ActionContext context) {
         return EntityPlacer.of(
             this.entityType(
                 context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY),

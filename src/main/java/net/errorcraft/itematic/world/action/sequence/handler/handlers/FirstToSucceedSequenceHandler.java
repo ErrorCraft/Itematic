@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.action.sequence.handler.handlers;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.world.action.ActionEntry;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
@@ -25,7 +25,7 @@ public record FirstToSucceedSequenceHandler(RegistryEntryList<ActionEntry> entri
     }
 
     @Override
-    public boolean handle(NewActionContext context) {
+    public boolean handle(ActionContext context) {
         for (RegistryEntry<ActionEntry> entry : this.entries) {
             if (entry.value().execute(context).orElse(false)) {
                 return true;

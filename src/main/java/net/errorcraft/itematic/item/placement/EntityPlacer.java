@@ -4,7 +4,7 @@ import net.errorcraft.itematic.entity.EntitySpawnCallback;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -27,7 +27,7 @@ import java.util.Optional;
 
 public class EntityPlacer<T extends Entity> {
     private final EntityType<T> type;
-    private final NewActionContext context;
+    private final ActionContext context;
     private final boolean mayModifyBlock;
     private final SpawnReason spawnReason;
     private final EntitySpawnCallback<T> spawnCallback;
@@ -35,7 +35,7 @@ public class EntityPlacer<T extends Entity> {
     private final PositionTarget position;
     private final ItemStack stack;
 
-    private EntityPlacer(EntityType<T> type, NewActionContext context, boolean mayModifyBlock, SpawnReason spawnReason, EntitySpawnCallback<T> spawnCallback, boolean allowItemData, PositionTarget position) {
+    private EntityPlacer(EntityType<T> type, ActionContext context, boolean mayModifyBlock, SpawnReason spawnReason, EntitySpawnCallback<T> spawnCallback, boolean allowItemData, PositionTarget position) {
         this.type = type;
         this.context = context;
         this.mayModifyBlock = mayModifyBlock;
@@ -46,7 +46,7 @@ public class EntityPlacer<T extends Entity> {
         this.stack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
     }
 
-    public static <T extends Entity> EntityPlacer<T> of(EntityType<T> type, NewActionContext context, boolean mayModifyBlock, SpawnReason spawnReason, EntitySpawnCallback<T> spawnCallback, boolean allowItemData, PositionTarget position) {
+    public static <T extends Entity> EntityPlacer<T> of(EntityType<T> type, ActionContext context, boolean mayModifyBlock, SpawnReason spawnReason, EntitySpawnCallback<T> spawnCallback, boolean allowItemData, PositionTarget position) {
         return new EntityPlacer<>(type, context, mayModifyBlock, spawnReason, spawnCallback, allowItemData, position);
     }
 
@@ -112,7 +112,7 @@ public class EntityPlacer<T extends Entity> {
             GameEvent.ENTITY_PLACE,
             entity.getBlockPos()
         );
-        NewActionContext extendedContext = this.context.extend()
+        ActionContext extendedContext = this.context.extend()
             .add(ItematicContextParameters.TARGET_ENTITY, entity)
             .build();
         this.stack.itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, extendedContext);

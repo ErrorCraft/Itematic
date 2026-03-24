@@ -2,7 +2,7 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EntityType;
@@ -35,7 +35,7 @@ public record DecorationEntityInitializer<T extends AbstractDecorationEntity>(Cr
     }
 
     @Override
-    public T create(NewActionContext context, SpawnReason reason) {
+    public T create(ActionContext context, SpawnReason reason) {
         BlockPos pos = context.getBlockPos(ItematicContextParameters.INTERACTED_POSITION);
         if (pos == null) {
             return null;

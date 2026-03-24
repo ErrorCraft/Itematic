@@ -6,7 +6,7 @@ import net.errorcraft.itematic.stat.StatUtil;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.stat.Stat;
@@ -27,7 +27,7 @@ public record IncrementStatAction(LootContext.EntityTarget entity, Stat<?> stat)
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         if (context.get(this.entity.getParameter()) instanceof PlayerEntity player) {
             player.incrementStat(this.stat);
             return true;

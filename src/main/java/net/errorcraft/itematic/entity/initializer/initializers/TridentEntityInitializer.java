@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -17,7 +17,7 @@ public class TridentEntityInitializer implements EntityInitializer<TridentEntity
     public static final TridentEntityInitializer INSTANCE = new TridentEntityInitializer();
 
     @Override
-    public TridentEntity create(NewActionContext context, SpawnReason reason) {
+    public TridentEntity create(ActionContext context, SpawnReason reason) {
         ItemStack stack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
         LivingEntity user = context.get(LootContextParameters.THIS_ENTITY, LivingEntity.class);
         float spinAttackStrength = user != null ?

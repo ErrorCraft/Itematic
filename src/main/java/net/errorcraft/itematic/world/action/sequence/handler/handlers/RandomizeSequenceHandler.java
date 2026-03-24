@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.action.sequence.handler.handlers;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.ActionEntry;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
@@ -28,7 +28,7 @@ public record RandomizeSequenceHandler(RegistryEntryList<ActionEntry> entries, O
     }
 
     @Override
-    public boolean handle(NewActionContext context) {
+    public boolean handle(ActionContext context) {
         boolean result = false;
         for (RegistryEntry<ActionEntry> entry : this.randomEntries(context.world().getRandom())) {
             result |= entry.value().execute(context).orElse(false);

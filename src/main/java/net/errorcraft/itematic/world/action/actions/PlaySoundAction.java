@@ -7,7 +7,7 @@ import net.errorcraft.itematic.util.Range;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.loot.context.LootContextParameters;
@@ -63,7 +63,7 @@ public record PlaySoundAction(PositionTarget position, RegistryEntry<SoundEvent>
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         Entity entity = context.get(LootContextParameters.THIS_ENTITY);
         SoundCategory category = this.category(entity);
         if (category == null) {

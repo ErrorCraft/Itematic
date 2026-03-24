@@ -5,7 +5,7 @@ import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.actions.SequenceAction;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.registry.entry.RegistryEntry;
 
@@ -13,7 +13,7 @@ public interface SequenceHandler<T extends SequenceHandler<T>> {
     MapCodec<SequenceHandler<?>> CODEC = ItematicRegistries.SEQUENCE_HANDLER_TYPE.getCodec().dispatchMap("handler", SequenceHandler::type, SequenceHandlerType::codec);
 
     SequenceHandlerType<T> type();
-    boolean handle(NewActionContext context);
+    boolean handle(ActionContext context);
     Iterable<RegistryEntry<ActionEntry>> iterateEntries();
 
     interface Builder<T extends SequenceHandler<T>, S extends Builder<T, S>> {

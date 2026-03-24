@@ -7,8 +7,8 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
@@ -53,7 +53,7 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            NewActionContext context = NewActionContext.builder(serverWorld)
+            ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
                 .add(LootContextParameters.ORIGIN, user.getPos())

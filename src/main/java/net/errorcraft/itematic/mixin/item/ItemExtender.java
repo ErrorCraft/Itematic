@@ -19,8 +19,8 @@ import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.BlockState;
@@ -157,7 +157,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            NewActionContext context = NewActionContext.builder(serverWorld)
+            ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
                 .add(LootContextParameters.ORIGIN, user.getPos())
@@ -192,7 +192,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         if (context.getWorld() instanceof ServerWorld serverWorld) {
-            NewActionContext actionContext = NewActionContext.builder(serverWorld)
+            ActionContext actionContext = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .addOptional(LootContextParameters.THIS_ENTITY, context.getPlayer())
                 .addOptional(LootContextParameters.ORIGIN, context.getPlayer(), Entity::getPos)
@@ -229,7 +229,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         if (user.getWorld() instanceof ServerWorld serverWorld) {
-            NewActionContext context = NewActionContext.builder(serverWorld)
+            ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
                 .add(LootContextParameters.ORIGIN, user.getPos())
@@ -265,7 +265,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         if (attacker.getWorld() instanceof ServerWorld serverWorld) {
-            NewActionContext context = NewActionContext.builder(serverWorld)
+            ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, attacker)
                 .add(LootContextParameters.ORIGIN, attacker.getPos())
@@ -294,7 +294,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            NewActionContext context = NewActionContext.builder(serverWorld)
+            ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, miner)
                 .add(LootContextParameters.ORIGIN, miner.getPos())
@@ -346,7 +346,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            NewActionContext context = NewActionContext.builder(serverWorld)
+            ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
                 .add(LootContextParameters.ORIGIN, user.getPos())
@@ -373,7 +373,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            NewActionContext context = NewActionContext.builder(serverWorld)
+            ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
                 .add(LootContextParameters.ORIGIN, user.getPos())
@@ -670,7 +670,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
-    public boolean itematic$invokeEvent(ItemEvent event, NewActionContext context) {
+    public boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
         return this.events.invokeEvent(event, context);
     }
 

@@ -6,7 +6,7 @@ import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
@@ -32,7 +32,7 @@ public record EquipHorseWithChestAtPositionAction(PositionTarget position) imple
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         ItemStack stack = context.get(LootContextParameters.TOOL);
         if (ItemStackUtil.isNullOrEmpty(stack)) {
             return false;

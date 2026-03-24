@@ -5,8 +5,8 @@ import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.SharedConstants;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -53,7 +53,7 @@ public class CastableItemComponent implements ItemComponent<CastableItemComponen
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            NewActionContext context = NewActionContext.builder(serverWorld)
+            ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
                 .add(LootContextParameters.ORIGIN, user.getPos())

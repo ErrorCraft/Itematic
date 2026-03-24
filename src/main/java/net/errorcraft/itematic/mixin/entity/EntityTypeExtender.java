@@ -11,7 +11,7 @@ import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.EntityInitializerSupplier;
 import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.item.ItemStackUtil;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EyeOfEnderEntity;
@@ -55,7 +55,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     private EntityInitializer<T> initializer;
 
     @Unique
-    private NewActionContext actionContext;
+    private ActionContext actionContext;
 
     @ModifyArg(
         method = "<clinit>",
@@ -437,7 +437,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         }
 
         // Copy to a local and set the field to null so we don't get a StackOverflowError
-        NewActionContext context = this.actionContext;
+        ActionContext context = this.actionContext;
         this.actionContext = null;
         return this.initializer.create(context, reason);
     }
@@ -448,7 +448,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     }
 
     @Override
-    public T itematic$create(NewActionContext context, SpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback<T> callback, boolean allowItemData, boolean invertY) {
+    public T itematic$create(ActionContext context, SpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback<T> callback, boolean allowItemData, boolean invertY) {
         this.actionContext = context;
         return this.create(
             context.world(),
@@ -462,7 +462,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
 
     @Unique
     @Nullable
-    private static <T extends Entity> Consumer<T> copier(NewActionContext context, @Nullable EntitySpawnCallback<T> callback, boolean allowItemData) {
+    private static <T extends Entity> Consumer<T> copier(ActionContext context, @Nullable EntitySpawnCallback<T> callback, boolean allowItemData) {
         ItemStack stack = context.get(LootContextParameters.TOOL);
         if (!allowItemData || ItemStackUtil.isNullOrEmpty(stack)) {
             return callback == null ? null : entity -> callback.accept(entity, stack);

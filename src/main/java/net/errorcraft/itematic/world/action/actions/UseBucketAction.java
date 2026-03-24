@@ -8,7 +8,7 @@ import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -34,14 +34,14 @@ public record UseBucketAction(PositionTarget position) implements Action<UseBuck
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         ItemStack stack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
         return stack.itematic$getBehavior(ItemComponentTypes.BUCKET)
             .map(bucket -> this.place(bucket, stack, context))
             .orElse(false);
     }
 
-    private boolean place(BucketItemComponent bucket, ItemStack stack, NewActionContext context) {
+    private boolean place(BucketItemComponent bucket, ItemStack stack, ActionContext context) {
         Vec3d pos = context.get(this.position.parameter());
         if (pos == null) {
             return false;

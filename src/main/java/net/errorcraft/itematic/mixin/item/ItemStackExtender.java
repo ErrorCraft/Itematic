@@ -19,7 +19,7 @@ import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.util.Util;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.block.BlockState;
@@ -119,7 +119,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     private RegistryEntry<Item> entry;
 
     @Unique
-    private NewActionContext context;
+    private ActionContext context;
 
     @Inject(
         method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V",
@@ -725,7 +725,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
-    public void itematic$damage(int amount, NewActionContext context) {
+    public void itematic$damage(int amount, ActionContext context) {
         this.context = context;
         Entity entity = context.get(LootContextParameters.THIS_ENTITY);
         this.damage(
@@ -752,7 +752,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
-    public boolean itematic$invokeEvent(ItemEvent event, NewActionContext context) {
+    public boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
         if (this.isEmpty()) {
             return false;
         }
@@ -830,7 +830,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Unique
-    private void onItemBroken(Item item, Entity entity, NewActionContext context) {
+    private void onItemBroken(Item item, Entity entity, ActionContext context) {
         EquipmentSlot slot = context.get(ItematicContextParameters.EQUIPMENT_SLOT);
         if (slot != null && entity instanceof LivingEntity livingEntity) {
             livingEntity.sendEquipmentBreakStatus(item, slot);

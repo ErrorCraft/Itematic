@@ -6,7 +6,7 @@ import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.actions.SequenceAction;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.FallibleItemDispenserBehavior;
@@ -56,7 +56,7 @@ public class DispenseBehavior extends FallibleItemDispenserBehavior {
     protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
         Direction side = pointer.state().get(DispenserBlock.FACING);
         Vec3d outputPos = this.offset.position(pointer);
-        NewActionContext context = NewActionContext.builder(pointer.world())
+        ActionContext context = ActionContext.builder(pointer.world())
             .stackExchanger(side, outputPos, stack)
             .add(LootContextParameters.ORIGIN, pointer.centerPos())
             .add(ItematicContextParameters.INTERACTED_POSITION, outputPos)

@@ -6,8 +6,8 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;
@@ -80,7 +80,7 @@ public record ToolItemComponent(ToolComponent tool) implements ItemComponent<Too
             return;
         }
 
-        NewActionContext context = NewActionContext.builder(serverWorld)
+        ActionContext context = ActionContext.builder(serverWorld)
             .stackExchanger(stackExchanger)
             .add(LootContextParameters.THIS_ENTITY, miner)
             .add(LootContextParameters.ORIGIN, miner.getPos())

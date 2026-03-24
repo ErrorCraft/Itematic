@@ -2,7 +2,7 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.enums.RailShape;
@@ -21,7 +21,7 @@ import net.minecraft.util.math.BlockPos;
 
 public record MinecartEntityInitializer<T extends AbstractMinecartEntity>(EntityType<T> type) implements EntityInitializer<T> {
     @Override
-    public T create(NewActionContext context, SpawnReason reason) {
+    public T create(ActionContext context, SpawnReason reason) {
         ServerWorld world = context.world();
         BlockPos pos = context.getBlockPos(ItematicContextParameters.INTERACTED_POSITION);
         if (pos == null) {

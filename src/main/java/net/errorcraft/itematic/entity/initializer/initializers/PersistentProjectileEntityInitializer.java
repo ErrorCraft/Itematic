@@ -2,7 +2,7 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -18,7 +18,7 @@ public record PersistentProjectileEntityInitializer<T extends PersistentProjecti
     }
 
     @Override
-    public T create(NewActionContext context, SpawnReason reason) {
+    public T create(ActionContext context, SpawnReason reason) {
         if (context.get(LootContextParameters.THIS_ENTITY) instanceof LivingEntity entity) {
             ItemStack shooter = entity.getActiveItem();
             if (shooter.isEmpty()) {

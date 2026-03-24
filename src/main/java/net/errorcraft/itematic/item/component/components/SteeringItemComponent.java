@@ -7,8 +7,8 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemSteerable;
@@ -51,7 +51,7 @@ public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int dam
             return ItemResult.PASS;
         }
 
-        NewActionContext context = NewActionContext.builder((ServerWorld) world)
+        ActionContext context = ActionContext.builder((ServerWorld) world)
             .stackExchanger(stackExchanger)
             .add(LootContextParameters.THIS_ENTITY, user)
             .add(LootContextParameters.ORIGIN, user.getPos())
@@ -66,7 +66,7 @@ public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int dam
         return ItemResult.PASS;
     }
 
-    private boolean apply(PlayerEntity user, ItemStack stack, NewActionContext context) {
+    private boolean apply(PlayerEntity user, ItemStack stack, ActionContext context) {
         Entity vehicle = user.getControllingVehicle();
         if (!user.hasVehicle() || !(vehicle instanceof ItemSteerable itemSteerable)) {
             return false;

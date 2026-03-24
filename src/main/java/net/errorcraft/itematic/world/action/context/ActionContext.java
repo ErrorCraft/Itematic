@@ -27,12 +27,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class NewActionContext {
+public class ActionContext {
     private final ServerWorld world;
     private final ContextParameterMap parameters;
     private final ItemStackExchanger stackExchanger;
 
-    private NewActionContext(ServerWorld world, ContextParameterMap parameters, ItemStackExchanger stackExchanger) {
+    private ActionContext(ServerWorld world, ContextParameterMap parameters, ItemStackExchanger stackExchanger) {
         this.world = world;
         this.parameters = parameters;
         this.stackExchanger = stackExchanger;
@@ -174,14 +174,14 @@ public class NewActionContext {
             this.world = world;
         }
 
-        private Builder(NewActionContext currentContext) {
+        private Builder(ActionContext currentContext) {
             this.world = currentContext.world;
             this.stackExchanger = currentContext.stackExchanger;
             this.parameters.itematic$copy(currentContext.parameters);
         }
 
-        public NewActionContext build() {
-            return new NewActionContext(
+        public ActionContext build() {
+            return new ActionContext(
                 this.world,
                 this.parameters.itematic$build(),
                 this.stackExchanger

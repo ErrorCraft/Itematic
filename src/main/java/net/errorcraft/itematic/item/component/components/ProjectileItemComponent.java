@@ -6,7 +6,7 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -51,7 +51,7 @@ public record ProjectileItemComponent(RegistryEntry<EntityType<?>> entity) imple
             return null;
         }
 
-        NewActionContext context = NewActionContext.builder((ServerWorld) world)
+        ActionContext context = ActionContext.builder((ServerWorld) world)
             .stackExchanger(user, stack)
             .add(LootContextParameters.TOOL, stack)
             .add(LootContextParameters.THIS_ENTITY, user)
@@ -61,7 +61,7 @@ public record ProjectileItemComponent(RegistryEntry<EntityType<?>> entity) imple
         return this.createEntity(context, PositionTarget.INTERACTED_POSITION, angleOffset, speed, 1.0f);
     }
 
-    public Entity createEntity(NewActionContext context, PositionTarget position, float angleOffset, float speed, float uncertainty) {
+    public Entity createEntity(ActionContext context, PositionTarget position, float angleOffset, float speed, float uncertainty) {
         Vec3d pos = context.get(position.parameter());
         if (pos == null) {
             return null;
@@ -92,7 +92,7 @@ public record ProjectileItemComponent(RegistryEntry<EntityType<?>> entity) imple
         return entity;
     }
 
-    private void initializeProjectile(NewActionContext context, ProjectileEntity projectileEntity, float angleOffset, float speed, float uncertainty) {
+    private void initializeProjectile(ActionContext context, ProjectileEntity projectileEntity, float angleOffset, float speed, float uncertainty) {
         Entity user = context.get(LootContextParameters.THIS_ENTITY);
         if (user != null) {
             this.initializeProjectile(projectileEntity, user, angleOffset, speed, uncertainty);

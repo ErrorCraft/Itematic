@@ -7,7 +7,7 @@ import net.errorcraft.itematic.item.component.components.SaddleItemComponent;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Saddleable;
@@ -35,14 +35,14 @@ public record SaddleEntityAtPositionAction(PositionTarget position) implements A
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         ItemStack stack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
         return stack.itematic$getBehavior(ItemComponentTypes.SADDLE)
             .map(saddle -> this.trySaddle(saddle, stack, context))
             .orElse(false);
     }
 
-    private boolean trySaddle(SaddleItemComponent saddle, ItemStack stack, NewActionContext context) {
+    private boolean trySaddle(SaddleItemComponent saddle, ItemStack stack, ActionContext context) {
         BlockPos pos = context.getBlockPos(this.position.parameter());
         if (pos == null) {
             return false;

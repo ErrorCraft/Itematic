@@ -9,7 +9,7 @@ import net.errorcraft.itematic.item.placement.block.picker.pickers.SimpleBlockPi
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -31,7 +31,7 @@ public record PlaceBlockAction(BlockPicker<?> block, PositionTarget position, bo
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         BlockPlacer placer = BlockPlacer.action(context, this.position, this.block, this.decrementCount);
         if (placer == null) {
             return false;

@@ -3,7 +3,7 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
@@ -22,7 +22,7 @@ public class EndCrystalEntityInitializer implements EntityInitializer<EndCrystal
     private EndCrystalEntityInitializer() {}
 
     @Override
-    public EndCrystalEntity create(NewActionContext context, SpawnReason reason) {
+    public EndCrystalEntity create(ActionContext context, SpawnReason reason) {
         ServerWorld world = context.world();
         BlockPos pos = context.getBlockPos(ItematicContextParameters.INTERACTED_POSITION);
         if (pos == null) {

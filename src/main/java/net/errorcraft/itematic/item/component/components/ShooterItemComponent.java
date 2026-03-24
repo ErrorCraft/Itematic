@@ -12,8 +12,8 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.item.use.provider.providers.ShooterIntegerProvider;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -134,7 +134,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
             return;
         }
 
-        NewActionContext context = NewActionContext.builder(world)
+        ActionContext context = ActionContext.builder(world)
             .stackExchanger(shooter, stack)
             .add(LootContextParameters.THIS_ENTITY, shooter)
             .add(LootContextParameters.ORIGIN, shooter.getPos())

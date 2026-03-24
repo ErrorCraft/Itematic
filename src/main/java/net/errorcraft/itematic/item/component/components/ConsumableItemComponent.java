@@ -9,8 +9,8 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.mixin.component.type.ConsumableComponentAccessor;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -79,7 +79,7 @@ public record ConsumableItemComponent(boolean hasConsumeParticles, RegistryEntry
 
     public void consume(LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger, World world, Hand hand) {
         if (world instanceof ServerWorld serverWorld) {
-            NewActionContext context = NewActionContext.builder(serverWorld)
+            ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
                 .add(LootContextParameters.ORIGIN, user.getPos())

@@ -10,8 +10,8 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
@@ -77,7 +77,7 @@ public record WeaponItemComponent(int damagePerHit, WeaponAttackDamageDataCompon
         }
 
 
-        NewActionContext context = NewActionContext.builder(serverWorld)
+        ActionContext context = ActionContext.builder(serverWorld)
             .stackExchanger(stackExchanger)
             .add(LootContextParameters.THIS_ENTITY, attacker)
             .add(LootContextParameters.ORIGIN, attacker.getPos())

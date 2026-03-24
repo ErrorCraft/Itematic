@@ -13,7 +13,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ConsumableItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.type.DeathProtectionComponent;
 import net.minecraft.component.type.EquippableComponent;
@@ -243,7 +243,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             return;
         }
 
-        NewActionContext context = NewActionContext.builder(serverWorld)
+        ActionContext context = ActionContext.builder(serverWorld)
             .stackExchanger(entity, stack)
             .add(LootContextParameters.THIS_ENTITY, entity)
             .add(LootContextParameters.ORIGIN, entity.getPos())

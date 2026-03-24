@@ -9,7 +9,7 @@ import net.errorcraft.itematic.item.placement.BlockPlacer;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
@@ -30,7 +30,7 @@ public record PlaceBlockFromItemAction(PositionTarget position, boolean decremen
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         BlockItemComponent block = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
             .itematic$getBehavior(ItemComponentTypes.BLOCK)
             .orElse(null);

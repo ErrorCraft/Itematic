@@ -8,7 +8,7 @@ import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -38,7 +38,7 @@ public record DisplayParticleAction(PositionTarget position, ParticleEffect part
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         ServerWorld world = context.world();
         Random random = world.getRandom();
         Vec3d pos = this.position(context, random);
@@ -63,7 +63,7 @@ public record DisplayParticleAction(PositionTarget position, ParticleEffect part
         return amountOfPlayersShown > 0;
     }
 
-    private Vec3d position(NewActionContext context, Random random) {
+    private Vec3d position(ActionContext context, Random random) {
         Vec3d pos = context.get(this.position.parameter());
         if (pos == null) {
             return null;

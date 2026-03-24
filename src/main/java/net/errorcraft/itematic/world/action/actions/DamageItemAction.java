@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
@@ -26,7 +26,7 @@ public record DamageItemAction(int amount) implements Action<DamageItemAction> {
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         ItemStack stack = context.get(LootContextParameters.TOOL);
         if (stack == null || stack.isEmpty()) {
             return false;
@@ -44,7 +44,7 @@ public record DamageItemAction(int amount) implements Action<DamageItemAction> {
         return true;
     }
 
-    private static boolean preventDamage(NewActionContext context) {
+    private static boolean preventDamage(ActionContext context) {
         return context.get(LootContextParameters.THIS_ENTITY) instanceof LivingEntity entity
             && entity.isInCreativeMode();
     }

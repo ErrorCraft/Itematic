@@ -6,7 +6,7 @@ import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.SuspiciousStewEffectsComponent;
 import net.minecraft.entity.Entity;
@@ -30,7 +30,7 @@ public record ApplySuspiciousStewEffectsFromItemAction(LootContext.EntityTarget 
     }
 
     @Override
-    public boolean execute(NewActionContext context) {
+    public boolean execute(ActionContext context) {
         ItemStack stack = context.get(LootContextParameters.TOOL);
         if (ItemStackUtil.isNullOrEmpty(stack)) {
             return false;

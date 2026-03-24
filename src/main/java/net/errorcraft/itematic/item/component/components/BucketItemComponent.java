@@ -18,8 +18,8 @@ import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.component.ComponentMap;
@@ -167,7 +167,7 @@ public record BucketItemComponent(Optional<RegistryEntry<Fluid>> fluid, Optional
             return currentResult;
         }
 
-        NewActionContext context = NewActionContext.builder((ServerWorld) world)
+        ActionContext context = ActionContext.builder((ServerWorld) world)
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParameters.THIS_ENTITY, user)
             .addOptional(LootContextParameters.ORIGIN, user, Entity::getPos)

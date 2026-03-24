@@ -10,8 +10,8 @@ import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.use.provider.providers.TridentIntegerProvider;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.NewActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -92,7 +92,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
 
     private void createEntity(World world, LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (world instanceof ServerWorld serverWorld) {
-            NewActionContext.Builder contextBuilder = NewActionContext.builder(serverWorld)
+            ActionContext.Builder contextBuilder = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.TOOL, stack)
                 .add(LootContextParameters.THIS_ENTITY, user)
@@ -102,7 +102,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
         }
     }
 
-    private void createEntity(NewActionContext.Builder contextBuilder, ServerWorld world, ItemStack stack) {
+    private void createEntity(ActionContext.Builder contextBuilder, ServerWorld world, ItemStack stack) {
         ProjectileItemComponent projectile = stack.itematic$getBehavior(ItemComponentTypes.PROJECTILE).orElse(null);
         if (projectile == null) {
             return;
@@ -120,7 +120,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
         }
 
         world.spawnEntity(projectileEntity);
-        NewActionContext projectileContext = contextBuilder.add(ItematicContextParameters.TARGET_ENTITY, projectileEntity)
+        ActionContext projectileContext = contextBuilder.add(ItematicContextParameters.TARGET_ENTITY, projectileEntity)
             .build();
         stack.itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, projectileContext);
     }
