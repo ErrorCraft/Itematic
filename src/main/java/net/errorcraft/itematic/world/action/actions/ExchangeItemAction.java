@@ -12,9 +12,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 
-public record ExchangeItemAction(ItemStack stack, boolean decrementCount) implements Action<ExchangeItemAction> {
+public record ExchangeItemAction(ItemStack item, boolean decrementCount) implements Action<ExchangeItemAction> {
     public static final MapCodec<ExchangeItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ItemStack.CODEC.fieldOf("item").forGetter(ExchangeItemAction::stack),
+        ItemStack.CODEC.fieldOf("item").forGetter(ExchangeItemAction::item),
         Codec.BOOL.optionalFieldOf("decrement_count", true).forGetter(ExchangeItemAction::decrementCount)
     ).apply(instance, ExchangeItemAction::new));
 
@@ -41,7 +41,7 @@ public record ExchangeItemAction(ItemStack stack, boolean decrementCount) implem
             context.resultStack().decrement(1);
         }
 
-        context.exchangeStack(this.stack.copy());
+        context.exchangeStack(this.item.copy());
         return true;
     }
 }
