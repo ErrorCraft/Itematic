@@ -692,20 +692,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Unique
-    private static void tryUpdateItemStack(LivingEntity target, Hand hand, ItemStack stack, StackReference stackReference) {
-        if (target == null) {
-            return;
-        }
-
-        ItemStack newStack = stackReference.get();
-        if (stack == newStack) {
-            return;
-        }
-
-        target.setStackInHand(hand, newStack);
-    }
-
-    @Unique
     private static void tryUpdateItemStack(LivingEntity target, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (target == null) {
             return;
