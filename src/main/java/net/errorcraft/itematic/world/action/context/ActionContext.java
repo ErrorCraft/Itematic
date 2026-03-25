@@ -73,18 +73,23 @@ public class ActionContext {
         return null;
     }
 
+    @Nullable
+    public <T, U> U get(ContextParameter<T> parameter, Function<@NotNull T, U> mapper) {
+        T value = this.get(parameter);
+        if (value == null) {
+            return null;
+        }
+
+        return mapper.apply(value);
+    }
+
     public <T> T getOrDefault(ContextParameter<T> parameter, T defaultValue) {
         return this.parameters.getOrDefault(parameter, defaultValue);
     }
 
     @Nullable
     public BlockPos getBlockPos(ContextParameter<Vec3d> parameter) {
-        Vec3d pos = this.get(parameter);
-        if (pos == null) {
-            return null;
-        }
-
-        return BlockPos.ofFloored(pos);
+        return this.get(parameter, BlockPos::ofFloored);
     }
 
     public ItemStack resultStack() {
