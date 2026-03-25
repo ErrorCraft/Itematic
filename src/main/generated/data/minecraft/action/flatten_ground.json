@@ -6,7 +6,7 @@
       {
         "action": {
           "type": "minecraft:set_block_state",
-          "position": "interacted_position",
+          "position": "interacted",
           "state": {
             "Name": "minecraft:dirt_path"
           }
@@ -17,7 +17,7 @@
           "type": "minecraft:play_sound",
           "category": "block",
           "pitch": 1.0,
-          "position": "interacted_position",
+          "position": "interacted",
           "sound": "minecraft:item.shovel.flatten",
           "volume": 1.0
         }
@@ -29,7 +29,7 @@
     "terms": [
       {
         "condition": "minecraft:location_check",
-        "position": "interacted_position",
+        "position": "interacted",
         "predicate": {
           "block": {
             "blocks": "#minecraft:flattenable_into_dirt_path"
@@ -48,7 +48,7 @@
       {
         "condition": "minecraft:location_check",
         "offsetY": 1,
-        "position": "interacted_position",
+        "position": "interacted",
         "predicate": {
           "block": {
             "blocks": "#minecraft:air"

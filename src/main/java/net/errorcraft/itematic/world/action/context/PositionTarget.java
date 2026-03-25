@@ -9,7 +9,7 @@ import net.minecraft.util.math.Vec3d;
 
 public enum PositionTarget implements StringIdentifiable {
     ORIGIN("origin", LootContextParameters.ORIGIN),
-    INTERACTED_POSITION("interacted_position", ItematicContextParameters.INTERACTED_POSITION);
+    INTERACTED_POSITION("interacted", ItematicContextParameters.INTERACTED_POSITION);
 
     public static final Codec<PositionTarget> CODEC = StringIdentifiable.createCodec(PositionTarget::values);
 

@@ -8,7 +8,7 @@
         {
           "action": {
             "type": "minecraft:shear_at_position",
-            "position": "interacted_position"
+            "position": "interacted"
           }
         },
         {

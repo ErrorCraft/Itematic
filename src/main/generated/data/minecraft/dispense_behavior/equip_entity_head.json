@@ -8,7 +8,7 @@
         {
           "action": {
             "type": "minecraft:equip_entity_at_position",
-            "position": "interacted_position"
+            "position": "interacted"
           }
         },
         {

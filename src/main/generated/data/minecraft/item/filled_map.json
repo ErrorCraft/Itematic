@@ -16,7 +16,7 @@
           {
             "action": {
               "type": "minecraft:mark_banner_on_item",
-              "position": "interacted_position"
+              "position": "interacted"
             }
           },
           {

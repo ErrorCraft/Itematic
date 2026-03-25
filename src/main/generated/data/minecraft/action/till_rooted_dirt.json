@@ -6,7 +6,7 @@
       {
         "action": {
           "type": "minecraft:set_block_state",
-          "position": "interacted_position",
+          "position": "interacted",
           "state": {
             "Name": "minecraft:dirt"
           }
@@ -19,14 +19,14 @@
             "id": "minecraft:hanging_roots",
             "count": 1
           },
-          "position": "interacted_position"
+          "position": "interacted"
         }
       }
     ]
   },
   "requirements": {
     "condition": "minecraft:location_check",
-    "position": "interacted_position",
+    "position": "interacted",
     "predicate": {
       "block": {
         "blocks": "minecraft:rooted_dirt"

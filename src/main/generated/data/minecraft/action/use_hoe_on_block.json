@@ -27,7 +27,7 @@
           "type": "minecraft:play_sound",
           "category": "block",
           "pitch": 1.0,
-          "position": "interacted_position",
+          "position": "interacted",
           "sound": "minecraft:item.hoe.till",
           "volume": 1.0
         }

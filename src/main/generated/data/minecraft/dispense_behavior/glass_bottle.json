@@ -9,7 +9,7 @@
             {
               "action": {
                 "type": "minecraft:take_honey",
-                "position": "interacted_position"
+                "position": "interacted"
               }
             },
             {
@@ -24,7 +24,7 @@
           ],
           "requirements": {
             "condition": "minecraft:location_check",
-            "position": "interacted_position",
+            "position": "interacted",
             "predicate": {
               "block": {
                 "state": {

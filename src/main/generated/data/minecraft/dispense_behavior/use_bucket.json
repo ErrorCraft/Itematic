@@ -2,7 +2,7 @@
   "entry": {
     "action": {
       "type": "minecraft:use_bucket",
-      "position": "interacted_position"
+      "position": "interacted"
     }
   }
 }

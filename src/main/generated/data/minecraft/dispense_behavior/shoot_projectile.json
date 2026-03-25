@@ -7,7 +7,7 @@
         {
           "action": {
             "type": "minecraft:shoot_projectile_from_item",
-            "position": "interacted_position",
+            "position": "interacted",
             "power": 1.1,
             "uncertainty": 6.0
           }

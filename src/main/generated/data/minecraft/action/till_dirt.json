@@ -1,7 +1,7 @@
 {
   "action": {
     "type": "minecraft:set_block_state",
-    "position": "interacted_position",
+    "position": "interacted",
     "state": {
       "Name": "minecraft:farmland",
       "Properties": {
@@ -14,7 +14,7 @@
     "terms": [
       {
         "condition": "minecraft:location_check",
-        "position": "interacted_position",
+        "position": "interacted",
         "predicate": {
           "block": {
             "blocks": "#minecraft:tillable_into_farmland"
@@ -33,7 +33,7 @@
       {
         "condition": "minecraft:location_check",
         "offsetY": 1,
-        "position": "interacted_position",
+        "position": "interacted",
         "predicate": {
           "block": {
             "blocks": "#minecraft:air"

@@ -31,7 +31,7 @@
             "type": "minecraft:invoke_game_event",
             "event": "minecraft:fluid_pickup",
             "entity": "this",
-            "position": "interacted_position"
+            "position": "interacted"
           }
         },
         {
@@ -53,7 +53,7 @@
       ],
       "requirements": {
         "condition": "minecraft:location_check",
-        "position": "interacted_position",
+        "position": "interacted",
         "predicate": {
           "fluid": {
             "fluids": "#minecraft:water"

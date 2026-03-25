@@ -6,7 +6,7 @@
       {
         "action": {
           "type": "minecraft:modify_block_state",
-          "position": "interacted_position",
+          "position": "interacted",
           "properties": {
             "lit": "false"
           }
@@ -20,7 +20,7 @@
             "max": 3.4,
             "min": 1.8
           },
-          "position": "interacted_position",
+          "position": "interacted",
           "sound": "minecraft:block.fire.extinguish",
           "volume": 0.5
         }
@@ -59,7 +59,7 @@
                     "particle": {
                       "type": "minecraft:campfire_signal_smoke"
                     },
-                    "position": "interacted_position",
+                    "position": "interacted",
                     "speed": 0.0
                   }
                 },
@@ -86,14 +86,14 @@
                     "particle": {
                       "type": "minecraft:campfire_signal_smoke"
                     },
-                    "position": "interacted_position",
+                    "position": "interacted",
                     "speed": 0.0
                   }
                 }
               ],
               "requirements": {
                 "condition": "minecraft:location_check",
-                "position": "interacted_position",
+                "position": "interacted",
                 "predicate": {
                   "block": {
                     "state": {
@@ -132,7 +132,7 @@
                     "particle": {
                       "type": "minecraft:campfire_cosy_smoke"
                     },
-                    "position": "interacted_position",
+                    "position": "interacted",
                     "speed": 0.0
                   }
                 },
@@ -159,7 +159,7 @@
                     "particle": {
                       "type": "minecraft:campfire_cosy_smoke"
                     },
-                    "position": "interacted_position",
+                    "position": "interacted",
                     "speed": 0.0
                   }
                 }
@@ -172,7 +172,7 @@
   },
   "requirements": {
     "condition": "minecraft:location_check",
-    "position": "interacted_position",
+    "position": "interacted",
     "predicate": {
       "block": {
         "blocks": "#minecraft:campfires",

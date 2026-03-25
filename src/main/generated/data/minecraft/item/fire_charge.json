@@ -34,7 +34,7 @@
                 "max": 1.2,
                 "min": 0.8
               },
-              "position": "interacted_position",
+              "position": "interacted",
               "sound": "minecraft:item.firecharge.use",
               "volume": 1.0
             }

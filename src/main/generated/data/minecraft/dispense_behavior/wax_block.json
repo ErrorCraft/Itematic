@@ -7,7 +7,7 @@
         {
           "action": {
             "type": "minecraft:wax_block",
-            "position": "interacted_position"
+            "position": "interacted"
           }
         },
         {

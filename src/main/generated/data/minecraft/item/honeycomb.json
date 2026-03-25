@@ -23,7 +23,7 @@
                 {
                   "action": {
                     "type": "minecraft:modify_sign",
-                    "position": "interacted_position",
+                    "position": "interacted",
                     "wax": true
                   }
                 },
@@ -43,7 +43,7 @@
             },
             "requirements": {
               "condition": "minecraft:location_check",
-              "position": "interacted_position",
+              "position": "interacted",
               "predicate": {
                 "block": {
                   "blocks": "#minecraft:signs"
@@ -59,7 +59,7 @@
                 {
                   "action": {
                     "type": "minecraft:wax_block",
-                    "position": "interacted_position"
+                    "position": "interacted"
                   }
                 },
                 {

@@ -15,7 +15,7 @@
           {
             "action": {
               "type": "minecraft:attach_leashed_entities_on_block",
-              "position": "interacted_position"
+              "position": "interacted"
             }
           },
           {

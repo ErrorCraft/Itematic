@@ -38,7 +38,7 @@
           {
             "action": {
               "type": "minecraft:modify_block_state",
-              "position": "interacted_position",
+              "position": "interacted",
               "properties": {
                 "eye": "true"
               },
@@ -62,7 +62,7 @@
               "type": "minecraft:play_sound",
               "category": "block",
               "pitch": 1.0,
-              "position": "interacted_position",
+              "position": "interacted",
               "sound": "minecraft:block.end_portal_frame.fill",
               "volume": 1.0
             }
@@ -90,7 +90,7 @@
               "particle": {
                 "type": "minecraft:smoke"
               },
-              "position": "interacted_position",
+              "position": "interacted",
               "speed": 0.0
             }
           },
@@ -98,7 +98,7 @@
             "entry": {
               "action": {
                 "type": "minecraft:light_end_portal",
-                "position": "interacted_position"
+                "position": "interacted"
               }
             },
             "optional": true
@@ -107,7 +107,7 @@
       },
       "requirements": {
         "condition": "minecraft:location_check",
-        "position": "interacted_position",
+        "position": "interacted",
         "predicate": {
           "block": {
             "blocks": "minecraft:end_portal_frame",

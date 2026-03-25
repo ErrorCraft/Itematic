@@ -16,7 +16,7 @@
             "action": {
               "type": "minecraft:modify_sign",
               "glow": true,
-              "position": "interacted_position"
+              "position": "interacted"
             }
           },
           {
@@ -35,7 +35,7 @@
       },
       "requirements": {
         "condition": "minecraft:location_check",
-        "position": "interacted_position",
+        "position": "interacted",
         "predicate": {
           "block": {
             "blocks": "#minecraft:signs"
