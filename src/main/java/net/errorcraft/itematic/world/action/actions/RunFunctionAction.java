@@ -6,7 +6,9 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.command.ReturnValueConsumer;
+import net.minecraft.loot.context.LootContext;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.function.CommandFunction;
 import net.minecraft.server.function.CommandFunctionManager;
@@ -15,9 +17,11 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import java.util.Optional;
 
-public record RunFunctionAction(Identifier function) implements Action<RunFunctionAction> {
+public record RunFunctionAction(Identifier function, Optional<LootContext.EntityTarget> entity, Optional<PositionTarget> position) implements Action<RunFunctionAction> {
     public static final MapCodec<RunFunctionAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Identifier.CODEC.fieldOf("function").forGetter(RunFunctionAction::function)
+        Identifier.CODEC.fieldOf("function").forGetter(RunFunctionAction::function),
+        LootContext.EntityTarget.CODEC.optionalFieldOf("entity").forGetter(RunFunctionAction::entity),
+        PositionTarget.CODEC.optionalFieldOf("position").forGetter(RunFunctionAction::position)
     ).apply(instance, RunFunctionAction::new));
 
     @Override
@@ -34,7 +38,7 @@ public record RunFunctionAction(Identifier function) implements Action<RunFuncti
         }
 
         MutableBoolean success = new MutableBoolean();
-        ServerCommandSource source = context.commandSource(functionManager)
+        ServerCommandSource source = context.commandSource(functionManager, this.entity, this.position)
             .mergeReturnValueConsumers((successful, returnValue) -> success.setValue(successful), ReturnValueConsumer::chain);
         functionManager.execute(function.get(), source);
         return success.booleanValue();

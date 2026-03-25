@@ -105,18 +105,16 @@ public class ActionContext {
         return new LootContext.Builder(context).build(Optional.empty());
     }
 
-    public ServerCommandSource commandSource(CommandFunctionManager functionManager) {
+    public ServerCommandSource commandSource(CommandFunctionManager functionManager, Optional<LootContext.EntityTarget> entity, Optional<PositionTarget> position) {
         ServerCommandSource source = functionManager.getScheduledCommandSource();
-        Entity entity = this.get(LootContextParameters.THIS_ENTITY);
-        if (entity != null) {
-            source = source.withEntity(entity);
-        }
-
-        Vec3d position = this.get(LootContextParameters.ORIGIN);
-        if (position != null) {
-            source = source.withPosition(position);
-        }
-
+        source = entity.map(LootContext.EntityTarget::getParameter)
+            .map(this::get)
+            .map(source::withEntity)
+            .orElse(source);
+        source = position.map(PositionTarget::parameter)
+            .map(this::get)
+            .map(source::withPosition)
+            .orElse(source);
         return source;
     }
 
