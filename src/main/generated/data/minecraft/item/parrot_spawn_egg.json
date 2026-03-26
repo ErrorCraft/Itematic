@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:parrot"
-      },
+      "entity": "minecraft:parrot",
       "passes": [
         "block",
         "fluid"

@@ -6,7 +6,7 @@
       {
         "action": {
           "type": "minecraft:modify_block_state",
-          "position": "target",
+          "position": "interacted",
           "properties": {
             "lit": "false"
           }
@@ -20,7 +20,7 @@
             "max": 3.4,
             "min": 1.8
           },
-          "position": "target",
+          "position": "interacted",
           "sound": "minecraft:block.fire.extinguish",
           "volume": 0.5
         }
@@ -59,7 +59,7 @@
                     "particle": {
                       "type": "minecraft:campfire_signal_smoke"
                     },
-                    "position": "target",
+                    "position": "interacted",
                     "speed": 0.0
                   }
                 },
@@ -86,25 +86,20 @@
                     "particle": {
                       "type": "minecraft:campfire_signal_smoke"
                     },
-                    "position": "target",
+                    "position": "interacted",
                     "speed": 0.0
                   }
                 }
               ],
               "requirements": {
-                "conditions": {
-                  "condition": "minecraft:location_check",
-                  "predicate": {
-                    "block": {
-                      "state": {
-                        "signal_fire": "true"
-                      }
+                "condition": "minecraft:location_check",
+                "position": "interacted",
+                "predicate": {
+                  "block": {
+                    "state": {
+                      "signal_fire": "true"
                     }
                   }
-                },
-                "context": {
-                  "entity": "this",
-                  "position": "target"
                 }
               }
             },
@@ -137,7 +132,7 @@
                     "particle": {
                       "type": "minecraft:campfire_cosy_smoke"
                     },
-                    "position": "target",
+                    "position": "interacted",
                     "speed": 0.0
                   }
                 },
@@ -164,7 +159,7 @@
                     "particle": {
                       "type": "minecraft:campfire_cosy_smoke"
                     },
-                    "position": "target",
+                    "position": "interacted",
                     "speed": 0.0
                   }
                 }
@@ -176,20 +171,15 @@
     ]
   },
   "requirements": {
-    "conditions": {
-      "condition": "minecraft:location_check",
-      "predicate": {
-        "block": {
-          "blocks": "#minecraft:campfires",
-          "state": {
-            "lit": "true"
-          }
+    "condition": "minecraft:location_check",
+    "position": "interacted",
+    "predicate": {
+      "block": {
+        "blocks": "#minecraft:campfires",
+        "state": {
+          "lit": "true"
         }
       }
-    },
-    "context": {
-      "entity": "this",
-      "position": "target"
     }
   }
 }

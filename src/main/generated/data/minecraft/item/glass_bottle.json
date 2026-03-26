@@ -15,12 +15,15 @@
         {
           "action": {
             "type": "minecraft:exchange_item",
-            "components": {
-              "minecraft:potion_contents": {
-                "potion": "minecraft:water"
-              }
-            },
-            "item": "minecraft:potion"
+            "item": {
+              "id": "minecraft:potion",
+              "components": {
+                "minecraft:potion_contents": {
+                  "potion": "minecraft:water"
+                }
+              },
+              "count": 1
+            }
           }
         },
         {
@@ -28,7 +31,7 @@
             "type": "minecraft:invoke_game_event",
             "event": "minecraft:fluid_pickup",
             "entity": "this",
-            "position": "target"
+            "position": "interacted"
           }
         },
         {
@@ -36,29 +39,25 @@
             "type": "minecraft:play_sound",
             "category": "neutral",
             "pitch": 1.0,
-            "position": "this",
+            "position": "origin",
             "sound": "minecraft:item.bottle.fill",
             "volume": 1.0
           }
         },
         {
           "action": {
-            "type": "minecraft:swing_hand"
+            "type": "minecraft:swing_hand",
+            "entity": "this"
           }
         }
       ],
       "requirements": {
-        "conditions": {
-          "condition": "minecraft:location_check",
-          "predicate": {
-            "fluid": {
-              "fluids": "#minecraft:water"
-            }
+        "condition": "minecraft:location_check",
+        "position": "interacted",
+        "predicate": {
+          "fluid": {
+            "fluids": "#minecraft:water"
           }
-        },
-        "context": {
-          "entity": "this",
-          "position": "target"
         }
       }
     }

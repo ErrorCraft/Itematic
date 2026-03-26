@@ -2,21 +2,19 @@ package net.errorcraft.itematic.item.dispense.behavior;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.inventory.StackReferenceUtil;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.actions.SequenceAction;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.FallibleItemDispenserBehavior;
-import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Position;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.Optional;
@@ -57,11 +55,14 @@ public class DispenseBehavior extends FallibleItemDispenserBehavior {
     @Override
     protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
         Direction side = pointer.state().get(DispenserBlock.FACING);
-        StackReference stackReference = StackReferenceUtil.of(stack);
-        ActionContext context = ActionContext.builder(pointer.world(), stack, stackReference::set)
-            .position(ActionContextParameter.THIS, pointer.pos())
-            .position(ActionContextParameter.TARGET, this.offset.position(pointer))
-            .side(side)
+        Vec3d outputPos = this.offset.position(pointer);
+        ActionContext context = ActionContext.builder(pointer.world())
+            .stackExchanger(side, outputPos, stack)
+            .add(LootContextParameters.ORIGIN, pointer.centerPos())
+            .add(ItematicContextParameters.INTERACTED_POSITION, outputPos)
+            .add(ItematicContextParameters.SIDE, side)
+            .add(LootContextParameters.TOOL, stack)
+            .add(LootContextParameters.BLOCK_ENTITY, pointer.blockEntity())
             .build();
         Optional<Boolean> result = this.entry.value().execute(context);
         if (result.isEmpty()) {
@@ -69,7 +70,7 @@ public class DispenseBehavior extends FallibleItemDispenserBehavior {
         }
 
         if (result.get()) {
-            return this.succeed(pointer, stack, stackReference.get());
+            return this.succeed(pointer, stack, context.resultStack());
         }
 
         return this.fail(pointer, stack);
@@ -121,7 +122,7 @@ public class DispenseBehavior extends FallibleItemDispenserBehavior {
             return new Offset(new Vec3d(side, side, side), new Vec3d(constantX, constantY, constantZ));
         }
 
-        public Position position(BlockPointer pointer) {
+        public Vec3d position(BlockPointer pointer) {
             Direction side = pointer.state().get(DispenserBlock.FACING);
             double offsetX = this.sideFactor.getX() * side.getOffsetX() + this.constant.getX();
             double offsetY = this.sideFactor.getY() * side.getOffsetY() + this.constant.getY();

@@ -2,19 +2,20 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -44,7 +45,7 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
     }
 
     @Override
-    public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackConsumer resultStackConsumer) {
+    public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
         FoodComponent food = stack.get(DataComponentTypes.FOOD);
         if (user instanceof PlayerEntity player) {
             player.getHungerManager().eat(food);
@@ -52,8 +53,12 @@ public record FoodItemComponent(int nutrition, float saturation, boolean alwaysE
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, user.getActiveHand())
-                .entityPosition(ActionContextParameter.THIS, user)
+            ActionContext context = ActionContext.builder(serverWorld)
+                .stackExchanger(stackExchanger)
+                .add(LootContextParameters.THIS_ENTITY, user)
+                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.TOOL, stack)
+                .add(ItematicContextParameters.HAND, user.getActiveHand())
                 .build();
             stack.itematic$invokeEvent(ItemEvents.EAT_ITEM, context);
         }

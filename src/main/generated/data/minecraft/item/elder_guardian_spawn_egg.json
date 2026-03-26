@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:elder_guardian"
-      },
+      "entity": "minecraft:elder_guardian",
       "passes": [
         "block",
         "fluid"

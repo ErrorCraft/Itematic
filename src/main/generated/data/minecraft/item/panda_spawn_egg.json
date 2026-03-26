@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:panda"
-      },
+      "entity": "minecraft:panda",
       "passes": [
         "block",
         "fluid"

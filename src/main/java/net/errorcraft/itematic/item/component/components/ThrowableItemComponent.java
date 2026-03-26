@@ -3,19 +3,22 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.use.provider.providers.TridentIntegerProvider;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.consume.UseAction;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
@@ -64,17 +67,19 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.drawDuration.isPresent()) {
             return ItemResult.PASS;
         }
-        return this.createEntity(world, user, stack, resultStackConsumer);
+
+        this.createEntity(world, user, stack, stackExchanger);
+        return ItemResult.SUCCEED;
     }
 
     @Override
-    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
+    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
         if (this.drawDuration.filter(drawDuration -> drawDuration.test(usedTicks)).isPresent()) {
-            this.createEntity(world, user, stack, resultStackConsumer);
+            this.createEntity(world, user, stack, stackExchanger);
             if (user instanceof PlayerEntity player) {
                 player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
             }
@@ -85,27 +90,38 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
         return false;
     }
 
-    private ItemResult createEntity(World world, LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    private void createEntity(World world, LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer)
-                .entityPosition(ActionContextParameter.THIS, user)
-                .position(ActionContextParameter.TARGET, user.getEyePos().add(0.0d, -0.1d, 0.0d))
-                .build();
-            this.createEntity(context);
+            ActionContext.Builder contextBuilder = ActionContext.builder(serverWorld)
+                .stackExchanger(stackExchanger)
+                .add(LootContextParameters.TOOL, stack)
+                .add(LootContextParameters.THIS_ENTITY, user)
+                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(ItematicContextParameters.INTERACTED_POSITION, user.getEyePos().add(0.0d, -0.1d, 0.0d));
+            this.createEntity(contextBuilder, serverWorld, stack);
         }
-
-        return ItemResult.SUCCEED;
     }
 
-    private void createEntity(ActionContext context) {
-        context.stack().itematic$getBehavior(ItemComponentTypes.PROJECTILE)
-            .map(c -> c.createEntity(context, ActionContextParameter.TARGET, this.angleOffset, this.speed, 1.0f))
-            .ifPresent(projectile -> {
-                context.world().spawnEntity(projectile);
-                ActionContext projectileContext = context.builderForCopy()
-                    .entityPosition(ActionContextParameter.TARGET, projectile)
-                    .build();
-                context.stack().itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, projectileContext);
-            });
+    private void createEntity(ActionContext.Builder contextBuilder, ServerWorld world, ItemStack stack) {
+        ProjectileItemComponent projectile = stack.itematic$getBehavior(ItemComponentTypes.PROJECTILE).orElse(null);
+        if (projectile == null) {
+            return;
+        }
+
+        Entity projectileEntity = projectile.createEntity(
+            contextBuilder.build(),
+            PositionTarget.INTERACTED_POSITION,
+            this.angleOffset,
+            this.speed,
+            1.0f
+        );
+        if (projectileEntity == null) {
+            return;
+        }
+
+        world.spawnEntity(projectileEntity);
+        ActionContext projectileContext = contextBuilder.add(ItematicContextParameters.TARGET_ENTITY, projectileEntity)
+            .build();
+        stack.itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, projectileContext);
     }
 }

@@ -1,17 +1,25 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.loot.context.LootContext;
 import net.minecraft.util.Hand;
 
-public record SwingHandAction() implements Action<SwingHandAction> {
-    public static final SwingHandAction INSTANCE = new SwingHandAction();
-    public static final MapCodec<SwingHandAction> CODEC = MapCodec.unit(INSTANCE);
+public record SwingHandAction(LootContext.EntityTarget entity) implements Action<SwingHandAction> {
+    public static final MapCodec<SwingHandAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(SwingHandAction::entity)
+    ).apply(instance, SwingHandAction::new));
+
+    public static SwingHandAction of(LootContext.EntityTarget entity) {
+        return new SwingHandAction(entity);
+    }
 
     @Override
     public ActionType<SwingHandAction> type() {
@@ -20,14 +28,17 @@ public record SwingHandAction() implements Action<SwingHandAction> {
 
     @Override
     public boolean execute(ActionContext context) {
-        if (!(context.entity(ActionContextParameter.THIS).orElse(null) instanceof LivingEntity entity)) {
+        Entity entity = context.get(this.entity.getParameter());
+        if (!(entity instanceof LivingEntity target)) {
             return false;
         }
-        Hand hand = context.hand();
+
+        Hand hand = context.get(ItematicContextParameters.HAND);
         if (hand == null) {
             return false;
         }
-        entity.swingHand(hand, true);
+
+        target.swingHand(hand, true);
         return true;
     }
 }

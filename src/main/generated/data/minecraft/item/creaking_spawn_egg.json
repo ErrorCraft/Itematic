@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:creaking"
-      },
+      "entity": "minecraft:creaking",
       "passes": [
         "block",
         "fluid"

@@ -6,21 +6,22 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.HoneycombItem;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldEvents;
 import net.minecraft.world.event.GameEvent;
 
-public record WaxBlockAction(ActionContextParameter position) implements Action<WaxBlockAction> {
+public record WaxBlockAction(PositionTarget position) implements Action<WaxBlockAction> {
     public static final MapCodec<WaxBlockAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ActionContextParameter.CODEC.fieldOf("position").forGetter(WaxBlockAction::position)
+        PositionTarget.CODEC.fieldOf("position").forGetter(WaxBlockAction::position)
     ).apply(instance, WaxBlockAction::new));
 
-    public static WaxBlockAction of(ActionContextParameter position) {
+    public static WaxBlockAction of(PositionTarget position) {
         return new WaxBlockAction(position);
     }
 
@@ -32,13 +33,19 @@ public record WaxBlockAction(ActionContextParameter position) implements Action<
     @Override
     public boolean execute(ActionContext context) {
         ServerWorld world = context.world();
-        BlockPos pos = context.blockPos(this.position);
-        return HoneycombItem.getWaxedState(world.getBlockState(pos)).map(state -> {
-            PlayerEntity player = context.player(ActionContextParameter.THIS).orElse(null);
-            world.setBlockState(pos, state, Block.NOTIFY_ALL_AND_REDRAW);
-            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player, state));
-            world.syncWorldEvent(null, WorldEvents.BLOCK_WAXED, pos, 0);
-            return true;
-        }).orElse(false);
+        BlockPos pos = context.get(this.position.parameter(), BlockPos::ofFloored);
+        if (pos == null) {
+            return false;
+        }
+
+        return HoneycombItem.getWaxedState(world.getBlockState(pos))
+            .map(state -> {
+                Entity entity = context.get(LootContextParameters.THIS_ENTITY);
+                world.setBlockState(pos, state, Block.NOTIFY_ALL_AND_REDRAW);
+                world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(entity, state));
+                world.syncWorldEvent(WorldEvents.BLOCK_WAXED, pos, 0);
+                return true;
+            })
+            .orElse(false);
     }
 }

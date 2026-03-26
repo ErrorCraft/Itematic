@@ -33,7 +33,7 @@
                 "max": 1.2,
                 "min": 0.8
               },
-              "position": "target",
+              "position": "interacted",
               "sound": "minecraft:item.flintandsteel.use",
               "volume": 1.0
             }

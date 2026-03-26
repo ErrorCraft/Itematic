@@ -4,9 +4,7 @@
       "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
-      "entity": {
-        "type": "minecraft:jungle_boat"
-      }
+      "entity": "minecraft:jungle_boat"
     },
     "minecraft:fuel": {
       "ticks": 1200

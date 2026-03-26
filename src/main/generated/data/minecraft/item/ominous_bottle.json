@@ -24,7 +24,7 @@
       "action": {
         "type": "minecraft:play_sound",
         "pitch": 1.0,
-        "position": "this",
+        "position": "origin",
         "sound": "minecraft:item.ominous_bottle.dispose",
         "volume": 1.0
       }

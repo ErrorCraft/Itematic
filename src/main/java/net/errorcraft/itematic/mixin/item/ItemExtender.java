@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.UseDurationDataComponent;
-import net.errorcraft.itematic.inventory.StackReferenceUtil;
 import net.errorcraft.itematic.item.ItemDisplay;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemResult;
@@ -19,8 +18,9 @@ import net.errorcraft.itematic.item.component.components.DamageableItemComponent
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.BlockState;
@@ -44,6 +44,7 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.consume.UseAction;
 import net.minecraft.item.tooltip.TooltipData;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -148,16 +149,20 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Overwrite
     public ActionResult use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
-        StackReference stackReference = StackReferenceUtil.of(stack);
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
         ItemResult result = ItemResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
-            ItemResult newResult = component.use(world, user, hand, stack, stackReference::set);
+            ItemResult newResult = component.use(world, user, hand, stack, stackExchanger);
             result = result.max(newResult);
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, hand)
-                .entityPosition(ActionContextParameter.THIS, user)
+            ActionContext context = ActionContext.builder(serverWorld)
+                .stackExchanger(stackExchanger)
+                .add(LootContextParameters.THIS_ENTITY, user)
+                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.TOOL, stack)
+                .add(ItematicContextParameters.HAND, hand)
                 .build();
             if (this.itematic$invokeEvent(ItemEvents.USE, context)) {
                 result = result.max(ItemResult.CONSUME);
@@ -166,7 +171,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
         ActionResult trueResult = result.toActionResult();
         if (trueResult instanceof ActionResult.Success success) {
-            return success.withNewHandStack(stackReference.get());
+            return success.withNewHandStack(stackExchanger.result());
         }
 
         return trueResult;
@@ -179,28 +184,32 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Overwrite
     public ActionResult useOnBlock(ItemUsageContext context) {
         ItemStack stack = context.getStack();
-        StackReference stackReference = StackReferenceUtil.of(stack);
+        ItemStackExchanger stackExchanger = context.itematic$stackExchanger();
         ItemResult result = ItemResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
-            ItemResult newResult = component.useOnBlock(context, stackReference::set);
+            ItemResult newResult = component.useOnBlock(context, stackExchanger);
             result = result.max(newResult);
         }
 
         if (context.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext actionContext = ActionContext.builder(serverWorld, stack, stackReference::set, context.getHand())
-                .entityPosition(ActionContextParameter.THIS, context.getPlayer())
-                .position(ActionContextParameter.TARGET, context.getBlockPos())
-                .side(context.getSide())
+            ActionContext actionContext = ActionContext.builder(serverWorld)
+                .stackExchanger(stackExchanger)
+                .addOptional(LootContextParameters.THIS_ENTITY, context.getPlayer())
+                .addOptional(LootContextParameters.ORIGIN, context.getPlayer(), Entity::getPos)
+                .add(ItematicContextParameters.INTERACTED_POSITION, context.getBlockPos().toCenterPos())
+                .add(LootContextParameters.TOOL, stack)
+                .add(ItematicContextParameters.HAND, context.getHand())
+                .add(ItematicContextParameters.SIDE, context.getSide())
                 .build();
             if (this.itematic$invokeEvent(ItemEvents.USE_ON_BLOCK, actionContext)) {
                 result = result.max(ItemResult.CONSUME);
             }
         }
 
-        tryUpdateItemStack(context.getPlayer(), context.getHand(), stack, stackReference);
+        tryUpdateItemStack(context.getPlayer(), context.getHand(), stack, stackExchanger);
         ActionResult trueResult = result.toActionResult();
         if (trueResult instanceof ActionResult.Success success) {
-            trueResult = success.withNewHandStack(stackReference.get());
+            trueResult = success.withNewHandStack(stackExchanger.result());
         }
 
         return trueResult;
@@ -212,27 +221,32 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-        StackReference stackReference = StackReferenceUtil.of(stack);
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
         ItemResult result = ItemResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
-            ItemResult newResult = component.useOnEntity(user, entity, hand, stack, stackReference::set);
+            ItemResult newResult = component.useOnEntity(user, entity, hand, stack, stackExchanger);
             result = result.max(newResult);
         }
 
         if (user.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, hand)
-                .entityPosition(ActionContextParameter.THIS, user)
-                .entityPosition(ActionContextParameter.TARGET, entity)
+            ActionContext context = ActionContext.builder(serverWorld)
+                .stackExchanger(stackExchanger)
+                .add(LootContextParameters.THIS_ENTITY, user)
+                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(ItematicContextParameters.TARGET_ENTITY, entity)
+                .add(ItematicContextParameters.INTERACTED_POSITION, entity.getPos())
+                .add(LootContextParameters.TOOL, stack)
+                .add(ItematicContextParameters.HAND, hand)
                 .build();
             if (this.itematic$invokeEvent(ItemEvents.USE_ON_ENTITY, context)) {
                 result = result.max(ItemResult.CONSUME);
             }
         }
 
-        tryUpdateItemStack(user, hand, stack, stackReference);
+        tryUpdateItemStack(user, hand, stack, stackExchanger);
         ActionResult trueResult = result.toActionResult();
         if (trueResult instanceof ActionResult.Success success) {
-            trueResult = success.withNewHandStack(stackReference.get());
+            trueResult = success.withNewHandStack(stackExchanger.result());
         }
 
         return trueResult;
@@ -245,20 +259,25 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Overwrite
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         boolean result = false;
-        StackReference stackReference = StackReferenceUtil.of(stack);
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(attacker, stack);
         for (ItemComponent<?> component : this.itemComponents) {
-            result |= component.postHit(stack, target, attacker, stackReference::set);
+            result |= component.postHit(stack, target, attacker, stackExchanger);
         }
 
         if (attacker.getWorld() instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, EquipmentSlot.MAINHAND)
-                .entityPosition(ActionContextParameter.THIS, attacker)
-                .entityPosition(ActionContextParameter.TARGET, target)
+            ActionContext context = ActionContext.builder(serverWorld)
+                .stackExchanger(stackExchanger)
+                .add(LootContextParameters.THIS_ENTITY, attacker)
+                .add(LootContextParameters.ORIGIN, attacker.getPos())
+                .add(ItematicContextParameters.TARGET_ENTITY, target)
+                .add(ItematicContextParameters.INTERACTED_POSITION, target.getPos())
+                .add(LootContextParameters.TOOL, stack)
+                .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
                 .build();
             this.itematic$invokeEvent(ItemEvents.HIT_ENTITY, context);
         }
 
-        tryUpdateItemStack(attacker, Hand.MAIN_HAND, stack, stackReference);
+        tryUpdateItemStack(attacker, Hand.MAIN_HAND, stack, stackExchanger);
         return result;
     }
 
@@ -269,20 +288,24 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Overwrite
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
         boolean result = false;
-        StackReference stackReference = StackReferenceUtil.of(stack);
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(miner, stack);
         for (ItemComponent<?> component : this.itemComponents) {
-            result |= component.postMine(stack, world, state, pos, miner, stackReference::set);
+            result |= component.postMine(stack, world, state, pos, miner, stackExchanger);
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, EquipmentSlot.MAINHAND)
-                .entityPosition(ActionContextParameter.THIS, miner)
-                .position(ActionContextParameter.TARGET, pos.toCenterPos())
+            ActionContext context = ActionContext.builder(serverWorld)
+                .stackExchanger(stackExchanger)
+                .add(LootContextParameters.THIS_ENTITY, miner)
+                .add(LootContextParameters.ORIGIN, miner.getPos())
+                .add(ItematicContextParameters.INTERACTED_POSITION, pos.toCenterPos())
+                .add(LootContextParameters.TOOL, stack)
+                .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
                 .build();
             this.itematic$invokeEvent(ItemEvents.BROKE_BLOCK, context);
         }
 
-        tryUpdateItemStack(miner, Hand.MAIN_HAND, stack, stackReference);
+        tryUpdateItemStack(miner, Hand.MAIN_HAND, stack, stackExchanger);
         return result;
     }
 
@@ -317,19 +340,23 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     public boolean onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         boolean result = false;
         int usedTicks = user.itematic$itemUsedTicks();
-        StackReference stackReference = StackReferenceUtil.of(stack);
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
         for (ItemComponent<?> component : this.itemComponents) {
-            result |= component.stopUsing(stack, world, user, usedTicks, remainingUseTicks, stackReference::set);
+            result |= component.stopUsing(stack, world, user, usedTicks, remainingUseTicks, stackExchanger);
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, user.getActiveHand())
-                .entityPosition(ActionContextParameter.THIS, user)
+            ActionContext context = ActionContext.builder(serverWorld)
+                .stackExchanger(stackExchanger)
+                .add(LootContextParameters.THIS_ENTITY, user)
+                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.TOOL, stack)
+                .add(ItematicContextParameters.HAND, user.getActiveHand())
                 .build();
             this.itematic$invokeEvent(ItemEvents.STOPPED_USING, context);
         }
 
-        tryUpdateItemStack(user, Hand.MAIN_HAND, stack, stackReference);
+        tryUpdateItemStack(user, Hand.MAIN_HAND, stack, stackExchanger);
         return result;
     }
 
@@ -340,21 +367,25 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     public void finishUsingUseItemComponent(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> info) {
         int usedTicks = user.itematic$itemUsedTicks();
-        StackReference stackReference = StackReferenceUtil.of(stack);
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
         for (ItemComponent<?> component : this.itemComponents) {
-            component.finishUsing(world, user, stack, usedTicks, stackReference::set);
+            component.finishUsing(world, user, stack, usedTicks, stackExchanger);
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, stackReference::set, user.getActiveHand())
-                .entityPosition(ActionContextParameter.THIS, user)
+            ActionContext context = ActionContext.builder(serverWorld)
+                .stackExchanger(stackExchanger)
+                .add(LootContextParameters.THIS_ENTITY, user)
+                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.TOOL, stack)
+                .add(ItematicContextParameters.HAND, user.getActiveHand())
                 .build();
             this.itematic$invokeEvent(ItemEvents.FINISHED_USING, context);
         }
 
         this.itematic$getBehavior(ItemComponentTypes.CONSUMABLE)
-            .ifPresent(c -> c.consume(user, stack, stackReference::set, world, user.getActiveHand()));
-        info.setReturnValue(stackReference.get());
+            .ifPresent(c -> c.consume(user, stack, stackExchanger, world, user.getActiveHand()));
+        info.setReturnValue(stackExchanger.result());
     }
 
     /**
@@ -388,9 +419,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Overwrite
     public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
         boolean result = false;
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, otherStack);
         for (ItemComponent<?> component : this.itemComponents) {
-            result |= component.clickedOnWithStack(stack, otherStack, slot, clickType, player, cursorStackReference::set);
+            result |= component.clickedOnWithStack(stack, otherStack, slot, clickType, player, stackExchanger);
         }
+
+        cursorStackReference.set(stackExchanger.result());
         return result;
     }
 
@@ -658,12 +692,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Unique
-    private static void tryUpdateItemStack(LivingEntity target, Hand hand, ItemStack stack, StackReference stackReference) {
+    private static void tryUpdateItemStack(LivingEntity target, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (target == null) {
             return;
         }
 
-        ItemStack newStack = stackReference.get();
+        ItemStack newStack = stackExchanger.result();
         if (stack == newStack) {
             return;
         }

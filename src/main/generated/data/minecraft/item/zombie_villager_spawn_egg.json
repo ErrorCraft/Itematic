@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:zombie_villager"
-      },
+      "entity": "minecraft:zombie_villager",
       "passes": [
         "block",
         "fluid"

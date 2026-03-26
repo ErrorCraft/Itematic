@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:endermite"
-      },
+      "entity": "minecraft:endermite",
       "passes": [
         "block",
         "fluid"

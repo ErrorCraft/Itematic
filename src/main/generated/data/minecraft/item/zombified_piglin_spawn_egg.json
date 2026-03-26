@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:zombified_piglin"
-      },
+      "entity": "minecraft:zombified_piglin",
       "passes": [
         "block",
         "fluid"

@@ -6,14 +6,14 @@ import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.component.type.ItemListDataComponent;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.item.use.provider.providers.ShooterIntegerProvider;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -23,6 +23,7 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.consume.UseAction;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntryList;
@@ -72,7 +73,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.method.tryShoot(this, stack, world, user, hand)) {
             return ItemResult.CONSUME;
         }
@@ -86,7 +87,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
     }
 
     @Override
-    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
+    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
         return this.method.stop(this, stack, world, user, usedTicks);
     }
 
@@ -134,9 +135,11 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
         }
 
         ActionContext context = ActionContext.builder(world)
-            .stack(stack)
-            .hand(hand)
-            .entityPosition(ActionContextParameter.THIS, shooter)
+            .stackExchanger(shooter, stack)
+            .add(LootContextParameters.THIS_ENTITY, shooter)
+            .add(LootContextParameters.ORIGIN, shooter.getPos())
+            .add(LootContextParameters.TOOL, stack)
+            .add(ItematicContextParameters.HAND, hand)
             .build();
         stack.itematic$damage(damage, context);
     }

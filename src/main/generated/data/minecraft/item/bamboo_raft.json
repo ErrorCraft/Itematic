@@ -4,9 +4,7 @@
       "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
-      "entity": {
-        "type": "minecraft:bamboo_raft"
-      }
+      "entity": "minecraft:bamboo_raft"
     },
     "minecraft:fuel": {
       "ticks": 1200

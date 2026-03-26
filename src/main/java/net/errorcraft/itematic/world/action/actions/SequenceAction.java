@@ -41,9 +41,12 @@ public record SequenceAction(SequenceHandler<?> handler) implements Action<Seque
         if (!(entry instanceof RegistryEntry.Reference<ActionEntry> referenceEntry)) {
             return;
         }
+
         validator.add(referenceEntry);
         if (referenceEntry.value().action() instanceof SequenceAction action) {
             action.validate(validator);
         }
+
+        validator.remove(referenceEntry);
     }
 }

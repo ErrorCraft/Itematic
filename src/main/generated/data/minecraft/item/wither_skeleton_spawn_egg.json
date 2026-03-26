@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:wither_skeleton"
-      },
+      "entity": "minecraft:wither_skeleton",
       "passes": [
         "block",
         "fluid"

@@ -8,7 +8,6 @@ import net.errorcraft.itematic.component.AttributeModifiersComponentUtil;
 import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
-import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
@@ -21,6 +20,7 @@ import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMeth
 import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
+import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionUtil;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
@@ -29,11 +29,10 @@ import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.ActionEntry;
-import net.errorcraft.itematic.world.action.ActionRequirements;
 import net.errorcraft.itematic.world.action.Actions;
 import net.errorcraft.itematic.world.action.actions.*;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
+import net.errorcraft.itematic.world.action.context.ItematicEntityTargets;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
@@ -49,12 +48,8 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.decoration.GlowItemFrameEntity;
-import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
 import net.minecraft.item.consume.UseAction;
@@ -77,6 +72,7 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.stat.Stats;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
@@ -193,7 +189,7 @@ public class ItemUtil {
                         .build())
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ClearStatusEffectsAction.of(ActionContextParameter.THIS)))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ClearStatusEffectsAction.of(LootContext.EntityTarget.THIS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POTION, create(
@@ -209,29 +205,27 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                            AllOfLootCondition.builder(
-                                InvertedLootCondition.builder(
-                                    SideCheckPredicate.builder(Direction.DOWN)
-                                ),
-                                LocationCheckLootCondition.builder(
-                                    LocationPredicate.Builder.create()
-                                        .block(BlockPredicate.Builder.create()
-                                            .tag(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
-                                ),
-                                MatchToolLootCondition.builder(
-                                    ItemPredicate.Builder.create()
-                                        .subPredicate(ItemSubPredicateTypes.POTION_CONTENTS, new PotionContentsPredicate(RegistryEntryList.of(
-                                            this.potions.getOrThrow(PotionKeys.WATER)
-                                        )))
-                                )
-                            ).build()
+                        AllOfLootCondition.builder(
+                            InvertedLootCondition.builder(
+                                SideCheckPredicate.builder(Direction.DOWN)
+                            ),
+                            LocationCheckLootConditionUtil.builder(
+                                PositionTarget.INTERACTED_POSITION,
+                                LocationPredicate.Builder.create()
+                                    .block(BlockPredicate.Builder.create()
+                                        .tag(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
+                            ),
+                            MatchToolLootCondition.builder(
+                                ItemPredicate.Builder.create()
+                                    .subPredicate(ItemSubPredicateTypes.POTION_CONTENTS, new PotionContentsPredicate(RegistryEntryList.of(
+                                        this.potions.getOrThrow(PotionKeys.WATER)
+                                    )))
+                            )
                         ),
                         UncheckedSequenceHandler.builder()
-                            .add(PlaySoundAction.of(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_SPLASH), SoundCategory.BLOCKS))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_SPLASH), SoundCategory.BLOCKS))
                             .add(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
-                            .add(DisplayParticleAction.builder(ActionContextParameter.TARGET, ParticleTypes.SPLASH)
+                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED_POSITION, ParticleTypes.SPLASH)
                                 .count(5)
                                 .offset(Vec3dProvider.of(
                                     -0.5d, 0.5d,
@@ -240,9 +234,9 @@ public class ItemUtil {
                                 ))
                                 .speed(1.0d)
                                 .build())
-                            .add(PlaySoundAction.of(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_EMPTY), SoundCategory.BLOCKS))
-                            .add(SetBlockStateAction.of(ActionContextParameter.TARGET, this.blocks.getOrThrow(BlockKeys.MUD)))
-                            .add(SwingHandAction.INSTANCE)
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_EMPTY), SoundCategory.BLOCKS))
+                            .add(SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, this.blocks.getOrThrow(BlockKeys.MUD)))
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
             ));
@@ -256,7 +250,7 @@ public class ItemUtil {
                     .with(OminousEffectProviderItemComponent.INSTANCE)
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(PlaySoundAction.of(ActionContextParameter.THIS, this.soundEvents.getOrThrow(SoundEventKeys.OMINOUS_BOTTLE_DISPOSE))))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.OMINOUS_BOTTLE_DISPOSE))))
                     .build()
             ));
         }
@@ -333,7 +327,7 @@ public class ItemUtil {
                         .build())
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(TeleportAction.of(16, ActionContextParameter.THIS)))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(TeleportAction.of(16, LootContext.EntityTarget.THIS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BEETROOT, create(
@@ -434,10 +428,7 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
-                            RandomChanceLootCondition.builder(0.3f).build()
-                        ),
+                        RandomChanceLootCondition.builder(0.3f),
                         AddStatusEffectsAction.of(
                             new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 600)
                         )
@@ -592,7 +583,7 @@ public class ItemUtil {
                         .build())
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ApplySuspiciousStewEffectsFromItemAction.of(ActionContextParameter.THIS)))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ApplySuspiciousStewEffectsFromItemAction.of(LootContext.EntityTarget.THIS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ROTTEN_FLESH, create(
@@ -605,10 +596,7 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
-                            RandomChanceLootCondition.builder(0.8f).build()
-                        ),
+                        RandomChanceLootCondition.builder(0.8f),
                         AddStatusEffectsAction.of(
                             new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.HUNGER), 600)
                         )
@@ -641,10 +629,7 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
-                            RandomChanceLootCondition.builder(0.6f).build()
-                        ),
+                        RandomChanceLootCondition.builder(0.6f),
                         AddStatusEffectsAction.of(
                             new StatusEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 100)
                         )
@@ -724,7 +709,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         RemoveStatusEffectsAction.of(
-                            ActionContextParameter.THIS,
+                            LootContext.EntityTarget.THIS,
                             this.statusEffects.getOrThrow(StatusEffectKeys.POISON)
                         )
                     ))
@@ -5491,26 +5476,23 @@ public class ItemUtil {
                         .build())
                     .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE + 1, 0.275d))
                     .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
-                    .with(ProjectileItemComponent.of(TridentEntityInitializer.INSTANCE))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.TRIDENT)))
                     .with(EnchantableItemComponent.of(1))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.STOPPED_USING, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.THIS),
-                            AllOfLootCondition.builder(
-                                EntityPropertiesLootCondition.builder(
-                                    LootContext.EntityTarget.THIS,
-                                    EntityPredicate.Builder.create()
-                                        .itematic$usedItemAtLeast(TridentItem.MIN_DRAW_DURATION)
-                                        .itematic$inWaterOrRain(true)
-                                ),
-                                MatchToolLootCondition.builder(
-                                    ItemPredicate.Builder.create()
-                                        .subPredicate(ItemSubPredicateTypes.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.of(
-                                            new EnchantmentPredicate(this.enchantments.getOrThrow(Enchantments.RIPTIDE), NumberRange.IntRange.ANY)
-                                        ))))
-                            ).build()
+                        AllOfLootCondition.builder(
+                            EntityPropertiesLootCondition.builder(
+                                LootContext.EntityTarget.THIS,
+                                EntityPredicate.Builder.create()
+                                    .itematic$usedItemAtLeast(TridentItem.MIN_DRAW_DURATION)
+                                    .itematic$inWaterOrRain(true)
+                            ),
+                            MatchToolLootCondition.builder(
+                                ItemPredicate.Builder.create()
+                                    .subPredicate(ItemSubPredicateTypes.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.of(
+                                        new EnchantmentPredicate(this.enchantments.getOrThrow(Enchantments.RIPTIDE), NumberRange.IntRange.ANY)
+                                    ))))
                         ),
                         PassingSequenceHandler.builder()
                             .add(TwirlPlayerAction.INSTANCE)
@@ -5552,7 +5534,7 @@ public class ItemUtil {
                         PassingSequenceHandler.builder()
                             .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
                             .add(DamageItemAction.of(1))
-                            .add(PlaySoundAction.builder(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.FLINT_AND_STEEL_USE), SoundCategory.BLOCKS)
+                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.FLINT_AND_STEEL_USE), SoundCategory.BLOCKS)
                                 .pitch(0.8f, 1.2f)
                                 .build())
                     ))
@@ -5590,35 +5572,35 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MINECART), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHEST_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CHEST_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.CHEST_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CHEST_MINECART), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.FURNACE_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.FURNACE_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.FURNACE_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.FURNACE_MINECART), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TNT_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TNT_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.TNT_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.TNT_MINECART), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOPPER_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.HOPPER_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.HOPPER_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.HOPPER_MINECART), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.COMMAND_BLOCK_MINECART, create(
@@ -5627,14 +5609,14 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(new MinecartEntityInitializer<>(EntityType.COMMAND_BLOCK_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.COMMAND_BLOCK_MINECART), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.OAK_BOAT, create(
                 ItemDisplay.Builder.forItem(ItemKeys.OAK_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.OAK_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.OAK_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5642,7 +5624,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.OAK_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.OAK_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.OAK_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5650,7 +5632,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.SPRUCE_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.SPRUCE_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SPRUCE_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5658,7 +5640,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.SPRUCE_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.SPRUCE_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SPRUCE_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5666,7 +5648,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BIRCH_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.BIRCH_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BIRCH_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5674,7 +5656,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BIRCH_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.BIRCH_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BIRCH_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5682,7 +5664,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.JUNGLE_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.JUNGLE_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.JUNGLE_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5690,7 +5672,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.JUNGLE_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.JUNGLE_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.JUNGLE_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5698,7 +5680,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ACACIA_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.ACACIA_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ACACIA_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5706,7 +5688,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ACACIA_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.ACACIA_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ACACIA_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5714,7 +5696,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHERRY_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.CHERRY_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CHERRY_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5722,7 +5704,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHERRY_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.CHERRY_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CHERRY_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5730,7 +5712,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.DARK_OAK_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.DARK_OAK_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.DARK_OAK_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5738,7 +5720,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.DARK_OAK_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.DARK_OAK_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.DARK_OAK_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5746,7 +5728,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.PALE_OAK_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.PALE_OAK_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PALE_OAK_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5754,7 +5736,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.PALE_OAK_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.PALE_OAK_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PALE_OAK_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5762,7 +5744,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MANGROVE_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.MANGROVE_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MANGROVE_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5770,7 +5752,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MANGROVE_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.MANGROVE_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MANGROVE_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5778,7 +5760,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BAMBOO_RAFT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.BAMBOO_RAFT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BAMBOO_RAFT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5786,7 +5768,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BAMBOO_CHEST_RAFT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(SimpleEntityInitializer.of(EntityType.BAMBOO_CHEST_RAFT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BAMBOO_CHEST_RAFT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5794,28 +5776,28 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.PAINTING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.of(DecorationEntityInitializer.createPainting(EntityType.PAINTING)))
+                    .with(EntityItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.PAINTING)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ITEM_FRAME, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ITEM_FRAME).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.of(DecorationEntityInitializer.createItemFrame(EntityType.ITEM_FRAME, ItemFrameEntity::new)))
+                    .with(EntityItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.ITEM_FRAME)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOW_ITEM_FRAME, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GLOW_ITEM_FRAME).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.of(DecorationEntityInitializer.createItemFrame(EntityType.GLOW_ITEM_FRAME, GlowItemFrameEntity::new)))
+                    .with(EntityItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.GLOW_ITEM_FRAME)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ARMOR_STAND, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ARMOR_STAND).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(EntityItemComponent.from(new ArmorStandEntityInitializer(), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ARMOR_STAND), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_CRYSTAL, create(
@@ -5824,7 +5806,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.of(EndCrystalEntityInitializer.INSTANCE))
+                    .with(EntityItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.END_CRYSTAL)))
                     .build()
             ));
         }
@@ -9495,7 +9477,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ARROW).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.ARROW)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
@@ -9531,40 +9513,38 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ThrowableItemComponent.of())
-                    .with(ProjectileItemComponent.of(EyeOfEnderEntityInitializer.INSTANCE))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EYE_OF_ENDER)))
                     .with(PreventUseWhenUsedOnTargetItemComponent.forBlock())
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                            LocationCheckLootCondition.builder(
-                                    LocationPredicate.Builder.create()
-                                        .block(BlockPredicate.Builder.create()
-                                            .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
-                                            .state(StatePredicate.Builder.create()
-                                                .exactMatch(Properties.EYE, false))))
-                                .build()
+                        LocationCheckLootConditionUtil.builder(
+                            PositionTarget.INTERACTED_POSITION,
+                            LocationPredicate.Builder.create()
+                                .block(BlockPredicate.Builder.create()
+                                    .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
+                                    .state(StatePredicate.Builder.create()
+                                        .exactMatch(Properties.EYE, false)))
                         ),
                         PassingSequenceHandler.builder()
-                            .add(ModifyBlockStateAction.builder(ActionContextParameter.TARGET)
+                            .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED_POSITION)
                                 .property(Properties.EYE, true)
                                 .pushEntitiesUpwards()
                                 .build())
                             .add(DecrementItemAction.of(1))
-                            .add(SwingHandAction.INSTANCE)
-                            .add(PlaySoundAction.of(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS))
-                            .add(DisplayParticleAction.builder(ActionContextParameter.TARGET, ParticleTypes.SMOKE)
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS))
+                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED_POSITION, ParticleTypes.SMOKE)
                                 .count(16)
                                 .offset(Vec3dProvider.of(
                                     -0.1875d, 0.1875d,
                                     0.8125d, 0.8125d,
                                     -0.1875d, 0.1875d))
                                 .build())
-                            .addOptional(LightEndPortalAction.of(ActionContextParameter.TARGET))
+                            .addOptional(LightEndPortalAction.of(PositionTarget.INTERACTED_POSITION))
                     ))
                     .add(ItemEvents.THROW_PROJECTILE, ActionEntry.of(
-                        PlaySoundAction.builder(ActionContextParameter.THIS, this.soundEvents.getOrThrow(SoundEventKeys.ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL)
+                        PlaySoundAction.builder(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL)
                             .pitch(0.33f, 0.5f)
                             .build()
                     ))
@@ -9595,7 +9575,7 @@ public class ItemUtil {
                         PassingSequenceHandler.builder()
                             .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
                             .add(DecrementItemAction.of(1))
-                            .add(PlaySoundAction.builder(ActionContextParameter.TARGET, this.soundEvents.getOrThrow(SoundEventKeys.FIRE_CHARGE_USE), SoundCategory.BLOCKS)
+                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.FIRE_CHARGE_USE), SoundCategory.BLOCKS)
                                 .pitch(0.8f, 1.2f)
                                 .build())
                     ))
@@ -9616,7 +9596,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(FireworkItemComponent.INSTANCE)
-                    .with(ProjectileItemComponent.of(FireworkRocketEntityInitializer.INSTANCE))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.FIREWORK_ROCKET)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_FIREWORK_ROCKET)))
                     .build()
             ));
@@ -9634,7 +9614,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.SPECTRAL_ARROW).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ProjectileItemComponent.persistentProjectile(EntityType.SPECTRAL_ARROW, SpectralArrowEntity::new, SpectralArrowEntity::new))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.SPECTRAL_ARROW)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
@@ -9643,7 +9623,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(PotionHolderItemComponent.of(0.125f))
-                    .with(ProjectileItemComponent.persistentProjectile(EntityType.ARROW, ArrowEntity::new, ArrowEntity::new))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.ARROW)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
@@ -10771,17 +10751,20 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                            LocationCheckLootCondition.builder(
-                                LocationPredicate.Builder.create()
-                                    .block(BlockPredicate.Builder.create()
-                                        .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value())))
-                                .build()
+                        LocationCheckLootConditionUtil.builder(
+                            PositionTarget.INTERACTED_POSITION,
+                            LocationPredicate.Builder.create()
+                                .block(BlockPredicate.Builder.create()
+                                    .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value()))
                         ),
                         PassingSequenceHandler.builder()
-                            .add(SetItemPointerLocationAction.of(ActionContextParameter.TARGET))
-                            .add(SwingHandAction.INSTANCE)
+                            .add(SetItemPointerLocationAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(PlaySoundAction.of(
+                                PositionTarget.INTERACTED_POSITION,
+                                this.soundEvents.getOrThrow(SoundEventKeys.LODESTONE_COMPASS_LOCK),
+                                SoundCategory.PLAYERS
+                            ))
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
             ));
@@ -10977,7 +10960,16 @@ public class ItemUtil {
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK)))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(FertilizeAction.INSTANCE))
+                    .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .add(FertilizeAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(InvokeGameEventAction.of(
+                                GameEvent.ITEM_INTERACT_FINISH,
+                                PositionTarget.ORIGIN,
+                                LootContext.EntityTarget.THIS
+                            ))
+                            .add(DecrementItemAction.of(1))
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.BONE, create(
@@ -11001,8 +10993,8 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(MarkBannerOnItemAction.of(ActionContextParameter.TARGET))
-                            .add(SwingHandAction.INSTANCE)
+                            .add(MarkBannerOnItemAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
             ));
@@ -11027,13 +11019,11 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        ActionRequirements.of(
-                            ActionContextParameters.of(ActionContextParameter.THIS, ActionContextParameter.TARGET),
-                            LocationCheckLootCondition.builder(
-                                LocationPredicate.Builder.create()
-                                    .fluid(FluidPredicate.Builder.create()
-                                        .tag(this.fluids.getOrThrow(FluidTags.WATER)))
-                            ).build()
+                        LocationCheckLootConditionUtil.builder(
+                            PositionTarget.INTERACTED_POSITION,
+                            LocationPredicate.Builder.create()
+                                .fluid(FluidPredicate.Builder.create()
+                                    .tag(this.fluids.getOrThrow(FluidTags.WATER)))
                         ),
                         UncheckedSequenceHandler.builder()
                             .add(ExchangeItemAction.of(
@@ -11041,9 +11031,9 @@ public class ItemUtil {
                                 ComponentChanges.builder()
                                     .add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(this.potions.getOrThrow(PotionKeys.WATER)))
                                     .build()))
-                            .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, ActionContextParameter.TARGET, ActionContextParameter.THIS))
-                            .add(PlaySoundAction.of(ActionContextParameter.THIS, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundCategory.NEUTRAL))
-                            .add(SwingHandAction.INSTANCE)
+                            .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, PositionTarget.INTERACTED_POSITION, LootContext.EntityTarget.THIS))
+                            .add(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundCategory.NEUTRAL))
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
             ));
@@ -11087,7 +11077,14 @@ public class ItemUtil {
                     .with(TextHolderItemComponent.INSTANCE)
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE, ActionEntry.of(OpenBookFromItemAction.INSTANCE))
+                    .add(ItemEvents.USE, ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .add(OpenBookFromItemAction.INSTANCE)
+                            .add(IncrementStatAction.of(
+                                LootContext.EntityTarget.THIS,
+                                Stats.USED.itematic$getOrCreateStat(this.items.getOrThrow(ItemKeys.WRITTEN_BOOK))
+                            ))
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAP, create(
@@ -11158,8 +11155,8 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(AttachLeashedEntitiesOnBlockAction.INSTANCE)
-                            .add(SwingHandAction.INSTANCE)
+                            .add(AttachLeashedEntitiesOnBlockAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
             ));
@@ -11171,9 +11168,9 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_ENTITY, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(SetEntityNameFromItemAction.of(ActionContextParameter.TARGET))
+                            .add(SetEntityNameFromItemAction.of(ItematicEntityTargets.TARGET_ENTITY))
                             .add(DecrementItemAction.of(1))
-                            .add(SwingHandAction.INSTANCE)
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
             ));
@@ -11281,9 +11278,9 @@ public class ItemUtil {
                         FirstToPassRequirementsSequenceHandler.builder()
                             .add(Actions.waxSign(this.blocks, true))
                             .add(PassingSequenceHandler.builder()
-                                .add(WaxBlockAction.of(ActionContextParameter.TARGET))
+                                .add(WaxBlockAction.of(PositionTarget.INTERACTED_POSITION))
                                 .add(DecrementItemAction.of(1))
-                                .add(SwingHandAction.INSTANCE))))
+                                .add(SwingHandAction.of(LootContext.EntityTarget.THIS)))))
                     .build()
             ));
             this.registerable.register(ItemKeys.ECHO_SHARD, create(

@@ -11,7 +11,25 @@
   "events": {
     "minecraft:use": {
       "action": {
-        "type": "minecraft:open_book_from_item"
+        "type": "minecraft:sequence",
+        "handler": "minecraft:passing",
+        "entries": [
+          {
+            "action": {
+              "type": "minecraft:open_book_from_item"
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:increment_stat",
+              "entity": "this",
+              "stat": {
+                "type": "minecraft:used",
+                "entry": "minecraft:written_book"
+              }
+            }
+          }
+        ]
       }
     }
   }

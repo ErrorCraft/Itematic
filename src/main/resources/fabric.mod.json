@@ -43,12 +43,6 @@
       "net/minecraft/class_1297": [
         "net/errorcraft/itematic/access/entity/EntityAccess"
       ],
-      "net/minecraft/class_1299": [
-        "net/errorcraft/itematic/access/entity/EntityTypeAccess"
-      ],
-      "net/minecraft/class_1299\u0024class_1300": [
-        "net/errorcraft/itematic/access/entity/EntityTypeBuilderAccess<TT;>"
-      ],
       "net/minecraft/class_1308": [
         "net/errorcraft/itematic/access/entity/mob/MobEntityAccess"
       ],

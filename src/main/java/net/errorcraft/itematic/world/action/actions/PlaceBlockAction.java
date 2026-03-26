@@ -10,23 +10,19 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.registry.entry.RegistryEntry;
 
-public record PlaceBlockAction(BlockPicker<?> block, ActionContextParameter position, boolean decrementCount) implements Action<PlaceBlockAction> {
+public record PlaceBlockAction(BlockPicker<?> block, PositionTarget position, boolean decrementCount) implements Action<PlaceBlockAction> {
     public static final MapCodec<PlaceBlockAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         BlockPicker.CODEC.fieldOf("block").forGetter(PlaceBlockAction::block),
-        ActionContextParameter.CODEC.fieldOf("position").forGetter(PlaceBlockAction::position),
+        PositionTarget.CODEC.fieldOf("position").forGetter(PlaceBlockAction::position),
         Codec.BOOL.optionalFieldOf("decrement_count", true).forGetter(PlaceBlockAction::decrementCount)
     ).apply(instance, PlaceBlockAction::new));
 
-    public static PlaceBlockAction of(RegistryEntry<Block> block, ActionContextParameter position, boolean decrementCount) {
-        return of(new SimpleBlockPicker(block), position, decrementCount);
-    }
-
-    public static PlaceBlockAction of(BlockPicker<?> block, ActionContextParameter position, boolean decrementCount) {
-        return new PlaceBlockAction(block, position, decrementCount);
+    public static PlaceBlockAction of(RegistryEntry<Block> block, PositionTarget position) {
+        return new PlaceBlockAction(new SimpleBlockPicker(block), position, false);
     }
 
     @Override
@@ -36,7 +32,11 @@ public record PlaceBlockAction(BlockPicker<?> block, ActionContextParameter posi
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockPlacer placer = BlockPlacer.of(context, this.position, this.block, false, this.decrementCount);
+        BlockPlacer placer = BlockPlacer.action(context, this.position, this.block, this.decrementCount);
+        if (placer == null) {
+            return false;
+        }
+
         return placer.place().succeeds();
     }
 }

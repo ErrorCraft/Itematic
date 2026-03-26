@@ -16,6 +16,10 @@ import java.util.Optional;
 public record FirstToPassRequirementsSequenceHandler(RegistryEntryList<ActionEntry> entries) implements SequenceHandler<FirstToPassRequirementsSequenceHandler> {
     public static final Codec<FirstToPassRequirementsSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(FirstToPassRequirementsSequenceHandler::new, FirstToPassRequirementsSequenceHandler::entries);
 
+    public static FirstToPassRequirementsSequenceHandler of(RegistryEntryList<ActionEntry> entries) {
+        return new FirstToPassRequirementsSequenceHandler(entries);
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -33,6 +37,7 @@ public record FirstToPassRequirementsSequenceHandler(RegistryEntryList<ActionEnt
                 return result.get();
             }
         }
+
         return false;
     }
 
@@ -41,12 +46,10 @@ public record FirstToPassRequirementsSequenceHandler(RegistryEntryList<ActionEnt
         return this.entries;
     }
 
-    public static FirstToPassRequirementsSequenceHandler tag(RegistryEntryList.Named<ActionEntry> tag) {
-        return new FirstToPassRequirementsSequenceHandler(tag);
-    }
-
     public static class Builder implements SequenceHandler.Builder<FirstToPassRequirementsSequenceHandler, Builder> {
         private final List<RegistryEntry<ActionEntry>> entries = new ArrayList<>();
+
+        private Builder() {}
 
         @Override
         public FirstToPassRequirementsSequenceHandler build() {

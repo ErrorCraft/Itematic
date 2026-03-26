@@ -3,10 +3,10 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -34,12 +34,12 @@ public record PreventUseWhenUsedOnTargetItemComponent(boolean block, boolean ent
     }
 
     @Override
-    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
         return this.block ? ItemResult.CONSUME : ItemResult.PASS;
     }
 
     @Override
-    public ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         return this.entity ? ItemResult.CONSUME : ItemResult.PASS;
     }
 }

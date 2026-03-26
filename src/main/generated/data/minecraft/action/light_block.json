@@ -11,63 +11,72 @@
             {
               "action": {
                 "type": "minecraft:modify_block_state",
-                "position": "target",
+                "position": "interacted",
                 "properties": {
                   "lit": "true"
                 }
               },
               "requirements": {
-                "conditions": {
-                  "condition": "minecraft:all_of",
-                  "terms": [
-                    {
+                "condition": "minecraft:all_of",
+                "terms": [
+                  {
+                    "condition": "minecraft:location_check",
+                    "position": "interacted",
+                    "predicate": {
+                      "block": {
+                        "state": {
+                          "lit": "false"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "condition": "minecraft:inverted",
+                    "term": {
                       "condition": "minecraft:location_check",
+                      "position": "interacted",
                       "predicate": {
                         "block": {
                           "state": {
-                            "lit": "false"
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "condition": "minecraft:inverted",
-                      "term": {
-                        "condition": "minecraft:location_check",
-                        "predicate": {
-                          "block": {
-                            "state": {
-                              "waterlogged": "true"
-                            }
+                            "waterlogged": "true"
                           }
                         }
                       }
                     }
-                  ]
-                },
-                "context": {
-                  "entity": "this",
-                  "position": "target"
-                }
+                  }
+                ]
               }
             },
             {
               "action": {
-                "type": "minecraft:prime_tnt",
-                "position": "target"
-              },
-              "requirements": {
-                "conditions": {
-                  "condition": "minecraft:location_check",
-                  "predicate": {
-                    "block": {
-                      "blocks": "minecraft:tnt"
+                "type": "minecraft:sequence",
+                "handler": "minecraft:passing",
+                "entries": [
+                  {
+                    "action": {
+                      "type": "minecraft:prime_tnt",
+                      "position": "interacted"
+                    }
+                  },
+                  {
+                    "action": {
+                      "type": "minecraft:play_sound",
+                      "category": "block",
+                      "pitch": 1.0,
+                      "position": "interacted",
+                      "sound": "minecraft:entity.tnt.primed",
+                      "volume": 1.0
                     }
                   }
-                },
-                "context": {
-                  "entity": "this",
-                  "position": "target"
+                ]
+              },
+              "requirements": {
+                "condition": "minecraft:location_check",
+                "position": "interacted",
+                "predicate": {
+                  "block": {
+                    "blocks": "minecraft:tnt"
+                  }
                 }
               }
             },
@@ -76,7 +85,7 @@
                 "type": "minecraft:place_block",
                 "block": "minecraft:fire",
                 "decrement_count": false,
-                "position": "target"
+                "position": "interacted"
               }
             }
           ]
@@ -85,7 +94,8 @@
       {
         "entry": {
           "action": {
-            "type": "minecraft:swing_hand"
+            "type": "minecraft:swing_hand",
+            "entity": "this"
           }
         },
         "optional": true

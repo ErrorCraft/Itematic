@@ -32,14 +32,8 @@
         "entity": "this"
       },
       "requirements": {
-        "conditions": {
-          "chance": 0.3,
-          "condition": "minecraft:random_chance"
-        },
-        "context": {
-          "entity": "this",
-          "position": "this"
-        }
+        "chance": 0.3,
+        "condition": "minecraft:random_chance"
       }
     }
   }
