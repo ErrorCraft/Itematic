@@ -1,13 +1,13 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -16,46 +16,47 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.Optional;
-
-public record ArmorStandEntityInitializer() implements EntityInitializer<ArmorStandEntity> {
+public class ArmorStandEntityInitializer implements EntityInitializer<ArmorStandEntity> {
     public static final ArmorStandEntityInitializer INSTANCE = new ArmorStandEntityInitializer();
-    public static final MapCodec<ArmorStandEntityInitializer> CODEC = MapCodec.unit(INSTANCE);
 
-    @Override
-    public EntityType<?> type() {
-        return EntityType.ARMOR_STAND;
-    }
+    private ArmorStandEntityInitializer() {}
 
     @Override
     public ArmorStandEntity create(ActionContext context, SpawnReason reason) {
-        if (!mayCreate(context)) {
+        Vec3d position = context.get(ItematicContextParameters.INTERACTED_POSITION);
+        if (position == null) {
             return null;
         }
-        Vec3d position = context.position(ActionContextParameter.TARGET);
+
+        if (!mayCreate(context, position)) {
+            return null;
+        }
+
         ServerWorld world = context.world();
         ArmorStandEntity entity = new ArmorStandEntity(world, position.getX(), position.getY(), position.getZ());
-        float angle = getRoundedAngle(context.entity(ActionContextParameter.THIS).map(Entity::getYaw).orElse(0.0f));
+        float angle = getRoundedAngle(context);
         entity.refreshPositionAndAngles(entity.getX(), entity.getY(), entity.getZ(), angle, 0.0f);
         world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENTITY_ARMOR_STAND_PLACE, SoundCategory.BLOCKS, 0.75f, 0.8f);
         return entity;
     }
 
-    private static boolean mayCreate(ActionContext context) {
-        Optional<Entity> entity = context.entity(ActionContextParameter.THIS);
-        if (entity.isEmpty()) {
+    private static boolean mayCreate(ActionContext context, Vec3d position) {
+        if (!context.has(LootContextParameters.THIS_ENTITY)) {
             return true;
         }
+
         ServerWorld world = context.world();
-        if (context.side() == Direction.DOWN) {
+        if (context.get(ItematicContextParameters.SIDE) == Direction.DOWN) {
             return false;
         }
-        Vec3d position = context.position(ActionContextParameter.TARGET);
+
         Box box = EntityType.ARMOR_STAND.getDimensions().getBoxAt(position.getX(), position.getY(), position.getZ());
         return world.isSpaceEmpty(null, box) && world.getOtherEntities(null, box).isEmpty();
     }
 
-    private static float getRoundedAngle(float angle) {
+    private static float getRoundedAngle(ActionContext context) {
+        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
+        float angle = entity != null ? entity.getYaw() : 0.0f;
         return MathHelper.floor((MathHelper.wrapDegrees(angle - 180.0f) + 22.5f) / 45.0f) * 45.0f;
     }
 }

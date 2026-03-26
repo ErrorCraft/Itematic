@@ -142,7 +142,7 @@ public class StatTypeExtender<T> implements StatTypeAccess<T> {
     @SuppressWarnings("unchecked")
     public Stat<T> itematic$getOrCreateStat(RegistryEntry<T> entry, StatFormatter formatter) {
         return this.entryStats.computeIfAbsent(entry, value -> {
-            Stat<T> stat = StatAccessor.create((StatType<T>)(Object) this, value.value(), formatter);
+            Stat<T> stat = StatAccessor.create((StatType<T>)(Object) this, value.hasKeyAndValue() ? value.value() : null, formatter);
             stat.itematic$setEntry(value);
             return stat;
         });

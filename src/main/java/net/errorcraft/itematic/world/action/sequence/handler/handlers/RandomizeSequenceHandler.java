@@ -33,6 +33,7 @@ public record RandomizeSequenceHandler(RegistryEntryList<ActionEntry> entries, O
         for (RegistryEntry<ActionEntry> entry : this.randomEntries(context.world().getRandom())) {
             result |= entry.value().execute(context).orElse(false);
         }
+
         return result;
     }
 

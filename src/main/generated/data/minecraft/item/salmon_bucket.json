@@ -3,9 +3,7 @@
     "minecraft:bucket": {
       "emptying_sound_event": "minecraft:item.bucket.empty_fish",
       "entity": {
-        "entity": {
-          "type": "minecraft:salmon"
-        },
+        "entity": "minecraft:salmon",
         "require_other_successful_placement": true
       },
       "fluid": "minecraft:water",

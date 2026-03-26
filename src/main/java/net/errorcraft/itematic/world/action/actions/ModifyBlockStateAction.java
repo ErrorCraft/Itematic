@@ -3,30 +3,29 @@ package net.errorcraft.itematic.world.action.actions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.block.BlockStateUtil;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.type.BlockStateComponent;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public record ModifyBlockStateAction(ActionContextParameter position, Map<String, String> properties, boolean pushEntitiesUpwards) implements Action<ModifyBlockStateAction> {
+public record ModifyBlockStateAction(PositionTarget position, BlockStateComponent properties, boolean pushEntitiesUpwards) implements Action<ModifyBlockStateAction> {
     public static final MapCodec<ModifyBlockStateAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ActionContextParameter.CODEC.fieldOf("position").forGetter(ModifyBlockStateAction::position),
-        Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("properties").forGetter(ModifyBlockStateAction::properties),
+        PositionTarget.CODEC.fieldOf("position").forGetter(ModifyBlockStateAction::position),
+        BlockStateComponent.CODEC.fieldOf("properties").forGetter(ModifyBlockStateAction::properties),
         Codec.BOOL.optionalFieldOf("push_entities_upwards", false).forGetter(ModifyBlockStateAction::pushEntitiesUpwards)
     ).apply(instance, ModifyBlockStateAction::new));
 
-    public static Builder builder(ActionContextParameter position) {
+    public static Builder builder(PositionTarget position) {
         return new Builder(position);
     }
 
@@ -38,38 +37,40 @@ public record ModifyBlockStateAction(ActionContextParameter position, Map<String
     @Override
     public boolean execute(ActionContext context) {
         ServerWorld world = context.world();
-        BlockPos pos = context.blockPos(this.position);
-        BlockState state = world.getBlockState(pos);
-        BlockState newState = state;
-        StateManager<Block, BlockState> stateManager = state.getBlock().getStateManager();
-        for (String key : this.properties.keySet()) {
-            Property<?> property = stateManager.getProperty(key);
-            if (property == null) {
-                continue;
-            }
-            newState = BlockStateUtil.with(newState, property, this.properties.get(key));
-        }
-        if (state == newState) {
+        BlockPos pos = context.getBlockPos(this.position.parameter());
+        if (pos == null) {
             return false;
         }
-        if (this.pushEntitiesUpwards) {
-            Block.pushEntitiesUpBeforeBlockChange(state, newState, world, pos);
+
+        BlockState currentState = world.getBlockState(pos);
+        BlockState newState = this.properties.applyToState(currentState);
+        if (newState == currentState) {
+            return false;
         }
+
+        if (this.pushEntitiesUpwards) {
+            Block.pushEntitiesUpBeforeBlockChange(currentState, newState, world, pos);
+        }
+
         world.setBlockState(pos, newState);
         return true;
     }
 
     public static final class Builder {
-        private final ActionContextParameter position;
+        private final PositionTarget position;
         private final Map<String, String> properties = new HashMap<>();
         private boolean pushEntitiesUpwards = false;
 
-        private Builder(ActionContextParameter position) {
+        private Builder(PositionTarget position) {
             this.position = position;
         }
 
         public ModifyBlockStateAction build() {
-            return new ModifyBlockStateAction(this.position, this.properties, this.pushEntitiesUpwards);
+            return new ModifyBlockStateAction(
+                this.position,
+                new BlockStateComponent(this.properties),
+                this.pushEntitiesUpwards
+            );
         }
 
         public <T extends Comparable<T>> Builder property(Property<T> property, T value) {

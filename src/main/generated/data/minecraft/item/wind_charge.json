@@ -7,9 +7,7 @@
       "behavior": "minecraft:shoot_projectile"
     },
     "minecraft:projectile": {
-      "entity": {
-        "type": "minecraft:wind_charge"
-      }
+      "entity": "minecraft:wind_charge"
     },
     "minecraft:stackable": 64,
     "minecraft:throwable": {

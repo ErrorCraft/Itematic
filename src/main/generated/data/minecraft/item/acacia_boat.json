@@ -4,9 +4,7 @@
       "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
-      "entity": {
-        "type": "minecraft:acacia_boat"
-      }
+      "entity": "minecraft:acacia_boat"
     },
     "minecraft:fuel": {
       "ticks": 1200

@@ -2,7 +2,7 @@
   "entry": {
     "action": {
       "type": "minecraft:spawn_entity_from_item",
-      "position": "target"
+      "position": "interacted"
     }
   }
 }

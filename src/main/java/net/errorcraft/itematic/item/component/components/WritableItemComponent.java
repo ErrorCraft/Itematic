@@ -3,10 +3,10 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.WritableBookContentComponent;
@@ -36,7 +36,7 @@ public record WritableItemComponent(RegistryEntry<Item> transformsInto) implemen
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         user.useBook(stack, hand);
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         return ItemResult.SUCCEED;

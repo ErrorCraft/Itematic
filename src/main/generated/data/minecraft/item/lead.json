@@ -14,12 +14,14 @@
         "entries": [
           {
             "action": {
-              "type": "minecraft:attach_leashed_entities_on_block"
+              "type": "minecraft:attach_leashed_entities_on_block",
+              "position": "interacted"
             }
           },
           {
             "action": {
-              "type": "minecraft:swing_hand"
+              "type": "minecraft:swing_hand",
+              "entity": "this"
             }
           }
         ]

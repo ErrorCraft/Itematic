@@ -13,13 +13,13 @@
               {
                 "action": {
                   "type": "minecraft:place_carved_pumpkin",
-                  "position": "target"
+                  "position": "interacted"
                 }
               },
               {
                 "action": {
                   "type": "minecraft:equip_entity_at_position",
-                  "position": "target"
+                  "position": "interacted"
                 }
               }
             ]

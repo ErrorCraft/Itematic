@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.OminousBottleAmplifierComponent;
 import net.minecraft.entity.LivingEntity;
@@ -33,7 +33,7 @@ public class OminousEffectProviderItemComponent implements ItemComponent<Ominous
     }
 
     @Override
-    public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackConsumer resultStackConsumer) {
+    public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
         OminousBottleAmplifierComponent ominousAmplifier = stack.get(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER);
         if (ominousAmplifier != null) {
             ominousAmplifier.onConsume(world, user, stack, null);

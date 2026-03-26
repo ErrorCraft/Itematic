@@ -3,14 +3,14 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.type.UseDurationDataComponent;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.mixin.component.type.ConsumableComponentAccessor;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -21,6 +21,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.consume.UseAction;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -76,19 +77,25 @@ public record ConsumableItemComponent(boolean hasConsumeParticles, RegistryEntry
         builder.add(DataComponentTypes.CONSUMABLE, new ConsumableComponent(0.0f, UseAction.NONE, this.sound, this.hasConsumeParticles, List.of()));
     }
 
-    public void consume(LivingEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer, World world, Hand hand) {
-        if (!(user instanceof PlayerEntity player)) {
-            return;
-        }
-
+    public void consume(LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger, World world, Hand hand) {
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, hand)
-                .entityPosition(ActionContextParameter.THIS, user)
+            ActionContext context = ActionContext.builder(serverWorld)
+                .stackExchanger(stackExchanger)
+                .add(LootContextParameters.THIS_ENTITY, user)
+                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.TOOL, stack)
+                .add(ItematicContextParameters.HAND, hand)
                 .build();
             stack.itematic$invokeEvent(ItemEvents.CONSUME_ITEM, context);
         }
 
         stack.decrementUnlessCreative(1, user);
+        if (user instanceof PlayerEntity player) {
+            this.consumeForPlayer(player, stack);
+        }
+    }
+
+    private void consumeForPlayer(PlayerEntity player, ItemStack stack) {
         if (player instanceof ServerPlayerEntity serverPlayer) {
             Criteria.CONSUME_ITEM.trigger(serverPlayer, stack);
         }

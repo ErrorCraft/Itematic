@@ -18,28 +18,34 @@
           {
             "action": {
               "type": "minecraft:set_item_pointer_location",
-              "position": "target"
+              "position": "interacted"
             }
           },
           {
             "action": {
-              "type": "minecraft:swing_hand"
+              "type": "minecraft:play_sound",
+              "category": "player",
+              "pitch": 1.0,
+              "position": "interacted",
+              "sound": "minecraft:item.lodestone_compass.lock",
+              "volume": 1.0
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:swing_hand",
+              "entity": "this"
             }
           }
         ]
       },
       "requirements": {
-        "conditions": {
-          "condition": "minecraft:location_check",
-          "predicate": {
-            "block": {
-              "blocks": "minecraft:lodestone"
-            }
+        "condition": "minecraft:location_check",
+        "position": "interacted",
+        "predicate": {
+          "block": {
+            "blocks": "minecraft:lodestone"
           }
-        },
-        "context": {
-          "entity": "this",
-          "position": "target"
         }
       }
     }

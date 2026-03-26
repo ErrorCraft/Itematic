@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:piglin_brute"
-      },
+      "entity": "minecraft:piglin_brute",
       "passes": [
         "block",
         "fluid"

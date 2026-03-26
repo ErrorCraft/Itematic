@@ -1,284 +1,235 @@
 package net.errorcraft.itematic.world.action.context;
 
-import net.errorcraft.itematic.item.ItemStackConsumer;
-import net.errorcraft.itematic.util.PositionUtil;
+import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.util.context.ItematicContextTypes;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameters;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AutomaticItemPlacementContext;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootWorldContext;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.function.CommandFunctionManager;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
+import net.minecraft.util.context.ContextParameter;
+import net.minecraft.util.context.ContextParameterMap;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Position;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class ActionContext {
-    private final Builder builder;
     private final ServerWorld world;
-    protected final Map<ActionContextParameter, Entity> entities;
-    protected final Map<ActionContextParameter, Vec3d> positions;
-    protected Direction side = Direction.UP;
-    protected ItemStack stack = ItemStack.EMPTY;
-    protected ItemStackConsumer resultStackConsumer;
-    protected EquipmentSlot slot;
+    private final ContextParameterMap parameters;
+    private final ItemStackExchanger stackExchanger;
 
-    public ActionContext(ServerWorld world) {
-        this(world, new HashMap<>(), new HashMap<>());
-    }
-
-    private ActionContext(ServerWorld world, Map<ActionContextParameter, Entity> entities, Map<ActionContextParameter, Vec3d> positions) {
+    private ActionContext(ServerWorld world, ContextParameterMap parameters, ItemStackExchanger stackExchanger) {
         this.world = world;
-        this.entities = entities;
-        this.positions = positions;
-        this.builder = null;
-    }
-
-    private ActionContext(Builder builder) {
-        this.builder = builder;
-        this.world = builder.world;
-        this.entities = new HashMap<>(builder.entities);
-        this.positions = new HashMap<>(builder.positions);
-        this.side = builder.side;
-        this.stack = builder.stack;
-        this.resultStackConsumer = builder.resultStackConsumer;
-        this.slot = builder.slot;
+        this.parameters = parameters;
+        this.stackExchanger = stackExchanger;
     }
 
     public static Builder builder(ServerWorld world) {
         return new Builder(world);
     }
 
-    public static Builder builder(ServerWorld world, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        return builder(world)
-            .stack(stack)
-            .resultStackConsumer(resultStackConsumer);
-    }
-
-    public static Builder builder(ServerWorld world, ItemStack stack, ItemStackConsumer resultStackConsumer, EquipmentSlot slot) {
-        return builder(world, stack, resultStackConsumer)
-            .slot(slot);
-    }
-
-    public static Builder builder(ServerWorld world, ItemStack stack, ItemStackConsumer resultStackConsumer, Hand hand) {
-        if (hand == null) {
-            return builder(world, stack, resultStackConsumer);
-        }
-
-        return builder(world, stack, resultStackConsumer, LivingEntity.getSlotForHand(hand));
-    }
-
-    public Builder builderForCopy() {
-        return this.builder;
-    }
-
-    public LootContext createLootContext(ActionContextParameters parameters) {
-        LootWorldContext set = new LootWorldContext.Builder(this.world)
-            .add(LootContextParameters.THIS_ENTITY, this.entities.get(parameters.entity()))
-            .add(LootContextParameters.ORIGIN, this.position(parameters.position()))
-            .add(LootContextParameters.TOOL, this.stack)
-            .add(ItematicContextParameters.SIDE, this.side)
-            .build(ItematicContextTypes.ACTION);
-        return new LootContext.Builder(set).build(Optional.empty());
-    }
-
-    public ServerCommandSource createCommandSource(ActionContextParameters parameters, CommandFunctionManager functionManager) {
-        return functionManager.getScheduledCommandSource()
-            .withEntity(this.entities.get(parameters.entity()))
-            .withPosition(this.positions.get(parameters.position()));
-    }
-
-    public ItemUsageContext createItemUsageContext(ActionContextParameter position) {
-        return new ItemUsageContext(
-            this.world,
-            this.player(ActionContextParameter.THIS).orElse(null),
-            this.hand(),
-            this.stack(),
-            new BlockHitResult(
-                this.position(position),
-                this.side(),
-                this.blockPos(position),
-                false
-            )
-        );
-    }
-
-    public ItemPlacementContext createItemPlacementContext(ActionContextParameter position, RegistryEntry<Block> block) {
-        if (this.entity(ActionContextParameter.THIS).isPresent()) {
-            ItemPlacementContext placementContext = new ItemPlacementContext(this.createItemUsageContext(position));
-            return block.value().itematic$placementContext(placementContext);
-        }
-        BlockPos pos = this.blockPos(position);
-        Direction useSide = this.world.isAir(pos.down()) ? this.side : Direction.UP;
-        return new AutomaticItemPlacementContext(this.world, pos, this.side, this.stack, useSide);
+    public Builder extend() {
+        return new Builder(this);
     }
 
     public ServerWorld world() {
         return this.world;
     }
 
-    public Optional<Entity> entity(ActionContextParameter parameter) {
-        return Optional.ofNullable(this.entities.get(parameter));
+    public ItemStackExchanger stackExchanger() {
+        return this.stackExchanger;
     }
 
-    public Optional<LivingEntity> livingEntity(ActionContextParameter parameter) {
-        return this.entity(parameter).map(entity -> {
-            if (entity instanceof LivingEntity livingEntity) {
-                return livingEntity;
-            }
-            return null;
-        });
+    public <T> boolean has(ContextParameter<T> parameter) {
+        return this.parameters.contains(parameter);
     }
 
-    public Optional<PlayerEntity> player(ActionContextParameter parameter) {
-        return this.entity(parameter).map(entity -> {
-            if (entity instanceof PlayerEntity player) {
-                return player;
-            }
-            return null;
-        });
+    @Nullable
+    public <T> T get(ContextParameter<T> parameter) {
+        return this.parameters.getNullable(parameter);
     }
 
-    public Vec3d position(ActionContextParameter parameter) {
-        Vec3d position = this.positions.get(parameter);
-        if (position == null) {
-            return this.world.getSpawnPos().toCenterPos();
+    @Nullable
+    public <T, U extends T> U get(ContextParameter<T> parameter, Class<U> clazz) {
+        T value = this.get(parameter);
+        if (clazz.isInstance(value)) {
+            return clazz.cast(value);
         }
-        return position;
+
+        return null;
     }
 
-    public BlockPos blockPos(ActionContextParameter parameter) {
-        return BlockPos.ofFloored(this.position(parameter));
-    }
-
-    public Direction side() {
-        return this.side;
-    }
-
-    public ItemStack stack() {
-        return this.stack;
-    }
-
-    public ItemStackConsumer resultStackConsumer() {
-        return this.resultStackConsumer;
-    }
-
-    public void setResultStack(ItemStack stack) {
-        if (this.resultStackConsumer == null) {
-            return;
-        }
-        this.resultStackConsumer.set(stack);
-    }
-
-    public Optional<EquipmentSlot> slot() {
-        return Optional.ofNullable(this.slot);
-    }
-
-    public Hand hand() {
-        if (this.slot == null) {
+    @Nullable
+    public <T, U> U get(ContextParameter<T> parameter, Function<@NotNull T, U> mapper) {
+        T value = this.get(parameter);
+        if (value == null) {
             return null;
         }
-        return switch (this.slot) {
-            case MAINHAND -> Hand.MAIN_HAND;
-            case OFFHAND -> Hand.OFF_HAND;
-            default -> null;
-        };
+
+        return mapper.apply(value);
+    }
+
+    public <T> T getOrDefault(ContextParameter<T> parameter, T defaultValue) {
+        return this.parameters.getOrDefault(parameter, defaultValue);
+    }
+
+    @Nullable
+    public BlockPos getBlockPos(ContextParameter<Vec3d> parameter) {
+        return this.get(parameter, BlockPos::ofFloored);
+    }
+
+    public ItemStack resultStack() {
+        return this.stackExchanger.result();
+    }
+
+    public void exchangeStack(ItemStack stack) {
+        this.stackExchanger.exchange(stack);
+    }
+
+    public LootContext lootContext() {
+        LootWorldContext context = new LootWorldContext(
+            this.world,
+            this.parameters,
+            Map.of(),
+            0.0f
+        );
+        return new LootContext.Builder(context).build(Optional.empty());
+    }
+
+    public ServerCommandSource commandSource(CommandFunctionManager functionManager, Optional<LootContext.EntityTarget> entity, Optional<PositionTarget> position) {
+        ServerCommandSource source = functionManager.getScheduledCommandSource();
+        source = entity.map(LootContext.EntityTarget::getParameter)
+            .map(this::get)
+            .map(source::withEntity)
+            .orElse(source);
+        source = position.map(PositionTarget::parameter)
+            .map(this::get)
+            .map(source::withPosition)
+            .orElse(source);
+        return source;
+    }
+
+
+    @Nullable
+    public ItemPlacementContext blockPlaceContext(PositionTarget position, BlockPicker<?> block) {
+        Vec3d pos = this.get(position.parameter());
+        if (pos == null) {
+            return null;
+        }
+
+        Direction side = this.get(ItematicContextParameters.SIDE);
+        if (side == null) {
+            return null;
+        }
+
+        ItemPlacementContext placeContext = this.blockPlaceContext(pos, side);
+        return block.placementContext(placeContext);
+    }
+
+    private ItemPlacementContext blockPlaceContext(Vec3d pos, Direction side) {
+        BlockPos blockPos = BlockPos.ofFloored(pos);
+        Entity entity = this.get(LootContextParameters.THIS_ENTITY);
+        if (entity != null) {
+            return new ItemPlacementContext(
+                this.world,
+                entity instanceof PlayerEntity player ? player : null,
+                this.get(ItematicContextParameters.HAND),
+                this.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY),
+                new BlockHitResult(
+                    pos,
+                    side,
+                    blockPos,
+                    false
+                )
+            );
+        }
+
+        Direction useSide = this.world.isAir(blockPos.down()) ? side : Direction.UP;
+        return new AutomaticItemPlacementContext(
+            this.world,
+            blockPos,
+            side,
+            this.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY),
+            useSide
+        );
     }
 
     public static class Builder {
         private final ServerWorld world;
-        private final Map<ActionContextParameter, Entity> entities = new HashMap<>();
-        private final Map<ActionContextParameter, Vec3d> positions = new HashMap<>();
-        private Direction side = Direction.UP;
-        private ItemStack stack = ItemStack.EMPTY;
-        private ItemStackConsumer resultStackConsumer;
-        private EquipmentSlot slot;
+        private ItemStackExchanger stackExchanger = ItemStackExchanger.EMPTY;
+        private final ContextParameterMap.Builder parameters = new ContextParameterMap.Builder();
 
         private Builder(ServerWorld world) {
             this.world = world;
         }
 
+        private Builder(ActionContext currentContext) {
+            this.world = currentContext.world;
+            this.stackExchanger = currentContext.stackExchanger;
+            this.parameters.itematic$copy(currentContext.parameters);
+        }
+
         public ActionContext build() {
-            return new ActionContext(this);
+            return new ActionContext(
+                this.world,
+                this.parameters.itematic$build(),
+                this.stackExchanger
+            );
         }
 
-        public Builder entity(ActionContextParameter parameter, Entity entity) {
-            this.entities.put(parameter, entity);
+        public Builder stackExchanger(ItemStackExchanger stackExchanger) {
+            this.stackExchanger = stackExchanger;
             return this;
         }
 
-        public Builder entityPosition(ActionContextParameter parameter, Entity entity) {
-            this.entities.put(parameter, entity);
-            if (entity != null) {
-                this.positions.put(parameter, entity.getPos());
+        public Builder possibleStackExchanger(@Nullable LivingEntity consumingEntity, ItemStack initialStack) {
+            if (consumingEntity == null) {
+                return this;
             }
+
+            return this.stackExchanger(consumingEntity, initialStack);
+        }
+
+        public Builder stackExchanger(LivingEntity consumingEntity, ItemStack initialStack) {
+            this.stackExchanger = ItemStackExchanger.forEntity(consumingEntity, initialStack);
             return this;
         }
 
-        public Builder position(ActionContextParameter parameter, BlockPos position) {
-            return this.position(parameter, Vec3d.ofBottomCenter(position));
+        public Builder stackExchanger(Direction side, Vec3d pos, ItemStack initialStack) {
+            this.stackExchanger = ItemStackExchanger.forDispenser(this.world, side, pos, initialStack);
+            return this;
         }
 
-        public Builder position(ActionContextParameter parameter, Position position) {
-            return this.position(parameter, PositionUtil.vec3d(position));
+        public <T> Builder add(ContextParameter<T> parameter, T value) {
+            this.parameters.add(parameter, value);
+            return this;
         }
 
-        public Builder position(ActionContextParameter parameter, Vec3d position) {
-            if (position == null) {
-                throw new IllegalArgumentException("Position was null");
+        public <T> Builder addOptional(ContextParameter<T> parameter, @Nullable T value) {
+            this.parameters.addNullable(parameter, value);
+            return this;
+        }
+
+        public <T, U> Builder addOptional(ContextParameter<T> parameter, @Nullable U value, Function<@NotNull U, T> mapper) {
+            if (value == null) {
+                return this;
             }
-            this.positions.put(parameter, position);
-            return this;
-        }
 
-        public Builder side(Direction side) {
-            if (side == null) {
-                throw new IllegalArgumentException("Side was null");
-            }
-            this.side = side;
-            return this;
-        }
-
-        public Builder stack(ItemStack stack) {
-            if (stack == null) {
-                throw new IllegalArgumentException("Item stack was null");
-            }
-            this.stack = stack;
-            return this;
-        }
-
-        public Builder resultStackConsumer(ItemStackConsumer resultStackConsumer) {
-            this.resultStackConsumer = resultStackConsumer;
-            return this;
-        }
-
-        public Builder slot(EquipmentSlot slot) {
-            this.slot = slot;
-            return this;
-        }
-
-        public Builder hand(Hand hand) {
-            this.slot = LivingEntity.getSlotForHand(hand);
+            this.addOptional(parameter, mapper.apply(value));
             return this;
         }
     }

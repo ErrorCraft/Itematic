@@ -4,9 +4,7 @@
       "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
-      "entity": {
-        "type": "minecraft:dark_oak_boat"
-      }
+      "entity": "minecraft:dark_oak_boat"
     },
     "minecraft:fuel": {
       "ticks": 1200

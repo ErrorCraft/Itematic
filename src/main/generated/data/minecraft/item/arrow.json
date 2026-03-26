@@ -4,9 +4,7 @@
       "behavior": "minecraft:shoot_projectile"
     },
     "minecraft:projectile": {
-      "entity": {
-        "type": "minecraft:arrow"
-      }
+      "entity": "minecraft:arrow"
     },
     "minecraft:stackable": 64
   },

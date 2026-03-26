@@ -15,7 +15,7 @@
           {
             "action": {
               "type": "minecraft:set_entity_name_from_item",
-              "entity": "target"
+              "entity": "target_entity"
             }
           },
           {
@@ -26,7 +26,8 @@
           },
           {
             "action": {
-              "type": "minecraft:swing_hand"
+              "type": "minecraft:swing_hand",
+              "entity": "this"
             }
           }
         ]

@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:zombie_horse"
-      },
+      "entity": "minecraft:zombie_horse",
       "passes": [
         "block",
         "fluid"

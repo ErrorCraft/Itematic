@@ -2,18 +2,18 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.SharedConstants;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -39,22 +39,25 @@ public class CastableItemComponent implements ItemComponent<CastableItemComponen
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
-        if (!this.tryRetract(world, user, stack, resultStackConsumer)) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        if (!this.tryRetract(world, user, stack, stackExchanger)) {
             this.cast(world, user, stack);
         }
 
         return ItemResult.SUCCEED;
     }
 
-    private boolean tryRetract(World world, PlayerEntity user, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    private boolean tryRetract(World world, PlayerEntity user, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (user.fishHook == null) {
             return false;
         }
 
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer)
-                .entityPosition(ActionContextParameter.THIS, user)
+            ActionContext context = ActionContext.builder(serverWorld)
+                .stackExchanger(stackExchanger)
+                .add(LootContextParameters.THIS_ENTITY, user)
+                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.TOOL, stack)
                 .build();
             stack.itematic$damage(user.fishHook.use(stack), context);
         }

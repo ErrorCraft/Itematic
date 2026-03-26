@@ -3,10 +3,10 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.SharedConstants;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -41,7 +41,7 @@ public record CooldownItemComponent(Optional<Identifier> group, int ticks) imple
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         UseCooldownComponent useCooldown = stack.get(DataComponentTypes.USE_COOLDOWN);
         if (useCooldown != null) {
             useCooldown.set(stack, user);

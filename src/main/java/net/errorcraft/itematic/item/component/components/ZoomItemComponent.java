@@ -3,11 +3,11 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -39,20 +39,20 @@ public record ZoomItemComponent(float fieldOfViewMultiplier, RegistryEntry<Sound
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         user.playSound(this.startUsingSound.value(), 1.0f, 1.0f);
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         return ItemResult.PASS;
     }
 
     @Override
-    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
+    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
         this.playStopSound(user);
         return true;
     }
 
     @Override
-    public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackConsumer resultStackConsumer) {
+    public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
         this.playStopSound(user);
     }
 

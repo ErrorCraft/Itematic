@@ -7,10 +7,8 @@
         {
           "action": {
             "type": "minecraft:spawn_entity",
-            "entity": {
-              "type": "minecraft:tnt"
-            },
-            "position": "target"
+            "entity": "minecraft:tnt",
+            "position": "interacted"
           }
         },
         {
@@ -18,7 +16,7 @@
             "type": "minecraft:play_sound",
             "category": "block",
             "pitch": 1.0,
-            "position": "target",
+            "position": "interacted",
             "sound": "minecraft:entity.tnt.primed",
             "volume": 1.0
           }

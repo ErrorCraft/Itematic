@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.entity.initializer.initializers.SimpleEntityInitializer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -28,7 +27,12 @@ public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponen
 
     public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
-            EntityItemComponent.of(SimpleEntityInitializer.of(entity.value()), true, EntityItemComponent.Pass.BLOCK, EntityItemComponent.Pass.FLUID),
+            EntityItemComponent.of(
+                entity,
+                true,
+                EntityItemComponent.Pass.BLOCK,
+                EntityItemComponent.Pass.FLUID
+            ),
             INSTANCE,
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
         };
@@ -52,7 +56,7 @@ public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponen
             return Optional.empty();
         }
 
-        if (entityItemComponent.get().getEntityInitializer(stack, world.getRegistryManager()).type() != entityType) {
+        if (entityItemComponent.get().entityType(stack, world.getRegistryManager()) != entityType) {
             return Optional.empty();
         }
 

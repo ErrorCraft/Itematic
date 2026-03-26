@@ -4,9 +4,7 @@
       "block": true
     },
     "minecraft:projectile": {
-      "entity": {
-        "type": "minecraft:eye_of_ender"
-      }
+      "entity": "minecraft:eye_of_ender"
     },
     "minecraft:stackable": 64,
     "minecraft:throwable": {
@@ -27,7 +25,7 @@
           "max": 0.5,
           "min": 0.33
         },
-        "position": "this",
+        "position": "origin",
         "sound": "minecraft:entity.ender_eye.launch",
         "volume": 1.0
       }
@@ -40,7 +38,7 @@
           {
             "action": {
               "type": "minecraft:modify_block_state",
-              "position": "target",
+              "position": "interacted",
               "properties": {
                 "eye": "true"
               },
@@ -55,7 +53,8 @@
           },
           {
             "action": {
-              "type": "minecraft:swing_hand"
+              "type": "minecraft:swing_hand",
+              "entity": "this"
             }
           },
           {
@@ -63,7 +62,7 @@
               "type": "minecraft:play_sound",
               "category": "block",
               "pitch": 1.0,
-              "position": "target",
+              "position": "interacted",
               "sound": "minecraft:block.end_portal_frame.fill",
               "volume": 1.0
             }
@@ -91,7 +90,7 @@
               "particle": {
                 "type": "minecraft:smoke"
               },
-              "position": "target",
+              "position": "interacted",
               "speed": 0.0
             }
           },
@@ -99,7 +98,7 @@
             "entry": {
               "action": {
                 "type": "minecraft:light_end_portal",
-                "position": "target"
+                "position": "interacted"
               }
             },
             "optional": true
@@ -107,20 +106,15 @@
         ]
       },
       "requirements": {
-        "conditions": {
-          "condition": "minecraft:location_check",
-          "predicate": {
-            "block": {
-              "blocks": "minecraft:end_portal_frame",
-              "state": {
-                "eye": "false"
-              }
+        "condition": "minecraft:location_check",
+        "position": "interacted",
+        "predicate": {
+          "block": {
+            "blocks": "minecraft:end_portal_frame",
+            "state": {
+              "eye": "false"
             }
           }
-        },
-        "context": {
-          "entity": "this",
-          "position": "target"
         }
       }
     }
