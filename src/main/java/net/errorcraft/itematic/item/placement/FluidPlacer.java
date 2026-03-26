@@ -2,7 +2,7 @@ package net.errorcraft.itematic.item.placement;
 
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -32,17 +32,17 @@ public class FluidPlacer extends Placer {
     private final Direction direction;
     private final boolean allowOffset;
 
-    protected FluidPlacer(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound, Direction direction, boolean allowOffset) {
-        super(stack, resultStackConsumer, world, blockPos, blockState, player);
+    private FluidPlacer(ItemStack stack, ItemStackExchanger stackExchanger, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound, Direction direction, boolean allowOffset) {
+        super(stack, stackExchanger, world, blockPos, blockState, player);
         this.fluid = fluid;
         this.emptyingSound = emptyingSound;
         this.direction = direction;
         this.allowOffset = allowOffset;
     }
 
-    public static FluidPlacer of(ItemStack stack, ItemStackConsumer resultStackConsumer, World world, BlockHitResult hitResult, PlayerEntity player, RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound) {
+    public static FluidPlacer of(ItemStack stack, ItemStackExchanger stackExchanger, World world, BlockHitResult hitResult, PlayerEntity player, RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound) {
         BlockPos blockPos = hitResult.getBlockPos();
-        return new FluidPlacer(stack, resultStackConsumer, world, blockPos, world.getBlockState(blockPos), player, fluid, emptyingSound, hitResult.getSide(), !hitResult.isInsideBlock());
+        return new FluidPlacer(stack, stackExchanger, world, blockPos, world.getBlockState(blockPos), player, fluid, emptyingSound, hitResult.getSide(), !hitResult.isInsideBlock());
     }
 
     @Override
@@ -88,7 +88,7 @@ public class FluidPlacer extends Placer {
 
         this.applyPlayerEffects(fluidDrainable, drainedItemStack);
         this.world.emitGameEvent(this.player, GameEvent.FLUID_PICKUP, this.blockPos);
-        this.resultStackConsumer.set(drainedItemStack);
+        this.stackExchanger.exchange(drainedItemStack);
         return ItemResult.SUCCEED;
     }
 

@@ -5,9 +5,7 @@
     },
     "minecraft:firework": {},
     "minecraft:projectile": {
-      "entity": {
-        "type": "minecraft:firework_rocket"
-      }
+      "entity": "minecraft:firework_rocket"
     },
     "minecraft:stackable": 64
   },

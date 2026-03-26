@@ -2,9 +2,9 @@ package net.errorcraft.itematic.item.component;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.serialization.SetMapCodec;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.Entity;
@@ -31,33 +31,33 @@ public interface ItemComponent<T extends ItemComponent<T>> {
     ItemComponentType<T> type();
     Codec<T> codec();
 
-    default ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    default ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         return ItemResult.PASS;
     }
 
-    default ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    default ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
         return ItemResult.PASS;
     }
 
-    default ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    default ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         return ItemResult.PASS;
     }
 
-    default boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, ItemStackConsumer resultStackConsumer) {
+    default boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, ItemStackExchanger stackExchanger) {
         return false;
     }
 
-    default boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner, ItemStackConsumer resultStackConsumer) {
+    default boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
         return false;
     }
 
     default void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {}
 
-    default boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackConsumer resultStackConsumer) {
+    default boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
         return false;
     }
 
-    default void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackConsumer resultStackConsumer) {}
+    default void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {}
 
     default void inventoryTick(ItemStack stack, World world, Entity holder, int slot, boolean selected) {}
 
@@ -65,7 +65,7 @@ public interface ItemComponent<T extends ItemComponent<T>> {
         return false;
     }
 
-    default boolean clickedOnWithStack(ItemStack stack, ItemStack cursorStack, Slot slot, ClickType clickType, PlayerEntity user, ItemStackConsumer resultStackConsumer) {
+    default boolean clickedOnWithStack(ItemStack stack, ItemStack cursorStack, Slot slot, ClickType clickType, PlayerEntity user, ItemStackExchanger stackExchanger) {
         return false;
     }
 

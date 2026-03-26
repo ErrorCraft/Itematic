@@ -4,9 +4,7 @@
       "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
-      "entity": {
-        "type": "minecraft:furnace_minecart"
-      }
+      "entity": "minecraft:furnace_minecart"
     },
     "minecraft:stackable": 1
   },

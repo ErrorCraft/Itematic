@@ -3,12 +3,11 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
-import net.errorcraft.itematic.item.ItemUsageUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.item.FilledMapItemAccessor;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,6 +26,9 @@ public record MappableItemComponent(RegistryEntry<Item> transformsInto) implemen
         RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("transforms_into").forGetter(MappableItemComponent::transformsInto)
     ).apply(instance, MappableItemComponent::new));
 
+    public static MappableItemComponent of(RegistryEntry<Item> transformsInto) {
+        return new MappableItemComponent(transformsInto);
+    }
 
     @Override
     public ItemComponentType<MappableItemComponent> type() {
@@ -39,14 +41,16 @@ public record MappableItemComponent(RegistryEntry<Item> transformsInto) implemen
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackConsumer resultStackConsumer) {
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (world.isClient()) {
             return ItemResult.SUCCEED;
         }
+
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
-        user.getWorld().playSoundFromEntity(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundCategory(), 1.0f, 1.0f);
+        world.playSoundFromEntity(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundCategory(), 1.0f, 1.0f);
         ItemStack resultStack = this.createStack(world, user.getBlockX(), user.getBlockZ(), 0, true, false);
-        resultStackConsumer.set(ItemUsageUtil.exchangeStack(stack, user, resultStack, true, true));
+        stack.decrementUnlessCreative(1, user);
+        stackExchanger.exchange(resultStack);
         return ItemResult.CONSUME;
     }
 
@@ -55,9 +59,5 @@ public record MappableItemComponent(RegistryEntry<Item> transformsInto) implemen
         MapIdComponent mapId = FilledMapItemAccessor.allocateMapId(world, x, z, scale, showIcons, unlimitedTracking, world.getRegistryKey());
         resultStack.set(DataComponentTypes.MAP_ID, mapId);
         return resultStack;
-    }
-
-    public static MappableItemComponent of(RegistryEntry<Item> transformsInto) {
-        return new MappableItemComponent(transformsInto);
     }
 }

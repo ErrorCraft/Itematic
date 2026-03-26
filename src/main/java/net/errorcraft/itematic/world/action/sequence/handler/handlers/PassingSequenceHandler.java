@@ -33,6 +33,7 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
                 return false;
             }
         }
+
         return true;
     }
 
@@ -77,6 +78,7 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
             if (this.action.value().execute(context).orElse(false)) {
                 return true;
             }
+
             return this.optional;
         }
 

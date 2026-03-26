@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:skeleton_horse"
-      },
+      "entity": "minecraft:skeleton_horse",
       "passes": [
         "block",
         "fluid"

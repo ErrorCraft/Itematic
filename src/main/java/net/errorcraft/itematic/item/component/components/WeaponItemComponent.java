@@ -4,14 +4,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MaceItem;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -66,7 +67,7 @@ public record WeaponItemComponent(int damagePerHit, WeaponAttackDamageDataCompon
     }
 
     @Override
-    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, ItemStackConsumer resultStackConsumer) {
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, ItemStackExchanger stackExchanger) {
         if (this.maySmash && !DUMMY.postHit(stack, target, attacker)) {
             return false;
         }
@@ -75,9 +76,15 @@ public record WeaponItemComponent(int damagePerHit, WeaponAttackDamageDataCompon
             return true;
         }
 
-        ActionContext context = ActionContext.builder(serverWorld, stack, resultStackConsumer, EquipmentSlot.MAINHAND)
-            .entityPosition(ActionContextParameter.THIS, attacker)
-            .entityPosition(ActionContextParameter.TARGET, target)
+
+        ActionContext context = ActionContext.builder(serverWorld)
+            .stackExchanger(stackExchanger)
+            .add(LootContextParameters.THIS_ENTITY, attacker)
+            .add(LootContextParameters.ORIGIN, attacker.getPos())
+            .add(ItematicContextParameters.TARGET_ENTITY, target)
+            .add(ItematicContextParameters.INTERACTED_POSITION, target.getPos())
+            .add(LootContextParameters.TOOL, stack)
+            .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
             .build();
         stack.itematic$invokeEvent(ItemEvents.USE_WEAPON, context);
         stack.itematic$damage(this.damagePerHit, context);

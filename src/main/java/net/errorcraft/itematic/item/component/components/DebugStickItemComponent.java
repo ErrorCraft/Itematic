@@ -2,11 +2,11 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.ItemResult;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.item.DebugStickItemAccessor;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -36,7 +36,7 @@ public record DebugStickItemComponent() implements ItemComponent<DebugStickItemC
     }
 
     @Override
-    public ItemResult useOnBlock(ItemUsageContext context, ItemStackConsumer resultStackConsumer) {
+    public ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
         World world = context.getWorld();
         if (world.isClient()) {
             return ItemResult.PASS;

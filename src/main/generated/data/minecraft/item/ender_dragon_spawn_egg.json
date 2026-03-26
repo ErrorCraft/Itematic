@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:ender_dragon"
-      },
+      "entity": "minecraft:ender_dragon",
       "passes": [
         "block",
         "fluid"

@@ -1,22 +1,25 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public record PersistentProjectileEntityInitializer<T extends PersistentProjectileEntity>(EntityType<T> type, OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) implements EntityInitializer<T> {
+public record PersistentProjectileEntityInitializer<T extends PersistentProjectileEntity>(OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) implements EntityInitializer<T> {
+    public static <T extends PersistentProjectileEntity> EntityInitializer<T> of(OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) {
+        return new PersistentProjectileEntityInitializer<>(ownerCreator, simpleCreator);
+    }
+
     @Override
     public T create(ActionContext context, SpawnReason reason) {
-        if (context.entity(ActionContextParameter.THIS).orElse(null) instanceof LivingEntity entity) {
+        if (context.get(LootContextParameters.THIS_ENTITY) instanceof LivingEntity entity) {
             ItemStack shooter = entity.getActiveItem();
             if (shooter.isEmpty()) {
                 shooter = null;
@@ -25,26 +28,26 @@ public record PersistentProjectileEntityInitializer<T extends PersistentProjecti
             return this.ownerCreator.create(
                 context.world(),
                 entity,
-                context.stack().copyWithCount(1),
+                context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY).copyWithCount(1),
                 shooter
             );
         }
 
-        Vec3d pos = context.position(ActionContextParameter.TARGET);
+        Vec3d pos = context.get(ItematicContextParameters.INTERACTED_POSITION);
+        if (pos == null) {
+            return null;
+        }
+
         T entity = this.simpleCreator.create(
             context.world(),
             pos.getX(),
             pos.getY(),
             pos.getZ(),
-            context.stack().copyWithCount(1),
+            context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY).copyWithCount(1),
             null
         );
         entity.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
         return entity;
-    }
-
-    public static <U extends PersistentProjectileEntity> MapCodec<EntityInitializer<U>> createCodec(EntityType<U> type, OwnerCreator<U> ownerCreator, SimpleCreator<U> simpleCreator) {
-        return MapCodec.unit(new PersistentProjectileEntityInitializer<>(type, ownerCreator, simpleCreator));
     }
 
     @FunctionalInterface

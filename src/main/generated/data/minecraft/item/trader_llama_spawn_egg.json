@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:trader_llama"
-      },
+      "entity": "minecraft:trader_llama",
       "passes": [
         "block",
         "fluid"

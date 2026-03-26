@@ -6,19 +6,20 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.RespawnAnchorBlock;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
-public record ChargeRespawnAnchorAction(ActionContextParameter position) implements Action<ChargeRespawnAnchorAction> {
+public record ChargeRespawnAnchorAction(PositionTarget position) implements Action<ChargeRespawnAnchorAction> {
     public static final MapCodec<ChargeRespawnAnchorAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ActionContextParameter.CODEC.fieldOf("position").forGetter(ChargeRespawnAnchorAction::position)
+        PositionTarget.CODEC.fieldOf("position").forGetter(ChargeRespawnAnchorAction::position)
     ).apply(instance, ChargeRespawnAnchorAction::new));
 
-    public static ChargeRespawnAnchorAction of(ActionContextParameter position) {
+    public static ChargeRespawnAnchorAction of(PositionTarget position) {
         return new ChargeRespawnAnchorAction(position);
     }
 
@@ -30,15 +31,21 @@ public record ChargeRespawnAnchorAction(ActionContextParameter position) impleme
     @Override
     public boolean execute(ActionContext context) {
         ServerWorld world = context.world();
-        BlockPos pos = context.blockPos(this.position);
+        BlockPos pos = context.getBlockPos(this.position.parameter());
+        if (pos == null) {
+            return false;
+        }
+
         BlockState state = world.getBlockState(pos);
         if (!state.isOf(Blocks.RESPAWN_ANCHOR)) {
             return false;
         }
+
         if (state.get(RespawnAnchorBlock.CHARGES) == RespawnAnchorBlock.MAX_CHARGES) {
             return false;
         }
-        RespawnAnchorBlock.charge(context.entity(ActionContextParameter.THIS).orElse(null), world, pos, state);
+
+        RespawnAnchorBlock.charge(context.get(LootContextParameters.THIS_ENTITY), world, pos, state);
         return true;
     }
 }

@@ -6,19 +6,21 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.text.Text;
 
-public record SetEntityNameFromItemAction(ActionContextParameter entity) implements Action<SetEntityNameFromItemAction> {
+public record SetEntityNameFromItemAction(LootContext.EntityTarget entity) implements Action<SetEntityNameFromItemAction> {
     public static final MapCodec<SetEntityNameFromItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ActionContextParameter.CODEC.fieldOf("entity").forGetter(SetEntityNameFromItemAction::entity)
+        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(SetEntityNameFromItemAction::entity)
     ).apply(instance, SetEntityNameFromItemAction::new));
 
-    public static SetEntityNameFromItemAction of(ActionContextParameter entity) {
+    public static SetEntityNameFromItemAction of(LootContext.EntityTarget entity) {
         return new SetEntityNameFromItemAction(entity);
     }
 
@@ -29,20 +31,34 @@ public record SetEntityNameFromItemAction(ActionContextParameter entity) impleme
 
     @Override
     public boolean execute(ActionContext context) {
-        Text customName = context.stack().get(DataComponentTypes.CUSTOM_NAME);
+        ItemStack stack = context.get(LootContextParameters.TOOL);
+        if (stack == null || stack.isEmpty()) {
+            return false;
+        }
+
+        Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (customName == null) {
             return false;
         }
-        Entity entity = context.entity(this.entity).orElse(null);
-        if (entity == null || entity instanceof PlayerEntity) {
+
+        Entity entity = context.get(this.entity.getParameter());
+        if (entity instanceof LivingEntity livingEntity) {
+            return trySetName(livingEntity, customName);
+        }
+
+        return false;
+    }
+
+    private static boolean trySetName(LivingEntity target, Text name) {
+        if (!target.getType().isSaveable() || !target.canBeNameTagged()) {
             return false;
         }
-        if (entity.isAlive()) {
-            entity.setCustomName(customName);
-            if (entity instanceof MobEntity mobEntity) {
-                mobEntity.setPersistent();
-            }
+
+        target.setCustomName(name);
+        if (target instanceof MobEntity mobTarget) {
+            mobTarget.setPersistent();
         }
+
         return true;
     }
 }

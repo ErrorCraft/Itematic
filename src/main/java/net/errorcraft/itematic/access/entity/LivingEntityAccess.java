@@ -6,6 +6,9 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Hand;
 
 public interface LivingEntityAccess {
+    default boolean itematic$hasStackInInventory(ItemStack stack) {
+        return false;
+    }
     default boolean itematic$isHolding(RegistryKey<Item> key) {
         return false;
     }

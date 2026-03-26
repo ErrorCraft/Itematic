@@ -43,6 +43,9 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
     @Final
     private PlayerAbilities abilities;
 
+    @Shadow
+    public abstract PlayerInventory getInventory();
+
     protected PlayerEntityExtender(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -128,6 +131,11 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
     )
     private boolean isOfUseItemComponentCheck(ItemStack instance, Item item) {
         return instance.itematic$hasBehavior(ItemComponentTypes.ZOOM);
+    }
+
+    @Override
+    public boolean itematic$hasStackInInventory(ItemStack stack) {
+        return this.getInventory().contains(stack);
     }
 
     @Override

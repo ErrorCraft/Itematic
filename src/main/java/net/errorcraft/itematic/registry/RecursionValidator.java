@@ -23,6 +23,12 @@ public class RecursionValidator {
         }
     }
 
+    public void remove(RegistryEntry.Reference<ActionEntry> entry) {
+        if (!this.foundEntries.remove(entry)) {
+            throw new IllegalStateException("Action " + entry.registryKey().getValue() + " is not present in sequence: " + this.sequence(entry));
+        }
+    }
+
     private String sequence(RegistryEntry.Reference<ActionEntry> towardsEntry) {
         return Stream.concat(this.foundEntries.stream(), Stream.of(towardsEntry))
             .map(RegistryEntry.Reference::registryKey)

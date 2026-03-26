@@ -5,9 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
-      "entity": {
-        "type": "minecraft:polar_bear"
-      },
+      "entity": "minecraft:polar_bear",
       "passes": [
         "block",
         "fluid"

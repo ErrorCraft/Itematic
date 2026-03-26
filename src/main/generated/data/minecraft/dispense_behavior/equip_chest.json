@@ -7,7 +7,7 @@
         {
           "action": {
             "type": "minecraft:equip_horse_with_chest_at_position",
-            "position": "target"
+            "position": "interacted"
           }
         },
         {

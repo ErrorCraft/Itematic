@@ -3,7 +3,6 @@ package net.errorcraft.itematic.item.component.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.item.ItemStackConsumer;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -16,6 +15,7 @@ import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAcces
 import net.errorcraft.itematic.mixin.item.BundleItemAccessor;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.sound.SoundEventKeys;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
@@ -126,7 +126,7 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
     }
 
     @Override
-    public boolean clickedOnWithStack(ItemStack stack, ItemStack cursorStack, Slot slot, ClickType clickType, PlayerEntity user, ItemStackConsumer resultStackConsumer) {
+    public boolean clickedOnWithStack(ItemStack stack, ItemStack cursorStack, Slot slot, ClickType clickType, PlayerEntity user, ItemStackExchanger stackExchanger) {
         if (clickType != ClickType.RIGHT || !slot.canTakePartial(user)) {
             return false;
         }
@@ -137,7 +137,7 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
         }
 
         if (cursorStack.isEmpty()) {
-            this.remove(user, newBuilder, resultStackConsumer::set);
+            this.remove(user, newBuilder, stackExchanger::exchange);
         } else {
             this.add(newBuilder, cursorStack, user);
         }

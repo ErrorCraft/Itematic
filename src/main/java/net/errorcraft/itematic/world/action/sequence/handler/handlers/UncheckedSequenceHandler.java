@@ -30,6 +30,7 @@ public record UncheckedSequenceHandler(RegistryEntryList<ActionEntry> entries) i
         for (RegistryEntry<ActionEntry> entry : this.entries) {
             result |= entry.value().execute(context).orElse(false);
         }
+
         return result;
     }
 

@@ -7,9 +7,7 @@
       "duration_multiplier": 1.0
     },
     "minecraft:projectile": {
-      "entity": {
-        "type": "minecraft:potion"
-      }
+      "entity": "minecraft:potion"
     },
     "minecraft:stackable": 1,
     "minecraft:throwable": {

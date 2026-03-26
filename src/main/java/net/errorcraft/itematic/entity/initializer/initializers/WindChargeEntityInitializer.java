@@ -1,13 +1,12 @@
 package net.errorcraft.itematic.entity.initializer.initializers;
 
-import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.WindChargeEntity;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -16,27 +15,22 @@ import net.minecraft.util.math.random.Random;
 
 public class WindChargeEntityInitializer implements EntityInitializer<WindChargeEntity> {
     public static final WindChargeEntityInitializer INSTANCE = new WindChargeEntityInitializer();
-    public static final MapCodec<WindChargeEntityInitializer> CODEC = MapCodec.unit(INSTANCE);
     private static final double VELOCITY_DEVIATION = 0.11485d;
 
     private WindChargeEntityInitializer() {}
 
     @Override
-    public EntityType<?> type() {
-        return EntityType.WIND_CHARGE;
-    }
-
-    @Override
     public WindChargeEntity create(ActionContext context, SpawnReason reason) {
         ServerWorld world = context.world();
-        PlayerEntity user = context.player(ActionContextParameter.THIS).orElse(null);
+        PlayerEntity user = context.get(LootContextParameters.THIS_ENTITY, PlayerEntity.class);
         if (user != null) {
             return spawnFromUser(world, user);
         }
 
-        Direction side = context.side();
-        if (side != null) {
-            return spawnFromSide(world, side, context.position(ActionContextParameter.TARGET));
+        Direction side = context.get(ItematicContextParameters.SIDE);
+        Vec3d position = context.get(ItematicContextParameters.INTERACTED_POSITION);
+        if (side != null && position != null) {
+            return spawnFromSide(world, side, position);
         }
 
         return null;

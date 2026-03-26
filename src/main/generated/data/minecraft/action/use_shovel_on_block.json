@@ -18,24 +18,19 @@
       },
       {
         "action": {
-          "type": "minecraft:swing_hand"
+          "type": "minecraft:swing_hand",
+          "entity": "this"
         }
       }
     ]
   },
   "requirements": {
-    "conditions": {
-      "condition": "minecraft:inverted",
-      "term": {
-        "condition": "minecraft:side_check",
-        "sides": [
-          "down"
-        ]
-      }
-    },
-    "context": {
-      "entity": "this",
-      "position": "target"
+    "condition": "minecraft:inverted",
+    "term": {
+      "condition": "minecraft:side_check",
+      "sides": [
+        "down"
+      ]
     }
   }
 }

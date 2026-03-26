@@ -16,12 +16,13 @@
           {
             "action": {
               "type": "minecraft:mark_banner_on_item",
-              "position": "target"
+              "position": "interacted"
             }
           },
           {
             "action": {
-              "type": "minecraft:swing_hand"
+              "type": "minecraft:swing_hand",
+              "entity": "this"
             }
           }
         ]

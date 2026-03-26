@@ -13,3 +13,9 @@ inject-interface    net/minecraft/util/DyeColor    net/errorcraft/itematic/acces
 inject-interface    net/minecraft/item/tooltip/BundleTooltipData    net/errorcraft/itematic/access/item/tooltip/BundleTooltipDataAccess
 inject-interface    net/minecraft/recipe/Ingredient    net/errorcraft/itematic/access/recipe/IngredientAccess
 inject-interface    net/minecraft/block/AbstractBlock    net/errorcraft/itematic/access/block/AbstractBlockAccess
+inject-interface    net/minecraft/util/context/ContextParameterMap$Builder    net/errorcraft/itematic/access/util/context/ContextParameterMapBuilderAccess
+inject-interface    net/minecraft/loot/condition/LocationCheckLootCondition    net/errorcraft/itematic/access/loot/condition/LocationCheckLootConditionAccess
+inject-interface    net/minecraft/item/ItemUsageContext    net/errorcraft/itematic/access/item/ItemUsageContextAccess
+inject-interface    net/minecraft/entity/EntityType    net/errorcraft/itematic/access/entity/EntityTypeAccess<TT;>
+inject-interface    net/minecraft/entity/EntityType$Builder    net/errorcraft/itematic/access/entity/EntityTypeBuilderAccess<TT;>
+inject-interface    net/minecraft/block/entity/BlockEntity    net/errorcraft/itematic/access/block/entity/BlockEntityAccess

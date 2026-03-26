@@ -4,9 +4,7 @@
       "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
-      "entity": {
-        "type": "minecraft:birch_chest_boat"
-      }
+      "entity": "minecraft:birch_chest_boat"
     },
     "minecraft:fuel": {
       "ticks": 1200

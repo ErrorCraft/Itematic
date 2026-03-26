@@ -4,9 +4,7 @@
       "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
-      "entity": {
-        "type": "minecraft:cherry_boat"
-      }
+      "entity": "minecraft:cherry_boat"
     },
     "minecraft:fuel": {
       "ticks": 1200

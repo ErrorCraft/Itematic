@@ -9,30 +9,28 @@
             {
               "action": {
                 "type": "minecraft:take_honey",
-                "position": "target"
+                "position": "interacted"
               }
             },
             {
               "action": {
                 "type": "minecraft:exchange_item",
-                "item": "minecraft:honey_bottle"
+                "item": {
+                  "id": "minecraft:honey_bottle",
+                  "count": 1
+                }
               }
             }
           ],
           "requirements": {
-            "conditions": {
-              "condition": "minecraft:location_check",
-              "predicate": {
-                "block": {
-                  "state": {
-                    "honey_level": "5"
-                  }
+            "condition": "minecraft:location_check",
+            "position": "interacted",
+            "predicate": {
+              "block": {
+                "state": {
+                  "honey_level": "5"
                 }
               }
-            },
-            "context": {
-              "entity": "this",
-              "position": "target"
             }
           }
         },

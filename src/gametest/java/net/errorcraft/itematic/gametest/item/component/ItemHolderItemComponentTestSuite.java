@@ -2,7 +2,7 @@ package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.gametest.Assert;
 import net.errorcraft.itematic.gametest.TestUtil;
-import net.errorcraft.itematic.inventory.StackReferenceUtil;
+import net.errorcraft.itematic.inventory.SimpleStackReference;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
@@ -29,15 +29,15 @@ public class ItemHolderItemComponentTestSuite {
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         PlayerInventory inventory = player.getInventory();
-        ItemStack stack = world.itematic$createStack(ItemKeys.BUNDLE);
+        ItemStack bundle = world.itematic$createStack(ItemKeys.BUNDLE);
         inventory.insertStack(SLOT, world.itematic$createStack(ItemKeys.STICK));
         Slot slot = new Slot(inventory, SLOT, 0, 0);
         world.spawnEntity(player);
-        boolean success = stack.onStackClicked(slot, ClickType.RIGHT, player);
+        boolean success = bundle.onStackClicked(slot, ClickType.RIGHT, player);
         context.addInstantFinalTask(() -> {
             context.assertTrue(success, "Expected right clicking with item holder to be successful");
             Assert.itemStackIsEmpty(inventory.getStack(SLOT));
-            Assert.itemStackHasDataComponent(stack, DataComponentTypes.BUNDLE_CONTENTS,
+            Assert.itemStackHasDataComponent(bundle, DataComponentTypes.BUNDLE_CONTENTS,
                 component -> Assert.itemStackIsOf(component.get(0), ItemKeys.STICK)
             );
         });
@@ -48,16 +48,16 @@ public class ItemHolderItemComponentTestSuite {
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         PlayerInventory inventory = player.getInventory();
-        ItemStack stack = world.itematic$createStack(ItemKeys.BUNDLE);
+        ItemStack bundle = world.itematic$createStack(ItemKeys.BUNDLE);
         ItemStack stackToRemove = world.itematic$createStack(ItemKeys.STICK);
-        addToBundleContentsComponent(stack, stackToRemove);
+        addToBundleContentsComponent(bundle, stackToRemove);
         Slot slot = new Slot(inventory, SLOT, 0, 0);
         world.spawnEntity(player);
-        boolean success = stack.onStackClicked(slot, ClickType.RIGHT, player);
+        boolean success = bundle.onStackClicked(slot, ClickType.RIGHT, player);
         context.addInstantFinalTask(() -> {
             context.assertTrue(success, "Expected right clicking with item holder to be successful");
             Assert.itemStackIsOf(inventory.getStack(SLOT), ItemKeys.STICK);
-            Assert.itemStackHasDataComponent(stack, DataComponentTypes.BUNDLE_CONTENTS,
+            Assert.itemStackHasDataComponent(bundle, DataComponentTypes.BUNDLE_CONTENTS,
                 component -> context.assertTrue(component.isEmpty(), "Expected item holder to be empty")
             );
         });
@@ -69,12 +69,12 @@ public class ItemHolderItemComponentTestSuite {
         ServerWorld world = context.getWorld();
         PlayerInventory inventory = player.getInventory();
         inventory.insertStack(SLOT, world.itematic$createStack(ItemKeys.BUNDLE));
-        ItemStack stack = inventory.getStack(SLOT);
+        ItemStack bundle = inventory.getStack(SLOT);
         ItemStack stackToAdd = world.itematic$createStack(ItemKeys.STICK);
-        StackReference cursorStack = StackReferenceUtil.of(stackToAdd);
+        StackReference cursorStack = SimpleStackReference.of(stackToAdd);
         Slot slot = new Slot(inventory, SLOT, 0, 0);
         world.spawnEntity(player);
-        boolean success = stack.onClicked(stackToAdd, slot, ClickType.RIGHT, player, cursorStack);
+        boolean success = bundle.onClicked(stackToAdd, slot, ClickType.RIGHT, player, cursorStack);
         context.addInstantFinalTask(() -> {
             context.assertTrue(success, "Expected right clicking on item holder to be successful");
             Assert.itemStackIsEmpty(cursorStack.get());
@@ -89,15 +89,14 @@ public class ItemHolderItemComponentTestSuite {
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         PlayerInventory inventory = player.getInventory();
-        ItemStack stack = world.itematic$createStack(ItemKeys.BUNDLE);
+        inventory.insertStack(SLOT, world.itematic$createStack(ItemKeys.BUNDLE));
+        ItemStack bundle = inventory.getStack(SLOT);
         ItemStack stackToRemove = world.itematic$createStack(ItemKeys.STICK);
-        addToBundleContentsComponent(stack, stackToRemove);
-        inventory.insertStack(SLOT, stack);
-        stack = inventory.getStack(SLOT);
-        StackReference cursorStack = StackReferenceUtil.of(ItemStack.EMPTY);
+        addToBundleContentsComponent(bundle, stackToRemove);
+        StackReference cursorStack = SimpleStackReference.of(ItemStack.EMPTY);
         Slot slot = new Slot(inventory, SLOT, 0, 0);
         world.spawnEntity(player);
-        boolean success = stack.onClicked(ItemStack.EMPTY, slot, ClickType.RIGHT, player, cursorStack);
+        boolean success = bundle.onClicked(ItemStack.EMPTY, slot, ClickType.RIGHT, player, cursorStack);
         context.addInstantFinalTask(() -> {
             context.assertTrue(success, "Expected right clicking on item holder to be successful");
             Assert.itemStackIsOf(cursorStack.get(), ItemKeys.STICK);
@@ -107,11 +106,11 @@ public class ItemHolderItemComponentTestSuite {
         });
     }
 
-    private static void addToBundleContentsComponent(ItemStack origin, ItemStack stackToAdd) {
+    private static void addToBundleContentsComponent(ItemStack bundle, ItemStack stackToAdd) {
         BundleContentsComponent.Builder builder = Objects.requireNonNull(
-            TestUtil.getItemBehavior(origin, ItemComponentTypes.ITEM_HOLDER).createBuilder(origin)
+            TestUtil.getItemBehavior(bundle, ItemComponentTypes.ITEM_HOLDER).createBuilder(bundle)
         );
         builder.add(stackToAdd);
-        origin.set(DataComponentTypes.BUNDLE_CONTENTS, builder.build());
+        bundle.set(DataComponentTypes.BUNDLE_CONTENTS, builder.build());
     }
 }

@@ -4,19 +4,23 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.component.components.BlockItemComponent;
+import net.errorcraft.itematic.item.placement.BlockPlacer;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.parameter.ActionContextParameter;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContextParameters;
 
-public record PlaceBlockFromItemAction(ActionContextParameter position, boolean decrementCount) implements Action<PlaceBlockFromItemAction> {
+public record PlaceBlockFromItemAction(PositionTarget position, boolean decrementCount) implements Action<PlaceBlockFromItemAction> {
     public static final MapCodec<PlaceBlockFromItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ActionContextParameter.CODEC.fieldOf("position").forGetter(PlaceBlockFromItemAction::position),
+        PositionTarget.CODEC.fieldOf("position").forGetter(PlaceBlockFromItemAction::position),
         Codec.BOOL.optionalFieldOf("decrement_count", true).forGetter(PlaceBlockFromItemAction::decrementCount)
     ).apply(instance, PlaceBlockFromItemAction::new));
 
-    public static PlaceBlockFromItemAction of(ActionContextParameter position, boolean decrementCount) {
+    public static PlaceBlockFromItemAction of(PositionTarget position, boolean decrementCount) {
         return new PlaceBlockFromItemAction(position, decrementCount);
     }
 
@@ -27,10 +31,18 @@ public record PlaceBlockFromItemAction(ActionContextParameter position, boolean 
 
     @Override
     public boolean execute(ActionContext context) {
-        return context.stack().itematic$getBehavior(ItemComponentTypes.BLOCK)
-            .map(component -> {
-                PlaceBlockAction action = PlaceBlockAction.of(component.block(), this.position, this.decrementCount);
-                return action.execute(context);
-            }).orElse(false);
+        BlockItemComponent block = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
+            .itematic$getBehavior(ItemComponentTypes.BLOCK)
+            .orElse(null);
+        if (block == null) {
+            return false;
+        }
+
+        BlockPlacer placer = BlockPlacer.action(context, this.position, block.block(), this.decrementCount);
+        if (placer == null) {
+            return false;
+        }
+
+        return placer.place().succeeds();
     }
 }

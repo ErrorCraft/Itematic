@@ -31,6 +31,7 @@ public record FirstToSucceedSequenceHandler(RegistryEntryList<ActionEntry> entri
                 return true;
             }
         }
+
         return false;
     }
 

@@ -27,7 +27,7 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> GENERIC_SPLASH = of("entity.generic.splash");
     public static final RegistryKey<SoundEvent> HOE_TILL = of("item.hoe.till");
     public static final RegistryKey<SoundEvent> HONEY_BOTTLE_DRINK = of("item.honey_bottle.drink");
-    public static final RegistryKey<SoundEvent> LLAMA_SWAG = of("entity.llama.swag");
+    public static final RegistryKey<SoundEvent> LODESTONE_COMPASS_LOCK = of("item.lodestone_compass.lock");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_5 = of("music_disc.5");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_11 = of("music_disc.11");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_13 = of("music_disc.13");
