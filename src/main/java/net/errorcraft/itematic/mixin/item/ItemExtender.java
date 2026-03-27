@@ -257,11 +257,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        boolean result = false;
+    public void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(attacker, stack);
         for (ItemComponent<?> component : this.itemComponents) {
-            result |= component.postHit(stack, target, attacker, stackExchanger);
+            component.postHit(stack, target, attacker, stackExchanger);
         }
 
         if (attacker.getWorld() instanceof ServerWorld serverWorld) {
@@ -278,7 +277,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         tryUpdateItemStack(attacker, Hand.MAIN_HAND, stack, stackExchanger);
-        return result;
     }
 
     /**
@@ -456,10 +454,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         at = @At("HEAD"),
         cancellable = true
     )
-    private void useDebugStickItemComponent(BlockState state, World world, BlockPos pos, PlayerEntity miner, CallbackInfoReturnable<Boolean> info) {
+    private void useDebugStickItemComponent(ItemStack stack, BlockState state, World world, BlockPos pos, LivingEntity user, CallbackInfoReturnable<Boolean> info) {
         this.itematic$getBehavior(ItemComponentTypes.DEBUG_STICK)
-            .ifPresent(c -> {
-                c.use(miner, state, world, pos);
+            .ifPresent(debugStick -> {
+                debugStick.use(user, state, world, pos, stack);
                 info.setReturnValue(false);
             });
     }

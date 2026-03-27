@@ -149,7 +149,6 @@ public class ItematicItemTags {
     public static final TagKey<Item> BANNED_BUNDLE_ITEMS = of("banned_bundle_items");
     public static final TagKey<Item> SHULKER_BOXES = of("shulker_boxes");
 
-    public static final TagKey<Item> PREVENTS_MINING_IN_CREATIVE = of("prevents_mining_in_creative");
     public static final TagKey<Item> PREVENTS_TAKING_POTTED_ITEM_OUT = of("prevents_taking_potted_item_out");
 
     public static final TagKey<Item> BREWING_INPUTS = of("brewing_inputs");

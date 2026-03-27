@@ -9,7 +9,6 @@ import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemUtil;
-import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -22,11 +21,8 @@ import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
-import net.minecraft.block.BlockState;
-import net.minecraft.component.ComponentChanges;
-import net.minecraft.component.ComponentHolder;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.MergedComponentMap;
+import net.minecraft.component.*;
+import net.minecraft.component.type.WeaponComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
@@ -50,7 +46,6 @@ import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -237,9 +232,20 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         at = @At("HEAD"),
         cancellable = true
     )
-    public void checkEmptyStackBoolean(CallbackInfoReturnable<Boolean> info) {
+    public void checkEmptyStackBooleanFalse(CallbackInfoReturnable<Boolean> info) {
         if (this.isEmpty()) {
             info.setReturnValue(false);
+        }
+    }
+
+    @Inject(
+        method = "canMine",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void checkEmptyStackBooleanTrue(CallbackInfoReturnable<Boolean> info) {
+        if (this.isEmpty()) {
+            info.setReturnValue(true);
         }
     }
 
@@ -550,15 +556,15 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
     }
 
-    @Inject(
-        method = "postMine",
-        at = @At("HEAD"),
-        cancellable = true
+    @Redirect(
+        method = "postDamageEntity",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+        )
     )
-    private void postMineUseRegistryEntryNullCheck(World world, BlockState state, BlockPos pos, PlayerEntity miner, CallbackInfo info) {
-        if (this.isEmpty()) {
-            info.cancel();
-        }
+    private Object getWeaponDataComponentReturnNull(ItemStack instance, ComponentType<WeaponComponent> type) {
+        return null;
     }
 
     @ModifyReturnValue(
@@ -774,19 +780,6 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
 
         return this.entry.value().itematic$hasEventListener(event);
-    }
-
-    @Override
-    public boolean itematic$canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
-        if (this.entry == null) {
-            return true;
-        }
-
-        if (miner.isCreative() && this.isIn(ItematicItemTags.PREVENTS_MINING_IN_CREATIVE)) {
-            return false;
-        }
-
-        return this.entry.value().canMine(state, world, pos, miner);
     }
 
     @Override

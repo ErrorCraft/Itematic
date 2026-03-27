@@ -199,7 +199,6 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(ConsumableComponents.DRINK)
                         .remainder(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
                         .build())
-                    .with(PotionItemComponent.INSTANCE)
                     .with(PotionHolderItemComponent.of(1.0f))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM)))
                     .build(),
@@ -5473,8 +5472,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.ofPreserved(250))
                     .with(ToolItemComponent.builder(2)
+                        .preventCreativeDestruction()
                         .build())
-                    .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE + 1, 0.275d))
+                    .with(WeaponItemComponent.of(1, false, TridentItem.ATTACK_DAMAGE, 0.275d))
                     .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.TRIDENT)))
                     .with(EnchantableItemComponent.of(1))
@@ -5557,7 +5557,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(500))
                     .with(ToolItemComponent.builder(2).build())
-                    .with(WeaponItemComponent.ofSmashing(1, 6.0d, 0.15d))
+                    .with(WeaponItemComponent.ofSmashing(1, 5.0d, 0.15d))
                     .with(EnchantableItemComponent.of(15))
                     .with(RepairableItemComponent.of(RegistryEntryList.of(
                         this.items.getOrThrow(ItemKeys.BREEZE_ROD)
@@ -6696,6 +6696,14 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_HANGING_MOSS)))
+                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WILDFLOWERS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WILDFLOWERS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WILDFLOWERS)))
                     .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
                     .build()
             ));
@@ -9468,6 +9476,14 @@ public class ItemUtil {
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(EquippableComponent.ofCarpet(DyeColor.BLACK)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LEAF_LITTER, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.LEAF_LITTER).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LEAF_LITTER)))
+                    .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build()
             ));
         }

@@ -43,8 +43,7 @@ public interface ItemComponent<T extends ItemComponent<T>> {
         return ItemResult.PASS;
     }
 
-    default boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, ItemStackExchanger stackExchanger) {
-        return false;
+    default void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, ItemStackExchanger stackExchanger) {
     }
 
     default boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {

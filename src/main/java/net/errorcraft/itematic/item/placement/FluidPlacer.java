@@ -48,7 +48,7 @@ public class FluidPlacer extends Placer {
     @Override
     public ItemResult place() {
         BlockPos offset = this.blockPos.offset(this.direction);
-        if (this.player != null && (!this.world.canPlayerModifyAt(this.player, this.blockPos) || !this.player.canPlaceOn(offset, this.direction, this.stack))) {
+        if (this.player != null && (!this.world.canEntityModifyAt(this.player, this.blockPos) || !this.player.canPlaceOn(offset, this.direction, this.stack))) {
             return ItemResult.PASS;
         }
 
@@ -148,7 +148,15 @@ public class FluidPlacer extends Placer {
 
         this.world.playSound(this.player, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5f, 2.6f + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.8f);
         for (int i = 0; i < 8; i++) {
-            this.world.addParticle(ParticleTypes.LARGE_SMOKE, pos.getX() + Math.random(), pos.getY() + Math.random(), pos.getZ() + Math.random(), 0.0d, 0.0d, 0.0d);
+            this.world.addParticleClient(
+                ParticleTypes.LARGE_SMOKE,
+                pos.getX() + Math.random(),
+                pos.getY() + Math.random(),
+                pos.getZ() + Math.random(),
+                0.0d,
+                0.0d,
+                0.0d
+            );
         }
 
         return true;

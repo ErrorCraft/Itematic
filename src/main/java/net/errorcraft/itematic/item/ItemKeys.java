@@ -261,6 +261,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> SUGAR_CANE = register("sugar_cane");
     public static final RegistryKey<Item> KELP = register("kelp");
     public static final RegistryKey<Item> PINK_PETALS = register("pink_petals");
+    public static final RegistryKey<Item> WILDFLOWERS = register("wildflowers");
+    public static final RegistryKey<Item> LEAF_LITTER = register("leaf_litter");
     public static final RegistryKey<Item> MOSS_CARPET = register("moss_carpet");
     public static final RegistryKey<Item> MOSS_BLOCK = register("moss_block");
     public static final RegistryKey<Item> PALE_MOSS_CARPET = register("pale_moss_carpet");

@@ -32,7 +32,6 @@ public class ItemComponentTypes {
     public static final ItemComponentType<FireworkItemComponent> FIREWORK = register("firework", new ItemComponentType<>(FireworkItemComponent.CODEC));
     public static final ItemComponentType<BucketItemComponent> BUCKET = register("bucket", new ItemComponentType<>(BucketItemComponent.CODEC));
     public static final ItemComponentType<ConsumableItemComponent> CONSUMABLE = register("consumable", new ItemComponentType<>(ConsumableItemComponent.CODEC));
-    public static final ItemComponentType<PotionItemComponent> POTION = register("potion", new ItemComponentType<>(PotionItemComponent.CODEC));
     public static final ItemComponentType<PotionHolderItemComponent> POTION_HOLDER = register("potion_holder", new ItemComponentType<>(PotionHolderItemComponent.CODEC));
     public static final ItemComponentType<SaddleItemComponent> SADDLE = register("saddle", new ItemComponentType<>(SaddleItemComponent.CODEC));
     public static final ItemComponentType<SteeringItemComponent> STEERING = register("steering", new ItemComponentType<>(SteeringItemComponent.CODEC));

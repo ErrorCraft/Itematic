@@ -1,26 +1,17 @@
 package net.errorcraft.itematic.mixin.block;
 
-import net.minecraft.block.*;
+import net.errorcraft.itematic.access.block.AbstractBlockAccess;
+import net.minecraft.block.Segmented;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin({
-    ScaffoldingBlock.class,
-    SeaPickleBlock.class,
-    SlabBlock.class,
-    SnowBlock.class,
-    TurtleEggBlock.class
-})
-public class CanReplaceBlockExtender extends Block {
-    public CanReplaceBlockExtender(Settings settings) {
-        super(settings);
-    }
-
+@Mixin(Segmented.class)
+public interface SegmentedExtender extends AbstractBlockAccess {
     @Redirect(
-        method = "canReplace",
+        method = "shouldAddSegment",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"

@@ -40,7 +40,6 @@
     "gui.tooltip.TooltipComponentExtender",
     "network.AbstractClientPlayerEntityExtender",
     "network.ClientPlayerEntityExtender",
-    "network.ClientPlayerInteractionManagerExtender",
     "network.ClientPlayNetworkHandlerExtender",
     "option.HotbarStorageEntryExtender",
     "particle.CrackParticleExtender$SlimeballFactoryExtender",

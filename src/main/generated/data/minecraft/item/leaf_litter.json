@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:leaf_litter"
+    },
+    "minecraft:fuel": {
+      "ticks": 100
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:leaf_litter",
+    "translation_key": "block.minecraft.leaf_litter"
+  }
+}

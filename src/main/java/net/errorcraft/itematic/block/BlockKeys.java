@@ -1012,6 +1012,8 @@ public class BlockKeys {
     public static final RegistryKey<Block> FLOWERING_AZALEA = of("flowering_azalea");
     public static final RegistryKey<Block> MOSS_CARPET = of("moss_carpet");
     public static final RegistryKey<Block> PINK_PETALS = of("pink_petals");
+    public static final RegistryKey<Block> WILDFLOWERS = of("wildflowers");
+    public static final RegistryKey<Block> LEAF_LITTER = of("leaf_litter");
     public static final RegistryKey<Block> MOSS_BLOCK = of("moss_block");
     public static final RegistryKey<Block> BIG_DRIPLEAF = of("big_dripleaf");
     public static final RegistryKey<Block> SMALL_DRIPLEAF = of("small_dripleaf");

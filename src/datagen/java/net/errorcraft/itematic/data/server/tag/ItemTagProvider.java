@@ -948,6 +948,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.TORCHFLOWER)
             .add(ItemKeys.WITHER_ROSE)
             .add(ItemKeys.PINK_PETALS)
+            .add(ItemKeys.WILDFLOWERS)
+            .add(ItemKeys.LEAF_LITTER)
             .add(ItemKeys.SPORE_BLOSSOM)
             .add(ItemKeys.BAMBOO)
             .add(ItemKeys.SUGAR_CANE)
@@ -1390,9 +1392,6 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.RED_SHULKER_BOX)
             .add(ItemKeys.WHITE_SHULKER_BOX)
             .add(ItemKeys.YELLOW_SHULKER_BOX);
-        this.getOrCreateTagBuilder(ItematicItemTags.PREVENTS_MINING_IN_CREATIVE)
-            .forceAddTag(ItemTags.SWORDS)
-            .add(ItemKeys.TRIDENT);
         this.getOrCreateTagBuilder(ItematicItemTags.PREVENTS_TAKING_POTTED_ITEM_OUT)
             .add(ItemKeys.OAK_SAPLING)
             .add(ItemKeys.SPRUCE_SAPLING)
