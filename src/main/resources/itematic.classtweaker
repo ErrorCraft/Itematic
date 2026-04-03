@@ -19,3 +19,5 @@ inject-interface    net/minecraft/item/ItemUsageContext    net/errorcraft/itemat
 inject-interface    net/minecraft/entity/EntityType    net/errorcraft/itematic/access/entity/EntityTypeAccess<TT;>
 inject-interface    net/minecraft/entity/EntityType$Builder    net/errorcraft/itematic/access/entity/EntityTypeBuilderAccess<TT;>
 inject-interface    net/minecraft/block/entity/BlockEntity    net/errorcraft/itematic/access/block/entity/BlockEntityAccess
+inject-interface    net/minecraft/village/VillagerData    net/errorcraft/itematic/access/village/VillagerDataAccess
+inject-interface    net/minecraft/village/VillagerProfession    net/errorcraft/itematic/access/village/VillagerProfessionAccess

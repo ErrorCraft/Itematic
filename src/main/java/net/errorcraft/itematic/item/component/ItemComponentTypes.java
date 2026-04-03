@@ -33,7 +33,6 @@ public class ItemComponentTypes {
     public static final ItemComponentType<BucketItemComponent> BUCKET = register("bucket", new ItemComponentType<>(BucketItemComponent.CODEC));
     public static final ItemComponentType<ConsumableItemComponent> CONSUMABLE = register("consumable", new ItemComponentType<>(ConsumableItemComponent.CODEC));
     public static final ItemComponentType<PotionHolderItemComponent> POTION_HOLDER = register("potion_holder", new ItemComponentType<>(PotionHolderItemComponent.CODEC));
-    public static final ItemComponentType<SaddleItemComponent> SADDLE = register("saddle", new ItemComponentType<>(SaddleItemComponent.CODEC));
     public static final ItemComponentType<SteeringItemComponent> STEERING = register("steering", new ItemComponentType<>(SteeringItemComponent.CODEC));
     public static final ItemComponentType<PointableItemComponent> POINTABLE = register("pointable", new ItemComponentType<>(PointableItemComponent.CODEC));
     public static final ItemComponentType<PreventUseWhenUsedOnTargetItemComponent> PREVENT_USE_WHEN_USED_ON_TARGET = register("prevent_use_when_used_on_target", new ItemComponentType<>(PreventUseWhenUsedOnTargetItemComponent.CODEC));

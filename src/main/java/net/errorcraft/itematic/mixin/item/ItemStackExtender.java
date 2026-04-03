@@ -298,7 +298,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = "copy",
+        method = "copy()Lnet/minecraft/item/ItemStack;",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/MergedComponentMap;)Lnet/minecraft/item/ItemStack;"

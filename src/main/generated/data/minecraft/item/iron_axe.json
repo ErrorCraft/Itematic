@@ -30,7 +30,7 @@
       },
       "attack_speed": 0.225,
       "can_disable_blocking": true,
-      "damage_per_attack": 2
+      "item_damage_per_attack": 2
     }
   },
   "display": {

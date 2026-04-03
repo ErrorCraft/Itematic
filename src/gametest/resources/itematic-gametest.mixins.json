@@ -8,9 +8,9 @@
   },
   "mixins": [
     "GameTestStateExtender",
-    "StructureTestListenerExtender",
     "TestContextExtender",
-    "TestServerExtender"
+    "TestServerExtender",
+    "structure.StructureTemplateManagerExtender"
   ],
   "injectors": {
     "defaultRequire": 1

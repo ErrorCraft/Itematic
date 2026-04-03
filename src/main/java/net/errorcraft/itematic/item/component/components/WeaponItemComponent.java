@@ -31,9 +31,9 @@ import net.minecraft.util.dynamic.Codecs;
 
 import java.util.List;
 
-public record WeaponItemComponent(int damagePerAttack, boolean canDisableBlocking, boolean maySmash, WeaponAttackDamageDataComponent attackDamage, double attackSpeed) implements ItemComponent<WeaponItemComponent> {
+public record WeaponItemComponent(int itemDamagePerAttack, boolean canDisableBlocking, boolean maySmash, WeaponAttackDamageDataComponent attackDamage, double attackSpeed) implements ItemComponent<WeaponItemComponent> {
     public static final Codec<WeaponItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codecs.NON_NEGATIVE_INT.optionalFieldOf("damage_per_attack", 1).forGetter(WeaponItemComponent::damagePerAttack),
+        Codecs.NON_NEGATIVE_INT.optionalFieldOf("item_damage_per_attack", 1).forGetter(WeaponItemComponent::itemDamagePerAttack),
         Codec.BOOL.optionalFieldOf("can_disable_blocking", false).forGetter(WeaponItemComponent::canDisableBlocking),
         Codec.BOOL.optionalFieldOf("may_smash", false).forGetter(WeaponItemComponent::maySmash),
         WeaponAttackDamageDataComponent.CODEC.fieldOf("attack_damage").forGetter(WeaponItemComponent::attackDamage),
@@ -93,13 +93,13 @@ public record WeaponItemComponent(int damagePerAttack, boolean canDisableBlockin
         stack.itematic$invokeEvent(ItemEvents.USE_WEAPON, context);
         WeaponComponent weapon = stack.get(DataComponentTypes.WEAPON);
         if (weapon != null) {
-            stack.itematic$damage(weapon.damagePerAttack(), context);
+            stack.itematic$damage(weapon.itemDamagePerAttack(), context);
         }
     }
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.WEAPON, new WeaponComponent(this.damagePerAttack, this.canDisableBlocking));
+        builder.add(DataComponentTypes.WEAPON, new WeaponComponent(this.itemDamagePerAttack, this.canDisableBlocking));
         builder.add(ItematicDataComponentTypes.WEAPON_ATTACK_DAMAGE, this.attackDamage);
         builder.add(ItematicDataComponentTypes.ATTACK_SPEED_MULTIPLIER, this.attackSpeed);
     }

@@ -41,7 +41,6 @@ public class ActionTypes {
     public static final ActionType<InvokeGameEventAction> INVOKE_GAME_EVENT = register(ActionTypeKeys.INVOKE_GAME_EVENT, new ActionType<>(InvokeGameEventAction.CODEC));
     public static final ActionType<InvokeItemEventAction> INVOKE_ITEM_EVENT = register(ActionTypeKeys.INVOKE_ITEM_EVENT, new ActionType<>(InvokeItemEventAction.CODEC));
     public static final ActionType<PlaceCarvedPumpkinAction> PLACE_CARVED_PUMPKIN = register(ActionTypeKeys.PLACE_CARVED_PUMPKIN, new ActionType<>(PlaceCarvedPumpkinAction.CODEC));
-    public static final ActionType<SaddleEntityAtPositionAction> SADDLE_ENTITY_AT_POSITION = register(ActionTypeKeys.SADDLE_ENTITY_AT_POSITION, new ActionType<>(SaddleEntityAtPositionAction.CODEC));
     public static final ActionType<ShearAtPositionAction> SHEAR_AT_POSITION = register(ActionTypeKeys.SHEAR_AT_POSITION, new ActionType<>(ShearAtPositionAction.CODEC));
     public static final ActionType<ShootProjectileFromItemAction> SHOOT_PROJECTILE_FROM_ITEM = register(ActionTypeKeys.SHOOT_PROJECTILE_FROM_ITEM, new ActionType<>(ShootProjectileFromItemAction.CODEC));
     public static final ActionType<SpawnEntityAction> SPAWN_ENTITY = register(ActionTypeKeys.SPAWN_ENTITY, new ActionType<>(SpawnEntityAction.CODEC));

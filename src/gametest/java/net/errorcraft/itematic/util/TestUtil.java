@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.gametest;
+package net.errorcraft.itematic.util;
 
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -22,8 +22,6 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.GameTestException;
-import net.minecraft.test.PositionedException;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -58,23 +56,34 @@ public class TestUtil {
         return stack;
     }
 
-    public static <T extends ItemComponent<T>> T getItemBehavior(ItemStack stack, ItemComponentType<T> type) {
+    public static <T extends ItemComponent<T>> T getItemBehavior(TestContext helper, ItemStack stack, ItemComponentType<T> type) {
         return stack.itematic$getBehavior(type)
-            .orElseThrow(() -> new GameTestException("Item " + stack.itematic$key() + " does not have the " + ItematicRegistries.ITEM_COMPONENT_TYPE.getKey(type).orElseThrow() + " behavior"));
+            .orElseThrow(() -> helper.createError(
+                "test.error.item.expected_item_behavior",
+                ItematicRegistries.ITEM_COMPONENT_TYPE.getId(type)
+            ));
     }
 
-    public static <T> T getDataComponent(ItemStack stack, ComponentType<T> type) {
+    public static <T> T getDataComponent(TestContext helper, ItemStack stack, ComponentType<T> type) {
         T component = stack.get(type);
-        if (component == null) {
-            throw new GameTestException("Item stack does not contain the " + type + " data component");
+        if (component != null) {
+            return component;
         }
 
-        return component;
+        throw helper.createError(
+            "test.error.item_stack.expected_data_component",
+            "item stack",
+            type
+        );
     }
 
     public static <T extends BlockEntity> T getBlockEntity(TestContext context, BlockPos pos, BlockEntityType<T> type) {
         return context.getWorld().getBlockEntity(context.getAbsolutePos(pos), type)
-            .orElseThrow(() -> new GameTestException("Block entity at position " + pos + " was not of type " + Registries.BLOCK_ENTITY_TYPE.getKey(type).orElseThrow()));
+            .orElseThrow(() -> context.createError(
+                pos,
+                "test.error.block_entity.expected_block_entity_type",
+                Registries.BLOCK_ENTITY_TYPE.getId(type)
+            ));
     }
 
     public static PlayerEntity createMockPlayer(TestContext context, GameMode gameMode, BlockPos pos) {
@@ -90,7 +99,10 @@ public class TestUtil {
     public static <T extends Entity> T createEntityAt(TestContext context, EntityType<T> type, BlockPos pos, Consumer<T> initializer) {
         T entity = type.create(context.getWorld(), SpawnReason.COMMAND);
         if (entity == null) {
-            throw new GameTestException("Entity is null");
+            throw context.createError(
+                "test.error.entity_type.cannot_create_entity",
+                type.getName()
+            );
         }
 
         setEntityPos(context, entity, pos);
@@ -134,12 +146,12 @@ public class TestUtil {
         BlockPos absolutePos = context.getAbsolutePos(pos);
         NamedScreenHandlerFactory factory = context.getBlockState(pos).createScreenHandlerFactory(context.getWorld(), absolutePos);
         if (factory == null) {
-            throw new PositionedException("Block does not provide a menu", absolutePos, pos, context.getTick());
+            throw context.createError(pos, "test.error.menu.does_not_provide_menu");
         }
 
         ScreenHandler menu = factory.createMenu(-1, player.getInventory(), player);
         if (menu == null) {
-            throw new PositionedException("Block does not create a menu", absolutePos, pos, context.getTick());
+            throw context.createError(pos, "test.error.menu.does_not_create_menu");
         }
 
         try {
@@ -148,14 +160,14 @@ public class TestUtil {
                 return (T) menu;
             }
 
-            throw new PositionedException(
-                "Block has the incorrect menu type " + Registries.SCREEN_HANDLER.getId(actualType) + ", expected " + Registries.SCREEN_HANDLER.getId(type),
-                absolutePos,
+            throw context.createError(
                 pos,
-                context.getTick()
+                "test.error.menu.has_incorrect_menu_type",
+                Registries.SCREEN_HANDLER.getId(actualType),
+                Registries.SCREEN_HANDLER.getId(type)
             );
         } catch (UnsupportedOperationException ignored) {
-            throw new PositionedException("Block does not create a menu by type", absolutePos, pos, context.getTick());
+            throw context.createError(pos, "test.error.menu.does_not_create_menu_by_type");
         }
     }
 }

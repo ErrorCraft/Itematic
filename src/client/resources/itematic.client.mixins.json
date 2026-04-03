@@ -53,7 +53,6 @@
     "render.entity.feature.ArmorFeatureRendererExtender",
     "render.entity.feature.CapeFeatureRendererExtender",
     "render.entity.feature.ElytraFeatureRendererExtender",
-    "render.entity.feature.HorseArmorFeatureRendererExtender",
     "render.entity.feature.WolfArmorFeatureRendererExtender",
     "render.entity.state.ItemStackEntityRenderStateExtender",
     "render.item.HeldItemRendererExtender",

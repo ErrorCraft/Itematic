@@ -12,7 +12,6 @@ import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
@@ -26,7 +25,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
 import java.util.Set;
@@ -54,15 +52,8 @@ public class GatherItemsVillagerTaskExtender {
                     Map.Entry::getValue
                 ));
         }
-        return this.itemFoodPointsCache;
-    }
 
-    @Inject(
-        method = "getGatherableItems",
-        at = @At("HEAD")
-    )
-    private static void storeItemAccess(VillagerEntity entity, VillagerEntity target, CallbackInfoReturnable<Set<Item>> info, @Share("itemAccess")LocalRef<Registry<Item>> itemRegistry) {
-        itemRegistry.set(entity.getWorld().getRegistryManager().getOrThrow(RegistryKeys.ITEM));
+        return this.itemFoodPointsCache;
     }
 
     @Redirect(
@@ -72,13 +63,14 @@ public class GatherItemsVillagerTaskExtender {
             target = "Lnet/minecraft/village/VillagerProfession;gatherableItems()Lcom/google/common/collect/ImmutableSet;"
         )
     )
-    private static ImmutableSet<Item> gatherableItemsUseDynamicRegistry(VillagerProfession instance, VillagerEntity entity, @Share("itemAccess")LocalRef<Registry<Item>> itemRegistry) {
-        TagKey<Item> tag = instance.itematic$gatherableItemsTag();
+    private static ImmutableSet<Item> gatherableItemsUseDynamicRegistry(VillagerProfession instance, VillagerEntity entity) {
+        TagKey<Item> tag = instance.itematic$gatherableItems();
         if (tag == null) {
             return ImmutableSet.of();
         }
 
-        return itemRegistry.get()
+        return entity.getRegistryManager()
+            .getOrThrow(RegistryKeys.ITEM)
             .getOptional(tag)
             .stream()
             .flatMap(RegistryEntryList::stream)
@@ -105,7 +97,7 @@ public class GatherItemsVillagerTaskExtender {
             target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
         )
     )
-    private static void storeInventoryStackEntry(VillagerEntity villager, Set<Item> validItems, LivingEntity target, CallbackInfo info, @Local(ordinal = 1) ItemStack inventoryStack, @Share("registryEntry") LocalRef<RegistryEntry<Item>> foundItem) {
+    private static void storeInventoryStackRegistryEntry(VillagerEntity villager, Set<Item> validItems, LivingEntity target, CallbackInfo info, @Local(ordinal = 1) ItemStack inventoryStack, @Share("registryEntry") LocalRef<RegistryEntry<Item>> foundItem) {
         foundItem.set(inventoryStack.getRegistryEntry());
     }
 

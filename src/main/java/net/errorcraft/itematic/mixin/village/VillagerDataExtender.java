@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.village;
 import net.errorcraft.itematic.access.village.VillagerDataAccess;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -18,7 +19,7 @@ import org.spongepowered.asm.mixin.Unique;
 public class VillagerDataExtender implements VillagerDataAccess {
     @Shadow
     @Final
-    private VillagerProfession profession;
+    private RegistryEntry<VillagerProfession> profession;
 
     @Shadow
     @Final
@@ -34,11 +35,11 @@ public class VillagerDataExtender implements VillagerDataAccess {
     };
 
     public @Nullable TagKey<Trade> itematic$tradeTag() {
-        if (this.profession.workSound() == null) {
+        if (this.profession.value().workSound() == null) {
             return null;
         }
 
-        Identifier tag = Identifier.ofVanilla(this.profession.id() + "_" + this.levelName());
+        Identifier tag = Identifier.ofVanilla(this.profession.value().id() + "_" + this.levelName());
         return TagKey.of(ItematicRegistryKeys.TRADE, tag);
     }
 

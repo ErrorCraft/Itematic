@@ -40,7 +40,6 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> INVOKE_GAME_EVENT = of("invoke_game_event");
     public static final RegistryKey<ActionType<?>> INVOKE_ITEM_EVENT = of("invoke_item_event");
     public static final RegistryKey<ActionType<?>> PLACE_CARVED_PUMPKIN = of("place_carved_pumpkin");
-    public static final RegistryKey<ActionType<?>> SADDLE_ENTITY_AT_POSITION = of("saddle_entity_at_position");
     public static final RegistryKey<ActionType<?>> SHEAR_AT_POSITION = of("shear_at_position");
     public static final RegistryKey<ActionType<?>> SHOOT_PROJECTILE_FROM_ITEM = of("shoot_projectile_from_item");
     public static final RegistryKey<ActionType<?>> SPAWN_ENTITY = of("spawn_entity");

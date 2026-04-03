@@ -1,8 +1,0 @@
-{
-  "entry": {
-    "action": {
-      "type": "minecraft:saddle_entity_at_position",
-      "position": "interacted"
-    }
-  }
-}

@@ -378,6 +378,7 @@ public class Trades {
         RegistryEntryLookup<Enchantment> enchantments = registerable.getRegistryLookup(RegistryKeys.ENCHANTMENT);
         RegistryEntryLookup<StatusEffect> statusEffects = registerable.getRegistryLookup(RegistryKeys.STATUS_EFFECT);
         RegistryEntryLookup<Potion> potions = registerable.getRegistryLookup(RegistryKeys.POTION);
+        RegistryEntryLookup<VillagerType> villagerTypes = registerable.getRegistryLookup(RegistryKeys.VILLAGER_TYPE);
 
         registerable.register(BUY_WHEAT, buy(items, items.getOrThrow(ItemKeys.WHEAT), 20, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.noviceBuyTradeExperience()));
         registerable.register(BUY_POTATO, buy(items, items.getOrThrow(ItemKeys.POTATO), 26, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.noviceBuyTradeExperience()));
@@ -410,13 +411,13 @@ public class Trades {
         registerable.register(BUY_TROPICAL_FISH, buy(items, items.getOrThrow(ItemKeys.TROPICAL_FISH), 6, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertBuyTradeExperience()));
         registerable.register(BUY_PUFFERFISH, buy(items, items.getOrThrow(ItemKeys.PUFFERFISH), 4, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.masterTradeExperience()));
         registerable.register(BUY_BOAT, buyFromType(items, items.getOrThrow(ItemKeys.OAK_BOAT), Map.of(
-            VillagerType.PLAINS, items.getOrThrow(ItemKeys.OAK_BOAT),
-            VillagerType.TAIGA, items.getOrThrow(ItemKeys.SPRUCE_BOAT),
-            VillagerType.SNOW, items.getOrThrow(ItemKeys.SPRUCE_BOAT),
-            VillagerType.DESERT, items.getOrThrow(ItemKeys.JUNGLE_BOAT),
-            VillagerType.JUNGLE, items.getOrThrow(ItemKeys.JUNGLE_BOAT),
-            VillagerType.SAVANNA, items.getOrThrow(ItemKeys.ACACIA_BOAT),
-            VillagerType.SWAMP, items.getOrThrow(ItemKeys.DARK_OAK_BOAT)
+            villagerTypes.getOrThrow(VillagerType.PLAINS), items.getOrThrow(ItemKeys.OAK_BOAT),
+            villagerTypes.getOrThrow(VillagerType.TAIGA), items.getOrThrow(ItemKeys.SPRUCE_BOAT),
+            villagerTypes.getOrThrow(VillagerType.SNOW), items.getOrThrow(ItemKeys.SPRUCE_BOAT),
+            villagerTypes.getOrThrow(VillagerType.DESERT), items.getOrThrow(ItemKeys.JUNGLE_BOAT),
+            villagerTypes.getOrThrow(VillagerType.JUNGLE), items.getOrThrow(ItemKeys.JUNGLE_BOAT),
+            villagerTypes.getOrThrow(VillagerType.SAVANNA), items.getOrThrow(ItemKeys.ACACIA_BOAT),
+            villagerTypes.getOrThrow(VillagerType.SWAMP), items.getOrThrow(ItemKeys.DARK_OAK_BOAT)
         )));
         registerable.register(BUY_WHITE_WOOL, buy(items, items.getOrThrow(ItemKeys.WHITE_WOOL), 18, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.noviceBuyTradeExperience()));
         registerable.register(BUY_BROWN_WOOL, buy(items, items.getOrThrow(ItemKeys.BROWN_WOOL), 18, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.noviceBuyTradeExperience()));
@@ -728,7 +729,7 @@ public class Trades {
             .build();
     }
 
-    private static Trade buyFromType(RegistryEntryLookup<Item> items, RegistryEntry<Item> item, Map<VillagerType, RegistryEntry<Item>> types) {
+    private static Trade buyFromType(RegistryEntryLookup<Item> items, RegistryEntry<Item> item, Map<RegistryEntry<VillagerType>, RegistryEntry<Item>> types) {
         return Trade.builder(Trade.Entry.ofEmerald(items))
             .wants(Trade.Entry.of(item))
             .tradeExperience(TradeOffersAccessor.masterTradeExperience())

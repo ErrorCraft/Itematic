@@ -72,6 +72,7 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.DyeColor;
@@ -10627,8 +10628,14 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.SADDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(SaddleItemComponent.INSTANCE)
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SADDLE)))
+                    .with(EquipmentItemComponent.of(EquippableComponent.builder(EquipmentSlot.SADDLE)
+                        .equipSound(SoundEvents.ENTITY_HORSE_SADDLE)
+                        .model(EquipmentAssetKeys.SADDLE)
+                        .allowedEntities(this.entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_SADDLE))
+                        .equipOnInteract(true)
+                        .build()
+                    ))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TURTLE_SCUTE, create(

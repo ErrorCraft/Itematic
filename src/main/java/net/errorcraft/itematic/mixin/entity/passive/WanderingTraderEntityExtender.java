@@ -22,6 +22,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -61,7 +62,8 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;POTION:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/item/Items;POTION:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )
