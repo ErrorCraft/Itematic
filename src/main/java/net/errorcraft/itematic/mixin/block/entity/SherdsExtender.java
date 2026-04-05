@@ -1,10 +1,12 @@
 package net.errorcraft.itematic.mixin.block.entity;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.block.entity.SherdsAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.entity.Sherds;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.RegistryByteBuf;
@@ -13,10 +15,11 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.dynamic.Codecs;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -24,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -125,40 +129,17 @@ public abstract class SherdsExtender implements SherdsAccess {
         return Sherds::itematic$optionalEntries;
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses a registry entry for data-driven items.
-     */
-    @Overwrite
-    public Optional<Item> back() {
-        return this.back.map(RegistryEntry::value);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses a registry entry for data-driven items.
-     */
-    @Overwrite
-    public Optional<Item> left() {
-        return this.left.map(RegistryEntry::value);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses a registry entry for data-driven items.
-     */
-    @Overwrite
-    public Optional<Item> right() {
-        return this.right.map(RegistryEntry::value);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses a registry entry for data-driven items.
-     */
-    @Overwrite
-    public Optional<Item> front() {
-        return this.front.map(RegistryEntry::value);
+    @ModifyReturnValue(
+        method = {
+            "back",
+            "left",
+            "right",
+            "front"
+        },
+        at = @At("TAIL")
+    )
+    private Optional<Item> mapToItem(Optional<RegistryEntry<Item>> original) {
+        return original.map(RegistryEntry::value);
     }
 
     @Redirect(
@@ -183,6 +164,21 @@ public abstract class SherdsExtender implements SherdsAccess {
         return sherds.get(index);
     }
 
+    @Redirect(
+        method = "appendTooltip",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/block/entity/Sherds;appendSherdTooltip(Ljava/util/function/Consumer;Ljava/util/Optional;)V"
+        )
+    )
+    private void appendSherdTooltipUseRegistryEntry(Consumer<Text> textConsumer, Optional<RegistryEntry<Item>> sherd) {
+        sherd.map(ItemStack::new)
+            .map(ItemStack::getName)
+            .map(Text::copyContentOnly)
+            .map(text -> text.formatted(Formatting.GRAY))
+            .ifPresent(textConsumer);
+    }
+
     @Override
     @SuppressWarnings("EqualsBetweenInconvertibleTypes")
     public NbtCompound itematic$toNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup lookup) {
@@ -203,14 +199,6 @@ public abstract class SherdsExtender implements SherdsAccess {
     public List<RegistryEntry<Item>> itematic$entries(RegistryWrapper.WrapperLookup lookup) {
         RegistryWrapper.Impl<Item> items = lookup.getOrThrow(RegistryKeys.ITEM);
         return Stream.of(this.back, this.left, this.right, this.front)
-            .map(optional -> optional.orElse(items.getOrThrow(ItemKeys.BRICK)))
-            .toList();
-    }
-
-    @Override
-    public List<RegistryEntry<Item>> itematic$entriesForwards(RegistryWrapper.WrapperLookup lookup) {
-        RegistryWrapper.Impl<Item> items = lookup.getOrThrow(RegistryKeys.ITEM);
-        return Stream.of(this.front, this.left, this.right, this.back)
             .map(optional -> optional.orElse(items.getOrThrow(ItemKeys.BRICK)))
             .toList();
     }

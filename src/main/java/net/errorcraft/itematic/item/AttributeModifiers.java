@@ -1,6 +1,5 @@
-package net.errorcraft.itematic.component;
+package net.errorcraft.itematic.item;
 
-import com.mojang.serialization.Codec;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -9,13 +8,8 @@ import net.minecraft.item.equipment.ArmorMaterial;
 import net.minecraft.item.equipment.EquipmentType;
 import net.minecraft.util.Identifier;
 
-public class AttributeModifiersComponentUtil {
-    public static final Codec<AttributeModifiersComponent> LIST_CODEC = AttributeModifiersComponent.Entry.CODEC.listOf().xmap(
-        entries -> new AttributeModifiersComponent(entries, true),
-        AttributeModifiersComponent::modifiers
-    );
-
-    private AttributeModifiersComponentUtil() {}
+public class AttributeModifiers {
+    private AttributeModifiers() {}
 
     public static AttributeModifiersComponent armor(ArmorMaterial material, EquipmentType type) {
         Identifier attributeId = Identifier.ofVanilla("armor." + type.getName());

@@ -8,7 +8,6 @@ import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
-import net.errorcraft.itematic.item.smithing.template.SmithingTemplateType;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
@@ -28,7 +27,6 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<Trade>> TRADE = RegistryKey.ofRegistry(Identifier.ofVanilla("trade"));
     public static final RegistryKey<Registry<ActionEntry>> ACTION = RegistryKey.ofRegistry(Identifier.ofVanilla("action"));
     public static final RegistryKey<Registry<SequenceHandlerType<?>>> SEQUENCE_HANDLER_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("sequence_handler_type"));
-    public static final RegistryKey<Registry<SmithingTemplateType<?>>> SMITHING_TEMPLATE_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("smithing_template_type"));
     public static final RegistryKey<Registry<SmithingTemplate>> SMITHING_TEMPLATE = RegistryKey.ofRegistry(Identifier.ofVanilla("smithing_template"));
     public static final RegistryKey<Registry<BlockPickerType<?>>> BLOCK_PICKER_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("block_picker_type"));
     public static final RegistryKey<Registry<TradeModifierType<?>>> TRADE_MODIFIER_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("trade_modifier_type"));

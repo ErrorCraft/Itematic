@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 @Mixin(StructureTemplateManager.class)
 public class StructureTemplateManagerExtender {
     @Unique
-    private static final String STRUCTURE_OUTPUT_DIR = System.getProperty("itematic.gametest.structure-output-directory");
+    private static final String STRUCTURE_OUTPUT_DIRECTORY = System.getProperty("itematic.gametest.structure-output-directory");
 
     @ModifyExpressionValue(
         method = "getTemplatePath",
@@ -26,8 +26,8 @@ public class StructureTemplateManagerExtender {
         )
     )
     private Path useCustomStructureOutputDirectory(Path original) {
-        if (STRUCTURE_OUTPUT_DIR != null) {
-            return Paths.get(STRUCTURE_OUTPUT_DIR);
+        if (STRUCTURE_OUTPUT_DIRECTORY != null) {
+            return Paths.get(STRUCTURE_OUTPUT_DIRECTORY);
         }
 
         return original;

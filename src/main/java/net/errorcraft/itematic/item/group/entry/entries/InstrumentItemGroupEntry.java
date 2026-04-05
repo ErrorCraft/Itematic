@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.item.group.entry.PossiblyHiddenItemGroupEntry;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.InstrumentComponent;
 import net.minecraft.item.Instrument;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -52,7 +53,7 @@ public class InstrumentItemGroupEntry extends PossiblyHiddenItemGroupEntry {
             .stream()
             .map(instrument -> {
                 ItemStack stack = new ItemStack(this.item);
-                stack.set(DataComponentTypes.INSTRUMENT, instrument);
+                stack.set(DataComponentTypes.INSTRUMENT, new InstrumentComponent(instrument));
                 return stack;
             })
             .toList();

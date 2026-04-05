@@ -6,6 +6,7 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.BeesComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -93,6 +94,6 @@ public class BeehiveBlockExtender implements AbstractBlockAccess {
 
     @Override
     public void itematic$addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.BEES, List.of());
+        builder.add(DataComponentTypes.BEES, new BeesComponent(List.of()));
     }
 }

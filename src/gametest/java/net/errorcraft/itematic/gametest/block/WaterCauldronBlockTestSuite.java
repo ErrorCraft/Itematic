@@ -33,7 +33,7 @@ public class WaterCauldronBlockTestSuite {
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         ItemStack wolfArmor = world.itematic$createStack(ItemKeys.WOLF_ARMOR);
-        wolfArmor.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xffffff, true));
+        wolfArmor.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xffffff));
         player.setStackInHand(Hand.MAIN_HAND, wolfArmor);
         world.spawnEntity(player);
         context.useBlock(WATER_CAULDRON_POSITION, player);

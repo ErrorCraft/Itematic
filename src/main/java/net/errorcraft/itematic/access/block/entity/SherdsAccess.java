@@ -18,7 +18,4 @@ public interface SherdsAccess {
     default List<RegistryEntry<Item>> itematic$entries(RegistryWrapper.WrapperLookup lookup) {
         return null;
     }
-    default List<RegistryEntry<Item>> itematic$entriesForwards(RegistryWrapper.WrapperLookup lookup) {
-        return null;
-    }
 }

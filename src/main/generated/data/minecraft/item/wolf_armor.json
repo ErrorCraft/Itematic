@@ -22,6 +22,9 @@
       "equip_sound": "minecraft:item.armor.equip_wolf",
       "slot": "body"
     },
+    "minecraft:repairable": {
+      "items": "#minecraft:repairs_wolf_armor"
+    },
     "minecraft:stackable": 1
   },
   "display": {

@@ -28,7 +28,6 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> DROP_ITEM_FROM_BLOCK = of("drop_item_from_block");
     public static final RegistryKey<ActionType<?>> ATTACH_LEASHED_ENTITIES_ON_BLOCK = of("attach_leashed_entities_on_block");
     public static final RegistryKey<ActionType<?>> SET_ENTITY_NAME_FROM_ITEM = of("set_entity_name_from_item");
-    public static final RegistryKey<ActionType<?>> OPEN_BOOK_FROM_ITEM = of("open_book_from_item");
     public static final RegistryKey<ActionType<?>> PLACE_BLOCK_FROM_ITEM = of("place_block_from_item");
     public static final RegistryKey<ActionType<?>> MARK_BANNER_ON_ITEM = of("mark_banner_on_item");
     public static final RegistryKey<ActionType<?>> TWIRL_PLAYER = of("twirl_player");

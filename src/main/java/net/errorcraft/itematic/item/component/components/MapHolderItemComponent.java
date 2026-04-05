@@ -12,11 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public record MapHolderItemComponent() implements ItemComponent<MapHolderItemComponent> {
     public static final MapHolderItemComponent INSTANCE = new MapHolderItemComponent();
@@ -47,10 +43,5 @@ public record MapHolderItemComponent() implements ItemComponent<MapHolderItemCom
     @Override
     public void onCraft(ItemStack stack, World world) {
         DUMMY.onCraft(stack, world);
-    }
-
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        DUMMY.appendTooltip(stack, context, tooltip, type);
     }
 }

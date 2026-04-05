@@ -25,7 +25,7 @@ public class SmithingTransformRecipeExtender implements RecipeAccess {
 
     @Shadow
     @Final
-    Optional<Ingredient> base;
+    Ingredient base;
 
     @Shadow
     @Final
@@ -40,7 +40,7 @@ public class SmithingTransformRecipeExtender implements RecipeAccess {
         return List.of(
             new SmithingRecipeDisplay(
                 Ingredient.toDisplay(this.template),
-                Ingredient.toDisplay(this.base),
+                this.base.toDisplay(),
                 Ingredient.toDisplay(this.addition),
                 this.result.createSlotDisplay(),
                 new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.SMITHING_TABLE))

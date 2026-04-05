@@ -36,7 +36,7 @@ public class ItemComponentTypes {
     public static final ItemComponentType<SteeringItemComponent> STEERING = register("steering", new ItemComponentType<>(SteeringItemComponent.CODEC));
     public static final ItemComponentType<PointableItemComponent> POINTABLE = register("pointable", new ItemComponentType<>(PointableItemComponent.CODEC));
     public static final ItemComponentType<PreventUseWhenUsedOnTargetItemComponent> PREVENT_USE_WHEN_USED_ON_TARGET = register("prevent_use_when_used_on_target", new ItemComponentType<>(PreventUseWhenUsedOnTargetItemComponent.CODEC));
-    public static final ItemComponentType<SmithingTemplateItemComponent> SMITHING_TEMPLATE = register("smithing_template", new ItemComponentType<>(SmithingTemplateItemComponent.CODEC));
+    public static final ItemComponentType<SmithingTemplateProviderItemComponent> SMITHING_TEMPLATE_PROVIDER = register("smithing_template_provider", new ItemComponentType<>(SmithingTemplateProviderItemComponent.CODEC));
     public static final ItemComponentType<BannerPatternItemComponent> BANNER_PATTERN = register("banner_pattern", new ItemComponentType<>(BannerPatternItemComponent.CODEC));
     public static final ItemComponentType<BannerPatternHolderItemComponent> BANNER_PATTERN_HOLDER = register("banner_pattern_holder", new ItemComponentType<>(BannerPatternHolderItemComponent.CODEC));
     public static final ItemComponentType<WritableItemComponent> WRITABLE = register("writable", new ItemComponentType<>(WritableItemComponent.CODEC));
@@ -56,6 +56,8 @@ public class ItemComponentTypes {
     public static final ItemComponentType<StackableItemComponent> STACKABLE = register("stackable", new ItemComponentType<>(StackableItemComponent.CODEC));
     public static final ItemComponentType<OminousEffectProviderItemComponent> OMINOUS_EFFECT_PROVIDER = register("ominous_effect_provider", new ItemComponentType<>(OminousEffectProviderItemComponent.CODEC));
     public static final ItemComponentType<GliderItemComponent> GLIDER = register("glider", new ItemComponentType<>(GliderItemComponent.CODEC));
+    public static final ItemComponentType<AttackBlockingItemComponent> ATTACK_BLOCKING = register("attack_blocking", new ItemComponentType<>(AttackBlockingItemComponent.CODEC));
+    public static final ItemComponentType<TrimMaterialProviderItemComponent> TRIM_MATERIAL_PROVIDER = register("trim_material_provider", new ItemComponentType<>(TrimMaterialProviderItemComponent.CODEC));
 
     private ItemComponentTypes() {}
 

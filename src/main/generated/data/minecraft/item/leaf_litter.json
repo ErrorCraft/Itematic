@@ -3,6 +3,9 @@
     "minecraft:block": {
       "block": "minecraft:leaf_litter"
     },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.3
+    },
     "minecraft:fuel": {
       "ticks": 100
     },

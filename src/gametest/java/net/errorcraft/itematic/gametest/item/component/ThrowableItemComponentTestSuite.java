@@ -106,7 +106,7 @@ public class ThrowableItemComponentTestSuite {
                 result.isAccepted(),
                 () -> "Expected Splash Potion usage to be successful"
             );
-            context.expectEntityAt(EntityType.POTION, SPAWN_POSITION.add(0, (int)player.getStandingEyeHeight(), 0));
+            context.expectEntityAt(EntityType.SPLASH_POTION, SPAWN_POSITION.add(0, (int)player.getStandingEyeHeight(), 0));
         });
     }
 
@@ -124,7 +124,7 @@ public class ThrowableItemComponentTestSuite {
                 result.isAccepted(),
                 () -> "Expected Lingering Potion usage to be successful"
             );
-            context.expectEntityAt(EntityType.POTION, SPAWN_POSITION.add(0, (int)player.getStandingEyeHeight(), 0));
+            context.expectEntityAt(EntityType.LINGERING_POTION, SPAWN_POSITION.add(0, (int)player.getStandingEyeHeight(), 0));
         });
     }
 

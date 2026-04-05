@@ -10,19 +10,18 @@ import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public record PotionHolderItemComponent(float durationMultiplier) implements ItemComponent<PotionHolderItemComponent> {
     public static final Codec<PotionHolderItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.POSITIVE_FLOAT.fieldOf("duration_multiplier").forGetter(PotionHolderItemComponent::durationMultiplier)
     ).apply(instance, PotionHolderItemComponent::new));
+
+    public static PotionHolderItemComponent of(float durationMultiplier) {
+        return new PotionHolderItemComponent(durationMultiplier);
+    }
 
     @Override
     public ItemComponentType<PotionHolderItemComponent> type() {
@@ -48,22 +47,10 @@ public record PotionHolderItemComponent(float durationMultiplier) implements Ite
         builder.add(DataComponentTypes.POTION_DURATION_SCALE, this.durationMultiplier);
     }
 
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        PotionContentsComponent potionContents = stack.get(DataComponentTypes.POTION_CONTENTS);
-        if (potionContents != null) {
-            potionContents.buildTooltip(tooltip::add, this.durationMultiplier, context.getUpdateTickRate());
-        }
-    }
-
     public String translationKey(ItemStack stack, String baseTranslationKey) {
         return stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT)
             .potion()
             .map(potion -> baseTranslationKey + ".effect." + potion.value().getBaseName())
             .orElseGet(() -> baseTranslationKey + ".effect.empty");
-    }
-
-    public static PotionHolderItemComponent of(float durationMultiplier) {
-        return new PotionHolderItemComponent(durationMultiplier);
     }
 }

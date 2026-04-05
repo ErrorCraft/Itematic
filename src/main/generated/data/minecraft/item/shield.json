@@ -1,5 +1,15 @@
 {
   "behavior": {
+    "minecraft:attack_blocking": {
+      "block_delay_seconds": 0.25,
+      "block_sound": "minecraft:item.shield.block",
+      "disabled_sound": "minecraft:item.shield.break",
+      "item_damage": {
+        "base": 1.0,
+        "factor": 1.0,
+        "threshold": 3.0
+      }
+    },
     "minecraft:banner_pattern_holder": {},
     "minecraft:damageable": {
       "durability": 336

@@ -21,8 +21,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public interface ItemComponent<T extends ItemComponent<T>> {
     SetMapCodec<ItemComponentType<?>, ItemComponent<?>> SET_MAP_CODEC = SetMapCodec.ofRegistry(ItematicRegistries.ITEM_COMPONENT_TYPE, ItemComponentType::codec, ItemComponent::codec, ItemComponent::type);
@@ -72,5 +72,5 @@ public interface ItemComponent<T extends ItemComponent<T>> {
 
     default void addComponents(ComponentMap.Builder builder) {}
 
-    default void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {}
+    default void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Text> builder, TooltipType type) {}
 }

@@ -14,7 +14,6 @@ import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
-import net.errorcraft.itematic.item.component.components.DamageableItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
@@ -51,8 +50,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -65,8 +62,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Mixin(Item.class)
 public abstract class ItemExtender implements ItemAccess, FabricItem {
@@ -436,19 +433,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        this.display.tooltip()
-            .ifPresent(tooltip::addAll);
-        for (ItemComponent<?> component : this.itemComponents) {
-            component.appendTooltip(stack, context, tooltip, type);
-        }
-    }
-
     @Inject(
         method = "canMine",
         at = @At("HEAD"),
@@ -504,18 +488,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return this.itematic$getBehavior(ItemComponentTypes.BLOCK)
             .map(BlockItemComponent::canBeNested)
             .orElse(true);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public SoundEvent getBreakSound() {
-        return this.itematic$getBehavior(ItemComponentTypes.DAMAGEABLE)
-            .flatMap(DamageableItemComponent::breakSound)
-            .map(RegistryEntry::value)
-            .orElse(SoundEvents.ENTITY_ITEM_BREAK);
     }
 
     @Inject(
@@ -675,6 +647,14 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Override
     public boolean itematic$hasEventListener(ItemEvent event) {
         return this.events.hasListener(event);
+    }
+
+    @Override
+    public void itematic$addTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Text> builder, TooltipType type) {
+        this.display.tooltip().ifPresent(tooltip -> tooltip.forEach(builder));
+        for (ItemComponent<?> component : this.itemComponents) {
+            component.appendTooltip(stack, context, builder, type);
+        }
     }
 
     @Override

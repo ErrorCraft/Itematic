@@ -33,6 +33,6 @@ public record PlayableSongItemComponent(RegistryEntry<JukeboxSong> song) impleme
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.JUKEBOX_PLAYABLE, new JukeboxPlayableComponent(new RegistryPair<>(this.song), true));
+        builder.add(DataComponentTypes.JUKEBOX_PLAYABLE, new JukeboxPlayableComponent(new RegistryPair<>(this.song)));
     }
 }

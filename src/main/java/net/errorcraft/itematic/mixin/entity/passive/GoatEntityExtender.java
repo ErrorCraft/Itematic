@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.entity.passive;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.InstrumentComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.GoatEntity;
@@ -35,7 +36,7 @@ public abstract class GoatEntityExtender extends MobEntityExtender {
     private Function<? super RegistryEntry<Instrument>, ? extends ItemStack> getStackForInstrumentUseCreateStack(Function<? super RegistryEntry<Instrument>, ? extends ItemStack> mapper) {
         return instrument -> {
             ItemStack stack = this.getWorld().itematic$createStack(ItemKeys.GOAT_HORN);
-            stack.set(DataComponentTypes.INSTRUMENT, instrument);
+            stack.set(DataComponentTypes.INSTRUMENT, new InstrumentComponent(instrument));
             return stack;
         };
     }

@@ -7,7 +7,6 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
-import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.registry.ActionValidator;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
@@ -43,7 +42,6 @@ public class RegistryLoaderExtender {
             .add(createEntry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
             .add(createEntry(ItematicRegistryKeys.TRADE, Trade.CODEC))
             .add(createEntry(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
-            .add(createEntry(ItematicRegistryKeys.SMITHING_TEMPLATE, SmithingTemplate.CODEC))
             .add(createEntry(ItematicRegistryKeys.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();
     }
@@ -63,7 +61,6 @@ public class RegistryLoaderExtender {
             .add(createEntry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
             .add(createEntry(ItematicRegistryKeys.TRADE, Trade.CODEC))
             .add(createEntry(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
-            .add(createEntry(ItematicRegistryKeys.SMITHING_TEMPLATE, SmithingTemplate.CODEC))
             .add(createEntry(ItematicRegistryKeys.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();
     }

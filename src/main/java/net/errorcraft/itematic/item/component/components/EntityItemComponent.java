@@ -42,8 +42,8 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, boolean allowItemData, Set<Pass> passes) implements ItemComponent<EntityItemComponent> {
     public static final Codec<EntityItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -113,18 +113,18 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, boolean a
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Text> builder, TooltipType type) {
         if (this.entity.value() != EntityType.PAINTING) {
             return;
         }
 
         RegistryEntry<PaintingVariant> paintingVariant = stack.get(DataComponentTypes.PAINTING_VARIANT);
         if (paintingVariant != null) {
-            paintingVariant.value().title().ifPresent(tooltip::add);
-            paintingVariant.value().author().ifPresent(tooltip::add);
-            tooltip.add(Text.translatable("painting.dimensions", paintingVariant.value().width(), paintingVariant.value().height()));
+            paintingVariant.value().title().ifPresent(builder);
+            paintingVariant.value().author().ifPresent(builder);
+            builder.accept(Text.translatable("painting.dimensions", paintingVariant.value().width(), paintingVariant.value().height()));
         } else if (type.isCreative()) {
-            tooltip.add(RANDOM_TEXT);
+            builder.accept(RANDOM_TEXT);
         }
     }
 

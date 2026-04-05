@@ -1,23 +1,22 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.WrittenBookContentComponent;
-import net.minecraft.item.Item;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.StringHelper;
+import net.minecraft.stat.Stats;
+import net.minecraft.util.Hand;
+import net.minecraft.world.World;
 
-import java.util.List;
-
-public record TextHolderItemComponent() implements ItemComponent<TextHolderItemComponent> {
+public class TextHolderItemComponent implements ItemComponent<TextHolderItemComponent> {
     public static final TextHolderItemComponent INSTANCE = new TextHolderItemComponent();
     public static final Codec<TextHolderItemComponent> CODEC = Codec.unit(INSTANCE);
+
+    private TextHolderItemComponent() {}
 
     @Override
     public ItemComponentType<TextHolderItemComponent> type() {
@@ -30,14 +29,9 @@ public record TextHolderItemComponent() implements ItemComponent<TextHolderItemC
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        WrittenBookContentComponent writtenBookContent = stack.get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
-        if (writtenBookContent == null) {
-            return;
-        }
-        if (!StringHelper.isBlank(writtenBookContent.author())) {
-            tooltip.add(Text.translatable("book.byAuthor", writtenBookContent.author()).formatted(Formatting.GRAY));
-        }
-        tooltip.add(Text.translatable("book.generation." + writtenBookContent.generation()).formatted(Formatting.GRAY));
+    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        user.useBook(stack, hand);
+        user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+        return ItemResult.SUCCEED;
     }
 }
