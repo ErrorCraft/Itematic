@@ -7,8 +7,6 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.entity.Sherds;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
@@ -177,17 +175,6 @@ public abstract class SherdsExtender implements SherdsAccess {
             .map(Text::copyContentOnly)
             .map(text -> text.formatted(Formatting.GRAY))
             .ifPresent(textConsumer);
-    }
-
-    @Override
-    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
-    public NbtCompound itematic$toNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup lookup) {
-        if (this.equals(DEFAULT)) {
-            return nbt;
-        }
-
-        nbt.put("sherds", CODEC.encodeStart(lookup.getOps(NbtOps.INSTANCE), (Sherds)(Object) this).getOrThrow());
-        return nbt;
     }
 
     @Override

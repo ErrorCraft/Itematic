@@ -210,9 +210,11 @@ public class ItemKeys {
     public static final RegistryKey<Item> COBWEB = register("cobweb");
     public static final RegistryKey<Item> SHORT_GRASS = register("short_grass");
     public static final RegistryKey<Item> FERN = register("fern");
+    public static final RegistryKey<Item> BUSH = register("bush");
     public static final RegistryKey<Item> AZALEA = register("azalea");
     public static final RegistryKey<Item> FLOWERING_AZALEA = register("flowering_azalea");
     public static final RegistryKey<Item> DEAD_BUSH = register("dead_bush");
+    public static final RegistryKey<Item> FIREFLY_BUSH = register("firefly_bush");
     public static final RegistryKey<Item> SEAGRASS = register("seagrass");
     public static final RegistryKey<Item> SEA_PICKLE = register("sea_pickle");
     public static final RegistryKey<Item> WHITE_WOOL = register("white_wool");

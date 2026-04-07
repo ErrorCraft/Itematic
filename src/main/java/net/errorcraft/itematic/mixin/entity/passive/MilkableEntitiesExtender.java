@@ -2,8 +2,8 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.AbstractCowEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.passive.GoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-@Mixin({ CowEntity.class, GoatEntity.class })
+@Mixin({
+    AbstractCowEntity.class,
+    GoatEntity.class
+})
 public abstract class MilkableEntitiesExtender extends AnimalEntity {
     protected MilkableEntitiesExtender(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);

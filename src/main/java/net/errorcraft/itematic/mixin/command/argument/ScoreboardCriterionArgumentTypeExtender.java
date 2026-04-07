@@ -2,44 +2,39 @@ package net.errorcraft.itematic.mixin.command.argument;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.brigadier.StringReader;
+import com.mojang.serialization.JsonOps;
 import net.errorcraft.itematic.access.command.argument.ScoreboardCriterionArgumentTypeAccess;
 import net.errorcraft.itematic.scoreboard.ScoreboardCriterionUtil;
 import net.errorcraft.itematic.stat.StatUtil;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.ScoreboardCriterionArgumentType;
+import net.minecraft.registry.RegistryOps;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.scoreboard.ScoreboardCriterion;
 import net.minecraft.stat.StatType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Iterator;
+import java.util.Optional;
 
 @Mixin(ScoreboardCriterionArgumentType.class)
 public class ScoreboardCriterionArgumentTypeExtender implements ScoreboardCriterionArgumentTypeAccess {
     @Unique
     private CommandRegistryAccess registryAccess;
 
-    @Inject(
+    @Redirect(
         method = "parse(Lcom/mojang/brigadier/StringReader;)Lnet/minecraft/scoreboard/ScoreboardCriterion;",
-        at = @At("HEAD")
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/scoreboard/ScoreboardCriterion;getOrCreateStatCriterion(Ljava/lang/String;)Ljava/util/Optional;"
+        )
     )
-    private void setLookup(StringReader reader, CallbackInfoReturnable<ScoreboardCriterion> info) {
-        ScoreboardCriterionUtil.setLookup(this.registryAccess);
-    }
-
-    @Inject(
-        method = "parse(Lcom/mojang/brigadier/StringReader;)Lnet/minecraft/scoreboard/ScoreboardCriterion;",
-        at = @At("RETURN")
-    )
-    private void resetLookup(StringReader reader, CallbackInfoReturnable<ScoreboardCriterion> info) {
-        ScoreboardCriterionUtil.setLookup(null);
+    private Optional<ScoreboardCriterion> useDynamicRegistry(String name) {
+        return ScoreboardCriterionUtil.byName(name, RegistryOps.of(JsonOps.INSTANCE, this.registryAccess));
     }
 
     @ModifyExpressionValue(

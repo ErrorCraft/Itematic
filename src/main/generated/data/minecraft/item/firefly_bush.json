@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:firefly_bush"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.3
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:firefly_bush",
+    "translation_key": "block.minecraft.firefly_bush"
+  }
+}

@@ -6704,6 +6704,22 @@ public class ItemUtil {
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
+            this.registerable.register(ItemKeys.BUSH, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.BUSH).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BUSH)))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FIREFLY_BUSH, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.FIREFLY_BUSH).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FIREFLY_BUSH)))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
+                    .build()
+            ));
             this.registerable.register(ItemKeys.FLOWERING_AZALEA_LEAVES, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.FLOWERING_AZALEA_LEAVES).build(),
                 ItemComponentSet.builder()
@@ -7365,8 +7381,11 @@ public class ItemUtil {
                     .with(AttackBlockingItemComponent.of(new BlocksAttacksComponent(
                         0.25f,
                         1.0f,
-                        List.of(BlocksAttacksComponent.DamageReduction.DEFAULT),
+                        List.of(
+                            new BlocksAttacksComponent.DamageReduction(90.0f, Optional.empty(), 0.0f, 1.0f)
+                        ),
                         new BlocksAttacksComponent.ItemDamage(3.0f, 1.0f, 1.0f),
+                        Optional.of(DamageTypeTags.BYPASSES_SHIELD),
                         Optional.of(this.soundEvents.getOrThrow(SoundEventKeys.SHIELD_BLOCK)),
                         Optional.of(this.soundEvents.getOrThrow(SoundEventKeys.SHIELD_BREAK))
                     )))

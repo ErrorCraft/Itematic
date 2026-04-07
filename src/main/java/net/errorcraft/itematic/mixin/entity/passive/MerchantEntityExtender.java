@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.google.common.collect.Lists;
-import com.mojang.serialization.DynamicOps;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.errorcraft.itematic.util.context.ItematicContextTypes;
 import net.errorcraft.itematic.village.trade.Trade;
@@ -11,8 +10,6 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootWorldContext;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.registry.RegistryOps;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.world.ServerWorld;
@@ -23,7 +20,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.ArrayList;
@@ -47,18 +43,6 @@ public abstract class MerchantEntityExtender extends MobEntityExtender {
     )
     private void fillRecipesUseDynamicRegistry(MerchantEntity instance) {
         this.fillRecipesFromContext();
-    }
-
-    @ModifyArg(
-        method = "readCustomDataFromNbt",
-        at = @At(
-            value = "INVOKE",
-            target = "Lcom/mojang/serialization/Codec;parse(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;",
-            remap = false
-        )
-    )
-    private DynamicOps<NbtElement> parseTradeOfferListUseCodec(DynamicOps<NbtElement> ops) {
-        return RegistryOps.of(ops, this.getWorld().getRegistryManager());
     }
 
     @Unique

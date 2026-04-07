@@ -139,6 +139,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> SHORT_GRASS = of("short_grass");
     public static final RegistryKey<Block> FERN = of("fern");
     public static final RegistryKey<Block> DEAD_BUSH = of("dead_bush");
+    public static final RegistryKey<Block> BUSH = of("bush");
     public static final RegistryKey<Block> SEAGRASS = of("seagrass");
     public static final RegistryKey<Block> PISTON = of("piston");
     public static final RegistryKey<Block> WHITE_WOOL = of("white_wool");
@@ -1064,6 +1065,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> CLOSED_EYEBLOSSOM = of("closed_eyeblossom");
     public static final RegistryKey<Block> POTTED_OPEN_EYEBLOSSOM = of("potted_open_eyeblossom");
     public static final RegistryKey<Block> POTTED_CLOSED_EYEBLOSSOM = of("potted_closed_eyeblossom");
+    public static final RegistryKey<Block> FIREFLY_BUSH = of("firefly_bush");
 
     private BlockKeys() {}
 
