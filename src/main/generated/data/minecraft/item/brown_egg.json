@@ -5,7 +5,7 @@
     },
     "minecraft:projectile": {
       "components": {
-        "minecraft:chicken/variant": "minecraft:temperate"
+        "minecraft:chicken/variant": "minecraft:warm"
       },
       "entity": "minecraft:egg"
     },
@@ -16,7 +16,7 @@
     }
   },
   "display": {
-    "model": "minecraft:egg",
-    "translation_key": "item.minecraft.egg"
+    "model": "minecraft:brown_egg",
+    "translation_key": "item.minecraft.brown_egg"
   }
 }

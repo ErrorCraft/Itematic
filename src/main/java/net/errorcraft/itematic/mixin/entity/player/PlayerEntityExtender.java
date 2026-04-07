@@ -95,7 +95,7 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
         )
     )
     private double multiplyByAttackSpeedMultiplier(double original) {
-        return this.inventory.getMainHandStack().itematic$attackSpeedMultiplier() * original;
+        return this.getMainHandStack().itematic$attackSpeedMultiplier() * original;
     }
 
     @Redirect(

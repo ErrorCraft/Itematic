@@ -14,6 +14,7 @@ import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
+import net.errorcraft.itematic.item.data.InventoryTickListener;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
@@ -383,15 +384,13 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         info.setReturnValue(stackExchanger.result());
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        for (ItemComponent<?> component : this.itemComponents) {
-            component.inventoryTick(stack, world, entity, slot, selected);
-        }
+    @Inject(
+        method = "inventoryTick",
+        at = @At("HEAD")
+    )
+    public void callInventoryTickListeners(ItemStack stack, ServerWorld world, Entity entity, EquipmentSlot slot, CallbackInfo info) {
+        stack.streamAll(InventoryTickListener.class)
+            .forEach(inventoryTickListener -> inventoryTickListener.itematic$onInventoryTick(world, stack, entity, slot));
     }
 
     /**
@@ -468,17 +467,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return instance.itematic$isCorrectForDrops(stack, state);
     }
 
-    @Inject(
-        method = "hasGlint",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    public void checkPointableItemComponent(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
-        if (this.itematic$hasBehavior(ItemComponentTypes.POINTABLE) && stack.contains(DataComponentTypes.LODESTONE_TRACKER)) {
-            info.setReturnValue(true);
-        }
-    }
-
     /**
      * @author ErrorCraft
      * @reason Uses the ItemComponent implementation for data-driven items.
@@ -538,10 +526,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     public void getName(ItemStack stack, CallbackInfoReturnable<Text> info) {
-        this.itematic$getBehavior(ItemComponentTypes.POINTABLE)
-            .flatMap(c -> c.lodestoneTranslationKey(stack))
-            .or(() -> this.itematic$getBehavior(ItemComponentTypes.POTION_HOLDER)
-                .map(c -> c.translationKey(stack, this.display.translationKey())))
+        this.itematic$getBehavior(ItemComponentTypes.POTION_HOLDER)
+            .map(c -> c.translationKey(stack, this.display.translationKey()))
             .or(() -> this.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
                 .flatMap(c -> c.translationKey(stack, this.display.translationKey())))
             .map(Text::translatable)

@@ -7,7 +7,6 @@ import net.errorcraft.itematic.serialization.SetMapCodec;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -57,8 +56,6 @@ public interface ItemComponent<T extends ItemComponent<T>> {
     }
 
     default void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {}
-
-    default void inventoryTick(ItemStack stack, World world, Entity holder, int slot, boolean selected) {}
 
     default boolean clickOnSlot(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity user) {
         return false;

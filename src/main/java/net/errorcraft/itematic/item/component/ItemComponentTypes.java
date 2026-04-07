@@ -34,7 +34,6 @@ public class ItemComponentTypes {
     public static final ItemComponentType<ConsumableItemComponent> CONSUMABLE = register("consumable", new ItemComponentType<>(ConsumableItemComponent.CODEC));
     public static final ItemComponentType<PotionHolderItemComponent> POTION_HOLDER = register("potion_holder", new ItemComponentType<>(PotionHolderItemComponent.CODEC));
     public static final ItemComponentType<SteeringItemComponent> STEERING = register("steering", new ItemComponentType<>(SteeringItemComponent.CODEC));
-    public static final ItemComponentType<PointableItemComponent> POINTABLE = register("pointable", new ItemComponentType<>(PointableItemComponent.CODEC));
     public static final ItemComponentType<PreventUseWhenUsedOnTargetItemComponent> PREVENT_USE_WHEN_USED_ON_TARGET = register("prevent_use_when_used_on_target", new ItemComponentType<>(PreventUseWhenUsedOnTargetItemComponent.CODEC));
     public static final ItemComponentType<SmithingTemplateProviderItemComponent> SMITHING_TEMPLATE_PROVIDER = register("smithing_template_provider", new ItemComponentType<>(SmithingTemplateProviderItemComponent.CODEC));
     public static final ItemComponentType<BannerPatternItemComponent> BANNER_PATTERN = register("banner_pattern", new ItemComponentType<>(BannerPatternItemComponent.CODEC));

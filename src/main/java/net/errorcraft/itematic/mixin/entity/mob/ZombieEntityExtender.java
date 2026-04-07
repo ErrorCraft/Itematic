@@ -14,6 +14,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -23,17 +24,6 @@ import org.spongepowered.asm.mixin.injection.Slice;
 public abstract class ZombieEntityExtender extends MobEntityExtender {
     protected ZombieEntityExtender(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
-    }
-
-    @Redirect(
-        method = "canPickupItem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForEggUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.EGG);
     }
 
     @ModifyExpressionValue(
@@ -113,7 +103,8 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;IRON_SWORD:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/item/Items;IRON_SWORD:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )

@@ -215,6 +215,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> FLOWERING_AZALEA = register("flowering_azalea");
     public static final RegistryKey<Item> DEAD_BUSH = register("dead_bush");
     public static final RegistryKey<Item> FIREFLY_BUSH = register("firefly_bush");
+    public static final RegistryKey<Item> SHORT_DRY_GRASS = register("short_dry_grass");
+    public static final RegistryKey<Item> TALL_DRY_GRASS = register("tall_dry_grass");
     public static final RegistryKey<Item> SEAGRASS = register("seagrass");
     public static final RegistryKey<Item> SEA_PICKLE = register("sea_pickle");
     public static final RegistryKey<Item> WHITE_WOOL = register("white_wool");
@@ -333,6 +335,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ICE = register("ice");
     public static final RegistryKey<Item> SNOW_BLOCK = register("snow_block");
     public static final RegistryKey<Item> CACTUS = register("cactus");
+    public static final RegistryKey<Item> CACTUS_FLOWER = register("cactus_flower");
     public static final RegistryKey<Item> CLAY = register("clay");
     public static final RegistryKey<Item> JUKEBOX = register("jukebox");
     public static final RegistryKey<Item> OAK_FENCE = register("oak_fence");
@@ -971,6 +974,8 @@ public class ItemKeys {
     public static final RegistryKey<Item> BOOK = register("book");
     public static final RegistryKey<Item> SLIME_BALL = register("slime_ball");
     public static final RegistryKey<Item> EGG = register("egg");
+    public static final RegistryKey<Item> BLUE_EGG = register("blue_egg");
+    public static final RegistryKey<Item> BROWN_EGG = register("brown_egg");
     public static final RegistryKey<Item> COMPASS = register("compass");
     public static final RegistryKey<Item> RECOVERY_COMPASS = register("recovery_compass");
     public static final RegistryKey<Item> BUNDLE = register("bundle");

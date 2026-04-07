@@ -19,6 +19,7 @@ import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMeth
 import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionUtil;
+import net.errorcraft.itematic.loot.function.SplitItemModifier;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
@@ -29,6 +30,7 @@ import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.Actions;
 import net.errorcraft.itematic.world.action.actions.*;
+import net.errorcraft.itematic.world.action.context.ItemStackTarget;
 import net.errorcraft.itematic.world.action.context.ItematicEntityTargets;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
@@ -48,6 +50,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.passive.ChickenVariant;
+import net.minecraft.entity.passive.ChickenVariants;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
 import net.minecraft.item.consume.UseAction;
@@ -58,6 +62,8 @@ import net.minecraft.item.equipment.trim.ArmorTrimMaterial;
 import net.minecraft.item.equipment.trim.ArmorTrimMaterials;
 import net.minecraft.loot.condition.*;
 import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.function.SetComponentsLootFunction;
+import net.minecraft.loot.function.SetNameLootFunction;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.Potion;
 import net.minecraft.predicate.BlockPredicate;
@@ -68,12 +74,14 @@ import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.entity.LocationPredicate;
 import net.minecraft.predicate.item.*;
 import net.minecraft.registry.*;
+import net.minecraft.registry.entry.LazyRegistryEntryReference;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
@@ -143,6 +151,7 @@ public class ItemUtil {
         private final RegistryEntryLookup<JukeboxSong> jukeboxSongs;
         private final RegistryEntryLookup<Instrument> instruments;
         private final RegistryEntryLookup<ArmorTrimMaterial> trimMaterials;
+        private final RegistryEntryLookup<ChickenVariant> chickenVariants;
 
         private Bootstrapper(Registerable<Item> registerable) {
             this.registerable = registerable;
@@ -160,6 +169,7 @@ public class ItemUtil {
             this.jukeboxSongs = registerable.getRegistryLookup(RegistryKeys.JUKEBOX_SONG);
             this.instruments = registerable.getRegistryLookup(RegistryKeys.INSTRUMENT);
             this.trimMaterials = registerable.getRegistryLookup(RegistryKeys.TRIM_MATERIAL);
+            this.chickenVariants = registerable.getRegistryLookup(RegistryKeys.CHICKEN_VARIANT);
         }
 
         private void bootstrap() {
@@ -6720,6 +6730,14 @@ public class ItemUtil {
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
+            this.registerable.register(ItemKeys.CACTUS_FLOWER, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.CACTUS_FLOWER).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CACTUS_FLOWER)))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
+                    .build()
+            ));
             this.registerable.register(ItemKeys.FLOWERING_AZALEA_LEAVES, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.FLOWERING_AZALEA_LEAVES).build(),
                 ItemComponentSet.builder()
@@ -9523,6 +9541,24 @@ public class ItemUtil {
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
+            this.registerable.register(ItemKeys.SHORT_DRY_GRASS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.SHORT_DRY_GRASS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHORT_DRY_GRASS)))
+                    .with(FuelItemComponent.of(FuelTimes.PLANT))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TALL_DRY_GRASS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.TALL_DRY_GRASS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TALL_DRY_GRASS)))
+                    .with(FuelItemComponent.of(FuelTimes.PLANT))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
+                    .build()
+            ));
             this.registerable.register(ItemKeys.LEAF_LITTER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LEAF_LITTER).build(),
                 ItemComponentSet.builder()
@@ -9557,7 +9593,55 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
                     .with(ThrowableItemComponent.of(1.5f))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EGG)))
+                    .with(ProjectileItemComponent.of(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.EGG),
+                        ComponentChanges.builder()
+                            .add(
+                                DataComponentTypes.CHICKEN_VARIANT,
+                                new LazyRegistryEntryReference<>(
+                                    this.chickenVariants.getOrThrow(ChickenVariants.TEMPERATE)
+                                )
+                            )
+                            .build()
+                    ))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_EGG, create(
+                ItemDisplay.Builder.forItem(ItemKeys.BLUE_EGG).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(16))
+                    .with(ThrowableItemComponent.of(1.5f))
+                    .with(ProjectileItemComponent.of(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.EGG),
+                        ComponentChanges.builder()
+                            .add(
+                                DataComponentTypes.CHICKEN_VARIANT,
+                                new LazyRegistryEntryReference<>(
+                                    this.chickenVariants.getOrThrow(ChickenVariants.COLD)
+                                )
+                            )
+                            .build()
+                    ))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_EGG, create(
+                ItemDisplay.Builder.forItem(ItemKeys.BROWN_EGG).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(16))
+                    .with(ThrowableItemComponent.of(1.5f))
+                    .with(ProjectileItemComponent.of(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.EGG),
+                        ComponentChanges.builder()
+                            .add(
+                                DataComponentTypes.CHICKEN_VARIANT,
+                                new LazyRegistryEntryReference<>(
+                                    this.chickenVariants.getOrThrow(ChickenVariants.WARM)
+                                )
+                            )
+                            .build()
+                    ))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
@@ -10880,7 +10964,6 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.COMPASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(PointableItemComponent.of(Util.createTranslationKey("item", Identifier.ofVanilla("lodestone_compass"))))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
@@ -10891,7 +10974,25 @@ public class ItemUtil {
                                     .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value()))
                         ),
                         PassingSequenceHandler.builder()
-                            .add(SetItemPointerLocationAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(ModifyItemAction.of(
+                                ItemStackTarget.TOOL,
+                                SplitItemModifier.builder(1)
+                            ))
+                            .add(SetItemPointerLocationAction.of(
+                                ItemStackTarget.RESULT,
+                                PositionTarget.INTERACTED_POSITION
+                            ))
+                            .add(ModifyItemAction.of(
+                                ItemStackTarget.RESULT,
+                                SetNameLootFunction.builder(
+                                    Text.translatable(Util.createTranslationKey("item", Identifier.ofVanilla("lodestone_compass"))),
+                                    SetNameLootFunction.Target.ITEM_NAME
+                                ),
+                                SetComponentsLootFunction.builder(
+                                    DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE,
+                                    true
+                                )
+                            ))
                             .add(PlaySoundAction.of(
                                 PositionTarget.INTERACTED_POSITION,
                                 this.soundEvents.getOrThrow(SoundEventKeys.LODESTONE_COMPASS_LOCK),

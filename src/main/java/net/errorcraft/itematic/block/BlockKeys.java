@@ -140,6 +140,8 @@ public class BlockKeys {
     public static final RegistryKey<Block> FERN = of("fern");
     public static final RegistryKey<Block> DEAD_BUSH = of("dead_bush");
     public static final RegistryKey<Block> BUSH = of("bush");
+    public static final RegistryKey<Block> SHORT_DRY_GRASS = of("short_dry_grass");
+    public static final RegistryKey<Block> TALL_DRY_GRASS = of("tall_dry_grass");
     public static final RegistryKey<Block> SEAGRASS = of("seagrass");
     public static final RegistryKey<Block> PISTON = of("piston");
     public static final RegistryKey<Block> WHITE_WOOL = of("white_wool");
@@ -267,6 +269,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> ICE = of("ice");
     public static final RegistryKey<Block> SNOW_BLOCK = of("snow_block");
     public static final RegistryKey<Block> CACTUS = of("cactus");
+    public static final RegistryKey<Block> CACTUS_FLOWER = of("cactus_flower");
     public static final RegistryKey<Block> CLAY = of("clay");
     public static final RegistryKey<Block> SUGAR_CANE = of("sugar_cane");
     public static final RegistryKey<Block> JUKEBOX = of("jukebox");
