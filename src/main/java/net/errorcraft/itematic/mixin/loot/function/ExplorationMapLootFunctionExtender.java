@@ -7,7 +7,7 @@ import net.errorcraft.itematic.item.component.components.MappableItemComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.function.ExplorationMapLootFunction;
-import net.minecraft.world.World;
+import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -33,10 +33,10 @@ public class ExplorationMapLootFunctionExtender {
         method = "process",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/FilledMapItem;createMap(Lnet/minecraft/world/World;IIBZZ)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/item/FilledMapItem;createMap(Lnet/minecraft/server/world/ServerWorld;IIBZZ)Lnet/minecraft/item/ItemStack;"
         )
     )
-    private ItemStack createMapUseItemComponent(World world, int x, int z, byte scale, boolean showIcons, boolean unlimitedTracking, @Share("mappableItemComponent") LocalRef<MappableItemComponent> mappableItemComponent) {
+    private ItemStack createMapUseItemComponent(ServerWorld world, int x, int z, byte scale, boolean showIcons, boolean unlimitedTracking, @Share("mappableItemComponent") LocalRef<MappableItemComponent> mappableItemComponent) {
         return mappableItemComponent.get().createStack(world, x, z, scale, showIcons, unlimitedTracking);
     }
 }
