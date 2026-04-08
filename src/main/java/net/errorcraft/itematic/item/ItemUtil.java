@@ -70,6 +70,8 @@ import net.minecraft.predicate.BlockPredicate;
 import net.minecraft.predicate.FluidPredicate;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.predicate.StatePredicate;
+import net.minecraft.predicate.component.ComponentPredicateTypes;
+import net.minecraft.predicate.component.ComponentsPredicate;
 import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.entity.LocationPredicate;
 import net.minecraft.predicate.item.*;
@@ -228,11 +230,15 @@ public class ItemUtil {
                                     .block(BlockPredicate.Builder.create()
                                         .tag(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
                             ),
-                            MatchToolLootCondition.builder(
-                                ItemPredicate.Builder.create()
-                                    .subPredicate(ItemSubPredicateTypes.POTION_CONTENTS, new PotionContentsPredicate(RegistryEntryList.of(
-                                        this.potions.getOrThrow(PotionKeys.WATER)
-                                    )))
+                            MatchToolLootCondition.builder(ItemPredicate.Builder.create()
+                                .components(ComponentsPredicate.Builder.create()
+                                    .partial(
+                                        ComponentPredicateTypes.POTION_CONTENTS,
+                                        new PotionContentsPredicate(RegistryEntryList.of(
+                                            this.potions.getOrThrow(PotionKeys.WATER)
+                                        ))
+                                    ).build()
+                                )
                             )
                         ),
                         UncheckedSequenceHandler.builder()
@@ -5495,11 +5501,16 @@ public class ItemUtil {
                                     .itematic$usedItemAtLeast(TridentItem.MIN_DRAW_DURATION)
                                     .itematic$inWaterOrRain(true)
                             ),
-                            MatchToolLootCondition.builder(
-                                ItemPredicate.Builder.create()
-                                    .subPredicate(ItemSubPredicateTypes.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.of(
-                                        new EnchantmentPredicate(this.enchantments.getOrThrow(Enchantments.RIPTIDE), NumberRange.IntRange.ANY)
-                                    ))))
+                            MatchToolLootCondition.builder(ItemPredicate.Builder.create()
+                                .components(ComponentsPredicate.Builder.create()
+                                    .partial(
+                                        ComponentPredicateTypes.ENCHANTMENTS,
+                                        EnchantmentsPredicate.enchantments(List.of(
+                                            new EnchantmentPredicate(this.enchantments.getOrThrow(Enchantments.RIPTIDE), NumberRange.IntRange.ANY)
+                                        ))
+                                    ).build()
+                                )
+                            )
                         ),
                         PassingSequenceHandler.builder()
                             .add(TwirlPlayerAction.INSTANCE)
@@ -7372,9 +7383,13 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.ofPreserved(432))
                     .with(GliderItemComponent.of(ItemPredicate.Builder.create()
-                        .subPredicate(ItemSubPredicateTypes.DAMAGE, DamagePredicate.durability(
-                            NumberRange.IntRange.atLeast(2)))
-                        .build()))
+                        .components(ComponentsPredicate.Builder.create()
+                            .partial(
+                                ComponentPredicateTypes.DAMAGE,
+                                DamagePredicate.durability(NumberRange.IntRange.atLeast(2))
+                            ).build()
+                        ).build()
+                    ))
                     .with(EquipmentItemComponent.of(EquippableComponent.builder(EquipmentSlot.CHEST)
                         .swappable(true)
                         .equipSound(this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_ELYTRA))

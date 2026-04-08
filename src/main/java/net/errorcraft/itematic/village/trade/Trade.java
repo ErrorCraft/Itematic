@@ -13,7 +13,7 @@ import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionTypes;
-import net.minecraft.predicate.ComponentPredicate;
+import net.minecraft.predicate.component.ComponentMapPredicate;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -62,7 +62,7 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
     private TradedItem createGivenStack(Input wants, LootContext context) {
         ItemStack gives = this.gives.createStack(context);
         return this.tradeModifier.flatMap(tradeModifier -> tradeModifier.apply(wants, gives, context))
-            .orElseGet(() -> new TradedItem(gives.getRegistryEntry(), gives.getCount(), ComponentPredicate.of(gives.getComponents())));
+            .orElseGet(() -> new TradedItem(gives.getRegistryEntry(), gives.getCount(), ComponentMapPredicate.of(gives.getComponents())));
     }
 
     public static Builder builder(Entry gives) {
@@ -166,7 +166,7 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
             }
 
             ItemStack stack = this.stacks.get(index);
-            return Optional.of(new TradedItem(stack.getRegistryEntry(), stack.getCount(), ComponentPredicate.of(stack.getComponents())));
+            return Optional.of(new TradedItem(stack.getRegistryEntry(), stack.getCount(), ComponentMapPredicate.of(stack.getComponents())));
         }
 
         public ItemStack getStack(int index) {

@@ -55,6 +55,7 @@
     "block.StemBlockExtender",
     "block.SweetBerryBushBlockExtender",
     "block.TallSeagrassBlockExtender",
+    "block.TntBlockAccessor",
     "block.TntBlockExtender",
     "block.TorchflowerBlockExtender",
     "block.TripwireBlockExtender",

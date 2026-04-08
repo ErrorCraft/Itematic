@@ -11,7 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.predicate.ComponentPredicate;
+import net.minecraft.predicate.component.ComponentMapPredicate;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -49,6 +49,6 @@ public record ItemFromTypeTradeModifier(Map<RegistryEntry<VillagerType>, Registr
         }
 
         ItemStack givesActual = gives.itematic$copyWithItem(this.types.get(type));
-        return Optional.of(new TradedItem(givesActual.getRegistryEntry(), givesActual.getCount(), ComponentPredicate.of(givesActual.getComponents())));
+        return Optional.of(new TradedItem(givesActual.getRegistryEntry(), givesActual.getCount(), ComponentMapPredicate.of(givesActual.getComponents())));
     }
 }

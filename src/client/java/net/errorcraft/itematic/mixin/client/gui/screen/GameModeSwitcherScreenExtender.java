@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.mixin.client.gui.screen;
 
 
-import net.errorcraft.itematic.access.client.gui.screen.GameModeSelectionScreenGameModeSelectionAccess;
+import net.errorcraft.itematic.access.client.gui.screen.GameModeSwitcherScreenAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.GameModeSelectionScreen;
+import net.minecraft.client.gui.screen.GameModeSwitcherScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -20,52 +20,53 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-public class GameModeSelectionScreenExtender {
-    @Mixin(GameModeSelectionScreen.ButtonWidget.class)
+public class GameModeSwitcherScreenExtender {
+    @Mixin(GameModeSwitcherScreen.ButtonWidget.class)
     public static class ButtonWidgetExtender {
         @Redirect(
             method = "renderWidget",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/client/gui/screen/GameModeSelectionScreen$GameModeSelection;renderIcon(Lnet/minecraft/client/gui/DrawContext;II)V"
+                target = "Lnet/minecraft/client/gui/screen/GameModeSwitcherScreen$GameModeSelection;renderIcon(Lnet/minecraft/client/gui/DrawContext;II)V"
             )
         )
-        private void renderIconUseRegistryEntry(GameModeSelectionScreen.GameModeSelection instance, DrawContext context, int x, int y) {
+        private void renderIconUseRegistryEntry(GameModeSwitcherScreen.GameModeSelection instance, DrawContext context, int x, int y) {
             World world = MinecraftClient.getInstance().world;
             if (world == null) {
                 return;
             }
+
             ItemStack stack = instance.itematic$icon(world.getRegistryManager().getOrThrow(RegistryKeys.ITEM));
             context.drawItem(stack, x, y);
         }
     }
 
-    @Mixin(GameModeSelectionScreen.GameModeSelection.class)
-    public static class GameModeSelectionExtender implements GameModeSelectionScreenGameModeSelectionAccess {
-        @Final
+    @Mixin(GameModeSwitcherScreen.GameModeSelection.class)
+    public static class GameModeSelectionExtender implements GameModeSwitcherScreenAccess.GameModeSelectionAccess {
         @Shadow
-        public static GameModeSelectionScreen.GameModeSelection CREATIVE;
+        @Final
+        public static GameModeSwitcherScreen.GameModeSelection CREATIVE;
 
-        @Final
         @Shadow
-        public static GameModeSelectionScreen.GameModeSelection SURVIVAL;
+        @Final
+        public static GameModeSwitcherScreen.GameModeSelection SURVIVAL;
 
-        @Final
         @Shadow
-        public static GameModeSelectionScreen.GameModeSelection ADVENTURE;
+        @Final
+        public static GameModeSwitcherScreen.GameModeSelection ADVENTURE;
 
-        @Final
         @Shadow
-        public static GameModeSelectionScreen.GameModeSelection SPECTATOR;
+        @Final
+        public static GameModeSwitcherScreen.GameModeSelection SPECTATOR;
 
         @Unique
         private RegistryKey<Item> icon;
 
         static {
-            ((GameModeSelectionExtender)(Object) CREATIVE).icon = ItemKeys.GRASS_BLOCK;
-            ((GameModeSelectionExtender)(Object) SURVIVAL).icon = ItemKeys.IRON_SWORD;
-            ((GameModeSelectionExtender)(Object) ADVENTURE).icon = ItemKeys.MAP;
-            ((GameModeSelectionExtender)(Object) SPECTATOR).icon = ItemKeys.ENDER_EYE;
+            CREATIVE.itematic$setIcon(ItemKeys.GRASS_BLOCK);
+            SURVIVAL.itematic$setIcon(ItemKeys.IRON_SWORD);
+            ADVENTURE.itematic$setIcon(ItemKeys.MAP);
+            SPECTATOR.itematic$setIcon(ItemKeys.ENDER_EYE);
         }
 
         @Redirect(
@@ -84,9 +85,15 @@ public class GameModeSelectionScreenExtender {
             if (this.icon == null) {
                 return ItemStack.EMPTY;
             }
+
             return registry.getOptional(this.icon)
                 .map(ItemStack::new)
                 .orElse(ItemStack.EMPTY);
+        }
+
+        @Override
+        public void itematic$setIcon(RegistryKey<Item> icon) {
+            this.icon = icon;
         }
     }
 }

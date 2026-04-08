@@ -12,7 +12,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
-import net.minecraft.predicate.ComponentPredicate;
+import net.minecraft.predicate.component.ComponentMapPredicate;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntryList;
@@ -47,6 +47,6 @@ public record EnchantWithLevelsTradeModifier(int index, Range.IntegerRange level
             .getOptional(EnchantmentTags.ON_TRADED_EQUIPMENT);
         ItemStack givesActual = EnchantmentHelper.enchant(random, gives, level, registryManager, enchantments);
         wants.getStack(this.index).itematic$tryIncrement(level);
-        return Optional.of(new TradedItem(givesActual.getRegistryEntry(), givesActual.getCount(), ComponentPredicate.of(givesActual.getComponents())));
+        return Optional.of(new TradedItem(givesActual.getRegistryEntry(), givesActual.getCount(), ComponentMapPredicate.of(givesActual.getComponents())));
     }
 }
