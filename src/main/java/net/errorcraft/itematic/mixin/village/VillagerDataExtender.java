@@ -39,7 +39,7 @@ public class VillagerDataExtender implements VillagerDataAccess {
             return null;
         }
 
-        Identifier tag = Identifier.ofVanilla(this.profession.value().id() + "_" + this.levelName());
+        Identifier tag = this.profession.getKey().orElseThrow().getValue().withPath(path -> path + "_" + this.levelName());
         return TagKey.of(ItematicRegistryKeys.TRADE, tag);
     }
 

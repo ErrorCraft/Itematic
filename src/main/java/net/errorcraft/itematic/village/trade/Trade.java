@@ -9,6 +9,7 @@ import net.errorcraft.itematic.util.Range;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionTypes;
@@ -25,22 +26,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperience, float priceMultiplier, Optional<TradeModifier<?>> tradeModifier) {
+public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperience, float priceMultiplier, Optional<TradeModifier<?>> tradeModifier, Optional<LootCondition> merchantPredicate) {
     public static final Codec<Trade> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Entry.CODEC.listOf(1, Trade.MAX_WANTED_ENTRIES).fieldOf("wants").forGetter(Trade::wants),
         Entry.CODEC.fieldOf("gives").forGetter(Trade::gives),
         Codecs.POSITIVE_INT.fieldOf("max_uses").forGetter(Trade::maxUses),
         Codec.INT.optionalFieldOf("trade_experience", 1).forGetter(Trade::tradeExperience),
         Codec.FLOAT.optionalFieldOf("price_multiplier", 0.0f).forGetter(Trade::priceMultiplier),
-        TradeModifier.CODEC.optionalFieldOf("trade_modifier").forGetter(Trade::tradeModifier)
+        TradeModifier.CODEC.optionalFieldOf("trade_modifier").forGetter(Trade::tradeModifier),
+        LootCondition.CODEC.optionalFieldOf("merchant_predicate").forGetter(Trade::merchantPredicate)
     ).apply(instance, Trade::new));
     public static final Codec<Integer> WANTED_INDEX_CODEC = ItematicCodecs.index(Trade.MAX_WANTED_ENTRIES);
     private static final int MAX_WANTED_ENTRIES = 2;
 
     public TradeOffer createTradeOffer(LootContext context) {
+        if (!this.test(context)) {
+            return null;
+        }
+
         Input wants = this.createWantedStacks(context);
         TradedItem gives = this.createGivenStack(wants, context);
         return new TradeOffer(wants.getTradedItem(0).orElseThrow(), wants.getTradedItem(1), gives.itemStack(), this.maxUses, this.tradeExperience, this.priceMultiplier);
+    }
+
+    private boolean test(LootContext context) {
+        return this.merchantPredicate.map(merchantPredicate -> merchantPredicate.test(context))
+            .orElse(true);
     }
 
     private Input createWantedStacks(LootContext context) {
@@ -63,14 +74,23 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
     }
 
     public static Trade of(Entry firstBuy, Entry sell, int maxUses, int tradeExperience, float priceMultiplier) {
-        return of(List.of(firstBuy), sell, maxUses, tradeExperience, priceMultiplier, null);
+        return of(List.of(firstBuy), sell, maxUses, tradeExperience, priceMultiplier, null, null);
     }
 
-    public static Trade of(List<Entry> wants, Entry gives, int maxUses, int tradeExperience, float priceMultiplier, TradeModifier<?> tradeModifier) {
+    public static Trade of(List<Entry> wants, Entry gives, int maxUses, int tradeExperience, float priceMultiplier, TradeModifier<?> tradeModifier, LootCondition merchantPredicate) {
         if (wants.size() > MAX_WANTED_ENTRIES) {
             throw new IllegalArgumentException("Wanted entries must not be more than " + MAX_WANTED_ENTRIES);
         }
-        return new Trade(wants, gives, maxUses, tradeExperience, priceMultiplier, Optional.ofNullable(tradeModifier));
+
+        return new Trade(
+            wants,
+            gives,
+            maxUses,
+            tradeExperience,
+            priceMultiplier,
+            Optional.ofNullable(tradeModifier),
+            Optional.ofNullable(merchantPredicate)
+        );
     }
 
     public static class Builder {
@@ -80,19 +100,29 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         private int tradeExperience;
         private float priceMultiplier = TradeOffersAccessor.lowPriceMultiplier();
         private TradeModifier<?> tradeModifier;
+        private LootCondition merchantPredicate;
 
         public Builder(Entry gives) {
             this.gives = gives;
         }
 
         public Trade build() {
-            return Trade.of(this.wants, this.gives, this.maxUses, this.tradeExperience, this.priceMultiplier, this.tradeModifier);
+            return Trade.of(
+                this.wants,
+                this.gives,
+                this.maxUses,
+                this.tradeExperience,
+                this.priceMultiplier,
+                this.tradeModifier,
+                this.merchantPredicate
+            );
         }
 
         public Builder wants(Entry entry) {
             if (this.wants.size() >= MAX_WANTED_ENTRIES) {
                 throw new IllegalArgumentException("Tried to add more than " + MAX_WANTED_ENTRIES + " wanted entries");
             }
+
             this.wants.add(entry);
             return this;
         }
@@ -116,6 +146,11 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
             this.priceMultiplier = priceMultiplier;
             return this;
         }
+
+        public Builder merchantPredicate(LootCondition.Builder merchantPredicate) {
+            this.merchantPredicate = merchantPredicate.build();
+            return this;
+        }
     }
 
     public static class Input {
@@ -129,6 +164,7 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
             if (index < 0 || index >= this.stacks.size()) {
                 return Optional.empty();
             }
+
             ItemStack stack = this.stacks.get(index);
             return Optional.of(new TradedItem(stack.getRegistryEntry(), stack.getCount(), ComponentPredicate.of(stack.getComponents())));
         }

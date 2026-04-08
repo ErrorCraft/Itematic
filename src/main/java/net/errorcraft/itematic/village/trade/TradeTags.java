@@ -70,10 +70,9 @@ public class TradeTags {
     public static final TagKey<Trade> MASON_JOURNEYMAN = of("mason_journeyman");
     public static final TagKey<Trade> MASON_EXPERT = of("mason_expert");
     public static final TagKey<Trade> MASON_MASTER = of("mason_master");
-    public static final TagKey<Trade> WANDERING_TRADER_REGULAR = of("wandering_trader_regular");
+    public static final TagKey<Trade> WANDERING_TRADER_BUYING = of("wandering_trader_buying");
     public static final TagKey<Trade> WANDERING_TRADER_SPECIAL = of("wandering_trader_special");
-
-
+    public static final TagKey<Trade> WANDERING_TRADER_REGULAR = of("wandering_trader_regular");
 
     private TradeTags() {}
 

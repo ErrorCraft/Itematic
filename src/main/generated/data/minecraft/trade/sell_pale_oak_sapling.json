@@ -1,0 +1,13 @@
+{
+  "gives": {
+    "item": "minecraft:pale_oak_sapling"
+  },
+  "max_uses": 8,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "count": 5,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

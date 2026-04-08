@@ -1,5 +1,7 @@
 {
   "values": [
+    "minecraft:sell_tropical_fish_bucket",
+    "minecraft:sell_pufferfish_bucket",
     "minecraft:sell_sea_pickle",
     "minecraft:sell_slime_ball",
     "minecraft:sell_glowstone_wandering_trader",
@@ -21,6 +23,7 @@
     "minecraft:sell_oxeye_daisy",
     "minecraft:sell_cornflower",
     "minecraft:sell_lily_of_the_valley",
+    "minecraft:sell_open_eyeblossom",
     "minecraft:sell_wheat_seeds",
     "minecraft:sell_beetroot_seeds",
     "minecraft:sell_pumpkin_seeds",
@@ -32,6 +35,7 @@
     "minecraft:sell_oak_sapling",
     "minecraft:sell_spruce_sapling",
     "minecraft:sell_cherry_sapling",
+    "minecraft:sell_pale_oak_sapling",
     "minecraft:sell_mangrove_propagule",
     "minecraft:sell_red_dye",
     "minecraft:sell_white_dye",
@@ -55,6 +59,7 @@
     "minecraft:sell_horn_coral_block",
     "minecraft:sell_tube_coral_block",
     "minecraft:sell_vine",
+    "minecraft:sell_pale_hanging_moss",
     "minecraft:sell_brown_mushroom",
     "minecraft:sell_red_mushroom",
     "minecraft:sell_lily_pad",
@@ -63,6 +68,10 @@
     "minecraft:sell_red_sand",
     "minecraft:sell_pointed_dripstone",
     "minecraft:sell_rooted_dirt",
-    "minecraft:sell_moss_block"
+    "minecraft:sell_moss_block",
+    "minecraft:sell_pale_moss_block",
+    "minecraft:sell_wildflowers",
+    "minecraft:sell_tall_dry_grass",
+    "minecraft:sell_firefly_bush"
   ]
 }

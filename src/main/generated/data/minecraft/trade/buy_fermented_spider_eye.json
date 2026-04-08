@@ -1,0 +1,13 @@
+{
+  "gives": {
+    "count": 3,
+    "item": "minecraft:emerald"
+  },
+  "max_uses": 1,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "item": "minecraft:fermented_spider_eye"
+    }
+  ]
+}

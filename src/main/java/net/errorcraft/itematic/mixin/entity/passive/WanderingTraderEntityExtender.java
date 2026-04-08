@@ -33,8 +33,9 @@ import org.spongepowered.asm.mixin.injection.Slice;
 public abstract class WanderingTraderEntityExtender extends MerchantEntityExtender {
     @Unique
     private static final Object2IntMap<TagKey<Trade>> TRADE_TO_AMOUNT = Util.make(new Object2IntArrayMap<>(), trades -> {
+        trades.put(TradeTags.WANDERING_TRADER_BUYING, 2);
+        trades.put(TradeTags.WANDERING_TRADER_SPECIAL, 2);
         trades.put(TradeTags.WANDERING_TRADER_REGULAR, 5);
-        trades.put(TradeTags.WANDERING_TRADER_SPECIAL, 1);
     });
 
     public WanderingTraderEntityExtender(EntityType<? extends MerchantEntity> entityType, World world) {

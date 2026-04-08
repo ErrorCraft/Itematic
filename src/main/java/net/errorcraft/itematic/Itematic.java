@@ -10,6 +10,7 @@ import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
 import net.errorcraft.itematic.loot.function.ItematicItemModifierTypes;
 import net.errorcraft.itematic.loot.predicate.ItematicPredicateTypes;
+import net.errorcraft.itematic.predicate.entity.ItematicEntitySubPredicateTypes;
 import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
 import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
 import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
@@ -45,5 +46,6 @@ public class Itematic implements ModInitializer {
         ItematicRecipeBookCategories.init();
         ItematicRecipeDisplaySerializers.init();
         ItematicSlotDisplaySerializers.init();
+        ItematicEntitySubPredicateTypes.init();
     }
 }

@@ -47,7 +47,7 @@ public record BannerPatternHolderItemComponent(Optional<DyeColor> color) impleme
             return Optional.empty();
         }
 
-        return Optional.of(baseTranslationKey + "." + baseColor.getName());
+        return Optional.of(baseTranslationKey + "." + baseColor.getId());
     }
 
     public static BannerPatternHolderItemComponent of() {

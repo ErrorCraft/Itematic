@@ -67,9 +67,17 @@ public abstract class MerchantEntityExtender extends MobEntityExtender {
         int actualCount = Math.min(count, entries.size());
         ArrayList<RegistryEntry<Trade>> pool = Lists.newArrayList(entries);
         TradeOfferList recipeList = this.getOffers();
-        for (int i = 0; i < actualCount; i++) {
-            TradeOffer tradeOffer = pool.remove(this.random.nextInt(pool.size())).value().createTradeOffer(context);
+        int addedTrades = 0;
+        while (addedTrades < actualCount && !pool.isEmpty()) {
+            TradeOffer tradeOffer = pool.remove(this.random.nextInt(pool.size()))
+                .value()
+                .createTradeOffer(context);
+            if (tradeOffer == null) {
+                continue;
+            }
+
             recipeList.add(tradeOffer);
+            addedTrades++;
         }
     }
 }

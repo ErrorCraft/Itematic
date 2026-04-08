@@ -5,7 +5,9 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.loot.function.DyeItemModifier;
 import net.errorcraft.itematic.loot.function.SetRandomPotionItemModifier;
 import net.errorcraft.itematic.mixin.village.TradeOffersAccessor;
+import net.errorcraft.itematic.potion.PotionKeys;
 import net.errorcraft.itematic.potion.PotionTags;
+import net.errorcraft.itematic.predicate.entity.VillagerEntitySubPredicate;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.EnchantWithLevelsTradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.ItemFromTypeTradeModifier;
@@ -15,16 +17,13 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.Item;
 import net.minecraft.item.map.MapDecorationType;
 import net.minecraft.item.map.MapDecorationTypes;
-import net.minecraft.loot.function.AndLootFunction;
-import net.minecraft.loot.function.ExplorationMapLootFunction;
-import net.minecraft.loot.function.SetNameLootFunction;
-import net.minecraft.loot.function.SetStewEffectLootFunction;
+import net.minecraft.loot.condition.EntityPropertiesLootCondition;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.function.*;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.potion.Potion;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.EnchantmentTags;
@@ -80,22 +79,22 @@ public class Trades {
     public static final RegistryKey<Trade> BUY_BLACK_DYE = of("buy_black_dye");
     public static final RegistryKey<Trade> BUY_LIGHT_BLUE_DYE = of("buy_light_blue_dye");
     public static final RegistryKey<Trade> BUY_LIME_DYE = of("buy_lime_dye");
-    public static final RegistryKey<Trade> SELL_WHITE_WOOL = of("sell_white_wool");
-    public static final RegistryKey<Trade> SELL_ORANGE_WOOL = of("sell_orange_wool");
-    public static final RegistryKey<Trade> SELL_MAGENTA_WOOL = of("sell_magenta_wool");
-    public static final RegistryKey<Trade> SELL_LIGHT_BLUE_WOOL = of("sell_light_blue_wool");
-    public static final RegistryKey<Trade> SELL_YELLOW_WOOL = of("sell_yellow_wool");
-    public static final RegistryKey<Trade> SELL_LIME_WOOL = of("sell_lime_wool");
-    public static final RegistryKey<Trade> SELL_PINK_WOOL = of("sell_pink_wool");
-    public static final RegistryKey<Trade> SELL_GRAY_WOOL = of("sell_gray_wool");
-    public static final RegistryKey<Trade> SELL_LIGHT_GRAY_WOOL = of("sell_light_gray_wool");
-    public static final RegistryKey<Trade> SELL_CYAN_WOOL = of("sell_cyan_wool");
-    public static final RegistryKey<Trade> SELL_PURPLE_WOOL = of("sell_purple_wool");
-    public static final RegistryKey<Trade> SELL_BLUE_WOOL = of("sell_blue_wool");
-    public static final RegistryKey<Trade> SELL_BROWN_WOOL = of("sell_brown_wool");
-    public static final RegistryKey<Trade> SELL_GREEN_WOOL = of("sell_green_wool");
-    public static final RegistryKey<Trade> SELL_RED_WOOL = of("sell_red_wool");
-    public static final RegistryKey<Trade> SELL_BLACK_WOOL = of("sell_black_wool");
+    public static final RegistryKey<Trade> SELL_WHITE_WOOL_SHEPHERD = of("sell_white_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_ORANGE_WOOL_SHEPHERD = of("sell_orange_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_MAGENTA_WOOL_SHEPHERD = of("sell_magenta_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_LIGHT_BLUE_WOOL_SHEPHERD = of("sell_light_blue_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_YELLOW_WOOL_SHEPHERD = of("sell_yellow_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_LIME_WOOL_SHEPHERD = of("sell_lime_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_PINK_WOOL_SHEPHERD = of("sell_pink_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_GRAY_WOOL_SHEPHERD = of("sell_gray_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_LIGHT_GRAY_WOOL_SHEPHERD = of("sell_light_gray_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_CYAN_WOOL_SHEPHERD = of("sell_cyan_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_PURPLE_WOOL_SHEPHERD = of("sell_purple_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_BLUE_WOOL_SHEPHERD = of("sell_blue_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_BROWN_WOOL_SHEPHERD = of("sell_brown_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_GREEN_WOOL_SHEPHERD = of("sell_green_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_RED_WOOL_SHEPHERD = of("sell_red_wool_shepherd");
+    public static final RegistryKey<Trade> SELL_BLACK_WOOL_SHEPHERD = of("sell_black_wool_shepherd");
     public static final RegistryKey<Trade> SELL_WHITE_CARPET = of("sell_white_carpet");
     public static final RegistryKey<Trade> SELL_ORANGE_CARPET = of("sell_orange_carpet");
     public static final RegistryKey<Trade> SELL_MAGENTA_CARPET = of("sell_magenta_carpet");
@@ -168,7 +167,7 @@ public class Trades {
     public static final RegistryKey<Trade> BUY_TRIPWIRE_HOOK = of("buy_tripwire_hook");
     public static final RegistryKey<Trade> SELL_ENCHANTED_CROSSBOW = of("sell_enchanted_crossbow");
     public static final RegistryKey<Trade> SELL_TIPPED_ARROW = of("sell_tipped_arrow");
-    public static final RegistryKey<Trade> BUY_PAPER = of("buy_paper");
+    public static final RegistryKey<Trade> BUY_PAPER_LIBRARIAN = of("buy_paper_librarian");
     public static final RegistryKey<Trade> SELL_ENCHANTED_BOOK_NOVICE = of("sell_enchanted_book_novice");
     public static final RegistryKey<Trade> SELL_BOOKSHELF = of("sell_bookshelf");
     public static final RegistryKey<Trade> BUY_BOOK = of("buy_book");
@@ -182,13 +181,37 @@ public class Trades {
     public static final RegistryKey<Trade> SELL_CLOCK = of("sell_clock");
     public static final RegistryKey<Trade> SELL_COMPASS = of("sell_compass");
     public static final RegistryKey<Trade> SELL_NAME_TAG = of("sell_name_tag");
+    public static final RegistryKey<Trade> BUY_PAPER_CARTOGRAPHER = of("buy_paper_cartographer");
     public static final RegistryKey<Trade> SELL_MAP = of("sell_map");
     public static final RegistryKey<Trade> BUY_GLASS_PANE = of("buy_glass_pane");
-    public static final RegistryKey<Trade> SELL_MONUMENT_MAP = of("sell_monument_map");
+    public static final RegistryKey<Trade> SELL_TAIGA_VILLAGE_MAP = of("sell_taiga_village_map");
+    public static final RegistryKey<Trade> SELL_SWAMP_HUT_MAP = of("sell_swamp_hut_map");
+    public static final RegistryKey<Trade> SELL_SNOWY_VILLAGE_MAP = of("sell_snowy_village_map");
+    public static final RegistryKey<Trade> SELL_SAVANNA_VILLAGE_MAP = of("sell_savanna_village_map");
+    public static final RegistryKey<Trade> SELL_PLAINS_VILLAGE_MAP = of("sell_plains_village_map");
+    public static final RegistryKey<Trade> SELL_JUNGLE_TEMPLE_MAP = of("sell_jungle_temple_map");
+    public static final RegistryKey<Trade> SELL_DESERT_VILLAGE_MAP = of("sell_desert_village_map");
     public static final RegistryKey<Trade> BUY_COMPASS = of("buy_compass");
-    public static final RegistryKey<Trade> SELL_MANSION_MAP = of("sell_mansion_map");
+    public static final RegistryKey<Trade> SELL_MONUMENT_MAP = of("sell_monument_map");
+    public static final RegistryKey<Trade> SELL_TRIAL_CHAMBER_MAP = of("sell_trial_chamber_map");
     public static final RegistryKey<Trade> SELL_ITEM_FRAME = of("sell_item_frame");
+    public static final RegistryKey<Trade> SELL_BLUE_BANNER_CARTOGRAPHER = of("sell_blue_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_WHITE_BANNER_CARTOGRAPHER = of("sell_white_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_RED_BANNER_CARTOGRAPHER = of("sell_red_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_GREEN_BANNER_CARTOGRAPHER = of("sell_green_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_LIME_BANNER_CARTOGRAPHER = of("sell_lime_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_PURPLE_BANNER_CARTOGRAPHER = of("sell_purple_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_CYAN_BANNER_CARTOGRAPHER = of("sell_cyan_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_YELLOW_BANNER_CARTOGRAPHER = of("sell_yellow_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_ORANGE_BANNER_CARTOGRAPHER = of("sell_orange_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_BROWN_BANNER_CARTOGRAPHER = of("sell_brown_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_MAGENTA_BANNER_CARTOGRAPHER = of("sell_magenta_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_LIGHT_BLUE_BANNER_CARTOGRAPHER = of("sell_light_blue_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_PINK_BANNER_CARTOGRAPHER = of("sell_pink_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_GRAY_BANNER_CARTOGRAPHER = of("sell_gray_banner_cartographer");
+    public static final RegistryKey<Trade> SELL_BLACK_BANNER_CARTOGRAPHER = of("sell_black_banner_cartographer");
     public static final RegistryKey<Trade> SELL_GLOBE_BANNER_PATTERN = of("sell_globe_banner_pattern");
+    public static final RegistryKey<Trade> SELL_MANSION_MAP = of("sell_mansion_map");
     public static final RegistryKey<Trade> BUY_ROTTEN_FLESH = of("buy_rotten_flesh");
     public static final RegistryKey<Trade> SELL_REDSTONE = of("sell_redstone");
     public static final RegistryKey<Trade> BUY_GOLD_INGOT = of("buy_gold_ingot");
@@ -300,6 +323,29 @@ public class Trades {
     public static final RegistryKey<Trade> SELL_BROWN_GLAZED_TERRACOTTA = of("sell_brown_glazed_terracotta");
     public static final RegistryKey<Trade> SELL_QUARTZ_PILLAR = of("sell_quartz_pillar");
     public static final RegistryKey<Trade> SELL_QUARTZ_BLOCK = of("sell_quartz_block");
+    public static final RegistryKey<Trade> BUY_WATER_BOTTLE = of("buy_water_bottle");
+    public static final RegistryKey<Trade> BUY_WATER_BUCKET = of("buy_water_bucket");
+    public static final RegistryKey<Trade> BUY_MILK_BUCKET = of("buy_milk_bucket");
+    public static final RegistryKey<Trade> BUY_FERMENTED_SPIDER_EYE = of("buy_fermented_spider_eye");
+    public static final RegistryKey<Trade> BUY_BAKED_POTATO = of("buy_baked_potato");
+    public static final RegistryKey<Trade> BUY_HAY_BLOCK = of("buy_hay_block");
+    public static final RegistryKey<Trade> SELL_PACKED_ICE = of("sell_packed_ice");
+    public static final RegistryKey<Trade> SELL_BLUE_ICE = of("sell_blue_ice");
+    public static final RegistryKey<Trade> SELL_GUNPOWDER = of("sell_gunpowder");
+    public static final RegistryKey<Trade> SELL_PODZOL = of("sell_podzol");
+    public static final RegistryKey<Trade> SELL_ACACIA_LOG = of("sell_acacia_log");
+    public static final RegistryKey<Trade> SELL_BIRCH_LOG = of("sell_birch_log");
+    public static final RegistryKey<Trade> SELL_DARK_OAK_LOG = of("sell_dark_oak_log");
+    public static final RegistryKey<Trade> SELL_JUNGLE_LOG = of("sell_jungle_log");
+    public static final RegistryKey<Trade> SELL_OAK_LOG = of("sell_oak_log");
+    public static final RegistryKey<Trade> SELL_SPRUCE_LOG = of("sell_spruce_log");
+    public static final RegistryKey<Trade> SELL_CHERRY_LOG = of("sell_cherry_log");
+    public static final RegistryKey<Trade> SELL_MANGROVE_LOG = of("sell_mangrove_log");
+    public static final RegistryKey<Trade> SELL_PALE_OAK_LOG = of("sell_pale_oak_log");
+    public static final RegistryKey<Trade> SELL_ENCHANTED_IRON_PICKAXE_WANDERING_TRADER = of("sell_enchanted_iron_pickaxe_wandering_trader");
+    public static final RegistryKey<Trade> SELL_LONG_INVISIBILITY_POTION = of("sell_long_invisibility_potion");
+    public static final RegistryKey<Trade> SELL_TROPICAL_FISH_BUCKET = of("sell_tropical_fish_bucket");
+    public static final RegistryKey<Trade> SELL_PUFFERFISH_BUCKET = of("sell_pufferfish_bucket");
     public static final RegistryKey<Trade> SELL_SEA_PICKLE = of("sell_sea_pickle");
     public static final RegistryKey<Trade> SELL_SLIME_BALL = of("sell_slime_ball");
     public static final RegistryKey<Trade> SELL_GLOWSTONE_WANDERING_TRADER = of("sell_glowstone_wandering_trader");
@@ -321,6 +367,7 @@ public class Trades {
     public static final RegistryKey<Trade> SELL_OXEYE_DAISY = of("sell_oxeye_daisy");
     public static final RegistryKey<Trade> SELL_CORNFLOWER = of("sell_cornflower");
     public static final RegistryKey<Trade> SELL_LILY_OF_THE_VALLEY = of("sell_lily_of_the_valley");
+    public static final RegistryKey<Trade> SELL_OPEN_EYEBLOSSOM = of("sell_open_eyeblossom");
     public static final RegistryKey<Trade> SELL_WHEAT_SEEDS = of("sell_wheat_seeds");
     public static final RegistryKey<Trade> SELL_BEETROOT_SEEDS = of("sell_beetroot_seeds");
     public static final RegistryKey<Trade> SELL_PUMPKIN_SEEDS = of("sell_pumpkin_seeds");
@@ -332,6 +379,7 @@ public class Trades {
     public static final RegistryKey<Trade> SELL_OAK_SAPLING = of("sell_oak_sapling");
     public static final RegistryKey<Trade> SELL_SPRUCE_SAPLING = of("sell_spruce_sapling");
     public static final RegistryKey<Trade> SELL_CHERRY_SAPLING = of("sell_cherry_sapling");
+    public static final RegistryKey<Trade> SELL_PALE_OAK_SAPLING = of("sell_pale_oak_sapling");
     public static final RegistryKey<Trade> SELL_MANGROVE_PROPAGULE = of("sell_mangrove_propagule");
     public static final RegistryKey<Trade> SELL_RED_DYE = of("sell_red_dye");
     public static final RegistryKey<Trade> SELL_WHITE_DYE = of("sell_white_dye");
@@ -355,6 +403,7 @@ public class Trades {
     public static final RegistryKey<Trade> SELL_HORN_CORAL_BLOCK = of("sell_horn_coral_block");
     public static final RegistryKey<Trade> SELL_TUBE_CORAL_BLOCK = of("sell_tube_coral_block");
     public static final RegistryKey<Trade> SELL_VINE = of("sell_vine");
+    public static final RegistryKey<Trade> SELL_PALE_HANGING_MOSS = of("sell_pale_hanging_moss");
     public static final RegistryKey<Trade> SELL_BROWN_MUSHROOM = of("sell_brown_mushroom");
     public static final RegistryKey<Trade> SELL_RED_MUSHROOM = of("sell_red_mushroom");
     public static final RegistryKey<Trade> SELL_LILY_PAD = of("sell_lily_pad");
@@ -364,12 +413,10 @@ public class Trades {
     public static final RegistryKey<Trade> SELL_POINTED_DRIPSTONE = of("sell_pointed_dripstone");
     public static final RegistryKey<Trade> SELL_ROOTED_DIRT = of("sell_rooted_dirt");
     public static final RegistryKey<Trade> SELL_MOSS_BLOCK = of("sell_moss_block");
-    public static final RegistryKey<Trade> SELL_TROPICAL_FISH_BUCKET = of("sell_tropical_fish_bucket");
-    public static final RegistryKey<Trade> SELL_PUFFERFISH_BUCKET = of("sell_pufferfish_bucket");
-    public static final RegistryKey<Trade> SELL_PACKED_ICE = of("sell_packed_ice");
-    public static final RegistryKey<Trade> SELL_BLUE_ICE = of("sell_blue_ice");
-    public static final RegistryKey<Trade> SELL_GUNPOWDER = of("sell_gunpowder");
-    public static final RegistryKey<Trade> SELL_PODZOL = of("sell_podzol");
+    public static final RegistryKey<Trade> SELL_PALE_MOSS_BLOCK = of("sell_pale_moss_block");
+    public static final RegistryKey<Trade> SELL_WILDFLOWERS = of("sell_wildflowers");
+    public static final RegistryKey<Trade> SELL_TALL_DRY_GRASS = of("sell_tall_dry_grass");
+    public static final RegistryKey<Trade> SELL_FIREFLY_BUSH = of("sell_firefly_bush");
 
     private Trades() {}
 
@@ -429,22 +476,22 @@ public class Trades {
         registerable.register(BUY_BLACK_DYE, buy(items, items.getOrThrow(ItemKeys.BLACK_DYE), 12, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeBuyTradeExperience()));
         registerable.register(BUY_LIGHT_BLUE_DYE, buy(items, items.getOrThrow(ItemKeys.LIGHT_BLUE_DYE), 12, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeBuyTradeExperience()));
         registerable.register(BUY_LIME_DYE, buy(items, items.getOrThrow(ItemKeys.LIME_DYE), 12, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeBuyTradeExperience()));
-        registerable.register(SELL_WHITE_WOOL, sell(items, items.getOrThrow(ItemKeys.WHITE_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_ORANGE_WOOL, sell(items, items.getOrThrow(ItemKeys.ORANGE_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_MAGENTA_WOOL, sell(items, items.getOrThrow(ItemKeys.MAGENTA_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_LIGHT_BLUE_WOOL, sell(items, items.getOrThrow(ItemKeys.LIGHT_BLUE_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_YELLOW_WOOL, sell(items, items.getOrThrow(ItemKeys.YELLOW_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_LIME_WOOL, sell(items, items.getOrThrow(ItemKeys.LIME_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_PINK_WOOL, sell(items, items.getOrThrow(ItemKeys.PINK_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_GRAY_WOOL, sell(items, items.getOrThrow(ItemKeys.GRAY_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_LIGHT_GRAY_WOOL, sell(items, items.getOrThrow(ItemKeys.LIGHT_GRAY_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_CYAN_WOOL, sell(items, items.getOrThrow(ItemKeys.CYAN_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_PURPLE_WOOL, sell(items, items.getOrThrow(ItemKeys.PURPLE_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_BLUE_WOOL, sell(items, items.getOrThrow(ItemKeys.BLUE_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_BROWN_WOOL, sell(items, items.getOrThrow(ItemKeys.BROWN_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_GREEN_WOOL, sell(items, items.getOrThrow(ItemKeys.GREEN_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_RED_WOOL, sell(items, items.getOrThrow(ItemKeys.RED_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
-        registerable.register(SELL_BLACK_WOOL, sell(items, items.getOrThrow(ItemKeys.BLACK_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_WHITE_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.WHITE_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_ORANGE_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.ORANGE_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_MAGENTA_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.MAGENTA_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_LIGHT_BLUE_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.LIGHT_BLUE_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_YELLOW_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.YELLOW_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_LIME_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.LIME_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_PINK_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.PINK_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_GRAY_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.GRAY_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_LIGHT_GRAY_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.LIGHT_GRAY_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_CYAN_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.CYAN_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_PURPLE_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.PURPLE_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_BLUE_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.BLUE_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_BROWN_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.BROWN_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_GREEN_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.GREEN_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_RED_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.RED_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
+        registerable.register(SELL_BLACK_WOOL_SHEPHERD, sell(items, items.getOrThrow(ItemKeys.BLACK_WOOL), 1, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
         registerable.register(SELL_WHITE_CARPET, sell(items, items.getOrThrow(ItemKeys.WHITE_CARPET), 4, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
         registerable.register(SELL_ORANGE_CARPET, sell(items, items.getOrThrow(ItemKeys.ORANGE_CARPET), 4, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
         registerable.register(SELL_MAGENTA_CARPET, sell(items, items.getOrThrow(ItemKeys.MAGENTA_CARPET), 4, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), 1));
@@ -517,7 +564,7 @@ public class Trades {
         registerable.register(BUY_TRIPWIRE_HOOK, buy(items, items.getOrThrow(ItemKeys.TRIPWIRE_HOOK), 8, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.masterTradeExperience()));
         registerable.register(SELL_ENCHANTED_CROSSBOW, sellEnchantedItem(items, items.getOrThrow(ItemKeys.CROSSBOW), 15, 3));
         registerable.register(SELL_TIPPED_ARROW, sellWithPotion(items, potions.getOrThrow(PotionTags.TRADEABLE), items.getOrThrow(ItemKeys.ARROW), items.getOrThrow(ItemKeys.TIPPED_ARROW), TradeOffersAccessor.masterTradeExperience()));
-        registerable.register(BUY_PAPER, buy(items, items.getOrThrow(ItemKeys.PAPER), 24, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.noviceBuyTradeExperience()));
+        registerable.register(BUY_PAPER_LIBRARIAN, buy(items, items.getOrThrow(ItemKeys.PAPER), 24, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.noviceBuyTradeExperience()));
         registerable.register(SELL_ENCHANTED_BOOK_NOVICE, sellEnchantedBook(items, TradeOffersAccessor.noviceSellTradeExperience(), enchantments.getOrThrow(EnchantmentTags.TRADEABLE)));
         registerable.register(SELL_BOOKSHELF, sell(items, items.getOrThrow(ItemKeys.BOOKSHELF), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 9));
         registerable.register(BUY_BOOK, buy(items, items.getOrThrow(ItemKeys.BOOK), 4, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.apprenticeBuyTradeExperience()));
@@ -531,13 +578,37 @@ public class Trades {
         registerable.register(SELL_CLOCK, sell(items, items.getOrThrow(ItemKeys.CLOCK), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 5));
         registerable.register(SELL_COMPASS, sell(items, items.getOrThrow(ItemKeys.COMPASS), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 4));
         registerable.register(SELL_NAME_TAG, sell(items, items.getOrThrow(ItemKeys.NAME_TAG), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.masterTradeExperience(), 20));
+        registerable.register(BUY_PAPER_CARTOGRAPHER, buy(items, items.getOrThrow(ItemKeys.PAPER), 24, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceBuyTradeExperience()));
         registerable.register(SELL_MAP, sell(items, items.getOrThrow(ItemKeys.MAP), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 7));
         registerable.register(BUY_GLASS_PANE, buy(items, items.getOrThrow(ItemKeys.GLASS_PANE), 11, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.apprenticeBuyTradeExperience()));
-        registerable.register(SELL_MONUMENT_MAP, sellMap(items, 13, StructureTags.ON_OCEAN_EXPLORER_MAPS, "filled_map.monument", MapDecorationTypes.MONUMENT, TradeOffersAccessor.apprenticeSellTradeExperience()));
+        registerable.register(SELL_TAIGA_VILLAGE_MAP, sellMap(items, 8, StructureTags.ON_TAIGA_VILLAGE_MAPS, "filled_map.village_taiga", MapDecorationTypes.VILLAGE_TAIGA, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), VillagerType.SWAMP, VillagerType.SNOW, VillagerType.PLAINS));
+        registerable.register(SELL_SWAMP_HUT_MAP, sellMap(items, 8, StructureTags.ON_SWAMP_EXPLORER_MAPS, "filled_map.explorer_swamp", MapDecorationTypes.SWAMP_HUT, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), VillagerType.TAIGA, VillagerType.SNOW, VillagerType.JUNGLE));
+        registerable.register(SELL_SNOWY_VILLAGE_MAP, sellMap(items, 8, StructureTags.ON_SNOWY_VILLAGE_MAPS, "filled_map.village_snowy", MapDecorationTypes.VILLAGE_SNOWY, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), VillagerType.TAIGA, VillagerType.SWAMP));
+        registerable.register(SELL_SAVANNA_VILLAGE_MAP, sellMap(items, 8, StructureTags.ON_SAVANNA_VILLAGE_MAPS, "filled_map.village_savanna", MapDecorationTypes.VILLAGE_SAVANNA, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), VillagerType.PLAINS, VillagerType.JUNGLE, VillagerType.DESERT));
+        registerable.register(SELL_PLAINS_VILLAGE_MAP, sellMap(items, 8, StructureTags.ON_PLAINS_VILLAGE_MAPS, "filled_map.village_plains", MapDecorationTypes.VILLAGE_PLAINS, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), VillagerType.TAIGA, VillagerType.SNOW, VillagerType.SAVANNA, VillagerType.DESERT));
+        registerable.register(SELL_JUNGLE_TEMPLE_MAP, sellMap(items, 8, StructureTags.ON_JUNGLE_EXPLORER_MAPS, "filled_map.explorer_jungle", MapDecorationTypes.JUNGLE_TEMPLE, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), VillagerType.SWAMP, VillagerType.SAVANNA, VillagerType.DESERT));
+        registerable.register(SELL_DESERT_VILLAGE_MAP, sellMap(items, 8, StructureTags.ON_DESERT_VILLAGE_MAPS, "filled_map.village_desert", MapDecorationTypes.VILLAGE_DESERT, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.apprenticeSellTradeExperience(), VillagerType.SAVANNA, VillagerType.JUNGLE));
         registerable.register(BUY_COMPASS, buy(items, items.getOrThrow(ItemKeys.COMPASS), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.journeymanBuyTradeExperience()));
-        registerable.register(SELL_MANSION_MAP, sellMap(items, 14, StructureTags.ON_WOODLAND_EXPLORER_MAPS, "filled_map.mansion", MapDecorationTypes.MANSION, TradeOffersAccessor.journeymanSellTradeExperience()));
+        registerable.register(SELL_MONUMENT_MAP, sellMap(items, 13, StructureTags.ON_OCEAN_EXPLORER_MAPS, "filled_map.monument", MapDecorationTypes.MONUMENT, TradeOffersAccessor.journeymanSellTradeExperience()));
+        registerable.register(SELL_TRIAL_CHAMBER_MAP, sellMap(items, 12, StructureTags.ON_TRIAL_CHAMBERS_MAPS, "filled_map.trial_chambers", MapDecorationTypes.TRIAL_CHAMBERS, TradeOffersAccessor.journeymanSellTradeExperience()));
         registerable.register(SELL_ITEM_FRAME, sell(items, items.getOrThrow(ItemKeys.ITEM_FRAME), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 7));
+        registerable.register(SELL_BLUE_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.BLUE_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.SNOW, VillagerType.TAIGA));
+        registerable.register(SELL_WHITE_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.WHITE_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.SNOW, VillagerType.PLAINS));
+        registerable.register(SELL_RED_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.RED_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.SNOW, VillagerType.SAVANNA));
+        registerable.register(SELL_GREEN_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.GREEN_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.DESERT, VillagerType.SAVANNA, VillagerType.JUNGLE));
+        registerable.register(SELL_LIME_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.LIME_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.DESERT, VillagerType.TAIGA));
+        registerable.register(SELL_PURPLE_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.PURPLE_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.TAIGA, VillagerType.SWAMP));
+        registerable.register(SELL_CYAN_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.CYAN_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.DESERT, VillagerType.SNOW));
+        registerable.register(SELL_YELLOW_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.YELLOW_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.PLAINS, VillagerType.JUNGLE));
+        registerable.register(SELL_ORANGE_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.ORANGE_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.SAVANNA, VillagerType.DESERT));
+        registerable.register(SELL_BROWN_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.BROWN_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.PLAINS, VillagerType.JUNGLE));
+        registerable.register(SELL_MAGENTA_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.MAGENTA_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.SAVANNA));
+        registerable.register(SELL_LIGHT_BLUE_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.LIGHT_BLUE_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.SNOW, VillagerType.SWAMP));
+        registerable.register(SELL_PINK_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.PINK_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.TAIGA, VillagerType.PLAINS));
+        registerable.register(SELL_GRAY_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.GRAY_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.DESERT));
+        registerable.register(SELL_BLACK_BANNER_CARTOGRAPHER, sell(items, items.getOrThrow(ItemKeys.BLACK_BANNER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.expertSellTradeExperience(), 2, VillagerType.SWAMP));
         registerable.register(SELL_GLOBE_BANNER_PATTERN, sell(items, items.getOrThrow(ItemKeys.GLOBE_BANNER_PATTERN), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.masterTradeExperience(), 8));
+        registerable.register(SELL_MANSION_MAP, sellMap(items, 14, StructureTags.ON_WOODLAND_EXPLORER_MAPS, "filled_map.mansion", MapDecorationTypes.MANSION, TradeOffersAccessor.journeymanSellTradeExperience()));
         registerable.register(BUY_ROTTEN_FLESH, buy(items, items.getOrThrow(ItemKeys.ROTTEN_FLESH), 32, TradeOffersAccessor.commonMaxUses(), TradeOffersAccessor.noviceBuyTradeExperience()));
         registerable.register(SELL_REDSTONE, sell(items, items.getOrThrow(ItemKeys.REDSTONE), 2, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(BUY_GOLD_INGOT, buy(items, items.getOrThrow(ItemKeys.GOLD_INGOT), 3, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.apprenticeBuyTradeExperience()));
@@ -670,6 +741,7 @@ public class Trades {
         registerable.register(SELL_OXEYE_DAISY, sell(items, items.getOrThrow(ItemKeys.OXEYE_DAISY), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_CORNFLOWER, sell(items, items.getOrThrow(ItemKeys.CORNFLOWER), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_LILY_OF_THE_VALLEY, sell(items, items.getOrThrow(ItemKeys.LILY_OF_THE_VALLEY), 1, 7, TradeOffersAccessor.noviceSellTradeExperience(), 1));
+        registerable.register(SELL_OPEN_EYEBLOSSOM, sell(items, items.getOrThrow(ItemKeys.OPEN_EYEBLOSSOM), 1, 7, TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_WHEAT_SEEDS, sell(items, items.getOrThrow(ItemKeys.WHEAT_SEEDS), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_BEETROOT_SEEDS, sell(items, items.getOrThrow(ItemKeys.BEETROOT_SEEDS), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_PUMPKIN_SEEDS, sell(items, items.getOrThrow(ItemKeys.PUMPKIN_SEEDS), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 1));
@@ -681,6 +753,7 @@ public class Trades {
         registerable.register(SELL_OAK_SAPLING, sell(items, items.getOrThrow(ItemKeys.OAK_SAPLING), 1, 8, TradeOffersAccessor.noviceSellTradeExperience(), 5));
         registerable.register(SELL_SPRUCE_SAPLING, sell(items, items.getOrThrow(ItemKeys.SPRUCE_SAPLING), 1, 8, TradeOffersAccessor.noviceSellTradeExperience(), 5));
         registerable.register(SELL_CHERRY_SAPLING, sell(items, items.getOrThrow(ItemKeys.CHERRY_SAPLING), 1, 8, TradeOffersAccessor.noviceSellTradeExperience(), 5));
+        registerable.register(SELL_PALE_OAK_SAPLING, sell(items, items.getOrThrow(ItemKeys.PALE_OAK_SAPLING), 1, 8, TradeOffersAccessor.noviceSellTradeExperience(), 5));
         registerable.register(SELL_MANGROVE_PROPAGULE, sell(items, items.getOrThrow(ItemKeys.MANGROVE_PROPAGULE), 1, 8, TradeOffersAccessor.noviceSellTradeExperience(), 5));
         registerable.register(SELL_RED_DYE, sell(items, items.getOrThrow(ItemKeys.RED_DYE), 3, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_WHITE_DYE, sell(items, items.getOrThrow(ItemKeys.WHITE_DYE), 3, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 1));
@@ -704,6 +777,7 @@ public class Trades {
         registerable.register(SELL_HORN_CORAL_BLOCK, sell(items, items.getOrThrow(ItemKeys.HORN_CORAL_BLOCK), 1, 8, TradeOffersAccessor.noviceSellTradeExperience(), 3));
         registerable.register(SELL_TUBE_CORAL_BLOCK, sell(items, items.getOrThrow(ItemKeys.TUBE_CORAL_BLOCK), 1, 8, TradeOffersAccessor.noviceSellTradeExperience(), 3));
         registerable.register(SELL_VINE, sell(items, items.getOrThrow(ItemKeys.VINE), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 1));
+        registerable.register(SELL_PALE_HANGING_MOSS, sell(items, items.getOrThrow(ItemKeys.PALE_HANGING_MOSS), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_BROWN_MUSHROOM, sell(items, items.getOrThrow(ItemKeys.BROWN_MUSHROOM), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_RED_MUSHROOM, sell(items, items.getOrThrow(ItemKeys.RED_MUSHROOM), 1, TradeOffersAccessor.defaultMaxUses(), TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_LILY_PAD, sell(items, items.getOrThrow(ItemKeys.LILY_PAD), 2, 5, TradeOffersAccessor.noviceSellTradeExperience(), 1));
@@ -713,16 +787,45 @@ public class Trades {
         registerable.register(SELL_POINTED_DRIPSTONE, sell(items, items.getOrThrow(ItemKeys.POINTED_DRIPSTONE), 2, 5, TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_ROOTED_DIRT, sell(items, items.getOrThrow(ItemKeys.ROOTED_DIRT), 2, 5, TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_MOSS_BLOCK, sell(items, items.getOrThrow(ItemKeys.MOSS_BLOCK), 2, 5, TradeOffersAccessor.noviceSellTradeExperience(), 1));
+        registerable.register(SELL_PALE_MOSS_BLOCK, sell(items, items.getOrThrow(ItemKeys.PALE_MOSS_BLOCK), 2, 5, TradeOffersAccessor.noviceSellTradeExperience(), 1));
+        registerable.register(SELL_WILDFLOWERS, sell(items, items.getOrThrow(ItemKeys.WILDFLOWERS), 1, 5, TradeOffersAccessor.noviceSellTradeExperience(), 1));
+        registerable.register(SELL_TALL_DRY_GRASS, sell(items, items.getOrThrow(ItemKeys.TALL_DRY_GRASS), 1, 5, TradeOffersAccessor.noviceSellTradeExperience(), 1));
+        registerable.register(SELL_FIREFLY_BUSH, sell(items, items.getOrThrow(ItemKeys.FIREFLY_BUSH), 1, 5, TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_TROPICAL_FISH_BUCKET, sell(items, items.getOrThrow(ItemKeys.TROPICAL_FISH_BUCKET), 1, 4, 1, 5));
         registerable.register(SELL_PUFFERFISH_BUCKET, sell(items, items.getOrThrow(ItemKeys.PUFFERFISH_BUCKET), 1, 4, 1, 5));
+        registerable.register(BUY_WATER_BOTTLE, buyWithPotion(items, potions.getOrThrow(PotionKeys.WATER), items.getOrThrow(ItemKeys.POTION), 1));
+        registerable.register(BUY_WATER_BUCKET, buy(items, items.getOrThrow(ItemKeys.WATER_BUCKET), 1, 2, 1, 1));
+        registerable.register(BUY_MILK_BUCKET, buy(items, items.getOrThrow(ItemKeys.MILK_BUCKET), 1, 2, 1, 1));
+        registerable.register(BUY_FERMENTED_SPIDER_EYE, buy(items, items.getOrThrow(ItemKeys.FERMENTED_SPIDER_EYE), 1, 3, 1, 1));
+        registerable.register(BUY_BAKED_POTATO, buy(items, items.getOrThrow(ItemKeys.BAKED_POTATO), 4, 1, 1, 1));
+        registerable.register(BUY_HAY_BLOCK, buy(items, items.getOrThrow(ItemKeys.HAY_BLOCK), 1, 1, 1, 1));
         registerable.register(SELL_PACKED_ICE, sell(items, items.getOrThrow(ItemKeys.PACKED_ICE), 1, 6, 1, 3));
         registerable.register(SELL_BLUE_ICE, sell(items, items.getOrThrow(ItemKeys.BLUE_ICE), 1, 6, 1, 6));
         registerable.register(SELL_GUNPOWDER, sell(items, items.getOrThrow(ItemKeys.GUNPOWDER), 1, 8, 1, 1));
         registerable.register(SELL_PODZOL, sell(items, items.getOrThrow(ItemKeys.PODZOL), 3, 6, 1, 3));
+        registerable.register(SELL_ACACIA_LOG, sell(items, items.getOrThrow(ItemKeys.ACACIA_LOG), 8, 4, 1, 1));
+        registerable.register(SELL_BIRCH_LOG, sell(items, items.getOrThrow(ItemKeys.BIRCH_LOG), 8, 4, 1, 1));
+        registerable.register(SELL_CHERRY_LOG, sell(items, items.getOrThrow(ItemKeys.CHERRY_LOG), 8, 4, 1, 1));
+        registerable.register(SELL_MANGROVE_LOG, sell(items, items.getOrThrow(ItemKeys.MANGROVE_LOG), 8, 4, 1, 1));
+        registerable.register(SELL_DARK_OAK_LOG, sell(items, items.getOrThrow(ItemKeys.DARK_OAK_LOG), 8, 4, 1, 1));
+        registerable.register(SELL_JUNGLE_LOG, sell(items, items.getOrThrow(ItemKeys.JUNGLE_LOG), 8, 4, 1, 1));
+        registerable.register(SELL_OAK_LOG, sell(items, items.getOrThrow(ItemKeys.OAK_LOG), 8, 4, 1, 1));
+        registerable.register(SELL_SPRUCE_LOG, sell(items, items.getOrThrow(ItemKeys.SPRUCE_LOG), 8, 4, 1, 1));
+        registerable.register(SELL_PALE_OAK_LOG, sell(items, items.getOrThrow(ItemKeys.PALE_OAK_LOG), 8, 4, 1, 1));
+        registerable.register(SELL_ENCHANTED_IRON_PICKAXE_WANDERING_TRADER, sellEnchantedItem(items, items.getOrThrow(ItemKeys.IRON_PICKAXE), 1, 3, TradeOffersAccessor.highPriceMultiplier(), 1));
+        registerable.register(SELL_LONG_INVISIBILITY_POTION, sellWithPotion(items, potions.getOrThrow(PotionKeys.LONG_INVISIBILITY), items.getOrThrow(ItemKeys.POTION), 1));
     }
 
     private static Trade buy(RegistryEntryLookup<Item> items, RegistryEntry<Item> item, int count, int maxUses, int tradeExperience) {
         return Trade.builder(Trade.Entry.ofEmerald(items))
+            .wants(Trade.Entry.of(item, count))
+            .maxUses(maxUses)
+            .tradeExperience(tradeExperience)
+            .build();
+    }
+
+    private static Trade buy(RegistryEntryLookup<Item> items, RegistryEntry<Item> item, int count, int givenAmount, int maxUses, int tradeExperience) {
+        return Trade.builder(Trade.Entry.ofEmerald(items, givenAmount))
             .wants(Trade.Entry.of(item, count))
             .maxUses(maxUses)
             .tradeExperience(tradeExperience)
@@ -737,11 +840,36 @@ public class Trades {
             .build();
     }
 
+    private static Trade buyWithPotion(RegistryEntryLookup<Item> items, RegistryEntry<Potion> potion, RegistryEntry<Item> item, int tradeExperience) {
+        return Trade.builder(Trade.Entry.ofEmerald(items))
+            .wants(Trade.Entry.of(item, 1, SetPotionLootFunction.builder(potion).build()))
+            .tradeExperience(tradeExperience)
+            .build();
+    }
+
     private static Trade sell(RegistryEntryLookup<Item> items, RegistryEntry<Item> item, int count, int maxUses, int tradeExperience, int price) {
         return Trade.builder(Trade.Entry.of(item, count))
             .wants(Trade.Entry.ofEmerald(items, price))
             .maxUses(maxUses)
             .tradeExperience(tradeExperience)
+            .build();
+    }
+
+    @SafeVarargs
+    private static Trade sell(RegistryEntryLookup<Item> items, RegistryEntry<Item> item, int count, int maxUses, int tradeExperience, int price, RegistryKey<VillagerType>... types) {
+        return Trade.builder(Trade.Entry.of(item, count))
+            .wants(Trade.Entry.ofEmerald(items, price))
+            .maxUses(maxUses)
+            .tradeExperience(tradeExperience)
+            .merchantPredicate(
+                EntityPropertiesLootCondition.builder(
+                    LootContext.EntityTarget.THIS,
+                    EntityPredicate.Builder.create()
+                        .typeSpecific(VillagerEntitySubPredicate.of(
+                            RegistryEntryList.of(Registries.VILLAGER_TYPE::getOrThrow, types)
+                        ))
+                )
+            )
             .build();
     }
 
@@ -770,9 +898,13 @@ public class Trades {
     }
 
     private static Trade sellEnchantedItem(RegistryEntryLookup<Item> items, RegistryEntry<Item> item, int tradeExperience, int basePrice, float priceMultiplier) {
+        return sellEnchantedItem(items, item, tradeExperience, basePrice, priceMultiplier, 3);
+    }
+
+    private static Trade sellEnchantedItem(RegistryEntryLookup<Item> items, RegistryEntry<Item> item, int tradeExperience, int basePrice, float priceMultiplier, int maxUses) {
         return Trade.builder(Trade.Entry.of(item))
             .wants(Trade.Entry.ofEmerald(items, basePrice))
-            .maxUses(3)
+            .maxUses(maxUses)
             .tradeExperience(tradeExperience)
             .tradeModifier(EnchantWithLevelsTradeModifier.of(0, 5, 19))
             .priceMultiplier(priceMultiplier)
@@ -784,6 +916,14 @@ public class Trades {
             .wants(Trade.Entry.ofEmerald(items, 2))
             .wants(Trade.Entry.of(item, 5))
             .tradeExperience(tradeExperience)
+            .build();
+    }
+
+    private static Trade sellWithPotion(RegistryEntryLookup<Item> items, RegistryEntry<Potion> potion, RegistryEntry<Item> resultItem, int tradeExperience) {
+        return Trade.builder(Trade.Entry.of(resultItem, 1, SetPotionLootFunction.builder(potion).build()))
+            .wants(Trade.Entry.ofEmerald(items, 5))
+            .tradeExperience(tradeExperience)
+            .maxUses(1)
             .build();
     }
 
@@ -811,6 +951,33 @@ public class Trades {
         return Trade.builder(Trade.Entry.of(items.getOrThrow(ItemKeys.MAP), 1, itemModifier))
             .wants(Trade.Entry.ofEmerald(items, price))
             .tradeExperience(tradeExperience)
+            .build();
+    }
+
+    @SafeVarargs
+    private static Trade sellMap(RegistryEntryLookup<Item> items, int price, TagKey<Structure> structure, String name, RegistryEntry<MapDecorationType> decoration, int maxUses, int experience, RegistryKey<VillagerType>... types) {
+        AndLootFunction itemModifier = AndLootFunction.create(List.of(
+            ExplorationMapLootFunction.builder()
+                .withDestination(structure)
+                .withDecoration(decoration)
+                .searchRadius(100)
+                .build(),
+            SetNameLootFunction.builder(Text.translatable(name), SetNameLootFunction.Target.ITEM_NAME)
+                .build()
+        ));
+        return Trade.builder(Trade.Entry.of(items.getOrThrow(ItemKeys.MAP), 1, itemModifier))
+            .wants(Trade.Entry.ofEmerald(items, price))
+            .maxUses(maxUses)
+            .tradeExperience(experience)
+            .merchantPredicate(
+                EntityPropertiesLootCondition.builder(
+                    LootContext.EntityTarget.THIS,
+                    EntityPredicate.Builder.create()
+                        .typeSpecific(VillagerEntitySubPredicate.of(
+                            RegistryEntryList.of(Registries.VILLAGER_TYPE::getOrThrow, types)
+                        ))
+                )
+            )
             .build();
     }
 
