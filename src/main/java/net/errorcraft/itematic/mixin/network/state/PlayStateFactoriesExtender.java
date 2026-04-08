@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.network.state;
 
 import net.errorcraft.itematic.network.packet.ItematicPlayPackets;
 import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
-import net.minecraft.network.NetworkStateBuilder;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.state.NetworkStateBuilder;
 import net.minecraft.network.state.PlayStateFactories;
 import net.minecraft.util.Unit;
 import org.spongepowered.asm.mixin.Mixin;

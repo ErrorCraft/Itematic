@@ -4,7 +4,6 @@ import net.errorcraft.itematic.mixin.screen.BrewingStandScreenHandlerAccessor;
 import net.errorcraft.itematic.recipe.book.ItematicRecipeBookTypes;
 import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
-import net.minecraft.class_10938;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -17,6 +16,7 @@ import net.minecraft.recipe.book.RecipeBookType;
 import net.minecraft.screen.*;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.screen.sync.ItemStackHash;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.collection.DefaultedList;
 
@@ -134,18 +134,18 @@ public class BrewingStandMenuDelegate extends AbstractRecipeScreenHandler {
     }
 
     @Override
-    public void setPreviousTrackedSlot(int slot, ItemStack stack) {
-        this.delegate.setPreviousTrackedSlot(slot, stack);
+    public void setReceivedStack(int slot, ItemStack stack) {
+        this.delegate.setReceivedStack(slot, stack);
     }
 
     @Override
-    public void setPreviousTrackedSlotMutable(int slot, class_10938 hash) {
-        this.delegate.setPreviousTrackedSlotMutable(slot, hash);
+    public void setReceivedHash(int slot, ItemStackHash hash) {
+        this.delegate.setReceivedHash(slot, hash);
     }
 
     @Override
-    public void setPreviousCursorStack(class_10938 cursorStackHash) {
-        this.delegate.setPreviousCursorStack(cursorStackHash);
+    public void setReceivedCursorHash(ItemStackHash cursorStackHash) {
+        this.delegate.setReceivedCursorHash(cursorStackHash);
     }
 
     @Override
