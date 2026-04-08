@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ChargeTypeProperty.class)
 public class ChargeTypePropertyExtender {
     @Redirect(
-        method = "getValue(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/entity/LivingEntity;ILnet/minecraft/item/ModelTransformationMode;)Lnet/minecraft/item/CrossbowItem$ChargeType;",
+        method = "getValue(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/entity/LivingEntity;ILnet/minecraft/item/ItemDisplayContext;)Lnet/minecraft/item/CrossbowItem$ChargeType;",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/component/type/ChargedProjectilesComponent;contains(Lnet/minecraft/item/Item;)Z"

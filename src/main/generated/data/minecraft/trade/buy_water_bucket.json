@@ -3,7 +3,7 @@
     "count": 2,
     "item": "minecraft:emerald"
   },
-  "max_uses": 1,
+  "max_uses": 2,
   "price_multiplier": 0.05,
   "wants": [
     {

@@ -793,12 +793,12 @@ public class Trades {
         registerable.register(SELL_FIREFLY_BUSH, sell(items, items.getOrThrow(ItemKeys.FIREFLY_BUSH), 1, 5, TradeOffersAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_TROPICAL_FISH_BUCKET, sell(items, items.getOrThrow(ItemKeys.TROPICAL_FISH_BUCKET), 1, 4, 1, 5));
         registerable.register(SELL_PUFFERFISH_BUCKET, sell(items, items.getOrThrow(ItemKeys.PUFFERFISH_BUCKET), 1, 4, 1, 5));
-        registerable.register(BUY_WATER_BOTTLE, buyWithPotion(items, potions.getOrThrow(PotionKeys.WATER), items.getOrThrow(ItemKeys.POTION), 1));
-        registerable.register(BUY_WATER_BUCKET, buy(items, items.getOrThrow(ItemKeys.WATER_BUCKET), 1, 2, 1, 1));
-        registerable.register(BUY_MILK_BUCKET, buy(items, items.getOrThrow(ItemKeys.MILK_BUCKET), 1, 2, 1, 1));
-        registerable.register(BUY_FERMENTED_SPIDER_EYE, buy(items, items.getOrThrow(ItemKeys.FERMENTED_SPIDER_EYE), 1, 3, 1, 1));
-        registerable.register(BUY_BAKED_POTATO, buy(items, items.getOrThrow(ItemKeys.BAKED_POTATO), 4, 1, 1, 1));
-        registerable.register(BUY_HAY_BLOCK, buy(items, items.getOrThrow(ItemKeys.HAY_BLOCK), 1, 1, 1, 1));
+        registerable.register(BUY_WATER_BOTTLE, buyWithPotion(items, potions.getOrThrow(PotionKeys.WATER), items.getOrThrow(ItemKeys.POTION)));
+        registerable.register(BUY_WATER_BUCKET, buy(items, items.getOrThrow(ItemKeys.WATER_BUCKET), 1, 2, 2, 1));
+        registerable.register(BUY_MILK_BUCKET, buy(items, items.getOrThrow(ItemKeys.MILK_BUCKET), 1, 2, 2, 1));
+        registerable.register(BUY_FERMENTED_SPIDER_EYE, buy(items, items.getOrThrow(ItemKeys.FERMENTED_SPIDER_EYE), 1, 3, 2, 1));
+        registerable.register(BUY_BAKED_POTATO, buy(items, items.getOrThrow(ItemKeys.BAKED_POTATO), 4, 1, 2, 1));
+        registerable.register(BUY_HAY_BLOCK, buy(items, items.getOrThrow(ItemKeys.HAY_BLOCK), 1, 1, 2, 1));
         registerable.register(SELL_PACKED_ICE, sell(items, items.getOrThrow(ItemKeys.PACKED_ICE), 1, 6, 1, 3));
         registerable.register(SELL_BLUE_ICE, sell(items, items.getOrThrow(ItemKeys.BLUE_ICE), 1, 6, 1, 6));
         registerable.register(SELL_GUNPOWDER, sell(items, items.getOrThrow(ItemKeys.GUNPOWDER), 1, 8, 1, 1));
@@ -840,10 +840,11 @@ public class Trades {
             .build();
     }
 
-    private static Trade buyWithPotion(RegistryEntryLookup<Item> items, RegistryEntry<Potion> potion, RegistryEntry<Item> item, int tradeExperience) {
+    private static Trade buyWithPotion(RegistryEntryLookup<Item> items, RegistryEntry<Potion> potion, RegistryEntry<Item> item) {
         return Trade.builder(Trade.Entry.ofEmerald(items))
             .wants(Trade.Entry.of(item, 1, SetPotionLootFunction.builder(potion).build()))
-            .tradeExperience(tradeExperience)
+            .maxUses(2)
+            .tradeExperience(1)
             .build();
     }
 
