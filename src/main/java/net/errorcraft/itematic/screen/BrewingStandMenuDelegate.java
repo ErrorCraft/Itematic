@@ -4,6 +4,7 @@ import net.errorcraft.itematic.mixin.screen.BrewingStandScreenHandlerAccessor;
 import net.errorcraft.itematic.recipe.book.ItematicRecipeBookTypes;
 import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
+import net.minecraft.class_10938;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -138,13 +139,13 @@ public class BrewingStandMenuDelegate extends AbstractRecipeScreenHandler {
     }
 
     @Override
-    public void setPreviousTrackedSlotMutable(int slot, ItemStack stack) {
-        this.delegate.setPreviousTrackedSlotMutable(slot, stack);
+    public void setPreviousTrackedSlotMutable(int slot, class_10938 hash) {
+        this.delegate.setPreviousTrackedSlotMutable(slot, hash);
     }
 
     @Override
-    public void setPreviousCursorStack(ItemStack stack) {
-        this.delegate.setPreviousCursorStack(stack);
+    public void setPreviousCursorStack(class_10938 cursorStackHash) {
+        this.delegate.setPreviousCursorStack(cursorStackHash);
     }
 
     @Override
