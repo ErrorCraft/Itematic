@@ -7,7 +7,6 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:use_item_on_block_or_dispense_item"
     },
-    "minecraft:potion": {},
     "minecraft:potion_holder": {
       "duration_multiplier": 1.0
     },

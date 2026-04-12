@@ -22,6 +22,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,8 +33,9 @@ import org.spongepowered.asm.mixin.injection.Slice;
 public abstract class WanderingTraderEntityExtender extends MerchantEntityExtender {
     @Unique
     private static final Object2IntMap<TagKey<Trade>> TRADE_TO_AMOUNT = Util.make(new Object2IntArrayMap<>(), trades -> {
+        trades.put(TradeTags.WANDERING_TRADER_BUYING, 2);
+        trades.put(TradeTags.WANDERING_TRADER_SPECIAL, 2);
         trades.put(TradeTags.WANDERING_TRADER_REGULAR, 5);
-        trades.put(TradeTags.WANDERING_TRADER_SPECIAL, 1);
     });
 
     public WanderingTraderEntityExtender(EntityType<? extends MerchantEntity> entityType, World world) {
@@ -61,7 +63,8 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;POTION:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/item/Items;POTION:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )

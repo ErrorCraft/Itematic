@@ -1,6 +1,7 @@
 {
   "behavior": {
-    "minecraft:stackable": 64
+    "minecraft:stackable": 64,
+    "minecraft:trim_material_provider": "minecraft:copper"
   },
   "display": {
     "model": "minecraft:copper_ingot",

@@ -16,6 +16,7 @@ import net.minecraft.recipe.book.RecipeBookType;
 import net.minecraft.screen.*;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.screen.sync.ItemStackHash;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.collection.DefaultedList;
 
@@ -133,18 +134,18 @@ public class BrewingStandMenuDelegate extends AbstractRecipeScreenHandler {
     }
 
     @Override
-    public void setPreviousTrackedSlot(int slot, ItemStack stack) {
-        this.delegate.setPreviousTrackedSlot(slot, stack);
+    public void setReceivedStack(int slot, ItemStack stack) {
+        this.delegate.setReceivedStack(slot, stack);
     }
 
     @Override
-    public void setPreviousTrackedSlotMutable(int slot, ItemStack stack) {
-        this.delegate.setPreviousTrackedSlotMutable(slot, stack);
+    public void setReceivedHash(int slot, ItemStackHash hash) {
+        this.delegate.setReceivedHash(slot, hash);
     }
 
     @Override
-    public void setPreviousCursorStack(ItemStack stack) {
-        this.delegate.setPreviousCursorStack(stack);
+    public void setReceivedCursorHash(ItemStackHash cursorStackHash) {
+        this.delegate.setReceivedCursorHash(cursorStackHash);
     }
 
     @Override

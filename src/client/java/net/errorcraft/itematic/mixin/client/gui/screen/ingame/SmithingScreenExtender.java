@@ -6,7 +6,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.SmithingTemplateItemComponent;
+import net.errorcraft.itematic.item.component.components.SmithingTemplateProviderItemComponent;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.minecraft.client.gui.screen.ingame.ForgingScreen;
 import net.minecraft.client.gui.screen.ingame.SmithingScreen;
@@ -16,7 +16,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SmithingTemplateItem;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.SmithingScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -44,9 +43,8 @@ public abstract class SmithingScreenExtender extends ForgingScreen<SmithingScree
     private void storeSmithingTemplate(CallbackInfo info, @Share("smithingTemplate") LocalRef<Optional<SmithingTemplate>> smithingTemplate) {
         smithingTemplate.set(this.handler.getSlot(0)
             .getStack()
-            .itematic$getBehavior(ItemComponentTypes.SMITHING_TEMPLATE)
-            .map(SmithingTemplateItemComponent::template)
-            .map(RegistryEntry::value)
+            .itematic$getBehavior(ItemComponentTypes.SMITHING_TEMPLATE_PROVIDER)
+            .map(SmithingTemplateProviderItemComponent::template)
         );
     }
 
@@ -97,9 +95,8 @@ public abstract class SmithingScreenExtender extends ForgingScreen<SmithingScree
         )
     )
     private boolean instanceOfSmithingTemplateItemUseItemComponentCheck(Object reference, Class<SmithingTemplateItem> clazz, @Local(ordinal = 0) ItemStack itemStack, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplate) {
-        Optional<SmithingTemplate> optionalSmithingTemplate = itemStack.itematic$getBehavior(ItemComponentTypes.SMITHING_TEMPLATE)
-            .map(SmithingTemplateItemComponent::template)
-            .map(RegistryEntry::value);
+        Optional<SmithingTemplate> optionalSmithingTemplate = itemStack.itematic$getBehavior(ItemComponentTypes.SMITHING_TEMPLATE_PROVIDER)
+            .map(SmithingTemplateProviderItemComponent::template);
         optionalSmithingTemplate.ifPresent(smithingTemplate::set);
         return optionalSmithingTemplate.isPresent();
     }

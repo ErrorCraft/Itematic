@@ -3,7 +3,6 @@ package net.errorcraft.itematic.mixin.registry;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProviders;
-import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trades;
 import net.errorcraft.itematic.world.action.Actions;
@@ -32,7 +31,6 @@ public class BuiltinRegistriesExtender {
             .addRegistry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProviders::bootstrap)
             .addRegistry(ItematicRegistryKeys.TRADE, Trades::bootstrap)
             .addRegistry(ItematicRegistryKeys.ACTION, Actions::bootstrap)
-            .addRegistry(ItematicRegistryKeys.SMITHING_TEMPLATE, SmithingTemplates::bootstrap)
             .addRegistry(ItematicRegistryKeys.DISPENSE_BEHAVIOR, DispenseBehaviors::bootstrap);
     }
 }

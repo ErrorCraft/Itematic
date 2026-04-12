@@ -50,7 +50,7 @@ public record SetEntityNameFromItemAction(LootContext.EntityTarget entity) imple
     }
 
     private static boolean trySetName(LivingEntity target, Text name) {
-        if (!target.getType().isSaveable() || !target.canBeNameTagged()) {
+        if (!target.getType().isSaveable() || !target.isAlive()) {
             return false;
         }
 

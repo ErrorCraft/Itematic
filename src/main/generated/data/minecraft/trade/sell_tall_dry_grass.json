@@ -1,0 +1,12 @@
+{
+  "gives": {
+    "item": "minecraft:tall_dry_grass"
+  },
+  "max_uses": 5,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "item": "minecraft:emerald"
+    }
+  ]
+}

@@ -1,38 +1,40 @@
 package net.errorcraft.itematic.mixin.village;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.access.village.VillagerProfessionAccess;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.minecraft.item.Item;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.village.VillagerProfession;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(VillagerProfession.class)
 public class VillagerProfessionExtender implements VillagerProfessionAccess {
-    @Shadow
-    @Final
-    public static VillagerProfession FARMER;
-
     @Unique
-    private TagKey<Item> gatherableItemsTag;
+    private TagKey<Item> gatherableItems;
 
-    @Inject(
-        method = "<clinit>",
-        at = @At("TAIL")
+    @ModifyExpressionValue(
+        method = "registerAndGetDefault",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/village/VillagerProfession;register(Lnet/minecraft/registry/Registry;Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/registry/RegistryKey;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sound/SoundEvent;)Lnet/minecraft/village/VillagerProfession;"
+        )
     )
-    private static void staticSetGatherableItemsTag(CallbackInfo info) {
-        ((VillagerProfessionExtender)(Object) FARMER).gatherableItemsTag = ItematicItemTags.FARMER_VILLAGER_GATHERABLE_ITEMS;
+    private static VillagerProfession setGatherableItemsTag(VillagerProfession original) {
+        original.itematic$setGatherableItems(ItematicItemTags.FARMER_VILLAGER_GATHERABLE_ITEMS);
+        return original;
     }
 
     @Override
-    public @Nullable TagKey<Item> itematic$gatherableItemsTag() {
-        return this.gatherableItemsTag;
+    public @Nullable TagKey<Item> itematic$gatherableItems() {
+        return this.gatherableItems;
+    }
+
+    @Override
+    public void itematic$setGatherableItems(TagKey<Item> gatherableItems) {
+        this.gatherableItems = gatherableItems;
     }
 }

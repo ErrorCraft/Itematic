@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.world;
 import net.errorcraft.itematic.access.world.WorldAccess;
 import net.errorcraft.itematic.access.world.WorldViewAccess;
 import net.errorcraft.itematic.item.ItemAccess;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.registry.DynamicRegistryManager;
@@ -25,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(World.class)
 public abstract class WorldExtender implements WorldViewAccess, WorldAccess {
     @Shadow
-    public abstract void playSound(@Nullable PlayerEntity except, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch);
+    public abstract void playSound(@Nullable Entity source, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch);
 
     @Unique
     private ItemAccess itemAccess;
@@ -49,7 +50,7 @@ public abstract class WorldExtender implements WorldViewAccess, WorldAccess {
     }
 
     @Override
-    public void itematic$playSound(@Nullable PlayerEntity except, Vec3d pos, SoundEvent sound, SoundCategory category, float volume, float pitch) {
-        this.playSound(except, pos.getX(), pos.getY(), pos.getZ(), sound, category, volume, pitch);
+    public void itematic$playSound(@Nullable PlayerEntity source, Vec3d pos, SoundEvent sound, SoundCategory category, float volume, float pitch) {
+        this.playSound(source, pos.getX(), pos.getY(), pos.getZ(), sound, category, volume, pitch);
     }
 }

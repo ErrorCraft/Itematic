@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
-import net.errorcraft.itematic.util.IdentifierUtil;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
@@ -12,7 +11,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeyedValue;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextCodecs;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
@@ -81,14 +79,11 @@ public record ItemDisplay(String translationKey, Identifier model, Rarity rarity
             return this;
         }
 
-        public Builder tooltip(RegistryKey<Item> name) {
-            return this.tooltip(Text.translatable(IdentifierUtil.createTranslationKey(name, "item", "desc")).formatted(Formatting.GRAY));
-        }
-
         public Builder tooltip(Text... lines) {
             if (this.tooltip == null) {
                 this.tooltip = new ArrayList<>();
             }
+
             this.tooltip.addAll(List.of(lines));
             return this;
         }

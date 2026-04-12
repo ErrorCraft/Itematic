@@ -144,29 +144,4 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
     private boolean isOfForEnchantedGoldenAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.ENCHANTED_GOLDEN_APPLE);
     }
-
-    @Redirect(
-        method = "readCustomDataFromNbt",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForSaddleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SADDLE);
-    }
-
-    @Mixin(targets = "net/minecraft/entity/passive/AbstractHorseEntity$2")
-    public static class SaddleStackReferenceExtender {
-        @Redirect(
-            method = "set",
-            at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-            )
-        )
-        private boolean isOfForSaddleUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.itematic$isOf(ItemKeys.SADDLE);
-        }
-    }
 }

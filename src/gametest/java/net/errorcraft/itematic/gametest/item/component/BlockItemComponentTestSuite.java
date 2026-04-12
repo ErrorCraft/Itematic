@@ -1,7 +1,9 @@
 package net.errorcraft.itematic.gametest.item.component;
 
-import net.errorcraft.itematic.gametest.TestUtil;
+import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.util.TestUtil;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ScaffoldingBlock;
 import net.minecraft.block.enums.DoubleBlockHalf;
@@ -10,7 +12,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
-import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -22,201 +23,218 @@ public class BlockItemComponentTestSuite {
     private static final BlockPos PLACED_BLOCK_POSITION = GROUND_POSITION.add(0, 1, 0);
     private static final BlockPos ABOVE_PLACED_BLOCK_POSITION = PLACED_BLOCK_POSITION.add(0, 1, 0);
     private static final BlockPos WALL_POSITION = GROUND_POSITION.add(0, 1, 1);
-
     private static final int BEYOND_MAX_SCAFFOLDING_DISTANCE = ScaffoldingBlock.MAX_DISTANCE + 1;
     private static final BlockPos HORIZONTAL_SCAFFOLDING_OFFSET = PLACED_BLOCK_POSITION.add(0, 0, 1);
     private static final BlockPos VERTICAL_SCAFFOLDING_OFFSET = PLACED_BLOCK_POSITION.add(0, 1, 0);
     private static final BlockPos HORIZONTAL_SCAFFOLDING_BEYOND_MAX_DISTANCE_OFFSET = PLACED_BLOCK_POSITION.add(0, 0, BEYOND_MAX_SCAFFOLDING_DISTANCE);
     private static final BlockPos VERTICAL_SCAFFOLDING_BEYOND_MAX_DISTANCE_OFFSET = PLACED_BLOCK_POSITION.add(0, BEYOND_MAX_SCAFFOLDING_DISTANCE, 0);
 
-    @GameTest(templateName = "itematic:item.component.block.platform")
+    @GameTest(structure = "itematic:item.component.block.platform")
     public void usingStoneOnGroundPlacesStone(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.STONE);
+        ItemStack stone = world.itematic$createStack(ItemKeys.STONE);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, stone);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, GROUND_POSITION, Direction.UP);
-        context.addInstantFinalTask(() -> context.expectBlock(Blocks.STONE, PLACED_BLOCK_POSITION));
+        TestUtil.useStackOnBlockInside(context, player, stone, GROUND_POSITION, Direction.UP);
+        context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+            .is(Blocks.STONE));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.platform")
+    @GameTest(structure = "itematic:item.component.block.platform")
     public void usingOakSlabOnGroundPlacesOakSlab(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.OAK_SLAB);
+        ItemStack oakSlab = world.itematic$createStack(ItemKeys.OAK_SLAB);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, oakSlab);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, GROUND_POSITION, Direction.UP);
-        context.addInstantFinalTask(() -> context.checkBlockState(PLACED_BLOCK_POSITION, state -> state.get(Properties.SLAB_TYPE) == SlabType.BOTTOM, () -> "Expected placed oak slab to be of bottom type"));
+        TestUtil.useStackOnBlockInside(context, player, oakSlab, GROUND_POSITION, Direction.UP);
+        context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+            .hasProperty(Properties.SLAB_TYPE, SlabType.BOTTOM, () -> "Expected placed Oak Slab to be of bottom type"));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.oak_slab.lower")
+    @GameTest(structure = "itematic:item.component.block.oak_slab.lower")
     public void usingOakSlabOnLowerOakSlabPlacesDoubleOakSlab(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.OAK_SLAB);
+        ItemStack oakSlab = world.itematic$createStack(ItemKeys.OAK_SLAB);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, oakSlab);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, PLACED_BLOCK_POSITION, Direction.DOWN);
-        context.addInstantFinalTask(() -> context.checkBlockState(PLACED_BLOCK_POSITION, state -> state.get(Properties.SLAB_TYPE) == SlabType.DOUBLE, () -> "Expected placed oak slab to be of double type"));
+        TestUtil.useStackOnBlockInside(context, player, oakSlab, PLACED_BLOCK_POSITION, Direction.DOWN);
+        context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+            .hasProperty(Properties.SLAB_TYPE, SlabType.DOUBLE, () -> "Expected placed Oak Slab to be of double type"));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.oak_slab.upper")
+    @GameTest(structure = "itematic:item.component.block.oak_slab.upper")
     public void usingOakSlabOnUpperOakSlabPlacesDoubleOakSlab(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.OAK_SLAB);
+        ItemStack oakSlab = world.itematic$createStack(ItemKeys.OAK_SLAB);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, oakSlab);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, PLACED_BLOCK_POSITION, Direction.DOWN);
-        context.addInstantFinalTask(() -> context.checkBlockState(PLACED_BLOCK_POSITION, state -> state.get(Properties.SLAB_TYPE) == SlabType.DOUBLE, () -> "Expected placed oak slab to be of double type"));
+        TestUtil.useStackOnBlockInside(context, player, oakSlab, PLACED_BLOCK_POSITION, Direction.DOWN);
+        context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+            .hasProperty(Properties.SLAB_TYPE, SlabType.DOUBLE, () -> "Expected placed Oak Slab to be of double type"));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.platform.grass_block")
+    @GameTest(structure = "itematic:item.component.block.platform.grass_block")
     public void usingTallGrassOnGroundPlacesTallGrass(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.TALL_GRASS);
+        ItemStack tallGrass = world.itematic$createStack(ItemKeys.TALL_GRASS);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, tallGrass);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, GROUND_POSITION, Direction.UP);
-        context.addInstantFinalTask(() -> {
-            context.checkBlockState(PLACED_BLOCK_POSITION, state -> state.get(Properties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER, () -> "Expected lower half of tall grass to be placed");
-            context.checkBlockState(ABOVE_PLACED_BLOCK_POSITION, state -> state.get(Properties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER, () -> "Expected upper half of tall grass to be placed");
+        TestUtil.useStackOnBlockInside(context, player, tallGrass, GROUND_POSITION, Direction.UP);
+        context.addFinalTask(() -> {
+            Assert.blockState(context, PLACED_BLOCK_POSITION)
+                .hasProperty(Properties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER, () -> "Expected lower half of Tall Grass to be placed");
+            Assert.blockState(context, ABOVE_PLACED_BLOCK_POSITION)
+                .hasProperty(Properties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER, () -> "Expected upper half of Tall Grass to be placed");
         });
     }
 
-    @GameTest(templateName = "itematic:item.component.block.platform.grass_block.blocked_off_above")
+    @GameTest(structure = "itematic:item.component.block.platform.grass_block.blocked_off_above")
     public void usingTallGrassOnGroundWhileBlockedOffDoesNotPlaceTallGrass(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.TALL_GRASS);
+        ItemStack tallGrass = world.itematic$createStack(ItemKeys.TALL_GRASS);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, tallGrass);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, GROUND_POSITION, Direction.UP);
-        context.addInstantFinalTask(() -> context.dontExpectBlock(Blocks.TALL_GRASS, PLACED_BLOCK_POSITION));
+        TestUtil.useStackOnBlockInside(context, player, tallGrass, GROUND_POSITION, Direction.UP);
+        context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+            .isNot(Blocks.TALL_GRASS));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.platform")
+    @GameTest(structure = "itematic:item.component.block.platform")
     public void usingSkeletonSkullOnGroundPlacesSkeletonSkull(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.SKELETON_SKULL);
+        ItemStack skeletonSkull = world.itematic$createStack(ItemKeys.SKELETON_SKULL);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, skeletonSkull);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, GROUND_POSITION, Direction.UP);
-        context.addInstantFinalTask(() -> context.expectBlock(Blocks.SKELETON_SKULL, PLACED_BLOCK_POSITION));
+        TestUtil.useStackOnBlockInside(context, player, skeletonSkull, GROUND_POSITION, Direction.UP);
+        context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+            .is(Blocks.SKELETON_SKULL));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.platform.wall")
+    @GameTest(structure = "itematic:item.component.block.platform.wall")
     public void usingSkeletonSkullOnWallPlacesSkeletonWallSkull(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.SKELETON_SKULL);
+        ItemStack skeletonSkull = world.itematic$createStack(ItemKeys.SKELETON_SKULL);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, skeletonSkull);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, WALL_POSITION, Direction.NORTH);
-        context.addInstantFinalTask(() -> context.expectBlock(Blocks.SKELETON_WALL_SKULL, PLACED_BLOCK_POSITION));
+        TestUtil.useStackOnBlockInside(context, player, skeletonSkull, WALL_POSITION, Direction.NORTH);
+        context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+            .is(Blocks.SKELETON_WALL_SKULL));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.platform.ceiling")
+    @GameTest(structure = "itematic:item.component.block.platform.ceiling")
     public void usingOakHangingSignOnCeilingPlacesOakHangingSign(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.OAK_HANGING_SIGN);
+        ItemStack oakHangingSign = world.itematic$createStack(ItemKeys.OAK_HANGING_SIGN);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, oakHangingSign);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, ABOVE_PLACED_BLOCK_POSITION, Direction.DOWN);
-        context.addInstantFinalTask(() -> context.expectBlock(Blocks.OAK_HANGING_SIGN, PLACED_BLOCK_POSITION));
+        TestUtil.useStackOnBlockInside(context, player, oakHangingSign, ABOVE_PLACED_BLOCK_POSITION, Direction.DOWN);
+        context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+            .is(Blocks.OAK_HANGING_SIGN));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.platform.wall")
+    @GameTest(structure = "itematic:item.component.block.platform.wall")
     public void usingOakHangingSignOnWallPlacesOakWallHangingSign(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.OAK_HANGING_SIGN);
+        ItemStack oakHangingSign = world.itematic$createStack(ItemKeys.OAK_HANGING_SIGN);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, oakHangingSign);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, WALL_POSITION, Direction.NORTH);
-        context.addInstantFinalTask(() -> context.expectBlock(Blocks.OAK_WALL_HANGING_SIGN, PLACED_BLOCK_POSITION));
+        TestUtil.useStackOnBlockInside(context, player, oakHangingSign, WALL_POSITION, Direction.NORTH);
+        context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+            .is(Blocks.OAK_WALL_HANGING_SIGN));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.platform")
+    @GameTest(structure = "itematic:item.component.block.platform")
     public void usingScaffoldingOnGroundPlacesScaffolding(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.SCAFFOLDING);
+        ItemStack scaffolding = world.itematic$createStack(ItemKeys.SCAFFOLDING);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, scaffolding);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, GROUND_POSITION, Direction.UP);
-        context.addInstantFinalTask(() -> context.expectBlock(Blocks.SCAFFOLDING, PLACED_BLOCK_POSITION));
+        TestUtil.useStackOnBlockInside(context, player, scaffolding, GROUND_POSITION, Direction.UP);
+        context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+            .is(Blocks.SCAFFOLDING));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.scaffolding.single_block")
+    @GameTest(structure = "itematic:item.component.block.scaffolding.single_block")
     public void usingScaffoldingOnTopFaceOfScaffoldingPlacesScaffoldingHorizontally(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.SCAFFOLDING);
+        ItemStack scaffolding = world.itematic$createStack(ItemKeys.SCAFFOLDING);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, scaffolding);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, PLACED_BLOCK_POSITION, Direction.UP);
-        context.addInstantFinalTask(() -> context.expectBlock(Blocks.SCAFFOLDING, HORIZONTAL_SCAFFOLDING_OFFSET));
+        TestUtil.useStackOnBlockInside(context, player, scaffolding, PLACED_BLOCK_POSITION, Direction.UP);
+        context.addFinalTask(() -> Assert.blockState(context, HORIZONTAL_SCAFFOLDING_OFFSET)
+            .is(Blocks.SCAFFOLDING));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.scaffolding.single_block")
+    @GameTest(structure = "itematic:item.component.block.scaffolding.single_block")
     public void usingScaffoldingOnTopFaceOfBlockBelowScaffoldingPlacesScaffoldingHorizontally(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.SCAFFOLDING);
+        ItemStack scaffolding = world.itematic$createStack(ItemKeys.SCAFFOLDING);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, scaffolding);
         player.setYaw(0.0f);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, GROUND_POSITION, Direction.UP);
-        context.addInstantFinalTask(() -> context.expectBlock(Blocks.SCAFFOLDING, HORIZONTAL_SCAFFOLDING_OFFSET));
+        TestUtil.useStackOnBlockInside(context, player, scaffolding, GROUND_POSITION, Direction.UP);
+        context.addFinalTask(() -> Assert.blockState(context, HORIZONTAL_SCAFFOLDING_OFFSET)
+            .is(Blocks.SCAFFOLDING));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.scaffolding.single_block")
+    @GameTest(structure = "itematic:item.component.block.scaffolding.single_block")
     public void usingScaffoldingOnSideFaceOfScaffoldingPlacesScaffoldingVertically(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.SCAFFOLDING);
+        ItemStack scaffolding = world.itematic$createStack(ItemKeys.SCAFFOLDING);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, scaffolding);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, PLACED_BLOCK_POSITION, Direction.SOUTH);
-        context.addInstantFinalTask(() -> context.expectBlock(Blocks.SCAFFOLDING, VERTICAL_SCAFFOLDING_OFFSET));
+        TestUtil.useStackOnBlockInside(context, player, scaffolding, PLACED_BLOCK_POSITION, Direction.SOUTH);
+        context.addFinalTask(() -> Assert.blockState(context, VERTICAL_SCAFFOLDING_OFFSET)
+            .is(Blocks.SCAFFOLDING));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.scaffolding.horizontal.max_distance")
+    @GameTest(structure = "itematic:item.component.block.scaffolding.horizontal.max_distance")
     public void usingScaffoldingForHorizontalPlacementFailsAfterReachingMaxDistance(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.SCAFFOLDING);
+        ItemStack scaffolding = world.itematic$createStack(ItemKeys.SCAFFOLDING);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, scaffolding);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, PLACED_BLOCK_POSITION, Direction.UP);
-        context.addInstantFinalTask(() -> context.dontExpectBlock(Blocks.SCAFFOLDING, HORIZONTAL_SCAFFOLDING_BEYOND_MAX_DISTANCE_OFFSET));
+        TestUtil.useStackOnBlockInside(context, player, scaffolding, PLACED_BLOCK_POSITION, Direction.UP);
+        context.addFinalTask(() -> Assert.blockState(context, HORIZONTAL_SCAFFOLDING_BEYOND_MAX_DISTANCE_OFFSET)
+            .isNot(Blocks.SCAFFOLDING));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.scaffolding.vertical.max_distance")
+    @GameTest(structure = "itematic:item.component.block.scaffolding.vertical.max_distance")
     public void usingScaffoldingForVerticalPlacementIgnoresMaxDistance(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.SCAFFOLDING);
+        ItemStack scaffolding = world.itematic$createStack(ItemKeys.SCAFFOLDING);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, scaffolding);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, PLACED_BLOCK_POSITION, Direction.SOUTH);
-        context.addInstantFinalTask(() -> context.expectBlock(Blocks.SCAFFOLDING, VERTICAL_SCAFFOLDING_BEYOND_MAX_DISTANCE_OFFSET));
+        TestUtil.useStackOnBlockInside(context, player, scaffolding, PLACED_BLOCK_POSITION, Direction.SOUTH);
+        context.addFinalTask(() -> Assert.blockState(context, VERTICAL_SCAFFOLDING_BEYOND_MAX_DISTANCE_OFFSET)
+            .is(Blocks.SCAFFOLDING));
     }
 
-    @GameTest(templateName = "itematic:item.component.block.platform")
+    @GameTest(structure = "itematic:item.component.block.platform")
     public void usingCommandBlockInSurvivalModeOnGroundDoesNotPlaceCommandBlock(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.COMMAND_BLOCK);
+        ItemStack commandBlock = world.itematic$createStack(ItemKeys.COMMAND_BLOCK);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, commandBlock);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, stack, GROUND_POSITION, Direction.UP);
-        context.addInstantFinalTask(() -> context.dontExpectBlock(Blocks.COMMAND_BLOCK, PLACED_BLOCK_POSITION));
+        TestUtil.useStackOnBlockInside(context, player, commandBlock, GROUND_POSITION, Direction.UP);
+        context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+            .isNot(Blocks.COMMAND_BLOCK));
     }
 }

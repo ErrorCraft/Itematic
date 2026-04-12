@@ -21,14 +21,13 @@ import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.decoration.painting.PaintingEntity;
+import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
@@ -36,7 +35,6 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
@@ -44,8 +42,8 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, boolean allowItemData, Set<Pass> passes) implements ItemComponent<EntityItemComponent> {
     public static final Codec<EntityItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -115,33 +113,18 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, boolean a
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Text> builder, TooltipType type) {
         if (this.entity.value() != EntityType.PAINTING) {
             return;
         }
 
-        RegistryWrapper.WrapperLookup lookup = context.getRegistryLookup();
-        if (lookup == null) {
-            return;
-        }
-
-        NbtComponent entityData = stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT);
-        if (!entityData.isEmpty()) {
-            entityData.get(lookup.getOps(NbtOps.INSTANCE), PaintingEntity.VARIANT_MAP_CODEC).result().ifPresentOrElse(
-                variant -> {
-                    variant.getKey().ifPresent((key) -> {
-                        tooltip.add(Text.translatable(key.getValue().toTranslationKey("painting", "title")).formatted(Formatting.YELLOW));
-                        tooltip.add(Text.translatable(key.getValue().toTranslationKey("painting", "author")).formatted(Formatting.GRAY));
-                    });
-                    tooltip.add(Text.translatable("painting.dimensions", variant.value().width(), variant.value().height()));
-                },
-                () -> tooltip.add(RANDOM_TEXT)
-            );
-            return;
-        }
-
-        if (type.isCreative()) {
-            tooltip.add(RANDOM_TEXT);
+        RegistryEntry<PaintingVariant> paintingVariant = stack.get(DataComponentTypes.PAINTING_VARIANT);
+        if (paintingVariant != null) {
+            paintingVariant.value().title().ifPresent(builder);
+            paintingVariant.value().author().ifPresent(builder);
+            builder.accept(Text.translatable("painting.dimensions", paintingVariant.value().width(), paintingVariant.value().height()));
+        } else if (type.isCreative()) {
+            builder.accept(RANDOM_TEXT);
         }
     }
 

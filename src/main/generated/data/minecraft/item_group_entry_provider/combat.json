@@ -24,7 +24,10 @@
     "minecraft:tnt",
     "minecraft:end_crystal",
     "minecraft:snowball",
-    "minecraft:egg",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/eggs"
+    },
     "minecraft:wind_charge",
     "minecraft:bow",
     "minecraft:crossbow",

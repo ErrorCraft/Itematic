@@ -1,60 +1,66 @@
 package net.errorcraft.itematic.gametest.item.component;
 
-import net.errorcraft.itematic.gametest.Assert;
-import net.errorcraft.itematic.gametest.TestUtil;
+import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import net.errorcraft.itematic.util.TestUtil;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.GameTest;
-import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.GameMode;
 
 public class EquipmentItemComponentTestSuite {
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+    @GameTest
     public void usingItemEquipsStack(TestContext context) {
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.LEATHER_HELMET);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
-        EquippableComponent equippable = TestUtil.getDataComponent(stack, DataComponentTypes.EQUIPPABLE);
-        stack.use(world, player, Hand.MAIN_HAND);
-        context.addInstantFinalTask(() -> Assert.itemStackIsOf(player.getEquippedStack(equippable.slot()), ItemKeys.LEATHER_HELMET));
+        ItemStack leatherHelmet = world.itematic$createStack(ItemKeys.LEATHER_HELMET);
+        player.setStackInHand(Hand.MAIN_HAND, leatherHelmet);
+        EquippableComponent equippable = TestUtil.getDataComponent(context, leatherHelmet, DataComponentTypes.EQUIPPABLE);
+        leatherHelmet.use(world, player, Hand.MAIN_HAND);
+        context.addFinalTask(() -> Assert.itemStack(context, player.getEquippedStack(equippable.slot()))
+            .is(ItemKeys.LEATHER_HELMET)
+        );
     }
 
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+    @GameTest
     public void usingItemThatIsNotSwappableDoesNotEquipStack(TestContext context) {
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.SHIELD);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
-        EquippableComponent equippable = TestUtil.getDataComponent(stack, DataComponentTypes.EQUIPPABLE);
-        stack.use(world, player, Hand.MAIN_HAND);
-        context.addInstantFinalTask(() -> Assert.itemStackIsEmpty(player.getEquippedStack(equippable.slot())));
+        ItemStack shield = world.itematic$createStack(ItemKeys.SHIELD);
+        player.setStackInHand(Hand.MAIN_HAND, shield);
+        EquippableComponent equippable = TestUtil.getDataComponent(context, shield, DataComponentTypes.EQUIPPABLE);
+        shield.use(world, player, Hand.MAIN_HAND);
+        context.addFinalTask(() -> Assert.itemStack(context, player.getEquippedStack(equippable.slot()))
+            .isEmpty()
+        );
     }
 
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+    @GameTest
     public void usingItemWithAlreadyEquippedStackSwapsStacks(TestContext context) {
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ServerWorld world = context.getWorld();
         player.equipStack(EquipmentSlot.HEAD, world.itematic$createStack(ItemKeys.IRON_HELMET));
-        ItemStack stack = world.itematic$createStack(ItemKeys.LEATHER_HELMET);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
-        ActionResult result = stack.use(world, player, Hand.MAIN_HAND);
-        context.addInstantFinalTask(() -> {
-            if (!(result instanceof ActionResult.Success successResult)) {
-                throw new GameTestException("Expected equipment usage to be successful");
-            }
-
-            Assert.itemStackIsOf(player.getEquippedStack(EquipmentSlot.HEAD), ItemKeys.LEATHER_HELMET);
-            Assert.itemStackIsOf(successResult.getNewHandStack(), ItemKeys.IRON_HELMET);
+        ItemStack leatherHelmet = world.itematic$createStack(ItemKeys.LEATHER_HELMET);
+        player.setStackInHand(Hand.MAIN_HAND, leatherHelmet);
+        context.addFinalTask(() -> {
+            ActionResult result = leatherHelmet.use(world, player, Hand.MAIN_HAND);
+            Assert.isInstance(
+                context,
+                result,
+                ActionResult.Success.class,
+                () -> "Expected equipment item usage to be successful",
+                success -> Assert.itemStack(context, success.getNewHandStack())
+                    .is(ItemKeys.IRON_HELMET)
+            );
+            Assert.itemStack(context, player.getEquippedStack(EquipmentSlot.HEAD))
+                .is(ItemKeys.LEATHER_HELMET);
         });
     }
 }

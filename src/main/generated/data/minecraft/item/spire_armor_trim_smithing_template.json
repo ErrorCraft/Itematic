@@ -1,13 +1,44 @@
 {
   "behavior": {
-    "minecraft:smithing_template": {
-      "template": "minecraft:spire_pattern"
-    },
+    "minecraft:smithing_template_provider": "minecraft:trim_pattern",
     "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:spire_armor_trim_smithing_template",
     "rarity": "uncommon",
+    "tooltip": [
+      {
+        "color": "gray",
+        "translate": "item.minecraft.smithing_template"
+      },
+      "",
+      {
+        "color": "gray",
+        "translate": "item.minecraft.smithing_template.applies_to"
+      },
+      {
+        "extra": [
+          {
+            "color": "blue",
+            "translate": "item.minecraft.smithing_template.armor_trim.applies_to"
+          }
+        ],
+        "text": " "
+      },
+      {
+        "color": "gray",
+        "translate": "item.minecraft.smithing_template.ingredients"
+      },
+      {
+        "extra": [
+          {
+            "color": "blue",
+            "translate": "item.minecraft.smithing_template.armor_trim.ingredients"
+          }
+        ],
+        "text": " "
+      }
+    ],
     "translation_key": "item.minecraft.spire_armor_trim_smithing_template"
   }
 }

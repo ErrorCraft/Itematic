@@ -11,7 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.predicate.ComponentPredicate;
+import net.minecraft.predicate.component.ComponentMapPredicate;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -23,12 +23,12 @@ import net.minecraft.village.VillagerType;
 import java.util.Map;
 import java.util.Optional;
 
-public record ItemFromTypeTradeModifier(Map<VillagerType, RegistryEntry<Item>> types) implements TradeModifier<ItemFromTypeTradeModifier> {
+public record ItemFromTypeTradeModifier(Map<RegistryEntry<VillagerType>, RegistryEntry<Item>> types) implements TradeModifier<ItemFromTypeTradeModifier> {
     public static final MapCodec<ItemFromTypeTradeModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codec.simpleMap(Registries.VILLAGER_TYPE.getCodec(), RegistryFixedCodec.of(RegistryKeys.ITEM), Registries.VILLAGER_TYPE).fieldOf("types").forGetter(ItemFromTypeTradeModifier::types)
+        Codec.simpleMap(Registries.VILLAGER_TYPE.getEntryCodec(), RegistryFixedCodec.of(RegistryKeys.ITEM), Registries.VILLAGER_TYPE).fieldOf("types").forGetter(ItemFromTypeTradeModifier::types)
     ).apply(instance, ItemFromTypeTradeModifier::new));
 
-    public static ItemFromTypeTradeModifier of(Map<VillagerType, RegistryEntry<Item>> types) {
+    public static ItemFromTypeTradeModifier of(Map<RegistryEntry<VillagerType>, RegistryEntry<Item>> types) {
         return new ItemFromTypeTradeModifier(types);
     }
 
@@ -42,11 +42,13 @@ public record ItemFromTypeTradeModifier(Map<VillagerType, RegistryEntry<Item>> t
         if (!(context.get(LootContextParameters.THIS_ENTITY) instanceof VillagerDataContainer container)) {
             return Optional.empty();
         }
-        VillagerType type = container.getVillagerData().getType();
+
+        RegistryEntry<VillagerType> type = container.getVillagerData().type();
         if (!this.types.containsKey(type)) {
             return Optional.empty();
         }
+
         ItemStack givesActual = gives.itematic$copyWithItem(this.types.get(type));
-        return Optional.of(new TradedItem(givesActual.getRegistryEntry(), givesActual.getCount(), ComponentPredicate.of(givesActual.getComponents())));
+        return Optional.of(new TradedItem(givesActual.getRegistryEntry(), givesActual.getCount(), ComponentMapPredicate.of(givesActual.getComponents())));
     }
 }

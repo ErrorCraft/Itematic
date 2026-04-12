@@ -139,6 +139,9 @@ public class BlockKeys {
     public static final RegistryKey<Block> SHORT_GRASS = of("short_grass");
     public static final RegistryKey<Block> FERN = of("fern");
     public static final RegistryKey<Block> DEAD_BUSH = of("dead_bush");
+    public static final RegistryKey<Block> BUSH = of("bush");
+    public static final RegistryKey<Block> SHORT_DRY_GRASS = of("short_dry_grass");
+    public static final RegistryKey<Block> TALL_DRY_GRASS = of("tall_dry_grass");
     public static final RegistryKey<Block> SEAGRASS = of("seagrass");
     public static final RegistryKey<Block> PISTON = of("piston");
     public static final RegistryKey<Block> WHITE_WOOL = of("white_wool");
@@ -266,6 +269,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> ICE = of("ice");
     public static final RegistryKey<Block> SNOW_BLOCK = of("snow_block");
     public static final RegistryKey<Block> CACTUS = of("cactus");
+    public static final RegistryKey<Block> CACTUS_FLOWER = of("cactus_flower");
     public static final RegistryKey<Block> CLAY = of("clay");
     public static final RegistryKey<Block> SUGAR_CANE = of("sugar_cane");
     public static final RegistryKey<Block> JUKEBOX = of("jukebox");
@@ -1012,6 +1016,8 @@ public class BlockKeys {
     public static final RegistryKey<Block> FLOWERING_AZALEA = of("flowering_azalea");
     public static final RegistryKey<Block> MOSS_CARPET = of("moss_carpet");
     public static final RegistryKey<Block> PINK_PETALS = of("pink_petals");
+    public static final RegistryKey<Block> WILDFLOWERS = of("wildflowers");
+    public static final RegistryKey<Block> LEAF_LITTER = of("leaf_litter");
     public static final RegistryKey<Block> MOSS_BLOCK = of("moss_block");
     public static final RegistryKey<Block> BIG_DRIPLEAF = of("big_dripleaf");
     public static final RegistryKey<Block> SMALL_DRIPLEAF = of("small_dripleaf");
@@ -1062,6 +1068,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> CLOSED_EYEBLOSSOM = of("closed_eyeblossom");
     public static final RegistryKey<Block> POTTED_OPEN_EYEBLOSSOM = of("potted_open_eyeblossom");
     public static final RegistryKey<Block> POTTED_CLOSED_EYEBLOSSOM = of("potted_closed_eyeblossom");
+    public static final RegistryKey<Block> FIREFLY_BUSH = of("firefly_bush");
 
     private BlockKeys() {}
 

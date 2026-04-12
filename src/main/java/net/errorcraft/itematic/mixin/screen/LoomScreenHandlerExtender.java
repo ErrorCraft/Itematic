@@ -1,68 +1,37 @@
 package net.errorcraft.itematic.mixin.screen;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BannerPatternHolderItemComponent;
-import net.errorcraft.itematic.item.component.components.BannerPatternItemComponent;
 import net.errorcraft.itematic.item.component.components.DyeItemComponent;
-import net.minecraft.block.entity.BannerPattern;
-import net.minecraft.item.*;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.item.BannerItem;
+import net.minecraft.item.DyeItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.LoomScreenHandler;
 import net.minecraft.util.DyeColor;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
 
 @Mixin(LoomScreenHandler.class)
 public class LoomScreenHandlerExtender {
-    @ModifyConstant(
-        method = "getPatternsFor",
-        constant = @Constant(
-            classValue = BannerPatternItem.class,
-            ordinal = 0
-        )
-    )
-    private boolean instanceOfBannerPatternItemUseItemComponent(Object reference, Class<BannerPatternItem> clazz, ItemStack stack, @Share("bannerPatternItemComponent") LocalRef<BannerPatternItemComponent> bannerPatternItemComponent) {
-        Optional<BannerPatternItemComponent> optionalComponent = stack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN);
-        optionalComponent.ifPresent(bannerPatternItemComponent::set);
-        return optionalComponent.isPresent();
-    }
-
-    @ModifyVariable(
-        method = "getPatternsFor",
-        at = @At("LOAD"),
-        ordinal = 0
-    )
-    private Item castToBannerPatternItemUseNull(Item instance) {
-        return null;
-    }
-
-    @Redirect(
-        method = "getPatternsFor",
+    @ModifyExpressionValue(
+        method = "quickMove",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/BannerPatternItem;getPattern()Lnet/minecraft/registry/tag/TagKey;"
+            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
         )
     )
-    private TagKey<BannerPattern> getPatternUseItemComponent(BannerPatternItem instance, @Share("bannerPatternItemComponent") LocalRef<BannerPatternItemComponent> bannerPatternItemComponent) {
-        return bannerPatternItemComponent.get().patterns();
-    }
-
-    @ModifyConstant(
-        method = "quickMove",
-        constant = @Constant(
-            classValue = BannerItem.class,
-            ordinal = 0
-        )
-    )
-    private boolean instanceOfBannerItemUseItemComponent(Object reference, Class<BannerItem> clazz, @Local(ordinal = 1) ItemStack slotStack) {
-        return slotStack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
-            .map(BannerPatternHolderItemComponent::modifiable)
-            .orElse(false);
+    private boolean containsProvidersBannerPatternsDataComponentAlsoCheckItemBehaviorComponent(boolean original, @Local(ordinal = 1) ItemStack slotStack) {
+        return original && slotStack.itematic$hasBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER);
     }
 
     @ModifyConstant(
@@ -72,19 +41,10 @@ public class LoomScreenHandlerExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<BannerItem> clazz, @Local(ordinal = 1) ItemStack slotStack) {
-        return slotStack.itematic$hasBehavior(ItemComponentTypes.DYE);
-    }
-
-    @ModifyConstant(
-        method = "quickMove",
-        constant = @Constant(
-            classValue = BannerPatternItem.class,
-            ordinal = 0
-        )
-    )
-    private boolean instanceOfBannerPatternItemUseItemComponentCheck(Object reference, Class<BannerPatternItem> clazz, @Local(ordinal = 1) ItemStack slotStack) {
-        return slotStack.itematic$hasBehavior(ItemComponentTypes.BANNER_PATTERN);
+    private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<BannerItem> clazz, @Local(ordinal = 1) ItemStack slotStack, @Share("dye") LocalRef<DyeItemComponent> dye) {
+        Optional<DyeItemComponent> optionalDye = slotStack.itematic$getBehavior(ItemComponentTypes.DYE);
+        optionalDye.ifPresent(dye::set);
+        return optionalDye.isPresent();
     }
 
     @Redirect(
@@ -105,10 +65,8 @@ public class LoomScreenHandlerExtender {
             target = "Lnet/minecraft/item/DyeItem;getColor()Lnet/minecraft/util/DyeColor;"
         )
     )
-    private DyeColor getColorUseItemComponent(DyeItem instance, @Local(ordinal = 1) ItemStack dyeStack) {
-        return dyeStack.itematic$getBehavior(ItemComponentTypes.DYE)
-            .map(DyeItemComponent::color)
-            .orElse(DyeColor.WHITE);
+    private DyeColor getColorUseItemComponent(DyeItem instance, @Share("dye") LocalRef<DyeItemComponent> dye) {
+        return dye.get().color();
     }
 
     @Mixin(targets = "net/minecraft/screen/LoomScreenHandler$3")
@@ -143,15 +101,15 @@ public class LoomScreenHandlerExtender {
 
     @Mixin(targets = "net/minecraft/screen/LoomScreenHandler$5")
     public static class BannerPatternSlotExtender {
-        @ModifyConstant(
+        @ModifyExpressionValue(
             method = "canInsert",
-            constant = @Constant(
-                classValue = BannerPatternItem.class,
-                ordinal = 0
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
             )
         )
-        private boolean instanceOfBannerPatternItemUseItemComponentCheck(Object reference, Class<BannerPatternItem> clazz, ItemStack stack) {
-            return stack.itematic$hasBehavior(ItemComponentTypes.BANNER_PATTERN);
+        private boolean containsProvidersBannerPatternsDataComponentAlsoCheckItemBehaviorComponent(boolean original, ItemStack stack) {
+            return original && stack.itematic$hasBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER);
         }
     }
 }

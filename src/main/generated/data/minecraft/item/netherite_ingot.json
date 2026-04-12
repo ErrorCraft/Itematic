@@ -3,7 +3,8 @@
     "minecraft:immune_to_damage": {
       "damage": "minecraft:is_fire"
     },
-    "minecraft:stackable": 64
+    "minecraft:stackable": 64,
+    "minecraft:trim_material_provider": "minecraft:netherite"
   },
   "display": {
     "model": "minecraft:netherite_ingot",

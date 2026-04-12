@@ -12,12 +12,9 @@ import net.minecraft.component.type.FireworksComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.item.FireworkRocketItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -74,14 +71,6 @@ public record FireworkItemComponent() implements ItemComponent<FireworkItemCompo
     @Override
     public void addComponents(ComponentMap.Builder builder) {
         builder.add(DataComponentTypes.FIREWORKS, DEFAULT_DATA_COMPONENT);
-    }
-
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        FireworksComponent fireworks = stack.get(DataComponentTypes.FIREWORKS);
-        if (fireworks != null) {
-            fireworks.appendTooltip(context, tooltip::add, type);
-        }
     }
 
     private static FireworkRocketEntity createFireworkEntity(World world, ItemStack stack, ItemUsageContext context) {

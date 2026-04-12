@@ -1,8 +1,5 @@
 {
   "behavior": {
-    "minecraft:pointable": {
-      "lodestone_translation_key": "item.minecraft.lodestone_compass"
-    },
     "minecraft:stackable": 64
   },
   "display": {
@@ -17,8 +14,42 @@
         "entries": [
           {
             "action": {
+              "type": "minecraft:modify_item",
+              "item_modifier": {
+                "count": 1.0,
+                "function": "minecraft:split"
+              }
+            }
+          },
+          {
+            "action": {
               "type": "minecraft:set_item_pointer_location",
-              "position": "interacted"
+              "position": "interacted",
+              "stack": "result"
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:modify_item",
+              "item_modifier": {
+                "function": "minecraft:sequence",
+                "functions": [
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "item.minecraft.lodestone_compass"
+                    },
+                    "target": "item_name"
+                  },
+                  {
+                    "components": {
+                      "minecraft:enchantment_glint_override": true
+                    },
+                    "function": "minecraft:set_components"
+                  }
+                ]
+              },
+              "stack": "result"
             }
           },
           {

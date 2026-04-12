@@ -6,7 +6,8 @@ import org.jetbrains.annotations.Nullable;
 
 public interface VillagerProfessionAccess {
     @Nullable
-    default TagKey<Item> itematic$gatherableItemsTag() {
+    default TagKey<Item> itematic$gatherableItems() {
         return null;
     }
+    default void itematic$setGatherableItems(TagKey<Item> gatherableItems) {}
 }

@@ -1,6 +1,7 @@
 {
   "behavior": {
-    "minecraft:stackable": 64
+    "minecraft:stackable": 64,
+    "minecraft:trim_material_provider": "minecraft:lapis"
   },
   "display": {
     "model": "minecraft:lapis_lazuli",

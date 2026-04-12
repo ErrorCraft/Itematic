@@ -1,56 +1,74 @@
 package net.errorcraft.itematic.gametest.item.component;
 
-import net.errorcraft.itematic.gametest.TestUtil;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import net.errorcraft.itematic.util.TestUtil;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 
 public class ImmuneToDamageItemComponentTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+    @GameTest
     public void explodingNetherStarKeepsItemAlive(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.NETHER_STAR);
-        ItemEntity item = new ItemEntity(world, 0.0d, 0.0d, 0.0d, stack);
-        TestUtil.spawnEntity(context, item, SPAWN_POSITION);
-        item.damage(world, world.getDamageSources().explosion(null), Float.MAX_VALUE);
-        context.addInstantFinalTask(() -> context.expectEntity(EntityType.ITEM));
+        ItemEntity netherStar = new ItemEntity(
+            world,
+            0.0d,
+            0.0d,
+            0.0d,
+            world.itematic$createStack(ItemKeys.NETHER_STAR)
+        );
+        TestUtil.spawnEntity(context, netherStar, SPAWN_POSITION);
+        netherStar.damage(world, world.getDamageSources().explosion(null), Float.MAX_VALUE);
+        context.addFinalTask(() -> context.expectEntity(EntityType.ITEM));
     }
 
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+    @GameTest
     public void explodingStickDestroysItem(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.STICK);
-        ItemEntity item = new ItemEntity(world, 0.0d, 0.0d, 0.0d, stack);
-        TestUtil.spawnEntity(context, item, SPAWN_POSITION);
-        item.damage(world, world.getDamageSources().explosion(null), Float.MAX_VALUE);
-        context.addInstantFinalTask(() -> context.dontExpectEntity(EntityType.ITEM));
+        ItemEntity stick = new ItemEntity(
+            world,
+            0.0d,
+            0.0d,
+            0.0d,
+            world.itematic$createStack(ItemKeys.STICK)
+        );
+        TestUtil.spawnEntity(context, stick, SPAWN_POSITION);
+        stick.damage(world, world.getDamageSources().explosion(null), Float.MAX_VALUE);
+        context.addFinalTask(() -> context.dontExpectEntity(EntityType.ITEM));
     }
 
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+    @GameTest
     public void settingNetheriteIngotOnFireKeepsItemAlive(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.NETHERITE_INGOT);
-        ItemEntity item = new ItemEntity(world, 0.0d, 0.0d, 0.0d, stack);
-        TestUtil.spawnEntity(context, item, SPAWN_POSITION);
-        item.damage(world, world.getDamageSources().inFire(), Float.MAX_VALUE);
-        context.addInstantFinalTask(() -> context.expectEntity(EntityType.ITEM));
+        ItemEntity netheriteIngot = new ItemEntity(
+            world,
+            0.0d,
+            0.0d,
+            0.0d,
+            world.itematic$createStack(ItemKeys.NETHERITE_INGOT)
+        );
+        TestUtil.spawnEntity(context, netheriteIngot, SPAWN_POSITION);
+        netheriteIngot.damage(world, world.getDamageSources().inFire(), Float.MAX_VALUE);
+        context.addFinalTask(() -> context.expectEntity(EntityType.ITEM));
     }
 
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+    @GameTest
     public void settingStickOnFireDestroysItem(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.STICK);
-        ItemEntity item = new ItemEntity(world, 0.0d, 0.0d, 0.0d, stack);
-        TestUtil.spawnEntity(context, item, SPAWN_POSITION);
-        item.damage(world, world.getDamageSources().inFire(), Float.MAX_VALUE);
-        context.addInstantFinalTask(() -> context.dontExpectEntity(EntityType.ITEM));
+        ItemEntity stick = new ItemEntity(
+            world,
+            0.0d,
+            0.0d,
+            0.0d,
+            world.itematic$createStack(ItemKeys.STICK)
+        );
+        TestUtil.spawnEntity(context, stick, SPAWN_POSITION);
+        stick.damage(world, world.getDamageSources().inFire(), Float.MAX_VALUE);
+        context.addFinalTask(() -> context.dontExpectEntity(EntityType.ITEM));
     }
 }

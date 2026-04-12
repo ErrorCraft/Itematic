@@ -43,17 +43,18 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
     }
 
     public static ItemComponent<?>[] sword(RegistryEntryLookup<Block> blocks, ToolMaterial material, RegistryEntryList<Item> repairItems) {
-        double attackDamage = 4.0d + material.attackDamageBonus();
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
             DamageableItemComponent.of(material.durability()),
             ToolItemComponent.builder(2)
+                .preventCreativeDestruction()
                 .rule(ToolComponent.Rule.ofAlwaysDropping(RegistryEntryList.of(blocks.getOrThrow(BlockKeys.COBWEB)), 15.0f))
                 .rule(ToolComponent.Rule.of(blocks.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5f))
                 .build(),
             WeaponItemComponent.of(
                 1,
-                attackDamage,
+                0.0f,
+                4.0d + material.attackDamageBonus(),
                 0.4d
             ),
             EnchantableItemComponent.of(material),
@@ -62,40 +63,40 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
     }
 
     public static ItemComponent<?>[] shovel(RegistryEntryLookup<Block> blocks, ToolMaterial material, RegistryEntryList<Item> repairItems) {
-        return tool(blocks, material, 2.5d, 0.25d, BlockTags.SHOVEL_MINEABLE, repairItems);
+        return tool(blocks, material, 0.0f, 2.5d, 0.25d, BlockTags.SHOVEL_MINEABLE, repairItems);
     }
 
     public static ItemComponent<?>[] pickaxe(RegistryEntryLookup<Block> blocks, ToolMaterial material, RegistryEntryList<Item> repairItems) {
-        return tool(blocks, material, 2.0d, 0.3d, BlockTags.PICKAXE_MINEABLE, repairItems);
+        return tool(blocks, material, 0.0f, 2.0d, 0.3d, BlockTags.PICKAXE_MINEABLE, repairItems);
     }
 
     public static ItemComponent<?>[] axe(RegistryEntryLookup<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, RegistryEntryList<Item> repairItems) {
-        return tool(blocks, material, attackDamage, attackSpeed, BlockTags.AXE_MINEABLE, repairItems);
+        return tool(blocks, material, 5.0f, attackDamage, attackSpeed, BlockTags.AXE_MINEABLE, repairItems);
     }
 
     public static ItemComponent<?>[] hoe(RegistryEntryLookup<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, RegistryEntryList<Item> repairItems) {
-        return tool(blocks, material, attackDamage, attackSpeed, BlockTags.HOE_MINEABLE, repairItems);
+        return tool(blocks, material, 0.0f, attackDamage, attackSpeed, BlockTags.HOE_MINEABLE, repairItems);
     }
 
-    @Override
-    public ItemComponentType<DamageableItemComponent> type() {
-        return ItemComponentTypes.DAMAGEABLE;
-    }
-
-    private static ItemComponent<?>[] tool(RegistryEntryLookup<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Block> mineableBlocks, RegistryEntryList<Item> repairItems) {
-        double realAttackDamage = attackDamage + material.attackDamageBonus();
+    private static ItemComponent<?>[] tool(RegistryEntryLookup<Block> blocks, ToolMaterial material, float disableBlockingForSeconds, double baseAttackDamage, double attackSpeed, TagKey<Block> mineableBlocks, RegistryEntryList<Item> repairItems) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
             DamageableItemComponent.of(material.durability()),
             ToolItemComponent.of(blocks, material, mineableBlocks),
             WeaponItemComponent.of(
                 2,
-                realAttackDamage,
+                disableBlockingForSeconds,
+                baseAttackDamage + material.attackDamageBonus(),
                 attackSpeed
             ),
             EnchantableItemComponent.of(material),
             RepairableItemComponent.of(repairItems)
         };
+    }
+
+    @Override
+    public ItemComponentType<DamageableItemComponent> type() {
+        return ItemComponentTypes.DAMAGEABLE;
     }
 
     @Override
@@ -107,6 +108,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
     public void addComponents(ComponentMap.Builder builder) {
         builder.add(DataComponentTypes.MAX_DAMAGE, this.durability);
         builder.add(DataComponentTypes.DAMAGE, 0);
+        this.breakSound.ifPresent(breakSound -> builder.add(DataComponentTypes.BREAK_SOUND, breakSound));
     }
 
     public int maximumDamage(ItemStack stack) {

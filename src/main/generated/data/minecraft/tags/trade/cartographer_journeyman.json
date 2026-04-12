@@ -1,6 +1,7 @@
 {
   "values": [
     "minecraft:buy_compass",
-    "minecraft:sell_mansion_map"
+    "minecraft:sell_monument_map",
+    "minecraft:sell_trial_chamber_map"
   ]
 }

@@ -3,23 +3,20 @@ package net.errorcraft.itematic.mixin.recipe;
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.TransmuteRecipe;
+import net.minecraft.recipe.TransmuteRecipeResult;
 import net.minecraft.recipe.display.RecipeDisplay;
 import net.minecraft.recipe.display.ShapelessCraftingRecipeDisplay;
 import net.minecraft.recipe.display.SlotDisplay;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.collection.DefaultedList;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 
@@ -35,21 +32,7 @@ public abstract class TransmuteRecipeExtender implements CraftingRecipe, RecipeA
 
     @Shadow
     @Final
-    RegistryEntry<Item> result;
-
-    @Shadow
-    public abstract List<RecipeDisplay> getDisplays();
-
-    @Redirect(
-        method = "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack copyComponentsToNewStackUseRegistryEntry(ItemStack instance, ItemConvertible item, int count) {
-        return instance.itematic$copyComponentsToNewStack(this.result, count);
-    }
+    TransmuteRecipeResult result;
 
     @Override
     public DefaultedList<ItemStack> getRecipeRemainders(CraftingRecipeInput input) {
@@ -62,7 +45,7 @@ public abstract class TransmuteRecipeExtender implements CraftingRecipe, RecipeA
             }
 
             final int index = i;
-            if (!foundInput && this.input.test(stack) && !stack.itemMatches(this.result)) {
+            if (!foundInput && this.input.test(stack) && !stack.itemMatches(this.result.itemEntry())) {
                 foundInput = true;
                 this.input.itematic$remainder()
                     .map(ItemStack::copy)
@@ -85,7 +68,7 @@ public abstract class TransmuteRecipeExtender implements CraftingRecipe, RecipeA
                     this.input.toDisplay(),
                     this.material.toDisplay()
                 ),
-                new SlotDisplay.ItemSlotDisplay(this.result),
+                this.result.createSlotDisplay(),
                 new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.CRAFTING_TABLE))
             )
         );

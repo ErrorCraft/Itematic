@@ -7,30 +7,5 @@
     "glint": true,
     "model": "minecraft:written_book",
     "translation_key": "item.minecraft.written_book"
-  },
-  "events": {
-    "minecraft:use": {
-      "action": {
-        "type": "minecraft:sequence",
-        "handler": "minecraft:passing",
-        "entries": [
-          {
-            "action": {
-              "type": "minecraft:open_book_from_item"
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:increment_stat",
-              "entity": "this",
-              "stat": {
-                "type": "minecraft:used",
-                "entry": "minecraft:written_book"
-              }
-            }
-          }
-        ]
-      }
-    }
   }
 }
