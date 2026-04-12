@@ -4,22 +4,19 @@ import com.mojang.serialization.Codec;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.util.StringIdentifiable;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Function;
+import net.minecraft.util.context.ContextParameter;
 
 public enum ItemStackTarget implements StringIdentifiable {
-    TOOL("tool", context -> context.get(LootContextParameters.TOOL)),
-    RESULT("result", ActionContext::resultStack);
+    TOOL("tool", LootContextParameters.TOOL);
 
     public static final Codec<ItemStackTarget> CODEC = StringIdentifiable.createCodec(ItemStackTarget::values);
 
     private final String name;
-    private final Function<ActionContext, ItemStack> itemStackSupplier;
+    private final ContextParameter<ItemStack> parameter;
 
-    ItemStackTarget(String name, Function<ActionContext, ItemStack> itemStackSupplier) {
+    ItemStackTarget(String name, ContextParameter<ItemStack> parameter) {
         this.name = name;
-        this.itemStackSupplier = itemStackSupplier;
+        this.parameter = parameter;
     }
 
     @Override
@@ -27,8 +24,7 @@ public enum ItemStackTarget implements StringIdentifiable {
         return this.name;
     }
 
-    @Nullable
-    public ItemStack get(ActionContext context) {
-        return this.itemStackSupplier.apply(context);
+    public ContextParameter<ItemStack> parameter() {
+        return this.parameter;
     }
 }
