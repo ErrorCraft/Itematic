@@ -5,6 +5,7 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.component.MergedComponentMap;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,6 +13,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -23,6 +25,9 @@ public interface ItemStackAccess {
     default void itematic$tryIncrement(int count) {}
     default int itematic$tryDecrement(int amount) {
         return 0;
+    }
+    default ItemStack itematic$copyOrSplit(@Nullable LivingEntity holder, int amount) {
+        return ItemStack.EMPTY;
     }
     default ItemStack itematic$copyWithItem(RegistryEntry<Item> item) {
         return ItemStack.EMPTY;

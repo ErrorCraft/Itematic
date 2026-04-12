@@ -89,6 +89,9 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     public abstract boolean isEmpty();
 
     @Shadow
+    public abstract ItemStack split(int amount);
+
+    @Shadow
     public abstract void damage(int amount, ServerWorld world, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback);
 
     @Shadow
@@ -102,6 +105,9 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     @Shadow
     public abstract int getMaxCount();
+
+    @Shadow
+    public abstract ItemStack copyWithCount(int count);
 
     @Shadow
     public abstract int getCount();
@@ -705,6 +711,15 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         int actualAmount = Math.min(amount, this.getCount());
         this.decrement(actualAmount);
         return actualAmount;
+    }
+
+    @Override
+    public ItemStack itematic$copyOrSplit(@Nullable LivingEntity holder, int amount) {
+        if (holder != null && holder.isInCreativeMode()) {
+            return this.copyWithCount(amount);
+        }
+
+        return this.split(amount);
     }
 
     @Override
