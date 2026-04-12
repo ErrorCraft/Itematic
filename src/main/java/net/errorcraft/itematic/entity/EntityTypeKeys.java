@@ -66,6 +66,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> ITEM_FRAME = of("item_frame");
     public static final RegistryKey<EntityType<?>> JUNGLE_BOAT = of("jungle_boat");
     public static final RegistryKey<EntityType<?>> JUNGLE_CHEST_BOAT = of("jungle_chest_boat");
+    public static final RegistryKey<EntityType<?>> LINGERING_POTION = of("lingering_potion");
     public static final RegistryKey<EntityType<?>> LLAMA = of("llama");
     public static final RegistryKey<EntityType<?>> MAGMA_CUBE = of("magma_cube");
     public static final RegistryKey<EntityType<?>> MANGROVE_BOAT = of("mangrove_boat");
@@ -87,7 +88,6 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> PIGLIN_BRUTE = of("piglin_brute");
     public static final RegistryKey<EntityType<?>> PILLAGER = of("pillager");
     public static final RegistryKey<EntityType<?>> POLAR_BEAR = of("polar_bear");
-    public static final RegistryKey<EntityType<?>> POTION = of("potion");
     public static final RegistryKey<EntityType<?>> PUFFERFISH = of("pufferfish");
     public static final RegistryKey<EntityType<?>> RABBIT = of("rabbit");
     public static final RegistryKey<EntityType<?>> RAVAGER = of("ravager");
@@ -104,6 +104,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> SNOW_GOLEM = of("snow_golem");
     public static final RegistryKey<EntityType<?>> SPECTRAL_ARROW = of("spectral_arrow");
     public static final RegistryKey<EntityType<?>> SPIDER = of("spider");
+    public static final RegistryKey<EntityType<?>> SPLASH_POTION = of("splash_potion");
     public static final RegistryKey<EntityType<?>> SPRUCE_BOAT = of("spruce_boat");
     public static final RegistryKey<EntityType<?>> SPRUCE_CHEST_BOAT = of("spruce_chest_boat");
     public static final RegistryKey<EntityType<?>> SQUID = of("squid");

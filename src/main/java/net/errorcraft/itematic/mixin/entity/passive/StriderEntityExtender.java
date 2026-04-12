@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.StriderEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +11,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -24,28 +22,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class StriderEntityExtender extends MobEntityExtender {
     protected StriderEntityExtender(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
-    }
-
-    @Redirect(
-        method = "interactMob",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForSaddleUseRegistryKey(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SADDLE);
-    }
-
-    @Redirect(
-        method = "dropInventory",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/StriderEntity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
-        )
-    )
-    private ItemEntity dropItemForSaddleUseRegistryKey(StriderEntity instance, ServerWorld world, ItemConvertible itemConvertible) {
-        return this.itematic$dropItem(world, ItemKeys.SADDLE);
     }
 
     @Redirect(

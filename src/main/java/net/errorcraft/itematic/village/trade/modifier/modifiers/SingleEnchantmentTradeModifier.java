@@ -11,7 +11,7 @@ import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
-import net.minecraft.predicate.ComponentPredicate;
+import net.minecraft.predicate.component.ComponentMapPredicate;
 import net.minecraft.registry.RegistryCodecs;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -47,7 +47,7 @@ public record SingleEnchantmentTradeModifier(int index, int baseRandomCost, int 
         Random random = context.getRandom();
         this.enchantments.getRandom(random)
             .ifPresent(entry -> this.apply(wants.getStack(this.index), gives, random, entry));
-        return Optional.of(new TradedItem(gives.getRegistryEntry(), gives.getCount(), ComponentPredicate.of(gives.getComponents())));
+        return Optional.of(new TradedItem(gives.getRegistryEntry(), gives.getCount(), ComponentMapPredicate.of(gives.getComponents())));
     }
 
     private void apply(ItemStack wants, ItemStack gives, Random random, RegistryEntry<Enchantment> enchantment) {

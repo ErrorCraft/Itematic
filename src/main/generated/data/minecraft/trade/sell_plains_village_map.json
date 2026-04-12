@@ -1,0 +1,47 @@
+{
+  "gives": {
+    "item": "minecraft:map",
+    "item_modifier": {
+      "function": "minecraft:sequence",
+      "functions": [
+        {
+          "decoration": "minecraft:village_plains",
+          "destination": "minecraft:on_plains_village_maps",
+          "function": "minecraft:exploration_map",
+          "search_radius": 100
+        },
+        {
+          "function": "minecraft:set_name",
+          "name": {
+            "translate": "filled_map.village_plains"
+          },
+          "target": "item_name"
+        }
+      ]
+    }
+  },
+  "max_uses": 12,
+  "merchant_predicate": {
+    "condition": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+      "type_specific": {
+        "type": "minecraft:villager",
+        "variant": [
+          "minecraft:taiga",
+          "minecraft:snow",
+          "minecraft:savanna",
+          "minecraft:desert"
+        ]
+      }
+    }
+  },
+  "price_multiplier": 0.05,
+  "trade_experience": 5,
+  "wants": [
+    {
+      "count": 8,
+      "item": "minecraft:emerald"
+    }
+  ]
+}

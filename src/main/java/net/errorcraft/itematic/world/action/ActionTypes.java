@@ -29,7 +29,6 @@ public class ActionTypes {
     public static final ActionType<DropItemFromBlockAction> DROP_ITEM_FROM_BLOCK = register(ActionTypeKeys.DROP_ITEM_FROM_BLOCK, new ActionType<>(DropItemFromBlockAction.CODEC));
     public static final ActionType<AttachLeashedEntitiesOnBlockAction> ATTACH_LEASHED_ENTITIES_ON_BLOCK = register(ActionTypeKeys.ATTACH_LEASHED_ENTITIES_ON_BLOCK, new ActionType<>(AttachLeashedEntitiesOnBlockAction.CODEC));
     public static final ActionType<SetEntityNameFromItemAction> SET_ENTITY_NAME_FROM_ITEM = register(ActionTypeKeys.SET_ENTITY_NAME_FROM_ITEM, new ActionType<>(SetEntityNameFromItemAction.CODEC));
-    public static final ActionType<OpenBookFromItemAction> OPEN_BOOK_FROM_ITEM = register(ActionTypeKeys.OPEN_BOOK_FROM_ITEM, new ActionType<>(OpenBookFromItemAction.CODEC));
     public static final ActionType<PlaceBlockFromItemAction> PLACE_BLOCK_FROM_ITEM = register(ActionTypeKeys.PLACE_BLOCK_FROM_ITEM, new ActionType<>(PlaceBlockFromItemAction.CODEC));
     public static final ActionType<MarkBannerOnItemAction> MARK_BANNER_ON_ITEM = register(ActionTypeKeys.MARK_BANNER_ON_ITEM, new ActionType<>(MarkBannerOnItemAction.CODEC));
     public static final ActionType<TwirlPlayerAction> TWIRL_PLAYER = register(ActionTypeKeys.TWIRL_PLAYER, new ActionType<>(TwirlPlayerAction.CODEC));
@@ -41,7 +40,6 @@ public class ActionTypes {
     public static final ActionType<InvokeGameEventAction> INVOKE_GAME_EVENT = register(ActionTypeKeys.INVOKE_GAME_EVENT, new ActionType<>(InvokeGameEventAction.CODEC));
     public static final ActionType<InvokeItemEventAction> INVOKE_ITEM_EVENT = register(ActionTypeKeys.INVOKE_ITEM_EVENT, new ActionType<>(InvokeItemEventAction.CODEC));
     public static final ActionType<PlaceCarvedPumpkinAction> PLACE_CARVED_PUMPKIN = register(ActionTypeKeys.PLACE_CARVED_PUMPKIN, new ActionType<>(PlaceCarvedPumpkinAction.CODEC));
-    public static final ActionType<SaddleEntityAtPositionAction> SADDLE_ENTITY_AT_POSITION = register(ActionTypeKeys.SADDLE_ENTITY_AT_POSITION, new ActionType<>(SaddleEntityAtPositionAction.CODEC));
     public static final ActionType<ShearAtPositionAction> SHEAR_AT_POSITION = register(ActionTypeKeys.SHEAR_AT_POSITION, new ActionType<>(ShearAtPositionAction.CODEC));
     public static final ActionType<ShootProjectileFromItemAction> SHOOT_PROJECTILE_FROM_ITEM = register(ActionTypeKeys.SHOOT_PROJECTILE_FROM_ITEM, new ActionType<>(ShootProjectileFromItemAction.CODEC));
     public static final ActionType<SpawnEntityAction> SPAWN_ENTITY = register(ActionTypeKeys.SPAWN_ENTITY, new ActionType<>(SpawnEntityAction.CODEC));

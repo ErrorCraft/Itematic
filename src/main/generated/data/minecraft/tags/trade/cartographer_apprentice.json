@@ -1,6 +1,12 @@
 {
   "values": [
     "minecraft:buy_glass_pane",
-    "minecraft:sell_monument_map"
+    "minecraft:sell_taiga_village_map",
+    "minecraft:sell_swamp_hut_map",
+    "minecraft:sell_snowy_village_map",
+    "minecraft:sell_savanna_village_map",
+    "minecraft:sell_plains_village_map",
+    "minecraft:sell_jungle_temple_map",
+    "minecraft:sell_desert_village_map"
   ]
 }

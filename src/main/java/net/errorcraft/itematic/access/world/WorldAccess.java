@@ -7,5 +7,5 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 public interface WorldAccess {
-    default void itematic$playSound(@Nullable PlayerEntity except, Vec3d pos, SoundEvent sound, SoundCategory category, float volume, float pitch) {}
+    default void itematic$playSound(@Nullable PlayerEntity source, Vec3d pos, SoundEvent sound, SoundCategory category, float volume, float pitch) {}
 }

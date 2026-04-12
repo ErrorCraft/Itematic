@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
@@ -42,19 +43,19 @@ public record MappableItemComponent(RegistryEntry<Item> transformsInto) implemen
 
     @Override
     public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (world.isClient()) {
+        if (!(world instanceof ServerWorld serverWorld)) {
             return ItemResult.SUCCEED;
         }
 
         user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
         world.playSoundFromEntity(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundCategory(), 1.0f, 1.0f);
-        ItemStack resultStack = this.createStack(world, user.getBlockX(), user.getBlockZ(), 0, true, false);
+        ItemStack resultStack = this.createStack(serverWorld, user.getBlockX(), user.getBlockZ(), 0, true, false);
         stack.decrementUnlessCreative(1, user);
         stackExchanger.exchange(resultStack);
         return ItemResult.CONSUME;
     }
 
-    public ItemStack createStack(World world, int x, int z, int scale, boolean showIcons, boolean unlimitedTracking) {
+    public ItemStack createStack(ServerWorld world, int x, int z, int scale, boolean showIcons, boolean unlimitedTracking) {
         ItemStack resultStack = new ItemStack(this.transformsInto);
         MapIdComponent mapId = FilledMapItemAccessor.allocateMapId(world, x, z, scale, showIcons, unlimitedTracking, world.getRegistryKey());
         resultStack.set(DataComponentTypes.MAP_ID, mapId);

@@ -4,7 +4,6 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -15,7 +14,6 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -65,28 +63,6 @@ public abstract class PigEntityExtender extends MobEntityExtender {
     )
     private ItemStack newItemStackForGoldenSwordUseCreateStack(ItemConvertible item) {
         return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
-    }
-
-    @Redirect(
-        method = "interactMob",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForSaddleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SADDLE);
-    }
-
-    @Redirect(
-        method = "dropInventory",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/PigEntity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
-        )
-    )
-    private ItemEntity dropItemForSaddleUseRegistryKey(PigEntity instance, ServerWorld world, ItemConvertible itemConvertible) {
-        return this.itematic$dropItem(world, ItemKeys.SADDLE);
     }
 
     @Redirect(

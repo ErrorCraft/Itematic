@@ -8,13 +8,8 @@ import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.OminousBottleAmplifierComponent;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class OminousEffectProviderItemComponent implements ItemComponent<OminousEffectProviderItemComponent> {
     public static final OminousEffectProviderItemComponent INSTANCE = new OminousEffectProviderItemComponent();
@@ -37,14 +32,6 @@ public class OminousEffectProviderItemComponent implements ItemComponent<Ominous
         OminousBottleAmplifierComponent ominousAmplifier = stack.get(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER);
         if (ominousAmplifier != null) {
             ominousAmplifier.onConsume(world, user, stack, null);
-        }
-    }
-
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        OminousBottleAmplifierComponent ominousAmplifier = stack.get(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER);
-        if (ominousAmplifier != null) {
-            ominousAmplifier.appendTooltip(context, tooltip::add, type);
         }
     }
 }

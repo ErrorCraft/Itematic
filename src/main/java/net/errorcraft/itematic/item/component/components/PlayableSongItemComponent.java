@@ -8,7 +8,7 @@ import net.minecraft.block.jukebox.JukeboxSong;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.JukeboxPlayableComponent;
-import net.minecraft.registry.RegistryPair;
+import net.minecraft.registry.entry.LazyRegistryEntryReference;
 import net.minecraft.registry.entry.RegistryEntry;
 
 public record PlayableSongItemComponent(RegistryEntry<JukeboxSong> song) implements ItemComponent<PlayableSongItemComponent> {
@@ -33,6 +33,6 @@ public record PlayableSongItemComponent(RegistryEntry<JukeboxSong> song) impleme
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.JUKEBOX_PLAYABLE, new JukeboxPlayableComponent(new RegistryPair<>(this.song), true));
+        builder.add(DataComponentTypes.JUKEBOX_PLAYABLE, new JukeboxPlayableComponent(new LazyRegistryEntryReference<>(this.song)));
     }
 }

@@ -1,9 +1,15 @@
 {
   "behavior": {
     "minecraft:dispensable": {
-      "behavior": "minecraft:saddle"
+      "behavior": "minecraft:equip_entity"
     },
-    "minecraft:saddle": {},
+    "minecraft:equipment": {
+      "allowed_entities": "#minecraft:can_equip_saddle",
+      "asset_id": "minecraft:saddle",
+      "equip_on_interact": true,
+      "equip_sound": "minecraft:entity.horse.saddle",
+      "slot": "saddle"
+    },
     "minecraft:stackable": 1
   },
   "display": {

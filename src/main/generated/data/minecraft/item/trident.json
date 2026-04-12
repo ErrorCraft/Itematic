@@ -19,6 +19,7 @@
       "speed": 2.5
     },
     "minecraft:tool": {
+      "can_destroy_blocks_in_creative": false,
       "damage_per_block": 2,
       "rules": []
     },
@@ -30,7 +31,7 @@
     },
     "minecraft:weapon": {
       "attack_damage": {
-        "default_damage": 9.0,
+        "default_damage": 8.0,
         "rules": []
       },
       "attack_speed": 0.275

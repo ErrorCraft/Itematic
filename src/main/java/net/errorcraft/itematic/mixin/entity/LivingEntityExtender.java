@@ -31,7 +31,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
@@ -40,7 +39,6 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -431,15 +429,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     )
     private int getItemUseTimeUseField(int original) {
         return this.itemUsedTicks;
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses an item tag check instead of an instanceof check.
-     */
-    @Overwrite
-    public boolean disablesShield() {
-        return this.getMainHandStack().isIn(ItemTags.AXES);
     }
 
     @Override

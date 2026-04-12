@@ -1,6 +1,7 @@
 {
   "behavior": {
-    "minecraft:stackable": 64
+    "minecraft:stackable": 64,
+    "minecraft:trim_material_provider": "minecraft:iron"
   },
   "display": {
     "model": "minecraft:iron_ingot",

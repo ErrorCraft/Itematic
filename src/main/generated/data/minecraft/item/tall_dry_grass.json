@@ -1,0 +1,18 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:tall_dry_grass"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.3
+    },
+    "minecraft:fuel": {
+      "ticks": 100
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:tall_dry_grass",
+    "translation_key": "block.minecraft.tall_dry_grass"
+  }
+}

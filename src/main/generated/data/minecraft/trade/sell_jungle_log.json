@@ -1,0 +1,13 @@
+{
+  "gives": {
+    "count": 8,
+    "item": "minecraft:jungle_log"
+  },
+  "max_uses": 4,
+  "price_multiplier": 0.05,
+  "wants": [
+    {
+      "item": "minecraft:emerald"
+    }
+  ]
+}

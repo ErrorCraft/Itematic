@@ -13,9 +13,10 @@
       "behavior": "minecraft:equip_entity"
     },
     "minecraft:equipment": {
-      "allowed_entities": "minecraft:horse",
+      "allowed_entities": "#minecraft:can_wear_horse_armor",
       "asset_id": "minecraft:iron",
-      "equip_sound": "minecraft:item.armor.equip_iron",
+      "damage_on_hurt": false,
+      "equip_sound": "minecraft:entity.horse.armor",
       "slot": "body"
     },
     "minecraft:stackable": 1

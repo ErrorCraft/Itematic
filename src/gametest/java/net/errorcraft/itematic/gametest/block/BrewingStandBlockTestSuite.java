@@ -1,16 +1,16 @@
 package net.errorcraft.itematic.gametest.block;
 
+import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.component.PotionContentsComponentUtil;
-import net.errorcraft.itematic.gametest.Assert;
-import net.errorcraft.itematic.gametest.TestUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.screen.BrewingStandMenuDelegate;
 import net.errorcraft.itematic.screen.ItematicScreenHandlerTypes;
+import net.errorcraft.itematic.util.TestUtil;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potions;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
@@ -18,7 +18,7 @@ import net.minecraft.world.GameMode;
 public class BrewingStandBlockTestSuite {
     private static final BlockPos BLOCK_POSITION = new BlockPos(1, 1, 1);
 
-    @GameTest(templateName = "itematic:block.brewing_stand", tickLimit = 401)
+    @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
     public void brewingWaterBottleWithNetherWartTurnsItIntoAwkwardPotion(TestContext context) {
         ServerWorld world = context.getWorld();
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
@@ -32,16 +32,14 @@ public class BrewingStandBlockTestSuite {
         context.createTimedTaskRunner()
             .expectMinDurationAndRun(
                 401,
-                () -> {
-                    ItemStack resultPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStackIsOf(resultPotion, ItemKeys.POTION);
-                    Assert.itemStackHasPotion(resultPotion, Potions.AWKWARD);
-                }
+                () -> Assert.itemStack(context, brewingStandMenu.getSlot(0).getStack())
+                    .is(ItemKeys.POTION)
+                    .hasPotion(Potions.AWKWARD)
             )
             .completeIfSuccessful();
     }
 
-    @GameTest(templateName = "itematic:block.brewing_stand", tickLimit = 401)
+    @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
     public void brewingAwkwardPotionWithSugarTurnsItIntoSwiftnessPotion(TestContext context) {
         ServerWorld world = context.getWorld();
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
@@ -57,14 +55,15 @@ public class BrewingStandBlockTestSuite {
                 401,
                 () -> {
                     ItemStack resultPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStackIsOf(resultPotion, ItemKeys.POTION);
-                    Assert.itemStackHasPotion(resultPotion, Potions.SWIFTNESS);
+                    Assert.itemStack(context, resultPotion)
+                        .is(ItemKeys.POTION)
+                        .hasPotion(Potions.SWIFTNESS);
                 }
             )
             .completeIfSuccessful();
     }
 
-    @GameTest(templateName = "itematic:block.brewing_stand", tickLimit = 401)
+    @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
     public void brewingSwiftnessPotionWithGlowstoneDustTurnsItIntoStrongSwiftnessPotion(TestContext context) {
         ServerWorld world = context.getWorld();
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
@@ -80,14 +79,15 @@ public class BrewingStandBlockTestSuite {
                 401,
                 () -> {
                     ItemStack resultPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStackIsOf(resultPotion, ItemKeys.POTION);
-                    Assert.itemStackHasPotion(resultPotion, Potions.STRONG_SWIFTNESS);
+                    Assert.itemStack(context, resultPotion)
+                        .is(ItemKeys.POTION)
+                        .hasPotion(Potions.STRONG_SWIFTNESS);
                 }
             )
             .completeIfSuccessful();
     }
 
-    @GameTest(templateName = "itematic:block.brewing_stand", tickLimit = 401)
+    @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
     public void brewingSwiftnessPotionWithRedstoneTurnsItIntoLongSwiftnessPotion(TestContext context) {
         ServerWorld world = context.getWorld();
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
@@ -103,14 +103,15 @@ public class BrewingStandBlockTestSuite {
                 401,
                 () -> {
                     ItemStack resultPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStackIsOf(resultPotion, ItemKeys.POTION);
-                    Assert.itemStackHasPotion(resultPotion, Potions.LONG_SWIFTNESS);
+                    Assert.itemStack(context, resultPotion)
+                        .is(ItemKeys.POTION)
+                        .hasPotion(Potions.LONG_SWIFTNESS);
                 }
             )
             .completeIfSuccessful();
     }
 
-    @GameTest(templateName = "itematic:block.brewing_stand", tickLimit = 401)
+    @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
     public void brewingSwiftnessPotionWithGunpowderTurnsItIntoSwiftnessSplashPotion(TestContext context) {
         ServerWorld world = context.getWorld();
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
@@ -126,14 +127,15 @@ public class BrewingStandBlockTestSuite {
                 401,
                 () -> {
                     ItemStack resultPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStackIsOf(resultPotion, ItemKeys.SPLASH_POTION);
-                    Assert.itemStackHasPotion(resultPotion, Potions.SWIFTNESS);
+                    Assert.itemStack(context, resultPotion)
+                        .is(ItemKeys.SPLASH_POTION)
+                        .hasPotion(Potions.SWIFTNESS);
                 }
             )
             .completeIfSuccessful();
     }
 
-    @GameTest(templateName = "itematic:block.brewing_stand", tickLimit = 401)
+    @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
     public void brewingSwiftnessSplashPotionWithDragonBreathTurnsItIntoSwiftnessLingeringPotionAndLeavesGlassBottle(TestContext context) {
         ServerWorld world = context.getWorld();
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
@@ -149,16 +151,18 @@ public class BrewingStandBlockTestSuite {
                 401,
                 () -> {
                     ItemStack resultPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStackIsOf(resultPotion, ItemKeys.LINGERING_POTION);
-                    Assert.itemStackHasPotion(resultPotion, Potions.SWIFTNESS);
+                    Assert.itemStack(context, resultPotion)
+                        .is(ItemKeys.LINGERING_POTION)
+                        .hasPotion(Potions.SWIFTNESS);
                     ItemStack ingredientRemainder = brewingStandMenu.getSlot(3).getStack();
-                    Assert.itemStackIsOf(ingredientRemainder, ItemKeys.GLASS_BOTTLE);
+                    Assert.itemStack(context, ingredientRemainder)
+                        .is(ItemKeys.GLASS_BOTTLE);
                 }
             )
             .completeIfSuccessful();
     }
 
-    @GameTest(templateName = "itematic:block.brewing_stand", tickLimit = 401)
+    @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
     public void brewingDifferentPotionsOnlyModifiesCorrectTargets(TestContext context) {
         ServerWorld world = context.getWorld();
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
@@ -178,20 +182,23 @@ public class BrewingStandBlockTestSuite {
                 401,
                 () -> {
                     ItemStack firstPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStackIsOf(firstPotion, ItemKeys.POTION);
-                    Assert.itemStackHasPotion(firstPotion, Potions.SWIFTNESS);
+                    Assert.itemStack(context, firstPotion)
+                        .is(ItemKeys.POTION)
+                        .hasPotion(Potions.SWIFTNESS);
                     ItemStack secondPotion = brewingStandMenu.getSlot(1).getStack();
-                    Assert.itemStackIsOf(secondPotion, ItemKeys.POTION);
-                    Assert.itemStackHasPotion(secondPotion, Potions.AWKWARD);
+                    Assert.itemStack(context, secondPotion)
+                        .is(ItemKeys.POTION)
+                        .hasPotion(Potions.AWKWARD);
                     ItemStack thirdPotion = brewingStandMenu.getSlot(2).getStack();
-                    Assert.itemStackIsOf(thirdPotion, ItemKeys.POTION);
-                    Assert.itemStackHasPotion(thirdPotion, Potions.LEAPING);
+                    Assert.itemStack(context, thirdPotion)
+                        .is(ItemKeys.POTION)
+                        .hasPotion(Potions.LEAPING);
                 }
             )
             .completeIfSuccessful();
     }
 
-    @GameTest(templateName = "itematic:block.brewing_stand", tickLimit = 401)
+    @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
     public void brewingPotionsTargetingMultipleValidRecipesModifiesBoth(TestContext context) {
         ServerWorld world = context.getWorld();
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
@@ -209,11 +216,13 @@ public class BrewingStandBlockTestSuite {
                 401,
                 () -> {
                     ItemStack firstPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStackIsOf(firstPotion, ItemKeys.POTION);
-                    Assert.itemStackHasPotion(firstPotion, Potions.MUNDANE);
+                    Assert.itemStack(context, firstPotion)
+                        .is(ItemKeys.POTION)
+                        .hasPotion(Potions.MUNDANE);
                     ItemStack secondPotion = brewingStandMenu.getSlot(1).getStack();
-                    Assert.itemStackIsOf(secondPotion, ItemKeys.POTION);
-                    Assert.itemStackHasPotion(secondPotion, Potions.SWIFTNESS);
+                    Assert.itemStack(context, secondPotion)
+                        .is(ItemKeys.POTION)
+                        .hasPotion(Potions.SWIFTNESS);
                 }
             )
             .completeIfSuccessful();

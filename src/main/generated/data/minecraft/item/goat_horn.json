@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:playable": {
-      "instruments": "minecraft:goat_horns"
+      "default_instrument": "minecraft:ponder_goat_horn"
     },
     "minecraft:stackable": 1,
     "minecraft:useable": {

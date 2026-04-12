@@ -6,6 +6,8 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.block.entity.BannerPattern;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 
@@ -29,5 +31,10 @@ public record BannerPatternItemComponent(TagKey<BannerPattern> patterns) impleme
     @Override
     public Codec<BannerPatternItemComponent> codec() {
         return CODEC;
+    }
+
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.PROVIDES_BANNER_PATTERNS, this.patterns);
     }
 }

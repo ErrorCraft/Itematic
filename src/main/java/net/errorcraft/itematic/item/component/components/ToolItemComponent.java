@@ -31,15 +31,15 @@ public record ToolItemComponent(ToolComponent tool) implements ItemComponent<Too
     public static final Codec<ToolItemComponent> CODEC = ToolComponent.CODEC.xmap(ToolItemComponent::new, ToolItemComponent::tool);
 
     public static ToolItemComponent of(RegistryEntryLookup<Block> blocks, ToolMaterial material, TagKey<Block> mineableBlocks) {
-        ToolComponent tool = new ToolComponent(
+        return new ToolItemComponent(new ToolComponent(
             List.of(
                 ToolComponent.Rule.ofNeverDropping(blocks.getOrThrow(material.incorrectBlocksForDrops())),
                 ToolComponent.Rule.ofAlwaysDropping(blocks.getOrThrow(mineableBlocks), material.speed())
             ),
             1.0f,
-            1
-        );
-        return new ToolItemComponent(tool);
+            1,
+            true
+        ));
     }
 
     public static Builder builder(int damage) {
@@ -95,13 +95,24 @@ public record ToolItemComponent(ToolComponent tool) implements ItemComponent<Too
     public static class Builder {
         private final int damage;
         private final List<ToolComponent.Rule> rules = new ArrayList<>();
+        private boolean canDestroyBlocksInCreative = true;
 
         public Builder(int damage) {
             this.damage = damage;
         }
 
         public ToolItemComponent build() {
-            return new ToolItemComponent(new ToolComponent(this.rules, 1.0f, this.damage));
+            return new ToolItemComponent(new ToolComponent(
+                this.rules,
+                1.0f,
+                this.damage,
+                this.canDestroyBlocksInCreative
+            ));
+        }
+
+        public Builder preventCreativeDestruction() {
+            this.canDestroyBlocksInCreative = false;
+            return this;
         }
 
         public Builder rule(ToolComponent.Rule rule) {

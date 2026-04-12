@@ -10,43 +10,36 @@ import net.errorcraft.itematic.item.use.provider.providers.PlayableIntegerProvid
 import net.errorcraft.itematic.mixin.item.GoatHornItemAccessor;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.SharedConstants;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.InstrumentComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Instrument;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.consume.UseAction;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
-public record PlayableItemComponent(TagKey<Instrument> instruments) implements ItemComponent<PlayableItemComponent> {
+public record PlayableItemComponent(RegistryEntry<Instrument> defaultInstrument) implements ItemComponent<PlayableItemComponent> {
     public static final Codec<PlayableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        TagKey.unprefixedCodec(RegistryKeys.INSTRUMENT).fieldOf("instruments").forGetter(PlayableItemComponent::instruments)
+        RegistryFixedCodec.of(RegistryKeys.INSTRUMENT).fieldOf("default_instrument").forGetter(PlayableItemComponent::defaultInstrument)
     ).apply(instance, PlayableItemComponent::new));
 
-    public static ItemComponent<?>[] of(TagKey<Instrument> instruments) {
+    public static ItemComponent<?>[] of(RegistryEntry<Instrument> defaultInstrument) {
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
                 .useFor(PlayableIntegerProvider.INSTANCE)
                 .animation(UseAction.TOOT_HORN)
                 .build(),
-            new PlayableItemComponent(instruments)
+            new PlayableItemComponent(defaultInstrument)
         };
     }
 
@@ -73,27 +66,16 @@ public record PlayableItemComponent(TagKey<Instrument> instruments) implements I
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        RegistryWrapper.WrapperLookup lookup = context.getRegistryLookup();
-        if (lookup == null) {
-            return;
-        }
-
-        this.instrument(stack, lookup)
-            .flatMap(RegistryEntry::getKey)
-            .map(RegistryKey::getValue)
-            .ifPresent(id -> tooltip.add(Text.translatable(Util.createTranslationKey("instrument", id)).formatted(Formatting.GRAY)));
+    public void addComponents(ComponentMap.Builder builder) {
+        builder.add(DataComponentTypes.INSTRUMENT, new InstrumentComponent(this.defaultInstrument));
     }
 
-    public Optional<? extends RegistryEntry<Instrument>> instrument(ItemStack stack, RegistryWrapper.WrapperLookup lookup) {
-        RegistryEntry<Instrument> instrument = stack.get(DataComponentTypes.INSTRUMENT);
-        if (instrument != null) {
-            return Optional.of(instrument);
+    public Optional<RegistryEntry<Instrument>> instrument(ItemStack stack, RegistryWrapper.WrapperLookup lookup) {
+        InstrumentComponent instrument = stack.get(DataComponentTypes.INSTRUMENT);
+        if (instrument == null) {
+            return Optional.empty();
         }
 
-        return lookup.getOrThrow(RegistryKeys.INSTRUMENT)
-            .getOptional(this.instruments)
-            .map(RegistryEntryList::stream)
-            .flatMap(Stream::findFirst);
+        return instrument.getInstrument(lookup);
     }
 }

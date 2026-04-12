@@ -28,7 +28,6 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> DROP_ITEM_FROM_BLOCK = of("drop_item_from_block");
     public static final RegistryKey<ActionType<?>> ATTACH_LEASHED_ENTITIES_ON_BLOCK = of("attach_leashed_entities_on_block");
     public static final RegistryKey<ActionType<?>> SET_ENTITY_NAME_FROM_ITEM = of("set_entity_name_from_item");
-    public static final RegistryKey<ActionType<?>> OPEN_BOOK_FROM_ITEM = of("open_book_from_item");
     public static final RegistryKey<ActionType<?>> PLACE_BLOCK_FROM_ITEM = of("place_block_from_item");
     public static final RegistryKey<ActionType<?>> MARK_BANNER_ON_ITEM = of("mark_banner_on_item");
     public static final RegistryKey<ActionType<?>> TWIRL_PLAYER = of("twirl_player");
@@ -40,7 +39,6 @@ public class ActionTypeKeys {
     public static final RegistryKey<ActionType<?>> INVOKE_GAME_EVENT = of("invoke_game_event");
     public static final RegistryKey<ActionType<?>> INVOKE_ITEM_EVENT = of("invoke_item_event");
     public static final RegistryKey<ActionType<?>> PLACE_CARVED_PUMPKIN = of("place_carved_pumpkin");
-    public static final RegistryKey<ActionType<?>> SADDLE_ENTITY_AT_POSITION = of("saddle_entity_at_position");
     public static final RegistryKey<ActionType<?>> SHEAR_AT_POSITION = of("shear_at_position");
     public static final RegistryKey<ActionType<?>> SHOOT_PROJECTILE_FROM_ITEM = of("shoot_projectile_from_item");
     public static final RegistryKey<ActionType<?>> SPAWN_ENTITY = of("spawn_entity");

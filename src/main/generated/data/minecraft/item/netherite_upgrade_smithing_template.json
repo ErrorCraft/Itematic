@@ -1,13 +1,42 @@
 {
   "behavior": {
-    "minecraft:smithing_template": {
-      "template": "minecraft:netherite_upgrade"
-    },
+    "minecraft:smithing_template_provider": "minecraft:item_upgrade",
     "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:netherite_upgrade_smithing_template",
     "rarity": "uncommon",
+    "tooltip": [
+      {
+        "color": "gray",
+        "translate": "item.minecraft.smithing_template"
+      },
+      "",
+      {
+        "color": "gray",
+        "translate": "item.minecraft.smithing_template.applies_to"
+      },
+      {
+        "extra": [
+          {
+            "translate": "smithing_template.minecraft.netherite_upgrade.applies_to"
+          }
+        ],
+        "text": " "
+      },
+      {
+        "color": "gray",
+        "translate": "item.minecraft.smithing_template.ingredients"
+      },
+      {
+        "extra": [
+          {
+            "translate": "smithing_template.minecraft.netherite_upgrade.ingredients"
+          }
+        ],
+        "text": " "
+      }
+    ],
     "translation_key": "item.minecraft.netherite_upgrade_smithing_template"
   }
 }

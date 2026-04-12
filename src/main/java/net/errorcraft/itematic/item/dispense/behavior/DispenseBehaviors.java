@@ -113,9 +113,6 @@ public class DispenseBehaviors {
                 .add(PlaceCarvedPumpkinAction.of(PositionTarget.INTERACTED_POSITION))
                 .add(EquipEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION)))
         ).doNotDispenseOnFailure().build());
-        registerable.register(SADDLE, DispenseBehavior.builder(
-            SaddleEntityAtPositionAction.of(PositionTarget.INTERACTED_POSITION)
-        ).build());
         registerable.register(SHEAR, DispenseBehavior.builder(
             PassingSequenceHandler.builder()
                 .add(ShearAtPositionAction.of(PositionTarget.INTERACTED_POSITION))

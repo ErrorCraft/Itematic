@@ -6,10 +6,11 @@ import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleTypes;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPickerTypes;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
-import net.errorcraft.itematic.item.smithing.template.SmithingTemplateTypes;
+import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
 import net.errorcraft.itematic.loot.function.ItematicItemModifierTypes;
 import net.errorcraft.itematic.loot.predicate.ItematicPredicateTypes;
+import net.errorcraft.itematic.predicate.entity.ItematicEntitySubPredicateTypes;
 import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
 import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
 import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
@@ -32,7 +33,7 @@ public class Itematic implements ModInitializer {
         SequenceHandlerTypes.init();
         ItematicPredicateTypes.init();
         ItematicContextParameters.init();
-        SmithingTemplateTypes.init();
+        SmithingTemplates.init();
         BlockPickerTypes.init();
         ItematicItemModifierTypes.init();
         TradeModifierTypes.init();
@@ -45,5 +46,6 @@ public class Itematic implements ModInitializer {
         ItematicRecipeBookCategories.init();
         ItematicRecipeDisplaySerializers.init();
         ItematicSlotDisplaySerializers.init();
+        ItematicEntitySubPredicateTypes.init();
     }
 }

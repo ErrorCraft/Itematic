@@ -107,7 +107,7 @@ loom {
 		gametestClient {
 			inherit client
 			name "GameTest Client"
-			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/gametest/resources/data/itematic/gametest/structure")}"
+			vmArg "-Ditematic.gametest.structure-output-directory=${file("src/gametest/resources/data")}"
 
 			runDir "run"
 			source sourceSets.gametest

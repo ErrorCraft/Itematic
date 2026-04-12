@@ -32,7 +32,7 @@
         "rules": []
       },
       "attack_speed": 0.3,
-      "damage_per_hit": 2
+      "item_damage_per_attack": 2
     }
   },
   "display": {

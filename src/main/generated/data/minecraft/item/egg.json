@@ -4,6 +4,9 @@
       "behavior": "minecraft:shoot_projectile"
     },
     "minecraft:projectile": {
+      "components": {
+        "minecraft:chicken/variant": "minecraft:temperate"
+      },
       "entity": "minecraft:egg"
     },
     "minecraft:stackable": 16,

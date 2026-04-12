@@ -3,8 +3,8 @@ package net.errorcraft.itematic.mixin.block;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.TntBlock;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.TntEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
@@ -36,7 +36,7 @@ public class TntBlockExtender {
     }
 
     @ModifyExpressionValue(
-        method = "primeTnt(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/LivingEntity;)V",
+        method = "primeTnt(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/LivingEntity;)Z",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/World;DDDLnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/TntEntity;"
@@ -48,11 +48,11 @@ public class TntBlockExtender {
     }
 
     @Redirect(
-        method = "primeTnt(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/LivingEntity;)V",
+        method = "primeTnt(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/LivingEntity;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/player/PlayerEntity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"
+            target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/Entity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"
         )
     )
-    private static void doNotPlaySound(World instance, PlayerEntity source, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) {}
+    private static void doNotPlaySound(World instance, Entity source, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) {}
 }
