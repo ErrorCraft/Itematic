@@ -16,24 +16,16 @@
             "action": {
               "type": "minecraft:modify_item",
               "item_modifier": {
-                "count": 1.0,
-                "function": "minecraft:split"
-              }
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:set_item_pointer_location",
-              "position": "interacted",
-              "stack": "result"
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:modify_item",
-              "item_modifier": {
                 "function": "minecraft:sequence",
                 "functions": [
+                  {
+                    "count": 1.0,
+                    "function": "minecraft:split"
+                  },
+                  {
+                    "function": "minecraft:set_item_pointer_location",
+                    "position": "interacted"
+                  },
                   {
                     "function": "minecraft:set_name",
                     "name": {
@@ -48,8 +40,7 @@
                     "function": "minecraft:set_components"
                   }
                 ]
-              },
-              "stack": "result"
+              }
             }
           },
           {

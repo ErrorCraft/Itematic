@@ -19,6 +19,7 @@ import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMeth
 import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionUtil;
+import net.errorcraft.itematic.loot.function.SetItemPointerLocationItemModifier;
 import net.errorcraft.itematic.loot.function.SplitItemModifier;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
@@ -10991,14 +10992,8 @@ public class ItemUtil {
                         PassingSequenceHandler.builder()
                             .add(ModifyItemAction.of(
                                 ItemStackTarget.TOOL,
-                                SplitItemModifier.builder(1)
-                            ))
-                            .add(SetItemPointerLocationAction.of(
-                                ItemStackTarget.RESULT,
-                                PositionTarget.INTERACTED_POSITION
-                            ))
-                            .add(ModifyItemAction.of(
-                                ItemStackTarget.RESULT,
+                                SplitItemModifier.builder(1),
+                                SetItemPointerLocationItemModifier.builder(PositionTarget.INTERACTED_POSITION),
                                 SetNameLootFunction.builder(
                                     Text.translatable(Util.createTranslationKey("item", Identifier.ofVanilla("lodestone_compass"))),
                                     SetNameLootFunction.Target.ITEM_NAME
