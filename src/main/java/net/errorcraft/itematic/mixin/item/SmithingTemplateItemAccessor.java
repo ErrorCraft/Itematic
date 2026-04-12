@@ -2,7 +2,6 @@ package net.errorcraft.itematic.mixin.item;
 
 import net.minecraft.item.SmithingTemplateItem;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
@@ -12,78 +11,68 @@ import java.util.List;
 
 @Mixin(SmithingTemplateItem.class)
 public interface SmithingTemplateItemAccessor {
-    @Accessor("TITLE_FORMATTING")
-    static Formatting getTitleFormatting() {
-        throw new AssertionError();
-    }
-
-    @Accessor("DESCRIPTION_FORMATTING")
-    static Formatting getDescriptionFormatting() {
-        throw new AssertionError();
-    }
-
     @Accessor("SMITHING_TEMPLATE_TEXT")
-    static Text getSmithingTemplateText() {
+    static Text smithingTemplateTitle() {
         throw new AssertionError();
     }
 
     @Accessor("APPLIES_TO_TEXT")
-    static Text getAppliesToText() {
+    static Text appliesToTitle() {
         throw new AssertionError();
     }
 
     @Accessor("ARMOR_TRIM_APPLIES_TO_TEXT")
-    static Text getTrimPatternAppliesToText() {
+    static Text trimPatternAppliesToLabel() {
         throw new AssertionError();
     }
 
     @Accessor("INGREDIENTS_TEXT")
-    static Text getIngredientsText() {
+    static Text ingredientsTitle() {
         throw new AssertionError();
     }
 
     @Accessor("ARMOR_TRIM_INGREDIENTS_TEXT")
-    static Text getTrimPatternIngredientsText() {
+    static Text trimPatternIngredients() {
         throw new AssertionError();
     }
 
     @Accessor("ARMOR_TRIM_BASE_SLOT_DESCRIPTION_TEXT")
-    static Text getTrimPatternBaseSlotDescriptionText() {
+    static Text trimPatternBaseSlotDescription() {
         throw new AssertionError();
     }
 
     @Accessor("ARMOR_TRIM_ADDITIONS_SLOT_DESCRIPTION_TEXT")
-    static Text getTrimPatternAdditionsSlotDescriptionText() {
+    static Text trimPatternAdditionsSlotDescription() {
         throw new AssertionError();
     }
 
     @Accessor("NETHERITE_UPGRADE_BASE_SLOT_DESCRIPTION_TEXT")
-    static Text getItemUpgradeBaseSlotDescriptionText() {
+    static Text itemUpgradeBaseSlotDescription() {
         throw new AssertionError();
     }
 
     @Accessor("NETHERITE_UPGRADE_ADDITIONS_SLOT_DESCRIPTION_TEXT")
-    static Text getItemUpgradeAdditionsSlotDescriptionText() {
+    static Text itemUpgradeAdditionsSlotDescription() {
         throw new AssertionError();
     }
 
     @Invoker("getArmorTrimEmptyBaseSlotTextures")
-    static List<Identifier> getTrimPatternEmptyBaseSlotTextures() {
+    static List<Identifier> trimPatternEmptyBaseSlotTextures() {
         throw new AssertionError();
     }
 
     @Invoker("getArmorTrimEmptyAdditionsSlotTextures")
-    static List<Identifier> getTrimPatternEmptyAdditionsSlotTextures() {
+    static List<Identifier> trimPatternEmptyAdditionsSlotTextures() {
         throw new AssertionError();
     }
 
     @Invoker("getNetheriteUpgradeEmptyBaseSlotTextures")
-    static List<Identifier> getItemUpgradeEmptyBaseSlotTextures() {
+    static List<Identifier> itemUpgradeEmptyBaseSlotTextures() {
         throw new AssertionError();
     }
 
     @Invoker("getNetheriteUpgradeEmptyAdditionsSlotTextures")
-    static List<Identifier> getItemUpgradeEmptyAdditionsSlotTextures() {
+    static List<Identifier> itemUpgradeEmptyAdditionsSlotTextures() {
         throw new AssertionError();
     }
 }

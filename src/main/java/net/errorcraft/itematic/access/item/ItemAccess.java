@@ -9,11 +9,15 @@ import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public interface ItemAccess {
     default ItemDisplay itematic$display() {
@@ -44,6 +48,7 @@ public interface ItemAccess {
     default boolean itematic$hasEventListener(ItemEvent event) {
         return false;
     }
+    default void itematic$addTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Text> tooltip, TooltipType type) {}
     default boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         return true;
     }

@@ -1,0 +1,22 @@
+{
+  "behavior": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:shoot_projectile"
+    },
+    "minecraft:projectile": {
+      "components": {
+        "minecraft:chicken/variant": "minecraft:cold"
+      },
+      "entity": "minecraft:egg"
+    },
+    "minecraft:stackable": 16,
+    "minecraft:throwable": {
+      "angle_offset": 0.0,
+      "speed": 1.5
+    }
+  },
+  "display": {
+    "model": "minecraft:blue_egg",
+    "translation_key": "item.minecraft.blue_egg"
+  }
+}

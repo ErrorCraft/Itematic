@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minecraft:buy_water_bottle",
+    "minecraft:buy_water_bucket",
+    "minecraft:buy_milk_bucket",
+    "minecraft:buy_fermented_spider_eye",
+    "minecraft:buy_baked_potato",
+    "minecraft:buy_hay_block"
+  ]
+}

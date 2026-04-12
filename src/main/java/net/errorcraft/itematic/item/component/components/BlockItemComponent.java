@@ -20,13 +20,10 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
@@ -35,7 +32,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.Set;
 
 public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set<Pass> passes) implements ItemComponent<BlockItemComponent> {
@@ -102,11 +98,6 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
     @Override
     public void addComponents(ComponentMap.Builder builder) {
         this.block.defaultBlock().value().itematic$addComponents(builder);
-    }
-
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        this.block.defaultBlock().value().appendTooltip(stack, context, tooltip, type);
     }
 
     public boolean canBeNested() {

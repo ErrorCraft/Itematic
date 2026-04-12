@@ -8,14 +8,9 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BannerPatternsComponent;
-import net.minecraft.item.BannerItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 
-import java.util.List;
 import java.util.Optional;
 
 public record BannerPatternHolderItemComponent(Optional<DyeColor> color) implements ItemComponent<BannerPatternHolderItemComponent> {
@@ -38,11 +33,6 @@ public record BannerPatternHolderItemComponent(Optional<DyeColor> color) impleme
         builder.add(DataComponentTypes.BANNER_PATTERNS, BannerPatternsComponent.DEFAULT);
     }
 
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        BannerItem.appendBannerTooltip(stack, tooltip);
-    }
-
     public boolean modifiable() {
         return this.color.isPresent();
     }
@@ -51,11 +41,13 @@ public record BannerPatternHolderItemComponent(Optional<DyeColor> color) impleme
         if (this.modifiable()) {
             return Optional.empty();
         }
+
         DyeColor baseColor = stack.get(DataComponentTypes.BASE_COLOR);
         if (baseColor == null) {
             return Optional.empty();
         }
-        return Optional.of(baseTranslationKey + "." + baseColor.getName());
+
+        return Optional.of(baseTranslationKey + "." + baseColor.getId());
     }
 
     public static BannerPatternHolderItemComponent of() {

@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:cactus_flower"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.3
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cactus_flower",
+    "translation_key": "block.minecraft.cactus_flower"
+  }
+}

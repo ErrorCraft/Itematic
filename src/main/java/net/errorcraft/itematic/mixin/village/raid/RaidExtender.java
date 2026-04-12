@@ -6,9 +6,7 @@ import net.minecraft.entity.raid.RaiderEntity;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.village.raid.Raid;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -17,9 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Raid.class)
 public abstract class RaidExtender {
-    @Shadow
-    public abstract World getWorld();
-
     @Redirect(
         method = "createOminousBanner",
         at = @At(
@@ -53,6 +48,6 @@ public abstract class RaidExtender {
         )
     )
     private void createOminousBannerSetDataDrivenItemStack(int wave, RaiderEntity entity, CallbackInfo info) {
-        RaidUtil.createOminousBanner(this.getWorld());
+        RaidUtil.createOminousBanner(entity.getWorld());
     }
 }

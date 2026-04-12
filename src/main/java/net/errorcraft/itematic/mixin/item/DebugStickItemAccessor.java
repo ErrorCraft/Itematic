@@ -12,5 +12,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(DebugStickItem.class)
 public interface DebugStickItemAccessor {
     @Invoker("use")
-    boolean callUse(PlayerEntity player, BlockState state, WorldAccess world, BlockPos pos, boolean update, ItemStack stack);
+    boolean itematic$use(PlayerEntity player, BlockState state, WorldAccess world, BlockPos pos, boolean update, ItemStack stack);
 }

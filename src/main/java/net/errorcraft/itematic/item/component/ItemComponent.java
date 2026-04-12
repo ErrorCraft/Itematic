@@ -7,7 +7,6 @@ import net.errorcraft.itematic.serialization.SetMapCodec;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -21,8 +20,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public interface ItemComponent<T extends ItemComponent<T>> {
     SetMapCodec<ItemComponentType<?>, ItemComponent<?>> SET_MAP_CODEC = SetMapCodec.ofRegistry(ItematicRegistries.ITEM_COMPONENT_TYPE, ItemComponentType::codec, ItemComponent::codec, ItemComponent::type);
@@ -43,8 +42,7 @@ public interface ItemComponent<T extends ItemComponent<T>> {
         return ItemResult.PASS;
     }
 
-    default boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, ItemStackExchanger stackExchanger) {
-        return false;
+    default void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, ItemStackExchanger stackExchanger) {
     }
 
     default boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
@@ -59,8 +57,6 @@ public interface ItemComponent<T extends ItemComponent<T>> {
 
     default void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {}
 
-    default void inventoryTick(ItemStack stack, World world, Entity holder, int slot, boolean selected) {}
-
     default boolean clickOnSlot(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity user) {
         return false;
     }
@@ -73,5 +69,5 @@ public interface ItemComponent<T extends ItemComponent<T>> {
 
     default void addComponents(ComponentMap.Builder builder) {}
 
-    default void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {}
+    default void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Text> builder, TooltipType type) {}
 }

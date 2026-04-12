@@ -27,7 +27,10 @@
     "minecraft:string",
     "minecraft:feather",
     "minecraft:snowball",
-    "minecraft:egg",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/eggs"
+    },
     "minecraft:leather",
     "minecraft:rabbit_hide",
     "minecraft:honeycomb",

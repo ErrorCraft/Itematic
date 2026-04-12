@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.block;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.block.AbstractBlockAccess;
 import net.errorcraft.itematic.block.entity.SherdsUtil;
@@ -13,9 +12,6 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.world.WorldView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,24 +22,6 @@ import java.util.List;
 
 @Mixin(DecoratedPotBlock.class)
 public class DecoratedPotBlockExtender implements AbstractBlockAccess {
-    @ModifyExpressionValue(
-        method = "appendTooltip",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/block/entity/Sherds;equals(Ljava/lang/Object;)Z"
-        )
-    )
-    private boolean defaultSherdsAlwaysTrue(boolean original, @Local(argsOnly = true) Item.TooltipContext context, @Local(argsOnly = true) List<Text> tooltip, @Local Sherds sherds) {
-        if (!original) {
-            tooltip.add(ScreenTexts.EMPTY);
-            for (RegistryEntry<Item> entry : sherds.itematic$entriesForwards(context.getRegistryLookup())) {
-                tooltip.add(new ItemStack(entry).getName().copyContentOnly().formatted(Formatting.GRAY));
-            }
-        }
-
-        return true;
-    }
-
     @Redirect(
         method = "method_49815",
         at = @At(

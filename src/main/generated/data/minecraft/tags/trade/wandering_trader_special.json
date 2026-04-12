@@ -1,10 +1,19 @@
 {
   "values": [
-    "minecraft:sell_tropical_fish_bucket",
-    "minecraft:sell_pufferfish_bucket",
     "minecraft:sell_packed_ice",
     "minecraft:sell_blue_ice",
     "minecraft:sell_gunpowder",
-    "minecraft:sell_podzol"
+    "minecraft:sell_podzol",
+    "minecraft:sell_acacia_log",
+    "minecraft:sell_birch_log",
+    "minecraft:sell_dark_oak_log",
+    "minecraft:sell_jungle_log",
+    "minecraft:sell_oak_log",
+    "minecraft:sell_spruce_log",
+    "minecraft:sell_cherry_log",
+    "minecraft:sell_mangrove_log",
+    "minecraft:sell_pale_oak_log",
+    "minecraft:sell_enchanted_iron_pickaxe_wandering_trader",
+    "minecraft:sell_long_invisibility_potion"
   ]
 }

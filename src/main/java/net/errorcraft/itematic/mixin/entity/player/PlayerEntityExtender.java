@@ -20,8 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.stat.Stat;
-import net.minecraft.stat.StatType;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
@@ -62,28 +60,6 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
     }
 
     @Redirect(
-        method = "damageShield",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
-        )
-    )
-    private boolean isOfForShieldUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SHIELD);
-    }
-
-    @Redirect(
-        method = "damageShield",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
-        )
-    )
-    private <T> Stat<Item> getOrCreateStatForActiveItemUseRegistryEntry(StatType<Item> instance, T key) {
-        return instance.itematic$getOrCreateStat(this.activeItemStack.getRegistryEntry());
-    }
-
-    @Redirect(
         method = "attack",
         at = @At(
             value = "INVOKE",
@@ -119,7 +95,7 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
         )
     )
     private double multiplyByAttackSpeedMultiplier(double original) {
-        return this.inventory.getMainHandStack().itematic$attackSpeedMultiplier() * original;
+        return this.getMainHandStack().itematic$attackSpeedMultiplier() * original;
     }
 
     @Redirect(

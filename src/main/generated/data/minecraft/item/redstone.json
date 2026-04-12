@@ -3,7 +3,8 @@
     "minecraft:block": {
       "block": "minecraft:redstone_wire"
     },
-    "minecraft:stackable": 64
+    "minecraft:stackable": 64,
+    "minecraft:trim_material_provider": "minecraft:redstone"
   },
   "display": {
     "model": "minecraft:redstone",

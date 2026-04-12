@@ -12,8 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.function.Supplier;
-
 @Mixin(FireworkRocketEntity.class)
 public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
     public FireworkRocketEntityExtender(EntityType<? extends ProjectileEntity> entityType, World world) {
@@ -31,9 +29,11 @@ public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
         return this.getWorld().itematic$getItem(ItemKeys.FIREWORK_ROCKET).value();
     }
 
-
     @Redirect(
-        method = { "initDataTracker", "readCustomDataFromNbt" },
+        method = {
+            "initDataTracker",
+            "readCustomDataFromNbt"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/projectile/FireworkRocketEntity;getDefaultStack()Lnet/minecraft/item/ItemStack;"
@@ -41,16 +41,5 @@ public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
     )
     private ItemStack newItemStackForFireworkRocketUseCreateStack() {
         return this.getWorld().itematic$createStack(ItemKeys.FIREWORK_ROCKET);
-    }
-
-    @ModifyArg(
-        method = "readCustomDataFromNbt",
-        at = @At(
-            value = "INVOKE",
-            target = "Ljava/util/Optional;orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;"
-        )
-    )
-    private <T> Supplier<ItemStack> newItemStackSupplierForFireworkRocketUseCreateStack(Supplier<? extends T> supplier) {
-        return () -> this.getWorld().itematic$createStack(ItemKeys.FIREWORK_ROCKET);
     }
 }

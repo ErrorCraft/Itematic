@@ -11,19 +11,22 @@ import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.DebugStickStateComponent;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DebugStickItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-public record DebugStickItemComponent() implements ItemComponent<DebugStickItemComponent> {
+public class DebugStickItemComponent implements ItemComponent<DebugStickItemComponent> {
     public static final DebugStickItemComponent INSTANCE = new DebugStickItemComponent();
     public static final Codec<DebugStickItemComponent> CODEC = Codec.unit(INSTANCE);
     private static final DebugStickItemAccessor DUMMY = (DebugStickItemAccessor) new DebugStickItem(new Item.Settings());
+
+    private DebugStickItemComponent() {}
 
     @Override
     public ItemComponentType<DebugStickItemComponent> type() {
@@ -41,14 +44,17 @@ public record DebugStickItemComponent() implements ItemComponent<DebugStickItemC
         if (world.isClient()) {
             return ItemResult.PASS;
         }
+
         PlayerEntity player = context.getPlayer();
         if (player == null) {
             return ItemResult.PASS;
         }
+
         BlockPos pos = context.getBlockPos();
-        if (!DUMMY.callUse(player, world.getBlockState(pos), world, pos, true, context.getStack())) {
+        if (!DUMMY.itematic$use(player, world.getBlockState(pos), world, pos, true, context.getStack())) {
             return ItemResult.PASS;
         }
+
         return ItemResult.SUCCEED;
     }
 
@@ -57,9 +63,9 @@ public record DebugStickItemComponent() implements ItemComponent<DebugStickItemC
         builder.add(DataComponentTypes.DEBUG_STICK_STATE, DebugStickStateComponent.DEFAULT);
     }
 
-    public void use(PlayerEntity miner, BlockState state, WorldAccess world, BlockPos pos) {
-        if (!world.isClient()) {
-            DUMMY.callUse(miner, state, world, pos, false, miner.getStackInHand(Hand.MAIN_HAND));
+    public void use(LivingEntity user, BlockState state, WorldAccess world, BlockPos pos, ItemStack stack) {
+        if (!world.isClient() && user instanceof PlayerEntity playerUser) {
+            DUMMY.itematic$use(playerUser, state, world, pos, false, stack);
         }
     }
 }

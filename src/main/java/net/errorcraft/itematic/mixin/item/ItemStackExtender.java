@@ -2,14 +2,12 @@ package net.errorcraft.itematic.mixin.item;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemUtil;
-import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -22,11 +20,9 @@ import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
-import net.minecraft.block.BlockState;
-import net.minecraft.component.ComponentChanges;
-import net.minecraft.component.ComponentHolder;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.MergedComponentMap;
+import net.minecraft.component.*;
+import net.minecraft.component.type.TooltipDisplayComponent;
+import net.minecraft.component.type.WeaponComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
@@ -50,7 +46,6 @@ import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +61,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -237,9 +231,20 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         at = @At("HEAD"),
         cancellable = true
     )
-    public void checkEmptyStackBoolean(CallbackInfoReturnable<Boolean> info) {
+    public void checkEmptyStackBooleanFalse(CallbackInfoReturnable<Boolean> info) {
         if (this.isEmpty()) {
             info.setReturnValue(false);
+        }
+    }
+
+    @Inject(
+        method = "canMine",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void checkEmptyStackBooleanTrue(CallbackInfoReturnable<Boolean> info) {
+        if (this.isEmpty()) {
+            info.setReturnValue(true);
         }
     }
 
@@ -292,7 +297,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = "copy",
+        method = "copy()Lnet/minecraft/item/ItemStack;",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/MergedComponentMap;)Lnet/minecraft/item/ItemStack;"
@@ -505,19 +510,21 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
     }
 
-    @WrapWithCondition(
-        method = "getTooltip",
+    @Inject(
+        method = "appendTooltip",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;appendTooltip(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/List;Lnet/minecraft/item/tooltip/TooltipType;)V"
+            target = "Lnet/minecraft/item/Item;appendTooltip(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/Item$TooltipContext;Lnet/minecraft/component/type/TooltipDisplayComponent;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V"
         )
     )
-    private boolean appendTooltipCheckRegistryEntry(Item instance, ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        return this.entry != null;
+    private void addTooltipFromItem(Item.TooltipContext context, TooltipDisplayComponent displayComponent, PlayerEntity player, TooltipType type, Consumer<Text> textConsumer, CallbackInfo info) {
+        if (this.entry != null) {
+            this.entry.value().itematic$addTooltip((ItemStack) (Object) this, context, textConsumer, type);
+        }
     }
 
     @Redirect(
-        method = "getTooltip",
+        method = "appendTooltip",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/registry/DefaultedRegistry;getId(Ljava/lang/Object;)Lnet/minecraft/util/Identifier;"
@@ -550,15 +557,15 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
     }
 
-    @Inject(
-        method = "postMine",
-        at = @At("HEAD"),
-        cancellable = true
+    @Redirect(
+        method = "postDamageEntity",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+        )
     )
-    private void postMineUseRegistryEntryNullCheck(World world, BlockState state, BlockPos pos, PlayerEntity miner, CallbackInfo info) {
-        if (this.isEmpty()) {
-            info.cancel();
-        }
+    private Object getWeaponDataComponentReturnNull(ItemStack instance, ComponentType<WeaponComponent> type) {
+        return null;
     }
 
     @ModifyReturnValue(
@@ -567,7 +574,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     )
     private int limitDamageApplied(int original) {
         return this.itematic$getBehavior(ItemComponentTypes.DAMAGEABLE)
-            .map(c -> Math.min(c.maximumDamage((ItemStack)(Object) this) - this.getDamage(), original))
+            .map(c -> Math.min(c.maximumDamage((ItemStack) (Object) this) - this.getDamage(), original))
             .orElse(original);
     }
 
@@ -640,7 +647,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     )
     private void checkForUseableBehavior(LivingEntity user, ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
         if (!this.itematic$hasBehavior(ItemComponentTypes.USEABLE)) {
-            info.setReturnValue((ItemStack)(Object) this);
+            info.setReturnValue((ItemStack) (Object) this);
         }
     }
 
@@ -667,7 +674,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     @Override
     public boolean canBeEnchantedWith(RegistryEntry<Enchantment> enchantment, EnchantingContext context) {
         // Use the original implementation again
-        return enchantment.value().isAcceptableItem((ItemStack)(Object) this);
+        return enchantment.value().isAcceptableItem((ItemStack) (Object) this);
     }
 
     @Override
@@ -777,19 +784,6 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
-    public boolean itematic$canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
-        if (this.entry == null) {
-            return true;
-        }
-
-        if (miner.isCreative() && this.isIn(ItematicItemTags.PREVENTS_MINING_IN_CREATIVE)) {
-            return false;
-        }
-
-        return this.entry.value().canMine(state, world, pos, miner);
-    }
-
-    @Override
     public boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         if (this.entry == null) {
             return false;
@@ -812,7 +806,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         this.entry = entry;
         if (entry.hasKeyAndValue()) {
             this.components = new MergedComponentMap(entry.value().getComponents());
-            entry.value().postProcessComponents((ItemStack)(Object) this);
+            entry.value().postProcessComponents((ItemStack) (Object) this);
         } else {
             this.components = new MergedComponentMap(ComponentMap.EMPTY);
         }
@@ -823,7 +817,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         this.entry = entry;
         if (entry.hasKeyAndValue()) {
             this.components = MergedComponentMap.create(entry.value().getComponents(), changes);
-            entry.value().postProcessComponents((ItemStack)(Object) this);
+            entry.value().postProcessComponents((ItemStack) (Object) this);
         } else {
             this.components = MergedComponentMap.create(ComponentMap.EMPTY, changes);
         }

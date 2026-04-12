@@ -12,16 +12,12 @@ import net.errorcraft.itematic.entity.initializer.EntityInitializerSupplier;
 import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EyeOfEnderEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.*;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.item.ItemStack;
@@ -43,7 +39,7 @@ import java.util.function.Consumer;
 @Mixin(EntityType.class)
 public abstract class EntityTypeExtender<T extends Entity> implements EntityTypeAccess<T> {
     @Shadow
-    public static <T extends Entity> Consumer<T> copier(Consumer<T> chained, World world, ItemStack stack, @Nullable PlayerEntity player) {
+    public static <T extends Entity> Consumer<T> copier(Consumer<T> chained, World world, ItemStack stack, @Nullable LivingEntity spawner) {
         return null;
     }
 
@@ -472,7 +468,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             callback == null ?entity -> {} : entity -> callback.accept(entity, stack),
             context.world(),
             stack,
-            context.get(LootContextParameters.THIS_ENTITY, PlayerEntity.class)
+            context.get(LootContextParameters.THIS_ENTITY, LivingEntity.class)
         );
     }
 

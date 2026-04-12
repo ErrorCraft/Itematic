@@ -7,12 +7,6 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FireworkExplosionComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-
-import java.util.List;
 
 public record FireworkExplosionHolderItemComponent() implements ItemComponent<FireworkExplosionHolderItemComponent> {
     public static final FireworkExplosionHolderItemComponent INSTANCE = new FireworkExplosionHolderItemComponent();
@@ -31,13 +25,5 @@ public record FireworkExplosionHolderItemComponent() implements ItemComponent<Fi
     @Override
     public void addComponents(ComponentMap.Builder builder) {
         builder.add(DataComponentTypes.FIREWORK_EXPLOSION, FireworkExplosionComponent.DEFAULT);
-    }
-
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        FireworkExplosionComponent explosion = stack.get(DataComponentTypes.FIREWORK_EXPLOSION);
-        if (explosion != null) {
-            explosion.appendTooltip(context, tooltip::add, type);
-        }
     }
 }

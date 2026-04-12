@@ -3,14 +3,13 @@ package net.errorcraft.itematic.item;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
-import net.errorcraft.itematic.block.ComposterBlockUtil;
-import net.errorcraft.itematic.component.AttributeModifiersComponentUtil;
 import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
+import net.errorcraft.itematic.item.composting.CompostChances;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.event.ItemEventMap;
@@ -18,9 +17,9 @@ import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.fuel.FuelTimes;
 import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
 import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
-import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionUtil;
+import net.errorcraft.itematic.loot.function.SplitItemModifier;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
@@ -31,6 +30,7 @@ import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.Actions;
 import net.errorcraft.itematic.world.action.actions.*;
+import net.errorcraft.itematic.world.action.context.ItemStackTarget;
 import net.errorcraft.itematic.world.action.context.ItematicEntityTargets;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
@@ -50,30 +50,40 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.passive.ChickenVariant;
+import net.minecraft.entity.passive.ChickenVariants;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
 import net.minecraft.item.consume.UseAction;
 import net.minecraft.item.equipment.ArmorMaterials;
 import net.minecraft.item.equipment.EquipmentAssetKeys;
 import net.minecraft.item.equipment.EquipmentType;
+import net.minecraft.item.equipment.trim.ArmorTrimMaterial;
+import net.minecraft.item.equipment.trim.ArmorTrimMaterials;
 import net.minecraft.loot.condition.*;
 import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.function.SetComponentsLootFunction;
+import net.minecraft.loot.function.SetNameLootFunction;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.Potion;
 import net.minecraft.predicate.BlockPredicate;
 import net.minecraft.predicate.FluidPredicate;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.predicate.StatePredicate;
+import net.minecraft.predicate.component.ComponentPredicateTypes;
+import net.minecraft.predicate.component.ComponentsPredicate;
 import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.entity.LocationPredicate;
 import net.minecraft.predicate.item.*;
 import net.minecraft.registry.*;
+import net.minecraft.registry.entry.LazyRegistryEntryReference;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.stat.Stats;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
@@ -82,12 +92,13 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.event.GameEvent;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ItemUtil {
     public static final int UNSTACKABLE_MAX_STACK_SIZE = 1;
     public static final Codec<Item> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
         ItemDisplay.CODEC.fieldOf("display").forGetter(Item::itematic$display),
-        AttributeModifiersComponentUtil.LIST_CODEC.optionalFieldOf("attribute_modifiers", AttributeModifiersComponent.DEFAULT).forGetter(Item::itematic$attributeModifiers),
+        AttributeModifiersComponent.CODEC.optionalFieldOf("attribute_modifiers", AttributeModifiersComponent.DEFAULT).forGetter(Item::itematic$attributeModifiers),
         ItemComponentSet.CODEC.optionalFieldOf("behavior", ItemComponentSet.EMPTY).forGetter(Item::itematic$behavior),
         ItemEventMap.CODEC.optionalFieldOf("events", ItemEventMap.EMPTY).forGetter(Item::itematic$events)
     ).apply(instance, ItemUtil::create));
@@ -135,12 +146,14 @@ public class ItemUtil {
         private final RegistryEntryLookup<SoundEvent> soundEvents;
         private final RegistryEntryLookup<Fluid> fluids;
         private final RegistryEntryLookup<ActionEntry> actions;
-        private final RegistryEntryLookup<SmithingTemplate> smithingTemplates;
         private final RegistryEntryLookup<DecoratedPotPattern> decoratedPotPatterns;
         private final RegistryEntryLookup<StatusEffect> statusEffects;
         private final RegistryEntryLookup<Potion> potions;
         private final RegistryEntryLookup<Enchantment> enchantments;
         private final RegistryEntryLookup<JukeboxSong> jukeboxSongs;
+        private final RegistryEntryLookup<Instrument> instruments;
+        private final RegistryEntryLookup<ArmorTrimMaterial> trimMaterials;
+        private final RegistryEntryLookup<ChickenVariant> chickenVariants;
 
         private Bootstrapper(Registerable<Item> registerable) {
             this.registerable = registerable;
@@ -151,12 +164,14 @@ public class ItemUtil {
             this.soundEvents = registerable.getRegistryLookup(RegistryKeys.SOUND_EVENT);
             this.fluids = registerable.getRegistryLookup(RegistryKeys.FLUID);
             this.actions = registerable.getRegistryLookup(ItematicRegistryKeys.ACTION);
-            this.smithingTemplates = registerable.getRegistryLookup(ItematicRegistryKeys.SMITHING_TEMPLATE);
             this.decoratedPotPatterns = registerable.getRegistryLookup(RegistryKeys.DECORATED_POT_PATTERN);
             this.statusEffects = registerable.getRegistryLookup(RegistryKeys.STATUS_EFFECT);
             this.potions = registerable.getRegistryLookup(RegistryKeys.POTION);
             this.enchantments = registerable.getRegistryLookup(RegistryKeys.ENCHANTMENT);
             this.jukeboxSongs = registerable.getRegistryLookup(RegistryKeys.JUKEBOX_SONG);
+            this.instruments = registerable.getRegistryLookup(RegistryKeys.INSTRUMENT);
+            this.trimMaterials = registerable.getRegistryLookup(RegistryKeys.TRIM_MATERIAL);
+            this.chickenVariants = registerable.getRegistryLookup(RegistryKeys.CHICKEN_VARIANT);
         }
 
         private void bootstrap() {
@@ -175,6 +190,7 @@ public class ItemUtil {
             this.bootstrapBanners();
             this.bootstrapDecoratedPotPatterns();
             this.bootstrapImmuneToDamage();
+            this.bootstrapTrimMaterialProviders();
             this.bootstrapMiscellaneous();
         }
 
@@ -199,7 +215,6 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(ConsumableComponents.DRINK)
                         .remainder(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
                         .build())
-                    .with(PotionItemComponent.INSTANCE)
                     .with(PotionHolderItemComponent.of(1.0f))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM)))
                     .build(),
@@ -215,11 +230,15 @@ public class ItemUtil {
                                     .block(BlockPredicate.Builder.create()
                                         .tag(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
                             ),
-                            MatchToolLootCondition.builder(
-                                ItemPredicate.Builder.create()
-                                    .subPredicate(ItemSubPredicateTypes.POTION_CONTENTS, new PotionContentsPredicate(RegistryEntryList.of(
-                                        this.potions.getOrThrow(PotionKeys.WATER)
-                                    )))
+                            MatchToolLootCondition.builder(ItemPredicate.Builder.create()
+                                .components(ComponentsPredicate.Builder.create()
+                                    .partial(
+                                        ComponentPredicateTypes.POTION_CONTENTS,
+                                        new PotionContentsPredicate(RegistryEntryList.of(
+                                            this.potions.getOrThrow(PotionKeys.WATER)
+                                        ))
+                                    ).build()
+                                )
                             )
                         ),
                         UncheckedSequenceHandler.builder()
@@ -263,7 +282,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
                         .food(FoodComponents.APPLE)
                         .build())
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.MELON_SLICE, create(
@@ -273,7 +292,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
                         .food(FoodComponents.MELON_SLICE)
                         .build())
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
             this.registerable.register(ItemKeys.DRIED_KELP, create(
@@ -283,7 +302,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(ConsumableComponents.DRIED_KELP)
                         .food(FoodComponents.DRIED_KELP)
                         .build())
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.CARROT, create(
@@ -294,7 +313,7 @@ public class ItemUtil {
                         .food(FoodComponents.CARROT)
                         .build())
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARROTS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.POTATO, create(
@@ -305,7 +324,7 @@ public class ItemUtil {
                         .food(FoodComponents.POTATO)
                         .build())
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POTATOES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.BAKED_POTATO, create(
@@ -315,7 +334,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
                         .food(FoodComponents.BAKED_POTATO)
                         .build())
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHORUS_FRUIT, create(
@@ -337,7 +356,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
                         .food(FoodComponents.BEETROOT)
                         .build())
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.SWEET_BERRIES, create(
@@ -348,7 +367,7 @@ public class ItemUtil {
                         .food(FoodComponents.SWEET_BERRIES)
                         .build())
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SWEET_BERRY_BUSH)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOW_BERRIES, create(
@@ -359,7 +378,7 @@ public class ItemUtil {
                         .food(FoodComponents.GLOW_BERRIES)
                         .build())
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAVE_VINES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.BREAD, create(
@@ -369,7 +388,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
                         .food(FoodComponents.BREAD)
                         .build())
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
             this.registerable.register(ItemKeys.COOKIE, create(
@@ -379,7 +398,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
                         .food(FoodComponents.COOKIE)
                         .build())
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
             this.registerable.register(ItemKeys.PORKCHOP, create(
@@ -691,7 +710,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(ConsumableComponents.FOOD)
                         .food(FoodComponents.PUMPKIN_PIE)
                         .build())
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.GUARANTEED))
                     .build()
             ));
             this.registerable.register(ItemKeys.HONEY_BOTTLE, create(
@@ -5103,13 +5122,6 @@ public class ItemUtil {
         }
 
         private void bootstrapItemNameBlocks() {
-            this.registerable.register(ItemKeys.REDSTONE, create(
-                ItemDisplay.Builder.forItem(ItemKeys.REDSTONE).build(),
-                ItemComponentSet.builder()
-                    .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REDSTONE_WIRE)))
-                    .build()
-            ));
             this.registerable.register(ItemKeys.STRING, create(
                 ItemDisplay.Builder.forItem(ItemKeys.STRING).build(),
                 ItemComponentSet.builder()
@@ -5473,8 +5485,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.ofPreserved(250))
                     .with(ToolItemComponent.builder(2)
+                        .preventCreativeDestruction()
                         .build())
-                    .with(WeaponItemComponent.of(1, TridentItem.ATTACK_DAMAGE + 1, 0.275d))
+                    .with(WeaponItemComponent.of(1, 0.0f, TridentItem.ATTACK_DAMAGE, 0.275d))
                     .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.TRIDENT)))
                     .with(EnchantableItemComponent.of(1))
@@ -5488,11 +5501,16 @@ public class ItemUtil {
                                     .itematic$usedItemAtLeast(TridentItem.MIN_DRAW_DURATION)
                                     .itematic$inWaterOrRain(true)
                             ),
-                            MatchToolLootCondition.builder(
-                                ItemPredicate.Builder.create()
-                                    .subPredicate(ItemSubPredicateTypes.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.of(
-                                        new EnchantmentPredicate(this.enchantments.getOrThrow(Enchantments.RIPTIDE), NumberRange.IntRange.ANY)
-                                    ))))
+                            MatchToolLootCondition.builder(ItemPredicate.Builder.create()
+                                .components(ComponentsPredicate.Builder.create()
+                                    .partial(
+                                        ComponentPredicateTypes.ENCHANTMENTS,
+                                        EnchantmentsPredicate.enchantments(List.of(
+                                            new EnchantmentPredicate(this.enchantments.getOrThrow(Enchantments.RIPTIDE), NumberRange.IntRange.ANY)
+                                        ))
+                                    ).build()
+                                )
+                            )
                         ),
                         PassingSequenceHandler.builder()
                             .add(TwirlPlayerAction.INSTANCE)
@@ -5557,7 +5575,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(500))
                     .with(ToolItemComponent.builder(2).build())
-                    .with(WeaponItemComponent.ofSmashing(1, 6.0d, 0.15d))
+                    .with(WeaponItemComponent.ofSmashing(1, 5.0d, 0.15d))
                     .with(EnchantableItemComponent.of(15))
                     .with(RepairableItemComponent.of(RegistryEntryList.of(
                         this.items.getOrThrow(ItemKeys.BREEZE_ROD)
@@ -6387,7 +6405,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_LEAVES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPRUCE_LEAVES, create(
@@ -6395,7 +6413,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_LEAVES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.BIRCH_LEAVES, create(
@@ -6403,7 +6421,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_LEAVES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.JUNGLE_LEAVES, create(
@@ -6411,7 +6429,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_LEAVES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.ACACIA_LEAVES, create(
@@ -6419,7 +6437,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_LEAVES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHERRY_LEAVES, create(
@@ -6427,7 +6445,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_LEAVES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.DARK_OAK_LEAVES, create(
@@ -6435,7 +6453,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_LEAVES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.PALE_OAK_LEAVES, create(
@@ -6443,7 +6461,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_LEAVES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.MANGROVE_LEAVES, create(
@@ -6451,7 +6469,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_LEAVES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.AZALEA_LEAVES, create(
@@ -6459,7 +6477,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AZALEA_LEAVES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.OAK_SAPLING, create(
@@ -6467,7 +6485,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_SAPLING)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
@@ -6479,7 +6497,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_SAPLING)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
@@ -6491,7 +6509,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_SAPLING)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
@@ -6503,7 +6521,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_SAPLING)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
@@ -6515,7 +6533,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_SAPLING)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
@@ -6527,7 +6545,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_SAPLING)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
@@ -6539,7 +6557,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_SAPLING)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
@@ -6551,7 +6569,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_SAPLING)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
@@ -6563,7 +6581,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_PROPAGULE)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
@@ -6575,7 +6593,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHORT_GRASS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.KELP, create(
@@ -6583,7 +6601,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.KELP)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOSS_CARPET, create(
@@ -6591,7 +6609,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSS_CARPET)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.PALE_MOSS_CARPET, create(
@@ -6599,7 +6617,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_MOSS_CARPET)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_PETALS, create(
@@ -6607,7 +6625,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_PETALS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.HANGING_ROOTS, create(
@@ -6615,7 +6633,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HANGING_ROOTS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMALL_DRIPLEAF, create(
@@ -6623,7 +6641,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMALL_DRIPLEAF)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHEAT_SEEDS, create(
@@ -6631,7 +6649,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHEAT)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.PUMPKIN_SEEDS, create(
@@ -6639,7 +6657,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PUMPKIN_STEM)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.MELON_SEEDS, create(
@@ -6647,7 +6665,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MELON_STEM)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.TORCHFLOWER_SEEDS, create(
@@ -6655,7 +6673,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TORCHFLOWER_CROP)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.PITCHER_POD, create(
@@ -6663,7 +6681,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PITCHER_CROP)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.BEETROOT_SEEDS, create(
@@ -6671,7 +6689,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BEETROOTS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.MANGROVE_ROOTS, create(
@@ -6679,7 +6697,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_ROOTS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -6688,7 +6706,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SEAGRASS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.PALE_HANGING_MOSS, create(
@@ -6696,7 +6714,39 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_HANGING_MOSS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.SMALL_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WILDFLOWERS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WILDFLOWERS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WILDFLOWERS)))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BUSH, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.BUSH).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BUSH)))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.FIREFLY_BUSH, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.FIREFLY_BUSH).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FIREFLY_BUSH)))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CACTUS_FLOWER, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.CACTUS_FLOWER).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CACTUS_FLOWER)))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
             this.registerable.register(ItemKeys.FLOWERING_AZALEA_LEAVES, create(
@@ -6704,7 +6754,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FLOWERING_AZALEA_LEAVES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_SPROUTS, create(
@@ -6712,7 +6762,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_SPROUTS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEEPING_VINES, create(
@@ -6720,7 +6770,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEEPING_VINES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
             this.registerable.register(ItemKeys.TWISTING_VINES, create(
@@ -6728,7 +6778,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TWISTING_VINES)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
             this.registerable.register(ItemKeys.SUGAR_CANE, create(
@@ -6736,7 +6786,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SUGAR_CANE)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
             this.registerable.register(ItemKeys.VINE, create(
@@ -6744,7 +6794,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.VINE)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOW_LICHEN, create(
@@ -6752,7 +6802,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GLOW_LICHEN)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
             this.registerable.register(ItemKeys.TALL_GRASS, create(
@@ -6760,7 +6810,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TALL_GRASS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
             this.registerable.register(ItemKeys.CACTUS, create(
@@ -6768,7 +6818,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CACTUS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CACTUS))
@@ -6779,7 +6829,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DRIED_KELP_BLOCK)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.HALF_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .with(FuelItemComponent.of(FuelTimes.DRIED_KELP_BLOCK))
                     .build()
             ));
@@ -6788,7 +6838,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FERN)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_FERN))
@@ -6799,7 +6849,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_PAD), BlockItemComponent.Pass.FLUID))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_WART, create(
@@ -6807,7 +6857,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_WART)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.COCOA_BEANS, create(
@@ -6815,7 +6865,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COCOA)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.BIG_DRIPLEAF, create(
@@ -6823,7 +6873,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIG_DRIPLEAF)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.PUMPKIN, create(
@@ -6831,7 +6881,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PUMPKIN)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.CARVED_PUMPKIN, create(
@@ -6839,7 +6889,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARVED_PUMPKIN)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(EquipmentItemComponent.of(EquippableComponent.builder(EquipmentSlot.HEAD)
                         .swappable(false)
                         .cameraOverlay(Identifier.ofVanilla("misc/pumpkinblur"))
@@ -6852,7 +6902,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MELON)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.SEA_PICKLE, create(
@@ -6860,14 +6910,14 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SEA_PICKLE)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHEAT, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WHEAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.DANDELION, create(
@@ -6875,7 +6925,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DANDELION)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.SATURATION), 140)
                     ))
@@ -6889,7 +6939,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OPEN_EYEBLOSSOM)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.BLINDNESS), 140)
                     ))
@@ -6903,7 +6953,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CLOSED_EYEBLOSSOM)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.NAUSEA), 140)
                     ))
@@ -6917,7 +6967,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POPPY)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.NIGHT_VISION), 100)
                     ))
@@ -6931,7 +6981,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_ORCHID)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.SATURATION), 140)
                     ))
@@ -6945,7 +6995,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ALLIUM)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 80)
                     ))
@@ -6959,7 +7009,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AZURE_BLUET)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.BLINDNESS), 160)
                     ))
@@ -6973,7 +7023,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_TULIP)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
                     ))
@@ -6987,7 +7037,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_TULIP)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
                     ))
@@ -7001,7 +7051,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_TULIP)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
                     ))
@@ -7015,7 +7065,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_TULIP)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
                     ))
@@ -7029,7 +7079,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXEYE_DAISY)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 160)
                     ))
@@ -7043,7 +7093,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CORNFLOWER)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.JUMP_BOOST), 120)
                     ))
@@ -7057,7 +7107,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_OF_THE_VALLEY)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 240)
                     ))
@@ -7071,7 +7121,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WITHER_ROSE)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.WITHER), 160)
                     ))
@@ -7085,7 +7135,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AZALEA)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
@@ -7097,7 +7147,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SUNFLOWER)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.LILAC, create(
@@ -7105,7 +7155,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILAC)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.ROSE_BUSH, create(
@@ -7113,7 +7163,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ROSE_BUSH)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.PEONY, create(
@@ -7121,7 +7171,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PEONY)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.LARGE_FERN, create(
@@ -7129,7 +7179,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LARGE_FERN)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPORE_BLOSSOM, create(
@@ -7137,7 +7187,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPORE_BLOSSOM)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_MUSHROOM, create(
@@ -7145,7 +7195,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_MUSHROOM)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_BROWN_MUSHROOM))
@@ -7156,7 +7206,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_MUSHROOM)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_RED_MUSHROOM))
@@ -7167,7 +7217,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_FUNGUS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CRIMSON_FUNGUS))
@@ -7178,7 +7228,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_FUNGUS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_WARPED_FUNGUS))
@@ -7189,7 +7239,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_ROOTS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CRIMSON_ROOTS))
@@ -7200,7 +7250,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_ROOTS)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_WARPED_ROOTS))
@@ -7211,7 +7261,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSS_BLOCK)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.PALE_MOSS_BLOCK, create(
@@ -7219,7 +7269,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_MOSS_BLOCK)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUSHROOM_STEM, create(
@@ -7227,7 +7277,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUSHROOM_STEM)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHROOMLIGHT, create(
@@ -7235,7 +7285,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHROOMLIGHT)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.BIG_CHANCE_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_WART_BLOCK, create(
@@ -7243,7 +7293,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_WART_BLOCK)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_WART_BLOCK, create(
@@ -7251,7 +7301,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_WART_BLOCK)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
             this.registerable.register(ItemKeys.HAY_BLOCK, create(
@@ -7259,7 +7309,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HAY_BLOCK)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
             this.registerable.register(ItemKeys.FLOWERING_AZALEA, create(
@@ -7267,7 +7317,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FLOWERING_AZALEA)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
@@ -7279,7 +7329,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TORCHFLOWER)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .with(SuspiciousEffectIngredientItemComponent.of(
                         new SuspiciousStewEffectsComponent.StewEffect(this.statusEffects.getOrThrow(StatusEffectKeys.NIGHT_VISION), 100)
                     ))
@@ -7293,7 +7343,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PITCHER_PLANT)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_MUSHROOM_BLOCK, create(
@@ -7301,7 +7351,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_MUSHROOM_BLOCK)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_MUSHROOM_BLOCK, create(
@@ -7309,7 +7359,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_MUSHROOM_BLOCK)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.ALMOST_GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
             this.registerable.register(ItemKeys.CAKE, create(
@@ -7317,7 +7367,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAKE)))
-                    .with(CompostableItemComponent.of(ComposterBlockUtil.GUARANTEED_TO_COMPOST))
+                    .with(CompostableItemComponent.of(CompostChances.GUARANTEED))
                     .build()
             ));
         }
@@ -7333,9 +7383,13 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.ofPreserved(432))
                     .with(GliderItemComponent.of(ItemPredicate.Builder.create()
-                        .subPredicate(ItemSubPredicateTypes.DAMAGE, DamagePredicate.durability(
-                            NumberRange.IntRange.atLeast(2)))
-                        .build()))
+                        .components(ComponentsPredicate.Builder.create()
+                            .partial(
+                                ComponentPredicateTypes.DAMAGE,
+                                DamagePredicate.durability(NumberRange.IntRange.atLeast(2))
+                            ).build()
+                        ).build()
+                    ))
                     .with(EquipmentItemComponent.of(EquippableComponent.builder(EquipmentSlot.CHEST)
                         .swappable(true)
                         .equipSound(this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_ELYTRA))
@@ -7354,12 +7408,25 @@ public class ItemUtil {
                     .with(UseableItemComponent.builder()
                         .useIndefinitely()
                         .animation(UseAction.BLOCK)
-                        .build())
+                        .build()
+                    )
                     .with(DamageableItemComponent.of(336))
+                    .with(AttackBlockingItemComponent.of(new BlocksAttacksComponent(
+                        0.25f,
+                        1.0f,
+                        List.of(
+                            new BlocksAttacksComponent.DamageReduction(90.0f, Optional.empty(), 0.0f, 1.0f)
+                        ),
+                        new BlocksAttacksComponent.ItemDamage(3.0f, 1.0f, 1.0f),
+                        Optional.of(DamageTypeTags.BYPASSES_SHIELD),
+                        Optional.of(this.soundEvents.getOrThrow(SoundEventKeys.SHIELD_BLOCK)),
+                        Optional.of(this.soundEvents.getOrThrow(SoundEventKeys.SHIELD_BREAK))
+                    )))
                     .with(EquipmentItemComponent.of(EquippableComponent.builder(EquipmentSlot.OFFHAND)
                         .equipSound(this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC))
                         .swappable(false)
-                        .build()))
+                        .build()
+                    ))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(BannerPatternHolderItemComponent.of())
@@ -7370,9 +7437,9 @@ public class ItemUtil {
         private void bootstrapArmor() {
             this.registerable.register(ItemKeys.LEATHER_HELMET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LEATHER_HELMET).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.LEATHER, EquipmentType.HELMET),
+                AttributeModifiers.armor(ArmorMaterials.LEATHER, EquipmentType.HELMET),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.LEATHER, EquipmentType.HELMET))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.LEATHER, EquipmentType.HELMET))
                     .with(EnchantableItemComponent.of(ArmorMaterials.LEATHER))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7381,9 +7448,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.LEATHER_CHESTPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LEATHER_CHESTPLATE).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.LEATHER, EquipmentType.CHESTPLATE),
+                AttributeModifiers.armor(ArmorMaterials.LEATHER, EquipmentType.CHESTPLATE),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.LEATHER, EquipmentType.CHESTPLATE))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.LEATHER, EquipmentType.CHESTPLATE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.LEATHER))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7392,9 +7459,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.LEATHER_LEGGINGS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LEATHER_LEGGINGS).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.LEATHER, EquipmentType.LEGGINGS),
+                AttributeModifiers.armor(ArmorMaterials.LEATHER, EquipmentType.LEGGINGS),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.LEATHER, EquipmentType.LEGGINGS))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.LEATHER, EquipmentType.LEGGINGS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.LEATHER))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7403,9 +7470,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.LEATHER_BOOTS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LEATHER_BOOTS).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.LEATHER, EquipmentType.BOOTS),
+                AttributeModifiers.armor(ArmorMaterials.LEATHER, EquipmentType.BOOTS),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.LEATHER, EquipmentType.BOOTS))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.LEATHER, EquipmentType.BOOTS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.LEATHER))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7416,9 +7483,9 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHAINMAIL_HELMET)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.CHAIN, EquipmentType.HELMET),
+                AttributeModifiers.armor(ArmorMaterials.CHAIN, EquipmentType.HELMET),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.CHAIN, EquipmentType.HELMET))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.CHAIN, EquipmentType.HELMET))
                     .with(EnchantableItemComponent.of(ArmorMaterials.CHAIN))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7428,9 +7495,9 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHAINMAIL_CHESTPLATE)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.CHAIN, EquipmentType.CHESTPLATE),
+                AttributeModifiers.armor(ArmorMaterials.CHAIN, EquipmentType.CHESTPLATE),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.CHAIN, EquipmentType.CHESTPLATE))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.CHAIN, EquipmentType.CHESTPLATE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.CHAIN))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7440,9 +7507,9 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHAINMAIL_LEGGINGS)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.CHAIN, EquipmentType.LEGGINGS),
+                AttributeModifiers.armor(ArmorMaterials.CHAIN, EquipmentType.LEGGINGS),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.CHAIN, EquipmentType.LEGGINGS))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.CHAIN, EquipmentType.LEGGINGS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.CHAIN))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7452,9 +7519,9 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHAINMAIL_BOOTS)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.CHAIN, EquipmentType.BOOTS),
+                AttributeModifiers.armor(ArmorMaterials.CHAIN, EquipmentType.BOOTS),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.CHAIN, EquipmentType.BOOTS))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.CHAIN, EquipmentType.BOOTS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.CHAIN))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7462,9 +7529,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.IRON_HELMET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.IRON_HELMET).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.IRON, EquipmentType.HELMET),
+                AttributeModifiers.armor(ArmorMaterials.IRON, EquipmentType.HELMET),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.IRON, EquipmentType.HELMET))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.IRON, EquipmentType.HELMET))
                     .with(EnchantableItemComponent.of(ArmorMaterials.IRON))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_IRON_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7472,9 +7539,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.IRON_CHESTPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.IRON_CHESTPLATE).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.IRON, EquipmentType.CHESTPLATE),
+                AttributeModifiers.armor(ArmorMaterials.IRON, EquipmentType.CHESTPLATE),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.IRON, EquipmentType.CHESTPLATE))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.IRON, EquipmentType.CHESTPLATE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.IRON))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_IRON_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7482,9 +7549,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.IRON_LEGGINGS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.IRON_LEGGINGS).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.IRON, EquipmentType.LEGGINGS),
+                AttributeModifiers.armor(ArmorMaterials.IRON, EquipmentType.LEGGINGS),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.IRON, EquipmentType.LEGGINGS))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.IRON, EquipmentType.LEGGINGS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.IRON))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_IRON_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7492,9 +7559,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.IRON_BOOTS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.IRON_BOOTS).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.IRON, EquipmentType.BOOTS),
+                AttributeModifiers.armor(ArmorMaterials.IRON, EquipmentType.BOOTS),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.IRON, EquipmentType.BOOTS))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.IRON, EquipmentType.BOOTS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.IRON))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_IRON_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7502,9 +7569,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.DIAMOND_HELMET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DIAMOND_HELMET).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.DIAMOND, EquipmentType.HELMET),
+                AttributeModifiers.armor(ArmorMaterials.DIAMOND, EquipmentType.HELMET),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.DIAMOND, EquipmentType.HELMET))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.DIAMOND, EquipmentType.HELMET))
                     .with(EnchantableItemComponent.of(ArmorMaterials.DIAMOND))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7512,9 +7579,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.DIAMOND_CHESTPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DIAMOND_CHESTPLATE).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.DIAMOND, EquipmentType.CHESTPLATE),
+                AttributeModifiers.armor(ArmorMaterials.DIAMOND, EquipmentType.CHESTPLATE),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.DIAMOND, EquipmentType.CHESTPLATE))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.DIAMOND, EquipmentType.CHESTPLATE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.DIAMOND))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7522,9 +7589,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.DIAMOND_LEGGINGS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DIAMOND_LEGGINGS).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.DIAMOND, EquipmentType.LEGGINGS),
+                AttributeModifiers.armor(ArmorMaterials.DIAMOND, EquipmentType.LEGGINGS),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.DIAMOND, EquipmentType.LEGGINGS))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.DIAMOND, EquipmentType.LEGGINGS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.DIAMOND))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7532,9 +7599,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.DIAMOND_BOOTS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DIAMOND_BOOTS).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.DIAMOND, EquipmentType.BOOTS),
+                AttributeModifiers.armor(ArmorMaterials.DIAMOND, EquipmentType.BOOTS),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.DIAMOND, EquipmentType.BOOTS))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.DIAMOND, EquipmentType.BOOTS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.DIAMOND))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7542,9 +7609,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.GOLDEN_HELMET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GOLDEN_HELMET).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.GOLD, EquipmentType.HELMET),
+                AttributeModifiers.armor(ArmorMaterials.GOLD, EquipmentType.HELMET),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.GOLD, EquipmentType.HELMET))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.GOLD, EquipmentType.HELMET))
                     .with(EnchantableItemComponent.of(ArmorMaterials.GOLD))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7552,9 +7619,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.GOLDEN_CHESTPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GOLDEN_CHESTPLATE).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.GOLD, EquipmentType.CHESTPLATE),
+                AttributeModifiers.armor(ArmorMaterials.GOLD, EquipmentType.CHESTPLATE),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.GOLD, EquipmentType.CHESTPLATE))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.GOLD, EquipmentType.CHESTPLATE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.GOLD))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7562,9 +7629,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.GOLDEN_LEGGINGS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GOLDEN_LEGGINGS).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.GOLD, EquipmentType.LEGGINGS),
+                AttributeModifiers.armor(ArmorMaterials.GOLD, EquipmentType.LEGGINGS),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.GOLD, EquipmentType.LEGGINGS))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.GOLD, EquipmentType.LEGGINGS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.GOLD))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7572,9 +7639,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.GOLDEN_BOOTS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GOLDEN_BOOTS).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.GOLD, EquipmentType.BOOTS),
+                AttributeModifiers.armor(ArmorMaterials.GOLD, EquipmentType.BOOTS),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.GOLD, EquipmentType.BOOTS))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.GOLD, EquipmentType.BOOTS))
                     .with(EnchantableItemComponent.of(ArmorMaterials.GOLD))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7582,9 +7649,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.NETHERITE_HELMET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.NETHERITE_HELMET).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.NETHERITE, EquipmentType.HELMET),
+                AttributeModifiers.armor(ArmorMaterials.NETHERITE, EquipmentType.HELMET),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.NETHERITE, EquipmentType.HELMET))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.NETHERITE, EquipmentType.HELMET))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.NETHERITE))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)))
@@ -7593,9 +7660,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.NETHERITE_CHESTPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.NETHERITE_CHESTPLATE).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.NETHERITE, EquipmentType.CHESTPLATE),
+                AttributeModifiers.armor(ArmorMaterials.NETHERITE, EquipmentType.CHESTPLATE),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.NETHERITE, EquipmentType.CHESTPLATE))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.NETHERITE, EquipmentType.CHESTPLATE))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.NETHERITE))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)))
@@ -7604,9 +7671,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.NETHERITE_LEGGINGS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.NETHERITE_LEGGINGS).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.NETHERITE, EquipmentType.LEGGINGS),
+                AttributeModifiers.armor(ArmorMaterials.NETHERITE, EquipmentType.LEGGINGS),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.NETHERITE, EquipmentType.LEGGINGS))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.NETHERITE, EquipmentType.LEGGINGS))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.NETHERITE))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)))
@@ -7615,9 +7682,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.NETHERITE_BOOTS, create(
                 ItemDisplay.Builder.forItem(ItemKeys.NETHERITE_BOOTS).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.NETHERITE, EquipmentType.BOOTS),
+                AttributeModifiers.armor(ArmorMaterials.NETHERITE, EquipmentType.BOOTS),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.NETHERITE, EquipmentType.BOOTS))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.NETHERITE, EquipmentType.BOOTS))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .with(EnchantableItemComponent.of(ArmorMaterials.NETHERITE))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)))
@@ -7626,9 +7693,9 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.TURTLE_HELMET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TURTLE_HELMET).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.TURTLE_SCUTE, EquipmentType.HELMET),
+                AttributeModifiers.armor(ArmorMaterials.TURTLE_SCUTE, EquipmentType.HELMET),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.TURTLE_SCUTE, EquipmentType.HELMET))
+                    .with(EquipmentItemComponent.forArmor(ArmorMaterials.TURTLE_SCUTE, EquipmentType.HELMET))
                     .with(EnchantableItemComponent.of(ArmorMaterials.TURTLE_SCUTE))
                     .with(RepairableItemComponent.of(this.items.getOrThrow(ItematicItemTags.REPAIRS_TURTLE_ARMOR)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -7636,42 +7703,61 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.LEATHER_HORSE_ARMOR, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LEATHER_HORSE_ARMOR).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.LEATHER, EquipmentType.BODY),
+                AttributeModifiers.armor(ArmorMaterials.LEATHER, EquipmentType.BODY),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.LEATHER, EquipmentType.BODY, AnimalArmorItem.Type.EQUESTRIAN))
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHorseArmor(ArmorMaterials.LEATHER, this.soundEvents, this.entityTypes))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .with(DyeableItemComponent.of())
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_HORSE_ARMOR, create(
                 ItemDisplay.Builder.forItem(ItemKeys.IRON_HORSE_ARMOR).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.IRON, EquipmentType.BODY),
+                AttributeModifiers.armor(ArmorMaterials.IRON, EquipmentType.BODY),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.IRON, EquipmentType.BODY, AnimalArmorItem.Type.EQUESTRIAN))
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHorseArmor(ArmorMaterials.IRON, this.soundEvents, this.entityTypes))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLDEN_HORSE_ARMOR, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GOLDEN_HORSE_ARMOR).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.GOLD, EquipmentType.BODY),
+                AttributeModifiers.armor(ArmorMaterials.GOLD, EquipmentType.BODY),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.GOLD, EquipmentType.BODY, AnimalArmorItem.Type.EQUESTRIAN))
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHorseArmor(ArmorMaterials.GOLD, this.soundEvents, this.entityTypes))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_HORSE_ARMOR, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DIAMOND_HORSE_ARMOR).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.DIAMOND, EquipmentType.BODY),
+                AttributeModifiers.armor(ArmorMaterials.DIAMOND, EquipmentType.BODY),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.from(ArmorMaterials.DIAMOND, EquipmentType.BODY, AnimalArmorItem.Type.EQUESTRIAN))
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHorseArmor(ArmorMaterials.DIAMOND, this.soundEvents, this.entityTypes))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOLF_ARMOR, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WOLF_ARMOR).build(),
-                AttributeModifiersComponentUtil.armor(ArmorMaterials.ARMADILLO_SCUTE, EquipmentType.BODY),
+                AttributeModifiers.armor(ArmorMaterials.ARMADILLO_SCUTE, EquipmentType.BODY),
                 ItemComponentSet.builder()
-                    .with(EquipmentItemComponent.fromDamageable(ArmorMaterials.ARMADILLO_SCUTE, EquipmentType.BODY, AnimalArmorItem.Type.CANINE))
+                    .with(StackableItemComponent.of(1))
+                    .with(DamageableItemComponent.of(
+                        EquipmentType.BODY.getMaxDamage(ArmorMaterials.ARMADILLO_SCUTE.durability()),
+                        this.soundEvents.getOrThrow(SoundEventKeys.WOLF_ARMOR_BREAK)
+                    ))
+                    .with(RepairableItemComponent.of(
+                        this.items.getOrThrow(ArmorMaterials.ARMADILLO_SCUTE.repairIngredient())
+                    ))
+                    .with(EquipmentItemComponent.of(EquippableComponent.builder(EquipmentSlot.BODY)
+                        .equipSound(ArmorMaterials.ARMADILLO_SCUTE.equipSound())
+                        .model(ArmorMaterials.ARMADILLO_SCUTE.assetId())
+                        .allowedEntities(RegistryEntryList.of(
+                            this.entityTypes.getOrThrow(EntityTypeKeys.WOLF)
+                        ))
+                        .build()
+                    ))
                     .with(DyeableItemComponent.of(0x000000))
                     .build()
             ));
@@ -7684,7 +7770,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EquipmentItemComponent.skull(
+                    .with(EquipmentItemComponent.forSkull(
                         this.blocks.getOrThrow(BlockKeys.SKELETON_SKULL),
                         this.blocks.getOrThrow(BlockKeys.SKELETON_WALL_SKULL),
                         this.dispenseBehaviors
@@ -7697,7 +7783,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EquipmentItemComponent.skull(
+                    .with(EquipmentItemComponent.forSkull(
                         this.blocks.getOrThrow(BlockKeys.WITHER_SKELETON_SKULL),
                         this.blocks.getOrThrow(BlockKeys.WITHER_SKELETON_WALL_SKULL),
                         this.dispenseBehaviors
@@ -7710,7 +7796,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EquipmentItemComponent.skull(
+                    .with(EquipmentItemComponent.forSkull(
                         this.blocks.getOrThrow(BlockKeys.PLAYER_HEAD),
                         this.blocks.getOrThrow(BlockKeys.PLAYER_WALL_HEAD),
                         this.dispenseBehaviors
@@ -7723,7 +7809,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EquipmentItemComponent.skull(
+                    .with(EquipmentItemComponent.forSkull(
                         this.blocks.getOrThrow(BlockKeys.ZOMBIE_HEAD),
                         this.blocks.getOrThrow(BlockKeys.ZOMBIE_WALL_HEAD),
                         this.dispenseBehaviors
@@ -7736,7 +7822,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EquipmentItemComponent.skull(
+                    .with(EquipmentItemComponent.forSkull(
                         this.blocks.getOrThrow(BlockKeys.CREEPER_HEAD),
                         this.blocks.getOrThrow(BlockKeys.CREEPER_WALL_HEAD),
                         this.dispenseBehaviors
@@ -7749,7 +7835,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EquipmentItemComponent.skull(
+                    .with(EquipmentItemComponent.forSkull(
                         this.blocks.getOrThrow(BlockKeys.DRAGON_HEAD),
                         this.blocks.getOrThrow(BlockKeys.DRAGON_WALL_HEAD),
                         this.dispenseBehaviors
@@ -7762,7 +7848,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EquipmentItemComponent.skull(
+                    .with(EquipmentItemComponent.forSkull(
                         this.blocks.getOrThrow(BlockKeys.PIGLIN_HEAD),
                         this.blocks.getOrThrow(BlockKeys.PIGLIN_WALL_HEAD),
                         this.dispenseBehaviors
@@ -9470,6 +9556,33 @@ public class ItemUtil {
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
+            this.registerable.register(ItemKeys.SHORT_DRY_GRASS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.SHORT_DRY_GRASS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHORT_DRY_GRASS)))
+                    .with(FuelItemComponent.of(FuelTimes.PLANT))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.TALL_DRY_GRASS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.TALL_DRY_GRASS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TALL_DRY_GRASS)))
+                    .with(FuelItemComponent.of(FuelTimes.PLANT))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LEAF_LITTER, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.LEAF_LITTER).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LEAF_LITTER)))
+                    .with(FuelItemComponent.of(FuelTimes.PLANT))
+                    .with(CompostableItemComponent.of(CompostChances.SMALL))
+                    .build()
+            ));
         }
 
         private void bootstrapProjectiles() {
@@ -9495,7 +9608,55 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
                     .with(ThrowableItemComponent.of(1.5f))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EGG)))
+                    .with(ProjectileItemComponent.of(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.EGG),
+                        ComponentChanges.builder()
+                            .add(
+                                DataComponentTypes.CHICKEN_VARIANT,
+                                new LazyRegistryEntryReference<>(
+                                    this.chickenVariants.getOrThrow(ChickenVariants.TEMPERATE)
+                                )
+                            )
+                            .build()
+                    ))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_EGG, create(
+                ItemDisplay.Builder.forItem(ItemKeys.BLUE_EGG).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(16))
+                    .with(ThrowableItemComponent.of(1.5f))
+                    .with(ProjectileItemComponent.of(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.EGG),
+                        ComponentChanges.builder()
+                            .add(
+                                DataComponentTypes.CHICKEN_VARIANT,
+                                new LazyRegistryEntryReference<>(
+                                    this.chickenVariants.getOrThrow(ChickenVariants.COLD)
+                                )
+                            )
+                            .build()
+                    ))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_EGG, create(
+                ItemDisplay.Builder.forItem(ItemKeys.BROWN_EGG).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(16))
+                    .with(ThrowableItemComponent.of(1.5f))
+                    .with(ProjectileItemComponent.of(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.EGG),
+                        ComponentChanges.builder()
+                            .add(
+                                DataComponentTypes.CHICKEN_VARIANT,
+                                new LazyRegistryEntryReference<>(
+                                    this.chickenVariants.getOrThrow(ChickenVariants.WARM)
+                                )
+                            )
+                            .build()
+                    ))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
@@ -9606,7 +9767,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(PotionHolderItemComponent.of(1.0f))
                     .with(ThrowableItemComponent.of(0.5f, -20.0f))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.POTION)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.SPLASH_POTION)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
                     .build()
             ));
@@ -9633,7 +9794,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(PotionHolderItemComponent.of(0.25f))
                     .with(ThrowableItemComponent.of(0.5f, -20.0f))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.POTION)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.LINGERING_POTION)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
                     .build()
             ));
@@ -9911,7 +10072,7 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.DISC_FRAGMENT_5, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DISC_FRAGMENT_5)
                     .rarity(Rarity.UNCOMMON)
-                    .tooltip(ItemKeys.DISC_FRAGMENT_5)
+                    .tooltip(Tooltips.description(ItemKeys.DISC_FRAGMENT_5))
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
@@ -9988,153 +10149,191 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingUpgrade(Identifier.ofVanilla("netherite_upgrade")))
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.NETHERITE_UPGRADE)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.ITEM_UPGRADE))
                     .build()
             ));
             this.registerable.register(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SENTRY_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.DUNE_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.COAST_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.WILD_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.WARD_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.EYE_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.VEX_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.TIDE_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SNOUT_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.RIB_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SPIRE_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.WAYFINDER_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SHAPER_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.EPIC)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.SILENCE_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.RAISER_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.HOST_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.FLOW_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE, create(
                 ItemDisplay.Builder.forItem(ItemKeys.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE)
                     .rarity(Rarity.UNCOMMON)
+                    .tooltip(Tooltips.smithingTrimPattern())
                     .build(),
                 ItemComponentSet.builder()
-                    .with(SmithingTemplateItemComponent.of(this.smithingTemplates.getOrThrow(SmithingTemplates.BOLT_PATTERN)))
+                    .with(StackableItemComponent.of(64))
+                    .with(SmithingTemplateProviderItemComponent.of(SmithingTemplates.TRIM_PATTERN))
                     .build()
             ));
         }
@@ -10582,6 +10781,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
+                    .with(TrimMaterialProviderItemComponent.of(this.trimMaterials.getOrThrow(ArmorTrimMaterials.NETHERITE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERITE_SCRAP, create(
@@ -10603,6 +10803,80 @@ public class ItemUtil {
             ));
         }
 
+        private void bootstrapTrimMaterialProviders() {
+            this.registerable.register(ItemKeys.REDSTONE, create(
+                ItemDisplay.Builder.forItem(ItemKeys.REDSTONE).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REDSTONE_WIRE)))
+                    .with(TrimMaterialProviderItemComponent.of(this.trimMaterials.getOrThrow(ArmorTrimMaterials.REDSTONE)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND, create(
+                ItemDisplay.Builder.forItem(ItemKeys.DIAMOND).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(TrimMaterialProviderItemComponent.of(this.trimMaterials.getOrThrow(ArmorTrimMaterials.DIAMOND)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EMERALD, create(
+                ItemDisplay.Builder.forItem(ItemKeys.EMERALD).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(TrimMaterialProviderItemComponent.of(this.trimMaterials.getOrThrow(ArmorTrimMaterials.EMERALD)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LAPIS_LAZULI, create(
+                ItemDisplay.Builder.forItem(ItemKeys.LAPIS_LAZULI).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(TrimMaterialProviderItemComponent.of(this.trimMaterials.getOrThrow(ArmorTrimMaterials.LAPIS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.QUARTZ, create(
+                ItemDisplay.Builder.forItem(ItemKeys.QUARTZ).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(TrimMaterialProviderItemComponent.of(this.trimMaterials.getOrThrow(ArmorTrimMaterials.QUARTZ)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.AMETHYST_SHARD, create(
+                ItemDisplay.Builder.forItem(ItemKeys.AMETHYST_SHARD).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(TrimMaterialProviderItemComponent.of(this.trimMaterials.getOrThrow(ArmorTrimMaterials.AMETHYST)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_INGOT, create(
+                ItemDisplay.Builder.forItem(ItemKeys.IRON_INGOT).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(TrimMaterialProviderItemComponent.of(this.trimMaterials.getOrThrow(ArmorTrimMaterials.IRON)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COPPER_INGOT, create(
+                ItemDisplay.Builder.forItem(ItemKeys.COPPER_INGOT).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(TrimMaterialProviderItemComponent.of(this.trimMaterials.getOrThrow(ArmorTrimMaterials.COPPER)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLD_INGOT, create(
+                ItemDisplay.Builder.forItem(ItemKeys.GOLD_INGOT).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(TrimMaterialProviderItemComponent.of(this.trimMaterials.getOrThrow(ArmorTrimMaterials.GOLD)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RESIN_BRICK, create(
+                ItemDisplay.Builder.forItem(ItemKeys.RESIN_BRICK).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(TrimMaterialProviderItemComponent.of(this.trimMaterials.getOrThrow(ArmorTrimMaterials.RESIN)))
+                    .build()
+            ));
+        }
+
         private void bootstrapMiscellaneous() {
             this.registerable.register(ItemKeys.AIR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.AIR).build()
@@ -10611,8 +10885,14 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.SADDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(SaddleItemComponent.INSTANCE)
-                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SADDLE)))
+                    .with(EquipmentItemComponent.of(EquippableComponent.builder(EquipmentSlot.SADDLE)
+                        .equipSound(SoundEvents.ENTITY_HORSE_SADDLE)
+                        .model(EquipmentAssetKeys.SADDLE)
+                        .allowedEntities(this.entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_SADDLE))
+                        .equipOnInteract(true)
+                        .build()
+                    ))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TURTLE_SCUTE, create(
@@ -10627,44 +10907,8 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .build()
             ));
-            this.registerable.register(ItemKeys.DIAMOND, create(
-                ItemDisplay.Builder.forItem(ItemKeys.DIAMOND).build(),
-                ItemComponentSet.builder()
-                    .with(StackableItemComponent.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemKeys.EMERALD, create(
-                ItemDisplay.Builder.forItem(ItemKeys.EMERALD).build(),
-                ItemComponentSet.builder()
-                    .with(StackableItemComponent.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemKeys.LAPIS_LAZULI, create(
-                ItemDisplay.Builder.forItem(ItemKeys.LAPIS_LAZULI).build(),
-                ItemComponentSet.builder()
-                    .with(StackableItemComponent.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemKeys.QUARTZ, create(
-                ItemDisplay.Builder.forItem(ItemKeys.QUARTZ).build(),
-                ItemComponentSet.builder()
-                    .with(StackableItemComponent.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemKeys.AMETHYST_SHARD, create(
-                ItemDisplay.Builder.forItem(ItemKeys.AMETHYST_SHARD).build(),
-                ItemComponentSet.builder()
-                    .with(StackableItemComponent.of(64))
-                    .build()
-            ));
             this.registerable.register(ItemKeys.RAW_IRON, create(
                 ItemDisplay.Builder.forItem(ItemKeys.RAW_IRON).build(),
-                ItemComponentSet.builder()
-                    .with(StackableItemComponent.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemKeys.IRON_INGOT, create(
-                ItemDisplay.Builder.forItem(ItemKeys.IRON_INGOT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .build()
@@ -10675,20 +10919,8 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .build()
             ));
-            this.registerable.register(ItemKeys.COPPER_INGOT, create(
-                ItemDisplay.Builder.forItem(ItemKeys.COPPER_INGOT).build(),
-                ItemComponentSet.builder()
-                    .with(StackableItemComponent.of(64))
-                    .build()
-            ));
             this.registerable.register(ItemKeys.RAW_GOLD, create(
                 ItemDisplay.Builder.forItem(ItemKeys.RAW_GOLD).build(),
-                ItemComponentSet.builder()
-                    .with(StackableItemComponent.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemKeys.GOLD_INGOT, create(
-                ItemDisplay.Builder.forItem(ItemKeys.GOLD_INGOT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .build()
@@ -10747,7 +10979,6 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.COMPASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(PointableItemComponent.of(Util.createTranslationKey("item", Identifier.ofVanilla("lodestone_compass"))))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
@@ -10758,7 +10989,25 @@ public class ItemUtil {
                                     .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value()))
                         ),
                         PassingSequenceHandler.builder()
-                            .add(SetItemPointerLocationAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(ModifyItemAction.of(
+                                ItemStackTarget.TOOL,
+                                SplitItemModifier.builder(1)
+                            ))
+                            .add(SetItemPointerLocationAction.of(
+                                ItemStackTarget.RESULT,
+                                PositionTarget.INTERACTED_POSITION
+                            ))
+                            .add(ModifyItemAction.of(
+                                ItemStackTarget.RESULT,
+                                SetNameLootFunction.builder(
+                                    Text.translatable(Util.createTranslationKey("item", Identifier.ofVanilla("lodestone_compass"))),
+                                    SetNameLootFunction.Target.ITEM_NAME
+                                ),
+                                SetComponentsLootFunction.builder(
+                                    DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE,
+                                    true
+                                )
+                            ))
                             .add(PlaySoundAction.of(
                                 PositionTarget.INTERACTED_POSITION,
                                 this.soundEvents.getOrThrow(SoundEventKeys.LODESTONE_COMPASS_LOCK),
@@ -11075,16 +11324,6 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
                     .with(TextHolderItemComponent.INSTANCE)
-                    .build(),
-                ItemEventMap.builder()
-                    .add(ItemEvents.USE, ActionEntry.of(
-                        PassingSequenceHandler.builder()
-                            .add(OpenBookFromItemAction.INSTANCE)
-                            .add(IncrementStatAction.of(
-                                LootContext.EntityTarget.THIS,
-                                Stats.USED.itematic$getOrCreateStat(this.items.getOrThrow(ItemKeys.WRITTEN_BOOK))
-                            ))
-                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAP, create(
@@ -11113,12 +11352,6 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.NETHER_BRICK, create(
                 ItemDisplay.Builder.forItem(ItemKeys.NETHER_BRICK).build(),
-                ItemComponentSet.builder()
-                    .with(StackableItemComponent.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemKeys.RESIN_BRICK, create(
-                ItemDisplay.Builder.forItem(ItemKeys.RESIN_BRICK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .build()
@@ -11264,7 +11497,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(PlayableItemComponent.of(InstrumentTags.GOAT_HORNS))
+                    .with(PlayableItemComponent.of(this.instruments.getOrThrow(Instruments.PONDER_GOAT_HORN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HONEYCOMB, create(

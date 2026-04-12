@@ -14,7 +14,7 @@ import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
-import net.errorcraft.itematic.item.component.components.DamageableItemComponent;
+import net.errorcraft.itematic.item.data.InventoryTickListener;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.item.event.ItemEvents;
@@ -51,8 +51,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -65,8 +63,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Mixin(Item.class)
 public abstract class ItemExtender implements ItemAccess, FabricItem {
@@ -257,11 +255,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        boolean result = false;
+    public void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(attacker, stack);
         for (ItemComponent<?> component : this.itemComponents) {
-            result |= component.postHit(stack, target, attacker, stackExchanger);
+            component.postHit(stack, target, attacker, stackExchanger);
         }
 
         if (attacker.getWorld() instanceof ServerWorld serverWorld) {
@@ -278,7 +275,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         tryUpdateItemStack(attacker, Hand.MAIN_HAND, stack, stackExchanger);
-        return result;
     }
 
     /**
@@ -388,15 +384,13 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         info.setReturnValue(stackExchanger.result());
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        for (ItemComponent<?> component : this.itemComponents) {
-            component.inventoryTick(stack, world, entity, slot, selected);
-        }
+    @Inject(
+        method = "inventoryTick",
+        at = @At("HEAD")
+    )
+    public void callInventoryTickListeners(ItemStack stack, ServerWorld world, Entity entity, EquipmentSlot slot, CallbackInfo info) {
+        stack.streamAll(InventoryTickListener.class)
+            .forEach(inventoryTickListener -> inventoryTickListener.itematic$onInventoryTick(world, stack, entity, slot));
     }
 
     /**
@@ -438,28 +432,15 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        this.display.tooltip()
-            .ifPresent(tooltip::addAll);
-        for (ItemComponent<?> component : this.itemComponents) {
-            component.appendTooltip(stack, context, tooltip, type);
-        }
-    }
-
     @Inject(
         method = "canMine",
         at = @At("HEAD"),
         cancellable = true
     )
-    private void useDebugStickItemComponent(BlockState state, World world, BlockPos pos, PlayerEntity miner, CallbackInfoReturnable<Boolean> info) {
+    private void useDebugStickItemComponent(ItemStack stack, BlockState state, World world, BlockPos pos, LivingEntity user, CallbackInfoReturnable<Boolean> info) {
         this.itematic$getBehavior(ItemComponentTypes.DEBUG_STICK)
-            .ifPresent(c -> {
-                c.use(miner, state, world, pos);
+            .ifPresent(debugStick -> {
+                debugStick.use(user, state, world, pos, stack);
                 info.setReturnValue(false);
             });
     }
@@ -486,17 +467,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return instance.itematic$isCorrectForDrops(stack, state);
     }
 
-    @Inject(
-        method = "hasGlint",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    public void checkPointableItemComponent(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
-        if (this.itematic$hasBehavior(ItemComponentTypes.POINTABLE) && stack.contains(DataComponentTypes.LODESTONE_TRACKER)) {
-            info.setReturnValue(true);
-        }
-    }
-
     /**
      * @author ErrorCraft
      * @reason Uses the ItemComponent implementation for data-driven items.
@@ -506,18 +476,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return this.itematic$getBehavior(ItemComponentTypes.BLOCK)
             .map(BlockItemComponent::canBeNested)
             .orElse(true);
-    }
-
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
-     */
-    @Overwrite
-    public SoundEvent getBreakSound() {
-        return this.itematic$getBehavior(ItemComponentTypes.DAMAGEABLE)
-            .flatMap(DamageableItemComponent::breakSound)
-            .map(RegistryEntry::value)
-            .orElse(SoundEvents.ENTITY_ITEM_BREAK);
     }
 
     @Inject(
@@ -568,10 +526,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         cancellable = true
     )
     public void getName(ItemStack stack, CallbackInfoReturnable<Text> info) {
-        this.itematic$getBehavior(ItemComponentTypes.POINTABLE)
-            .flatMap(c -> c.lodestoneTranslationKey(stack))
-            .or(() -> this.itematic$getBehavior(ItemComponentTypes.POTION_HOLDER)
-                .map(c -> c.translationKey(stack, this.display.translationKey())))
+        this.itematic$getBehavior(ItemComponentTypes.POTION_HOLDER)
+            .map(c -> c.translationKey(stack, this.display.translationKey()))
             .or(() -> this.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
                 .flatMap(c -> c.translationKey(stack, this.display.translationKey())))
             .map(Text::translatable)
@@ -677,6 +633,14 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Override
     public boolean itematic$hasEventListener(ItemEvent event) {
         return this.events.hasListener(event);
+    }
+
+    @Override
+    public void itematic$addTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Text> builder, TooltipType type) {
+        this.display.tooltip().ifPresent(tooltip -> tooltip.forEach(builder));
+        for (ItemComponent<?> component : this.itemComponents) {
+            component.appendTooltip(stack, context, builder, type);
+        }
     }
 
     @Override
