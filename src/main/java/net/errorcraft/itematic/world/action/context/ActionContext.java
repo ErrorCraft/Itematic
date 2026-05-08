@@ -123,7 +123,6 @@ public class ActionContext {
         return source;
     }
 
-
     @Nullable
     public ItemPlacementContext blockPlaceContext(PositionTarget position, BlockPicker<?> block) {
         Vec3d pos = this.get(position.parameter());

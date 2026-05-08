@@ -22,9 +22,11 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -36,16 +38,23 @@ public class BlockPlacer extends Placer {
     private final ItemPlacementContext context;
     private final boolean operatorOnly;
     private final boolean decrementStack;
+    @Nullable
+    private final RegistryEntry<SoundEvent> placeSound;
 
-    private BlockPlacer(ItemStack stack, ItemStackExchanger stackExchanger, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, BlockPicker<?> block, ItemPlacementContext context, boolean operatorOnly, boolean decrementStack) {
+    private BlockPlacer(ItemStack stack, ItemStackExchanger stackExchanger, World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, BlockPicker<?> block, ItemPlacementContext context, boolean operatorOnly, boolean decrementStack, @Nullable RegistryEntry<SoundEvent> placeSound) {
         super(stack, stackExchanger, world, blockPos, blockState, player);
         this.block = block;
         this.context = context;
         this.operatorOnly = operatorOnly;
         this.decrementStack = decrementStack;
+        this.placeSound = placeSound;
     }
 
     public static BlockPlacer action(ActionContext context, PositionTarget position, BlockPicker<?> block, boolean decrementCount) {
+        return action(context, position, block, decrementCount, null);
+    }
+
+    public static BlockPlacer action(ActionContext context, PositionTarget position, BlockPicker<?> block, boolean decrementCount, RegistryEntry<SoundEvent> placeSound) {
         ItemPlacementContext placeContext = context.blockPlaceContext(position, block);
         if (placeContext == null) {
             return null;
@@ -66,7 +75,8 @@ public class BlockPlacer extends Placer {
             block,
             placeContext,
             false,
-            decrementCount
+            decrementCount,
+            null
         );
     }
 
@@ -81,7 +91,19 @@ public class BlockPlacer extends Placer {
     public static BlockPlacer of(ItemPlacementContext context, ItemStackExchanger stackExchanger, BlockPicker<?> block, boolean operatorOnly, boolean decrementStack) {
         World world = context.getWorld();
         BlockPos blockPos = context.getBlockPos();
-        return new BlockPlacer(context.getStack(), stackExchanger, world, blockPos, world.getBlockState(blockPos), context.getPlayer(), block, context, operatorOnly, decrementStack);
+        return new BlockPlacer(
+            context.getStack(),
+            stackExchanger,
+            world,
+            blockPos,
+            world.getBlockState(blockPos),
+            context.getPlayer(),
+            block,
+            context,
+            operatorOnly,
+            decrementStack,
+            null
+        );
     }
 
     @Override
@@ -126,11 +148,19 @@ public class BlockPlacer extends Placer {
         }
 
         BlockSoundGroup blockSoundGroup = blockState.getSoundGroup();
-        this.world.playSound(this.player, this.blockPos, blockSoundGroup.getPlaceSound(), SoundCategory.BLOCKS, (blockSoundGroup.getVolume() + 1.0F) / 2.0F, blockSoundGroup.getPitch() * 0.8F);
+        this.world.playSound(this.player, this.blockPos, this.placeSound(blockSoundGroup), SoundCategory.BLOCKS, (blockSoundGroup.getVolume() + 1.0F) / 2.0F, blockSoundGroup.getPitch() * 0.8F);
         this.world.emitGameEvent(GameEvent.BLOCK_PLACE, this.blockPos, GameEvent.Emitter.of(this.player, blockState));
         if (this.decrementStack) {
             this.tryDecrementStack();
         }
+    }
+
+    private SoundEvent placeSound(BlockSoundGroup group) {
+        if (this.placeSound != null) {
+            return this.placeSound.value();
+        }
+
+        return group.getPlaceSound();
     }
 
     @Nullable

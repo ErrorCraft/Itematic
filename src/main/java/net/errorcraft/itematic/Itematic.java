@@ -1,6 +1,7 @@
 package net.errorcraft.itematic;
 
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.item.bucket.modification.WorldModificationTypes;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleTypes;
@@ -47,5 +48,6 @@ public class Itematic implements ModInitializer {
         ItematicRecipeDisplaySerializers.init();
         ItematicSlotDisplaySerializers.init();
         ItematicEntitySubPredicateTypes.init();
+        WorldModificationTypes.init();
     }
 }
