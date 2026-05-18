@@ -108,11 +108,11 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.platform")
     public void usingSkeletonSkullOnGroundPlacesSkeletonSkull(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack skeletonSkull = world.itematic$createStack(ItemKeys.SKELETON_SKULL);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, skeletonSkull);
+        player.setPitch(90.0f);
+        player.setStackInHand(Hand.MAIN_HAND, world.itematic$createStack(ItemKeys.SKELETON_SKULL));
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, skeletonSkull, GROUND_POSITION, Direction.UP);
+        TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
         context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
             .is(Blocks.SKELETON_SKULL));
     }
@@ -132,11 +132,11 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.platform.ceiling")
     public void usingOakHangingSignOnCeilingPlacesOakHangingSign(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack oakHangingSign = world.itematic$createStack(ItemKeys.OAK_HANGING_SIGN);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, oakHangingSign);
+        player.setPitch(-90.0f);
+        player.setStackInHand(Hand.MAIN_HAND, world.itematic$createStack(ItemKeys.OAK_HANGING_SIGN));
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, oakHangingSign, ABOVE_PLACED_BLOCK_POSITION, Direction.DOWN);
+        TestUtil.useBlock(context, ABOVE_PLACED_BLOCK_POSITION, player, Direction.DOWN);
         context.addFinalTask(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
             .is(Blocks.OAK_HANGING_SIGN));
     }

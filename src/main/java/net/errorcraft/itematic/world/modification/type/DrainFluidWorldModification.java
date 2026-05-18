@@ -1,22 +1,22 @@
-package net.errorcraft.itematic.item.bucket.modification.type;
+package net.errorcraft.itematic.world.modification.type;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.item.bucket.modification.WorldModification;
-import net.errorcraft.itematic.item.bucket.modification.WorldModificationType;
-import net.errorcraft.itematic.item.bucket.modification.WorldModificationTypes;
 import net.errorcraft.itematic.item.placement.fluid.FluidDrainer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.modification.WorldModification;
+import net.errorcraft.itematic.world.modification.WorldModificationType;
+import net.errorcraft.itematic.world.modification.WorldModificationTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.RaycastContext;
 
 import java.util.Optional;
 
-public class DrainFluid implements WorldModification {
-    public static final DrainFluid INSTANCE = new DrainFluid();
-    public static final MapCodec<DrainFluid> CODEC = MapCodec.unit(INSTANCE);
+public class DrainFluidWorldModification implements WorldModification {
+    public static final DrainFluidWorldModification INSTANCE = new DrainFluidWorldModification();
+    public static final MapCodec<DrainFluidWorldModification> CODEC = MapCodec.unit(INSTANCE);
 
-    private DrainFluid() {}
+    private DrainFluidWorldModification() {}
 
     @Override
     public WorldModificationType<?> type() {

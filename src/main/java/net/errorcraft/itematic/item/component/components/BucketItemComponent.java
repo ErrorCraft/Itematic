@@ -5,10 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackUtil;
-import net.errorcraft.itematic.item.bucket.modification.WorldModification;
-import net.errorcraft.itematic.item.bucket.modification.type.DrainFluid;
-import net.errorcraft.itematic.item.bucket.modification.type.PlaceBlock;
-import net.errorcraft.itematic.item.bucket.modification.type.PlaceFluid;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -21,6 +17,10 @@ import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.modification.WorldModification;
+import net.errorcraft.itematic.world.modification.type.DrainFluidWorldModification;
+import net.errorcraft.itematic.world.modification.type.PlaceBlockWorldModification;
+import net.errorcraft.itematic.world.modification.type.PlaceFluidWorldModification;
 import net.minecraft.block.Block;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
@@ -54,7 +54,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
         return new ItemComponent<?>[] {
             StackableItemComponent.of(16),
             new BucketItemComponent(
-                DrainFluid.INSTANCE,
+                DrainFluidWorldModification.INSTANCE,
                 Optional.empty()
             ),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
@@ -65,7 +65,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
             new BucketItemComponent(
-                new PlaceFluid(fluid, emptyingSound, items.getOrThrow(ItemKeys.BUCKET)),
+                new PlaceFluidWorldModification(fluid, emptyingSound, items.getOrThrow(ItemKeys.BUCKET)),
                 Optional.empty()
             ),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
@@ -76,7 +76,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
         return new ItemComponent[] {
             StackableItemComponent.of(1),
             new BucketItemComponent(
-                new PlaceFluid(fluid, emptyingSound, items.getOrThrow(ItemKeys.BUCKET)),
+                new PlaceFluidWorldModification(fluid, emptyingSound, items.getOrThrow(ItemKeys.BUCKET)),
                 Optional.of(entity)
             ),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
@@ -87,7 +87,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
         return new ItemComponent[] {
             StackableItemComponent.of(1),
             new BucketItemComponent(
-                new PlaceBlock(new SimpleBlockPicker(block), emptyingSound, items.getOrThrow(ItemKeys.BUCKET)),
+                new PlaceBlockWorldModification(new SimpleBlockPicker(block), emptyingSound, items.getOrThrow(ItemKeys.BUCKET)),
                 Optional.empty()
             ),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))

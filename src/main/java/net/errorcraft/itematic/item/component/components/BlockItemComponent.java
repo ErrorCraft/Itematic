@@ -6,24 +6,30 @@ import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.placement.BlockPlacer;
+import net.errorcraft.itematic.item.placement.block.BlockPlacer;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.item.placement.block.picker.pickers.AttachedToSideBlockPicker;
 import net.errorcraft.itematic.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
 import net.errorcraft.itematic.serialization.SetCodec;
+import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
@@ -115,9 +121,41 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
         return !this.passes.contains(pass);
     }
 
+    public boolean place(ActionContext context, PositionTarget position, boolean decrementCount) {
+        BlockPlacer placer = BlockPlacer.of(
+            context,
+            position,
+            this.block,
+            this.operatorOnly,
+            null
+        );
+        if (!placer.place()) {
+            return false;
+        }
+
+        if (decrementCount) {
+            context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
+                .decrementUnlessCreative(
+                    1,
+                    context.get(LootContextParameters.THIS_ENTITY, LivingEntity.class)
+                );
+        }
+
+        return true;
+    }
+
     private ItemResult place(ItemUsageContext context, ItemStackExchanger stackExchanger) {
-        return BlockPlacer.of(context, stackExchanger, this.block, this.operatorOnly, true)
-            .place();
+        if (!(context.getWorld() instanceof ServerWorld world)) {
+            return ItemResult.SUCCEED;
+        }
+
+        ActionContext actionContext = new ItemPlacementContext(context)
+            .itematic$actionContext(world, stackExchanger);
+        if (this.place(actionContext, PositionTarget.INTERACTED_POSITION, true)) {
+            return ItemResult.SUCCEED;
+        }
+
+        return ItemResult.PASS;
     }
 
     public enum Pass implements StringIdentifiable {

@@ -1,7 +1,6 @@
 package net.errorcraft.itematic;
 
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.item.bucket.modification.WorldModificationTypes;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleTypes;
@@ -22,6 +21,7 @@ import net.errorcraft.itematic.util.context.ItematicContextTypes;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
+import net.errorcraft.itematic.world.modification.WorldModificationTypes;
 import net.fabricmc.api.ModInitializer;
 
 public class Itematic implements ModInitializer {

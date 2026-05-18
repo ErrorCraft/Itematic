@@ -1,14 +1,14 @@
-package net.errorcraft.itematic.item.bucket.modification.type;
+package net.errorcraft.itematic.world.modification.type;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.bucket.modification.WorldModification;
-import net.errorcraft.itematic.item.bucket.modification.WorldModificationType;
-import net.errorcraft.itematic.item.bucket.modification.WorldModificationTypes;
-import net.errorcraft.itematic.item.placement.BlockPlacer;
+import net.errorcraft.itematic.item.placement.block.BlockPlacer;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.modification.WorldModification;
+import net.errorcraft.itematic.world.modification.WorldModificationType;
+import net.errorcraft.itematic.world.modification.WorldModificationTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKeys;
@@ -19,12 +19,12 @@ import net.minecraft.world.RaycastContext;
 
 import java.util.Optional;
 
-public record PlaceBlock(BlockPicker<?> block, RegistryEntry<SoundEvent> placeSound, RegistryEntry<Item> transformsInto) implements WorldModification {
-    public static final MapCodec<PlaceBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        BlockPicker.CODEC.fieldOf("block").forGetter(PlaceBlock::block),
-        SoundEvent.ENTRY_CODEC.fieldOf("place_sound").forGetter(PlaceBlock::placeSound),
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("transforms_into").forGetter(PlaceBlock::transformsInto)
-    ).apply(instance, PlaceBlock::new));
+public record PlaceBlockWorldModification(BlockPicker<?> block, RegistryEntry<SoundEvent> placeSound, RegistryEntry<Item> transformsInto) implements WorldModification {
+    public static final MapCodec<PlaceBlockWorldModification> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        BlockPicker.CODEC.fieldOf("block").forGetter(PlaceBlockWorldModification::block),
+        SoundEvent.ENTRY_CODEC.fieldOf("place_sound").forGetter(PlaceBlockWorldModification::placeSound),
+        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("transforms_into").forGetter(PlaceBlockWorldModification::transformsInto)
+    ).apply(instance, PlaceBlockWorldModification::new));
 
     @Override
     public WorldModificationType<?> type() {
@@ -33,18 +33,15 @@ public record PlaceBlock(BlockPicker<?> block, RegistryEntry<SoundEvent> placeSo
 
     @Override
     public Optional<ItemStack> modify(ActionContext context, PositionTarget position, boolean mayOffset) {
-        BlockPlacer placer = BlockPlacer.action(
+        BlockPlacer placer = BlockPlacer.of(
             context,
-            PositionTarget.INTERACTED_POSITION,
+            position,
             this.block,
             false,
             this.placeSound
         );
-        if (placer == null) {
-            return Optional.empty();
-        }
 
-        if (!placer.place().succeeds()) {
+        if (!placer.place()) {
             return Optional.empty();
         }
 

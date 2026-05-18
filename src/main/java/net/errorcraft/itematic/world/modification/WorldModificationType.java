@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.item.bucket.modification;
+package net.errorcraft.itematic.world.modification;
 
 import com.mojang.serialization.MapCodec;
 

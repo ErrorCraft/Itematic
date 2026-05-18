@@ -27,11 +27,11 @@ public class SignTestSuite {
     @GameTest(structure = "itematic:item.sign.platform")
     public void placingSignOpensSignMenu(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack oakSign = world.itematic$createStack(ItemKeys.OAK_SIGN);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, oakSign);
+        player.setPitch(90.0f);
+        player.setStackInHand(Hand.MAIN_HAND, world.itematic$createStack(ItemKeys.OAK_SIGN));
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, oakSign, GROUND_POSITION, Direction.UP);
+        TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
         context.addFinalTask(() -> {
             Assert.blockState(context, PLACED_BLOCK_POSITION)
                 .is(Blocks.OAK_SIGN);
@@ -49,12 +49,13 @@ public class SignTestSuite {
     @SuppressWarnings("DataFlowIssue")
     public void placingSignWithBlockEntityDataDoesNotOpenSignMenu(TestContext context) {
         ServerWorld world = context.getWorld();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
+        player.setPitch(90.0f);
         ItemStack oakSign = world.itematic$createStack(ItemKeys.OAK_SIGN);
         NbtComponent.set(DataComponentTypes.BLOCK_ENTITY_DATA, oakSign, nbt -> nbt.putString(Entity.ID_KEY, Registries.BLOCK_ENTITY_TYPE.getId(BlockEntityType.SIGN).toString()));
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         player.setStackInHand(Hand.MAIN_HAND, oakSign);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, oakSign, GROUND_POSITION, Direction.UP);
+        TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
         context.addFinalTaskWithDuration(1, () -> {
             Assert.blockState(context, PLACED_BLOCK_POSITION)
                 .is(Blocks.OAK_SIGN);
@@ -71,11 +72,11 @@ public class SignTestSuite {
     @GameTest(structure = "itematic:item.sign.platform.ceiling")
     public void placingHangingSignOpensSignMenu(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack oakHangingSign = world.itematic$createStack(ItemKeys.OAK_HANGING_SIGN);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, oakHangingSign);
+        player.setPitch(-90.0f);
+        player.setStackInHand(Hand.MAIN_HAND, world.itematic$createStack(ItemKeys.OAK_HANGING_SIGN));
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, oakHangingSign, ABOVE_PLACED_BLOCK_POSITION, Direction.DOWN);
+        TestUtil.useBlock(context, ABOVE_PLACED_BLOCK_POSITION, player, Direction.DOWN);
         context.addFinalTask(() -> {
             Assert.blockState(context, PLACED_BLOCK_POSITION)
                 .is(Blocks.OAK_HANGING_SIGN);
@@ -93,12 +94,13 @@ public class SignTestSuite {
     @SuppressWarnings("DataFlowIssue")
     public void placingHangingSignWithBlockEntityDataDoesNotOpenSignMenu(TestContext context) {
         ServerWorld world = context.getWorld();
+        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
+        player.setPitch(-90.0f);
         ItemStack oakHangingSign = world.itematic$createStack(ItemKeys.OAK_HANGING_SIGN);
         NbtComponent.set(DataComponentTypes.BLOCK_ENTITY_DATA, oakHangingSign, nbt -> nbt.putString(Entity.ID_KEY, Registries.BLOCK_ENTITY_TYPE.getId(BlockEntityType.SIGN).toString()));
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         player.setStackInHand(Hand.MAIN_HAND, oakHangingSign);
         world.spawnEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, oakHangingSign, ABOVE_PLACED_BLOCK_POSITION, Direction.DOWN);
+        TestUtil.useBlock(context, ABOVE_PLACED_BLOCK_POSITION, player, Direction.DOWN);
         context.addFinalTaskWithDuration(1, () -> {
             Assert.blockState(context, PLACED_BLOCK_POSITION)
                 .is(Blocks.OAK_HANGING_SIGN);

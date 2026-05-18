@@ -30,9 +30,11 @@ public class UseableOnFluidItemComponentTestSuite {
 
     @GameTest(structure = "itematic:item.component.useable_on_fluid.water_hole")
     public void usingLilyPadWhileLookingAtWaterPlacesLilyPad(TestContext context) {
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION_ON_LAND);
-        player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, Vec3d.ofBottomCenter(context.getAbsolutePos(LOOK_AT_WATER_POSITION_ON_LAND)));
+        PlayerEntity player = TestUtil.createMockPlayer(context, GameMode.SURVIVAL, SPAWN_POSITION_ON_LAND);
+        player.lookAt(
+            EntityAnchorArgumentType.EntityAnchor.EYES,
+            Vec3d.ofBottomCenter(context.getAbsolutePos(LOOK_AT_WATER_POSITION_ON_LAND))
+        );
         ServerWorld world = context.getWorld();
         ItemStack lilyPad = world.itematic$createStack(ItemKeys.LILY_PAD);
         player.setStackInHand(Hand.MAIN_HAND, lilyPad);

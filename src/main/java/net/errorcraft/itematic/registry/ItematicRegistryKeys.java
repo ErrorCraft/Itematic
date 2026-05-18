@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.registry;
 
-import net.errorcraft.itematic.item.bucket.modification.WorldModificationType;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.event.ItemEvent;
@@ -15,6 +14,7 @@ import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
+import net.errorcraft.itematic.world.modification.WorldModificationType;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;

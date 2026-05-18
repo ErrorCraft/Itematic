@@ -1,13 +1,13 @@
-package net.errorcraft.itematic.item.bucket.modification.type;
+package net.errorcraft.itematic.world.modification.type;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.bucket.modification.WorldModification;
-import net.errorcraft.itematic.item.bucket.modification.WorldModificationType;
-import net.errorcraft.itematic.item.bucket.modification.WorldModificationTypes;
 import net.errorcraft.itematic.item.placement.fluid.FluidPlacer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.modification.WorldModification;
+import net.errorcraft.itematic.world.modification.WorldModificationType;
+import net.errorcraft.itematic.world.modification.WorldModificationTypes;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,12 +19,12 @@ import net.minecraft.world.RaycastContext;
 
 import java.util.Optional;
 
-public record PlaceFluid(RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> placeSound, RegistryEntry<Item> transformsInto) implements WorldModification {
-    public static final MapCodec<PlaceFluid> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.FLUID).fieldOf("fluid").forGetter(PlaceFluid::fluid),
-        SoundEvent.ENTRY_CODEC.fieldOf("place_sound").forGetter(PlaceFluid::placeSound),
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("transforms_into").forGetter(PlaceFluid::transformsInto)
-    ).apply(instance, PlaceFluid::new));
+public record PlaceFluidWorldModification(RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> placeSound, RegistryEntry<Item> transformsInto) implements WorldModification {
+    public static final MapCodec<PlaceFluidWorldModification> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        RegistryFixedCodec.of(RegistryKeys.FLUID).fieldOf("fluid").forGetter(PlaceFluidWorldModification::fluid),
+        SoundEvent.ENTRY_CODEC.fieldOf("place_sound").forGetter(PlaceFluidWorldModification::placeSound),
+        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("transforms_into").forGetter(PlaceFluidWorldModification::transformsInto)
+    ).apply(instance, PlaceFluidWorldModification::new));
 
     @Override
     public WorldModificationType<?> type() {
