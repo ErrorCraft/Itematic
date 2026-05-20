@@ -32,7 +32,6 @@ import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.Actions;
 import net.errorcraft.itematic.world.action.actions.*;
 import net.errorcraft.itematic.world.action.context.ItemStackTarget;
-import net.errorcraft.itematic.world.action.context.ItematicEntityTargets;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
@@ -11396,7 +11395,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_ENTITY, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(SetEntityNameFromItemAction.of(ItematicEntityTargets.TARGET_ENTITY))
+                            .add(SetEntityNameFromItemAction.of(LootContext.EntityTarget.ITEMATIC_TARGET_ENTITY))
                             .add(DecrementItemAction.of(1))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))

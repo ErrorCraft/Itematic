@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.screen;
 
 import net.errorcraft.itematic.mixin.screen.BrewingStandScreenHandlerAccessor;
-import net.errorcraft.itematic.recipe.book.ItematicRecipeBookTypes;
 import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
 import net.minecraft.entity.player.PlayerEntity;
@@ -85,7 +84,7 @@ public class BrewingStandMenuDelegate extends AbstractRecipeScreenHandler {
 
     @Override
     public RecipeBookType getCategory() {
-        return ItematicRecipeBookTypes.BREWING;
+        return RecipeBookType.ITEMATIC_BREWING;
     }
 
     @Override
