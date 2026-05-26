@@ -22,6 +22,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
 public class FluidPlacer {
@@ -66,7 +67,7 @@ public class FluidPlacer {
             return true;
         }
 
-        ServerWorld world = this.context.world();
+        World world = this.context.world();
         BlockState state = world.getBlockState(pos);
         if (!(state.getBlock() instanceof FluidFillable fluidFillable)) {
             return true;
@@ -94,7 +95,10 @@ public class FluidPlacer {
     }
 
     private boolean tryEvaporate(BlockPos pos) {
-        ServerWorld world = this.context.world();
+        if (!(context.world() instanceof ServerWorld world)) {
+            return false;
+        }
+
         if (!world.getDimension().ultrawarm()) {
             return false;
         }
@@ -149,7 +153,7 @@ public class FluidPlacer {
             return false;
         }
 
-        ServerWorld world = this.context.world();
+        World world = this.context.world();
         if (!state.isAir() && !state.isLiquid()) {
             world.breakBlock(pos, true);
         }
@@ -167,7 +171,7 @@ public class FluidPlacer {
             return;
         }
 
-        ServerWorld world = this.context.world();
+        World world = this.context.world();
         Entity possiblePlacer = this.context.get(LootContextParameters.THIS_ENTITY);
         world.playSound(possiblePlacer, pos, this.placeSound.value(), SoundCategory.BLOCKS, 1.0f, 1.0f);
         world.emitGameEvent(possiblePlacer, GameEvent.FLUID_PLACE, pos);

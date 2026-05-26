@@ -13,9 +13,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +35,7 @@ public class FluidDrainer {
             return null;
         }
 
-        ServerWorld world = this.context.world();
+        World world = this.context.world();
         BlockState state = world.getBlockState(pos);
         if (!(state.getBlock() instanceof FluidDrainable fluidDrainable)) {
             return null;

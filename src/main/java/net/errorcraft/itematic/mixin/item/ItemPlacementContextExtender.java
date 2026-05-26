@@ -9,7 +9,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,8 +27,8 @@ public class ItemPlacementContextExtender extends ItemUsageContext implements It
     }
 
     @Override
-    public ActionContext itematic$actionContext(ServerWorld world, ItemStackExchanger stackExchanger) {
-        return ActionContext.builder(world)
+    public ActionContext itematic$actionContext(ItemStackExchanger stackExchanger) {
+        return ActionContext.builder(this.getWorld())
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParameters.THIS_ENTITY, this.getPlayer())
             .addOptional(LootContextParameters.ORIGIN, this.getPlayer(), Entity::getPos)

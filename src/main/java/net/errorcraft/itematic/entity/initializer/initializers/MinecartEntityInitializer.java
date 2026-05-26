@@ -15,14 +15,14 @@ import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public record MinecartEntityInitializer<T extends AbstractMinecartEntity>(EntityType<T> type) implements EntityInitializer<T> {
     @Override
     public T create(ActionContext context, SpawnReason reason) {
-        ServerWorld world = context.world();
+        World world = context.world();
         BlockPos pos = context.getBlockPos(ItematicContextParameters.INTERACTED_POSITION);
         if (pos == null) {
             return null;

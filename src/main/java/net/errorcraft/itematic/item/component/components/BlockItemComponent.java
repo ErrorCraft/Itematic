@@ -29,7 +29,6 @@ import net.minecraft.item.ItemUsage;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
@@ -145,12 +144,8 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
     }
 
     private ItemResult place(ItemUsageContext context, ItemStackExchanger stackExchanger) {
-        if (!(context.getWorld() instanceof ServerWorld world)) {
-            return ItemResult.SUCCEED;
-        }
-
         ActionContext actionContext = new ItemPlacementContext(context)
-            .itematic$actionContext(world, stackExchanger);
+            .itematic$actionContext(stackExchanger);
         if (this.place(actionContext, PositionTarget.INTERACTED_POSITION, true)) {
             return ItemResult.SUCCEED;
         }
@@ -161,6 +156,7 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
     public enum Pass implements StringIdentifiable {
         BLOCK("block"),
         FLUID("fluid");
+
         public static final Set<Pass> DEFAULT_PASSES = Set.of(BLOCK);
         public static final Codec<Pass> CODEC = StringIdentifiable.createCodec(Pass::values);
 

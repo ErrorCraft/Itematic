@@ -20,11 +20,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +36,7 @@ public class BlockPlacer {
     @Nullable
     private final RegistryEntry<SoundEvent> placeSound;
 
-    public BlockPlacer(ActionContext context, PositionTarget position, BlockPicker<?> block, ItemPlacementContext placementContext, boolean operatorOnly, @Nullable RegistryEntry<SoundEvent> placeSound) {
+    private BlockPlacer(ActionContext context, BlockPicker<?> block, ItemPlacementContext placementContext, boolean operatorOnly, @Nullable RegistryEntry<SoundEvent> placeSound) {
         this.context = context;
         this.block = block;
         this.placementContext = placementContext;
@@ -47,7 +47,6 @@ public class BlockPlacer {
     public static BlockPlacer of(ActionContext context, PositionTarget position, BlockPicker<?> block, boolean operatorOnly, RegistryEntry<SoundEvent> placeSound) {
         return new BlockPlacer(
             context,
-            position,
             block,
             context.blockPlaceContext(position, block),
             operatorOnly,
@@ -76,7 +75,7 @@ public class BlockPlacer {
     }
 
     private void placed(BlockState blockState, BlockPos pos, @Nullable LivingEntity placer) {
-        ServerWorld world = this.context.world();
+        World world = this.context.world();
         ItemStack stack = this.context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
         blockState = this.placeFromNbt(blockState, pos, stack);
         BlockEntity blockEntity = world.getBlockEntity(pos);
@@ -120,7 +119,7 @@ public class BlockPlacer {
         }
 
         ShapeContext shapeContext = ShapeContexts.ofNullable(placer);
-        ServerWorld world = this.context.world();
+        World world = this.context.world();
         return state.canPlaceAt(world, pos) &&
             world.canPlace(state, pos, shapeContext);
     }

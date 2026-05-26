@@ -20,6 +20,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,17 +29,17 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class ActionContext {
-    private final ServerWorld world;
+    private final World world;
     private final ContextParameterMap parameters;
     private final ItemStackExchanger stackExchanger;
 
-    private ActionContext(ServerWorld world, ContextParameterMap parameters, ItemStackExchanger stackExchanger) {
+    private ActionContext(World world, ContextParameterMap parameters, ItemStackExchanger stackExchanger) {
         this.world = world;
         this.parameters = parameters;
         this.stackExchanger = stackExchanger;
     }
 
-    public static Builder builder(ServerWorld world) {
+    public static Builder builder(World world) {
         return new Builder(world);
     }
 
@@ -46,12 +47,8 @@ public class ActionContext {
         return new Builder(this);
     }
 
-    public ServerWorld world() {
+    public World world() {
         return this.world;
-    }
-
-    public ItemStackExchanger stackExchanger() {
-        return this.stackExchanger;
     }
 
     public <T> boolean has(ContextParameter<T> parameter) {
@@ -100,9 +97,14 @@ public class ActionContext {
         this.stackExchanger.exchange(stack);
     }
 
+    @Nullable
     public LootContext lootContext() {
+        if (!(this.world instanceof ServerWorld serverWorld)) {
+            return null;
+        }
+
         LootWorldContext context = new LootWorldContext(
-            this.world,
+            serverWorld,
             this.parameters,
             Map.of(),
             0.0f
@@ -168,11 +170,11 @@ public class ActionContext {
     }
 
     public static class Builder {
-        private final ServerWorld world;
+        private final World world;
         private ItemStackExchanger stackExchanger = ItemStackExchanger.EMPTY;
         private final ContextParameterMap.Builder parameters = new ContextParameterMap.Builder();
 
-        private Builder(ServerWorld world) {
+        private Builder(World world) {
             this.world = world;
         }
 
@@ -228,8 +230,7 @@ public class ActionContext {
                 return this;
             }
 
-            this.addOptional(parameter, mapper.apply(value));
-            return this;
+            return this.addOptional(parameter, mapper.apply(value));
         }
     }
 }

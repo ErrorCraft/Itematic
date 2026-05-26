@@ -23,7 +23,10 @@ public class EndCrystalEntityInitializer implements EntityInitializer<EndCrystal
 
     @Override
     public EndCrystalEntity create(ActionContext context, SpawnReason reason) {
-        ServerWorld world = context.world();
+        if (!(context.world() instanceof ServerWorld world)) {
+            return null;
+        }
+
         BlockPos pos = context.getBlockPos(ItematicContextParameters.INTERACTED_POSITION);
         if (pos == null) {
             return null;

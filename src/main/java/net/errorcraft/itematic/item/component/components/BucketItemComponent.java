@@ -34,7 +34,6 @@ import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -48,7 +47,6 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
         WorldModification.CODEC.fieldOf("modification").forGetter(BucketItemComponent::modification),
         Registries.ENTITY_TYPE.getEntryCodec().optionalFieldOf("entity").forGetter(BucketItemComponent::entity)
     ).apply(instance, BucketItemComponent::new));
-
 
     public static ItemComponent<?>[] drainFluid(RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
@@ -106,16 +104,12 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
 
     @Override
     public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (world.isClient()) {
-            return ItemResult.PASS;
-        }
-
         BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, this.modification().fluidHandling());
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return ItemResult.PASS;
         }
 
-        ActionContext context = ActionContext.builder((ServerWorld) world)
+        ActionContext context = ActionContext.builder(world)
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParameters.THIS_ENTITY, user)
             .addOptional(LootContextParameters.ORIGIN, user, Entity::getPos)
