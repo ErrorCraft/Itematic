@@ -54,6 +54,10 @@ public record ActionEntry(Action<?> action, Optional<LootCondition> requirements
 
         LootCondition requirements = this.requirements.get();
         LootContext lootContext = context.lootContext();
+        if (lootContext == null) {
+            return false;
+        }
+
         lootContext.markActive(LootContext.predicate(requirements));
         return requirements.test(lootContext);
     }

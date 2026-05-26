@@ -7,11 +7,11 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.WindChargeEntity;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
 
 public class WindChargeEntityInitializer implements EntityInitializer<WindChargeEntity> {
     public static final WindChargeEntityInitializer INSTANCE = new WindChargeEntityInitializer();
@@ -21,7 +21,7 @@ public class WindChargeEntityInitializer implements EntityInitializer<WindCharge
 
     @Override
     public WindChargeEntity create(ActionContext context, SpawnReason reason) {
-        ServerWorld world = context.world();
+        World world = context.world();
         PlayerEntity user = context.get(LootContextParameters.THIS_ENTITY, PlayerEntity.class);
         if (user != null) {
             return spawnFromUser(world, user);
@@ -36,7 +36,7 @@ public class WindChargeEntityInitializer implements EntityInitializer<WindCharge
         return null;
     }
 
-    private static WindChargeEntity spawnFromUser(ServerWorld world, PlayerEntity user) {
+    private static WindChargeEntity spawnFromUser(World world, PlayerEntity user) {
         Vec3d position = user.getEyePos().add(user.getRotationVecClient().multiply(0.8f));
         if (!world.getBlockState(BlockPos.ofFloored(position)).isReplaceable()) {
             position = user.getEyePos().add(user.getRotationVecClient().multiply(0.05f));
@@ -45,7 +45,7 @@ public class WindChargeEntityInitializer implements EntityInitializer<WindCharge
         return new WindChargeEntity(user, world, position.getX(), position.getY(), position.getZ());
     }
 
-    private static WindChargeEntity spawnFromSide(ServerWorld world, Direction direction, Vec3d position) {
+    private static WindChargeEntity spawnFromSide(World world, Direction direction, Vec3d position) {
         Random random = world.getRandom();
         double velocityX = random.nextTriangular(direction.getOffsetX(), VELOCITY_DEVIATION);
         double velocityY = random.nextTriangular(direction.getOffsetY(), VELOCITY_DEVIATION);

@@ -23,7 +23,10 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
 
     @Override
     public EyeOfEnderEntity create(ActionContext context, SpawnReason reason) {
-        ServerWorld world = context.world();
+        if (!(context.world() instanceof ServerWorld world)) {
+            return null;
+        }
+
         BlockPos blockPos = this.getBlockPos(context);
         if (blockPos == null) {
             return null;

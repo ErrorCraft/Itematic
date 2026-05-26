@@ -11,8 +11,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CarvedPumpkinBlock;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
 public record PlaceCarvedPumpkinAction(PositionTarget position) implements Action<PlaceCarvedPumpkinAction> {
@@ -36,7 +36,7 @@ public record PlaceCarvedPumpkinAction(PositionTarget position) implements Actio
             return false;
         }
 
-        ServerWorld world = context.world();
+        World world = context.world();
         if (!world.isAir(pos)) {
             return false;
         }

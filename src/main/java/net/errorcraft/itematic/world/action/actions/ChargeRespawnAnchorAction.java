@@ -11,8 +11,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.RespawnAnchorBlock;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public record ChargeRespawnAnchorAction(PositionTarget position) implements Action<ChargeRespawnAnchorAction> {
     public static final MapCodec<ChargeRespawnAnchorAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -30,7 +30,7 @@ public record ChargeRespawnAnchorAction(PositionTarget position) implements Acti
 
     @Override
     public boolean execute(ActionContext context) {
-        ServerWorld world = context.world();
+        World world = context.world();
         BlockPos pos = context.getBlockPos(this.position.parameter());
         if (pos == null) {
             return false;

@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
-import net.errorcraft.itematic.item.placement.BlockPlacer;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -38,11 +37,6 @@ public record PlaceBlockFromItemAction(PositionTarget position, boolean decremen
             return false;
         }
 
-        BlockPlacer placer = BlockPlacer.action(context, this.position, block.block(), this.decrementCount);
-        if (placer == null) {
-            return false;
-        }
-
-        return placer.place().succeeds();
+        return block.place(context, this.position, this.decrementCount);
     }
 }

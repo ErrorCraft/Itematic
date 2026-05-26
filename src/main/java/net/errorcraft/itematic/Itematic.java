@@ -21,6 +21,7 @@ import net.errorcraft.itematic.util.context.ItematicContextTypes;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
+import net.errorcraft.itematic.world.modification.WorldModificationTypes;
 import net.fabricmc.api.ModInitializer;
 
 public class Itematic implements ModInitializer {
@@ -47,5 +48,6 @@ public class Itematic implements ModInitializer {
         ItematicRecipeDisplaySerializers.init();
         ItematicSlotDisplaySerializers.init();
         ItematicEntitySubPredicateTypes.init();
+        WorldModificationTypes.init();
     }
 }

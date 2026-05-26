@@ -11,9 +11,9 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.type.BlockStateComponent;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +36,7 @@ public record ModifyBlockStateAction(PositionTarget position, BlockStateComponen
 
     @Override
     public boolean execute(ActionContext context) {
-        ServerWorld world = context.world();
+        World world = context.world();
         BlockPos pos = context.getBlockPos(this.position.parameter());
         if (pos == null) {
             return false;

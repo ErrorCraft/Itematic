@@ -11,7 +11,7 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.World;
 
 public class TridentEntityInitializer implements EntityInitializer<TridentEntity> {
     public static final TridentEntityInitializer INSTANCE = new TridentEntityInitializer();
@@ -34,7 +34,7 @@ public class TridentEntityInitializer implements EntityInitializer<TridentEntity
         return entity;
     }
 
-    private TridentEntity create(ServerWorld world, LivingEntity possibleUser, ItemStack stack) {
+    private TridentEntity create(World world, LivingEntity possibleUser, ItemStack stack) {
         if (possibleUser != null) {
             return new TridentEntity(world, possibleUser, stack);
         }

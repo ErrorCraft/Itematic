@@ -39,7 +39,10 @@ public record DisplayParticleAction(PositionTarget position, ParticleEffect part
 
     @Override
     public boolean execute(ActionContext context) {
-        ServerWorld world = context.world();
+        if (!(context.world() instanceof ServerWorld world)) {
+            return false;
+        }
+
         Random random = world.getRandom();
         Vec3d pos = this.position(context, random);
         if (pos == null) {

@@ -445,9 +445,13 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
 
     @Override
     public T itematic$create(ActionContext context, SpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback<T> callback, boolean allowItemData, boolean invertY) {
+        if (!(context.world() instanceof ServerWorld world)) {
+            return null;
+        }
+
         this.actionContext = context;
         return this.create(
-            context.world(),
+            world,
             copier(context, callback, allowItemData),
             pos,
             reason,

@@ -84,7 +84,6 @@
               "action": {
                 "type": "minecraft:place_block",
                 "block": "minecraft:fire",
-                "decrement_count": false,
                 "position": "interacted"
               }
             }

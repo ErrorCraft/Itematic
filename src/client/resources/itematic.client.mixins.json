@@ -44,6 +44,7 @@
     "option.HotbarStorageEntryExtender",
     "particle.CrackParticleExtender$SlimeballFactoryExtender",
     "particle.CrackParticleExtender$SnowballFactoryExtender",
+    "recipebook.RecipeBookTypeExtender",
     "recipebook.RecipeBookWidgetExtender$TabExtender",
     "render.block.entity.DecoratedPotBlockEntityRendererExtender",
     "render.entity.AbstractSkeletonEntityRendererExtender",

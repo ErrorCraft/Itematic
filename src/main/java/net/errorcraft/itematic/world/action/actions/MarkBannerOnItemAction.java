@@ -13,8 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapState;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public record MarkBannerOnItemAction(PositionTarget position) implements Action<MarkBannerOnItemAction> {
     public static final MapCodec<MarkBannerOnItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -37,7 +37,7 @@ public record MarkBannerOnItemAction(PositionTarget position) implements Action<
             return false;
         }
 
-        ServerWorld world = context.world();
+        World world = context.world();
         if (!world.getBlockState(pos).isIn(BlockTags.BANNERS)) {
             return false;
         }

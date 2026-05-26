@@ -8,13 +8,13 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public class ArmorStandEntityInitializer implements EntityInitializer<ArmorStandEntity> {
     public static final ArmorStandEntityInitializer INSTANCE = new ArmorStandEntityInitializer();
@@ -32,7 +32,7 @@ public class ArmorStandEntityInitializer implements EntityInitializer<ArmorStand
             return null;
         }
 
-        ServerWorld world = context.world();
+        World world = context.world();
         ArmorStandEntity entity = new ArmorStandEntity(world, position.getX(), position.getY(), position.getZ());
         float angle = getRoundedAngle(context);
         entity.refreshPositionAndAngles(entity.getX(), entity.getY(), entity.getZ(), angle, 0.0f);
@@ -45,7 +45,7 @@ public class ArmorStandEntityInitializer implements EntityInitializer<ArmorStand
             return true;
         }
 
-        ServerWorld world = context.world();
+        World world = context.world();
         if (context.get(ItematicContextParameters.SIDE) == Direction.DOWN) {
             return false;
         }

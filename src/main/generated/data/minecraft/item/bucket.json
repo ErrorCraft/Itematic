@@ -1,7 +1,9 @@
 {
   "behavior": {
     "minecraft:bucket": {
-      "fluid": "minecraft:empty"
+      "modification": {
+        "type": "minecraft:drain_fluid"
+      }
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:use_bucket"

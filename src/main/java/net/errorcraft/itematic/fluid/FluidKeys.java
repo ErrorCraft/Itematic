@@ -6,7 +6,6 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 public class FluidKeys {
-    public static final RegistryKey<Fluid> EMPTY = of("empty");
     public static final RegistryKey<Fluid> WATER = of("water");
     public static final RegistryKey<Fluid> LAVA = of("lava");
 

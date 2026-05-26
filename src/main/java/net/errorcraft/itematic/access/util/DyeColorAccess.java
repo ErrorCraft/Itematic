@@ -4,5 +4,8 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKey;
 
 public interface DyeColorAccess {
-    RegistryKey<Item> itematic$itemKey();
+    default RegistryKey<Item> itematic$itemKey() {
+        return null;
+    }
+    default void itematic$setItemKey(RegistryKey<Item> item) {}
 }
