@@ -11,8 +11,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.EndPortalFrameBlock;
 import net.minecraft.block.pattern.BlockPattern;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 
 public record LightEndPortalAction(PositionTarget position) implements Action<LightEndPortalAction> {
@@ -32,7 +32,7 @@ public record LightEndPortalAction(PositionTarget position) implements Action<Li
 
     @Override
     public boolean execute(ActionContext context) {
-        ServerWorld world = context.world();
+        World world = context.world();
         BlockPos pos = context.getBlockPos(this.position.parameter());
         BlockPattern.Result result = EndPortalFrameBlock.getCompletedFramePattern()
             .searchAround(world, pos);

@@ -127,8 +127,18 @@ public class TestUtil {
 
     public static Optional<ItemStack> useStackOnBlockInside(TestContext context, PlayerEntity player, ItemStack stack, BlockPos pos, Direction direction) {
         BlockPos absolutePos = context.getAbsolutePos(pos);
-        BlockHitResult hitResult = new BlockHitResult(Vec3d.ofCenter(absolutePos), direction, absolutePos, true);
-        ActionResult result = stack.useOnBlock(new ItemUsageContext(player, Hand.MAIN_HAND, hitResult));
+        ActionResult result = stack.useOnBlock(
+            new ItemUsageContext(
+                player,
+                Hand.MAIN_HAND,
+                new BlockHitResult(
+                    Vec3d.ofCenter(absolutePos),
+                    direction,
+                    absolutePos,
+                    false
+                )
+            )
+        );
         if (result instanceof ActionResult.Success success) {
             return Optional.ofNullable(success.getNewHandStack());
         }
@@ -138,7 +148,16 @@ public class TestUtil {
 
     public static void useBlock(TestContext context, BlockPos pos, PlayerEntity player, Direction direction) {
         BlockPos absolutePos = context.getAbsolutePos(pos);
-        context.useBlock(pos, player, new BlockHitResult(Vec3d.ofCenter(absolutePos), direction, absolutePos, true));
+        context.useBlock(
+            pos,
+            player,
+            new BlockHitResult(
+                Vec3d.ofCenter(absolutePos),
+                direction,
+                absolutePos,
+                false
+            )
+        );
     }
 
     @SuppressWarnings("unchecked")

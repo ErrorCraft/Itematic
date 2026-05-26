@@ -48,6 +48,10 @@ public record ModifyItemAction(ItemStackTarget stack, LootFunction itemModifier)
         }
 
         LootContext lootContext = context.lootContext();
+        if (lootContext == null) {
+            return false;
+        }
+
         lootContext.markActive(LootContext.itemModifier(this.itemModifier));
         ItemStack resultStack = this.itemModifier.apply(stack, lootContext);
         if (resultStack != stack) {

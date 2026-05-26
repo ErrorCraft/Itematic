@@ -9,6 +9,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.command.ReturnValueConsumer;
 import net.minecraft.loot.context.LootContext;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.function.CommandFunction;
 import net.minecraft.server.function.CommandFunctionManager;
@@ -31,7 +32,12 @@ public record RunFunctionAction(Identifier function, Optional<LootContext.Entity
 
     @Override
     public boolean execute(ActionContext context) {
-        CommandFunctionManager functionManager = context.world().getServer().getCommandFunctionManager();
+        MinecraftServer server = context.world().getServer();
+        if (server == null) {
+            return false;
+        }
+
+        CommandFunctionManager functionManager = server.getCommandFunctionManager();
         Optional<CommandFunction<ServerCommandSource>> function = functionManager.getFunction(this.function);
         if (function.isEmpty()) {
             return false;

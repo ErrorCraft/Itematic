@@ -1,4 +1,4 @@
-classTweaker	v1	named
+classTweaker	v2	named
 
 accessible    class    net/minecraft/registry/Registries$Initializer
 accessible    class    net/minecraft/entity/passive/OcelotEntity$OcelotTemptGoal
@@ -22,3 +22,8 @@ inject-interface    net/minecraft/block/entity/BlockEntity    net/errorcraft/ite
 inject-interface    net/minecraft/village/VillagerData    net/errorcraft/itematic/access/village/VillagerDataAccess
 inject-interface    net/minecraft/village/VillagerProfession    net/errorcraft/itematic/access/village/VillagerProfessionAccess
 inject-interface    net/minecraft/client/gui/screen/GameModeSwitcherScreen$GameModeSelection    net/errorcraft/itematic/access/client/gui/screen/GameModeSwitcherScreenAccess$GameModeSelectionAccess
+inject-interface    net/minecraft/item/ItemPlacementContext    net/errorcraft/itematic/access/item/ItemPlacementContextAccess
+
+extend-enum    net/minecraft/recipe/book/RecipeBookType    ITEMATIC_BREWING
+extend-enum    net/minecraft/client/recipebook/RecipeBookType    ITEMATIC_BREWING
+extend-enum    net/minecraft/loot/context/LootContext$EntityTarget    ITEMATIC_TARGET_ENTITY

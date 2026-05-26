@@ -92,24 +92,25 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
 
     private void createEntity(World world, LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (world instanceof ServerWorld serverWorld) {
-            ActionContext.Builder contextBuilder = ActionContext.builder(serverWorld)
+            ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.TOOL, stack)
                 .add(LootContextParameters.THIS_ENTITY, user)
                 .add(LootContextParameters.ORIGIN, user.getPos())
-                .add(ItematicContextParameters.INTERACTED_POSITION, user.getEyePos().add(0.0d, -0.1d, 0.0d));
-            this.createEntity(contextBuilder, serverWorld, stack);
+                .add(ItematicContextParameters.INTERACTED_POSITION, user.getEyePos().add(0.0d, -0.1d, 0.0d))
+                .build();
+            this.createEntity(context, serverWorld, stack);
         }
     }
 
-    private void createEntity(ActionContext.Builder contextBuilder, ServerWorld world, ItemStack stack) {
+    private void createEntity(ActionContext context, ServerWorld world, ItemStack stack) {
         ProjectileItemComponent projectile = stack.itematic$getBehavior(ItemComponentTypes.PROJECTILE).orElse(null);
         if (projectile == null) {
             return;
         }
 
         Entity projectileEntity = projectile.createEntity(
-            contextBuilder.build(),
+            context,
             PositionTarget.INTERACTED_POSITION,
             this.angleOffset,
             this.speed,
@@ -120,7 +121,8 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
         }
 
         world.spawnEntity(projectileEntity);
-        ActionContext projectileContext = contextBuilder.add(ItematicContextParameters.TARGET_ENTITY, projectileEntity)
+        ActionContext projectileContext = context.extend()
+            .add(ItematicContextParameters.TARGET_ENTITY, projectileEntity)
             .build();
         stack.itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, projectileContext);
     }

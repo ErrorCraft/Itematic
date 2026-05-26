@@ -3,9 +3,9 @@ package net.errorcraft.itematic.world.action.context;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -36,7 +36,7 @@ public class ItemStackExchanger {
         );
     }
 
-    public static ItemStackExchanger forDispenser(ServerWorld world, Direction side, Vec3d pos, ItemStack initialStack) {
+    public static ItemStackExchanger forDispenser(World world, Direction side, Vec3d pos, ItemStack initialStack) {
         return new ItemStackExchanger(
             stack -> true,
             stack -> ItemDispenserBehavior.spawnItem(world, stack, 6, side, pos),
@@ -54,10 +54,14 @@ public class ItemStackExchanger {
             return;
         }
 
-        if (!this.currentStack.isEmpty() && this.shouldDrop.test(this.currentStack)) {
-            this.dropper.accept(this.currentStack);
+        if (!this.shouldDrop.test(stack)) {
+            return;
         }
 
-        this.currentStack = stack;
+        if (this.currentStack.isEmpty()) {
+            this.currentStack = stack;
+        } else {
+            this.dropper.accept(stack);
+        }
     }
 }

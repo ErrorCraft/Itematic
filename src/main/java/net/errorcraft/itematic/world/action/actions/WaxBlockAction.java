@@ -11,8 +11,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.HoneycombItem;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 import net.minecraft.world.event.GameEvent;
 
@@ -32,7 +32,7 @@ public record WaxBlockAction(PositionTarget position) implements Action<WaxBlock
 
     @Override
     public boolean execute(ActionContext context) {
-        ServerWorld world = context.world();
+        World world = context.world();
         BlockPos pos = context.get(this.position.parameter(), BlockPos::ofFloored);
         if (pos == null) {
             return false;

@@ -9,10 +9,10 @@ import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.item.BoneMealItem;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 
 public record FertilizeAction(PositionTarget position) implements Action<FertilizeAction> {
@@ -37,7 +37,7 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
         }
 
         BlockPos blockPos = BlockPos.ofFloored(pos);
-        ServerWorld world = context.world();
+        World world = context.world();
         if (BoneMealItem.useOnFertilizable(null, world, blockPos)) {
             fertilized(world, blockPos);
             return true;
@@ -57,7 +57,7 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
         return false;
     }
 
-    private static void fertilized(ServerWorld world, BlockPos pos) {
+    private static void fertilized(World world, BlockPos pos) {
         world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, pos, 15);
     }
 }

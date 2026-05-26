@@ -10,8 +10,8 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
 public record SetBlockStateAction(PositionTarget position, BlockState state) implements Action<SetBlockStateAction> {
@@ -31,7 +31,7 @@ public record SetBlockStateAction(PositionTarget position, BlockState state) imp
 
     @Override
     public boolean execute(ActionContext context) {
-        ServerWorld world = context.world();
+        World world = context.world();
         BlockPos pos = context.getBlockPos(this.position.parameter());
         if (pos == null) {
             return false;

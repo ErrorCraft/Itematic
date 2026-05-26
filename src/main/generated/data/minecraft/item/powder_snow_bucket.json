@@ -1,9 +1,12 @@
 {
   "behavior": {
     "minecraft:bucket": {
-      "block": "minecraft:powder_snow",
-      "emptying_sound_event": "minecraft:item.bucket.empty_powder_snow",
-      "transforms_into": "minecraft:bucket"
+      "modification": {
+        "type": "minecraft:place_block",
+        "block": "minecraft:powder_snow",
+        "place_sound": "minecraft:item.bucket.empty_powder_snow",
+        "transforms_into": "minecraft:bucket"
+      }
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:use_bucket"
