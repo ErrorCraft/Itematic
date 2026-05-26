@@ -1,13 +1,13 @@
 {
   "behavior": {
     "minecraft:bucket": {
-      "emptying_sound_event": "minecraft:item.bucket.empty_fish",
-      "entity": {
-        "entity": "minecraft:salmon",
-        "require_other_successful_placement": true
-      },
-      "fluid": "minecraft:water",
-      "transforms_into": "minecraft:bucket"
+      "entity": "minecraft:salmon",
+      "modification": {
+        "type": "minecraft:place_fluid",
+        "fluid": "minecraft:water",
+        "place_sound": "minecraft:item.bucket.empty_fish",
+        "transforms_into": "minecraft:bucket"
+      }
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:use_bucket"

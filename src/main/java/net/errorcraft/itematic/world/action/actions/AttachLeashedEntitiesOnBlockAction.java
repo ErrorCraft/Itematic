@@ -11,8 +11,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.LeadItem;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public record AttachLeashedEntitiesOnBlockAction(PositionTarget position) implements Action<AttachLeashedEntitiesOnBlockAction> {
     public static final MapCodec<AttachLeashedEntitiesOnBlockAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -31,7 +31,7 @@ public record AttachLeashedEntitiesOnBlockAction(PositionTarget position) implem
     @Override
     public boolean execute(ActionContext context) {
         BlockPos pos = context.getBlockPos(this.position.parameter());
-        ServerWorld world = context.world();
+        World world = context.world();
         if (!world.getBlockState(pos).isIn(BlockTags.FENCES)) {
             return false;
         }

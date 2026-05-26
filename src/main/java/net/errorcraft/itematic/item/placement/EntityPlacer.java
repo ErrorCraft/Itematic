@@ -20,6 +20,7 @@ import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
 import java.util.Objects;
@@ -69,7 +70,7 @@ public class EntityPlacer<T extends Entity> {
             return false;
         }
 
-        ServerWorld world = this.context.world();
+        World world = this.context.world();
         if (!state.isOf(Blocks.SPAWNER)) {
             return false;
         }
@@ -84,7 +85,7 @@ public class EntityPlacer<T extends Entity> {
         return true;
     }
 
-    private void modifySpawnerBlock(ServerWorld world, MobSpawnerBlockEntity blockEntity, BlockPos pos, BlockState state) {
+    private void modifySpawnerBlock(World world, MobSpawnerBlockEntity blockEntity, BlockPos pos, BlockState state) {
         blockEntity.setEntityType(this.type, world.getRandom());
         blockEntity.markDirty();
         world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
@@ -96,12 +97,15 @@ public class EntityPlacer<T extends Entity> {
     }
 
     private T spawn(BlockPos pos, BlockState state) {
-        ServerWorld world = this.context.world();
+        if (!(this.context.world() instanceof ServerWorld world)) {
+            return null;
+        }
+
         Direction side = this.context.get(ItematicContextParameters.SIDE);
         BlockPos offset = state.getCollisionShape(world, pos).isEmpty() || side == null
             ? pos
             : pos.offset(side);
-        T entity = this.spawn(offset, !Objects.equals(pos, offset) && side == Direction.UP);
+        T entity = this.spawn(world, offset, !Objects.equals(pos, offset) && side == Direction.UP);
         if (entity == null) {
             return null;
         }
@@ -119,7 +123,7 @@ public class EntityPlacer<T extends Entity> {
         return entity;
     }
 
-    private T spawn(BlockPos pos, boolean invertY) {
+    private T spawn(ServerWorld world, BlockPos pos, boolean invertY) {
         T entity = this.type.itematic$create(
             this.context,
             this.spawnReason,
@@ -132,7 +136,7 @@ public class EntityPlacer<T extends Entity> {
             return null;
         }
 
-        this.context.world().spawnEntityAndPassengers(entity);
+        world.spawnEntityAndPassengers(entity);
         return entity;
     }
 

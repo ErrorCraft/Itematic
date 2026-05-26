@@ -748,11 +748,15 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     @Override
     public void itematic$damage(int amount, ActionContext context) {
+        if (!(context.world() instanceof ServerWorld world)) {
+            return;
+        }
+
         this.context = context;
         Entity entity = context.get(LootContextParameters.THIS_ENTITY);
         this.damage(
             amount,
-            context.world(),
+            world,
             entity instanceof ServerPlayerEntity player ? player : null,
             item -> this.onItemBroken(item, entity, context)
         );

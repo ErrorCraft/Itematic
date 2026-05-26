@@ -14,6 +14,7 @@ import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
+import net.errorcraft.itematic.world.modification.WorldModificationType;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
@@ -33,6 +34,7 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<IntegerProviderType<?>>> INTEGER_PROVIDER_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("integer_provider_type"));
     public static final RegistryKey<Registry<ItemHolderRuleType<?>>> ITEM_HOLDER_RULE_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("item_holder_rule_type"));
     public static final RegistryKey<Registry<ShooterMethodType<?>>> SHOOTER_METHOD_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("shooter_method_type"));
+    public static final RegistryKey<Registry<WorldModificationType<?>>> WORLD_MODIFICATION_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("fluid_modification_type"));
 
     private ItematicRegistryKeys() {}
 }

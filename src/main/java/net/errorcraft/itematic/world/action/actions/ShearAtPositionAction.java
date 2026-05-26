@@ -29,12 +29,15 @@ public record ShearAtPositionAction(PositionTarget position) implements Action<S
 
     @Override
     public boolean execute(ActionContext context) {
+        if (!(context.world() instanceof ServerWorld world)) {
+            return false;
+        }
+
         BlockPos pos = context.getBlockPos(this.position.parameter());
         if (pos == null) {
             return false;
         }
 
-        ServerWorld world = context.world();
         return ShearsDispenserBehaviorAccessor.tryShearBlock(world, pos)
             || ShearsDispenserBehaviorAccessor.tryShearEntity(world, pos, context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY));
     }

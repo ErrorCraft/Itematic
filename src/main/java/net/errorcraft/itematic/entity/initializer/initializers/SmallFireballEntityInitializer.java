@@ -7,10 +7,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.projectile.SmallFireballEntity;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
 
 public class SmallFireballEntityInitializer implements EntityInitializer<SmallFireballEntity> {
     public static final SmallFireballEntityInitializer INSTANCE = new SmallFireballEntityInitializer();
@@ -20,7 +20,7 @@ public class SmallFireballEntityInitializer implements EntityInitializer<SmallFi
 
     @Override
     public SmallFireballEntity create(ActionContext context, SpawnReason reason) {
-        ServerWorld world = context.world();
+        World world = context.world();
         Random random = world.getRandom();
         Direction direction = context.getOrDefault(ItematicContextParameters.SIDE, Direction.UP);
         double velocityX = random.nextTriangular(direction.getOffsetX(), VELOCITY_DEVIATION);

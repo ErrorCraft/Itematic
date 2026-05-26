@@ -3,7 +3,6 @@ package net.errorcraft.itematic.mixin.recipe.book;
 import com.google.common.collect.ImmutableMap;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.datafixers.util.Pair;
-import net.errorcraft.itematic.recipe.book.ItematicRecipeBookTypes;
 import net.minecraft.recipe.book.RecipeBookOptions;
 import net.minecraft.recipe.book.RecipeBookType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +22,7 @@ public class RecipeBookOptionsExtender {
         return ImmutableMap.<RecipeBookType, Pair<String, String>>builder()
             .putAll(original)
             .put(
-                ItematicRecipeBookTypes.BREWING,
+                RecipeBookType.ITEMATIC_BREWING,
                 Pair.of("isBrewingStandGuiOpen", "isBrewingStandFilteringCraftable")
             )
             .build();

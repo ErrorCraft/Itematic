@@ -14,10 +14,8 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +23,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 @Mixin(DyeColor.class)
-@SuppressWarnings("DataFlowIssue")
 public class DyeColorExtender implements DyeColorAccess {
     @Shadow
     @Final
@@ -94,23 +91,27 @@ public class DyeColorExtender implements DyeColorAccess {
     @Unique
     private RegistryKey<Item> itemKey;
 
-    static {
-        ((DyeColorExtender)(Object) WHITE).itemKey = ItemKeys.WHITE_DYE;
-        ((DyeColorExtender)(Object) ORANGE).itemKey = ItemKeys.ORANGE_DYE;
-        ((DyeColorExtender)(Object) MAGENTA).itemKey = ItemKeys.MAGENTA_DYE;
-        ((DyeColorExtender)(Object) LIGHT_BLUE).itemKey = ItemKeys.LIGHT_BLUE_DYE;
-        ((DyeColorExtender)(Object) YELLOW).itemKey = ItemKeys.YELLOW_DYE;
-        ((DyeColorExtender)(Object) LIME).itemKey = ItemKeys.LIME_DYE;
-        ((DyeColorExtender)(Object) PINK).itemKey = ItemKeys.PINK_DYE;
-        ((DyeColorExtender)(Object) GRAY).itemKey = ItemKeys.GRAY_DYE;
-        ((DyeColorExtender)(Object) LIGHT_GRAY).itemKey = ItemKeys.LIGHT_GRAY_DYE;
-        ((DyeColorExtender)(Object) CYAN).itemKey = ItemKeys.CYAN_DYE;
-        ((DyeColorExtender)(Object) PURPLE).itemKey = ItemKeys.PURPLE_DYE;
-        ((DyeColorExtender)(Object) BLUE).itemKey = ItemKeys.BLUE_DYE;
-        ((DyeColorExtender)(Object) BROWN).itemKey = ItemKeys.BROWN_DYE;
-        ((DyeColorExtender)(Object) GREEN).itemKey = ItemKeys.GREEN_DYE;
-        ((DyeColorExtender)(Object) RED).itemKey = ItemKeys.RED_DYE;
-        ((DyeColorExtender)(Object) BLACK).itemKey = ItemKeys.BLACK_DYE;
+    @Inject(
+        method = "<clinit>",
+        at = @At("TAIL")
+    )
+    private static void setItemKeys(CallbackInfo info) {
+        WHITE.itematic$setItemKey(ItemKeys.WHITE_DYE);
+        ORANGE.itematic$setItemKey(ItemKeys.ORANGE_DYE);
+        MAGENTA.itematic$setItemKey(ItemKeys.MAGENTA_DYE);
+        LIGHT_BLUE.itematic$setItemKey(ItemKeys.LIGHT_BLUE_DYE);
+        YELLOW.itematic$setItemKey(ItemKeys.YELLOW_DYE);
+        LIME.itematic$setItemKey(ItemKeys.LIME_DYE);
+        PINK.itematic$setItemKey(ItemKeys.PINK_DYE);
+        GRAY.itematic$setItemKey(ItemKeys.GRAY_DYE);
+        LIGHT_GRAY.itematic$setItemKey(ItemKeys.LIGHT_GRAY_DYE);
+        CYAN.itematic$setItemKey(ItemKeys.CYAN_DYE);
+        PURPLE.itematic$setItemKey(ItemKeys.PURPLE_DYE);
+        BLUE.itematic$setItemKey(ItemKeys.BLUE_DYE);
+        BROWN.itematic$setItemKey(ItemKeys.BROWN_DYE);
+        GREEN.itematic$setItemKey(ItemKeys.GREEN_DYE);
+        RED.itematic$setItemKey(ItemKeys.RED_DYE);
+        BLACK.itematic$setItemKey(ItemKeys.BLACK_DYE);
     }
 
     @Redirect(
@@ -181,5 +182,10 @@ public class DyeColorExtender implements DyeColorAccess {
     @Override
     public RegistryKey<Item> itematic$itemKey() {
         return this.itemKey;
+    }
+
+    @Override
+    public void itematic$setItemKey(RegistryKey<Item> item) {
+        this.itemKey = item;
     }
 }

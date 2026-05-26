@@ -12,12 +12,12 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
 
 import java.util.Optional;
 
@@ -70,7 +70,7 @@ public record PlaySoundAction(PositionTarget position, RegistryEntry<SoundEvent>
             return false;
         }
 
-        ServerWorld world = context.world();
+        World world = context.world();
         Random random = world.getRandom();
         float volume = this.volume.get(random);
         float pitch = this.pitch.get(random);

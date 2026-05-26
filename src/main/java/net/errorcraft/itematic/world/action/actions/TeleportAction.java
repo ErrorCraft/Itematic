@@ -35,9 +35,13 @@ public record TeleportAction(int distance, LootContext.EntityTarget entity) impl
 
     @Override
     public boolean execute(ActionContext context) {
+        if (!(context.world() instanceof ServerWorld world)) {
+            return false;
+        }
+
         Entity entity = context.get(this.entity.getParameter());
         if (entity instanceof LivingEntity target) {
-            return this.teleport(target, context.world());
+            return this.teleport(target, world);
         }
 
         return false;

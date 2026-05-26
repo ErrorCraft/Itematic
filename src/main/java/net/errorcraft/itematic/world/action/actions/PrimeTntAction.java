@@ -31,12 +31,15 @@ public record PrimeTntAction(PositionTarget position) implements Action<PrimeTnt
 
     @Override
     public boolean execute(ActionContext context) {
+        if (!(context.world() instanceof ServerWorld world)) {
+            return false;
+        }
+
         BlockPos pos = context.get(this.position.parameter(), BlockPos::ofFloored);
         if (pos == null) {
             return false;
         }
 
-        ServerWorld world = context.world();
         PlayerEntity player = context.get(LootContextParameters.THIS_ENTITY, PlayerEntity.class);
         if (TntBlockAccessor.primeTnt(world, pos, player)) {
             world.removeBlock(pos, false);
