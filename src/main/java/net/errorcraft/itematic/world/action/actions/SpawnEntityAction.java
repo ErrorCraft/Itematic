@@ -13,15 +13,20 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.sound.SoundEvent;
 
-public record SpawnEntityAction(PositionTarget position, RegistryEntry<EntityType<?>> entity) implements Action<SpawnEntityAction> {
+import java.util.List;
+import java.util.Optional;
+
+public record SpawnEntityAction(PositionTarget position, RegistryEntry<EntityType<?>> entity, Optional<RegistryEntry<SoundEvent>> spawnSound) implements Action<SpawnEntityAction> {
     public static final MapCodec<SpawnEntityAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         PositionTarget.CODEC.fieldOf("position").forGetter(SpawnEntityAction::position),
-        Registries.ENTITY_TYPE.getEntryCodec().fieldOf("entity").forGetter(SpawnEntityAction::entity)
+        Registries.ENTITY_TYPE.getEntryCodec().fieldOf("entity").forGetter(SpawnEntityAction::entity),
+        SoundEvent.ENTRY_CODEC.optionalFieldOf("spawn_sound").forGetter(SpawnEntityAction::spawnSound)
     ).apply(instance, SpawnEntityAction::new));
 
     public static SpawnEntityAction of(PositionTarget position, RegistryEntry<EntityType<?>> entity) {
-        return new SpawnEntityAction(position, entity);
+        return new SpawnEntityAction(position, entity, Optional.empty());
     }
 
     @Override
@@ -33,6 +38,8 @@ public record SpawnEntityAction(PositionTarget position, RegistryEntry<EntityTyp
     public boolean execute(ActionContext context) {
         Entity entity = EntityPlacer.of(
             this.entity.value(),
+            List.of(), // TODO field
+            this.spawnSound,
             context,
             false,
             SpawnReason.COMMAND,

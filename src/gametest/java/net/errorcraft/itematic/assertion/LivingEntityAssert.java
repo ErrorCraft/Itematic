@@ -14,31 +14,27 @@ import net.minecraft.util.Hand;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class LivingEntityAssert {
-    private final TestContext helper;
-    private final LivingEntity entity;
-
-    LivingEntityAssert(TestContext helper, LivingEntity entity) {
-        this.helper = helper;
-        this.entity = entity;
+public class LivingEntityAssert<E extends LivingEntity> extends BaseEntityAssert<LivingEntityAssert<E>, E> {
+    LivingEntityAssert(TestContext helper, E entity) {
+        super(helper, entity);
     }
 
-    public LivingEntityAssert hasHealth(Consumer<FloatsAssert> healthAssertion) {
+    public LivingEntityAssert<E> hasHealth(Consumer<FloatsAssert> healthAssertion) {
         healthAssertion.accept(Assert.floats(this.helper, this.entity.getHealth(), "entity health"));
         return this;
     }
 
-    public LivingEntityAssert hasStackInHand(Hand hand, Consumer<ItemStackAssert> stackAssertion) {
+    public LivingEntityAssert<E> hasStackInHand(Hand hand, Consumer<ItemStackAssert> stackAssertion) {
         stackAssertion.accept(Assert.itemStack(this.helper, this.entity.getStackInHand(hand), "item stack in hand"));
         return this;
     }
 
-    public LivingEntityAssert hasEquippedStack(EquipmentSlot slot, Consumer<ItemStackAssert> stackAssertion) {
+    public LivingEntityAssert<E> hasEquippedStack(EquipmentSlot slot, Consumer<ItemStackAssert> stackAssertion) {
         stackAssertion.accept(Assert.itemStack(this.helper, this.entity.getEquippedStack(slot), "equipped item stack"));
         return this;
     }
 
-    public LivingEntityAssert hasEffect(RegistryEntry<StatusEffect> effect) {
+    public LivingEntityAssert<E> hasEffect(RegistryEntry<StatusEffect> effect) {
         if (this.entity.hasStatusEffect(effect)) {
             return this;
         }
@@ -50,7 +46,7 @@ public class LivingEntityAssert {
         );
     }
 
-    public LivingEntityAssert hasEffect(RegistryEntry<StatusEffect> effect, int amplifier) {
+    public LivingEntityAssert<E> hasEffect(RegistryEntry<StatusEffect> effect, int amplifier) {
         StatusEffectInstance effectInstance = this.entity.getStatusEffect(effect);
         if (effectInstance != null && effectInstance.getAmplifier() == amplifier) {
             return this;
@@ -63,7 +59,7 @@ public class LivingEntityAssert {
         );
     }
 
-    public LivingEntityAssert doesNotHaveEffect(RegistryEntry<StatusEffect> effect) {
+    public LivingEntityAssert<E> doesNotHaveEffect(RegistryEntry<StatusEffect> effect) {
         if (!this.entity.hasStatusEffect(effect)) {
             return this;
         }
@@ -75,7 +71,7 @@ public class LivingEntityAssert {
         );
     }
 
-    public LivingEntityAssert hasEffects(RegistryEntry<Potion> potion) {
+    public LivingEntityAssert<E> hasEffects(RegistryEntry<Potion> potion) {
         for (StatusEffectInstance effect : potion.value().getEffects()) {
             this.hasEffect(effect.getEffectType(), effect.getAmplifier());
         }
@@ -83,7 +79,7 @@ public class LivingEntityAssert {
         return this;
     }
 
-    public LivingEntityAssert hasEffects(List<SuspiciousStewEffectsComponent.StewEffect> effects) {
+    public LivingEntityAssert<E> hasEffects(List<SuspiciousStewEffectsComponent.StewEffect> effects) {
         for (SuspiciousStewEffectsComponent.StewEffect effect : effects) {
             this.hasEffect(effect.effect(), effect.createStatusEffectInstance().getAmplifier());
         }

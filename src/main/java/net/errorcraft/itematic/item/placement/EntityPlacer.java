@@ -1,6 +1,8 @@
 package net.errorcraft.itematic.item.placement;
 
 import net.errorcraft.itematic.entity.EntitySpawnCallback;
+import net.errorcraft.itematic.entity.spawn.EntitySpawnContext;
+import net.errorcraft.itematic.entity.spawn.rule.ConditionedEntitySpawnRule;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
@@ -16,18 +18,26 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 public class EntityPlacer<T extends Entity> {
     private final EntityType<T> type;
+    private final List<ConditionedEntitySpawnRule> spawnRules;
+    private final Optional<RegistryEntry<SoundEvent>> spawnSound;
     private final ActionContext context;
     private final boolean mayModifyBlock;
     private final SpawnReason spawnReason;
@@ -36,8 +46,10 @@ public class EntityPlacer<T extends Entity> {
     private final PositionTarget position;
     private final ItemStack stack;
 
-    private EntityPlacer(EntityType<T> type, ActionContext context, boolean mayModifyBlock, SpawnReason spawnReason, EntitySpawnCallback<T> spawnCallback, boolean allowItemData, PositionTarget position) {
+    private EntityPlacer(EntityType<T> type, List<ConditionedEntitySpawnRule> spawnRules, Optional<RegistryEntry<SoundEvent>> spawnSound, ActionContext context, boolean mayModifyBlock, SpawnReason spawnReason, EntitySpawnCallback<T> spawnCallback, boolean allowItemData, PositionTarget position) {
         this.type = type;
+        this.spawnRules = spawnRules;
+        this.spawnSound = spawnSound;
         this.context = context;
         this.mayModifyBlock = mayModifyBlock;
         this.spawnReason = spawnReason;
@@ -47,8 +59,8 @@ public class EntityPlacer<T extends Entity> {
         this.stack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
     }
 
-    public static <T extends Entity> EntityPlacer<T> of(EntityType<T> type, ActionContext context, boolean mayModifyBlock, SpawnReason spawnReason, EntitySpawnCallback<T> spawnCallback, boolean allowItemData, PositionTarget position) {
-        return new EntityPlacer<>(type, context, mayModifyBlock, spawnReason, spawnCallback, allowItemData, position);
+    public static <T extends Entity> EntityPlacer<T> of(EntityType<T> type, List<ConditionedEntitySpawnRule> spawnRules, Optional<RegistryEntry<SoundEvent>> spawnSound, ActionContext context, boolean mayModifyBlock, SpawnReason spawnReason, EntitySpawnCallback<T> spawnCallback, boolean allowItemData, PositionTarget position) {
+        return new EntityPlacer<>(type, spawnRules, spawnSound, context, mayModifyBlock, spawnReason, spawnCallback, allowItemData, position);
     }
 
     public T place() {
@@ -105,22 +117,46 @@ public class EntityPlacer<T extends Entity> {
         BlockPos offset = state.getCollisionShape(world, pos).isEmpty() || side == null
             ? pos
             : pos.offset(side);
-        T entity = this.spawn(world, offset, !Objects.equals(pos, offset) && side == Direction.UP);
+        EntitySpawnContext spawnContext = new EntitySpawnContext(
+            world,
+            this.type,
+            this.context.get(LootContextParameters.THIS_ENTITY),
+            offset
+        );
+        if (!this.maySpawn(spawnContext)) {
+            return null;
+        }
+
+        T entity = this.spawn(
+            world,
+            BlockPos.ofFloored(spawnContext.spawnPosition()),
+            !Objects.equals(pos, offset) && side == Direction.UP
+        );
         if (entity == null) {
             return null;
         }
 
-        this.decrementStack();
-        world.emitGameEvent(
-            this.context.get(LootContextParameters.THIS_ENTITY),
-            GameEvent.ENTITY_PLACE,
-            entity.getBlockPos()
+        Vec3d spawnPosition = spawnContext.spawnPosition();
+        entity.refreshPositionAndAngles(
+            spawnPosition.getX(),
+            spawnPosition.getY(),
+            spawnPosition.getZ(),
+            spawnContext.yaw(),
+            0.0f
         );
-        ActionContext extendedContext = this.context.extend()
-            .add(ItematicContextParameters.TARGET_ENTITY, entity)
-            .build();
-        this.stack.itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, extendedContext);
+        this.spawned(entity, spawnPosition, world);
         return entity;
+    }
+
+    private boolean maySpawn(EntitySpawnContext spawnContext) {
+        LootContext predicateContext = this.context.lootContext();
+        for (ConditionedEntitySpawnRule spawnRule : this.spawnRules) {
+            if (!spawnRule.apply(predicateContext, spawnContext)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private T spawn(ServerWorld world, BlockPos pos, boolean invertY) {
@@ -138,6 +174,29 @@ public class EntityPlacer<T extends Entity> {
 
         world.spawnEntityAndPassengers(entity);
         return entity;
+    }
+
+    private void spawned(Entity entity, Vec3d spawnPosition, World world) {
+        this.spawnSound.ifPresent(spawnSound -> world.playSound(
+            null,
+            spawnPosition.getX(),
+            spawnPosition.getY(),
+            spawnPosition.getZ(),
+            spawnSound.value(),
+            SoundCategory.BLOCKS,
+            0.75f,
+            0.8f
+        ));
+        this.decrementStack();
+        world.emitGameEvent(
+            this.context.get(LootContextParameters.THIS_ENTITY),
+            GameEvent.ENTITY_PLACE,
+            entity.getBlockPos()
+        );
+        ActionContext extendedContext = this.context.extend()
+            .add(ItematicContextParameters.TARGET_ENTITY, entity)
+            .build();
+        this.stack.itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, extendedContext);
     }
 
     private void decrementStack() {

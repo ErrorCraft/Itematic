@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.entity.spawn.rule.ConditionedEntitySpawnRule;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -34,6 +35,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
@@ -42,28 +44,43 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, boolean allowItemData, Set<Pass> passes) implements ItemComponent<EntityItemComponent> {
+public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<ConditionedEntitySpawnRule> spawnRules, Optional<RegistryEntry<SoundEvent>> spawnSound, boolean allowItemData, Set<Pass> passes) implements ItemComponent<EntityItemComponent> {
     public static final Codec<EntityItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Registries.ENTITY_TYPE.getEntryCodec().fieldOf("entity").forGetter(EntityItemComponent::entity),
+        ConditionedEntitySpawnRule.CODEC.listOf().optionalFieldOf("spawn_rules", List.of()).forGetter(EntityItemComponent::spawnRules),
+        SoundEvent.ENTRY_CODEC.optionalFieldOf("spawn_sound").forGetter(EntityItemComponent::spawnSound),
         Codec.BOOL.optionalFieldOf("allow_item_data", false).forGetter(EntityItemComponent::allowItemData),
         SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(EntityItemComponent::passes)
     ).apply(instance, EntityItemComponent::new));
     private static final Text RANDOM_TEXT = DecorationItemAccessor.randomText();
 
     public static EntityItemComponent of(RegistryEntry<EntityType<?>> entity) {
-        return new EntityItemComponent(entity, false, Pass.DEFAULT_PASSES);
+        return new EntityItemComponent(entity, List.of(), Optional.empty(), false, Pass.DEFAULT_PASSES);
+    }
+
+    public static EntityItemComponent of(RegistryEntry<EntityType<?>> entity, RegistryEntry<SoundEvent> spawnSound, ConditionedEntitySpawnRule... spawnRules) {
+        return new EntityItemComponent(entity, List.of(spawnRules), Optional.of(spawnSound), false, Pass.DEFAULT_PASSES);
     }
 
     public static EntityItemComponent of(RegistryEntry<EntityType<?>> entity, boolean allowItemData, Pass... passes) {
-        return new EntityItemComponent(entity, allowItemData, Set.of(passes));
+        return new EntityItemComponent(entity, List.of(), Optional.empty(), allowItemData, Set.of(passes));
     }
 
     public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             of(entity),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
+        };
+    }
+
+    public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, RegistryEntry<SoundEvent> spawnSound, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors, ConditionedEntitySpawnRule... spawnRules) {
+        return new ItemComponent<?>[] {
+            of(entity, spawnSound, spawnRules),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
         };
     }
@@ -169,6 +186,8 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, boolean a
                 context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY),
                 context.world().getRegistryManager()
             ),
+            this.spawnRules,
+            this.spawnSound,
             context,
             true,
             SpawnReason.SPAWN_ITEM_USE,

@@ -40,6 +40,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 
+import java.util.List;
 import java.util.Optional;
 
 public record BucketItemComponent(WorldModification modification, Optional<RegistryEntry<EntityType<?>>> entity) implements ItemComponent<BucketItemComponent> {
@@ -140,6 +141,8 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
 
         this.entity.ifPresent(entity -> EntityPlacer.of(
             entity.value(),
+            List.of(), // TODO field
+            Optional.empty(),
             context,
             false,
             SpawnReason.BUCKET,

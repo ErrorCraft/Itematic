@@ -13,7 +13,6 @@ import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.entity.*;
-import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
@@ -202,25 +201,6 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     )
     private static EntityType.Builder<EndCrystalEntity> setEndCrystalInitializer(EntityType.Builder<EndCrystalEntity> builder) {
         builder.itematic$initializer(EndCrystalEntityInitializer.INSTANCE);
-        return builder;
-    }
-
-    @ModifyArg(
-        method = "<clinit>",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "CONSTANT",
-                args = "stringValue=armor_stand"
-            )
-        )
-    )
-    private static EntityType.Builder<ArmorStandEntity> setArmorStandInitializer(EntityType.Builder<ArmorStandEntity> builder) {
-        builder.itematic$initializer(ArmorStandEntityInitializer.INSTANCE);
         return builder;
     }
 

@@ -4,6 +4,8 @@ import net.errorcraft.itematic.util.TestUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
@@ -87,8 +89,16 @@ public class Assert {
         return new FluidStateAssert(helper, state);
     }
 
-    public static LivingEntityAssert livingEntity(TestContext helper, LivingEntity entity) {
-        return new LivingEntityAssert(helper, entity);
+    public static <E extends Entity> EntityTypeAssert<E> entityType(TestContext helper, EntityType<E> type) {
+        return new EntityTypeAssert<>(helper, type);
+    }
+
+    public static <E extends Entity> EntityAssert<E> entity(TestContext helper, E entity) {
+        return new EntityAssert<>(helper, entity);
+    }
+
+    public static <E extends LivingEntity> LivingEntityAssert<E> livingEntity(TestContext helper, E entity) {
+        return new LivingEntityAssert<>(helper, entity);
     }
 
     public static ItemStackAssert itemStack(TestContext helper, ItemStack stack) {

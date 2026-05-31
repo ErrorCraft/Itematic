@@ -6,6 +6,10 @@ import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
+import net.errorcraft.itematic.entity.spawn.rule.ConditionedEntitySpawnRule;
+import net.errorcraft.itematic.entity.spawn.rule.type.AlignYawEntitySpawnRule;
+import net.errorcraft.itematic.entity.spawn.rule.type.DiscardEntitySpawnRule;
+import net.errorcraft.itematic.entity.spawn.rule.type.FitsInVolumeEntitySpawnRule;
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
@@ -5815,7 +5819,21 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ARMOR_STAND).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ARMOR_STAND), this.dispenseBehaviors))
+                    .with(EntityItemComponent.from(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.ARMOR_STAND),
+                        this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_STAND_PLACE),
+                        this.dispenseBehaviors,
+                        ConditionedEntitySpawnRule.of(
+                            DiscardEntitySpawnRule.INSTANCE,
+                            SideCheckPredicate.builder(Direction.DOWN).build()
+                        ),
+                        ConditionedEntitySpawnRule.of(
+                            FitsInVolumeEntitySpawnRule.INSTANCE
+                        ),
+                        ConditionedEntitySpawnRule.of(
+                            AlignYawEntitySpawnRule.of(8)
+                        )
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_CRYSTAL, create(
