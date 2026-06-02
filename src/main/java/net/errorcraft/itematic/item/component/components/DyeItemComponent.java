@@ -50,7 +50,7 @@ public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemC
             .add(ItematicContextParameters.INTERACTED_POSITION, context.getBlockPos().toCenterPos())
             .add(LootContextParameters.TOOL, stack)
             .build();
-        ModifySignAction action = ModifySignAction.dye(PositionTarget.INTERACTED_POSITION, this.color);
+        ModifySignAction action = ModifySignAction.dye(PositionTarget.INTERACTED, this.color);
         if (action.execute(actionContext)) {
             context.getStack().decrementUnlessCreative(1, context.getPlayer());
             return ItemResult.CONSUME;

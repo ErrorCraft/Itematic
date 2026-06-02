@@ -6,7 +6,6 @@ import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
-import net.errorcraft.itematic.entity.spawn.rule.ConditionedEntitySpawnRule;
 import net.errorcraft.itematic.entity.spawn.rule.type.AlignYawEntitySpawnRule;
 import net.errorcraft.itematic.entity.spawn.rule.type.DiscardEntitySpawnRule;
 import net.errorcraft.itematic.entity.spawn.rule.type.FitsInVolumeEntitySpawnRule;
@@ -229,7 +228,7 @@ public class ItemUtil {
                                 SideCheckPredicate.builder(Direction.DOWN)
                             ),
                             LocationCheckLootConditionUtil.builder(
-                                PositionTarget.INTERACTED_POSITION,
+                                PositionTarget.INTERACTED,
                                 LocationPredicate.Builder.create()
                                     .block(BlockPredicate.Builder.create()
                                         .tag(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
@@ -246,9 +245,9 @@ public class ItemUtil {
                             )
                         ),
                         UncheckedSequenceHandler.builder()
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_SPLASH), SoundCategory.BLOCKS))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_SPLASH), SoundCategory.BLOCKS))
                             .add(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
-                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED_POSITION, ParticleTypes.SPLASH)
+                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SPLASH)
                                 .count(5)
                                 .offset(Vec3dProvider.of(
                                     -0.5d, 0.5d,
@@ -257,8 +256,8 @@ public class ItemUtil {
                                 ))
                                 .speed(1.0d)
                                 .build())
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_EMPTY), SoundCategory.BLOCKS))
-                            .add(SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, this.blocks.getOrThrow(BlockKeys.MUD)))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_EMPTY), SoundCategory.BLOCKS))
+                            .add(SetBlockStateAction.of(PositionTarget.INTERACTED, this.blocks.getOrThrow(BlockKeys.MUD)))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
@@ -5556,7 +5555,7 @@ public class ItemUtil {
                         PassingSequenceHandler.builder()
                             .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
                             .add(DamageItemAction.of(1))
-                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.FLINT_AND_STEEL_USE), SoundCategory.BLOCKS)
+                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.FLINT_AND_STEEL_USE), SoundCategory.BLOCKS)
                                 .pitch(0.8f, 1.2f)
                                 .build())
                     ))
@@ -5594,35 +5593,55 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.minecart(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.MINECART),
+                        this.blocks,
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHEST_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CHEST_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CHEST_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.minecart(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.CHEST_MINECART),
+                        this.blocks,
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.FURNACE_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.FURNACE_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.FURNACE_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.minecart(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.FURNACE_MINECART),
+                        this.blocks,
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.TNT_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TNT_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.TNT_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.minecart(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.TNT_MINECART),
+                        this.blocks,
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOPPER_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.HOPPER_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.HOPPER_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.minecart(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.HOPPER_MINECART),
+                        this.blocks,
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.COMMAND_BLOCK_MINECART, create(
@@ -5631,7 +5650,11 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.COMMAND_BLOCK_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.minecart(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.COMMAND_BLOCK_MINECART),
+                        this.blocks,
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.OAK_BOAT, create(
@@ -5819,21 +5842,15 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ARMOR_STAND).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(EntityItemComponent.from(
-                        this.entityTypes.getOrThrow(EntityTypeKeys.ARMOR_STAND),
-                        this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_STAND_PLACE),
-                        this.dispenseBehaviors,
-                        ConditionedEntitySpawnRule.of(
+                    .with(EntityItemComponent.builder(this.entityTypes.getOrThrow(EntityTypeKeys.ARMOR_STAND))
+                        .spawnRule(
                             DiscardEntitySpawnRule.INSTANCE,
-                            SideCheckPredicate.builder(Direction.DOWN).build()
-                        ),
-                        ConditionedEntitySpawnRule.of(
-                            FitsInVolumeEntitySpawnRule.INSTANCE
-                        ),
-                        ConditionedEntitySpawnRule.of(
-                            AlignYawEntitySpawnRule.of(8)
+                            SideCheckPredicate.builder(Direction.DOWN)
                         )
-                    ))
+                        .spawnRule(FitsInVolumeEntitySpawnRule.INSTANCE)
+                        .spawnRule(AlignYawEntitySpawnRule.of(8))
+                        .spawnSound(this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_STAND_PLACE))
+                        .build(this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_CRYSTAL, create(
@@ -9698,7 +9715,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         LocationCheckLootConditionUtil.builder(
-                            PositionTarget.INTERACTED_POSITION,
+                            PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
                                     .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
@@ -9706,21 +9723,21 @@ public class ItemUtil {
                                         .exactMatch(Properties.EYE, false)))
                         ),
                         PassingSequenceHandler.builder()
-                            .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED_POSITION)
+                            .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED)
                                 .property(Properties.EYE, true)
                                 .pushEntitiesUpwards()
                                 .build())
                             .add(DecrementItemAction.of(1))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS))
-                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED_POSITION, ParticleTypes.SMOKE)
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS))
+                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SMOKE)
                                 .count(16)
                                 .offset(Vec3dProvider.of(
                                     -0.1875d, 0.1875d,
                                     0.8125d, 0.8125d,
                                     -0.1875d, 0.1875d))
                                 .build())
-                            .addOptional(LightEndPortalAction.of(PositionTarget.INTERACTED_POSITION))
+                            .addOptional(LightEndPortalAction.of(PositionTarget.INTERACTED))
                     ))
                     .add(ItemEvents.THROW_PROJECTILE, ActionEntry.of(
                         PlaySoundAction.builder(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL)
@@ -9754,7 +9771,7 @@ public class ItemUtil {
                         PassingSequenceHandler.builder()
                             .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
                             .add(DecrementItemAction.of(1))
-                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.FIRE_CHARGE_USE), SoundCategory.BLOCKS)
+                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.FIRE_CHARGE_USE), SoundCategory.BLOCKS)
                                 .pitch(0.8f, 1.2f)
                                 .build())
                     ))
@@ -11001,7 +11018,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         LocationCheckLootConditionUtil.builder(
-                            PositionTarget.INTERACTED_POSITION,
+                            PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
                                     .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value()))
@@ -11010,7 +11027,7 @@ public class ItemUtil {
                             .add(ModifyItemAction.of(
                                 ItemStackTarget.TOOL,
                                 SplitItemModifier.builder(1),
-                                SetItemPointerLocationItemModifier.builder(PositionTarget.INTERACTED_POSITION),
+                                SetItemPointerLocationItemModifier.builder(PositionTarget.INTERACTED),
                                 SetNameLootFunction.builder(
                                     Text.translatable(Util.createTranslationKey("item", Identifier.ofVanilla("lodestone_compass"))),
                                     SetNameLootFunction.Target.ITEM_NAME
@@ -11021,7 +11038,7 @@ public class ItemUtil {
                                 )
                             ))
                             .add(PlaySoundAction.of(
-                                PositionTarget.INTERACTED_POSITION,
+                                PositionTarget.INTERACTED,
                                 this.soundEvents.getOrThrow(SoundEventKeys.LODESTONE_COMPASS_LOCK),
                                 SoundCategory.PLAYERS
                             ))
@@ -11223,7 +11240,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(FertilizeAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(FertilizeAction.of(PositionTarget.INTERACTED))
                             .add(InvokeGameEventAction.of(
                                 GameEvent.ITEM_INTERACT_FINISH,
                                 PositionTarget.ORIGIN,
@@ -11254,7 +11271,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(MarkBannerOnItemAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(MarkBannerOnItemAction.of(PositionTarget.INTERACTED))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
@@ -11281,7 +11298,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         LocationCheckLootConditionUtil.builder(
-                            PositionTarget.INTERACTED_POSITION,
+                            PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .fluid(FluidPredicate.Builder.create()
                                     .tag(this.fluids.getOrThrow(FluidTags.WATER)))
@@ -11292,7 +11309,7 @@ public class ItemUtil {
                                 ComponentChanges.builder()
                                     .add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(this.potions.getOrThrow(PotionKeys.WATER)))
                                     .build()))
-                            .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, PositionTarget.INTERACTED_POSITION, LootContext.EntityTarget.THIS))
+                            .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, PositionTarget.INTERACTED, LootContext.EntityTarget.THIS))
                             .add(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundCategory.NEUTRAL))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
@@ -11400,7 +11417,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(AttachLeashedEntitiesOnBlockAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(AttachLeashedEntitiesOnBlockAction.of(PositionTarget.INTERACTED))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
@@ -11523,7 +11540,7 @@ public class ItemUtil {
                         FirstToPassRequirementsSequenceHandler.builder()
                             .add(Actions.waxSign(this.blocks, true))
                             .add(PassingSequenceHandler.builder()
-                                .add(WaxBlockAction.of(PositionTarget.INTERACTED_POSITION))
+                                .add(WaxBlockAction.of(PositionTarget.INTERACTED))
                                 .add(DecrementItemAction.of(1))
                                 .add(SwingHandAction.of(LootContext.EntityTarget.THIS)))))
                     .build()

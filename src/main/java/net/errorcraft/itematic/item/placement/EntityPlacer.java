@@ -123,14 +123,25 @@ public class EntityPlacer<T extends Entity> {
             this.context.get(LootContextParameters.THIS_ENTITY),
             offset
         );
+        return this.spawn(
+            world,
+            spawnContext,
+            !Objects.equals(pos, offset) && side == Direction.UP
+        );
+    }
+
+    private T spawn(ServerWorld world, EntitySpawnContext spawnContext, boolean invertY) {
         if (!this.maySpawn(spawnContext)) {
             return null;
         }
 
-        T entity = this.spawn(
-            world,
+        T entity = this.type.itematic$create(
+            this.context,
+            this.spawnReason,
             BlockPos.ofFloored(spawnContext.spawnPosition()),
-            !Objects.equals(pos, offset) && side == Direction.UP
+            this.spawnCallback,
+            this.allowItemData,
+            invertY
         );
         if (entity == null) {
             return null;
@@ -138,13 +149,16 @@ public class EntityPlacer<T extends Entity> {
 
         Vec3d spawnPosition = spawnContext.spawnPosition();
         entity.refreshPositionAndAngles(
-            spawnPosition.getX(),
-            spawnPosition.getY(),
-            spawnPosition.getZ(),
+            spawnPosition,
             spawnContext.yaw(),
             0.0f
         );
-        this.spawned(entity, spawnPosition, world);
+        world.spawnEntityAndPassengers(entity);
+        ActionContext spawnedContext = this.context.extend()
+            .add(ItematicContextParameters.SPAWNED_ENTITY, entity)
+            .add(ItematicContextParameters.SPAWNED_POSITION, spawnPosition)
+            .build();
+        this.spawned(entity, spawnPosition, world, spawnedContext);
         return entity;
     }
 
@@ -159,24 +173,7 @@ public class EntityPlacer<T extends Entity> {
         return true;
     }
 
-    private T spawn(ServerWorld world, BlockPos pos, boolean invertY) {
-        T entity = this.type.itematic$create(
-            this.context,
-            this.spawnReason,
-            pos,
-            this.spawnCallback,
-            this.allowItemData,
-            invertY
-        );
-        if (entity == null) {
-            return null;
-        }
-
-        world.spawnEntityAndPassengers(entity);
-        return entity;
-    }
-
-    private void spawned(Entity entity, Vec3d spawnPosition, World world) {
+    private void spawned(Entity entity, Vec3d spawnPosition, World world, ActionContext spawnedContext) {
         this.spawnSound.ifPresent(spawnSound -> world.playSound(
             null,
             spawnPosition.getX(),
@@ -193,10 +190,7 @@ public class EntityPlacer<T extends Entity> {
             GameEvent.ENTITY_PLACE,
             entity.getBlockPos()
         );
-        ActionContext extendedContext = this.context.extend()
-            .add(ItematicContextParameters.TARGET_ENTITY, entity)
-            .build();
-        this.stack.itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, extendedContext);
+        this.stack.itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, spawnedContext);
     }
 
     private void decrementStack() {

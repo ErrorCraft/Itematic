@@ -13,6 +13,8 @@ public class ItematicContextParameters {
     public static final ContextParameter<EquipmentSlot> EQUIPMENT_SLOT = ContextParameter.of("equipment_slot");
     public static final ContextParameter<Hand> HAND = ContextParameter.of("hand");
     public static final ContextParameter<Entity> TARGET_ENTITY = ContextParameter.of("target_entity");
+    public static final ContextParameter<Entity> SPAWNED_ENTITY = ContextParameter.of("spawned_entity");
+    public static final ContextParameter<Vec3d> SPAWNED_POSITION = ContextParameter.of("spawned_position");
 
     private ItematicContextParameters() {}
 

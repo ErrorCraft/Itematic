@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.assertion;
 
+import net.errorcraft.itematic.util.TestUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.test.TestContext;
@@ -17,7 +18,7 @@ public class EntityTypeAssert<E extends Entity> {
     }
 
     public EntityTypeAssert<E> existsAt(BlockPos pos) {
-        this.helper.expectEntity(this.entityType, pos.getX(), pos.getY(), pos.getZ(), 0.5d);
+        TestUtil.getSingleEntityAt(this.helper, this.entityType, pos);
         return this;
     }
 
@@ -30,7 +31,7 @@ public class EntityTypeAssert<E extends Entity> {
     }
 
     public <A extends BaseEntityAssert<A, E>> EntityTypeAssert<E> existsAt(BlockPos pos, AssertionSupplier<A, E> assertionSupplier, Consumer<A> entityAssertion) {
-        E entity = this.helper.expectEntity(this.entityType, pos.getX(), pos.getY(), pos.getZ(), 0.5d);
+        E entity = TestUtil.getSingleEntityAt(this.helper, this.entityType, pos);
         entityAssertion.accept(assertionSupplier.get(this.helper, entity));
         return this;
     }

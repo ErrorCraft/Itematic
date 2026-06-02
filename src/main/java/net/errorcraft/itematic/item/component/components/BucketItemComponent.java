@@ -119,7 +119,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
             .add(ItematicContextParameters.HAND, hand)
             .add(ItematicContextParameters.SIDE, blockHitResult.getSide())
             .build();
-        if (this.use(context, PositionTarget.INTERACTED_POSITION, !blockHitResult.isInsideBlock())) {
+        if (this.use(context, PositionTarget.INTERACTED, !blockHitResult.isInsideBlock())) {
             return ItemResult.CONSUME;
         }
 
@@ -148,7 +148,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
             SpawnReason.BUCKET,
             BucketItemComponent::initializeBucketEntity,
             true,
-            PositionTarget.INTERACTED_POSITION
+            PositionTarget.INTERACTED
         ).place());
         ItemStack stack = context.get(LootContextParameters.TOOL);
         if (!ItemStackUtil.isNullOrEmpty(stack)) {

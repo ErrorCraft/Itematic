@@ -63,7 +63,7 @@ public record ProjectileItemComponent(EntitySpawner entity) implements ItemCompo
             .add(LootContextParameters.ORIGIN, user.getPos())
             .add(ItematicContextParameters.INTERACTED_POSITION, user.getEyePos().add(0.0d, -0.1d, 0.0d))
             .build();
-        return this.createEntity(context, PositionTarget.INTERACTED_POSITION, angleOffset, speed, 1.0f);
+        return this.createEntity(context, PositionTarget.INTERACTED, angleOffset, speed, 1.0f);
     }
 
     public Entity createEntity(ActionContext context, PositionTarget position, float angleOffset, float speed, float uncertainty) {

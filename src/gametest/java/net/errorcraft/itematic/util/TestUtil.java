@@ -27,10 +27,12 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -84,6 +86,36 @@ public class TestUtil {
                 "test.error.block_entity.expected_block_entity_type",
                 Registries.BLOCK_ENTITY_TYPE.getId(type)
             ));
+    }
+
+    public static <E extends Entity> E getSingleEntityAt(TestContext context, EntityType<E> type, BlockPos pos) {
+        List<E> entities = getEntitiesAt(context, type, pos);
+        if (entities.isEmpty()) {
+            throw context.createError(
+                "test.error.expected_entity_around",
+                type.getName(),
+                pos.getX(),
+                pos.getY(),
+                pos.getZ()
+            );
+        }
+
+        if (entities.size() > 1) {
+            throw context.createError(
+                "test.error.too_many_entities",
+                type.getUntranslatedName(),
+                pos.getX(),
+                pos.getY(),
+                pos.getZ(),
+                entities.size()
+            );
+        }
+
+        return entities.getFirst();
+    }
+
+    public static <E extends Entity> List<E> getEntitiesAt(TestContext context, EntityType<E> type, BlockPos pos) {
+        return context.getWorld().getEntitiesByType(type, new Box(context.getAbsolutePos(pos)), Entity::isAlive);
     }
 
     public static PlayerEntity createMockPlayer(TestContext context, GameMode gameMode, BlockPos pos) {

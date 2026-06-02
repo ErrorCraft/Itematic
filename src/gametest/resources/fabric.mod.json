@@ -39,6 +39,7 @@
       "net.errorcraft.itematic.gametest.item.FlowerPotItemTestSuite",
       "net.errorcraft.itematic.gametest.item.HoneyBottleTestSuite",
       "net.errorcraft.itematic.gametest.item.LeadTestSuite",
+      "net.errorcraft.itematic.gametest.item.MinecartTestSuite",
       "net.errorcraft.itematic.gametest.item.SignTestSuite",
       "net.errorcraft.itematic.gametest.item.TotemOfUndyingTestSuite",
       "net.errorcraft.itematic.gametest.item.component.BlockItemComponentTestSuite",

@@ -36,9 +36,8 @@ public class ArmorStandTestSuite {
     @GameTest(structure = "itematic:item.armor_stand.platform.high")
     public void usingArmorStandOnCeilingDoesNotPlaceArmorStand(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.ARMOR_STAND);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, world.itematic$createStack(ItemKeys.ARMOR_STAND));
         world.spawnEntity(player);
         TestUtil.useBlock(context, HIGH_POSITION, player, Direction.DOWN);
         context.addFinalTask(() -> Assert.entityType(context, EntityType.ARMOR_STAND)
@@ -48,9 +47,8 @@ public class ArmorStandTestSuite {
     @GameTest(structure = "itematic:item.armor_stand.platform.not_enough_room")
     public void usingArmorStandOnGroundWithNotEnoughRoomDoesNotPlaceArmorStand(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.ARMOR_STAND);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, world.itematic$createStack(ItemKeys.ARMOR_STAND));
         world.spawnEntity(player);
         TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
         context.addFinalTask(() -> Assert.entityType(context, EntityType.ARMOR_STAND)
@@ -60,9 +58,8 @@ public class ArmorStandTestSuite {
     @GameTest(structure = "itematic:item.armor_stand.platform")
     public void usingArmorStandOnGroundWhileRotatedPlacesArmorStandRotated(TestContext context) {
         ServerWorld world = context.getWorld();
-        ItemStack stack = world.itematic$createStack(ItemKeys.ARMOR_STAND);
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, stack);
+        player.setStackInHand(Hand.MAIN_HAND, world.itematic$createStack(ItemKeys.ARMOR_STAND));
         player.setYaw(USER_ANGLE);
         world.spawnEntity(player);
         TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);

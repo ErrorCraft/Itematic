@@ -4,7 +4,54 @@
       "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
-      "entity": "minecraft:furnace_minecart"
+      "entity": "minecraft:furnace_minecart",
+      "spawn_rules": [
+        {
+          "type": "minecraft:discard",
+          "condition": {
+            "condition": "minecraft:inverted",
+            "term": {
+              "condition": "minecraft:location_check",
+              "position": "interacted",
+              "predicate": {
+                "block": {
+                  "blocks": "#minecraft:rails"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "minecraft:offset_spawn_position",
+          "offset": [
+            0.0,
+            0.0625,
+            0.0
+          ]
+        },
+        {
+          "type": "minecraft:offset_spawn_position",
+          "condition": {
+            "condition": "minecraft:location_check",
+            "position": "interacted",
+            "predicate": {
+              "block": {
+                "state": {
+                  "shape": {
+                    "max": "ascending_south",
+                    "min": "ascending_east"
+                  }
+                }
+              }
+            }
+          },
+          "offset": [
+            0.0,
+            0.5,
+            0.0
+          ]
+        }
+      ]
     },
     "minecraft:stackable": 1
   },

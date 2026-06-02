@@ -12,8 +12,8 @@ public class EntitySpawnContext {
     private final EntityType<?> entityType;
     @Nullable
     private final Entity user;
+    private Vec3d spawnPosition;
     private float yaw = 0.0f;
-    private final Vec3d spawnPosition;
 
     public EntitySpawnContext(ServerWorld world, EntityType<?> entityType, @Nullable Entity user, BlockPos spawnPosition) {
         this.world = world;
@@ -32,6 +32,10 @@ public class EntitySpawnContext {
 
     public Vec3d spawnPosition() {
         return this.spawnPosition;
+    }
+
+    public void spawnPosition(Vec3d spawnPosition) {
+        this.spawnPosition = spawnPosition;
     }
 
     public float userAngle() {

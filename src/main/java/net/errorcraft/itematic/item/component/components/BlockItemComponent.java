@@ -146,7 +146,7 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
     private ItemResult place(ItemUsageContext context, ItemStackExchanger stackExchanger) {
         ActionContext actionContext = new ItemPlacementContext(context)
             .itematic$actionContext(stackExchanger);
-        if (this.place(actionContext, PositionTarget.INTERACTED_POSITION, true)) {
+        if (this.place(actionContext, PositionTarget.INTERACTED, true)) {
             return ItemResult.SUCCEED;
         }
 

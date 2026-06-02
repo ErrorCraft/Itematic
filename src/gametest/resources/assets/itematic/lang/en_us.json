@@ -1,6 +1,7 @@
 {
   "test.error.expected_not_null": "Expected %s to exist",
   "test.error.expected_value_greater_than": "Expected %s to be greater than %s, got %s instead",
+  "test.error.invalid_modulus": "Modulus must not be 0",
   "test.error.expected_type": "Expected %s to be %s, got %s instead",
   "test.error.did_not_expect_type": "Expected %s not to be %s",
   "test.error.expected_tag": "Expected %s to be #%s",
