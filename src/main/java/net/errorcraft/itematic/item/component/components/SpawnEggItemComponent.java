@@ -27,12 +27,10 @@ public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponen
 
     public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
-            EntityItemComponent.of(
-                entity,
-                true,
-                EntityItemComponent.Pass.BLOCK,
-                EntityItemComponent.Pass.FLUID
-            ),
+            EntityItemComponent.builder(entity)
+                .allowItemData(true)
+                .passes(EntityItemComponent.Pass.BLOCK, EntityItemComponent.Pass.FLUID)
+                .build(),
             INSTANCE,
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
         };

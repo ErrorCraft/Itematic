@@ -3,6 +3,7 @@ package net.errorcraft.itematic.item;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
+import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
@@ -91,7 +92,9 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.event.GameEvent;
 
 import java.util.List;
@@ -5847,7 +5850,7 @@ public class ItemUtil {
                             DiscardEntitySpawnRule.INSTANCE,
                             SideCheckPredicate.builder(Direction.DOWN)
                         )
-                        .spawnRule(FitsInVolumeEntitySpawnRule.INSTANCE)
+                        .spawnRule(FitsInVolumeEntitySpawnRule.entityDimensions())
                         .spawnRule(AlignYawEntitySpawnRule.of(8))
                         .spawnSound(this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_STAND_PLACE))
                         .build(this.dispenseBehaviors))
@@ -5859,7 +5862,38 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.END_CRYSTAL)))
+                    .with(EntityItemComponent.builder(this.entityTypes.getOrThrow(EntityTypeKeys.END_CRYSTAL))
+                        .spawnRule(
+                            DiscardEntitySpawnRule.INSTANCE,
+                            InvertedLootCondition.builder(
+                                LocationCheckLootConditionUtil.builder(
+                                    PositionTarget.INTERACTED,
+                                    LocationPredicate.Builder.create()
+                                        .block(BlockPredicate.Builder.create()
+                                            .tag(this.blocks, ItematicBlockTags.END_CRYSTAL_SPAWNABLE_ON)),
+                                    new BlockPos(0, -1, 0)
+                                )
+                            )
+                        )
+                        .spawnRule(
+                            DiscardEntitySpawnRule.INSTANCE,
+                            InvertedLootCondition.builder(
+                                LocationCheckLootConditionUtil.builder(
+                                    PositionTarget.INTERACTED,
+                                    LocationPredicate.Builder.create()
+                                        .block(BlockPredicate.Builder.create()
+                                            .tag(this.blocks, BlockTags.AIR))
+                                )
+                            )
+                        )
+                        .spawnRule(
+                            FitsInVolumeEntitySpawnRule.of(
+                                false,
+                                true,
+                                new Vec3d(1.0d, 2.0d, 1.0d)
+                            )
+                        )
+                        .build())
                     .build()
             ));
         }

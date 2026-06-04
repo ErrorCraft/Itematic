@@ -117,6 +117,9 @@ public class EntityPlacer<T extends Entity> {
         BlockPos offset = state.getCollisionShape(world, pos).isEmpty() || side == null
             ? pos
             : pos.offset(side);
+        ActionContext spawnActionContext = this.context.extend()
+            .add(ItematicContextParameters.INTERACTED_POSITION, offset.toCenterPos())
+            .build();
         EntitySpawnContext spawnContext = new EntitySpawnContext(
             world,
             this.type,
@@ -125,18 +128,19 @@ public class EntityPlacer<T extends Entity> {
         );
         return this.spawn(
             world,
+            spawnActionContext,
             spawnContext,
             !Objects.equals(pos, offset) && side == Direction.UP
         );
     }
 
-    private T spawn(ServerWorld world, EntitySpawnContext spawnContext, boolean invertY) {
-        if (!this.maySpawn(spawnContext)) {
+    private T spawn(ServerWorld world, ActionContext spawnActionContext, EntitySpawnContext spawnContext, boolean invertY) {
+        if (!this.maySpawn(spawnActionContext, spawnContext)) {
             return null;
         }
 
         T entity = this.type.itematic$create(
-            this.context,
+            spawnActionContext,
             this.spawnReason,
             BlockPos.ofFloored(spawnContext.spawnPosition()),
             this.spawnCallback,
@@ -154,16 +158,16 @@ public class EntityPlacer<T extends Entity> {
             0.0f
         );
         world.spawnEntityAndPassengers(entity);
-        ActionContext spawnedContext = this.context.extend()
+        ActionContext spawnedActionContext = spawnActionContext.extend()
             .add(ItematicContextParameters.SPAWNED_ENTITY, entity)
             .add(ItematicContextParameters.SPAWNED_POSITION, spawnPosition)
             .build();
-        this.spawned(entity, spawnPosition, world, spawnedContext);
+        this.spawned(entity, spawnPosition, world, spawnedActionContext);
         return entity;
     }
 
-    private boolean maySpawn(EntitySpawnContext spawnContext) {
-        LootContext predicateContext = this.context.lootContext();
+    private boolean maySpawn(ActionContext spawnActionContext, EntitySpawnContext spawnContext) {
+        LootContext predicateContext = spawnActionContext.lootContext();
         for (ConditionedEntitySpawnRule spawnRule : this.spawnRules) {
             if (!spawnRule.apply(predicateContext, spawnContext)) {
                 return false;

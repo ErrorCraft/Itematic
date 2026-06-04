@@ -75,30 +75,19 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
     private static final Text RANDOM_TEXT = DecorationItemAccessor.randomText();
 
     public static Builder builder(RegistryEntry<EntityType<?>> type) {
-        return new Builder(type, false);
+        return new Builder(type);
     }
 
     public static EntityItemComponent of(RegistryEntry<EntityType<?>> entity) {
-        return new EntityItemComponent(entity, List.of(), Optional.empty(), false, Pass.DEFAULT_PASSES);
-    }
-
-    public static EntityItemComponent of(RegistryEntry<EntityType<?>> entity, RegistryEntry<SoundEvent> spawnSound, ConditionedEntitySpawnRule... spawnRules) {
-        return new EntityItemComponent(entity, List.of(spawnRules), Optional.of(spawnSound), false, Pass.DEFAULT_PASSES);
-    }
-
-    public static EntityItemComponent of(RegistryEntry<EntityType<?>> entity, boolean allowItemData, Pass... passes) {
-        return new EntityItemComponent(entity, List.of(), Optional.empty(), allowItemData, Set.of(passes));
+        return builder(entity).build();
     }
 
     public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
-        return new ItemComponent<?>[] {
-            of(entity),
-            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
-        };
+        return builder(entity).build(dispenseBehaviors);
     }
 
     public static ItemComponent<?>[] minecart(RegistryEntry<EntityType<?>> entity, RegistryEntryLookup<Block> blocks, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
-        return EntityItemComponent.builder(entity)
+        return builder(entity)
             .spawnRule(
                 DiscardEntitySpawnRule.INSTANCE,
                 InvertedLootCondition.builder(
@@ -240,12 +229,11 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
         private final RegistryEntry<EntityType<?>> entity;
         private final List<ConditionedEntitySpawnRule> spawnRules = new ArrayList<>();
         private RegistryEntry<SoundEvent> spawnSound;
-        private final boolean allowItemData;
+        private boolean allowItemData;
         private Set<Pass> passes = Pass.DEFAULT_PASSES;
 
-        private Builder(RegistryEntry<EntityType<?>> entity, boolean allowItemData) {
+        private Builder(RegistryEntry<EntityType<?>> entity) {
             this.entity = entity;
-            this.allowItemData = allowItemData;
         }
 
         public EntityItemComponent build() {
@@ -277,6 +265,11 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
 
         public Builder spawnSound(RegistryEntry<SoundEvent> spawnSound) {
             this.spawnSound = spawnSound;
+            return this;
+        }
+
+        public Builder allowItemData(boolean allowItemData) {
+            this.allowItemData = allowItemData;
             return this;
         }
 

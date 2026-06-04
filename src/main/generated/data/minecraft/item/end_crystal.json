@@ -1,7 +1,49 @@
 {
   "behavior": {
     "minecraft:entity": {
-      "entity": "minecraft:end_crystal"
+      "entity": "minecraft:end_crystal",
+      "spawn_rules": [
+        {
+          "type": "minecraft:discard",
+          "condition": {
+            "condition": "minecraft:inverted",
+            "term": {
+              "condition": "minecraft:location_check",
+              "offsetY": -1,
+              "position": "interacted",
+              "predicate": {
+                "block": {
+                  "blocks": "#minecraft:end_crystal_spawnable_on"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "minecraft:discard",
+          "condition": {
+            "condition": "minecraft:inverted",
+            "term": {
+              "condition": "minecraft:location_check",
+              "position": "interacted",
+              "predicate": {
+                "block": {
+                  "blocks": "#minecraft:air"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "minecraft:fits_in_volume",
+          "blocks": false,
+          "volume": [
+            1.0,
+            2.0,
+            1.0
+          ]
+        }
+      ]
     },
     "minecraft:stackable": 64
   },
