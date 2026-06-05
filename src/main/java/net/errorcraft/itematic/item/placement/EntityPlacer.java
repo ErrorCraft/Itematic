@@ -32,69 +32,62 @@ public class EntityPlacer<T extends Entity> {
     private final EntityType<T> type;
     private final List<ConditionedEntitySpawnRule> spawnRules;
     private final Optional<RegistryEntry<SoundEvent>> spawnSound;
-    private final ActionContext context;
-    private final SpawnReason spawnReason;
     private final EntitySpawnCallback<T> spawnCallback;
     private final boolean allowItemData;
-    private final PositionTarget position;
-    private final ItemStack stack;
 
-    private EntityPlacer(EntityType<T> type, List<ConditionedEntitySpawnRule> spawnRules, Optional<RegistryEntry<SoundEvent>> spawnSound, ActionContext context, SpawnReason spawnReason, EntitySpawnCallback<T> spawnCallback, boolean allowItemData, PositionTarget position) {
+    private EntityPlacer(EntityType<T> type, List<ConditionedEntitySpawnRule> spawnRules, Optional<RegistryEntry<SoundEvent>> spawnSound, EntitySpawnCallback<T> spawnCallback, boolean allowItemData) {
         this.type = type;
         this.spawnRules = spawnRules;
         this.spawnSound = spawnSound;
-        this.context = context;
-        this.spawnReason = spawnReason;
         this.spawnCallback = spawnCallback;
         this.allowItemData = allowItemData;
-        this.position = position;
-        this.stack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
     }
 
-    public static <T extends Entity> EntityPlacer<T> of(EntityType<T> type, List<ConditionedEntitySpawnRule> spawnRules, Optional<RegistryEntry<SoundEvent>> spawnSound, ActionContext context, SpawnReason spawnReason, EntitySpawnCallback<T> spawnCallback, boolean allowItemData, PositionTarget position) {
-        return new EntityPlacer<>(type, spawnRules, spawnSound, context, spawnReason, spawnCallback, allowItemData, position);
+    public static <T extends Entity> EntityPlacer<T> of(EntityType<T> type, List<ConditionedEntitySpawnRule> spawnRules, Optional<RegistryEntry<SoundEvent>> spawnSound, EntitySpawnCallback<T> spawnCallback, boolean allowItemData) {
+        return new EntityPlacer<>(type, spawnRules, spawnSound, spawnCallback, allowItemData);
     }
 
-    public T place() {
-        if (!(this.context.world() instanceof ServerWorld world)) {
+    public T place(ActionContext context, PositionTarget position, SpawnReason spawnReason) {
+        if (!(context.world() instanceof ServerWorld world)) {
             return null;
         }
 
-        BlockPos pos = this.context.getBlockPos(this.position.parameter());
+        BlockPos pos = context.get(position.parameter(), BlockPos::ofFloored);
         if (pos == null) {
             return null;
         }
 
-        BlockState state = this.context.world().getBlockState(pos);
-        Direction side = this.context.get(ItematicContextParameters.SIDE);
+        BlockState state = world.getBlockState(pos);
+        Direction side = context.get(ItematicContextParameters.SIDE);
         BlockPos truePos = state.getCollisionShape(world, pos).isEmpty() || side == null
             ? pos
             : pos.offset(side);
-        ActionContext spawnActionContext = this.context.extend()
-            .add(ItematicContextParameters.INTERACTED_POSITION, truePos.toCenterPos())
-            .build();
         EntitySpawnContext spawnContext = new EntitySpawnContext(
             world,
             this.type,
-            this.context.get(LootContextParameters.THIS_ENTITY),
+            context.get(LootContextParameters.THIS_ENTITY),
             truePos
         );
+        ActionContext spawnActionContext = context.extend()
+            .add(ItematicContextParameters.INTERACTED_POSITION, truePos.toCenterPos())
+            .build();
         return this.spawn(
             world,
             spawnActionContext,
             spawnContext,
-            !Objects.equals(pos, truePos) && side == Direction.UP
+            !Objects.equals(pos, truePos) && side == Direction.UP,
+            spawnReason
         );
     }
 
-    private T spawn(ServerWorld world, ActionContext spawnActionContext, EntitySpawnContext spawnContext, boolean invertY) {
+    private T spawn(ServerWorld world, ActionContext spawnActionContext, EntitySpawnContext spawnContext, boolean invertY, SpawnReason spawnReason) {
         if (!this.maySpawn(spawnActionContext, spawnContext)) {
             return null;
         }
 
         T entity = this.type.itematic$create(
             spawnActionContext,
-            this.spawnReason,
+            spawnReason,
             BlockPos.ofFloored(spawnContext.spawnPosition()),
             this.spawnCallback,
             this.allowItemData,
@@ -142,10 +135,11 @@ public class EntityPlacer<T extends Entity> {
             0.8f
         ));
         world.emitGameEvent(
-            this.context.get(LootContextParameters.THIS_ENTITY),
+            spawnedContext.get(LootContextParameters.THIS_ENTITY),
             GameEvent.ENTITY_PLACE,
             entity.getBlockPos()
         );
-        this.stack.itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, spawnedContext);
+        spawnedContext.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
+            .itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, spawnedContext);
     }
 }

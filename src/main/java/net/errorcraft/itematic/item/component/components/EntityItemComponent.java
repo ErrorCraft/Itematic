@@ -227,7 +227,7 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
             .add(ItematicContextParameters.HAND, context.getHand())
             .add(ItematicContextParameters.SIDE, context.getSide())
             .build();
-        return this.place(actionContext) != null;
+        return this.place(actionContext, PositionTarget.INTERACTED) != null;
     }
 
     private boolean modifySpawner(ItemUsageContext context) {
@@ -266,7 +266,7 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
         );
     }
 
-    public Entity place(ActionContext context) {
+    public Entity place(ActionContext context, PositionTarget position) {
         return EntityPlacer.of(
             this.entityType(
                 context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY),
@@ -274,12 +274,9 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
             ),
             this.spawnRules,
             this.spawnSound,
-            context,
-            SpawnReason.SPAWN_ITEM_USE,
             null,
-            this.allowItemData,
-            PositionTarget.INTERACTED
-        ).place();
+            this.allowItemData
+        ).place(context, position, SpawnReason.SPAWN_ITEM_USE);
     }
 
     public static class Builder {

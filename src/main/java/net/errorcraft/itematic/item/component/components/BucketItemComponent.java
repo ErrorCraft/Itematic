@@ -143,12 +143,9 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
             entity.value(),
             List.of(), // TODO field
             Optional.empty(),
-            context,
-            SpawnReason.BUCKET,
             BucketItemComponent::initializeBucketEntity,
-            true,
-            PositionTarget.INTERACTED
-        ).place());
+            true
+        ).place(context, PositionTarget.INTERACTED, SpawnReason.BUCKET));
         ItemStack stack = context.get(LootContextParameters.TOOL);
         if (!ItemStackUtil.isNullOrEmpty(stack)) {
             stack.decrementUnlessCreative(

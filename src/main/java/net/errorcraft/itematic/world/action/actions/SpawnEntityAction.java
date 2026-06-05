@@ -8,7 +8,6 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.registry.Registries;
@@ -36,16 +35,13 @@ public record SpawnEntityAction(PositionTarget position, RegistryEntry<EntityTyp
 
     @Override
     public boolean execute(ActionContext context) {
-        Entity entity = EntityPlacer.of(
+        EntityPlacer<?> placer = EntityPlacer.of(
             this.entity.value(),
             List.of(), // TODO field
             this.spawnSound,
-            context,
-            SpawnReason.COMMAND,
             null,
-            false,
-            this.position
-        ).place();
-        return entity != null;
+            false
+        );
+        return placer.place(context, this.position, SpawnReason.COMMAND) != null;
     }
 }
