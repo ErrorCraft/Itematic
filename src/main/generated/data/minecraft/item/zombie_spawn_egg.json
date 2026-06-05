@@ -5,6 +5,7 @@
     },
     "minecraft:entity": {
       "allow_item_data": true,
+      "allow_spawner_modification": true,
       "entity": "minecraft:zombie",
       "passes": [
         "block",

@@ -144,7 +144,6 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
             List.of(), // TODO field
             Optional.empty(),
             context,
-            false,
             SpawnReason.BUCKET,
             BucketItemComponent::initializeBucketEntity,
             true,

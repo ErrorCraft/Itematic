@@ -41,7 +41,6 @@ public record SpawnEntityAction(PositionTarget position, RegistryEntry<EntityTyp
             List.of(), // TODO field
             this.spawnSound,
             context,
-            false,
             SpawnReason.COMMAND,
             null,
             false,

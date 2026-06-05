@@ -22,6 +22,10 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.entity.MobSpawnerBlockEntity;
 import net.minecraft.block.enums.RailShape;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
@@ -46,7 +50,6 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
@@ -54,9 +57,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,11 +69,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<ConditionedEntitySpawnRule> spawnRules, Optional<RegistryEntry<SoundEvent>> spawnSound, boolean allowItemData, Set<Pass> passes) implements ItemComponent<EntityItemComponent> {
+public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<ConditionedEntitySpawnRule> spawnRules, Optional<RegistryEntry<SoundEvent>> spawnSound, boolean allowSpawnerModification, boolean allowItemData, Set<Pass> passes) implements ItemComponent<EntityItemComponent> {
     public static final Codec<EntityItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Registries.ENTITY_TYPE.getEntryCodec().fieldOf("entity").forGetter(EntityItemComponent::entity),
         ConditionedEntitySpawnRule.CODEC.listOf().optionalFieldOf("spawn_rules", List.of()).forGetter(EntityItemComponent::spawnRules),
         SoundEvent.ENTRY_CODEC.optionalFieldOf("spawn_sound").forGetter(EntityItemComponent::spawnSound),
+        Codec.BOOL.optionalFieldOf("allow_spawner_modification", false).forGetter(EntityItemComponent::allowSpawnerModification),
         Codec.BOOL.optionalFieldOf("allow_item_data", false).forGetter(EntityItemComponent::allowItemData),
         SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(EntityItemComponent::passes)
     ).apply(instance, EntityItemComponent::new));
@@ -139,7 +145,7 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
         }
 
         ItemUsageContext itemUsageContext = new ItemUsageContext(world, user, hand, stack, blockHitResult);
-        this.place(itemUsageContext, stackExchanger);
+        this.modifyOrPlace(itemUsageContext, stackExchanger);
         return ItemResult.CONSUME;
     }
 
@@ -153,7 +159,7 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
             return ItemResult.SUCCEED;
         }
 
-        this.place(context, stackExchanger);
+        this.modifyOrPlace(context, stackExchanger);
         return ItemResult.CONSUME;
     }
 
@@ -191,9 +197,25 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
         return !this.passes.contains(pass);
     }
 
-    private void place(ItemUsageContext context, ItemStackExchanger stackExchanger) {
-        if (!(context.getWorld() instanceof ServerWorld world)) {
+    private void modifyOrPlace(ItemUsageContext context, ItemStackExchanger stackExchanger) {
+        if (!this.tryModifyOrPlace(context, stackExchanger)) {
             return;
+        }
+
+        context.getStack().decrementUnlessCreative(
+            1,
+            context.getPlayer()
+        );
+    }
+
+    private boolean tryModifyOrPlace(ItemUsageContext context, ItemStackExchanger stackExchanger) {
+        World world = context.getWorld();
+        if (world.isClient()) {
+            return false;
+        }
+
+        if (this.modifySpawner(context)) {
+            return true;
         }
 
         ActionContext actionContext = ActionContext.builder(world)
@@ -205,7 +227,43 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
             .add(ItematicContextParameters.HAND, context.getHand())
             .add(ItematicContextParameters.SIDE, context.getSide())
             .build();
-        this.place(actionContext);
+        return this.place(actionContext) != null;
+    }
+
+    private boolean modifySpawner(ItemUsageContext context) {
+        if (!this.allowSpawnerModification) {
+            return false;
+        }
+
+        BlockPos pos = context.getBlockPos();
+        World world = context.getWorld();
+        BlockState state = world.getBlockState(pos);
+        if (!state.isOf(Blocks.SPAWNER)) {
+            return false;
+        }
+
+        Optional<MobSpawnerBlockEntity> blockEntity = world.getBlockEntity(pos, BlockEntityType.MOB_SPAWNER);
+        if (blockEntity.isEmpty()) {
+            return false;
+        }
+
+        this.modifySpawner(context, world, blockEntity.get(), pos, state);
+        return true;
+    }
+
+    private void modifySpawner(ItemUsageContext context, World world, MobSpawnerBlockEntity blockEntity, BlockPos pos, BlockState state) {
+        EntityType<?> type = this.entityType(
+            context.getStack(),
+            context.getWorld().getRegistryManager()
+        );
+        blockEntity.setEntityType(type, world.getRandom());
+        blockEntity.markDirty();
+        world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
+        world.emitGameEvent(
+            context.getPlayer(),
+            GameEvent.BLOCK_CHANGE,
+            pos
+        );
     }
 
     public Entity place(ActionContext context) {
@@ -217,7 +275,6 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
             this.spawnRules,
             this.spawnSound,
             context,
-            true,
             SpawnReason.SPAWN_ITEM_USE,
             null,
             this.allowItemData,
@@ -229,6 +286,7 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
         private final RegistryEntry<EntityType<?>> entity;
         private final List<ConditionedEntitySpawnRule> spawnRules = new ArrayList<>();
         private RegistryEntry<SoundEvent> spawnSound;
+        private boolean allowSpawnerModification;
         private boolean allowItemData;
         private Set<Pass> passes = Pass.DEFAULT_PASSES;
 
@@ -241,6 +299,7 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
                 this.entity,
                 this.spawnRules,
                 Optional.ofNullable(this.spawnSound),
+                this.allowSpawnerModification,
                 this.allowItemData,
                 this.passes
             );
@@ -265,6 +324,11 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
 
         public Builder spawnSound(RegistryEntry<SoundEvent> spawnSound) {
             this.spawnSound = spawnSound;
+            return this;
+        }
+
+        public Builder allowSpawnerModification(boolean allowSpawnerModification) {
+            this.allowSpawnerModification = allowSpawnerModification;
             return this;
         }
 

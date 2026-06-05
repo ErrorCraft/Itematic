@@ -13,6 +13,12 @@
         },
         {
           "action": {
+            "type": "minecraft:decrement_item",
+            "amount": 1
+          }
+        },
+        {
+          "action": {
             "type": "minecraft:play_sound",
             "category": "block",
             "pitch": 1.0,

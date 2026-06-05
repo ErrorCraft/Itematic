@@ -135,7 +135,9 @@ public class DispenseBehaviors {
             shootProjectile(1.1f, 6.0f)
         ).offset(DispenseBehavior.Offset.of(0.7d, 0.0d, 0.1d, 0.0d)).build());
         registerable.register(SPAWN_ENTITY_FROM_ITEM, DispenseBehavior.builder(
-            SpawnEntityFromItemAction.of(PositionTarget.INTERACTED)
+            PassingSequenceHandler.builder()
+                .add(SpawnEntityFromItemAction.of(PositionTarget.INTERACTED))
+                .add(DecrementItemAction.of(1))
         ).build());
         registerable.register(SPAWN_TNT, DispenseBehavior.builder(
             PassingSequenceHandler.builder()
@@ -143,6 +145,7 @@ public class DispenseBehaviors {
                     PositionTarget.INTERACTED,
                     entityTypes.getOrThrow(EntityTypeKeys.TNT)
                 ))
+                .add(DecrementItemAction.of(1))
                 .add(PlaySoundAction.of(
                     PositionTarget.INTERACTED,
                     soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED),

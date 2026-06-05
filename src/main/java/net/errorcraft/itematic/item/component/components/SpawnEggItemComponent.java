@@ -28,6 +28,7 @@ public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponen
     public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             EntityItemComponent.builder(entity)
+                .allowSpawnerModification(true)
                 .allowItemData(true)
                 .passes(EntityItemComponent.Pass.BLOCK, EntityItemComponent.Pass.FLUID)
                 .build(),
