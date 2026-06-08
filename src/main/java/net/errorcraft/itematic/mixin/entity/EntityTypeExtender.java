@@ -424,7 +424,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     }
 
     @Override
-    public T itematic$create(ActionContext context, SpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback<T> callback, boolean allowItemData, boolean invertY) {
+    public T itematic$create(ActionContext context, SpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean invertY) {
         if (!(context.world() instanceof ServerWorld world)) {
             return null;
         }
@@ -442,7 +442,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
 
     @Unique
     @Nullable
-    private static <T extends Entity> Consumer<T> copier(ActionContext context, @Nullable EntitySpawnCallback<T> callback, boolean allowItemData) {
+    private static <T extends Entity> Consumer<T> copier(ActionContext context, @Nullable EntitySpawnCallback callback, boolean allowItemData) {
         ItemStack stack = context.get(LootContextParameters.TOOL);
         if (!allowItemData || ItemStackUtil.isNullOrEmpty(stack)) {
             return callback == null ? null : entity -> callback.accept(entity, stack);

@@ -1,8 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.entity.EntitySpawner;
+import net.errorcraft.itematic.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -22,23 +21,22 @@ import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public record ProjectileItemComponent(EntitySpawner entity) implements ItemComponent<ProjectileItemComponent> {
-    public static final Codec<ProjectileItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        EntitySpawner.CODEC.forGetter(ProjectileItemComponent::entity)
-    ).apply(instance, ProjectileItemComponent::new));
+    public static final Codec<ProjectileItemComponent> CODEC = EntitySpawner.CODEC.xmap(
+        ProjectileItemComponent::new,
+        ProjectileItemComponent::entity
+    );
 
     public static ProjectileItemComponent of(RegistryEntry<EntityType<?>> entity) {
         return new ProjectileItemComponent(EntitySpawner.of(entity));
     }
 
     public static ProjectileItemComponent of(RegistryEntry<EntityType<?>> entity, ComponentChanges components) {
-        return new ProjectileItemComponent(EntitySpawner.of(entity, components));
+        return new ProjectileItemComponent(EntitySpawner.builder(entity).components(components).build());
     }
 
     @Override
@@ -56,7 +54,7 @@ public record ProjectileItemComponent(EntitySpawner entity) implements ItemCompo
             return null;
         }
 
-        ActionContext context = ActionContext.builder((ServerWorld) world)
+        ActionContext context = ActionContext.builder(world)
             .stackExchanger(user, stack)
             .add(LootContextParameters.TOOL, stack)
             .add(LootContextParameters.THIS_ENTITY, user)
@@ -72,22 +70,21 @@ public record ProjectileItemComponent(EntitySpawner entity) implements ItemCompo
             return null;
         }
 
-        Entity entity = this.entity.create(context, BlockPos.ofFloored(pos), SpawnReason.SPAWN_ITEM_USE);
-        if (entity == null) {
-            return null;
-        }
+        return this.entity.spawn(
+            context,
+            pos,
+            SpawnReason.SPAWN_ITEM_USE,
+            (projectile, stack) -> {
+                if (projectile instanceof ThrownItemEntity thrownItemEntity) {
+                    thrownItemEntity.setItem(stack);
+                }
 
-        entity.refreshPositionAfterTeleport(pos);
-        ItemStack stack = context.get(LootContextParameters.TOOL);
-        if (stack != null && entity instanceof ThrownItemEntity thrownItemEntity) {
-            thrownItemEntity.setItem(stack);
-        }
-
-        if (entity instanceof ProjectileEntity projectileEntity) {
-            this.initializeProjectile(context, projectileEntity, angleOffset, speed, uncertainty);
-        }
-
-        return entity;
+                if (projectile instanceof ProjectileEntity projectileEntity) {
+                    this.initializeProjectile(context, projectileEntity, angleOffset, speed, uncertainty);
+                }
+            },
+            false
+        );
     }
 
     private void initializeProjectile(ActionContext context, ProjectileEntity projectileEntity, float angleOffset, float speed, float uncertainty) {

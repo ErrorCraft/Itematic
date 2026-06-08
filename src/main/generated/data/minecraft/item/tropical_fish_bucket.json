@@ -1,7 +1,9 @@
 {
   "behavior": {
     "minecraft:bucket": {
-      "entity": "minecraft:tropical_fish",
+      "entity": {
+        "entity": "minecraft:tropical_fish"
+      },
       "modification": {
         "type": "minecraft:place_fluid",
         "fluid": "minecraft:water",

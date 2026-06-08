@@ -2,8 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.entity.spawn.rule.ConditionedEntitySpawnRule;
-import net.errorcraft.itematic.entity.spawn.rule.EntitySpawnRule;
+import net.errorcraft.itematic.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.entity.spawn.rule.type.DiscardEntitySpawnRule;
 import net.errorcraft.itematic.entity.spawn.rule.type.OffsetSpawnPositionEntitySpawnRule;
 import net.errorcraft.itematic.item.ItemResult;
@@ -28,7 +27,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.MobSpawnerBlockEntity;
 import net.minecraft.block.enums.RailShape;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -39,18 +37,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.loot.condition.InvertedLootCondition;
-import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.predicate.BlockPredicate;
 import net.minecraft.predicate.StatePredicate;
 import net.minecraft.predicate.entity.LocationPredicate;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
@@ -63,60 +56,102 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<ConditionedEntitySpawnRule> spawnRules, Optional<RegistryEntry<SoundEvent>> spawnSound, boolean allowSpawnerModification, boolean allowItemData, Set<Pass> passes) implements ItemComponent<EntityItemComponent> {
+public record EntityItemComponent(EntitySpawner entity, boolean allowSpawnerModification, Set<Pass> passes) implements ItemComponent<EntityItemComponent> {
     public static final Codec<EntityItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Registries.ENTITY_TYPE.getEntryCodec().fieldOf("entity").forGetter(EntityItemComponent::entity),
-        ConditionedEntitySpawnRule.CODEC.listOf().optionalFieldOf("spawn_rules", List.of()).forGetter(EntityItemComponent::spawnRules),
-        SoundEvent.ENTRY_CODEC.optionalFieldOf("spawn_sound").forGetter(EntityItemComponent::spawnSound),
+        EntitySpawner.CODEC.fieldOf("entity").forGetter(EntityItemComponent::entity),
         Codec.BOOL.optionalFieldOf("allow_spawner_modification", false).forGetter(EntityItemComponent::allowSpawnerModification),
-        Codec.BOOL.optionalFieldOf("allow_item_data", false).forGetter(EntityItemComponent::allowItemData),
         SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(EntityItemComponent::passes)
     ).apply(instance, EntityItemComponent::new));
     private static final Text RANDOM_TEXT = DecorationItemAccessor.randomText();
 
-    public static Builder builder(RegistryEntry<EntityType<?>> type) {
-        return new Builder(type);
-    }
-
     public static EntityItemComponent of(RegistryEntry<EntityType<?>> entity) {
-        return builder(entity).build();
+        return new EntityItemComponent(
+            EntitySpawner.of(entity),
+            false,
+            Pass.DEFAULT_PASSES
+        );
     }
 
-    public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
-        return builder(entity).build(dispenseBehaviors);
+    public static EntityItemComponent of(EntitySpawner entity) {
+        return new EntityItemComponent(
+            entity,
+            false,
+            Pass.DEFAULT_PASSES
+        );
+    }
+
+    public static EntityItemComponent of(EntitySpawner entity, boolean allowSpawnerModification) {
+        return new EntityItemComponent(
+            entity,
+            allowSpawnerModification,
+            Pass.DEFAULT_PASSES
+        );
+    }
+
+    public static EntityItemComponent of(EntitySpawner entity, boolean allowSpawnerModification, Pass... passes) {
+        return new EntityItemComponent(
+            entity,
+            allowSpawnerModification,
+            Set.of(passes)
+        );
+    }
+
+    public static ItemComponent<?>[] ofDispensing(RegistryEntry<EntityType<?>> entity, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+        return ofDispensing(EntitySpawner.of(entity), dispenseBehaviors);
+    }
+
+    public static ItemComponent<?>[] ofDispensing(EntitySpawner entity, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+        return new ItemComponent<?>[] {
+            of(entity),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
+        };
     }
 
     public static ItemComponent<?>[] minecart(RegistryEntry<EntityType<?>> entity, RegistryEntryLookup<Block> blocks, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
-        return builder(entity)
-            .spawnRule(
-                DiscardEntitySpawnRule.INSTANCE,
-                InvertedLootCondition.builder(
+        return ofDispensing(
+            EntitySpawner.builder(entity)
+                .spawnRule(
+                    DiscardEntitySpawnRule.INSTANCE,
+                    InvertedLootCondition.builder(
+                        LocationCheckLootConditionUtil.builder(
+                            PositionTarget.INTERACTED,
+                            LocationPredicate.Builder.create()
+                                .block(BlockPredicate.Builder.create()
+                                    .tag(blocks, BlockTags.RAILS))
+                        )
+                    ))
+                .spawnRule(OffsetSpawnPositionEntitySpawnRule.of(new Vec3d(0.0d, 0.0625d, 0.0d)))
+                .spawnRule(
+                    OffsetSpawnPositionEntitySpawnRule.of(new Vec3d(0.0d, 0.5d, 0.0d)),
                     LocationCheckLootConditionUtil.builder(
                         PositionTarget.INTERACTED,
                         LocationPredicate.Builder.create()
                             .block(BlockPredicate.Builder.create()
-                                .tag(blocks, BlockTags.RAILS))
-                    )
-                )
-            )
-            .spawnRule(OffsetSpawnPositionEntitySpawnRule.of(new Vec3d(0.0d, 0.0625d, 0.0d)))
-            .spawnRule(
-                OffsetSpawnPositionEntitySpawnRule.of(new Vec3d(0.0d, 0.5d, 0.0d)),
-                LocationCheckLootConditionUtil.builder(
-                    PositionTarget.INTERACTED,
-                    LocationPredicate.Builder.create()
-                        .block(BlockPredicate.Builder.create()
-                            .state(StatePredicate.Builder.create()
-                                .itematic$range(Properties.RAIL_SHAPE, RailShape.ASCENDING_EAST, RailShape.ASCENDING_SOUTH)))
-                )
-            )
-            .build(dispenseBehaviors);
+                                .state(StatePredicate.Builder.create()
+                                    .itematic$range(Properties.RAIL_SHAPE, RailShape.ASCENDING_EAST, RailShape.ASCENDING_SOUTH)))
+                    ))
+                .build(),
+            dispenseBehaviors
+        );
+    }
+
+    public static ItemComponent<?>[] spawnEgg(RegistryEntry<EntityType<?>> entity, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+        return new ItemComponent<?>[] {
+            of(
+                EntitySpawner.builder(entity)
+                    .allowItemData(true)
+                    .build(),
+                true,
+                EntityItemComponent.Pass.BLOCK,
+                EntityItemComponent.Pass.FLUID
+            ),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)),
+            SpawnEggItemComponent.INSTANCE
+        };
     }
 
     @Override
@@ -165,7 +200,7 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
 
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Text> builder, TooltipType type) {
-        if (this.entity.value() != EntityType.PAINTING) {
+        if (this.entity.entity().value() != EntityType.PAINTING) {
             return;
         }
 
@@ -177,20 +212,6 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
         } else if (type.isCreative()) {
             builder.accept(RANDOM_TEXT);
         }
-    }
-
-    public EntityType<?> entityType(ItemStack stack, RegistryWrapper.WrapperLookup registries) {
-        if (!this.allowItemData) {
-            return this.entity.value();
-        }
-
-        NbtComponent entityData = stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT);
-        EntityType<?> entityType = entityData.getRegistryValueOfId(registries, RegistryKeys.ENTITY_TYPE);
-        if (entityType == null) {
-            return this.entity.value();
-        }
-
-        return entityType;
     }
 
     private boolean isUnuseable(Pass pass) {
@@ -252,7 +273,7 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
     }
 
     private void modifySpawner(ItemUsageContext context, World world, MobSpawnerBlockEntity blockEntity, BlockPos pos, BlockState state) {
-        EntityType<?> type = this.entityType(
+        EntityType<?> type = this.entity.entityType(
             context.getStack(),
             context.getWorld().getRegistryManager()
         );
@@ -267,77 +288,8 @@ public record EntityItemComponent(RegistryEntry<EntityType<?>> entity, List<Cond
     }
 
     public Entity place(ActionContext context, PositionTarget position) {
-        return EntityPlacer.of(
-            this.entityType(
-                context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY),
-                context.world().getRegistryManager()
-            ),
-            this.spawnRules,
-            this.spawnSound,
-            null,
-            this.allowItemData
-        ).place(context, position, SpawnReason.SPAWN_ITEM_USE);
-    }
-
-    public static class Builder {
-        private final RegistryEntry<EntityType<?>> entity;
-        private final List<ConditionedEntitySpawnRule> spawnRules = new ArrayList<>();
-        private RegistryEntry<SoundEvent> spawnSound;
-        private boolean allowSpawnerModification;
-        private boolean allowItemData;
-        private Set<Pass> passes = Pass.DEFAULT_PASSES;
-
-        private Builder(RegistryEntry<EntityType<?>> entity) {
-            this.entity = entity;
-        }
-
-        public EntityItemComponent build() {
-            return new EntityItemComponent(
-                this.entity,
-                this.spawnRules,
-                Optional.ofNullable(this.spawnSound),
-                this.allowSpawnerModification,
-                this.allowItemData,
-                this.passes
-            );
-        }
-
-        public ItemComponent<?>[] build(RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
-            return new ItemComponent<?>[] {
-                this.build(),
-                DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
-            };
-        }
-
-        public Builder spawnRule(EntitySpawnRule<?> rule) {
-            this.spawnRules.add(ConditionedEntitySpawnRule.of(rule));
-            return this;
-        }
-
-        public Builder spawnRule(EntitySpawnRule<?> rule, LootCondition.Builder condition) {
-            this.spawnRules.add(ConditionedEntitySpawnRule.of(rule, condition.build()));
-            return this;
-        }
-
-        public Builder spawnSound(RegistryEntry<SoundEvent> spawnSound) {
-            this.spawnSound = spawnSound;
-            return this;
-        }
-
-        public Builder allowSpawnerModification(boolean allowSpawnerModification) {
-            this.allowSpawnerModification = allowSpawnerModification;
-            return this;
-        }
-
-        public Builder allowItemData(boolean allowItemData) {
-            this.allowItemData = allowItemData;
-            return this;
-        }
-
-        public Builder passes(Pass... passes) {
-            this.passes = Set.of(passes);
-            return this;
-        }
+        return EntityPlacer.of(this.entity, null)
+            .place(context, position, SpawnReason.SPAWN_ITEM_USE);
     }
 
     public enum Pass implements StringIdentifiable {

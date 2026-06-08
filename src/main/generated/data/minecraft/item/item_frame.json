@@ -1,7 +1,9 @@
 {
   "behavior": {
     "minecraft:entity": {
-      "entity": "minecraft:item_frame"
+      "entity": {
+        "entity": "minecraft:item_frame"
+      }
     },
     "minecraft:stackable": 64
   },

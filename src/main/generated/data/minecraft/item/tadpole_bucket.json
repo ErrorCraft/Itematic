@@ -1,7 +1,9 @@
 {
   "behavior": {
     "minecraft:bucket": {
-      "entity": "minecraft:tadpole",
+      "entity": {
+        "entity": "minecraft:tadpole"
+      },
       "modification": {
         "type": "minecraft:place_fluid",
         "fluid": "minecraft:water",

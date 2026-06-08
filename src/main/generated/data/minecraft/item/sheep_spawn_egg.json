@@ -4,9 +4,11 @@
       "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
-      "allow_item_data": true,
       "allow_spawner_modification": true,
-      "entity": "minecraft:sheep",
+      "entity": {
+        "allow_item_data": true,
+        "entity": "minecraft:sheep"
+      },
       "passes": [
         "block",
         "fluid"

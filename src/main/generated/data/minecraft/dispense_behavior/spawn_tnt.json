@@ -7,7 +7,9 @@
         {
           "action": {
             "type": "minecraft:spawn_entity",
-            "entity": "minecraft:tnt",
+            "entity": {
+              "entity": "minecraft:tnt"
+            },
             "position": "interacted"
           }
         },

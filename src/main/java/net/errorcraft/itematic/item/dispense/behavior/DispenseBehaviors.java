@@ -142,8 +142,8 @@ public class DispenseBehaviors {
         registerable.register(SPAWN_TNT, DispenseBehavior.builder(
             PassingSequenceHandler.builder()
                 .add(SpawnEntityAction.of(
-                    PositionTarget.INTERACTED,
-                    entityTypes.getOrThrow(EntityTypeKeys.TNT)
+                    entityTypes.getOrThrow(EntityTypeKeys.TNT),
+                    PositionTarget.INTERACTED
                 ))
                 .add(DecrementItemAction.of(1))
                 .add(PlaySoundAction.of(
