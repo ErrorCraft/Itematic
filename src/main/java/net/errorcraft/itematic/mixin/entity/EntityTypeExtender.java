@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -377,7 +378,10 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<SmallFireballEntity> setSmallFireballInitializer(EntityType.Builder<SmallFireballEntity> builder) {
-        builder.itematic$initializer(SmallFireballEntityInitializer.INSTANCE);
+        builder.itematic$initializer(ThrownBallEntityInitializer.of(
+            (player, world, x, y, z) -> new SmallFireballEntity(world, player, new Vec3d(x, y, z)),
+            SmallFireballEntity::new
+        ));
         return builder;
     }
 
@@ -396,7 +400,10 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<WindChargeEntity> setWindChargeInitializer(EntityType.Builder<WindChargeEntity> builder) {
-        builder.itematic$initializer(WindChargeEntityInitializer.INSTANCE);
+        builder.itematic$initializer(ThrownBallEntityInitializer.of(
+            WindChargeEntity::new,
+            WindChargeEntity::new
+        ));
         return builder;
     }
 

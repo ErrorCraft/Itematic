@@ -109,7 +109,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
             return;
         }
 
-        Entity projectileEntity = projectile.createEntity(
+        Entity projectileEntity = projectile.spawnEntity(
             context,
             PositionTarget.INTERACTED,
             this.angleOffset,
@@ -120,7 +120,6 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
             return;
         }
 
-        world.spawnEntity(projectileEntity);
         ActionContext spawnedContext = context.extend()
             .add(ItematicContextParameters.SPAWNED_ENTITY, projectileEntity)
             .add(ItematicContextParameters.SPAWNED_POSITION, projectileEntity.getPos())
