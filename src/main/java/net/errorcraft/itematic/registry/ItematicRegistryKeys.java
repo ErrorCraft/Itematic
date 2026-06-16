@@ -10,6 +10,7 @@ import net.errorcraft.itematic.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
+import net.errorcraft.itematic.predicate.item.enchantment.EnchantmentEffectPredicateType;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
 import net.errorcraft.itematic.world.action.ActionEntry;
@@ -37,6 +38,7 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<ShooterMethodType<?>>> SHOOTER_METHOD_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("shooter_method_type"));
     public static final RegistryKey<Registry<WorldModificationType<?>>> WORLD_MODIFICATION_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("fluid_modification_type"));
     public static final RegistryKey<Registry<EntitySpawnRuleType<?>>> ENTITY_SPAWN_RULE_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("entity_spawn_rule_type"));
+    public static final RegistryKey<Registry<EnchantmentEffectPredicateType<?>>> ENCHANTMENT_EFFECT_PREDICATE_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("enchantment_effect_predicate_type"));
 
     private ItematicRegistryKeys() {}
 }

@@ -9,25 +9,40 @@ import net.errorcraft.itematic.access.predicate.item.ItemPredicateAccess;
 import net.errorcraft.itematic.access.predicate.item.ItemPredicateBuilderAccess;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.predicate.item.ItemPredicateExtraFields;
+import net.errorcraft.itematic.predicate.item.enchantment.EnchantmentEffectPredicate;
+import net.errorcraft.itematic.predicate.item.enchantment.EnchantmentEffectPredicateType;
 import net.minecraft.component.ComponentType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.predicate.NumberRange;
+import net.minecraft.predicate.component.ComponentsPredicate;
 import net.minecraft.predicate.item.ItemPredicate;
 import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.util.math.random.Random;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 @Mixin(ItemPredicate.class)
 public class ItemPredicateExtender implements ItemPredicateAccess {
+    @Shadow
+    @Final
+    private Optional<RegistryEntryList<Item>> items;
+
+    @Shadow
+    @Final
+    private NumberRange.IntRange count;
+
+    @Shadow
+    @Final
+    private ComponentsPredicate components;
+
     @Unique
     private ItemPredicateExtraFields extraFields;
 
@@ -58,7 +73,24 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         at = @At("TAIL")
     )
     private boolean testExtraFields(boolean original, ItemStack stack) {
-        return this.extraFields.testExtraFields(stack);
+        return this.extraFields.testExtraFields(stack, Random.create());
+    }
+
+    @Override
+    public boolean itematic$test(ItemStack stack, Random random) {
+        if (this.items.isPresent() && !stack.isIn(this.items.get())) {
+            return false;
+        }
+
+        if (!this.count.test(stack.getCount())) {
+            return false;
+        }
+
+        if (!this.components.test(stack)) {
+            return false;
+        }
+
+        return this.extraFields.testExtraFields(stack, random);
     }
 
     @Override
@@ -82,12 +114,15 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         @Unique
         private final Set<ComponentType<?>> dataComponents = new HashSet<>();
 
+        @Unique
+        private final Map<EnchantmentEffectPredicateType<?>, EnchantmentEffectPredicate> enchantmentEffects = new HashMap<>();
+
         @ModifyReturnValue(
             method = "build",
             at = @At("TAIL")
         )
         private ItemPredicate setExtraFields(ItemPredicate original) {
-            ((ItemPredicateAccess)(Object) original).itematic$setExtraFields(ItemPredicateExtraFields.of(this.behavior, this.dataComponents));
+            original.itematic$setExtraFields(ItemPredicateExtraFields.of(this.behavior, this.dataComponents, this.enchantmentEffects));
             return original;
         }
 
@@ -106,6 +141,12 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         @Override
         public ItemPredicate.Builder itematic$dataComponents(ComponentType<?>... dataComponents) {
             this.dataComponents.addAll(List.of(dataComponents));
+            return (ItemPredicate.Builder)(Object) this;
+        }
+
+        @Override
+        public <T extends EnchantmentEffectPredicate> ItemPredicate.Builder itematic$enchantmentEffect(EnchantmentEffectPredicateType<T> type, T effect) {
+            this.enchantmentEffects.put(type, effect);
             return (ItemPredicate.Builder)(Object) this;
         }
     }

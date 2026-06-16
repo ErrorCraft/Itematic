@@ -19,7 +19,7 @@ public class ItemPredicateUtil {
         PacketCodecs.optional(PacketCodecs.registryEntryList(RegistryKeys.ITEM)), ItemPredicate::items,
         NumberRangeUtil.INTEGER_RANGE_PACKET_CODEC, ItemPredicate::count,
         ComponentsPredicate.PACKET_CODEC, ItemPredicate::components,
-        ItemPredicateExtraFields.PACKET_CODEC, itemPredicate -> ((ItemPredicateAccess)(Object) itemPredicate).itematic$extraFields(),
+        ItemPredicateExtraFields.PACKET_CODEC, ItemPredicateAccess::itematic$extraFields,
         ItemPredicateUtil::create
     );
 
@@ -27,7 +27,7 @@ public class ItemPredicateUtil {
 
     private static ItemPredicate create(Optional<RegistryEntryList<Item>> items, NumberRange.IntRange count, ComponentsPredicate components, ItemPredicateExtraFields extraFields) {
         ItemPredicate predicate = new ItemPredicate(items, count, components);
-        ((ItemPredicateAccess)(Object) predicate).itematic$setExtraFields(extraFields);
+        predicate.itematic$setExtraFields(extraFields);
         return predicate;
     }
 }

@@ -20,6 +20,7 @@ public class NumberRangeUtil {
 
     public record FloatRange(Optional<Float> min, Optional<Float> max) implements NumberRange<Float> {
         public static final Codec<FloatRange> CODEC = NumberRange.createCodec(Codec.FLOAT, FloatRange::new);
+        public static final PacketCodec<ByteBuf, FloatRange> PACKET_CODEC = NumberRange.createPacketCodec(PacketCodecs.FLOAT, FloatRange::new);
 
         public static FloatRange exactly(float value) {
             return new FloatRange(Optional.of(value), Optional.of(value));

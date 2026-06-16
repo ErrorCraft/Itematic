@@ -12,6 +12,7 @@ import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
 import net.errorcraft.itematic.loot.function.ItematicItemModifierTypes;
 import net.errorcraft.itematic.loot.predicate.ItematicPredicateTypes;
 import net.errorcraft.itematic.predicate.entity.ItematicEntitySubPredicateTypes;
+import net.errorcraft.itematic.predicate.item.enchantment.EnchantmentEffectPredicateType;
 import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
 import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
 import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
@@ -51,5 +52,6 @@ public class Itematic implements ModInitializer {
         ItematicEntitySubPredicateTypes.init();
         WorldModificationTypes.init();
         EntitySpawnRuleType.init();
+        EnchantmentEffectPredicateType.init();
     }
 }

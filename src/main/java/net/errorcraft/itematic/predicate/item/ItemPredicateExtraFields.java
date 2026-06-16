@@ -4,6 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.network.codec.PacketCodecUtil;
+import net.errorcraft.itematic.predicate.item.enchantment.EnchantmentEffectPredicate;
+import net.errorcraft.itematic.predicate.item.enchantment.EnchantmentEffectPredicateType;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.serialization.SetCodec;
@@ -14,34 +16,43 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.math.random.Random;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-public record ItemPredicateExtraFields(Optional<Set<ItemComponentType<?>>> behavior, Optional<Set<ComponentType<?>>> dataComponents) {
+public record ItemPredicateExtraFields(Optional<Set<ItemComponentType<?>>> behavior, Optional<Set<ComponentType<?>>> dataComponents, Map<EnchantmentEffectPredicateType<?>, EnchantmentEffectPredicate> enchantmentEffects) {
     public static final MapCodec<ItemPredicateExtraFields> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         SetCodec.forRegistry(ItematicRegistries.ITEM_COMPONENT_TYPE).optionalFieldOf("behavior").forGetter(ItemPredicateExtraFields::behavior),
-        SetCodec.forRegistry(Registries.DATA_COMPONENT_TYPE).optionalFieldOf("data_components").forGetter(ItemPredicateExtraFields::dataComponents)
+        SetCodec.forRegistry(Registries.DATA_COMPONENT_TYPE).optionalFieldOf("data_components").forGetter(ItemPredicateExtraFields::dataComponents),
+        EnchantmentEffectPredicate.CODEC.optionalFieldOf("enchantment_effects", Map.of()).forGetter(ItemPredicateExtraFields::enchantmentEffects)
     ).apply(instance, ItemPredicateExtraFields::new));
     public static final PacketCodec<RegistryByteBuf, ItemPredicateExtraFields> PACKET_CODEC = PacketCodec.tuple(
         PacketCodecs.registryValue(ItematicRegistryKeys.ITEM_COMPONENT_TYPE).collect(PacketCodecUtil::set).collect(PacketCodecs::optional), ItemPredicateExtraFields::behavior,
         PacketCodecs.registryValue(RegistryKeys.DATA_COMPONENT_TYPE).collect(PacketCodecUtil::set).collect(PacketCodecs::optional), ItemPredicateExtraFields::dataComponents,
+        EnchantmentEffectPredicate.PACKET_CODEC, ItemPredicateExtraFields::enchantmentEffects,
         ItemPredicateExtraFields::new
     );
 
-    public static ItemPredicateExtraFields of(Set<ItemComponentType<?>> behavior, Set<ComponentType<?>> dataComponents) {
+    public static ItemPredicateExtraFields of(Set<ItemComponentType<?>> behavior, Set<ComponentType<?>> dataComponents, Map<EnchantmentEffectPredicateType<?>, EnchantmentEffectPredicate> enchantmentEffects) {
         return new ItemPredicateExtraFields(
             behavior.isEmpty() ? Optional.empty() : Optional.of(behavior),
-            dataComponents.isEmpty() ? Optional.empty() : Optional.of(dataComponents)
+            dataComponents.isEmpty() ? Optional.empty() : Optional.of(dataComponents),
+            enchantmentEffects
         );
     }
 
-    public boolean testExtraFields(ItemStack stack) {
+    public boolean testExtraFields(ItemStack stack, Random random) {
         if (!this.testBehavior(stack)) {
             return false;
         }
 
-        return this.testDataComponents(stack);
+        if (!this.testDataComponents(stack)) {
+            return false;
+        }
+
+        return this.testEnchantmentEffects(stack, random);
     }
 
     private boolean testBehavior(ItemStack stack) {
@@ -65,6 +76,16 @@ public record ItemPredicateExtraFields(Optional<Set<ItemComponentType<?>>> behav
 
         for (ComponentType<?> type : this.dataComponents.get()) {
             if (!stack.contains(type)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean testEnchantmentEffects(ItemStack stack, Random random) {
+        for (EnchantmentEffectPredicate value : this.enchantmentEffects.values()) {
+            if (!value.test(stack, random)) {
                 return false;
             }
         }

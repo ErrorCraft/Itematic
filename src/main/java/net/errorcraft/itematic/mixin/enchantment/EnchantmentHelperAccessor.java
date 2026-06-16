@@ -13,4 +13,9 @@ public interface EnchantmentHelperAccessor {
     static ComponentType<ItemEnchantmentsComponent> getComponentType(ItemStack stack) {
         throw new AssertionError();
     }
+
+    @Invoker("forEachEnchantment")
+    static void forEachEnchantment(ItemStack stack, EnchantmentHelper.Consumer consumer) {
+        throw new AssertionError();
+    }
 }

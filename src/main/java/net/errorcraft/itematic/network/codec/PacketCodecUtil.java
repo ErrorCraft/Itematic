@@ -11,8 +11,10 @@ import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.math.Fraction;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 
 public class PacketCodecUtil {
     public static final PacketCodec<ByteBuf, Fraction> FRACTION = PacketCodec.tuple(
@@ -56,5 +58,34 @@ public class PacketCodecUtil {
 
     public static <B extends ByteBuf, T> PacketCodec<B, Set<T>> set(PacketCodec<B, T> packetCodec) {
         return PacketCodecs.collection(HashSet::new, packetCodec);
+    }
+
+    public static <B extends ByteBuf, K, V> PacketCodec<B, Map<K, V>> dispatchedMap(IntFunction<? extends Map<K, V>> factory, PacketCodec<? super B, K> keyCodec, final Function<K, PacketCodec<? super B, ? extends V>> valueCodecFunction) {
+        return new PacketCodec<>() {
+            @Override
+            public Map<K, V> decode(B buf) {
+                int size = PacketCodecs.readCollectionSize(buf, Integer.MAX_VALUE);
+                Map<K, V> map = factory.apply(Math.min(size, PacketCodecs.field_49674));
+                for (int i = 0; i < size; i++) {
+                    K key = keyCodec.decode(buf);
+                    V value = valueCodecFunction.apply(key).decode(buf);
+                    map.put(key, value);
+                }
+
+                return map;
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public void encode(B buf, Map<K, V> value) {
+                PacketCodecs.writeCollectionSize(buf, value.size(), Integer.MAX_VALUE);
+                for (Map.Entry<K, V> entry : value.entrySet()) {
+                    K key = entry.getKey();
+                    keyCodec.encode(buf, key);
+                    PacketCodec<? super B, V> entryPacketCodec = (PacketCodec<? super B, V>) valueCodecFunction.apply(key);
+                    entryPacketCodec.encode(buf, entry.getValue());
+                }
+            }
+        };
     }
 }

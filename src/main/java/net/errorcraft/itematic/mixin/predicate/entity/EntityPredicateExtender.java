@@ -56,7 +56,9 @@ public class EntityPredicateExtender implements EntityPredicateAccess {
     private void checkForExtraFields(ServerWorld world, Vec3d pos, Entity entity, CallbackInfoReturnable<Boolean> info) {
         if (this.extraFields.usedItemTicks().isPresent() && entity instanceof LivingEntity livingEntity && !this.extraFields.usedItemTicks().get().test(livingEntity.itematic$itemUsedTicks())) {
             info.setReturnValue(false);
+            return;
         }
+
         if (this.extraFields.inWaterOrRain().isPresent() && entity.isTouchingWaterOrRain() != this.extraFields.inWaterOrRain().get()) {
             info.setReturnValue(false);
         }
@@ -76,6 +78,7 @@ public class EntityPredicateExtender implements EntityPredicateAccess {
     public static class BuilderExtender implements EntityPredicateBuilderAccess {
         @Unique
         private NumberRange.IntRange itemUsedTicks;
+
         @Unique
         private Boolean inWaterOrRain;
 

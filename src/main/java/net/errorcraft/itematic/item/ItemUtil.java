@@ -30,6 +30,8 @@ import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.potion.PotionKeys;
+import net.errorcraft.itematic.predicate.item.enchantment.EnchantmentEffectPredicateType;
+import net.errorcraft.itematic.predicate.item.enchantment.numerical.EnchantmentValueEffectPredicate;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.util.Vec3dProvider;
@@ -49,8 +51,6 @@ import net.minecraft.block.jukebox.JukeboxSongs;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.*;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffect;
@@ -79,7 +79,9 @@ import net.minecraft.predicate.component.ComponentPredicateTypes;
 import net.minecraft.predicate.component.ComponentsPredicate;
 import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.entity.LocationPredicate;
-import net.minecraft.predicate.item.*;
+import net.minecraft.predicate.item.DamagePredicate;
+import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.predicate.item.PotionContentsPredicate;
 import net.minecraft.registry.*;
 import net.minecraft.registry.entry.LazyRegistryEntryReference;
 import net.minecraft.registry.entry.RegistryEntryList;
@@ -156,7 +158,6 @@ public class ItemUtil {
         private final RegistryEntryLookup<DecoratedPotPattern> decoratedPotPatterns;
         private final RegistryEntryLookup<StatusEffect> statusEffects;
         private final RegistryEntryLookup<Potion> potions;
-        private final RegistryEntryLookup<Enchantment> enchantments;
         private final RegistryEntryLookup<JukeboxSong> jukeboxSongs;
         private final RegistryEntryLookup<Instrument> instruments;
         private final RegistryEntryLookup<ArmorTrimMaterial> trimMaterials;
@@ -174,7 +175,6 @@ public class ItemUtil {
             this.decoratedPotPatterns = registerable.getRegistryLookup(RegistryKeys.DECORATED_POT_PATTERN);
             this.statusEffects = registerable.getRegistryLookup(RegistryKeys.STATUS_EFFECT);
             this.potions = registerable.getRegistryLookup(RegistryKeys.POTION);
-            this.enchantments = registerable.getRegistryLookup(RegistryKeys.ENCHANTMENT);
             this.jukeboxSongs = registerable.getRegistryLookup(RegistryKeys.JUKEBOX_SONG);
             this.instruments = registerable.getRegistryLookup(RegistryKeys.INSTRUMENT);
             this.trimMaterials = registerable.getRegistryLookup(RegistryKeys.TRIM_MATERIAL);
@@ -5496,7 +5496,21 @@ public class ItemUtil {
                         .build())
                     .with(WeaponItemComponent.of(1, 0.0f, TridentItem.ATTACK_DAMAGE, 0.275d))
                     .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.TRIDENT)))
+                    .with(ProjectileItemComponent.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.TRIDENT))
+                            .spawnRule(
+                                DiscardEntitySpawnRule.INSTANCE,
+                                InvertedLootCondition.builder(
+                                    MatchToolLootCondition.builder(ItemPredicate.Builder.create()
+                                        .itematic$enchantmentEffect(
+                                            EnchantmentEffectPredicateType.TRIDENT_SPIN_ATTACK_STRENGTH,
+                                            EnchantmentValueEffectPredicate.tridentSpinAttackStrength(0.0f)
+                                        )
+                                    )
+                                )
+                            )
+                            .build()
+                    ))
                     .with(EnchantableItemComponent.of(1))
                     .build(),
                 ItemEventMap.builder()
@@ -5508,14 +5522,12 @@ public class ItemUtil {
                                     .itematic$usedItemAtLeast(TridentItem.MIN_DRAW_DURATION)
                                     .itematic$inWaterOrRain(true)
                             ),
-                            MatchToolLootCondition.builder(ItemPredicate.Builder.create()
-                                .components(ComponentsPredicate.Builder.create()
-                                    .partial(
-                                        ComponentPredicateTypes.ENCHANTMENTS,
-                                        EnchantmentsPredicate.enchantments(List.of(
-                                            new EnchantmentPredicate(this.enchantments.getOrThrow(Enchantments.RIPTIDE), NumberRange.IntRange.ANY)
-                                        ))
-                                    ).build()
+                            InvertedLootCondition.builder(
+                                MatchToolLootCondition.builder(ItemPredicate.Builder.create()
+                                    .itematic$enchantmentEffect(
+                                        EnchantmentEffectPredicateType.TRIDENT_SPIN_ATTACK_STRENGTH,
+                                        EnchantmentValueEffectPredicate.tridentSpinAttackStrength(0.0f)
+                                    )
                                 )
                             )
                         ),

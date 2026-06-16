@@ -31,6 +31,10 @@ public record ProjectileItemComponent(EntitySpawner entity) implements ItemCompo
         ProjectileItemComponent::entity
     );
 
+    public static ProjectileItemComponent of(EntitySpawner entity) {
+        return new ProjectileItemComponent(entity);
+    }
+
     public static ProjectileItemComponent of(RegistryEntry<EntityType<?>> entity) {
         return new ProjectileItemComponent(EntitySpawner.of(entity));
     }

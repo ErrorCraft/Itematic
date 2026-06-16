@@ -19,16 +19,19 @@ public record PersistentProjectileEntityInitializer<T extends PersistentProjecti
 
     @Override
     public T create(ActionContext context, SpawnReason reason) {
-        if (context.get(LootContextParameters.THIS_ENTITY) instanceof LivingEntity entity) {
-            ItemStack shooter = entity.getActiveItem();
-            if (shooter.isEmpty()) {
+        LivingEntity user = context.get(LootContextParameters.THIS_ENTITY, LivingEntity.class);
+        ItemStack usedStack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
+        usedStack.itematic$damage(1, context);
+        if (user != null) {
+            ItemStack shooter = user.getActiveItem();
+            if (shooter.isEmpty() || shooter == usedStack) {
                 shooter = null;
             }
 
-            return this.ownerCreator.create(
+            return this.spawnFromUser(
                 context.world(),
-                entity,
-                context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY).copyWithCount(1),
+                user,
+                usedStack.splitUnlessCreative(1, user),
                 shooter
             );
         }
@@ -38,16 +41,33 @@ public record PersistentProjectileEntityInitializer<T extends PersistentProjecti
             return null;
         }
 
-        T entity = this.simpleCreator.create(
+        T entity = this.spawnFromPos(
             context.world(),
-            pos.getX(),
-            pos.getY(),
-            pos.getZ(),
-            context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY).copyWithCount(1),
-            null
+            pos,
+            usedStack.split(1)
         );
         entity.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
         return entity;
+    }
+
+    private T spawnFromUser(World world, LivingEntity user, ItemStack ammunition, @Nullable ItemStack weapon) {
+        return this.ownerCreator.create(
+            world,
+            user,
+            ammunition,
+            weapon
+        );
+    }
+
+    private T spawnFromPos(World world, Vec3d pos, ItemStack ammunition) {
+        return this.simpleCreator.create(
+            world,
+            pos.getX(),
+            pos.getY(),
+            pos.getZ(),
+            ammunition,
+            null
+        );
     }
 
     @FunctionalInterface

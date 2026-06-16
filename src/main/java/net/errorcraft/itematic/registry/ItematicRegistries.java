@@ -16,6 +16,7 @@ import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
 import net.errorcraft.itematic.mixin.registry.RegistriesAccessor;
+import net.errorcraft.itematic.predicate.item.enchantment.EnchantmentEffectPredicateType;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -39,6 +40,7 @@ public class ItematicRegistries {
     public static final Registry<ShooterMethodType<?>> SHOOTER_METHOD_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.SHOOTER_METHOD_TYPE, r -> ShooterMethodTypes.DIRECT);
     public static final Registry<WorldModificationType<?>> WORLD_MODIFICATION_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.WORLD_MODIFICATION_TYPE, r -> WorldModificationTypes.DRAIN_FLUID);
     public static final Registry<EntitySpawnRuleType<?>> ENTITY_SPAWN_RULE_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.ENTITY_SPAWN_RULE_TYPE, r -> EntitySpawnRuleType.DISCARD);
+    public static final Registry<EnchantmentEffectPredicateType<?>> ENCHANTMENT_EFFECT_PREDICATE_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.ENCHANTMENT_EFFECT_PREDICATE_TYPE, r -> EnchantmentEffectPredicateType.TRIDENT_SPIN_ATTACK_STRENGTH);
 
     private ItematicRegistries() {}
 }

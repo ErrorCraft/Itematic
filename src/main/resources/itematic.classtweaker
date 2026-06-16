@@ -10,6 +10,7 @@ accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternat
 accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternativesWidget$AlternativeButtonWidget$InputSlot
 accessible    class    net/minecraft/predicate/StatePredicate$Condition
 accessible    class    net/minecraft/predicate/StatePredicate$RangedValueMatcher
+accessible    class    net/minecraft/enchantment/EnchantmentHelper$Consumer
 
 inject-interface    net/minecraft/util/DyeColor    net/errorcraft/itematic/access/util/DyeColorAccess
 inject-interface    net/minecraft/item/tooltip/BundleTooltipData    net/errorcraft/itematic/access/item/tooltip/BundleTooltipDataAccess
@@ -26,6 +27,7 @@ inject-interface    net/minecraft/village/VillagerProfession    net/errorcraft/i
 inject-interface    net/minecraft/client/gui/screen/GameModeSwitcherScreen$GameModeSelection    net/errorcraft/itematic/access/client/gui/screen/GameModeSwitcherScreenAccess$GameModeSelectionAccess
 inject-interface    net/minecraft/item/ItemPlacementContext    net/errorcraft/itematic/access/item/ItemPlacementContextAccess
 inject-interface    net/minecraft/predicate/StatePredicate$Builder    net/errorcraft/itematic/access/predicate/StatePredicateAccess$BuilderAccess
+inject-interface    net/minecraft/predicate/item/ItemPredicate    net/errorcraft/itematic/access/predicate/item/ItemPredicateAccess
 
 extend-enum    net/minecraft/recipe/book/RecipeBookType    ITEMATIC_BREWING
 extend-enum    net/minecraft/client/recipebook/RecipeBookType    ITEMATIC_BREWING

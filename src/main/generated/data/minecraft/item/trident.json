@@ -8,7 +8,26 @@
       "enchantability": 1
     },
     "minecraft:projectile": {
-      "entity": "minecraft:trident"
+      "entity": "minecraft:trident",
+      "spawn_rules": [
+        {
+          "type": "minecraft:discard",
+          "condition": {
+            "condition": "minecraft:inverted",
+            "term": {
+              "condition": "minecraft:match_tool",
+              "predicate": {
+                "enchantment_effects": {
+                  "minecraft:trident_spin_attack_strength": {
+                    "base_value": 0.0,
+                    "expected_range": 0.0
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "minecraft:stackable": 1,
     "minecraft:throwable": {
@@ -75,14 +94,16 @@
             }
           },
           {
-            "condition": "minecraft:match_tool",
-            "predicate": {
-              "predicates": {
-                "minecraft:enchantments": [
-                  {
-                    "enchantments": "minecraft:riptide"
+            "condition": "minecraft:inverted",
+            "term": {
+              "condition": "minecraft:match_tool",
+              "predicate": {
+                "enchantment_effects": {
+                  "minecraft:trident_spin_attack_strength": {
+                    "base_value": 0.0,
+                    "expected_range": 0.0
                   }
-                ]
+                }
               }
             }
           }

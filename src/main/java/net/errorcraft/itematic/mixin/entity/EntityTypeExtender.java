@@ -321,7 +321,10 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<TridentEntity> setTridentInitializer(EntityType.Builder<TridentEntity> builder) {
-        builder.itematic$initializer(TridentEntityInitializer.INSTANCE);
+        builder.itematic$initializer(PersistentProjectileEntityInitializer.of(
+            (world, owner, ammunition, weapon) -> new TridentEntity(world, owner, ammunition),
+            (world, x, y, z, ammunition, weapon) -> new TridentEntity(world, x, y, z, ammunition)
+        ));
         return builder;
     }
 
