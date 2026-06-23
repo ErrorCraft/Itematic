@@ -220,8 +220,8 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
             return this;
         }
 
-        public Builder allowItemData(boolean allowItemData) {
-            this.allowItemData = allowItemData;
+        public Builder allowItemData() {
+            this.allowItemData = true;
             return this;
         }
     }

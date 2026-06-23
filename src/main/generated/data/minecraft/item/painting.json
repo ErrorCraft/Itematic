@@ -2,7 +2,20 @@
   "behavior": {
     "minecraft:entity": {
       "entity": {
-        "entity": "minecraft:painting"
+        "allow_item_data": true,
+        "entity": "minecraft:painting",
+        "spawn_rules": [
+          {
+            "type": "minecraft:discard",
+            "condition": {
+              "condition": "minecraft:side_check",
+              "sides": [
+                "down",
+                "up"
+              ]
+            }
+          }
+        ]
       }
     },
     "minecraft:stackable": 64

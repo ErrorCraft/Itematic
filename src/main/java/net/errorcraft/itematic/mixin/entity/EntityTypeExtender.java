@@ -7,6 +7,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.entity.EntityTypeAccess;
 import net.errorcraft.itematic.access.entity.EntityTypeBuilderAccess;
 import net.errorcraft.itematic.entity.EntitySpawnCallback;
+import net.errorcraft.itematic.entity.decoration.painting.PaintingEntityUtil;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.EntityInitializerSupplier;
 import net.errorcraft.itematic.entity.initializer.initializers.*;
@@ -220,7 +221,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<PaintingEntity> setPaintingInitializer(EntityType.Builder<PaintingEntity> builder) {
-        builder.itematic$initializer(DecorationEntityInitializer.ofPainting());
+        builder.itematic$initializer(DecorationEntityInitializer.of(PaintingEntityUtil::create));
         return builder;
     }
 
@@ -239,7 +240,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<ItemFrameEntity> setItemFrameInitializer(EntityType.Builder<ItemFrameEntity> builder) {
-        builder.itematic$initializer(DecorationEntityInitializer.ofItemFrame(ItemFrameEntity::new));
+        builder.itematic$initializer(DecorationEntityInitializer.of(ItemFrameEntity::new));
         return builder;
     }
 
@@ -258,7 +259,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<GlowItemFrameEntity> setGlowItemFrameInitializer(EntityType.Builder<GlowItemFrameEntity> builder) {
-        builder.itematic$initializer(DecorationEntityInitializer.ofItemFrame(GlowItemFrameEntity::new));
+        builder.itematic$initializer(DecorationEntityInitializer.of(GlowItemFrameEntity::new));
         return builder;
     }
 

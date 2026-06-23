@@ -143,7 +143,7 @@ public record EntityItemComponent(EntitySpawner entity, boolean allowSpawnerModi
         return new ItemComponent<?>[] {
             of(
                 EntitySpawner.builder(entity)
-                    .allowItemData(true)
+                    .allowItemData()
                     .build(),
                 true,
                 EntityItemComponent.Pass.BLOCK,

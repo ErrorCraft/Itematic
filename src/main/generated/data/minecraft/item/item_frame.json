@@ -2,6 +2,7 @@
   "behavior": {
     "minecraft:entity": {
       "entity": {
+        "allow_item_data": true,
         "entity": "minecraft:item_frame"
       }
     },

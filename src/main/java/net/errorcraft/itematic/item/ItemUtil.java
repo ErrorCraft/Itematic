@@ -5825,21 +5825,40 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.PAINTING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.PAINTING)))
+                    .with(EntityItemComponent.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.PAINTING))
+                            .allowItemData()
+                            .spawnRule(
+                                DiscardEntitySpawnRule.INSTANCE,
+                                SideCheckPredicate.builder(
+                                    Direction.DOWN,
+                                    Direction.UP
+                                )
+                            )
+                            .build()
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.ITEM_FRAME, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ITEM_FRAME).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.ITEM_FRAME)))
+                    .with(EntityItemComponent.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.ITEM_FRAME))
+                            .allowItemData()
+                            .build()
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOW_ITEM_FRAME, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GLOW_ITEM_FRAME).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.GLOW_ITEM_FRAME)))
+                    .with(EntityItemComponent.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.GLOW_ITEM_FRAME))
+                            .allowItemData()
+                            .build()
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.ARMOR_STAND, create(
