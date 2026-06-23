@@ -1,7 +1,9 @@
 {
   "behavior": {
     "minecraft:bucket": {
-      "entity": "minecraft:axolotl",
+      "entity": {
+        "entity": "minecraft:axolotl"
+      },
       "modification": {
         "type": "minecraft:place_fluid",
         "fluid": "minecraft:water",

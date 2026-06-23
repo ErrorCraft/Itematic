@@ -7,13 +7,13 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.entity.EntityTypeAccess;
 import net.errorcraft.itematic.access.entity.EntityTypeBuilderAccess;
 import net.errorcraft.itematic.entity.EntitySpawnCallback;
+import net.errorcraft.itematic.entity.decoration.painting.PaintingEntityUtil;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.entity.initializer.EntityInitializerSupplier;
 import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.entity.*;
-import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -215,31 +216,12 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         slice = @Slice(
             from = @At(
                 value = "CONSTANT",
-                args = "stringValue=armor_stand"
-            )
-        )
-    )
-    private static EntityType.Builder<ArmorStandEntity> setArmorStandInitializer(EntityType.Builder<ArmorStandEntity> builder) {
-        builder.itematic$initializer(ArmorStandEntityInitializer.INSTANCE);
-        return builder;
-    }
-
-    @ModifyArg(
-        method = "<clinit>",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "CONSTANT",
                 args = "stringValue=painting"
             )
         )
     )
     private static EntityType.Builder<PaintingEntity> setPaintingInitializer(EntityType.Builder<PaintingEntity> builder) {
-        builder.itematic$initializer(DecorationEntityInitializer.ofPainting());
+        builder.itematic$initializer(DecorationEntityInitializer.of(PaintingEntityUtil::create));
         return builder;
     }
 
@@ -258,7 +240,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<ItemFrameEntity> setItemFrameInitializer(EntityType.Builder<ItemFrameEntity> builder) {
-        builder.itematic$initializer(DecorationEntityInitializer.ofItemFrame(ItemFrameEntity::new));
+        builder.itematic$initializer(DecorationEntityInitializer.of(ItemFrameEntity::new));
         return builder;
     }
 
@@ -277,7 +259,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<GlowItemFrameEntity> setGlowItemFrameInitializer(EntityType.Builder<GlowItemFrameEntity> builder) {
-        builder.itematic$initializer(DecorationEntityInitializer.ofItemFrame(GlowItemFrameEntity::new));
+        builder.itematic$initializer(DecorationEntityInitializer.of(GlowItemFrameEntity::new));
         return builder;
     }
 
@@ -397,7 +379,10 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<SmallFireballEntity> setSmallFireballInitializer(EntityType.Builder<SmallFireballEntity> builder) {
-        builder.itematic$initializer(SmallFireballEntityInitializer.INSTANCE);
+        builder.itematic$initializer(ThrownBallEntityInitializer.of(
+            (player, world, x, y, z) -> new SmallFireballEntity(world, player, new Vec3d(x, y, z)),
+            SmallFireballEntity::new
+        ));
         return builder;
     }
 
@@ -416,7 +401,10 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<WindChargeEntity> setWindChargeInitializer(EntityType.Builder<WindChargeEntity> builder) {
-        builder.itematic$initializer(WindChargeEntityInitializer.INSTANCE);
+        builder.itematic$initializer(ThrownBallEntityInitializer.of(
+            WindChargeEntity::new,
+            WindChargeEntity::new
+        ));
         return builder;
     }
 
@@ -444,7 +432,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     }
 
     @Override
-    public T itematic$create(ActionContext context, SpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback<T> callback, boolean allowItemData, boolean invertY) {
+    public T itematic$create(ActionContext context, SpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean invertY) {
         if (!(context.world() instanceof ServerWorld world)) {
             return null;
         }
@@ -462,7 +450,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
 
     @Unique
     @Nullable
-    private static <T extends Entity> Consumer<T> copier(ActionContext context, @Nullable EntitySpawnCallback<T> callback, boolean allowItemData) {
+    private static <T extends Entity> Consumer<T> copier(ActionContext context, @Nullable EntitySpawnCallback callback, boolean allowItemData) {
         ItemStack stack = context.get(LootContextParameters.TOOL);
         if (!allowItemData || ItemStackUtil.isNullOrEmpty(stack)) {
             return callback == null ? null : entity -> callback.accept(entity, stack);

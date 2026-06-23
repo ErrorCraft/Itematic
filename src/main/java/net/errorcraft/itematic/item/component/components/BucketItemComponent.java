@@ -2,6 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackUtil;
@@ -31,7 +32,6 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
@@ -42,10 +42,10 @@ import net.minecraft.world.World;
 
 import java.util.Optional;
 
-public record BucketItemComponent(WorldModification modification, Optional<RegistryEntry<EntityType<?>>> entity) implements ItemComponent<BucketItemComponent> {
+public record BucketItemComponent(WorldModification modification, Optional<EntitySpawner> entity) implements ItemComponent<BucketItemComponent> {
     public static final Codec<BucketItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         WorldModification.CODEC.fieldOf("modification").forGetter(BucketItemComponent::modification),
-        Registries.ENTITY_TYPE.getEntryCodec().optionalFieldOf("entity").forGetter(BucketItemComponent::entity)
+        EntitySpawner.CODEC.optionalFieldOf("entity").forGetter(BucketItemComponent::entity)
     ).apply(instance, BucketItemComponent::new));
 
     public static ItemComponent<?>[] drainFluid(RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
@@ -75,7 +75,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
             StackableItemComponent.of(1),
             new BucketItemComponent(
                 new PlaceFluidWorldModification(fluid, emptyingSound, items.getOrThrow(ItemKeys.BUCKET)),
-                Optional.of(entity)
+                Optional.of(EntitySpawner.of(entity))
             ),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
         };
@@ -118,7 +118,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
             .add(ItematicContextParameters.HAND, hand)
             .add(ItematicContextParameters.SIDE, blockHitResult.getSide())
             .build();
-        if (this.use(context, PositionTarget.INTERACTED_POSITION, !blockHitResult.isInsideBlock())) {
+        if (this.use(context, PositionTarget.INTERACTED, !blockHitResult.isInsideBlock())) {
             return ItemResult.CONSUME;
         }
 
@@ -138,15 +138,8 @@ public record BucketItemComponent(WorldModification modification, Optional<Regis
             return false;
         }
 
-        this.entity.ifPresent(entity -> EntityPlacer.of(
-            entity.value(),
-            context,
-            false,
-            SpawnReason.BUCKET,
-            BucketItemComponent::initializeBucketEntity,
-            true,
-            PositionTarget.INTERACTED_POSITION
-        ).place());
+        this.entity.ifPresent(entity -> EntityPlacer.of(entity, BucketItemComponent::initializeBucketEntity)
+            .place(context, PositionTarget.INTERACTED, SpawnReason.BUCKET));
         ItemStack stack = context.get(LootContextParameters.TOOL);
         if (!ItemStackUtil.isNullOrEmpty(stack)) {
             stack.decrementUnlessCreative(

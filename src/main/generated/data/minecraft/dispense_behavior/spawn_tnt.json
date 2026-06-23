@@ -7,8 +7,16 @@
         {
           "action": {
             "type": "minecraft:spawn_entity",
-            "entity": "minecraft:tnt",
+            "entity": {
+              "entity": "minecraft:tnt"
+            },
             "position": "interacted"
+          }
+        },
+        {
+          "action": {
+            "type": "minecraft:decrement_item",
+            "amount": 1
           }
         },
         {

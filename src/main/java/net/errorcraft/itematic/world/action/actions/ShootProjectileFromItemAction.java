@@ -32,11 +32,13 @@ public record ShootProjectileFromItemAction(PositionTarget position, float power
     public boolean execute(ActionContext context) {
         return context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
             .itematic$getBehavior(ItemComponentTypes.PROJECTILE)
-            .map(c -> c.createEntity(context, this.position, 0.0f, this.power, this.uncertainty))
-            .map(entity -> {
-                context.world().spawnEntity(entity);
-                return true;
-            })
-            .orElse(false);
+            .map(projectile -> projectile.spawnEntity(
+                context,
+                this.position,
+                0.0f,
+                this.power,
+                this.uncertainty
+            ))
+            .isPresent();
     }
 }

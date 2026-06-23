@@ -1,8 +1,22 @@
 {
   "entry": {
     "action": {
-      "type": "minecraft:spawn_entity_from_item",
-      "position": "interacted"
+      "type": "minecraft:sequence",
+      "handler": "minecraft:passing",
+      "entries": [
+        {
+          "action": {
+            "type": "minecraft:spawn_entity_from_item",
+            "position": "interacted"
+          }
+        },
+        {
+          "action": {
+            "type": "minecraft:decrement_item",
+            "amount": 1
+          }
+        }
+      ]
     }
   }
 }

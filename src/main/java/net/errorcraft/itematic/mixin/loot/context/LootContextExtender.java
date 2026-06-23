@@ -10,7 +10,8 @@ import org.spongepowered.asm.mixin.Shadow;
 public class LootContextExtender {
     @Mixin(LootContext.EntityTarget.class)
     public enum EntityTargetExtender {
-        ITEMATIC_TARGET_ENTITY("target_entity", ItematicContextParameters.TARGET_ENTITY);
+        ITEMATIC_TARGET_ENTITY("target_entity", ItematicContextParameters.TARGET_ENTITY),
+        ITEMATIC_SPAWNED_ENTITY("spawned_entity", ItematicContextParameters.SPAWNED_ENTITY);
 
         @Shadow
         EntityTargetExtender(String type, ContextParameter<? extends Entity> parameter) {}
