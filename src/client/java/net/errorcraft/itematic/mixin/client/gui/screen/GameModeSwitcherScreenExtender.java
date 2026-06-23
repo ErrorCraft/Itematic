@@ -18,9 +18,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 public class GameModeSwitcherScreenExtender {
     @Mixin(GameModeSwitcherScreen.ButtonWidget.class)
@@ -64,11 +62,7 @@ public class GameModeSwitcherScreenExtender {
         @Unique
         private RegistryKey<Item> icon;
 
-        @Inject(
-            method = "<clinit>",
-            at = @At("TAIL")
-        )
-        private static void setIcons(CallbackInfo info) {
+        static {
             CREATIVE.itematic$setIcon(ItemKeys.GRASS_BLOCK);
             SURVIVAL.itematic$setIcon(ItemKeys.IRON_SWORD);
             ADVENTURE.itematic$setIcon(ItemKeys.MAP);

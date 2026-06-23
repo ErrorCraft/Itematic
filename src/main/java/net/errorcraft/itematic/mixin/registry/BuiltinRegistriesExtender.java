@@ -12,9 +12,6 @@ import net.minecraft.registry.RegistryKeys;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BuiltinRegistries.class)
 public class BuiltinRegistriesExtender {
@@ -22,11 +19,7 @@ public class BuiltinRegistriesExtender {
     @Final
     private static RegistryBuilder REGISTRY_BUILDER;
 
-    @Inject(
-        method = "<clinit>",
-        at = @At("TAIL")
-    )
-    private static void initialiseCustomRegistries(CallbackInfo info) {
+    static {
         REGISTRY_BUILDER.addRegistry(RegistryKeys.ITEM, ItemUtil::bootstrap)
             .addRegistry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProviders::bootstrap)
             .addRegistry(ItematicRegistryKeys.TRADE, Trades::bootstrap)
