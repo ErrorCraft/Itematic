@@ -11,9 +11,11 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -72,7 +74,10 @@ public class AbstractSkeletonEntityExtender extends HostileEntity implements Mob
     }
 
     @Redirect(
-        method = { "updateAttackType", "shootAt" },
+        method = {
+            "updateAttackType",
+            "shootAt"
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/projectile/ProjectileUtil;getHandPossiblyHolding(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/Item;)Lnet/minecraft/util/Hand;"
@@ -91,6 +96,18 @@ public class AbstractSkeletonEntityExtender extends HostileEntity implements Mob
     )
     private boolean isOfForBowUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.BOW);
+    }
+
+    @Redirect(
+        method = "shootAt",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/projectile/ProjectileEntity;spawnWithVelocity(Lnet/minecraft/entity/projectile/ProjectileEntity;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;DDDFF)Lnet/minecraft/entity/projectile/ProjectileEntity;"
+        )
+    )
+    private <T extends ProjectileEntity> T onlySetSpeed(T projectile, ServerWorld world, ItemStack projectileStack, double velocityX, double velocityY, double velocityZ, float power, float divergence) {
+        projectile.setVelocity(velocityX, velocityY, velocityZ, power, divergence);
+        return projectile;
     }
 
     @Override

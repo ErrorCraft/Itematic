@@ -1,149 +1,57 @@
 package net.errorcraft.itematic.item.placement;
 
 import net.errorcraft.itematic.entity.EntitySpawnCallback;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.MobSpawnerBlockEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.Optional;
 
-public class EntityPlacer<T extends Entity> {
-    private final EntityType<T> type;
-    private final ActionContext context;
-    private final boolean mayModifyBlock;
-    private final SpawnReason spawnReason;
-    private final EntitySpawnCallback<T> spawnCallback;
-    private final boolean allowItemData;
-    private final PositionTarget position;
-    private final ItemStack stack;
+public class EntityPlacer {
+    private final EntitySpawner spawner;
+    @Nullable
+    private final EntitySpawnCallback spawnCallback;
 
-    private EntityPlacer(EntityType<T> type, ActionContext context, boolean mayModifyBlock, SpawnReason spawnReason, EntitySpawnCallback<T> spawnCallback, boolean allowItemData, PositionTarget position) {
-        this.type = type;
-        this.context = context;
-        this.mayModifyBlock = mayModifyBlock;
-        this.spawnReason = spawnReason;
+    private EntityPlacer(EntitySpawner spawner, @Nullable EntitySpawnCallback spawnCallback) {
+        this.spawner = spawner;
         this.spawnCallback = spawnCallback;
-        this.allowItemData = allowItemData;
-        this.position = position;
-        this.stack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
     }
 
-    public static <T extends Entity> EntityPlacer<T> of(EntityType<T> type, ActionContext context, boolean mayModifyBlock, SpawnReason spawnReason, EntitySpawnCallback<T> spawnCallback, boolean allowItemData, PositionTarget position) {
-        return new EntityPlacer<>(type, context, mayModifyBlock, spawnReason, spawnCallback, allowItemData, position);
+    public static EntityPlacer of(EntitySpawner entity, @Nullable EntitySpawnCallback spawnCallback) {
+        return new EntityPlacer(entity, spawnCallback);
     }
 
-    public T place() {
-        BlockPos pos = this.context.getBlockPos(this.position.parameter());
+    public Entity place(ActionContext context, PositionTarget position, SpawnReason spawnReason) {
+        World world = context.world();
+        if (world.isClient()) {
+            return null;
+        }
+
+        BlockPos pos = context.get(position.parameter(), BlockPos::ofFloored);
         if (pos == null) {
             return null;
         }
 
-        BlockState state = this.context.world().getBlockState(pos);
-        if (this.mayModifyBlock && this.modifySpawnerBlock(pos, state)) {
-            return null;
-        }
-
-        return this.spawn(pos, state);
-    }
-
-    private boolean modifySpawnerBlock(BlockPos pos, BlockState state) {
-        if (!this.stack.itematic$hasBehavior(ItemComponentTypes.SPAWN_EGG)) {
-            return false;
-        }
-
-        World world = this.context.world();
-        if (!state.isOf(Blocks.SPAWNER)) {
-            return false;
-        }
-
-        Optional<MobSpawnerBlockEntity> blockEntity = world.getBlockEntity(pos, BlockEntityType.MOB_SPAWNER);
-        if (blockEntity.isEmpty()) {
-            return false;
-        }
-
-        this.modifySpawnerBlock(world, blockEntity.get(), pos, state);
-        this.decrementStack();
-        return true;
-    }
-
-    private void modifySpawnerBlock(World world, MobSpawnerBlockEntity blockEntity, BlockPos pos, BlockState state) {
-        blockEntity.setEntityType(this.type, world.getRandom());
-        blockEntity.markDirty();
-        world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
-        world.emitGameEvent(
-            this.context.get(LootContextParameters.THIS_ENTITY),
-            GameEvent.BLOCK_CHANGE,
-            pos
-        );
-    }
-
-    private T spawn(BlockPos pos, BlockState state) {
-        if (!(this.context.world() instanceof ServerWorld world)) {
-            return null;
-        }
-
-        Direction side = this.context.get(ItematicContextParameters.SIDE);
-        BlockPos offset = state.getCollisionShape(world, pos).isEmpty() || side == null
+        BlockState state = world.getBlockState(pos);
+        Direction side = context.get(ItematicContextParameters.SIDE);
+        BlockPos truePos = state.getCollisionShape(world, pos).isEmpty() || side == null
             ? pos
             : pos.offset(side);
-        T entity = this.spawn(world, offset, !Objects.equals(pos, offset) && side == Direction.UP);
-        if (entity == null) {
-            return null;
-        }
-
-        this.decrementStack();
-        world.emitGameEvent(
-            this.context.get(LootContextParameters.THIS_ENTITY),
-            GameEvent.ENTITY_PLACE,
-            entity.getBlockPos()
-        );
-        ActionContext extendedContext = this.context.extend()
-            .add(ItematicContextParameters.TARGET_ENTITY, entity)
-            .build();
-        this.stack.itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, extendedContext);
-        return entity;
-    }
-
-    private T spawn(ServerWorld world, BlockPos pos, boolean invertY) {
-        T entity = this.type.itematic$create(
-            this.context,
-            this.spawnReason,
-            pos,
+        return this.spawner.spawn(
+            context,
+            Vec3d.ofBottomCenter(truePos),
+            spawnReason,
             this.spawnCallback,
-            this.allowItemData,
-            invertY
-        );
-        if (entity == null) {
-            return null;
-        }
-
-        world.spawnEntityAndPassengers(entity);
-        return entity;
-    }
-
-    private void decrementStack() {
-        this.stack.decrementUnlessCreative(
-            1,
-            this.context.get(LootContextParameters.THIS_ENTITY, LivingEntity.class)
+            !Objects.equals(pos, truePos) && side == Direction.UP
         );
     }
 }

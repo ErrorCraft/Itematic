@@ -4,8 +4,11 @@
       "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
-      "allow_item_data": true,
-      "entity": "minecraft:wither",
+      "allow_spawner_modification": true,
+      "entity": {
+        "allow_item_data": true,
+        "entity": "minecraft:wither"
+      },
       "passes": [
         "block",
         "fluid"

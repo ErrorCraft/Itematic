@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.registry;
 
+import net.errorcraft.itematic.entity.spawn.rule.EntitySpawnRuleType;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.event.ItemEvent;
@@ -35,6 +36,7 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<ItemHolderRuleType<?>>> ITEM_HOLDER_RULE_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("item_holder_rule_type"));
     public static final RegistryKey<Registry<ShooterMethodType<?>>> SHOOTER_METHOD_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("shooter_method_type"));
     public static final RegistryKey<Registry<WorldModificationType<?>>> WORLD_MODIFICATION_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("fluid_modification_type"));
+    public static final RegistryKey<Registry<EntitySpawnRuleType<?>>> ENTITY_SPAWN_RULE_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("entity_spawn_rule_type"));
 
     private ItematicRegistryKeys() {}
 }

@@ -3,13 +3,8 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.decoration.AbstractDecorationEntity;
-import net.minecraft.entity.decoration.ItemFrameEntity;
-import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
@@ -18,54 +13,28 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public record DecorationEntityInitializer<T extends AbstractDecorationEntity>(Creator<T> creator, PlacementChecker checker) implements EntityInitializer<T> {
-    public static EntityInitializer<PaintingEntity> ofPainting() {
-        return new DecorationEntityInitializer<>(
-            (world, pos, facing) -> PaintingEntity.placePainting(world, pos, facing).orElse(null),
-            DecorationEntityInitializer::mayPlacePainting
-        );
-    }
-
-    public static <T extends ItemFrameEntity> EntityInitializer<T> ofItemFrame(Creator<T> creator) {
-        return new DecorationEntityInitializer<>(
-            creator,
-            DecorationEntityInitializer::mayPlaceItemFrame
-        );
+public record DecorationEntityInitializer<T extends AbstractDecorationEntity>(Creator<T> creator) implements EntityInitializer<T> {
+    public static <T extends AbstractDecorationEntity> EntityInitializer<T> of(Creator<T> creator) {
+        return new DecorationEntityInitializer<>(creator);
     }
 
     @Override
     public T create(ActionContext context, SpawnReason reason) {
-        BlockPos pos = context.getBlockPos(ItematicContextParameters.INTERACTED_POSITION);
+        BlockPos pos = context.get(ItematicContextParameters.INTERACTED_POSITION, BlockPos::ofFloored);
         if (pos == null) {
             return null;
         }
 
-        Direction side = context.getOrDefault(ItematicContextParameters.SIDE, Direction.UP);
-        return this.create(
-            context.world(),
-            context.get(LootContextParameters.THIS_ENTITY, PlayerEntity.class),
-            pos,
-            side,
-            context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
-        );
-    }
-
-    private T create(World world, PlayerEntity player, BlockPos pos, Direction facing, ItemStack stack) {
-        if (player == null || !this.checker.mayPlace(player, pos, facing, stack)) {
+        Direction facing = context.getOrDefault(ItematicContextParameters.SIDE, Direction.UP);
+        if (!this.mayPlace(context, pos, facing)) {
             return null;
         }
 
-        T entity = this.creator.create(world, pos, facing);
+        T entity = this.creator.create(context.world(), pos, facing);
         if (entity == null) {
             return null;
         }
 
-        EntityType.loadFromEntityNbt(
-            world,
-            player,
-            entity,
-            stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT)
-        );
         if (!entity.canStayAttached()) {
             return null;
         }
@@ -74,22 +43,19 @@ public record DecorationEntityInitializer<T extends AbstractDecorationEntity>(Cr
         return entity;
     }
 
-    private static boolean mayPlacePainting(PlayerEntity player, BlockPos pos, Direction facing, ItemStack stack) {
-        return !facing.getAxis().isVertical() && player.canPlaceOn(pos, facing, stack);
-    }
+    private boolean mayPlace(ActionContext context, BlockPos pos, Direction facing) {
+        if (context.world().isOutOfHeightLimit(pos)) {
+            return false;
+        }
 
-    private static boolean mayPlaceItemFrame(PlayerEntity player, BlockPos pos, Direction facing, ItemStack stack) {
-        return !player.getWorld().isOutOfHeightLimit(pos) && player.canPlaceOn(pos, facing, stack);
+        PlayerEntity player = context.get(LootContextParameters.THIS_ENTITY, PlayerEntity.class);
+        ItemStack usedStack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
+        return player == null || player.canPlaceOn(pos, facing, usedStack);
     }
 
     @FunctionalInterface
     public interface Creator<T extends AbstractDecorationEntity> {
         @Nullable
         T create(World world, BlockPos pos, Direction facing);
-    }
-
-    @FunctionalInterface
-    public interface PlacementChecker {
-        boolean mayPlace(PlayerEntity player, BlockPos pos, Direction facing, ItemStack stack);
     }
 }
