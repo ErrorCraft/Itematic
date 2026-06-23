@@ -63,26 +63,26 @@ public class Actions {
                 .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_HOE_ON_BLOCK)))
                 .add(DamageItemAction.of(1))
                 .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, soundEvents.getOrThrow(SoundEventKeys.HOE_TILL), SoundCategory.BLOCKS))
+                .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.HOE_TILL), SoundCategory.BLOCKS))
         ));
         registerable.register(TILL_DIRT, ActionEntry.of(
             setBlockConditions(blocks, builder -> builder.tag(blocks, ItematicBlockTags.TILLABLE_INTO_FARMLAND)),
-            SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, blocks.getOrThrow(BlockKeys.FARMLAND))
+            SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockKeys.FARMLAND))
         ));
         registerable.register(TILL_COARSE_DIRT, ActionEntry.of(
             setBlockConditions(blocks, builder -> builder.blocks(blocks, blocks.getOrThrow(BlockKeys.COARSE_DIRT).value())),
-            SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, blocks.getOrThrow(BlockKeys.DIRT))
+            SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockKeys.DIRT))
         ));
         registerable.register(TILL_ROOTED_DIRT, ActionEntry.of(
             LocationCheckLootConditionUtil.builder(
-                PositionTarget.INTERACTED_POSITION,
+                PositionTarget.INTERACTED,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
                         .blocks(blocks, blocks.getOrThrow(BlockKeys.ROOTED_DIRT).value()))
             ),
             PassingSequenceHandler.builder()
-                .add(SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, blocks.getOrThrow(BlockKeys.DIRT)))
-                .add(DropItemFromBlockAction.of(PositionTarget.INTERACTED_POSITION, items.getOrThrow(ItemKeys.HANGING_ROOTS)))
+                .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockKeys.DIRT)))
+                .add(DropItemFromBlockAction.of(PositionTarget.INTERACTED, items.getOrThrow(ItemKeys.HANGING_ROOTS)))
         ));
         registerable.register(USE_SHOVEL_ON_BLOCK, ActionEntry.of(
             InvertedLootCondition.builder(
@@ -96,12 +96,12 @@ public class Actions {
         registerable.register(FLATTEN_GROUND, ActionEntry.of(
             setBlockConditions(blocks, builder -> builder.tag(blocks, ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)),
             PassingSequenceHandler.builder()
-                .add(SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, blocks.getOrThrow(BlockKeys.DIRT_PATH)))
-                .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, soundEvents.getOrThrow(SoundEventKeys.SHOVEL_FLATTEN), SoundCategory.BLOCKS))
+                .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockKeys.DIRT_PATH)))
+                .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.SHOVEL_FLATTEN), SoundCategory.BLOCKS))
         ));
         registerable.register(EXTINGUISH_CAMPFIRE, ActionEntry.of(
             LocationCheckLootConditionUtil.builder(
-                PositionTarget.INTERACTED_POSITION,
+                PositionTarget.INTERACTED,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
                         .tag(blocks, BlockTags.CAMPFIRES)
@@ -109,17 +109,17 @@ public class Actions {
                             .exactMatch(Properties.LIT, true)))
             ),
             PassingSequenceHandler.builder()
-                .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED_POSITION)
+                .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED)
                     .property(Properties.LIT, false)
                     .build())
-                .add(PlaySoundAction.builder(PositionTarget.INTERACTED_POSITION, soundEvents.getOrThrow(SoundEventKeys.FIRE_EXTINGUISH), SoundCategory.BLOCKS)
+                .add(PlaySoundAction.builder(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.FIRE_EXTINGUISH), SoundCategory.BLOCKS)
                     .volume(0.5f)
                     .pitch(1.8f, 3.4f)
                     .build())
                 .add(FirstToPassRequirementsSequenceHandler.builder()
                     .add(
                         LocationCheckLootConditionUtil.builder(
-                            PositionTarget.INTERACTED_POSITION,
+                            PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
                                     .state(StatePredicate.Builder.create()
@@ -136,58 +136,58 @@ public class Actions {
                     .add(
                         AllOfLootCondition.builder(
                             LocationCheckLootConditionUtil.builder(
-                                PositionTarget.INTERACTED_POSITION,
+                                PositionTarget.INTERACTED,
                                 LocationPredicate.Builder.create()
                                     .block(BlockPredicate.Builder.create()
                                         .state(StatePredicate.Builder.create()
                                             .exactMatch(Properties.LIT, false)))),
                             InvertedLootCondition.builder(
                                 LocationCheckLootConditionUtil.builder(
-                                    PositionTarget.INTERACTED_POSITION,
+                                    PositionTarget.INTERACTED,
                                     LocationPredicate.Builder.create()
                                         .block(BlockPredicate.Builder.create()
                                             .state(StatePredicate.Builder.create()
                                                 .exactMatch(Properties.WATERLOGGED, true)))))
                         ),
-                        ModifyBlockStateAction.builder(PositionTarget.INTERACTED_POSITION)
+                        ModifyBlockStateAction.builder(PositionTarget.INTERACTED)
                             .property(Properties.LIT, true)
                             .build()
                     )
                     .add(
                         LocationCheckLootConditionUtil.builder(
-                            PositionTarget.INTERACTED_POSITION,
+                            PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
                                     .blocks(blocks, blocks.getOrThrow(BlockKeys.TNT).value()))
                         ),
                         PassingSequenceHandler.builder()
-                            .add(PrimeTntAction.of(PositionTarget.INTERACTED_POSITION))
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundCategory.BLOCKS))
+                            .add(PrimeTntAction.of(PositionTarget.INTERACTED))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundCategory.BLOCKS))
                     )
-                    .add(PlaceBlockAction.of(blocks.getOrThrow(BlockKeys.FIRE), PositionTarget.INTERACTED_POSITION)))
+                    .add(PlaceBlockAction.of(blocks.getOrThrow(BlockKeys.FIRE), PositionTarget.INTERACTED)))
                 .addOptional(SwingHandAction.of(LootContext.EntityTarget.THIS))
         ));
     }
 
     public static ActionEntry waxSign(RegistryEntryLookup<Block> blocks, boolean wax) {
-        return modifySign(blocks, ModifySignAction.wax(PositionTarget.INTERACTED_POSITION, wax));
+        return modifySign(blocks, ModifySignAction.wax(PositionTarget.INTERACTED, wax));
     }
 
     public static ActionEntry glowSign(RegistryEntryLookup<Block> blocks, boolean glow) {
-        return modifySign(blocks, ModifySignAction.glow(PositionTarget.INTERACTED_POSITION, glow));
+        return modifySign(blocks, ModifySignAction.glow(PositionTarget.INTERACTED, glow));
     }
 
     public static ActionEntry potBlock(RegistryEntryLookup<Block> blocks, RegistryKey<Block> pottedBlock) {
         return ActionEntry.of(
             LocationCheckLootConditionUtil.builder(
-                PositionTarget.INTERACTED_POSITION,
+                PositionTarget.INTERACTED,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
                         .blocks(blocks, blocks.getOrThrow(BlockKeys.FLOWER_POT).value()))
             ),
             PassingSequenceHandler.builder()
-                .add(SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, blocks.getOrThrow(pottedBlock)))
-                .add(InvokeGameEventAction.of(GameEvent.BLOCK_CHANGE, PositionTarget.INTERACTED_POSITION, LootContext.EntityTarget.THIS))
+                .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(pottedBlock)))
+                .add(InvokeGameEventAction.of(GameEvent.BLOCK_CHANGE, PositionTarget.INTERACTED, LootContext.EntityTarget.THIS))
                 .add(IncrementStatAction.of(LootContext.EntityTarget.THIS, Stats.CUSTOM.getOrCreateStat(Stats.POT_FLOWER)))
                 .add(DecrementItemAction.of(1))
                 .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
@@ -197,7 +197,7 @@ public class Actions {
     private static ActionEntry modifySign(RegistryEntryLookup<Block> blocks, ModifySignAction action) {
         return ActionEntry.of(
             LocationCheckLootConditionUtil.builder(
-                PositionTarget.INTERACTED_POSITION,
+                PositionTarget.INTERACTED,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
                         .tag(blocks, BlockTags.SIGNS))
@@ -212,7 +212,7 @@ public class Actions {
     private static LootCondition.Builder setBlockConditions(RegistryEntryLookup<Block> blocks, UnaryOperator<BlockPredicate.Builder> blockPredicateBuilder) {
         return AllOfLootCondition.builder(
             LocationCheckLootConditionUtil.builder(
-                PositionTarget.INTERACTED_POSITION,
+                PositionTarget.INTERACTED,
                 LocationPredicate.Builder.create()
                     .block(blockPredicateBuilder.apply(BlockPredicate.Builder.create()))
             ),
@@ -220,7 +220,7 @@ public class Actions {
                 SideCheckPredicate.builder(Direction.DOWN)
             ),
             LocationCheckLootConditionUtil.builder(
-                PositionTarget.INTERACTED_POSITION,
+                PositionTarget.INTERACTED,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
                         .tag(blocks, BlockTags.AIR)),
@@ -232,7 +232,7 @@ public class Actions {
     private static UncheckedSequenceHandler.Builder campfireParticles(boolean signal) {
         SimpleParticleType type = signal ? ParticleTypes.CAMPFIRE_SIGNAL_SMOKE : ParticleTypes.CAMPFIRE_COSY_SMOKE;
         return UncheckedSequenceHandler.builder()
-            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED_POSITION, type)
+            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, type)
                 .count(20)
                 .offset(Vec3dProvider.of(
                     -1.0d / 3.0d, 1.0d / 3.0d,
@@ -242,7 +242,7 @@ public class Actions {
                 .delta(Vec3dProvider.of(0.0d, 0.07d, 0.0d))
                 .force()
                 .build())
-            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED_POSITION, type)
+            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, type)
                 .count(20)
                 .offset(Vec3dProvider.of(
                     -0.25d, 0.25d,

@@ -29,7 +29,7 @@ public record SpawnEntityFromItemAction(PositionTarget position) implements Acti
     public boolean execute(ActionContext context) {
         return context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
             .itematic$getBehavior(ItemComponentTypes.ENTITY)
-            .map(entity -> entity.place(context))
+            .map(entity -> entity.place(context, this.position))
             .isPresent();
     }
 }

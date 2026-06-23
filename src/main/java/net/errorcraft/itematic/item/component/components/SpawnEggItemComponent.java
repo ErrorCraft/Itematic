@@ -4,8 +4,6 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
-import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -13,8 +11,6 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
@@ -24,19 +20,6 @@ import java.util.Optional;
 public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponent> {
     public static final SpawnEggItemComponent INSTANCE = new SpawnEggItemComponent();
     public static final Codec<SpawnEggItemComponent> CODEC = Codec.unit(INSTANCE);
-
-    public static ItemComponent<?>[] from(RegistryEntry<EntityType<?>> entity, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
-        return new ItemComponent<?>[] {
-            EntityItemComponent.of(
-                entity,
-                true,
-                EntityItemComponent.Pass.BLOCK,
-                EntityItemComponent.Pass.FLUID
-            ),
-            INSTANCE,
-            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
-        };
-    }
 
     private SpawnEggItemComponent() {}
 
@@ -51,33 +34,33 @@ public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponen
     }
 
     public Optional<MobEntity> spawnBaby(PlayerEntity user, MobEntity entity, EntityType<? extends MobEntity> entityType, ServerWorld world, Vec3d pos, ItemStack stack) {
-        Optional<EntityItemComponent> entityItemComponent = stack.itematic$getBehavior(ItemComponentTypes.ENTITY);
-        if (entityItemComponent.isEmpty()) {
+        Optional<EntityItemComponent> entityBehavior = stack.itematic$getBehavior(ItemComponentTypes.ENTITY);
+        if (entityBehavior.isEmpty()) {
             return Optional.empty();
         }
 
-        if (entityItemComponent.get().entityType(stack, world.getRegistryManager()) != entityType) {
+        if (entityBehavior.get().entity().entityType(stack, world.getRegistryManager()) != entityType) {
             return Optional.empty();
         }
 
-        MobEntity mobEntity = this.createEntity(entity, entityType, world);
-        if (mobEntity == null) {
+        MobEntity child = this.createEntity(entity, entityType, world);
+        if (child == null) {
             return Optional.empty();
         }
 
-        if (!mobEntity.itematic$trySetBaby(true)) {
+        if (!child.itematic$trySetBaby(true)) {
             return Optional.empty();
         }
 
-        mobEntity.refreshPositionAfterTeleport(pos);
+        child.refreshPositionAfterTeleport(pos);
         Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (customName != null) {
-            mobEntity.setCustomName(customName);
+            child.setCustomName(customName);
         }
 
-        world.spawnEntityAndPassengers(mobEntity);
+        world.spawnEntityAndPassengers(child);
         stack.decrementUnlessCreative(1, user);
-        return Optional.of(mobEntity);
+        return Optional.of(child);
     }
 
     private MobEntity createEntity(MobEntity entity, EntityType<? extends MobEntity> entityType, ServerWorld world) {

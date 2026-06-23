@@ -109,9 +109,9 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
             return;
         }
 
-        Entity projectileEntity = projectile.createEntity(
+        Entity projectileEntity = projectile.spawnEntity(
             context,
-            PositionTarget.INTERACTED_POSITION,
+            PositionTarget.INTERACTED,
             this.angleOffset,
             this.speed,
             1.0f
@@ -120,10 +120,10 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
             return;
         }
 
-        world.spawnEntity(projectileEntity);
-        ActionContext projectileContext = context.extend()
-            .add(ItematicContextParameters.TARGET_ENTITY, projectileEntity)
+        ActionContext spawnedContext = context.extend()
+            .add(ItematicContextParameters.SPAWNED_ENTITY, projectileEntity)
+            .add(ItematicContextParameters.SPAWNED_POSITION, projectileEntity.getPos())
             .build();
-        stack.itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, projectileContext);
+        stack.itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, spawnedContext);
     }
 }

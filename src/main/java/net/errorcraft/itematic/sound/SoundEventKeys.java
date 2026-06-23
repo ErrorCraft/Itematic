@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier;
 public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> ARMOR_EQUIP_ELYTRA = of("item.armor.equip_elytra");
     public static final RegistryKey<SoundEvent> ARMOR_EQUIP_GENERIC = of("item.armor.equip_generic");
+    public static final RegistryKey<SoundEvent> ARMOR_STAND_PLACE = of("entity.armor_stand.place");
     public static final RegistryKey<SoundEvent> BOTTLE_EMPTY = of("item.bottle.empty");
     public static final RegistryKey<SoundEvent> BOTTLE_FILL = of("item.bottle.fill");
     public static final RegistryKey<SoundEvent> BUCKET_EMPTY = of("item.bucket.empty");

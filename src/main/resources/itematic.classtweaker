@@ -8,6 +8,8 @@ accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsList
 accessible    class    net/minecraft/client/gui/screen/world/CustomizeFlatLevelScreen$SuperflatLayersListWidget
 accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternativesWidget$AlternativeButtonWidget
 accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternativesWidget$AlternativeButtonWidget$InputSlot
+accessible    class    net/minecraft/predicate/StatePredicate$Condition
+accessible    class    net/minecraft/predicate/StatePredicate$RangedValueMatcher
 
 inject-interface    net/minecraft/util/DyeColor    net/errorcraft/itematic/access/util/DyeColorAccess
 inject-interface    net/minecraft/item/tooltip/BundleTooltipData    net/errorcraft/itematic/access/item/tooltip/BundleTooltipDataAccess
@@ -23,7 +25,9 @@ inject-interface    net/minecraft/village/VillagerData    net/errorcraft/itemati
 inject-interface    net/minecraft/village/VillagerProfession    net/errorcraft/itematic/access/village/VillagerProfessionAccess
 inject-interface    net/minecraft/client/gui/screen/GameModeSwitcherScreen$GameModeSelection    net/errorcraft/itematic/access/client/gui/screen/GameModeSwitcherScreenAccess$GameModeSelectionAccess
 inject-interface    net/minecraft/item/ItemPlacementContext    net/errorcraft/itematic/access/item/ItemPlacementContextAccess
+inject-interface    net/minecraft/predicate/StatePredicate$Builder    net/errorcraft/itematic/access/predicate/StatePredicateAccess$BuilderAccess
 
 extend-enum    net/minecraft/recipe/book/RecipeBookType    ITEMATIC_BREWING
 extend-enum    net/minecraft/client/recipebook/RecipeBookType    ITEMATIC_BREWING
 extend-enum    net/minecraft/loot/context/LootContext$EntityTarget    ITEMATIC_TARGET_ENTITY
+extend-enum    net/minecraft/loot/context/LootContext$EntityTarget    ITEMATIC_SPAWNED_ENTITY

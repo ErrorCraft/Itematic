@@ -1,7 +1,9 @@
 {
   "behavior": {
     "minecraft:bucket": {
-      "entity": "minecraft:cod",
+      "entity": {
+        "entity": "minecraft:cod"
+      },
       "modification": {
         "type": "minecraft:place_fluid",
         "fluid": "minecraft:water",

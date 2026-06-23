@@ -146,7 +146,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
 
     private void createProjectile(ItemStack projectile, ServerWorld world, LivingEntity shooter, float power, float divergence, float angle, int index, boolean critical, @Nullable LivingEntity target) {
         Optional<Entity> optionalEntity = projectile.itematic$getBehavior(ItemComponentTypes.PROJECTILE)
-            .map(projectileComponent -> projectileComponent.createEntity(world, shooter, projectile, 0.0f, power));
+            .map(projectileComponent -> projectileComponent.spawnEntity(world, shooter, projectile, 0.0f, power));
         if (optionalEntity.isEmpty()) {
             return;
         }
@@ -155,7 +155,5 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
         if (entity instanceof ProjectileEntity projectileEntity) {
             this.method.initializeProjectile(shooter, projectileEntity, index, power, divergence, angle, critical, target);
         }
-
-        world.spawnEntity(entity);
     }
 }

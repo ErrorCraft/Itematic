@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface EntityTypeAccess<T extends Entity> {
     default void itematic$setInitializer(EntityInitializer<T> initializer) {}
-    default T itematic$create(ActionContext context, SpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback<T> callback, boolean allowItemData, boolean invertY) {
+    default T itematic$create(ActionContext context, SpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean invertY) {
         return null;
     }
 }

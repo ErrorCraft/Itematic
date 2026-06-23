@@ -3,9 +3,14 @@ package net.errorcraft.itematic.item;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
+import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
+import net.errorcraft.itematic.entity.spawn.EntitySpawner;
+import net.errorcraft.itematic.entity.spawn.rule.type.AlignYawEntitySpawnRule;
+import net.errorcraft.itematic.entity.spawn.rule.type.DiscardEntitySpawnRule;
+import net.errorcraft.itematic.entity.spawn.rule.type.FitsInVolumeEntitySpawnRule;
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
@@ -88,7 +93,9 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.event.GameEvent;
 
 import java.util.List;
@@ -225,7 +232,7 @@ public class ItemUtil {
                                 SideCheckPredicate.builder(Direction.DOWN)
                             ),
                             LocationCheckLootConditionUtil.builder(
-                                PositionTarget.INTERACTED_POSITION,
+                                PositionTarget.INTERACTED,
                                 LocationPredicate.Builder.create()
                                     .block(BlockPredicate.Builder.create()
                                         .tag(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
@@ -242,9 +249,9 @@ public class ItemUtil {
                             )
                         ),
                         UncheckedSequenceHandler.builder()
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_SPLASH), SoundCategory.BLOCKS))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_SPLASH), SoundCategory.BLOCKS))
                             .add(ExchangeItemAction.of(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE)))
-                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED_POSITION, ParticleTypes.SPLASH)
+                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SPLASH)
                                 .count(5)
                                 .offset(Vec3dProvider.of(
                                     -0.5d, 0.5d,
@@ -253,8 +260,8 @@ public class ItemUtil {
                                 ))
                                 .speed(1.0d)
                                 .build())
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_EMPTY), SoundCategory.BLOCKS))
-                            .add(SetBlockStateAction.of(PositionTarget.INTERACTED_POSITION, this.blocks.getOrThrow(BlockKeys.MUD)))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_EMPTY), SoundCategory.BLOCKS))
+                            .add(SetBlockStateAction.of(PositionTarget.INTERACTED, this.blocks.getOrThrow(BlockKeys.MUD)))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
@@ -5552,7 +5559,7 @@ public class ItemUtil {
                         PassingSequenceHandler.builder()
                             .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
                             .add(DamageItemAction.of(1))
-                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.FLINT_AND_STEEL_USE), SoundCategory.BLOCKS)
+                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.FLINT_AND_STEEL_USE), SoundCategory.BLOCKS)
                                 .pitch(0.8f, 1.2f)
                                 .build())
                     ))
@@ -5590,35 +5597,55 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.minecart(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.MINECART),
+                        this.blocks,
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHEST_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CHEST_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CHEST_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.minecart(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.CHEST_MINECART),
+                        this.blocks,
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.FURNACE_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.FURNACE_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.FURNACE_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.minecart(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.FURNACE_MINECART),
+                        this.blocks,
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.TNT_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TNT_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.TNT_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.minecart(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.TNT_MINECART),
+                        this.blocks,
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOPPER_MINECART, create(
                 ItemDisplay.Builder.forItem(ItemKeys.HOPPER_MINECART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.HOPPER_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.minecart(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.HOPPER_MINECART),
+                        this.blocks,
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.COMMAND_BLOCK_MINECART, create(
@@ -5627,14 +5654,18 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.COMMAND_BLOCK_MINECART), this.dispenseBehaviors))
+                    .with(EntityItemComponent.minecart(
+                        this.entityTypes.getOrThrow(EntityTypeKeys.COMMAND_BLOCK_MINECART),
+                        this.blocks,
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.OAK_BOAT, create(
                 ItemDisplay.Builder.forItem(ItemKeys.OAK_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.OAK_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.OAK_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5642,7 +5673,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.OAK_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.OAK_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.OAK_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5650,7 +5681,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.SPRUCE_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SPRUCE_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.SPRUCE_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5658,7 +5689,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.SPRUCE_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SPRUCE_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.SPRUCE_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5666,7 +5697,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BIRCH_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BIRCH_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.BIRCH_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5674,7 +5705,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BIRCH_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BIRCH_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.BIRCH_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5682,7 +5713,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.JUNGLE_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.JUNGLE_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.JUNGLE_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5690,7 +5721,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.JUNGLE_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.JUNGLE_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.JUNGLE_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5698,7 +5729,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ACACIA_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ACACIA_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.ACACIA_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5706,7 +5737,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ACACIA_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ACACIA_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.ACACIA_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5714,7 +5745,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHERRY_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CHERRY_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.CHERRY_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5722,7 +5753,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHERRY_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CHERRY_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.CHERRY_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5730,7 +5761,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.DARK_OAK_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.DARK_OAK_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.DARK_OAK_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5738,7 +5769,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.DARK_OAK_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.DARK_OAK_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.DARK_OAK_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5746,7 +5777,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.PALE_OAK_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PALE_OAK_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.PALE_OAK_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5754,7 +5785,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.PALE_OAK_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PALE_OAK_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.PALE_OAK_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5762,7 +5793,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MANGROVE_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MANGROVE_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.MANGROVE_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5770,7 +5801,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MANGROVE_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MANGROVE_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.MANGROVE_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5778,7 +5809,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BAMBOO_RAFT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BAMBOO_RAFT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.BAMBOO_RAFT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5786,7 +5817,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BAMBOO_CHEST_RAFT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BAMBOO_CHEST_RAFT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.BAMBOO_CHEST_RAFT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -5794,28 +5825,58 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.PAINTING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.PAINTING)))
+                    .with(EntityItemComponent.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.PAINTING))
+                            .allowItemData()
+                            .spawnRule(
+                                DiscardEntitySpawnRule.INSTANCE,
+                                SideCheckPredicate.builder(
+                                    Direction.DOWN,
+                                    Direction.UP
+                                )
+                            )
+                            .build()
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.ITEM_FRAME, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ITEM_FRAME).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.ITEM_FRAME)))
+                    .with(EntityItemComponent.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.ITEM_FRAME))
+                            .allowItemData()
+                            .build()
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOW_ITEM_FRAME, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GLOW_ITEM_FRAME).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.GLOW_ITEM_FRAME)))
+                    .with(EntityItemComponent.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.GLOW_ITEM_FRAME))
+                            .allowItemData()
+                            .build()
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.ARMOR_STAND, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ARMOR_STAND).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(EntityItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ARMOR_STAND), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.ARMOR_STAND))
+                            .spawnRule(
+                                DiscardEntitySpawnRule.INSTANCE,
+                                SideCheckPredicate.builder(Direction.DOWN)
+                            )
+                            .spawnRule(FitsInVolumeEntitySpawnRule.entityDimensions())
+                            .spawnRule(AlignYawEntitySpawnRule.of(8))
+                            .spawnSound(this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_STAND_PLACE))
+                            .build(),
+                        this.dispenseBehaviors
+                    ))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_CRYSTAL, create(
@@ -5824,7 +5885,40 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.END_CRYSTAL)))
+                    .with(EntityItemComponent.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.END_CRYSTAL))
+                            .spawnRule(
+                                DiscardEntitySpawnRule.INSTANCE,
+                                InvertedLootCondition.builder(
+                                    LocationCheckLootConditionUtil.builder(
+                                        PositionTarget.INTERACTED,
+                                        LocationPredicate.Builder.create()
+                                            .block(BlockPredicate.Builder.create()
+                                                .tag(this.blocks, ItematicBlockTags.END_CRYSTAL_SPAWNABLE_ON)),
+                                        new BlockPos(0, -1, 0)
+                                    )
+                                )
+                            )
+                            .spawnRule(
+                                DiscardEntitySpawnRule.INSTANCE,
+                                InvertedLootCondition.builder(
+                                    LocationCheckLootConditionUtil.builder(
+                                        PositionTarget.INTERACTED,
+                                        LocationPredicate.Builder.create()
+                                            .block(BlockPredicate.Builder.create()
+                                                .tag(this.blocks, BlockTags.AIR))
+                                    )
+                                )
+                            )
+                            .spawnRule(
+                                FitsInVolumeEntitySpawnRule.of(
+                                    false,
+                                    true,
+                                    new Vec3d(1.0d, 2.0d, 1.0d)
+                                )
+                            )
+                            .build()
+                    ))
                     .build()
             ));
         }
@@ -5834,567 +5928,567 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ARMADILLO_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ARMADILLO), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ARMADILLO), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ALLAY_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ALLAY_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ALLAY), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ALLAY), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.AXOLOTL_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.AXOLOTL_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.AXOLOTL), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.AXOLOTL), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.BAT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.BAT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.BAT), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.BEE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.BEE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BEE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.BEE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLAZE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.BLAZE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BLAZE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.BLAZE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.BOGGED_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.BOGGED_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BOGGED), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.BOGGED), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.BREEZE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.BREEZE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.BREEZE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.BREEZE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CAT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CAT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CAT), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CAMEL_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CAMEL_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CAMEL), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CAMEL), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CAVE_SPIDER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CAVE_SPIDER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CAVE_SPIDER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CAVE_SPIDER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHICKEN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CHICKEN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CHICKEN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CHICKEN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.COD_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.COD_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.COD), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.COD), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.COW_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.COW_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.COW), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.COW), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CREAKING_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CREAKING_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CREAKING), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CREAKING), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CREEPER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CREEPER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.CREEPER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CREEPER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.DOLPHIN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DOLPHIN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.DOLPHIN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.DOLPHIN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.DONKEY_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DONKEY_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.DONKEY), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.DONKEY), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.DROWNED_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DROWNED_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.DROWNED), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.DROWNED), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ELDER_GUARDIAN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ELDER_GUARDIAN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ELDER_GUARDIAN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ELDER_GUARDIAN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENDER_DRAGON_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ENDER_DRAGON_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ENDER_DRAGON), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ENDER_DRAGON), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENDERMAN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ENDERMAN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ENDERMAN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ENDERMAN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENDERMITE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ENDERMITE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ENDERMITE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ENDERMITE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.EVOKER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.EVOKER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.EVOKER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.EVOKER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.FOX_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.FOX_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.FOX), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.FOX), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.FROG_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.FROG_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.FROG), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.FROG), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.GHAST_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GHAST_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.GHAST), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.GHAST), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOW_SQUID_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GLOW_SQUID_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.GLOW_SQUID), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.GLOW_SQUID), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOAT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GOAT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.GOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.GOAT), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.GUARDIAN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GUARDIAN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.GUARDIAN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.GUARDIAN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOGLIN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.HOGLIN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.HOGLIN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.HOGLIN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.HORSE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.HORSE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.HORSE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.HORSE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.HUSK_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.HUSK_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.HUSK), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.HUSK), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_GOLEM_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.IRON_GOLEM_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.IRON_GOLEM), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.IRON_GOLEM), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.LLAMA_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LLAMA_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.LLAMA), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.LLAMA), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGMA_CUBE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.MAGMA_CUBE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MAGMA_CUBE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.MAGMA_CUBE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOOSHROOM_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.MOOSHROOM_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MOOSHROOM), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.MOOSHROOM), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.MULE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.MULE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.MULE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.MULE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.OCELOT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.OCELOT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.OCELOT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.OCELOT), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PANDA_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PANDA_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PANDA), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PANDA), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PARROT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PARROT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PARROT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PARROT), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PHANTOM_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PHANTOM_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PHANTOM), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PHANTOM), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PIG_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PIG_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PIG), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PIG), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PIGLIN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PIGLIN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PIGLIN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PIGLIN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PIGLIN_BRUTE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PIGLIN_BRUTE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PIGLIN_BRUTE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PIGLIN_BRUTE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PILLAGER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PILLAGER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PILLAGER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PILLAGER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLAR_BEAR_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.POLAR_BEAR_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.POLAR_BEAR), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.POLAR_BEAR), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PUFFERFISH_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PUFFERFISH_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.RABBIT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.RABBIT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.RABBIT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.RABBIT), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.RAVAGER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.RAVAGER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.RAVAGER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.RAVAGER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SALMON_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SALMON_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SALMON), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SALMON), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHEEP_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SHEEP_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SHEEP), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SHEEP), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHULKER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SHULKER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SHULKER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SHULKER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SILVERFISH_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SILVERFISH_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SILVERFISH), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SILVERFISH), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SKELETON_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SKELETON_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SKELETON), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SKELETON), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SKELETON_HORSE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SKELETON_HORSE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SKELETON_HORSE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SKELETON_HORSE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SLIME_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SLIME_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SLIME), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SLIME), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNIFFER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SNIFFER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SNIFFER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SNIFFER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNOW_GOLEM_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SNOW_GOLEM_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SNOW_GOLEM), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SNOW_GOLEM), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPIDER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SPIDER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SPIDER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SPIDER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SQUID_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SQUID_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.SQUID), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SQUID), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.STRAY_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.STRAY_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.STRAY), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.STRAY), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.STRIDER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.STRIDER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.STRIDER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.STRIDER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TADPOLE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TADPOLE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.TADPOLE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.TADPOLE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TRADER_LLAMA_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TRADER_LLAMA_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.TRADER_LLAMA), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.TRADER_LLAMA), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TROPICAL_FISH_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TURTLE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TURTLE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.TURTLE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.TURTLE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.VEX_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.VEX_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.VEX), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.VEX), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.VILLAGER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.VILLAGER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.VILLAGER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.VILLAGER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.VINDICATOR_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.VINDICATOR_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.VINDICATOR), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.VINDICATOR), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WANDERING_TRADER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WANDERING_TRADER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.WANDERING_TRADER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.WANDERING_TRADER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARDEN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WARDEN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.WARDEN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.WARDEN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WITCH_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WITCH_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.WITCH), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.WITCH), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WITHER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WITHER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.WITHER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.WITHER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WITHER_SKELETON_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WITHER_SKELETON_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.WITHER_SKELETON), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.WITHER_SKELETON), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOLF_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WOLF_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.WOLF), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.WOLF), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOGLIN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ZOGLIN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ZOGLIN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOGLIN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOMBIE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ZOMBIE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOMBIE_HORSE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ZOMBIE_HORSE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_HORSE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_HORSE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOMBIE_VILLAGER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ZOMBIE_VILLAGER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_VILLAGER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_VILLAGER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(SpawnEggItemComponent.from(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIFIED_PIGLIN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIFIED_PIGLIN), this.dispenseBehaviors))
                     .build()
             ));
         }
@@ -9680,7 +9774,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         LocationCheckLootConditionUtil.builder(
-                            PositionTarget.INTERACTED_POSITION,
+                            PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
                                     .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
@@ -9688,21 +9782,21 @@ public class ItemUtil {
                                         .exactMatch(Properties.EYE, false)))
                         ),
                         PassingSequenceHandler.builder()
-                            .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED_POSITION)
+                            .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED)
                                 .property(Properties.EYE, true)
                                 .pushEntitiesUpwards()
                                 .build())
                             .add(DecrementItemAction.of(1))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS))
-                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED_POSITION, ParticleTypes.SMOKE)
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS))
+                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SMOKE)
                                 .count(16)
                                 .offset(Vec3dProvider.of(
                                     -0.1875d, 0.1875d,
                                     0.8125d, 0.8125d,
                                     -0.1875d, 0.1875d))
                                 .build())
-                            .addOptional(LightEndPortalAction.of(PositionTarget.INTERACTED_POSITION))
+                            .addOptional(LightEndPortalAction.of(PositionTarget.INTERACTED))
                     ))
                     .add(ItemEvents.THROW_PROJECTILE, ActionEntry.of(
                         PlaySoundAction.builder(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.ENDER_EYE_LAUNCH), SoundCategory.NEUTRAL)
@@ -9736,7 +9830,7 @@ public class ItemUtil {
                         PassingSequenceHandler.builder()
                             .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
                             .add(DecrementItemAction.of(1))
-                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED_POSITION, this.soundEvents.getOrThrow(SoundEventKeys.FIRE_CHARGE_USE), SoundCategory.BLOCKS)
+                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.FIRE_CHARGE_USE), SoundCategory.BLOCKS)
                                 .pitch(0.8f, 1.2f)
                                 .build())
                     ))
@@ -10983,7 +11077,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         LocationCheckLootConditionUtil.builder(
-                            PositionTarget.INTERACTED_POSITION,
+                            PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
                                     .blocks(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value()))
@@ -10992,7 +11086,7 @@ public class ItemUtil {
                             .add(ModifyItemAction.of(
                                 ItemStackTarget.TOOL,
                                 SplitItemModifier.builder(1),
-                                SetItemPointerLocationItemModifier.builder(PositionTarget.INTERACTED_POSITION),
+                                SetItemPointerLocationItemModifier.builder(PositionTarget.INTERACTED),
                                 SetNameLootFunction.builder(
                                     Text.translatable(Util.createTranslationKey("item", Identifier.ofVanilla("lodestone_compass"))),
                                     SetNameLootFunction.Target.ITEM_NAME
@@ -11003,7 +11097,7 @@ public class ItemUtil {
                                 )
                             ))
                             .add(PlaySoundAction.of(
-                                PositionTarget.INTERACTED_POSITION,
+                                PositionTarget.INTERACTED,
                                 this.soundEvents.getOrThrow(SoundEventKeys.LODESTONE_COMPASS_LOCK),
                                 SoundCategory.PLAYERS
                             ))
@@ -11205,7 +11299,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(FertilizeAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(FertilizeAction.of(PositionTarget.INTERACTED))
                             .add(InvokeGameEventAction.of(
                                 GameEvent.ITEM_INTERACT_FINISH,
                                 PositionTarget.ORIGIN,
@@ -11236,7 +11330,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(MarkBannerOnItemAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(MarkBannerOnItemAction.of(PositionTarget.INTERACTED))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
@@ -11263,7 +11357,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         LocationCheckLootConditionUtil.builder(
-                            PositionTarget.INTERACTED_POSITION,
+                            PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .fluid(FluidPredicate.Builder.create()
                                     .tag(this.fluids.getOrThrow(FluidTags.WATER)))
@@ -11274,7 +11368,7 @@ public class ItemUtil {
                                 ComponentChanges.builder()
                                     .add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(this.potions.getOrThrow(PotionKeys.WATER)))
                                     .build()))
-                            .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, PositionTarget.INTERACTED_POSITION, LootContext.EntityTarget.THIS))
+                            .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, PositionTarget.INTERACTED, LootContext.EntityTarget.THIS))
                             .add(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundCategory.NEUTRAL))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
@@ -11382,7 +11476,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(AttachLeashedEntitiesOnBlockAction.of(PositionTarget.INTERACTED_POSITION))
+                            .add(AttachLeashedEntitiesOnBlockAction.of(PositionTarget.INTERACTED))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
@@ -11505,7 +11599,7 @@ public class ItemUtil {
                         FirstToPassRequirementsSequenceHandler.builder()
                             .add(Actions.waxSign(this.blocks, true))
                             .add(PassingSequenceHandler.builder()
-                                .add(WaxBlockAction.of(PositionTarget.INTERACTED_POSITION))
+                                .add(WaxBlockAction.of(PositionTarget.INTERACTED))
                                 .add(DecrementItemAction.of(1))
                                 .add(SwingHandAction.of(LootContext.EntityTarget.THIS)))))
                     .build()

@@ -4,7 +4,28 @@
       "behavior": "minecraft:spawn_entity_from_item"
     },
     "minecraft:entity": {
-      "entity": "minecraft:armor_stand"
+      "entity": {
+        "entity": "minecraft:armor_stand",
+        "spawn_rules": [
+          {
+            "type": "minecraft:discard",
+            "condition": {
+              "condition": "minecraft:side_check",
+              "sides": [
+                "down"
+              ]
+            }
+          },
+          {
+            "type": "minecraft:fits_in_volume"
+          },
+          {
+            "type": "minecraft:align_yaw",
+            "steps": 8
+          }
+        ],
+        "spawn_sound": "minecraft:entity.armor_stand.place"
+      }
     },
     "minecraft:stackable": 16
   },
