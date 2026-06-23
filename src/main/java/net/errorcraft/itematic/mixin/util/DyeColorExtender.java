@@ -14,8 +14,10 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 import java.util.List;
 import java.util.Optional;
@@ -91,11 +93,7 @@ public class DyeColorExtender implements DyeColorAccess {
     @Unique
     private RegistryKey<Item> itemKey;
 
-    @Inject(
-        method = "<clinit>",
-        at = @At("TAIL")
-    )
-    private static void setItemKeys(CallbackInfo info) {
+    static {
         WHITE.itematic$setItemKey(ItemKeys.WHITE_DYE);
         ORANGE.itematic$setItemKey(ItemKeys.ORANGE_DYE);
         MAGENTA.itematic$setItemKey(ItemKeys.MAGENTA_DYE);
