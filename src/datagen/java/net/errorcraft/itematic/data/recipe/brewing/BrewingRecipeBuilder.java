@@ -60,7 +60,7 @@ public abstract class BrewingRecipeBuilder<T> {
     protected abstract BrewingRecipe<T> createRecipe();
 
     protected Ingredient reagent() {
-        Ingredient reagent = Ingredient.fromTag(this.reagent);
+        Ingredient reagent = Ingredient.ofTag(this.reagent);
         reagent.itematic$setRemainder(Optional.ofNullable(this.remainder).map(ItemStack::new));
         return reagent;
     }

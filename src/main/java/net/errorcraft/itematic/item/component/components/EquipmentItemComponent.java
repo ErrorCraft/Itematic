@@ -22,6 +22,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.equipment.ArmorMaterial;
+import net.minecraft.item.equipment.EquipmentAssetKeys;
 import net.minecraft.item.equipment.EquipmentType;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.RegistryEntryLookup;
@@ -30,6 +31,7 @@ import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -47,6 +49,16 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
             .model(material.assetId())
             .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_HORSE_ARMOR))
             .damageOnHurt(false)
+            .build()
+        );
+    }
+
+    public static EquipmentItemComponent ofHarness(DyeColor color, RegistryEntryLookup<SoundEvent> soundEvents, RegistryEntryLookup<EntityType<?>> entityTypes) {
+        return of(EquippableComponent.builder(EquipmentSlot.BODY)
+            .equipSound(soundEvents.getOrThrow(SoundEventKeys.HAPPY_GHAST_EQUIP))
+            .model(EquipmentAssetKeys.HARNESS_FROM_COLOR.get(color))
+            .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_HARNESS))
+            .equipOnInteract(true)
             .build()
         );
     }

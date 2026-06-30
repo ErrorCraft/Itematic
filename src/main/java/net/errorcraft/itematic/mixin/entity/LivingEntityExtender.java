@@ -6,7 +6,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.entity.LivingEntityAccess;
-import net.errorcraft.itematic.access.entity.attribute.AttributeContainerAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
@@ -454,8 +453,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Override
     public double itematic$getAttackDamage() {
         Double baseAttackDamage = this.getBaseAttackDamage(this.getMainHandStack());
-        return ((AttributeContainerAccess) this.getAttributes())
-            .itematic$getValue(EntityAttributes.ATTACK_DAMAGE, baseAttackDamage);
+        return this.getAttributes().itematic$getValue(EntityAttributes.ATTACK_DAMAGE, baseAttackDamage);
     }
 
     @Unique

@@ -63,7 +63,7 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
     @Override
     public IngredientPlacement itematic$ingredientPlacement(RegistryEntryLookup<Item> items) {
         return IngredientPlacement.forMultipleSlots(List.of(
-            items.getOptional(ItematicItemTags.BREWING_INPUTS).map(Ingredient::fromTag),
+            items.getOptional(ItematicItemTags.BREWING_INPUTS).map(Ingredient::ofTag),
             Optional.of(this.reagent())
         ));
     }

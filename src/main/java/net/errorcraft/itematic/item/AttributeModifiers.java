@@ -7,6 +7,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.equipment.ArmorMaterial;
 import net.minecraft.item.equipment.EquipmentType;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.waypoint.Waypoint;
 
 public class AttributeModifiers {
     private AttributeModifiers() {}
@@ -51,5 +52,16 @@ public class AttributeModifiers {
         }
 
         return builder.build();
+    }
+
+    public static AttributeModifiersComponent hideFromLocatorBar() {
+        return AttributeModifiersComponent.builder()
+            .add(
+                EntityAttributes.WAYPOINT_TRANSMIT_RANGE,
+                Waypoint.DISABLE_TRACKING,
+                AttributeModifierSlot.HEAD,
+                AttributeModifiersComponent.Display.getHidden()
+            )
+            .build();
     }
 }

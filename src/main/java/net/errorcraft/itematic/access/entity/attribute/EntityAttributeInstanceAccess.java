@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.access.entity.attribute;
 
 public interface EntityAttributeInstanceAccess {
-    double itematic$getValue(double base);
+    default double itematic$getValue(double base) {
+        return 0.0d;
+    }
 }

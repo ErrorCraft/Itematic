@@ -1,0 +1,13 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:dried_ghast"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:dried_ghast",
+    "rarity": "uncommon",
+    "translation_key": "block.minecraft.dried_ghast"
+  }
+}

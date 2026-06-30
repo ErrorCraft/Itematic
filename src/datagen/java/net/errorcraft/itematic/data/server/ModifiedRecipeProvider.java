@@ -93,7 +93,7 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
 
         public ShapelessRecipeBuilder input(RegistryEntry<Item> input, int count, RegistryEntry<Item> remainder) {
             for (int i = 0; i < count; i++) {
-                Ingredient ingredient = Ingredient.fromTag(RegistryEntryList.of(input));
+                Ingredient ingredient = Ingredient.ofTag(RegistryEntryList.of(input));
                 ingredient.itematic$setRemainder(Optional.of(new ItemStack(remainder)));
                 this.inputs.add(ingredient);
             }
@@ -124,12 +124,12 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
         }
 
         public ShapedRecipeBuilder input(char key, RegistryEntry<Item> input) {
-            this.inputs.put(key, Ingredient.fromTag(RegistryEntryList.of(input)));
+            this.inputs.put(key, Ingredient.ofTag(RegistryEntryList.of(input)));
             return this;
         }
 
         public ShapedRecipeBuilder input(char key, RegistryEntry<Item> input, RegistryEntry<Item> remainder) {
-            Ingredient ingredient = Ingredient.fromTag(RegistryEntryList.of(input));
+            Ingredient ingredient = Ingredient.ofTag(RegistryEntryList.of(input));
             ingredient.itematic$setRemainder(Optional.of(new ItemStack(remainder)));
             this.inputs.put(key, ingredient);
             return this;

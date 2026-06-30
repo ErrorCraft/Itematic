@@ -707,6 +707,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> DRIED_KELP_BLOCK = of("dried_kelp_block");
     public static final RegistryKey<Block> TURTLE_EGG = of("turtle_egg");
     public static final RegistryKey<Block> SNIFFER_EGG = of("sniffer_egg");
+    public static final RegistryKey<Block> DRIED_GHAST = of("dried_ghast");
     public static final RegistryKey<Block> DEAD_TUBE_CORAL_BLOCK = of("dead_tube_coral_block");
     public static final RegistryKey<Block> DEAD_BRAIN_CORAL_BLOCK = of("dead_brain_coral_block");
     public static final RegistryKey<Block> DEAD_BUBBLE_CORAL_BLOCK = of("dead_bubble_coral_block");

@@ -2709,6 +2709,15 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SNIFFER_EGG)))
                     .build()
             ));
+            this.registerable.register(ItemKeys.DRIED_GHAST, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.DRIED_GHAST)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DRIED_GHAST)))
+                    .build()
+            ));
             this.registerable.register(ItemKeys.DEAD_TUBE_CORAL_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_TUBE_CORAL_BLOCK).build(),
                 ItemComponentSet.builder()
@@ -6113,6 +6122,13 @@ public class ItemUtil {
                     .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.GHAST), this.dispenseBehaviors))
                     .build()
             ));
+            this.registerable.register(ItemKeys.HAPPY_GHAST_SPAWN_EGG, create(
+                ItemDisplay.Builder.forItem(ItemKeys.HAPPY_GHAST_SPAWN_EGG).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.HAPPY_GHAST), this.dispenseBehaviors))
+                    .build()
+            ));
             this.registerable.register(ItemKeys.GLOW_SQUID_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GLOW_SQUID_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
@@ -6980,6 +6996,7 @@ public class ItemUtil {
             ));
             this.registerable.register(ItemKeys.CARVED_PUMPKIN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CARVED_PUMPKIN).build(),
+                AttributeModifiers.hideFromLocatorBar(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARVED_PUMPKIN)))
@@ -7855,6 +7872,118 @@ public class ItemUtil {
                     .with(DyeableItemComponent.of(0x000000))
                     .build()
             ));
+            this.registerable.register(ItemKeys.WHITE_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.WHITE_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.WHITE, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ORANGE_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.ORANGE_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.ORANGE, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.MAGENTA_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.MAGENTA_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.MAGENTA, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_BLUE_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.LIGHT_BLUE_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.LIGHT_BLUE, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.YELLOW_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.YELLOW_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.YELLOW, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIME_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.LIME_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.LIME, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PINK_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.PINK_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.PINK, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GRAY_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.GRAY_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.GRAY, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.LIGHT_GRAY_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.LIGHT_GRAY_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.LIGHT_GRAY, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CYAN_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.CYAN_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.CYAN, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PURPLE_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.PURPLE_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.PURPLE, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLUE_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.BLUE_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.BLUE, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BROWN_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.BROWN_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.BROWN, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GREEN_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.GREEN_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.GREEN, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.RED_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.RED_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.RED, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.BLACK_HARNESS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.BLACK_HARNESS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHarness(DyeColor.BLACK, this.soundEvents, this.entityTypes))
+                    .build()
+            ));
         }
 
         private void bootstrapSkulls() {
@@ -7862,6 +7991,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SKELETON_SKULL)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
+                AttributeModifiers.hideFromLocatorBar(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
@@ -7875,6 +8005,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.WITHER_SKELETON_SKULL)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
+                AttributeModifiers.hideFromLocatorBar(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
@@ -7888,6 +8019,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PLAYER_HEAD)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
+                AttributeModifiers.hideFromLocatorBar(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
@@ -7901,6 +8033,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ZOMBIE_HEAD)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
+                AttributeModifiers.hideFromLocatorBar(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
@@ -7914,6 +8047,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CREEPER_HEAD)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
+                AttributeModifiers.hideFromLocatorBar(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
@@ -7927,6 +8061,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DRAGON_HEAD)
                     .rarity(Rarity.RARE)
                     .build(),
+                AttributeModifiers.hideFromLocatorBar(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
@@ -7940,6 +8075,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PIGLIN_HEAD)
                     .rarity(Rarity.UNCOMMON)
                     .build(),
+                AttributeModifiers.hideFromLocatorBar(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(

@@ -1,0 +1,16 @@
+{
+  "behavior": {
+    "minecraft:equipment": {
+      "allowed_entities": "#minecraft:can_equip_harness",
+      "asset_id": "minecraft:magenta_harness",
+      "equip_on_interact": true,
+      "equip_sound": "minecraft:entity.happy_ghast.equip",
+      "slot": "body"
+    },
+    "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:magenta_harness",
+    "translation_key": "item.minecraft.magenta_harness"
+  }
+}

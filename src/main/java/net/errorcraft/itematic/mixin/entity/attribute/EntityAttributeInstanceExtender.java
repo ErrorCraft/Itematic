@@ -21,6 +21,7 @@ public abstract class EntityAttributeInstanceExtender implements EntityAttribute
         if (this.baseValue == base) {
             return this.getValue();
         }
+
         // Temporarily update the base value without sending any updates by directly modifying the field
         double originalBase = this.baseValue;
         this.baseValue = base;

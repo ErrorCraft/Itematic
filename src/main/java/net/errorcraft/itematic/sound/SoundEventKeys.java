@@ -26,6 +26,7 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> FIRE_EXTINGUISH = of("block.fire.extinguish");
     public static final RegistryKey<SoundEvent> FLINT_AND_STEEL_USE = of("item.flintandsteel.use");
     public static final RegistryKey<SoundEvent> GENERIC_SPLASH = of("entity.generic.splash");
+    public static final RegistryKey<SoundEvent> HAPPY_GHAST_EQUIP = of("entity.happy_ghast.equip");
     public static final RegistryKey<SoundEvent> HOE_TILL = of("item.hoe.till");
     public static final RegistryKey<SoundEvent> HONEY_BOTTLE_DRINK = of("item.honey_bottle.drink");
     public static final RegistryKey<SoundEvent> HORSE_ARMOR = of("entity.horse.armor");

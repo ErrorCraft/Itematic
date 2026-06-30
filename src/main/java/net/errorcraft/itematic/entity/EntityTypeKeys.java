@@ -58,6 +58,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> GLOW_SQUID = of("glow_squid");
     public static final RegistryKey<EntityType<?>> GOAT = of("goat");
     public static final RegistryKey<EntityType<?>> GUARDIAN = of("guardian");
+    public static final RegistryKey<EntityType<?>> HAPPY_GHAST = of("happy_ghast");
     public static final RegistryKey<EntityType<?>> HOGLIN = of("hoglin");
     public static final RegistryKey<EntityType<?>> HOPPER_MINECART = of("hopper_minecart");
     public static final RegistryKey<EntityType<?>> HORSE = of("horse");
