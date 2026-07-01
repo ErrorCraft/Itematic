@@ -44,7 +44,8 @@ public class RecipeBookOptionsExtender implements RecipeBookOptionsAccess {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;mapCodec(Ljava/util/function/Function;)Lcom/mojang/serialization/MapCodec;"
+            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;mapCodec(Ljava/util/function/Function;)Lcom/mojang/serialization/MapCodec;",
+            remap = false
         )
     )
     private static MapCodec<RecipeBookOptions> addBrewingFieldCodec(MapCodec<RecipeBookOptions> original) {

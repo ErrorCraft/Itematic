@@ -77,7 +77,7 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
             entity.setItem(stack);
         }
 
-        entity.initTargetPos(strongholdPos);
+        entity.initTargetPos(Vec3d.of(strongholdPos));
         return entity;
     }
 }
