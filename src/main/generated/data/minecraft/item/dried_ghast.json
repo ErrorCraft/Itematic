@@ -7,7 +7,6 @@
   },
   "display": {
     "model": "minecraft:dried_ghast",
-    "rarity": "uncommon",
     "translation_key": "block.minecraft.dried_ghast"
   }
 }

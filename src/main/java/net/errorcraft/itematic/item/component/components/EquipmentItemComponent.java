@@ -53,14 +53,17 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
         );
     }
 
-    public static EquipmentItemComponent ofHarness(DyeColor color, RegistryEntryLookup<SoundEvent> soundEvents, RegistryEntryLookup<EntityType<?>> entityTypes) {
-        return of(EquippableComponent.builder(EquipmentSlot.BODY)
-            .equipSound(soundEvents.getOrThrow(SoundEventKeys.HAPPY_GHAST_EQUIP))
-            .model(EquipmentAssetKeys.HARNESS_FROM_COLOR.get(color))
-            .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_HARNESS))
-            .equipOnInteract(true)
-            .build()
-        );
+    public static ItemComponent<?>[] ofHarness(DyeColor color, RegistryEntryLookup<SoundEvent> soundEvents, RegistryEntryLookup<EntityType<?>> entityTypes, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+        return new ItemComponent<?>[] {
+            of(EquippableComponent.builder(EquipmentSlot.BODY)
+                .equipSound(soundEvents.getOrThrow(SoundEventKeys.HAPPY_GHAST_EQUIP))
+                .model(EquipmentAssetKeys.HARNESS_FROM_COLOR.get(color))
+                .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_HARNESS))
+                .equipOnInteract(true)
+                .build()
+            ),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
+        };
     }
 
     public static ItemComponent<?>[] forArmor(ArmorMaterial material, EquipmentType type) {
@@ -78,7 +81,7 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
     public static ItemComponent<?>[] forSkull(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             BlockItemComponent.attachedToSide(attachedBlock, otherBlock, Direction.DOWN),
-            new EquipmentItemComponent(EquippableComponent.builder(EquipmentSlot.HEAD)
+            of(EquippableComponent.builder(EquipmentSlot.HEAD)
                 .swappable(false)
                 .build()),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY_HEAD)),
