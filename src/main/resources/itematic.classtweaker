@@ -30,6 +30,7 @@ inject-interface    net/minecraft/entity/attribute/AttributeContainer    net/err
 inject-interface    net/minecraft/entity/attribute/EntityAttributeInstance    net/errorcraft/itematic/access/entity/attribute/EntityAttributeInstanceAccess
 inject-interface    net/minecraft/entity/attribute/DefaultAttributeContainer    net/errorcraft/itematic/access/entity/attribute/DefaultAttributeContainerAccess
 inject-interface    net/minecraft/client/MinecraftClient    net/errorcraft/itematic/access/client/MinecraftClientAccess
+inject-interface    net/minecraft/recipe/book/RecipeBookOptions    net/errorcraft/itematic/access/recipe/book/RecipeBookOptionsAccess
 
 extend-enum    net/minecraft/recipe/book/RecipeBookType    ITEMATIC_BREWING
 extend-enum    net/minecraft/client/recipebook/RecipeBookType    ITEMATIC_BREWING

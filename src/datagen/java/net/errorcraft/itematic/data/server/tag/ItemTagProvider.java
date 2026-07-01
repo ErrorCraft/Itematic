@@ -17,30 +17,31 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void configure(RegistryWrapper.WrapperLookup lookup) {
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_LEATHER_ARMOR)
+        this.builder(ItematicItemTags.REPAIRS_LEATHER_ARMOR)
             .add(ItemKeys.LEATHER);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)
+        this.builder(ItematicItemTags.REPAIRS_CHAINMAIL_ARMOR)
             .add(ItemKeys.IRON_INGOT);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_IRON_ARMOR)
+        this.builder(ItematicItemTags.REPAIRS_IRON_ARMOR)
             .add(ItemKeys.IRON_INGOT);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)
+        this.builder(ItematicItemTags.REPAIRS_GOLDEN_ARMOR)
             .add(ItemKeys.GOLD_INGOT);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)
+        this.builder(ItematicItemTags.REPAIRS_DIAMOND_ARMOR)
             .add(ItemKeys.DIAMOND);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)
+        this.builder(ItematicItemTags.REPAIRS_NETHERITE_ARMOR)
             .add(ItemKeys.NETHERITE_INGOT);
-        this.getOrCreateTagBuilder(ItematicItemTags.REPAIRS_TURTLE_ARMOR)
+        this.builder(ItematicItemTags.REPAIRS_TURTLE_ARMOR)
             .add(ItemKeys.TURTLE_SCUTE);
-        this.getOrCreateTagBuilder(ItematicItemTags.BOW_AMMUNITION)
+        this.builder(ItematicItemTags.BOW_AMMUNITION)
             .forceAddTag(ItemTags.ARROWS);
-        this.getOrCreateTagBuilder(ItematicItemTags.CROSSBOW_AMMUNITION)
+        this.builder(ItematicItemTags.CROSSBOW_AMMUNITION)
             .addTag(ItematicItemTags.BOW_AMMUNITION)
             .add(ItemKeys.FIREWORK_ROCKET);
-        this.getOrCreateTagBuilder(ItematicItemTags.PIG_TEMPT_ITEMS)
+        this.builder(ItematicItemTags.PIG_TEMPT_ITEMS)
             .forceAddTag(ItemTags.PIG_FOOD)
             .add(ItemKeys.CARROT_ON_A_STICK);
-        this.getOrCreateTagBuilder(ItematicItemTags.VILLAGER_GATHERABLE_ITEMS)
+        this.builder(ItematicItemTags.VILLAGER_GATHERABLE_ITEMS)
             .add(ItemKeys.BREAD)
             .add(ItemKeys.POTATO)
             .add(ItemKeys.CARROT)
@@ -50,12 +51,12 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.BEETROOT_SEEDS)
             .add(ItemKeys.TORCHFLOWER_SEEDS)
             .add(ItemKeys.PITCHER_POD);
-        this.getOrCreateTagBuilder(ItematicItemTags.FARMER_VILLAGER_GATHERABLE_ITEMS)
+        this.builder(ItematicItemTags.FARMER_VILLAGER_GATHERABLE_ITEMS)
             .add(ItemKeys.WHEAT)
             .add(ItemKeys.WHEAT_SEEDS)
             .add(ItemKeys.BEETROOT_SEEDS)
             .add(ItemKeys.BONE_MEAL);
-        this.getOrCreateTagBuilder(ItematicItemTags.OAK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.OAK_BUILDING_BLOCKS)
             .add(ItemKeys.OAK_LOG)
             .add(ItemKeys.OAK_WOOD)
             .add(ItemKeys.STRIPPED_OAK_LOG)
@@ -69,7 +70,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.OAK_TRAPDOOR)
             .add(ItemKeys.OAK_PRESSURE_PLATE)
             .add(ItemKeys.OAK_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.SPRUCE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.SPRUCE_BUILDING_BLOCKS)
             .add(ItemKeys.SPRUCE_LOG)
             .add(ItemKeys.SPRUCE_WOOD)
             .add(ItemKeys.STRIPPED_SPRUCE_LOG)
@@ -83,7 +84,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.SPRUCE_TRAPDOOR)
             .add(ItemKeys.SPRUCE_PRESSURE_PLATE)
             .add(ItemKeys.SPRUCE_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.BIRCH_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.BIRCH_BUILDING_BLOCKS)
             .add(ItemKeys.BIRCH_LOG)
             .add(ItemKeys.BIRCH_WOOD)
             .add(ItemKeys.STRIPPED_BIRCH_LOG)
@@ -97,7 +98,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.BIRCH_TRAPDOOR)
             .add(ItemKeys.BIRCH_PRESSURE_PLATE)
             .add(ItemKeys.BIRCH_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.JUNGLE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.JUNGLE_BUILDING_BLOCKS)
             .add(ItemKeys.JUNGLE_LOG)
             .add(ItemKeys.JUNGLE_WOOD)
             .add(ItemKeys.STRIPPED_JUNGLE_LOG)
@@ -111,7 +112,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.JUNGLE_TRAPDOOR)
             .add(ItemKeys.JUNGLE_PRESSURE_PLATE)
             .add(ItemKeys.JUNGLE_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.ACACIA_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.ACACIA_BUILDING_BLOCKS)
             .add(ItemKeys.ACACIA_LOG)
             .add(ItemKeys.ACACIA_WOOD)
             .add(ItemKeys.STRIPPED_ACACIA_LOG)
@@ -125,7 +126,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.ACACIA_TRAPDOOR)
             .add(ItemKeys.ACACIA_PRESSURE_PLATE)
             .add(ItemKeys.ACACIA_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.DARK_OAK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.DARK_OAK_BUILDING_BLOCKS)
             .add(ItemKeys.DARK_OAK_LOG)
             .add(ItemKeys.DARK_OAK_WOOD)
             .add(ItemKeys.STRIPPED_DARK_OAK_LOG)
@@ -139,7 +140,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.DARK_OAK_TRAPDOOR)
             .add(ItemKeys.DARK_OAK_PRESSURE_PLATE)
             .add(ItemKeys.DARK_OAK_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.MANGROVE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.MANGROVE_BUILDING_BLOCKS)
             .add(ItemKeys.MANGROVE_LOG)
             .add(ItemKeys.MANGROVE_WOOD)
             .add(ItemKeys.STRIPPED_MANGROVE_LOG)
@@ -153,7 +154,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MANGROVE_TRAPDOOR)
             .add(ItemKeys.MANGROVE_PRESSURE_PLATE)
             .add(ItemKeys.MANGROVE_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.CHERRY_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.CHERRY_BUILDING_BLOCKS)
             .add(ItemKeys.CHERRY_LOG)
             .add(ItemKeys.CHERRY_WOOD)
             .add(ItemKeys.STRIPPED_CHERRY_LOG)
@@ -167,7 +168,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.CHERRY_TRAPDOOR)
             .add(ItemKeys.CHERRY_PRESSURE_PLATE)
             .add(ItemKeys.CHERRY_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.PALE_OAK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.PALE_OAK_BUILDING_BLOCKS)
             .add(ItemKeys.PALE_OAK_LOG)
             .add(ItemKeys.PALE_OAK_WOOD)
             .add(ItemKeys.STRIPPED_PALE_OAK_LOG)
@@ -181,7 +182,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PALE_OAK_TRAPDOOR)
             .add(ItemKeys.PALE_OAK_PRESSURE_PLATE)
             .add(ItemKeys.PALE_OAK_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.BAMBOO_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.BAMBOO_BUILDING_BLOCKS)
             .add(ItemKeys.BAMBOO_BLOCK)
             .add(ItemKeys.STRIPPED_BAMBOO_BLOCK)
             .add(ItemKeys.BAMBOO_PLANKS)
@@ -196,7 +197,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.BAMBOO_TRAPDOOR)
             .add(ItemKeys.BAMBOO_PRESSURE_PLATE)
             .add(ItemKeys.BAMBOO_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.CRIMSON_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.CRIMSON_BUILDING_BLOCKS)
             .add(ItemKeys.CRIMSON_STEM)
             .add(ItemKeys.CRIMSON_HYPHAE)
             .add(ItemKeys.STRIPPED_CRIMSON_STEM)
@@ -210,7 +211,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.CRIMSON_TRAPDOOR)
             .add(ItemKeys.CRIMSON_PRESSURE_PLATE)
             .add(ItemKeys.CRIMSON_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.WARPED_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.WARPED_BUILDING_BLOCKS)
             .add(ItemKeys.WARPED_STEM)
             .add(ItemKeys.WARPED_HYPHAE)
             .add(ItemKeys.STRIPPED_WARPED_STEM)
@@ -224,7 +225,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WARPED_TRAPDOOR)
             .add(ItemKeys.WARPED_PRESSURE_PLATE)
             .add(ItemKeys.WARPED_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.WOODEN_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.WOODEN_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.OAK_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.SPRUCE_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.BIRCH_BUILDING_BLOCKS)
@@ -237,87 +238,87 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .addTag(ItematicItemTags.BAMBOO_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.CRIMSON_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.WARPED_BUILDING_BLOCKS);
-        this.getOrCreateTagBuilder(ItematicItemTags.STONE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.STONE_BUILDING_BLOCKS)
             .add(ItemKeys.STONE)
             .add(ItemKeys.STONE_STAIRS)
             .add(ItemKeys.STONE_SLAB)
             .add(ItemKeys.STONE_PRESSURE_PLATE)
             .add(ItemKeys.STONE_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.COBBLESTONE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.COBBLESTONE_BUILDING_BLOCKS)
             .add(ItemKeys.COBBLESTONE)
             .add(ItemKeys.COBBLESTONE_STAIRS)
             .add(ItemKeys.COBBLESTONE_SLAB)
             .add(ItemKeys.COBBLESTONE_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.MOSSY_COBBLESTONE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.MOSSY_COBBLESTONE_BUILDING_BLOCKS)
             .add(ItemKeys.MOSSY_COBBLESTONE)
             .add(ItemKeys.MOSSY_COBBLESTONE_STAIRS)
             .add(ItemKeys.MOSSY_COBBLESTONE_SLAB)
             .add(ItemKeys.MOSSY_COBBLESTONE_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.SMOOTH_STONE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.SMOOTH_STONE_BUILDING_BLOCKS)
             .add(ItemKeys.SMOOTH_STONE)
             .add(ItemKeys.SMOOTH_STONE_SLAB);
-        this.getOrCreateTagBuilder(ItematicItemTags.STONE_BRICK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.STONE_BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.STONE_BRICKS)
             .add(ItemKeys.CRACKED_STONE_BRICKS)
             .add(ItemKeys.STONE_BRICK_STAIRS)
             .add(ItemKeys.STONE_BRICK_SLAB)
             .add(ItemKeys.STONE_BRICK_WALL)
             .add(ItemKeys.CHISELED_STONE_BRICKS);
-        this.getOrCreateTagBuilder(ItematicItemTags.MOSSY_STONE_BRICK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.MOSSY_STONE_BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.MOSSY_STONE_BRICKS)
             .add(ItemKeys.MOSSY_STONE_BRICK_STAIRS)
             .add(ItemKeys.MOSSY_STONE_BRICK_SLAB)
             .add(ItemKeys.MOSSY_STONE_BRICK_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.GRANITE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.GRANITE_BUILDING_BLOCKS)
             .add(ItemKeys.GRANITE)
             .add(ItemKeys.GRANITE_STAIRS)
             .add(ItemKeys.GRANITE_SLAB)
             .add(ItemKeys.GRANITE_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.POLISHED_GRANITE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.POLISHED_GRANITE_BUILDING_BLOCKS)
             .add(ItemKeys.POLISHED_GRANITE)
             .add(ItemKeys.POLISHED_GRANITE_STAIRS)
             .add(ItemKeys.POLISHED_GRANITE_SLAB);
-        this.getOrCreateTagBuilder(ItematicItemTags.DIORITE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.DIORITE_BUILDING_BLOCKS)
             .add(ItemKeys.DIORITE)
             .add(ItemKeys.DIORITE_STAIRS)
             .add(ItemKeys.DIORITE_SLAB)
             .add(ItemKeys.DIORITE_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.POLISHED_DIORITE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.POLISHED_DIORITE_BUILDING_BLOCKS)
             .add(ItemKeys.POLISHED_DIORITE)
             .add(ItemKeys.POLISHED_DIORITE_STAIRS)
             .add(ItemKeys.POLISHED_DIORITE_SLAB);
-        this.getOrCreateTagBuilder(ItematicItemTags.ANDESITE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.ANDESITE_BUILDING_BLOCKS)
             .add(ItemKeys.ANDESITE)
             .add(ItemKeys.ANDESITE_STAIRS)
             .add(ItemKeys.ANDESITE_SLAB)
             .add(ItemKeys.ANDESITE_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.POLISHED_ANDESITE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.POLISHED_ANDESITE_BUILDING_BLOCKS)
             .add(ItemKeys.POLISHED_ANDESITE)
             .add(ItemKeys.POLISHED_ANDESITE_STAIRS)
             .add(ItemKeys.POLISHED_ANDESITE_SLAB);
-        this.getOrCreateTagBuilder(ItematicItemTags.COBBLED_DEEPSLATE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.COBBLED_DEEPSLATE_BUILDING_BLOCKS)
             .add(ItemKeys.COBBLED_DEEPSLATE)
             .add(ItemKeys.COBBLED_DEEPSLATE_STAIRS)
             .add(ItemKeys.COBBLED_DEEPSLATE_SLAB)
             .add(ItemKeys.COBBLED_DEEPSLATE_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.POLISHED_DEEPSLATE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.POLISHED_DEEPSLATE_BUILDING_BLOCKS)
             .add(ItemKeys.POLISHED_DEEPSLATE)
             .add(ItemKeys.POLISHED_DEEPSLATE_STAIRS)
             .add(ItemKeys.POLISHED_DEEPSLATE_SLAB)
             .add(ItemKeys.POLISHED_DEEPSLATE_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.DEEPSLATE_BRICK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.DEEPSLATE_BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.DEEPSLATE_BRICKS)
             .add(ItemKeys.CRACKED_DEEPSLATE_BRICKS)
             .add(ItemKeys.DEEPSLATE_BRICK_STAIRS)
             .add(ItemKeys.DEEPSLATE_BRICK_SLAB)
             .add(ItemKeys.DEEPSLATE_BRICK_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.DEEPSLATE_TILES_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.DEEPSLATE_TILES_BUILDING_BLOCKS)
             .add(ItemKeys.DEEPSLATE_TILES)
             .add(ItemKeys.CRACKED_DEEPSLATE_TILES)
             .add(ItemKeys.DEEPSLATE_TILE_STAIRS)
             .add(ItemKeys.DEEPSLATE_TILE_SLAB)
             .add(ItemKeys.DEEPSLATE_TILE_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.TUFF_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.TUFF_BUILDING_BLOCKS)
             .add(ItemKeys.TUFF)
             .add(ItemKeys.TUFF_STAIRS)
             .add(ItemKeys.TUFF_SLAB)
@@ -332,62 +333,62 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.TUFF_BRICK_SLAB)
             .add(ItemKeys.TUFF_BRICK_WALL)
             .add(ItemKeys.CHISELED_TUFF_BRICKS);
-        this.getOrCreateTagBuilder(ItematicItemTags.BRICK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.BRICKS)
             .add(ItemKeys.BRICK_STAIRS)
             .add(ItemKeys.BRICK_SLAB)
             .add(ItemKeys.BRICK_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.MUD_BRICK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.MUD_BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.MUD_BRICKS)
             .add(ItemKeys.MUD_BRICK_STAIRS)
             .add(ItemKeys.MUD_BRICK_SLAB)
             .add(ItemKeys.MUD_BRICK_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.RESIN_BRICK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.RESIN_BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.RESIN_BRICKS)
             .add(ItemKeys.RESIN_BRICK_STAIRS)
             .add(ItemKeys.RESIN_BRICK_SLAB)
             .add(ItemKeys.RESIN_BRICK_WALL)
             .add(ItemKeys.CHISELED_RESIN_BRICKS);
-        this.getOrCreateTagBuilder(ItematicItemTags.SANDSTONE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.SANDSTONE_BUILDING_BLOCKS)
             .add(ItemKeys.SANDSTONE)
             .add(ItemKeys.SANDSTONE_STAIRS)
             .add(ItemKeys.SANDSTONE_SLAB)
             .add(ItemKeys.SANDSTONE_WALL)
             .add(ItemKeys.CHISELED_SANDSTONE);
-        this.getOrCreateTagBuilder(ItematicItemTags.SMOOTH_SANDSTONE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.SMOOTH_SANDSTONE_BUILDING_BLOCKS)
             .add(ItemKeys.SMOOTH_SANDSTONE)
             .add(ItemKeys.SMOOTH_SANDSTONE_STAIRS)
             .add(ItemKeys.SMOOTH_SANDSTONE_SLAB);
-        this.getOrCreateTagBuilder(ItematicItemTags.CUT_SANDSTONE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.CUT_SANDSTONE_BUILDING_BLOCKS)
             .add(ItemKeys.CUT_SANDSTONE)
             .add(ItemKeys.CUT_SANDSTONE_SLAB);
-        this.getOrCreateTagBuilder(ItematicItemTags.RED_SANDSTONE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.RED_SANDSTONE_BUILDING_BLOCKS)
             .add(ItemKeys.RED_SANDSTONE)
             .add(ItemKeys.RED_SANDSTONE_STAIRS)
             .add(ItemKeys.RED_SANDSTONE_SLAB)
             .add(ItemKeys.RED_SANDSTONE_WALL)
             .add(ItemKeys.CHISELED_RED_SANDSTONE);
-        this.getOrCreateTagBuilder(ItematicItemTags.SMOOTH_RED_SANDSTONE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.SMOOTH_RED_SANDSTONE_BUILDING_BLOCKS)
             .add(ItemKeys.SMOOTH_RED_SANDSTONE)
             .add(ItemKeys.SMOOTH_RED_SANDSTONE_STAIRS)
             .add(ItemKeys.SMOOTH_RED_SANDSTONE_SLAB);
-        this.getOrCreateTagBuilder(ItematicItemTags.CUT_RED_SANDSTONE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.CUT_RED_SANDSTONE_BUILDING_BLOCKS)
             .add(ItemKeys.CUT_RED_SANDSTONE)
             .add(ItemKeys.CUT_RED_SANDSTONE_SLAB);
-        this.getOrCreateTagBuilder(ItematicItemTags.PRISMARINE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.PRISMARINE_BUILDING_BLOCKS)
             .add(ItemKeys.PRISMARINE)
             .add(ItemKeys.PRISMARINE_STAIRS)
             .add(ItemKeys.PRISMARINE_SLAB)
             .add(ItemKeys.PRISMARINE_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.PRISMARINE_BRICK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.PRISMARINE_BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.PRISMARINE_BRICKS)
             .add(ItemKeys.PRISMARINE_BRICK_STAIRS)
             .add(ItemKeys.PRISMARINE_BRICK_SLAB);
-        this.getOrCreateTagBuilder(ItematicItemTags.DARK_PRISMARINE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.DARK_PRISMARINE_BUILDING_BLOCKS)
             .add(ItemKeys.DARK_PRISMARINE)
             .add(ItemKeys.DARK_PRISMARINE_STAIRS)
             .add(ItemKeys.DARK_PRISMARINE_SLAB);
-        this.getOrCreateTagBuilder(ItematicItemTags.NETHER_BRICK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.NETHER_BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.NETHER_BRICKS)
             .add(ItemKeys.CRACKED_NETHER_BRICKS)
             .add(ItemKeys.NETHER_BRICK_STAIRS)
@@ -395,46 +396,46 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.NETHER_BRICK_WALL)
             .add(ItemKeys.NETHER_BRICK_FENCE)
             .add(ItemKeys.CHISELED_NETHER_BRICKS);
-        this.getOrCreateTagBuilder(ItematicItemTags.RED_NETHER_BRICK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.RED_NETHER_BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.RED_NETHER_BRICKS)
             .add(ItemKeys.RED_NETHER_BRICK_STAIRS)
             .add(ItemKeys.RED_NETHER_BRICK_SLAB)
             .add(ItemKeys.RED_NETHER_BRICK_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.BASALT_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.BASALT_BUILDING_BLOCKS)
             .add(ItemKeys.BASALT)
             .add(ItemKeys.SMOOTH_BASALT)
             .add(ItemKeys.POLISHED_BASALT);
-        this.getOrCreateTagBuilder(ItematicItemTags.BLACKSTONE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.BLACKSTONE_BUILDING_BLOCKS)
             .add(ItemKeys.BLACKSTONE)
             .add(ItemKeys.GILDED_BLACKSTONE)
             .add(ItemKeys.BLACKSTONE_STAIRS)
             .add(ItemKeys.BLACKSTONE_SLAB)
             .add(ItemKeys.BLACKSTONE_WALL)
             .add(ItemKeys.CHISELED_POLISHED_BLACKSTONE);
-        this.getOrCreateTagBuilder(ItematicItemTags.POLISHED_BLACKSTONE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.POLISHED_BLACKSTONE_BUILDING_BLOCKS)
             .add(ItemKeys.POLISHED_BLACKSTONE)
             .add(ItemKeys.POLISHED_BLACKSTONE_STAIRS)
             .add(ItemKeys.POLISHED_BLACKSTONE_SLAB)
             .add(ItemKeys.POLISHED_BLACKSTONE_WALL)
             .add(ItemKeys.POLISHED_BLACKSTONE_PRESSURE_PLATE)
             .add(ItemKeys.POLISHED_BLACKSTONE_BUTTON);
-        this.getOrCreateTagBuilder(ItematicItemTags.POLISHED_BLACKSTONE_BRICK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.POLISHED_BLACKSTONE_BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.POLISHED_BLACKSTONE_BRICKS)
             .add(ItemKeys.CRACKED_POLISHED_BLACKSTONE_BRICKS)
             .add(ItemKeys.POLISHED_BLACKSTONE_BRICK_STAIRS)
             .add(ItemKeys.POLISHED_BLACKSTONE_BRICK_SLAB)
             .add(ItemKeys.POLISHED_BLACKSTONE_BRICK_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.END_STONE_BRICK_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.END_STONE_BRICK_BUILDING_BLOCKS)
             .add(ItemKeys.END_STONE_BRICKS)
             .add(ItemKeys.END_STONE_BRICK_STAIRS)
             .add(ItemKeys.END_STONE_BRICK_SLAB)
             .add(ItemKeys.END_STONE_BRICK_WALL);
-        this.getOrCreateTagBuilder(ItematicItemTags.PURPUR_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.PURPUR_BUILDING_BLOCKS)
             .add(ItemKeys.PURPUR_BLOCK)
             .add(ItemKeys.PURPUR_PILLAR)
             .add(ItemKeys.PURPUR_STAIRS)
             .add(ItemKeys.PURPUR_SLAB);
-        this.getOrCreateTagBuilder(ItematicItemTags.STONE_LIKE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.STONE_LIKE_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.STONE_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.COBBLESTONE_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.MOSSY_COBBLESTONE_BUILDING_BLOCKS)
@@ -479,28 +480,28 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.END_STONE)
             .addTag(ItematicItemTags.END_STONE_BRICK_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.PURPUR_BUILDING_BLOCKS);
-        this.getOrCreateTagBuilder(ItematicItemTags.IRON_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.IRON_BUILDING_BLOCKS)
             .add(ItemKeys.IRON_BLOCK)
             .add(ItemKeys.IRON_BARS)
             .add(ItemKeys.IRON_DOOR)
             .add(ItemKeys.IRON_TRAPDOOR)
             .add(ItemKeys.HEAVY_WEIGHTED_PRESSURE_PLATE)
             .add(ItemKeys.CHAIN);
-        this.getOrCreateTagBuilder(ItematicItemTags.GOLD_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.GOLD_BUILDING_BLOCKS)
             .add(ItemKeys.GOLD_BLOCK)
             .add(ItemKeys.LIGHT_WEIGHTED_PRESSURE_PLATE);
-        this.getOrCreateTagBuilder(ItematicItemTags.QUARTZ_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.QUARTZ_BUILDING_BLOCKS)
             .add(ItemKeys.QUARTZ_BLOCK)
             .add(ItemKeys.QUARTZ_STAIRS)
             .add(ItemKeys.QUARTZ_SLAB)
             .add(ItemKeys.CHISELED_QUARTZ_BLOCK)
             .add(ItemKeys.QUARTZ_BRICKS)
             .add(ItemKeys.QUARTZ_PILLAR);
-        this.getOrCreateTagBuilder(ItematicItemTags.SMOOTH_QUARTZ_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.SMOOTH_QUARTZ_BUILDING_BLOCKS)
             .add(ItemKeys.SMOOTH_QUARTZ)
             .add(ItemKeys.SMOOTH_QUARTZ_STAIRS)
             .add(ItemKeys.SMOOTH_QUARTZ_SLAB);
-        this.getOrCreateTagBuilder(ItematicItemTags.COPPER_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.COPPER_BLOCK)
             .add(ItemKeys.CHISELED_COPPER)
             .add(ItemKeys.COPPER_GRATE)
@@ -510,7 +511,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.COPPER_DOOR)
             .add(ItemKeys.COPPER_TRAPDOOR)
             .add(ItemKeys.COPPER_BULB);
-        this.getOrCreateTagBuilder(ItematicItemTags.EXPOSED_COPPER_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.EXPOSED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.EXPOSED_COPPER)
             .add(ItemKeys.EXPOSED_CHISELED_COPPER)
             .add(ItemKeys.EXPOSED_COPPER_GRATE)
@@ -520,7 +521,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.EXPOSED_COPPER_DOOR)
             .add(ItemKeys.EXPOSED_COPPER_TRAPDOOR)
             .add(ItemKeys.EXPOSED_COPPER_BULB);
-        this.getOrCreateTagBuilder(ItematicItemTags.WEATHERED_COPPER_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.WEATHERED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WEATHERED_COPPER)
             .add(ItemKeys.WEATHERED_CHISELED_COPPER)
             .add(ItemKeys.WEATHERED_COPPER_GRATE)
@@ -530,7 +531,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WEATHERED_COPPER_DOOR)
             .add(ItemKeys.WEATHERED_COPPER_TRAPDOOR)
             .add(ItemKeys.WEATHERED_COPPER_BULB);
-        this.getOrCreateTagBuilder(ItematicItemTags.OXIDIZED_COPPER_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.OXIDIZED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.OXIDIZED_COPPER)
             .add(ItemKeys.OXIDIZED_CHISELED_COPPER)
             .add(ItemKeys.OXIDIZED_COPPER_GRATE)
@@ -540,7 +541,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.OXIDIZED_COPPER_DOOR)
             .add(ItemKeys.OXIDIZED_COPPER_TRAPDOOR)
             .add(ItemKeys.OXIDIZED_COPPER_BULB);
-        this.getOrCreateTagBuilder(ItematicItemTags.WAXED_COPPER_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.WAXED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WAXED_COPPER_BLOCK)
             .add(ItemKeys.WAXED_CHISELED_COPPER)
             .add(ItemKeys.WAXED_COPPER_GRATE)
@@ -550,7 +551,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WAXED_COPPER_DOOR)
             .add(ItemKeys.WAXED_COPPER_TRAPDOOR)
             .add(ItemKeys.WAXED_COPPER_BULB);
-        this.getOrCreateTagBuilder(ItematicItemTags.WAXED_EXPOSED_COPPER_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.WAXED_EXPOSED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WAXED_EXPOSED_COPPER)
             .add(ItemKeys.WAXED_EXPOSED_CHISELED_COPPER)
             .add(ItemKeys.WAXED_EXPOSED_COPPER_GRATE)
@@ -560,7 +561,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WAXED_EXPOSED_COPPER_DOOR)
             .add(ItemKeys.WAXED_EXPOSED_COPPER_TRAPDOOR)
             .add(ItemKeys.WAXED_EXPOSED_COPPER_BULB);
-        this.getOrCreateTagBuilder(ItematicItemTags.WAXED_WEATHERED_COPPER_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.WAXED_WEATHERED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WAXED_WEATHERED_COPPER)
             .add(ItemKeys.WAXED_WEATHERED_CHISELED_COPPER)
             .add(ItemKeys.WAXED_WEATHERED_COPPER_GRATE)
@@ -570,7 +571,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WAXED_WEATHERED_COPPER_DOOR)
             .add(ItemKeys.WAXED_WEATHERED_COPPER_TRAPDOOR)
             .add(ItemKeys.WAXED_WEATHERED_COPPER_BULB);
-        this.getOrCreateTagBuilder(ItematicItemTags.WAXED_OXIDIZED_COPPER_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.WAXED_OXIDIZED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WAXED_OXIDIZED_COPPER)
             .add(ItemKeys.WAXED_OXIDIZED_CHISELED_COPPER)
             .add(ItemKeys.WAXED_OXIDIZED_COPPER_GRATE)
@@ -580,7 +581,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WAXED_OXIDIZED_COPPER_DOOR)
             .add(ItemKeys.WAXED_OXIDIZED_COPPER_TRAPDOOR)
             .add(ItemKeys.WAXED_OXIDIZED_COPPER_BULB);
-        this.getOrCreateTagBuilder(ItematicItemTags.COPPER_LIKE_BUILDING_BLOCKS)
+        this.builder(ItematicItemTags.COPPER_LIKE_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.COPPER_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.EXPOSED_COPPER_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.WEATHERED_COPPER_BUILDING_BLOCKS)
@@ -589,7 +590,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .addTag(ItematicItemTags.WAXED_EXPOSED_COPPER_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.WAXED_WEATHERED_COPPER_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.WAXED_OXIDIZED_COPPER_BUILDING_BLOCKS);
-        this.getOrCreateTagBuilder(ItematicItemTags.WOOL)
+        this.builder(ItematicItemTags.WOOL)
             .add(ItemKeys.WHITE_WOOL)
             .add(ItemKeys.LIGHT_GRAY_WOOL)
             .add(ItemKeys.GRAY_WOOL)
@@ -606,7 +607,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_WOOL)
             .add(ItemKeys.MAGENTA_WOOL)
             .add(ItemKeys.PINK_WOOL);
-        this.getOrCreateTagBuilder(ItematicItemTags.WOOL_CARPETS)
+        this.builder(ItematicItemTags.WOOL_CARPETS)
             .add(ItemKeys.WHITE_CARPET)
             .add(ItemKeys.LIGHT_GRAY_CARPET)
             .add(ItemKeys.GRAY_CARPET)
@@ -623,7 +624,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_CARPET)
             .add(ItemKeys.MAGENTA_CARPET)
             .add(ItemKeys.PINK_CARPET);
-        this.getOrCreateTagBuilder(ItematicItemTags.TERRACOTTA)
+        this.builder(ItematicItemTags.TERRACOTTA)
             .add(ItemKeys.TERRACOTTA)
             .add(ItemKeys.WHITE_TERRACOTTA)
             .add(ItemKeys.LIGHT_GRAY_TERRACOTTA)
@@ -641,7 +642,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_TERRACOTTA)
             .add(ItemKeys.MAGENTA_TERRACOTTA)
             .add(ItemKeys.PINK_TERRACOTTA);
-        this.getOrCreateTagBuilder(ItematicItemTags.CONCRETE)
+        this.builder(ItematicItemTags.CONCRETE)
             .add(ItemKeys.WHITE_CONCRETE)
             .add(ItemKeys.LIGHT_GRAY_CONCRETE)
             .add(ItemKeys.GRAY_CONCRETE)
@@ -658,7 +659,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_CONCRETE)
             .add(ItemKeys.MAGENTA_CONCRETE)
             .add(ItemKeys.PINK_CONCRETE);
-        this.getOrCreateTagBuilder(ItematicItemTags.CONCRETE_POWDER)
+        this.builder(ItematicItemTags.CONCRETE_POWDER)
             .add(ItemKeys.WHITE_CONCRETE_POWDER)
             .add(ItemKeys.LIGHT_GRAY_CONCRETE_POWDER)
             .add(ItemKeys.GRAY_CONCRETE_POWDER)
@@ -675,7 +676,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_CONCRETE_POWDER)
             .add(ItemKeys.MAGENTA_CONCRETE_POWDER)
             .add(ItemKeys.PINK_CONCRETE_POWDER);
-        this.getOrCreateTagBuilder(ItematicItemTags.GLAZED_TERRACOTTA)
+        this.builder(ItematicItemTags.GLAZED_TERRACOTTA)
             .add(ItemKeys.WHITE_GLAZED_TERRACOTTA)
             .add(ItemKeys.LIGHT_GRAY_GLAZED_TERRACOTTA)
             .add(ItemKeys.GRAY_GLAZED_TERRACOTTA)
@@ -692,7 +693,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_GLAZED_TERRACOTTA)
             .add(ItemKeys.MAGENTA_GLAZED_TERRACOTTA)
             .add(ItemKeys.PINK_GLAZED_TERRACOTTA);
-        this.getOrCreateTagBuilder(ItematicItemTags.GLASS)
+        this.builder(ItematicItemTags.GLASS)
             .add(ItemKeys.GLASS)
             .add(ItemKeys.TINTED_GLASS)
             .add(ItemKeys.WHITE_STAINED_GLASS)
@@ -711,7 +712,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_STAINED_GLASS)
             .add(ItemKeys.MAGENTA_STAINED_GLASS)
             .add(ItemKeys.PINK_STAINED_GLASS);
-        this.getOrCreateTagBuilder(ItematicItemTags.GLASS_PANES)
+        this.builder(ItematicItemTags.GLASS_PANES)
             .add(ItemKeys.GLASS_PANE)
             .add(ItemKeys.WHITE_STAINED_GLASS_PANE)
             .add(ItemKeys.LIGHT_GRAY_STAINED_GLASS_PANE)
@@ -729,7 +730,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_STAINED_GLASS_PANE)
             .add(ItemKeys.MAGENTA_STAINED_GLASS_PANE)
             .add(ItemKeys.PINK_STAINED_GLASS_PANE);
-        this.getOrCreateTagBuilder(ItematicItemTags.ITEM_GROUP_SHULKER_BOXES)
+        this.builder(ItematicItemTags.ITEM_GROUP_SHULKER_BOXES)
             .add(ItemKeys.SHULKER_BOX)
             .add(ItemKeys.WHITE_SHULKER_BOX)
             .add(ItemKeys.LIGHT_GRAY_SHULKER_BOX)
@@ -747,7 +748,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_SHULKER_BOX)
             .add(ItemKeys.MAGENTA_SHULKER_BOX)
             .add(ItemKeys.PINK_SHULKER_BOX);
-        this.getOrCreateTagBuilder(ItematicItemTags.BEDS)
+        this.builder(ItematicItemTags.BEDS)
             .add(ItemKeys.WHITE_BED)
             .add(ItemKeys.LIGHT_GRAY_BED)
             .add(ItemKeys.GRAY_BED)
@@ -764,7 +765,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_BED)
             .add(ItemKeys.MAGENTA_BED)
             .add(ItemKeys.PINK_BED);
-        this.getOrCreateTagBuilder(ItematicItemTags.CANDLES)
+        this.builder(ItematicItemTags.CANDLES)
             .add(ItemKeys.CANDLE)
             .add(ItemKeys.WHITE_CANDLE)
             .add(ItemKeys.LIGHT_GRAY_CANDLE)
@@ -782,7 +783,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_CANDLE)
             .add(ItemKeys.MAGENTA_CANDLE)
             .add(ItemKeys.PINK_CANDLE);
-        this.getOrCreateTagBuilder(ItematicItemTags.BANNERS)
+        this.builder(ItematicItemTags.BANNERS)
             .add(ItemKeys.WHITE_BANNER)
             .add(ItemKeys.LIGHT_GRAY_BANNER)
             .add(ItemKeys.GRAY_BANNER)
@@ -799,11 +800,11 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_BANNER)
             .add(ItemKeys.MAGENTA_BANNER)
             .add(ItemKeys.PINK_BANNER);
-        this.getOrCreateTagBuilder(ItematicItemTags.GRASS_LIKE_BLOCKS)
+        this.builder(ItematicItemTags.GRASS_LIKE_BLOCKS)
             .add(ItemKeys.GRASS_BLOCK)
             .add(ItemKeys.PODZOL)
             .add(ItemKeys.MYCELIUM);
-        this.getOrCreateTagBuilder(ItematicItemTags.DIRT_LIKE_BLOCKS)
+        this.builder(ItematicItemTags.DIRT_LIKE_BLOCKS)
             .add(ItemKeys.DIRT_PATH)
             .add(ItemKeys.DIRT)
             .add(ItemKeys.COARSE_DIRT)
@@ -811,25 +812,25 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.FARMLAND)
             .add(ItemKeys.MUD)
             .add(ItemKeys.CLAY);
-        this.getOrCreateTagBuilder(ItematicItemTags.SAND_BLOCKS)
+        this.builder(ItematicItemTags.SAND_BLOCKS)
             .add(ItemKeys.SAND)
             .add(ItemKeys.SANDSTONE)
             .add(ItemKeys.RED_SAND)
             .add(ItemKeys.RED_SANDSTONE);
-        this.getOrCreateTagBuilder(ItematicItemTags.ICE_BLOCKS)
+        this.builder(ItematicItemTags.ICE_BLOCKS)
             .add(ItemKeys.ICE)
             .add(ItemKeys.PACKED_ICE)
             .add(ItemKeys.BLUE_ICE);
-        this.getOrCreateTagBuilder(ItematicItemTags.SNOW_BLOCKS)
+        this.builder(ItematicItemTags.SNOW_BLOCKS)
             .add(ItemKeys.SNOW_BLOCK)
             .add(ItemKeys.SNOW);
-        this.getOrCreateTagBuilder(ItematicItemTags.MOSS_BLOCKS)
+        this.builder(ItematicItemTags.MOSS_BLOCKS)
             .add(ItemKeys.MOSS_BLOCK)
             .add(ItemKeys.MOSS_CARPET)
             .add(ItemKeys.PALE_MOSS_BLOCK)
             .add(ItemKeys.PALE_MOSS_CARPET)
             .add(ItemKeys.PALE_HANGING_MOSS);
-        this.getOrCreateTagBuilder(ItematicItemTags.STONE_LIKE_BLOCKS)
+        this.builder(ItematicItemTags.STONE_LIKE_BLOCKS)
             .add(ItemKeys.STONE)
             .add(ItemKeys.DEEPSLATE)
             .add(ItemKeys.GRANITE)
@@ -840,7 +841,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.DRIPSTONE_BLOCK)
             .add(ItemKeys.POINTED_DRIPSTONE)
             .add(ItemKeys.PRISMARINE);
-        this.getOrCreateTagBuilder(ItematicItemTags.NETHER_BLOCKS)
+        this.builder(ItematicItemTags.NETHER_BLOCKS)
             .add(ItemKeys.MAGMA_BLOCK)
             .add(ItemKeys.OBSIDIAN)
             .add(ItemKeys.CRYING_OBSIDIAN)
@@ -853,10 +854,10 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.BLACKSTONE)
             .add(ItemKeys.BASALT)
             .add(ItemKeys.SMOOTH_BASALT);
-        this.getOrCreateTagBuilder(ItematicItemTags.GOLD_OVERWORLD_ORES)
+        this.builder(ItematicItemTags.GOLD_OVERWORLD_ORES)
             .add(ItemKeys.GOLD_ORE)
             .add(ItemKeys.DEEPSLATE_GOLD_ORE);
-        this.getOrCreateTagBuilder(ItematicItemTags.ORE_LIKE_BLOCKS)
+        this.builder(ItematicItemTags.ORE_LIKE_BLOCKS)
             .forceAddTag(ItemTags.COAL_ORES)
             .forceAddTag(ItemTags.IRON_ORES)
             .forceAddTag(ItemTags.COPPER_ORES)
@@ -871,14 +872,14 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.RAW_IRON_BLOCK)
             .add(ItemKeys.RAW_COPPER_BLOCK)
             .add(ItemKeys.RAW_GOLD_BLOCK);
-        this.getOrCreateTagBuilder(ItematicItemTags.AMETHYST_BLOCKS)
+        this.builder(ItematicItemTags.AMETHYST_BLOCKS)
             .add(ItemKeys.AMETHYST_BLOCK)
             .add(ItemKeys.BUDDING_AMETHYST)
             .add(ItemKeys.SMALL_AMETHYST_BUD)
             .add(ItemKeys.MEDIUM_AMETHYST_BUD)
             .add(ItemKeys.LARGE_AMETHYST_BUD)
             .add(ItemKeys.AMETHYST_CLUSTER);
-        this.getOrCreateTagBuilder(ItematicItemTags.LOG_LIKE_BLOCKS)
+        this.builder(ItematicItemTags.LOG_LIKE_BLOCKS)
             .add(ItemKeys.OAK_LOG)
             .add(ItemKeys.SPRUCE_LOG)
             .add(ItemKeys.BIRCH_LOG)
@@ -893,7 +894,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MUSHROOM_STEM)
             .add(ItemKeys.CRIMSON_STEM)
             .add(ItemKeys.WARPED_STEM);
-        this.getOrCreateTagBuilder(ItematicItemTags.LEAVES)
+        this.builder(ItematicItemTags.LEAVES)
             .add(ItemKeys.OAK_LEAVES)
             .add(ItemKeys.SPRUCE_LEAVES)
             .add(ItemKeys.BIRCH_LEAVES)
@@ -905,13 +906,13 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PALE_OAK_LEAVES)
             .add(ItemKeys.AZALEA_LEAVES)
             .add(ItemKeys.FLOWERING_AZALEA_LEAVES);
-        this.getOrCreateTagBuilder(ItematicItemTags.MUSHROOM_LIKE_BLOCKS)
+        this.builder(ItematicItemTags.MUSHROOM_LIKE_BLOCKS)
             .add(ItemKeys.BROWN_MUSHROOM_BLOCK)
             .add(ItemKeys.RED_MUSHROOM_BLOCK)
             .add(ItemKeys.NETHER_WART_BLOCK)
             .add(ItemKeys.WARPED_WART_BLOCK)
             .add(ItemKeys.SHROOMLIGHT);
-        this.getOrCreateTagBuilder(ItematicItemTags.SAPLINGS)
+        this.builder(ItematicItemTags.SAPLINGS)
             .add(ItemKeys.OAK_SAPLING)
             .add(ItemKeys.SPRUCE_SAPLING)
             .add(ItemKeys.BIRCH_SAPLING)
@@ -921,7 +922,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MANGROVE_PROPAGULE)
             .add(ItemKeys.CHERRY_SAPLING)
             .add(ItemKeys.PALE_OAK_SAPLING);
-        this.getOrCreateTagBuilder(ItematicItemTags.PLANTS)
+        this.builder(ItematicItemTags.PLANTS)
             .add(ItemKeys.AZALEA)
             .add(ItemKeys.FLOWERING_AZALEA)
             .add(ItemKeys.BROWN_MUSHROOM)
@@ -978,11 +979,11 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.CHORUS_FLOWER)
             .add(ItemKeys.GLOW_LICHEN)
             .add(ItemKeys.HANGING_ROOTS);
-        this.getOrCreateTagBuilder(ItematicItemTags.EGG_LIKE_BLOCKS)
+        this.builder(ItematicItemTags.EGG_LIKE_BLOCKS)
             .add(ItemKeys.FROGSPAWN)
             .add(ItemKeys.TURTLE_EGG)
             .add(ItemKeys.SNIFFER_EGG);
-        this.getOrCreateTagBuilder(ItematicItemTags.SEEDS)
+        this.builder(ItematicItemTags.SEEDS)
             .add(ItemKeys.WHEAT_SEEDS)
             .add(ItemKeys.COCOA_BEANS)
             .add(ItemKeys.PUMPKIN_SEEDS)
@@ -993,7 +994,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.GLOW_BERRIES)
             .add(ItemKeys.SWEET_BERRIES)
             .add(ItemKeys.NETHER_WART);
-        this.getOrCreateTagBuilder(ItematicItemTags.CORAL_BLOCKS)
+        this.builder(ItematicItemTags.CORAL_BLOCKS)
             .add(ItemKeys.TUBE_CORAL_BLOCK)
             .add(ItemKeys.BRAIN_CORAL_BLOCK)
             .add(ItemKeys.BUBBLE_CORAL_BLOCK)
@@ -1004,7 +1005,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.DEAD_BUBBLE_CORAL_BLOCK)
             .add(ItemKeys.DEAD_FIRE_CORAL_BLOCK)
             .add(ItemKeys.DEAD_HORN_CORAL_BLOCK);
-        this.getOrCreateTagBuilder(ItematicItemTags.CORAL)
+        this.builder(ItematicItemTags.CORAL)
             .add(ItemKeys.TUBE_CORAL)
             .add(ItemKeys.BRAIN_CORAL)
             .add(ItemKeys.BUBBLE_CORAL)
@@ -1015,7 +1016,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.DEAD_BUBBLE_CORAL)
             .add(ItemKeys.DEAD_FIRE_CORAL)
             .add(ItemKeys.DEAD_HORN_CORAL);
-        this.getOrCreateTagBuilder(ItematicItemTags.CORAL_FANS)
+        this.builder(ItematicItemTags.CORAL_FANS)
             .add(ItemKeys.TUBE_CORAL_FAN)
             .add(ItemKeys.BRAIN_CORAL_FAN)
             .add(ItemKeys.BUBBLE_CORAL_FAN)
@@ -1026,7 +1027,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.DEAD_BUBBLE_CORAL_FAN)
             .add(ItemKeys.DEAD_FIRE_CORAL_FAN)
             .add(ItemKeys.DEAD_HORN_CORAL_FAN);
-        this.getOrCreateTagBuilder(ItematicItemTags.WATER_BLOCKS)
+        this.builder(ItematicItemTags.WATER_BLOCKS)
             .add(ItemKeys.LILY_PAD)
             .add(ItemKeys.SEAGRASS)
             .add(ItemKeys.SEA_PICKLE)
@@ -1035,28 +1036,28 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .addTag(ItematicItemTags.CORAL_BLOCKS)
             .addTag(ItematicItemTags.CORAL)
             .addTag(ItematicItemTags.CORAL_FANS);
-        this.getOrCreateTagBuilder(ItematicItemTags.PUMPKINS)
+        this.builder(ItematicItemTags.PUMPKINS)
             .add(ItemKeys.PUMPKIN)
             .add(ItemKeys.CARVED_PUMPKIN)
             .add(ItemKeys.JACK_O_LANTERN);
-        this.getOrCreateTagBuilder(ItematicItemTags.FROGLIGHTS)
+        this.builder(ItematicItemTags.FROGLIGHTS)
             .add(ItemKeys.OCHRE_FROGLIGHT)
             .add(ItemKeys.VERDANT_FROGLIGHT)
             .add(ItemKeys.PEARLESCENT_FROGLIGHT);
-        this.getOrCreateTagBuilder(ItematicItemTags.SCULK)
+        this.builder(ItematicItemTags.SCULK)
             .add(ItemKeys.SCULK)
             .add(ItemKeys.SCULK_VEIN)
             .add(ItemKeys.SCULK_CATALYST)
             .add(ItemKeys.SCULK_SHRIEKER)
             .add(ItemKeys.SCULK_SENSOR);
-        this.getOrCreateTagBuilder(ItematicItemTags.TORCHES)
+        this.builder(ItematicItemTags.TORCHES)
             .add(ItemKeys.TORCH)
             .add(ItemKeys.SOUL_TORCH)
             .add(ItemKeys.REDSTONE_TORCH);
-        this.getOrCreateTagBuilder(ItematicItemTags.LANTERNS)
+        this.builder(ItematicItemTags.LANTERNS)
             .add(ItemKeys.LANTERN)
             .add(ItemKeys.SOUL_LANTERN);
-        this.getOrCreateTagBuilder(ItematicItemTags.LIGHT_EMITTING_BLOCKS)
+        this.builder(ItematicItemTags.LIGHT_EMITTING_BLOCKS)
             .add(ItemKeys.END_ROD)
             .add(ItemKeys.SEA_LANTERN)
             .add(ItemKeys.REDSTONE_LAMP)
@@ -1074,7 +1075,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.CRYING_OBSIDIAN)
             .add(ItemKeys.GLOW_LICHEN)
             .add(ItemKeys.MAGMA_BLOCK);
-        this.getOrCreateTagBuilder(ItematicItemTags.SIGNS)
+        this.builder(ItematicItemTags.SIGNS)
             .add(ItemKeys.OAK_SIGN)
             .add(ItemKeys.OAK_HANGING_SIGN)
             .add(ItemKeys.SPRUCE_SIGN)
@@ -1099,7 +1100,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.CRIMSON_HANGING_SIGN)
             .add(ItemKeys.WARPED_SIGN)
             .add(ItemKeys.WARPED_HANGING_SIGN);
-        this.getOrCreateTagBuilder(ItematicItemTags.HEADS)
+        this.builder(ItematicItemTags.HEADS)
             .add(ItemKeys.SKELETON_SKULL)
             .add(ItemKeys.WITHER_SKELETON_SKULL)
             .add(ItemKeys.PLAYER_HEAD)
@@ -1107,7 +1108,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.CREEPER_HEAD)
             .add(ItemKeys.PIGLIN_HEAD)
             .add(ItemKeys.DRAGON_HEAD);
-        this.getOrCreateTagBuilder(ItematicItemTags.INFESTED_BLOCKS)
+        this.builder(ItematicItemTags.INFESTED_BLOCKS)
             .add(ItemKeys.INFESTED_STONE)
             .add(ItemKeys.INFESTED_COBBLESTONE)
             .add(ItemKeys.INFESTED_STONE_BRICKS)
@@ -1115,18 +1116,18 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.INFESTED_CRACKED_STONE_BRICKS)
             .add(ItemKeys.INFESTED_CHISELED_STONE_BRICKS)
             .add(ItemKeys.INFESTED_DEEPSLATE);
-        this.getOrCreateTagBuilder(ItematicItemTags.RAILS)
+        this.builder(ItematicItemTags.RAILS)
             .add(ItemKeys.RAIL)
             .add(ItemKeys.POWERED_RAIL)
             .add(ItemKeys.DETECTOR_RAIL)
             .add(ItemKeys.ACTIVATOR_RAIL);
-        this.getOrCreateTagBuilder(ItematicItemTags.MINECARTS)
+        this.builder(ItematicItemTags.MINECARTS)
             .add(ItemKeys.MINECART)
             .add(ItemKeys.HOPPER_MINECART)
             .add(ItemKeys.CHEST_MINECART)
             .add(ItemKeys.FURNACE_MINECART)
             .add(ItemKeys.TNT_MINECART);
-        this.getOrCreateTagBuilder(ItematicItemTags.TOOLS)
+        this.builder(ItematicItemTags.TOOLS)
             .add(ItemKeys.WOODEN_SHOVEL)
             .add(ItemKeys.WOODEN_PICKAXE)
             .add(ItemKeys.WOODEN_AXE)
@@ -1151,7 +1152,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.NETHERITE_PICKAXE)
             .add(ItemKeys.NETHERITE_AXE)
             .add(ItemKeys.NETHERITE_HOE);
-        this.getOrCreateTagBuilder(ItematicItemTags.BUCKETS)
+        this.builder(ItematicItemTags.BUCKETS)
             .add(ItemKeys.BUCKET)
             .add(ItemKeys.WATER_BUCKET)
             .add(ItemKeys.COD_BUCKET)
@@ -1163,7 +1164,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.LAVA_BUCKET)
             .add(ItemKeys.POWDER_SNOW_BUCKET)
             .add(ItemKeys.MILK_BUCKET);
-        this.getOrCreateTagBuilder(ItematicItemTags.BUNDLES)
+        this.builder(ItematicItemTags.BUNDLES)
             .add(ItemKeys.BUNDLE)
             .add(ItemKeys.WHITE_BUNDLE)
             .add(ItemKeys.LIGHT_GRAY_BUNDLE)
@@ -1181,7 +1182,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_BUNDLE)
             .add(ItemKeys.MAGENTA_BUNDLE)
             .add(ItemKeys.PINK_BUNDLE);
-        this.getOrCreateTagBuilder(ItematicItemTags.HARNESSES)
+        this.builder(ItematicItemTags.HARNESSES)
             .add(ItemKeys.WHITE_HARNESS)
             .add(ItemKeys.LIGHT_GRAY_HARNESS)
             .add(ItemKeys.GRAY_HARNESS)
@@ -1198,7 +1199,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_HARNESS)
             .add(ItemKeys.MAGENTA_HARNESS)
             .add(ItemKeys.PINK_HARNESS);
-        this.getOrCreateTagBuilder(ItematicItemTags.BOATS)
+        this.builder(ItematicItemTags.BOATS)
             .add(ItemKeys.OAK_BOAT)
             .add(ItemKeys.OAK_CHEST_BOAT)
             .add(ItemKeys.SPRUCE_BOAT)
@@ -1219,7 +1220,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PALE_OAK_CHEST_BOAT)
             .add(ItemKeys.BAMBOO_RAFT)
             .add(ItemKeys.BAMBOO_CHEST_RAFT);
-        this.getOrCreateTagBuilder(ItematicItemTags.MUSIC_DISCS)
+        this.builder(ItematicItemTags.MUSIC_DISCS)
             .add(ItemKeys.MUSIC_DISC_13)
             .add(ItemKeys.MUSIC_DISC_CAT)
             .add(ItemKeys.MUSIC_DISC_BLOCKS)
@@ -1239,21 +1240,21 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MUSIC_DISC_5)
             .add(ItemKeys.MUSIC_DISC_PIGSTEP)
             .add(ItemKeys.MUSIC_DISC_PRECIPICE);
-        this.getOrCreateTagBuilder(ItematicItemTags.SWORDS)
+        this.builder(ItematicItemTags.SWORDS)
             .add(ItemKeys.WOODEN_SWORD)
             .add(ItemKeys.STONE_SWORD)
             .add(ItemKeys.IRON_SWORD)
             .add(ItemKeys.GOLDEN_SWORD)
             .add(ItemKeys.DIAMOND_SWORD)
             .add(ItemKeys.NETHERITE_SWORD);
-        this.getOrCreateTagBuilder(ItematicItemTags.AXES)
+        this.builder(ItematicItemTags.AXES)
             .add(ItemKeys.WOODEN_AXE)
             .add(ItemKeys.STONE_AXE)
             .add(ItemKeys.IRON_AXE)
             .add(ItemKeys.GOLDEN_AXE)
             .add(ItemKeys.DIAMOND_AXE)
             .add(ItemKeys.NETHERITE_AXE);
-        this.getOrCreateTagBuilder(ItematicItemTags.ARMOR)
+        this.builder(ItematicItemTags.ARMOR)
             .add(ItemKeys.LEATHER_HELMET)
             .add(ItemKeys.LEATHER_CHESTPLATE)
             .add(ItemKeys.LEATHER_LEGGINGS)
@@ -1279,16 +1280,16 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.NETHERITE_LEGGINGS)
             .add(ItemKeys.NETHERITE_BOOTS)
             .add(ItemKeys.TURTLE_HELMET);
-        this.getOrCreateTagBuilder(ItematicItemTags.HORSE_ARMOR)
+        this.builder(ItematicItemTags.HORSE_ARMOR)
             .add(ItemKeys.LEATHER_HORSE_ARMOR)
             .add(ItemKeys.IRON_HORSE_ARMOR)
             .add(ItemKeys.GOLDEN_HORSE_ARMOR)
             .add(ItemKeys.DIAMOND_HORSE_ARMOR);
-        this.getOrCreateTagBuilder(ItematicItemTags.EGGS)
+        this.builder(ItematicItemTags.EGGS)
             .add(ItemKeys.EGG)
             .add(ItemKeys.BROWN_EGG)
             .add(ItemKeys.BLUE_EGG);
-        this.getOrCreateTagBuilder(ItematicItemTags.FOOD)
+        this.builder(ItematicItemTags.FOOD)
             .add(ItemKeys.APPLE)
             .add(ItemKeys.GOLDEN_APPLE)
             .add(ItemKeys.ENCHANTED_GOLDEN_APPLE)
@@ -1328,7 +1329,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MUSHROOM_STEW)
             .add(ItemKeys.BEETROOT_SOUP)
             .add(ItemKeys.RABBIT_STEW);
-        this.getOrCreateTagBuilder(ItematicItemTags.DYES)
+        this.builder(ItematicItemTags.DYES)
             .add(ItemKeys.WHITE_DYE)
             .add(ItemKeys.LIGHT_GRAY_DYE)
             .add(ItemKeys.GRAY_DYE)
@@ -1345,7 +1346,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PURPLE_DYE)
             .add(ItemKeys.MAGENTA_DYE)
             .add(ItemKeys.PINK_DYE);
-        this.getOrCreateTagBuilder(ItematicItemTags.BREWING_INGREDIENTS)
+        this.builder(ItematicItemTags.BREWING_INGREDIENTS)
             .add(ItemKeys.GLASS_BOTTLE)
             .add(ItemKeys.NETHER_WART)
             .add(ItemKeys.REDSTONE)
@@ -1364,7 +1365,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.GHAST_TEAR)
             .add(ItemKeys.TURTLE_HELMET)
             .add(ItemKeys.PHANTOM_MEMBRANE);
-        this.getOrCreateTagBuilder(ItematicItemTags.BANNER_PATTERNS)
+        this.builder(ItematicItemTags.BANNER_PATTERNS)
             .add(ItemKeys.FIELD_MASONED_BANNER_PATTERN)
             .add(ItemKeys.BORDURE_INDENTED_BANNER_PATTERN)
             .add(ItemKeys.FLOWER_BANNER_PATTERN)
@@ -1375,7 +1376,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.PIGLIN_BANNER_PATTERN)
             .add(ItemKeys.FLOW_BANNER_PATTERN)
             .add(ItemKeys.GUSTER_BANNER_PATTERN);
-        this.getOrCreateTagBuilder(ItematicItemTags.SMITHING_TEMPLATES)
+        this.builder(ItematicItemTags.SMITHING_TEMPLATES)
             .add(ItemKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
             .add(ItemKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE)
             .add(ItemKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE)
@@ -1395,12 +1396,12 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE)
             .add(ItemKeys.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE)
             .add(ItemKeys.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE);
-        this.getOrCreateTagBuilder(ItematicItemTags.SPAWNERS)
+        this.builder(ItematicItemTags.SPAWNERS)
             .add(ItemKeys.SPAWNER)
             .add(ItemKeys.TRIAL_SPAWNER);
-        this.getOrCreateTagBuilder(ItematicItemTags.BANNED_BUNDLE_ITEMS)
+        this.builder(ItematicItemTags.BANNED_BUNDLE_ITEMS)
             .addTag(ItematicItemTags.SHULKER_BOXES);
-        this.getOrCreateTagBuilder(ItematicItemTags.SHULKER_BOXES)
+        this.builder(ItematicItemTags.SHULKER_BOXES)
             .add(ItemKeys.SHULKER_BOX)
             .add(ItemKeys.BLACK_SHULKER_BOX)
             .add(ItemKeys.BLUE_SHULKER_BOX)
@@ -1418,7 +1419,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.RED_SHULKER_BOX)
             .add(ItemKeys.WHITE_SHULKER_BOX)
             .add(ItemKeys.YELLOW_SHULKER_BOX);
-        this.getOrCreateTagBuilder(ItematicItemTags.PREVENTS_TAKING_POTTED_ITEM_OUT)
+        this.builder(ItematicItemTags.PREVENTS_TAKING_POTTED_ITEM_OUT)
             .add(ItemKeys.OAK_SAPLING)
             .add(ItemKeys.SPRUCE_SAPLING)
             .add(ItemKeys.BIRCH_SAPLING)
@@ -1453,11 +1454,11 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.TORCHFLOWER)
             .add(ItemKeys.RED_MUSHROOM)
             .add(ItemKeys.BROWN_MUSHROOM);
-        this.getOrCreateTagBuilder(ItematicItemTags.BREWING_INPUTS)
+        this.builder(ItematicItemTags.BREWING_INPUTS)
             .add(ItemKeys.POTION)
             .add(ItemKeys.SPLASH_POTION)
             .add(ItemKeys.LINGERING_POTION);
-        this.getOrCreateTagBuilder(ItematicItemTags.MUNDANE_POTION_REAGENTS)
+        this.builder(ItematicItemTags.MUNDANE_POTION_REAGENTS)
             .add(ItemKeys.REDSTONE)
             .add(ItemKeys.MAGMA_CREAM)
             .add(ItemKeys.GLISTERING_MELON_SLICE)

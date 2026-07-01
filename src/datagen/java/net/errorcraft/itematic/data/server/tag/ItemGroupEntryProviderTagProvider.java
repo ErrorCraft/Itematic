@@ -17,27 +17,27 @@ public class ItemGroupEntryProviderTagProvider extends FabricTagProvider<ItemGro
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup lookup) {
-        this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.BUILDING_BLOCKS)
+        this.builder(ItemGroupEntryProviderTags.BUILDING_BLOCKS)
             .add(ItemGroupEntryProviderKeys.BUILDING_BLOCKS);
-        this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.COLORED_BLOCKS)
+        this.builder(ItemGroupEntryProviderTags.COLORED_BLOCKS)
             .add(ItemGroupEntryProviderKeys.COLORED_BLOCKS);
-        this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.NATURAL_BLOCKS)
+        this.builder(ItemGroupEntryProviderTags.NATURAL_BLOCKS)
             .add(ItemGroupEntryProviderKeys.NATURAL_BLOCKS);
-        this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.FUNCTIONAL_BLOCKS)
+        this.builder(ItemGroupEntryProviderTags.FUNCTIONAL_BLOCKS)
             .add(ItemGroupEntryProviderKeys.FUNCTIONAL_BLOCKS);
-        this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.REDSTONE_BLOCKS)
+        this.builder(ItemGroupEntryProviderTags.REDSTONE_BLOCKS)
             .add(ItemGroupEntryProviderKeys.REDSTONE_BLOCKS);
-        this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.TOOLS_AND_UTILITIES)
+        this.builder(ItemGroupEntryProviderTags.TOOLS_AND_UTILITIES)
             .add(ItemGroupEntryProviderKeys.TOOLS_AND_UTILITIES);
-        this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.COMBAT)
+        this.builder(ItemGroupEntryProviderTags.COMBAT)
             .add(ItemGroupEntryProviderKeys.COMBAT);
-        this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.FOOD_AND_DRINKS)
+        this.builder(ItemGroupEntryProviderTags.FOOD_AND_DRINKS)
             .add(ItemGroupEntryProviderKeys.FOOD_AND_DRINKS);
-        this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.INGREDIENTS)
+        this.builder(ItemGroupEntryProviderTags.INGREDIENTS)
             .add(ItemGroupEntryProviderKeys.INGREDIENTS);
-        this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.SPAWN_EGGS)
+        this.builder(ItemGroupEntryProviderTags.SPAWN_EGGS)
             .add(ItemGroupEntryProviderKeys.SPAWN_EGGS);
-        this.getOrCreateTagBuilder(ItemGroupEntryProviderTags.OP_BLOCKS)
+        this.builder(ItemGroupEntryProviderTags.OP_BLOCKS)
             .add(ItemGroupEntryProviderKeys.OP_BLOCKS);
     }
 }

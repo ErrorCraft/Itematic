@@ -32,7 +32,7 @@ public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
     @Redirect(
         method = {
             "initDataTracker",
-            "readCustomDataFromNbt"
+            "readCustomData"
         },
         at = @At(
             value = "INVOKE",

@@ -33,7 +33,7 @@ public abstract class DrawContextExtender {
         method = "<init>(Lnet/minecraft/client/MinecraftClient;Lorg/joml/Matrix3x2fStack;Lnet/minecraft/client/gui/render/state/GuiRenderState;)V",
         at = @At("TAIL")
     )
-    private void setItemBarStyles(MinecraftClient client, Matrix3x2fStack matrices, GuiRenderState state, CallbackInfo ci) {
+    private void setItemBarStyles(MinecraftClient client, Matrix3x2fStack matrices, GuiRenderState state, CallbackInfo info) {
         this.itemBarStyles = client.itematic$itemBarStyles();
     }
 

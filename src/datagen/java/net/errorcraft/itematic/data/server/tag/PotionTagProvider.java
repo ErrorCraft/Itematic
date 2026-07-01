@@ -10,10 +10,10 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
-import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class PotionTagProvider extends FabricTagProvider<Potion> {
     public PotionTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
@@ -24,15 +24,13 @@ public class PotionTagProvider extends FabricTagProvider<Potion> {
     protected void configure(RegistryWrapper.WrapperLookup lookup) {
         RegistryWrapper.Impl<Potion> potions = lookup.getOrThrow(RegistryKeys.POTION);
         BrewingRecipeRegistry brewingRecipeRegistry = BrewingRecipeRegistry.create(FeatureFlags.VANILLA_FEATURES);
-        this.getOrCreateTagBuilder(PotionTags.TRADEABLE)
+        this.builder(PotionTags.TRADEABLE)
             .add(getAll(potions, potion -> !potion.value().getEffects().isEmpty() && brewingRecipeRegistry.isBrewable(potion)));
     }
 
-    private static Identifier[] getAll(RegistryWrapper.Impl<Potion> registry, Predicate<RegistryEntry<Potion>> predicate) {
+    private static Stream<RegistryKey<Potion>> getAll(RegistryWrapper.Impl<Potion> registry, Predicate<RegistryEntry<Potion>> predicate) {
         return registry.streamEntries()
             .filter(predicate)
-            .map(RegistryEntry.Reference::registryKey)
-            .map(RegistryKey::getValue)
-            .toArray(Identifier[]::new);
+            .map(RegistryEntry.Reference::registryKey);
     }
 }
