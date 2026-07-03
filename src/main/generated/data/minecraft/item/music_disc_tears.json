@@ -1,0 +1,11 @@
+{
+  "behavior": {
+    "minecraft:playable_song": "minecraft:tears",
+    "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:music_disc_tears",
+    "rarity": "uncommon",
+    "translation_key": "item.minecraft.music_disc_tears"
+  }
+}

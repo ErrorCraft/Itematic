@@ -10,10 +10,12 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Entity.class)
 public abstract class EntityExtender implements EntityAccess {
@@ -30,6 +32,36 @@ public abstract class EntityExtender implements EntityAccess {
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD:FIRST",
+                target = "Lnet/minecraft/item/Items;SHEARS:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
+            ),
+            to = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/entity/mob/MobEntity;canRemoveSaddle(Lnet/minecraft/entity/player/PlayerEntity;)Z"
+            )
+        )
+    )
+    private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.SHEARS);
+    }
+
+    @Redirect(
+        method = "interact",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;LEAD:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
+            )
         )
     )
     private boolean isOfForLeadUseRegistryKeyCheck(ItemStack instance, Item item) {

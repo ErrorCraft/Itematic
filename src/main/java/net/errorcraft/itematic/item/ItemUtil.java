@@ -7865,6 +7865,7 @@ public class ItemUtil {
                         .allowedEntities(RegistryEntryList.of(
                             this.entityTypes.getOrThrow(EntityTypeKeys.WOLF)
                         ))
+                        .canBeSheared(true)
                         .build()
                     ))
                     .with(DyeableItemComponent.of(0x000000))
@@ -10306,6 +10307,14 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(64))
                     .build()
             ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_TEARS, create(
+                ItemDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_TEARS)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.TEARS)))
+                    .build()
+            ));
         }
 
         private void bootstrapBuckets() {
@@ -11118,6 +11127,7 @@ public class ItemUtil {
                         .model(EquipmentAssetKeys.SADDLE)
                         .allowedEntities(this.entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_SADDLE))
                         .equipOnInteract(true)
+                        .canBeSheared(true)
                         .build()
                     ))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))

@@ -82,7 +82,7 @@ public class ItemStackAssert {
         }
 
         throw this.helper.createError(
-            "test.error.item_stack.damaged",
+            "test.error.item_stack.expected_damaged",
             this.name
         );
     }

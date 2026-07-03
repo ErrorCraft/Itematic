@@ -49,6 +49,7 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
             .model(material.assetId())
             .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_HORSE_ARMOR))
             .damageOnHurt(false)
+            .canBeSheared(true)
             .build()
         );
     }
@@ -60,8 +61,8 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
                 .model(EquipmentAssetKeys.HARNESS_FROM_COLOR.get(color))
                 .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_HARNESS))
                 .equipOnInteract(true)
-                .build()
-            ),
+                .canBeSheared(true)
+                .build()),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
         };
     }
