@@ -86,7 +86,6 @@ import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
@@ -7866,6 +7865,7 @@ public class ItemUtil {
                             this.entityTypes.getOrThrow(EntityTypeKeys.WOLF)
                         ))
                         .canBeSheared(true)
+                        .shearingSound(this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_UNEQUIP_WOLF))
                         .build()
                     ))
                     .with(DyeableItemComponent.of(0x000000))
@@ -11123,11 +11123,12 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(EquipmentItemComponent.of(EquippableComponent.builder(EquipmentSlot.SADDLE)
-                        .equipSound(SoundEvents.ENTITY_HORSE_SADDLE)
+                        .equipSound(this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE))
                         .model(EquipmentAssetKeys.SADDLE)
                         .allowedEntities(this.entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_SADDLE))
                         .equipOnInteract(true)
                         .canBeSheared(true)
+                        .shearingSound(this.soundEvents.getOrThrow(SoundEventKeys.SADDLE_UNEQUIP))
                         .build()
                     ))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))

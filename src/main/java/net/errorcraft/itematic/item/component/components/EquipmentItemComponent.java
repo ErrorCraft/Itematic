@@ -50,6 +50,7 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
             .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_HORSE_ARMOR))
             .damageOnHurt(false)
             .canBeSheared(true)
+            .shearingSound(soundEvents.getOrThrow(SoundEventKeys.HORSE_ARMOR_UNEQUIP))
             .build()
         );
     }
@@ -62,6 +63,7 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
                 .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_HARNESS))
                 .equipOnInteract(true)
                 .canBeSheared(true)
+                .shearingSound(soundEvents.getOrThrow(SoundEventKeys.HAPPY_GHAST_UNEQUIP))
                 .build()),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
         };
