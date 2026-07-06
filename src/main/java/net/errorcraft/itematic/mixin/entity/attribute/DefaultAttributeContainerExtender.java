@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.attribute;
 
 import net.errorcraft.itematic.access.entity.attribute.DefaultAttributeContainerAccess;
-import net.errorcraft.itematic.access.entity.attribute.EntityAttributeInstanceAccess;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
@@ -16,6 +15,6 @@ public abstract class DefaultAttributeContainerExtender implements DefaultAttrib
 
     @Override
     public double itematic$getValue(RegistryEntry<EntityAttribute> attribute, double base) {
-        return ((EntityAttributeInstanceAccess) this.require(attribute)).itematic$getValue(base);
+        return this.require(attribute).itematic$getValue(base);
     }
 }

@@ -17,14 +17,14 @@ public class BlockTagProvider extends FabricTagProvider<Block> {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup lookup) {
-        this.getOrCreateTagBuilder(ItematicBlockTags.END_CRYSTAL_SPAWNABLE_ON)
+        this.builder(ItematicBlockTags.END_CRYSTAL_SPAWNABLE_ON)
             .add(BlockKeys.BEDROCK)
             .add(BlockKeys.OBSIDIAN);
-        this.getOrCreateTagBuilder(ItematicBlockTags.TILLABLE_INTO_FARMLAND)
+        this.builder(ItematicBlockTags.TILLABLE_INTO_FARMLAND)
             .add(BlockKeys.GRASS_BLOCK)
             .add(BlockKeys.DIRT)
             .add(BlockKeys.DIRT_PATH);
-        this.getOrCreateTagBuilder(ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)
+        this.builder(ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)
             .add(BlockKeys.GRASS_BLOCK)
             .add(BlockKeys.DIRT)
             .add(BlockKeys.PODZOL)

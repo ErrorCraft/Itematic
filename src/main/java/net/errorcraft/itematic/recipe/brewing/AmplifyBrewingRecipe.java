@@ -54,7 +54,7 @@ public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
     @Override
     public IngredientPlacement getIngredientPlacement() {
         return IngredientPlacement.forMultipleSlots(List.of(
-            Optional.of(Ingredient.fromTag(RegistryEntryList.of(this.base()))),
+            Optional.of(Ingredient.ofTag(RegistryEntryList.of(this.base()))),
             Optional.of(this.reagent())
         ));
     }

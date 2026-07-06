@@ -56,6 +56,11 @@ public record FireworkItemComponent() implements ItemComponent<FireworkItemCompo
 
     @Override
     public ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
+        PlayerEntity player = context.getPlayer();
+        if (player != null && player.isGliding()) {
+            return ItemResult.PASS;
+        }
+
         World world = context.getWorld();
         ItemStack stack = context.getStack();
         if (world.isClient()) {

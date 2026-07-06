@@ -5,6 +5,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import org.jetbrains.annotations.Nullable;
 
 public interface AttributeContainerAccess {
-    double itematic$getTrueBaseValue(RegistryEntry<EntityAttribute> attribute);
-    double itematic$getValue(RegistryEntry<EntityAttribute> attribute, @Nullable Double possibleBase);
+    default double itematic$getValue(RegistryEntry<EntityAttribute> attribute, @Nullable Double possibleBase) {
+        return 0.0d;
+    }
 }

@@ -44,6 +44,7 @@
       "net.errorcraft.itematic.gametest.item.LeadTestSuite",
       "net.errorcraft.itematic.gametest.item.MinecartTestSuite",
       "net.errorcraft.itematic.gametest.item.PaintingTestSuite",
+      "net.errorcraft.itematic.gametest.item.ShearsTestSuite",
       "net.errorcraft.itematic.gametest.item.SignTestSuite",
       "net.errorcraft.itematic.gametest.item.TotemOfUndyingTestSuite",
       "net.errorcraft.itematic.gametest.item.component.BlockItemComponentTestSuite",

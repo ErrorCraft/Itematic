@@ -98,6 +98,25 @@ public abstract class AbstractHorseEntityExtender extends AnimalEntity {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
+                target = "Lnet/minecraft/item/Items;CARROT:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private boolean isOfForCarrotUseRegistryKeyCheck(ItemStack instance, Item item) {
+        return instance.itematic$isOf(ItemKeys.CARROT);
+    }
+
+    @Redirect(
+        method = "receiveFood",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
                 target = "Lnet/minecraft/item/Items;GOLDEN_CARROT:Lnet/minecraft/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )

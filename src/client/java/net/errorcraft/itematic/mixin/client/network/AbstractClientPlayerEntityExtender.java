@@ -8,7 +8,6 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class AbstractClientPlayerEntityExtender extends PlayerEntity {
-    public AbstractClientPlayerEntityExtender(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
-        super(world, pos, yaw, gameProfile);
+    public AbstractClientPlayerEntityExtender(World world, GameProfile profile) {
+        super(world, profile);
     }
 
     @Redirect(

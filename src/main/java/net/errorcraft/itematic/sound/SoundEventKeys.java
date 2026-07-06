@@ -9,6 +9,7 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> ARMOR_EQUIP_ELYTRA = of("item.armor.equip_elytra");
     public static final RegistryKey<SoundEvent> ARMOR_EQUIP_GENERIC = of("item.armor.equip_generic");
     public static final RegistryKey<SoundEvent> ARMOR_STAND_PLACE = of("entity.armor_stand.place");
+    public static final RegistryKey<SoundEvent> ARMOR_UNEQUIP_WOLF = of("item.armor.unequip_wolf");
     public static final RegistryKey<SoundEvent> BOTTLE_EMPTY = of("item.bottle.empty");
     public static final RegistryKey<SoundEvent> BOTTLE_FILL = of("item.bottle.fill");
     public static final RegistryKey<SoundEvent> BUCKET_EMPTY = of("item.bucket.empty");
@@ -26,9 +27,13 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> FIRE_EXTINGUISH = of("block.fire.extinguish");
     public static final RegistryKey<SoundEvent> FLINT_AND_STEEL_USE = of("item.flintandsteel.use");
     public static final RegistryKey<SoundEvent> GENERIC_SPLASH = of("entity.generic.splash");
+    public static final RegistryKey<SoundEvent> HAPPY_GHAST_EQUIP = of("entity.happy_ghast.equip");
+    public static final RegistryKey<SoundEvent> HAPPY_GHAST_UNEQUIP = of("entity.happy_ghast.unequip");
     public static final RegistryKey<SoundEvent> HOE_TILL = of("item.hoe.till");
     public static final RegistryKey<SoundEvent> HONEY_BOTTLE_DRINK = of("item.honey_bottle.drink");
     public static final RegistryKey<SoundEvent> HORSE_ARMOR = of("entity.horse.armor");
+    public static final RegistryKey<SoundEvent> HORSE_ARMOR_UNEQUIP = of("item.horse_armor.unequip");
+    public static final RegistryKey<SoundEvent> HORSE_SADDLE = of("entity.horse.saddle");
     public static final RegistryKey<SoundEvent> LODESTONE_COMPASS_LOCK = of("item.lodestone_compass.lock");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_5 = of("music_disc.5");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_11 = of("music_disc.11");
@@ -50,6 +55,7 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> MUSIC_DISC_WAIT = of("music_disc.wait");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_WARD = of("music_disc.ward");
     public static final RegistryKey<SoundEvent> OMINOUS_BOTTLE_DISPOSE = of("item.ominous_bottle.dispose");
+    public static final RegistryKey<SoundEvent> SADDLE_UNEQUIP = of("item.saddle.unequip");
     public static final RegistryKey<SoundEvent> SHIELD_BLOCK = of("item.shield.block");
     public static final RegistryKey<SoundEvent> SHIELD_BREAK = of("item.shield.break");
     public static final RegistryKey<SoundEvent> SHOVEL_FLATTEN = of("item.shovel.flatten");
