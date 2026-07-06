@@ -1,13 +1,22 @@
 package net.errorcraft.itematic.mixin.entity;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.entity.EntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.minecraft.advancement.criterion.PlayerInteractedWithEntityCriterion;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -66,6 +75,28 @@ public abstract class EntityExtender implements EntityAccess {
     )
     private boolean isOfForLeadUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.LEAD);
+    }
+
+    @Definition(id = "ServerPlayerEntity", type = ServerPlayerEntity.class)
+    @Definition(id = "player", local = @Local(type = PlayerEntity.class))
+    @Expression("(ServerPlayerEntity) player")
+    @WrapOperation(
+        method = "shearEquipment",
+        at = @At("MIXINEXTRAS:EXPRESSION")
+    )
+    private ServerPlayerEntity checkForServerPlayer(Object obj, Operation<ServerPlayerEntity> original) {
+        return obj instanceof ServerPlayerEntity serverPlayer ? serverPlayer : null;
+    }
+
+    @WrapWithCondition(
+        method = "shearEquipment",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/advancement/criterion/PlayerInteractedWithEntityCriterion;trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/Entity;)V"
+        )
+    )
+    private boolean checkForServerPlayer(PlayerInteractedWithEntityCriterion instance, ServerPlayerEntity player, ItemStack stack, Entity entity) {
+        return player != null;
     }
 
     @Override
