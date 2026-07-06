@@ -22,6 +22,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.equipment.ArmorMaterial;
+import net.minecraft.item.equipment.EquipmentAssetKeys;
 import net.minecraft.item.equipment.EquipmentType;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.RegistryEntryLookup;
@@ -30,6 +31,7 @@ import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -47,8 +49,24 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
             .model(material.assetId())
             .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_HORSE_ARMOR))
             .damageOnHurt(false)
+            .canBeSheared(true)
+            .shearingSound(soundEvents.getOrThrow(SoundEventKeys.HORSE_ARMOR_UNEQUIP))
             .build()
         );
+    }
+
+    public static ItemComponent<?>[] ofHarness(DyeColor color, RegistryEntryLookup<SoundEvent> soundEvents, RegistryEntryLookup<EntityType<?>> entityTypes, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+        return new ItemComponent<?>[] {
+            of(EquippableComponent.builder(EquipmentSlot.BODY)
+                .equipSound(soundEvents.getOrThrow(SoundEventKeys.HAPPY_GHAST_EQUIP))
+                .model(EquipmentAssetKeys.HARNESS_FROM_COLOR.get(color))
+                .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_HARNESS))
+                .equipOnInteract(true)
+                .canBeSheared(true)
+                .shearingSound(soundEvents.getOrThrow(SoundEventKeys.HAPPY_GHAST_UNEQUIP))
+                .build()),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
+        };
     }
 
     public static ItemComponent<?>[] forArmor(ArmorMaterial material, EquipmentType type) {
@@ -66,7 +84,7 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
     public static ItemComponent<?>[] forSkull(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             BlockItemComponent.attachedToSide(attachedBlock, otherBlock, Direction.DOWN),
-            new EquipmentItemComponent(EquippableComponent.builder(EquipmentSlot.HEAD)
+            of(EquippableComponent.builder(EquipmentSlot.HEAD)
                 .swappable(false)
                 .build()),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY_HEAD)),

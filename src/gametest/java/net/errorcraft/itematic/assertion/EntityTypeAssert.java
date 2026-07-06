@@ -17,6 +17,12 @@ public class EntityTypeAssert<E extends Entity> {
         this.entityType = entityType;
     }
 
+    public <A extends BaseEntityAssert<A, E>> EntityTypeAssert<E> exists(AssertionSupplier<A, E> assertionSupplier, Consumer<A> entityAssertion) {
+        E entity = TestUtil.getSingleEntity(this.helper, this.entityType);
+        entityAssertion.accept(assertionSupplier.get(this.helper, entity));
+        return this;
+    }
+
     public EntityTypeAssert<E> existsAt(BlockPos pos) {
         TestUtil.getSingleEntityAt(this.helper, this.entityType, pos);
         return this;

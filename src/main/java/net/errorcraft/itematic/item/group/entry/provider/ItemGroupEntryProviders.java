@@ -82,6 +82,7 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.tag(ItematicItemTags.SAPLINGS),
             ItemGroupEntry.tag(ItematicItemTags.PLANTS),
             ItemGroupEntry.tag(ItematicItemTags.EGG_LIKE_BLOCKS),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.DRIED_GHAST)),
             ItemGroupEntry.tag(ItematicItemTags.SEEDS),
             ItemGroupEntry.tag(ItematicItemTags.WATER_BLOCKS),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.SPONGE)),
@@ -252,6 +253,7 @@ public class ItemGroupEntryProviders {
             .add(items.getOrThrow(ItemKeys.ELYTRA))
             .add(flightDuration(items.getOrThrow(ItemKeys.FIREWORK_ROCKET)))
             .add(items.getOrThrow(ItemKeys.SADDLE))
+            .add(ItemGroupEntry.tag(ItematicItemTags.HARNESSES))
             .add(items.getOrThrow(ItemKeys.CARROT_ON_A_STICK))
             .add(items.getOrThrow(ItemKeys.WARPED_FUNGUS_ON_A_STICK))
             .add(ItemGroupEntry.tag(ItematicItemTags.BOATS))
@@ -397,6 +399,7 @@ public class ItemGroupEntryProviders {
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.GLOW_SQUID_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.GOAT_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.GUARDIAN_SPAWN_EGG)),
+            ItemGroupEntry.simple(items.getOrThrow(ItemKeys.HAPPY_GHAST_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.HOGLIN_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.HORSE_SPAWN_EGG)),
             ItemGroupEntry.simple(items.getOrThrow(ItemKeys.HUSK_SPAWN_EGG)),

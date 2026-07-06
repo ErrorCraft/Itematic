@@ -88,6 +88,26 @@ public class TestUtil {
             ));
     }
 
+    public static <E extends Entity> E getSingleEntity(TestContext context, EntityType<E> type) {
+        List<E> entities = context.getEntities(type);
+        if (entities.isEmpty()) {
+            throw context.createError(
+                "test.error.expected_entity",
+                type.getName()
+            );
+        }
+
+        if (entities.size() > 1) {
+            throw context.createError(
+                "test.error.entity.too_many_entities",
+                type.getUntranslatedName(),
+                entities.size()
+            );
+        }
+
+        return entities.getFirst();
+    }
+
     public static <E extends Entity> E getSingleEntityAt(TestContext context, EntityType<E> type, BlockPos pos) {
         List<E> entities = getEntitiesAt(context, type, pos);
         if (entities.isEmpty()) {

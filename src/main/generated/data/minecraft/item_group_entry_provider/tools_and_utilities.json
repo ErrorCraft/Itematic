@@ -58,6 +58,10 @@
       "item": "minecraft:firework_rocket"
     },
     "minecraft:saddle",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/harnesses"
+    },
     "minecraft:carrot_on_a_stick",
     "minecraft:warped_fungus_on_a_stick",
     {

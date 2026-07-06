@@ -17,11 +17,11 @@ public class ActionTagProvider extends FabricTagProvider<ActionEntry> {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup lookup) {
-        this.getOrCreateTagBuilder(ActionTags.USE_HOE_ON_BLOCK)
+        this.builder(ActionTags.USE_HOE_ON_BLOCK)
             .add(Actions.TILL_DIRT)
             .add(Actions.TILL_COARSE_DIRT)
             .add(Actions.TILL_ROOTED_DIRT);
-        this.getOrCreateTagBuilder(ActionTags.USE_SHOVEL_ON_BLOCK)
+        this.builder(ActionTags.USE_SHOVEL_ON_BLOCK)
             .add(Actions.FLATTEN_GROUND)
             .add(Actions.EXTINGUISH_CAMPFIRE);
     }
