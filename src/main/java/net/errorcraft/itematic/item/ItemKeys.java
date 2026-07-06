@@ -1260,6 +1260,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> MUSIC_DISC_CREATOR = register("music_disc_creator");
     public static final RegistryKey<Item> MUSIC_DISC_CREATOR_MUSIC_BOX = register("music_disc_creator_music_box");
     public static final RegistryKey<Item> MUSIC_DISC_FAR = register("music_disc_far");
+    public static final RegistryKey<Item> MUSIC_DISC_LAVA_CHICKEN = register("music_disc_lava_chicken");
     public static final RegistryKey<Item> MUSIC_DISC_MALL = register("music_disc_mall");
     public static final RegistryKey<Item> MUSIC_DISC_MELLOHI = register("music_disc_mellohi");
     public static final RegistryKey<Item> MUSIC_DISC_STAL = register("music_disc_stal");

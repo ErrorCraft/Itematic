@@ -1240,7 +1240,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.MUSIC_DISC_RELIC)
             .add(ItemKeys.MUSIC_DISC_5)
             .add(ItemKeys.MUSIC_DISC_PIGSTEP)
-            .add(ItemKeys.MUSIC_DISC_TEARS);
+            .add(ItemKeys.MUSIC_DISC_TEARS)
+            .add(ItemKeys.MUSIC_DISC_LAVA_CHICKEN);
         this.builder(ItematicItemTags.SWORDS)
             .add(ItemKeys.WOODEN_SWORD)
             .add(ItemKeys.STONE_SWORD)

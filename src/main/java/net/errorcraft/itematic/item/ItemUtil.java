@@ -10315,6 +10315,14 @@ public class ItemUtil {
                     .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.TEARS)))
                     .build()
             ));
+            this.registerable.register(ItemKeys.MUSIC_DISC_LAVA_CHICKEN, create(
+                ItemDisplay.Builder.forItem(ItemKeys.MUSIC_DISC_LAVA_CHICKEN)
+                    .rarity(Rarity.RARE)
+                    .build(),
+                ItemComponentSet.builder()
+                    .with(PlayableSongItemComponent.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.LAVA_CHICKEN)))
+                    .build()
+            ));
         }
 
         private void bootstrapBuckets() {
