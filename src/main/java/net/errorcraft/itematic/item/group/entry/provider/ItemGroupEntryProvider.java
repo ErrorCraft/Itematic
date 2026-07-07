@@ -16,22 +16,20 @@ public record ItemGroupEntryProvider(List<ItemGroupEntry> entries) {
         ItemGroupEntry.CODEC.listOf().fieldOf("entries").forGetter(ItemGroupEntryProvider::entries)
     ).apply(instance, ItemGroupEntryProvider::new));
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public void collectEntries(ItemGroup.DisplayContext context, ItemGroup.Entries entries) {
         for (ItemGroupEntry entry : this.entries) {
             entry.addStacks(context, entries);
         }
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static ItemGroupEntryProvider of(ItemGroupEntry... entries) {
-        return new ItemGroupEntryProvider(List.of(entries));
-    }
-
     public static class Builder {
         private final List<ItemGroupEntry> entries = new ArrayList<>();
+
+        private Builder() {}
 
         public ItemGroupEntryProvider build() {
             return new ItemGroupEntryProvider(this.entries);

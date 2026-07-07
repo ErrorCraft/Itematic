@@ -1,14 +1,12 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.TypedEntityData;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -42,10 +40,6 @@ public class ItemFrameTestSuite {
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         ItemStack itemFrame = world.itematic$createStack(ItemKeys.ITEM_FRAME);
         NbtCompound entityData = new NbtCompound();
-        entityData.putString(
-            Entity.ID_KEY,
-            EntityTypeKeys.ITEM_FRAME.getValue().toString()
-        );
         entityData.put(
             "Item",
             ItemStack.CODEC.encodeStart(
@@ -53,7 +47,13 @@ public class ItemFrameTestSuite {
                 world.itematic$createStack(ItemKeys.STICK)
             ).getOrThrow()
         );
-        itemFrame.set(DataComponentTypes.ENTITY_DATA, NbtComponent.of(entityData));
+        itemFrame.set(
+            DataComponentTypes.ENTITY_DATA,
+            TypedEntityData.create(
+                EntityType.ITEM_FRAME,
+                entityData
+            )
+        );
         player.setStackInHand(Hand.MAIN_HAND, itemFrame);
         world.spawnEntity(player);
         TestUtil.useBlock(context, BLOCK_POSITION, player, Direction.UP);

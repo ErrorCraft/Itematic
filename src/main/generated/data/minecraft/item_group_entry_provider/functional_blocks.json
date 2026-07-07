@@ -45,7 +45,10 @@
     "minecraft:beehive",
     "minecraft:suspicious_sand",
     "minecraft:suspicious_gravel",
-    "minecraft:lightning_rod",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/lightning_rods"
+    },
     "minecraft:flower_pot",
     "minecraft:decorated_pot",
     "minecraft:armor_stand",
@@ -62,6 +65,10 @@
     },
     "minecraft:bookshelf",
     "minecraft:chiseled_bookshelf",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/shelves"
+    },
     "minecraft:lectern",
     "minecraft:tinted_glass",
     {
@@ -145,6 +152,10 @@
     "minecraft:end_portal_frame",
     "minecraft:ender_eye",
     "minecraft:vault",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/copper_golems"
+    },
     {
       "type": "tag",
       "tag": "minecraft:item_group/infested_blocks"

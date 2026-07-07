@@ -273,10 +273,7 @@ public record EntityItemComponent(EntitySpawner entity, boolean allowSpawnerModi
     }
 
     private void modifySpawner(ItemUsageContext context, World world, MobSpawnerBlockEntity blockEntity, BlockPos pos, BlockState state) {
-        EntityType<?> type = this.entity.entityType(
-            context.getStack(),
-            context.getWorld().getRegistryManager()
-        );
+        EntityType<?> type = this.entity.entityType(context.getStack());
         blockEntity.setEntityType(type, world.getRandom());
         blockEntity.markDirty();
         world.updateListeners(pos, state, state, Block.NOTIFY_ALL);

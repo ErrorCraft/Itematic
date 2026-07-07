@@ -34,5 +34,4 @@ inject-interface    net/minecraft/recipe/book/RecipeBookOptions    net/errorcraf
 
 extend-enum    net/minecraft/recipe/book/RecipeBookType    ITEMATIC_BREWING
 extend-enum    net/minecraft/client/recipebook/RecipeBookType    ITEMATIC_BREWING
-extend-enum    net/minecraft/loot/context/LootContext$EntityTarget    ITEMATIC_TARGET_ENTITY
 extend-enum    net/minecraft/loot/context/LootContext$EntityTarget    ITEMATIC_SPAWNED_ENTITY

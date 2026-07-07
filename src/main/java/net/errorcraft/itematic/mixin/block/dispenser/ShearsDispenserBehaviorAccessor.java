@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(ShearsDispenserBehavior.class)
 public interface ShearsDispenserBehaviorAccessor {
     @Invoker("tryShearBlock")
-    static boolean tryShearBlock(ServerWorld world, BlockPos pos) {
+    static boolean tryShearBlock(ServerWorld world, ItemStack itemStack, BlockPos blockPos) {
         throw new AssertionError();
     }
 

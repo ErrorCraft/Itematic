@@ -6,14 +6,6 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 public class ItematicItemTags {
-    public static final TagKey<Item> REPAIRS_LEATHER_ARMOR = of("repairs_leather_armor");
-    public static final TagKey<Item> REPAIRS_CHAINMAIL_ARMOR = of("repairs_chainmail_armor");
-    public static final TagKey<Item> REPAIRS_IRON_ARMOR = of("repairs_iron_armor");
-    public static final TagKey<Item> REPAIRS_GOLDEN_ARMOR = of("repairs_golden_armor");
-    public static final TagKey<Item> REPAIRS_DIAMOND_ARMOR = of("repairs_diamond_armor");
-    public static final TagKey<Item> REPAIRS_NETHERITE_ARMOR = of("repairs_netherite_armor");
-    public static final TagKey<Item> REPAIRS_TURTLE_ARMOR = of("repairs_turtle_armor");
-
     public static final TagKey<Item> BOW_AMMUNITION = of("bow_ammunition");
     public static final TagKey<Item> CROSSBOW_AMMUNITION = of("crossbow_ammunition");
 
@@ -125,9 +117,15 @@ public class ItematicItemTags {
     public static final TagKey<Item> TORCHES = of("item_group/torches");
     public static final TagKey<Item> LANTERNS = of("item_group/lanterns");
     public static final TagKey<Item> LIGHT_EMITTING_BLOCKS = of("item_group/light_emitting_blocks");
+    public static final TagKey<Item> LIGHTNING_RODS = of("item_group/lightning_rods");
+    public static final TagKey<Item> SHELVES = of("item_group/shelves");
     public static final TagKey<Item> SIGNS = of("item_group/signs");
     public static final TagKey<Item> HEADS = of("item_group/heads");
+    public static final TagKey<Item> COPPER_GOLEMS = of("item_group/copper_golems");
     public static final TagKey<Item> INFESTED_BLOCKS = of("item_group/infested_blocks");
+    public static final TagKey<Item> WOODEN_CHESTS = of("item_group/wooden_chests");
+    public static final TagKey<Item> COPPER_CHESTS = of("item_group/copper_chests");
+    public static final TagKey<Item> CHESTS = of("item_group/chests");
     public static final TagKey<Item> RAILS = of("item_group/rails");
     public static final TagKey<Item> MINECARTS = of("item_group/minecarts");
     public static final TagKey<Item> TOOLS = of("item_group/tools");
@@ -140,6 +138,7 @@ public class ItematicItemTags {
     public static final TagKey<Item> AXES = of("item_group/axes");
     public static final TagKey<Item> ARMOR = of("item_group/armor");
     public static final TagKey<Item> HORSE_ARMOR = of("item_group/horse_armor");
+    public static final TagKey<Item> NUGGETS = of("item_group/nuggets");
     public static final TagKey<Item> EGGS = of("item_group/eggs");
     public static final TagKey<Item> FOOD = of("item_group/food");
     public static final TagKey<Item> DYES = of("item_group/dyes");

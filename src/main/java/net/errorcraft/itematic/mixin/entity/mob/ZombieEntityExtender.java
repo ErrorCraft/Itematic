@@ -60,17 +60,6 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "getSkull",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack newItemStackForZombieHeadUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.ZOMBIE_HEAD);
-    }
-
-    @Redirect(
         method = "canGather",
         at = @At(
             value = "INVOKE",

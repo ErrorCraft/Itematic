@@ -25,17 +25,6 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
     }
 
     @Redirect(
-        method = "dropEquipment",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack newItemStackForPiglinHeadUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.PIGLIN_HEAD);
-    }
-
-    @Redirect(
         method = "makeInitialWeapon",
         at = @At(
             value = "NEW",

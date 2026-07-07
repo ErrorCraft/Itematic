@@ -12,8 +12,10 @@
     "minecraft:quartz",
     "minecraft:amethyst_shard",
     "minecraft:resin_clump",
-    "minecraft:iron_nugget",
-    "minecraft:gold_nugget",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/nuggets"
+    },
     "minecraft:iron_ingot",
     "minecraft:copper_ingot",
     "minecraft:gold_ingot",

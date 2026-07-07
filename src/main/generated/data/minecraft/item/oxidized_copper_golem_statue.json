@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:oxidized_copper_golem_statue"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:oxidized_copper_golem_statue",
+    "translation_key": "block.minecraft.oxidized_copper_golem_statue"
+  }
+}

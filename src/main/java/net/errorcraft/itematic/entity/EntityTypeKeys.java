@@ -30,6 +30,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> CHEST_MINECART = of("chest_minecart");
     public static final RegistryKey<EntityType<?>> CHICKEN = of("chicken");
     public static final RegistryKey<EntityType<?>> COD = of("cod");
+    public static final RegistryKey<EntityType<?>> COPPER_GOLEM = of("copper_golem");
     public static final RegistryKey<EntityType<?>> COMMAND_BLOCK_MINECART = of("command_block_minecart");
     public static final RegistryKey<EntityType<?>> COW = of("cow");
     public static final RegistryKey<EntityType<?>> CREAKING = of("creaking");

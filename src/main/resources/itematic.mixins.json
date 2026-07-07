@@ -25,7 +25,6 @@
     "block.CandleCakeBlockExtender",
     "block.CanReplaceBlockExtender",
     "block.CarrotsBlockExtender",
-    "block.CaveVinesExtender",
     "block.CaveVinesHeadBlockExtender",
     "block.CaveVinesImplementationsExtender",
     "block.ChiseledBookshelfBlockExtender",

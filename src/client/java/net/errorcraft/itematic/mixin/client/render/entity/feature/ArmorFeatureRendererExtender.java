@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.render.entity.feature;
 
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.command.EntityRenderCommandQueue;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.state.BipedEntityRenderState;
@@ -32,7 +32,7 @@ public class ArmorFeatureRendererExtender<S extends BipedEntityRenderState, M ex
         at = @At("HEAD"),
         cancellable = true
     )
-    private void checkPresenceEquipmentBehavior(MatrixStack matrices, VertexConsumerProvider vertexConsumers, ItemStack stack, EquipmentSlot slot, int light, A armorModel, CallbackInfo info) {
+    private void checkPresenceEquipmentBehavior(MatrixStack matrices, EntityRenderCommandQueue entityRenderCommandQueue, ItemStack stack, EquipmentSlot slot, int light, S bipedEntityRenderState, CallbackInfo info) {
         if (!stack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
             info.cancel();
         }

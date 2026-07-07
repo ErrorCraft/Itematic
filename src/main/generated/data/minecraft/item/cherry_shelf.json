@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:cherry_shelf"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cherry_shelf",
+    "translation_key": "block.minecraft.cherry_shelf"
+  }
+}

@@ -6,7 +6,6 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceFinder;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceReloader;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -24,9 +23,9 @@ public class ItemBarStyleLoader implements ResourceReloader {
     private final Map<Identifier, ItemBarStyle> styles = new HashMap<>();
 
     @Override
-    public CompletableFuture<Void> reload(Synchronizer synchronizer, ResourceManager manager, Executor prepareExecutor, Executor applyExecutor) {
-        return CompletableFuture.supplyAsync(() -> FINDER.findResources(manager), prepareExecutor)
-            .thenCompose(synchronizer::whenPrepared)
+    public CompletableFuture<Void> reload(Store store, Executor prepareExecutor, Synchronizer reloadSynchronizer, Executor applyExecutor) {
+        return CompletableFuture.supplyAsync(() -> FINDER.findResources(store.getResourceManager()), prepareExecutor)
+            .thenCompose(reloadSynchronizer::whenPrepared)
             .thenAcceptAsync(this::apply, applyExecutor);
     }
 
