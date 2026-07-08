@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:waxed_oxidized_copper_chain"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:waxed_oxidized_copper_chain",
+    "translation_key": "block.minecraft.waxed_oxidized_copper_chain"
+  }
+}

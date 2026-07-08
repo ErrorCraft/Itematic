@@ -116,6 +116,7 @@ public class ItematicItemTags {
     public static final TagKey<Item> SCULK = of("item_group/sculk");
     public static final TagKey<Item> TORCHES = of("item_group/torches");
     public static final TagKey<Item> LANTERNS = of("item_group/lanterns");
+    public static final TagKey<Item> CHAINS = of("item_group/chains");
     public static final TagKey<Item> LIGHT_EMITTING_BLOCKS = of("item_group/light_emitting_blocks");
     public static final TagKey<Item> LIGHTNING_RODS = of("item_group/lightning_rods");
     public static final TagKey<Item> SHELVES = of("item_group/shelves");

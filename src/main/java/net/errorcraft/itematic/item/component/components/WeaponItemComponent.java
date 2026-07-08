@@ -80,7 +80,7 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
             .stackExchanger(stackExchanger)
             .add(LootContextParameters.THIS_ENTITY, attacker)
             .add(LootContextParameters.ORIGIN, attacker.getPos())
-            .add(LootContextParameters.field_61500, target)
+            .add(LootContextParameters.TARGET_ENTITY, target)
             .add(ItematicContextParameters.INTERACTED_POSITION, target.getPos())
             .add(LootContextParameters.TOOL, stack)
             .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)

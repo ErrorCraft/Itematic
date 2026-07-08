@@ -471,7 +471,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.IRON_DOOR)
             .add(ItemKeys.IRON_TRAPDOOR)
             .add(ItemKeys.HEAVY_WEIGHTED_PRESSURE_PLATE)
-            .add(ItemKeys.CHAIN);
+            .add(ItemKeys.IRON_CHAIN);
         this.builder(ItematicItemTags.GOLD_BUILDING_BLOCKS)
             .add(ItemKeys.GOLD_BLOCK)
             .add(ItemKeys.LIGHT_WEIGHTED_PRESSURE_PLATE);
@@ -493,9 +493,11 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.CUT_COPPER)
             .add(ItemKeys.CUT_COPPER_STAIRS)
             .add(ItemKeys.CUT_COPPER_SLAB)
+            .add(ItemKeys.COPPER_BARS)
             .add(ItemKeys.COPPER_DOOR)
             .add(ItemKeys.COPPER_TRAPDOOR)
-            .add(ItemKeys.COPPER_BULB);
+            .add(ItemKeys.COPPER_BULB)
+            .add(ItemKeys.COPPER_CHAIN);
         this.builder(ItematicItemTags.EXPOSED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.EXPOSED_COPPER)
             .add(ItemKeys.EXPOSED_CHISELED_COPPER)
@@ -503,9 +505,11 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.EXPOSED_CUT_COPPER)
             .add(ItemKeys.EXPOSED_CUT_COPPER_STAIRS)
             .add(ItemKeys.EXPOSED_CUT_COPPER_SLAB)
+            .add(ItemKeys.EXPOSED_COPPER_BARS)
             .add(ItemKeys.EXPOSED_COPPER_DOOR)
             .add(ItemKeys.EXPOSED_COPPER_TRAPDOOR)
-            .add(ItemKeys.EXPOSED_COPPER_BULB);
+            .add(ItemKeys.EXPOSED_COPPER_BULB)
+            .add(ItemKeys.EXPOSED_COPPER_CHAIN);
         this.builder(ItematicItemTags.WEATHERED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WEATHERED_COPPER)
             .add(ItemKeys.WEATHERED_CHISELED_COPPER)
@@ -513,9 +517,11 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WEATHERED_CUT_COPPER)
             .add(ItemKeys.WEATHERED_CUT_COPPER_STAIRS)
             .add(ItemKeys.WEATHERED_CUT_COPPER_SLAB)
+            .add(ItemKeys.WEATHERED_COPPER_BARS)
             .add(ItemKeys.WEATHERED_COPPER_DOOR)
             .add(ItemKeys.WEATHERED_COPPER_TRAPDOOR)
-            .add(ItemKeys.WEATHERED_COPPER_BULB);
+            .add(ItemKeys.WEATHERED_COPPER_BULB)
+            .add(ItemKeys.WEATHERED_COPPER_CHAIN);
         this.builder(ItematicItemTags.OXIDIZED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.OXIDIZED_COPPER)
             .add(ItemKeys.OXIDIZED_CHISELED_COPPER)
@@ -523,9 +529,11 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.OXIDIZED_CUT_COPPER)
             .add(ItemKeys.OXIDIZED_CUT_COPPER_STAIRS)
             .add(ItemKeys.OXIDIZED_CUT_COPPER_SLAB)
+            .add(ItemKeys.OXIDIZED_COPPER_BARS)
             .add(ItemKeys.OXIDIZED_COPPER_DOOR)
             .add(ItemKeys.OXIDIZED_COPPER_TRAPDOOR)
-            .add(ItemKeys.OXIDIZED_COPPER_BULB);
+            .add(ItemKeys.OXIDIZED_COPPER_BULB)
+            .add(ItemKeys.OXIDIZED_COPPER_CHAIN);
         this.builder(ItematicItemTags.WAXED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WAXED_COPPER_BLOCK)
             .add(ItemKeys.WAXED_CHISELED_COPPER)
@@ -533,9 +541,11 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WAXED_CUT_COPPER)
             .add(ItemKeys.WAXED_CUT_COPPER_STAIRS)
             .add(ItemKeys.WAXED_CUT_COPPER_SLAB)
+            .add(ItemKeys.WAXED_COPPER_BARS)
             .add(ItemKeys.WAXED_COPPER_DOOR)
             .add(ItemKeys.WAXED_COPPER_TRAPDOOR)
-            .add(ItemKeys.WAXED_COPPER_BULB);
+            .add(ItemKeys.WAXED_COPPER_BULB)
+            .add(ItemKeys.WAXED_COPPER_CHAIN);
         this.builder(ItematicItemTags.WAXED_EXPOSED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WAXED_EXPOSED_COPPER)
             .add(ItemKeys.WAXED_EXPOSED_CHISELED_COPPER)
@@ -543,9 +553,11 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WAXED_EXPOSED_CUT_COPPER)
             .add(ItemKeys.WAXED_EXPOSED_CUT_COPPER_STAIRS)
             .add(ItemKeys.WAXED_EXPOSED_CUT_COPPER_SLAB)
+            .add(ItemKeys.WAXED_EXPOSED_COPPER_BARS)
             .add(ItemKeys.WAXED_EXPOSED_COPPER_DOOR)
             .add(ItemKeys.WAXED_EXPOSED_COPPER_TRAPDOOR)
-            .add(ItemKeys.WAXED_EXPOSED_COPPER_BULB);
+            .add(ItemKeys.WAXED_EXPOSED_COPPER_BULB)
+            .add(ItemKeys.WAXED_EXPOSED_COPPER_CHAIN);
         this.builder(ItematicItemTags.WAXED_WEATHERED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WAXED_WEATHERED_COPPER)
             .add(ItemKeys.WAXED_WEATHERED_CHISELED_COPPER)
@@ -553,9 +565,11 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WAXED_WEATHERED_CUT_COPPER)
             .add(ItemKeys.WAXED_WEATHERED_CUT_COPPER_STAIRS)
             .add(ItemKeys.WAXED_WEATHERED_CUT_COPPER_SLAB)
+            .add(ItemKeys.WAXED_WEATHERED_COPPER_BARS)
             .add(ItemKeys.WAXED_WEATHERED_COPPER_DOOR)
             .add(ItemKeys.WAXED_WEATHERED_COPPER_TRAPDOOR)
-            .add(ItemKeys.WAXED_WEATHERED_COPPER_BULB);
+            .add(ItemKeys.WAXED_WEATHERED_COPPER_BULB)
+            .add(ItemKeys.WAXED_WEATHERED_COPPER_CHAIN);
         this.builder(ItematicItemTags.WAXED_OXIDIZED_COPPER_BUILDING_BLOCKS)
             .add(ItemKeys.WAXED_OXIDIZED_COPPER)
             .add(ItemKeys.WAXED_OXIDIZED_CHISELED_COPPER)
@@ -563,9 +577,11 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.WAXED_OXIDIZED_CUT_COPPER)
             .add(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_STAIRS)
             .add(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_SLAB)
+            .add(ItemKeys.WAXED_OXIDIZED_COPPER_BARS)
             .add(ItemKeys.WAXED_OXIDIZED_COPPER_DOOR)
             .add(ItemKeys.WAXED_OXIDIZED_COPPER_TRAPDOOR)
-            .add(ItemKeys.WAXED_OXIDIZED_COPPER_BULB);
+            .add(ItemKeys.WAXED_OXIDIZED_COPPER_BULB)
+            .add(ItemKeys.WAXED_OXIDIZED_COPPER_CHAIN);
         this.builder(ItematicItemTags.COPPER_LIKE_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.COPPER_BUILDING_BLOCKS)
             .addTag(ItematicItemTags.EXPOSED_COPPER_BUILDING_BLOCKS)
@@ -1038,10 +1054,29 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
         this.builder(ItematicItemTags.TORCHES)
             .add(ItemKeys.TORCH)
             .add(ItemKeys.SOUL_TORCH)
+            .add(ItemKeys.COPPER_TORCH)
             .add(ItemKeys.REDSTONE_TORCH);
         this.builder(ItematicItemTags.LANTERNS)
             .add(ItemKeys.LANTERN)
-            .add(ItemKeys.SOUL_LANTERN);
+            .add(ItemKeys.SOUL_LANTERN)
+            .add(ItemKeys.COPPER_LANTERN)
+            .add(ItemKeys.EXPOSED_COPPER_LANTERN)
+            .add(ItemKeys.WEATHERED_COPPER_LANTERN)
+            .add(ItemKeys.OXIDIZED_COPPER_LANTERN)
+            .add(ItemKeys.WAXED_COPPER_LANTERN)
+            .add(ItemKeys.WAXED_EXPOSED_COPPER_LANTERN)
+            .add(ItemKeys.WAXED_WEATHERED_COPPER_LANTERN)
+            .add(ItemKeys.WAXED_OXIDIZED_COPPER_LANTERN);
+        this.builder(ItematicItemTags.CHAINS)
+            .add(ItemKeys.IRON_CHAIN)
+            .add(ItemKeys.COPPER_CHAIN)
+            .add(ItemKeys.EXPOSED_COPPER_CHAIN)
+            .add(ItemKeys.WEATHERED_COPPER_CHAIN)
+            .add(ItemKeys.OXIDIZED_COPPER_CHAIN)
+            .add(ItemKeys.WAXED_COPPER_CHAIN)
+            .add(ItemKeys.WAXED_EXPOSED_COPPER_CHAIN)
+            .add(ItemKeys.WAXED_WEATHERED_COPPER_CHAIN)
+            .add(ItemKeys.WAXED_OXIDIZED_COPPER_CHAIN);
         this.builder(ItematicItemTags.LIGHT_EMITTING_BLOCKS)
             .add(ItemKeys.END_ROD)
             .add(ItemKeys.SEA_LANTERN)

@@ -8,7 +8,10 @@
       "type": "tag",
       "tag": "minecraft:item_group/lanterns"
     },
-    "minecraft:chain",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/chains"
+    },
     {
       "type": "tag",
       "tag": "minecraft:item_group/light_emitting_blocks"

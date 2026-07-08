@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:waxed_weathered_copper_bars"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:waxed_weathered_copper_bars",
+    "translation_key": "block.minecraft.waxed_weathered_copper_bars"
+  }
+}

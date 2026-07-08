@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:copper_chain"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:copper_chain",
+    "translation_key": "block.minecraft.copper_chain"
+  }
+}

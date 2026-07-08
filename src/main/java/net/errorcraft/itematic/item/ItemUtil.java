@@ -2150,11 +2150,123 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_BARS)))
                     .build()
             ));
-            this.registerable.register(ItemKeys.CHAIN, create(
-                ItemDisplay.Builder.forBlock(ItemKeys.CHAIN).build(),
+            this.registerable.register(ItemKeys.COPPER_BARS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.COPPER_BARS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHAIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_BARS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EXPOSED_COPPER_BARS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER_BARS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER_BARS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WEATHERED_COPPER_BARS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER_BARS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER_BARS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OXIDIZED_COPPER_BARS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER_BARS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER_BARS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_COPPER_BARS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_BARS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_BARS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER_BARS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER_BARS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER_BARS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER_BARS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER_BARS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER_BARS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER_BARS, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER_BARS).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER_BARS)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_CHAIN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.IRON_CHAIN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_CHAIN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COPPER_CHAIN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.COPPER_CHAIN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_CHAIN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EXPOSED_COPPER_CHAIN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER_CHAIN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER_CHAIN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WEATHERED_COPPER_CHAIN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER_CHAIN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER_CHAIN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OXIDIZED_COPPER_CHAIN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER_CHAIN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER_CHAIN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_COPPER_CHAIN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_CHAIN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_CHAIN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER_CHAIN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER_CHAIN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER_CHAIN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER_CHAIN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER_CHAIN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER_CHAIN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER_CHAIN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER_CHAIN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER_CHAIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLASS_PANE, create(
@@ -3635,6 +3747,62 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SOUL_LANTERN)))
                     .build()
             ));
+            this.registerable.register(ItemKeys.COPPER_LANTERN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.COPPER_LANTERN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_LANTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.EXPOSED_COPPER_LANTERN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER_LANTERN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER_LANTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WEATHERED_COPPER_LANTERN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER_LANTERN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER_LANTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.OXIDIZED_COPPER_LANTERN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER_LANTERN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER_LANTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_COPPER_LANTERN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_LANTERN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_LANTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER_LANTERN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER_LANTERN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER_LANTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER_LANTERN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER_LANTERN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER_LANTERN)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER_LANTERN, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER_LANTERN).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER_LANTERN)))
+                    .build()
+            ));
             this.registerable.register(ItemKeys.CAMPFIRE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CAMPFIRE).build(),
                 ItemComponentSet.builder()
@@ -4177,6 +4345,13 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.SOUL_TORCH), this.blocks.getOrThrow(BlockKeys.SOUL_WALL_TORCH), Direction.DOWN))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COPPER_TORCH, create(
+                ItemDisplay.Builder.forBlock(ItemKeys.COPPER_TORCH).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.COPPER_TORCH), this.blocks.getOrThrow(BlockKeys.COPPER_WALL_TORCH), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.TUBE_CORAL_FAN, create(
