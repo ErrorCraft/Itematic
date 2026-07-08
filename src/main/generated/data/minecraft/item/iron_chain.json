@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:iron_chain"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:iron_chain",
+    "translation_key": "block.minecraft.iron_chain"
+  }
+}

@@ -350,7 +350,7 @@ public class BlockKeys {
     public static final RegistryKey<Block> WAXED_EXPOSED_COPPER_BARS = of("waxed_exposed_copper_bars");
     public static final RegistryKey<Block> WAXED_WEATHERED_COPPER_BARS = of("waxed_weathered_copper_bars");
     public static final RegistryKey<Block> WAXED_OXIDIZED_COPPER_BARS = of("waxed_oxidized_copper_bars");
-    public static final RegistryKey<Block> IRON_CHAIN = of("chain");
+    public static final RegistryKey<Block> IRON_CHAIN = of("iron_chain");
     public static final RegistryKey<Block> COPPER_CHAIN = of("copper_chain");
     public static final RegistryKey<Block> EXPOSED_COPPER_CHAIN = of("exposed_copper_chain");
     public static final RegistryKey<Block> WEATHERED_COPPER_CHAIN = of("weathered_copper_chain");

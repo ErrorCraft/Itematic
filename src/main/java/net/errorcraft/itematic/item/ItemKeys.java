@@ -405,7 +405,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> WAXED_EXPOSED_COPPER_BARS = register("waxed_exposed_copper_bars");
     public static final RegistryKey<Item> WAXED_WEATHERED_COPPER_BARS = register("waxed_weathered_copper_bars");
     public static final RegistryKey<Item> WAXED_OXIDIZED_COPPER_BARS = register("waxed_oxidized_copper_bars");
-    public static final RegistryKey<Item> IRON_CHAIN = register("chain");
+    public static final RegistryKey<Item> IRON_CHAIN = register("iron_chain");
     public static final RegistryKey<Item> COPPER_CHAIN = register("copper_chain");
     public static final RegistryKey<Item> EXPOSED_COPPER_CHAIN = register("exposed_copper_chain");
     public static final RegistryKey<Item> WEATHERED_COPPER_CHAIN = register("weathered_copper_chain");
