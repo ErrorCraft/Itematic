@@ -38,6 +38,7 @@
     "gui.tooltip.BundleTooltipComponentExtender",
     "gui.tooltip.BundleTooltipSubmenuHandlerExtender",
     "gui.tooltip.TooltipComponentExtender",
+    "gui.widget.ItemStackWidgetExtender",
     "network.AbstractClientPlayerEntityExtender",
     "network.ClientPlayerEntityExtender",
     "network.ClientPlayNetworkHandlerExtender",

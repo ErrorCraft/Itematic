@@ -10,6 +10,7 @@ accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternat
 accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternativesWidget$AlternativeButtonWidget$InputSlot
 accessible    class    net/minecraft/predicate/StatePredicate$Condition
 accessible    class    net/minecraft/predicate/StatePredicate$RangedValueMatcher
+accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry$class_11775
 
 inject-interface    net/minecraft/util/DyeColor    net/errorcraft/itematic/access/util/DyeColorAccess
 inject-interface    net/minecraft/item/tooltip/BundleTooltipData    net/errorcraft/itematic/access/item/tooltip/BundleTooltipDataAccess
@@ -31,6 +32,9 @@ inject-interface    net/minecraft/entity/attribute/EntityAttributeInstance    ne
 inject-interface    net/minecraft/entity/attribute/DefaultAttributeContainer    net/errorcraft/itematic/access/entity/attribute/DefaultAttributeContainerAccess
 inject-interface    net/minecraft/client/MinecraftClient    net/errorcraft/itematic/access/client/MinecraftClientAccess
 inject-interface    net/minecraft/recipe/book/RecipeBookOptions    net/errorcraft/itematic/access/recipe/book/RecipeBookOptionsAccess
+inject-interface    net/minecraft/client/gui/widget/ItemStackWidget    net/errorcraft/itematic/access/client/gui/widget/ItemStackWidgetAccess
+inject-interface    net/minecraft/client/gui/screen/StatsScreen    net/errorcraft/itematic/access/client/gui/screen/StatsScreenAccess
+inject-interface    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry    net/errorcraft/itematic/access/client/gui/screen/StatsScreenAccess$ItemStatsListWidgetAccess$EntryAccess
 
 extend-enum    net/minecraft/recipe/book/RecipeBookType    ITEMATIC_BREWING
 extend-enum    net/minecraft/client/recipebook/RecipeBookType    ITEMATIC_BREWING
