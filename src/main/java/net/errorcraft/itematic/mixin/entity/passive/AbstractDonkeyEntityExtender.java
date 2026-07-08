@@ -58,7 +58,7 @@ public abstract class AbstractDonkeyEntityExtender extends AbstractHorseEntity {
             )
         )
         private ItemStack newItemStackForChestUseCreateStack(ItemConvertible item) {
-            return this.field_27867.getWorld().itematic$createStack(ItemKeys.CHEST);
+            return this.field_27867.getEntityWorld().itematic$createStack(ItemKeys.CHEST);
         }
 
         @Redirect(

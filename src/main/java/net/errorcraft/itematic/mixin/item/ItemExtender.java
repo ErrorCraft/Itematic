@@ -226,7 +226,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             result = result.max(newResult);
         }
 
-        if (user.getWorld() instanceof ServerWorld serverWorld) {
+        if (user.getEntityWorld() instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
@@ -261,7 +261,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             component.postHit(stack, target, attacker, stackExchanger);
         }
 
-        if (attacker.getWorld() instanceof ServerWorld serverWorld) {
+        if (attacker.getEntityWorld() instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, attacker)

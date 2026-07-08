@@ -240,7 +240,7 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
             return;
         }
 
-        user.playSound(this.removeItemSound.value(), 0.8f, 0.8f + user.getWorld().getRandom().nextFloat() * 0.4f);
+        user.playSound(this.removeItemSound.value(), 0.8f, 0.8f + user.getEntityWorld().getRandom().nextFloat() * 0.4f);
         onRemoved.accept(removedStack);
     }
 
@@ -256,13 +256,13 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
         }
 
         player.dropItem(removedStack, true);
-        player.playSound(this.emptySound.value(), 0.8f, 0.8f + player.getWorld().getRandom().nextFloat() * 0.4f);
+        player.playSound(this.emptySound.value(), 0.8f, 0.8f + player.getEntityWorld().getRandom().nextFloat() * 0.4f);
         player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
 
         stack.set(DataComponentTypes.BUNDLE_CONTENTS, newBuilder.build());
     }
 
     private void playInsertItemSound(PlayerEntity user) {
-        user.playSound(this.insertItemSound.value(), 0.8f, 0.8f + user.getWorld().getRandom().nextFloat() * 0.4f);
+        user.playSound(this.insertItemSound.value(), 0.8f, 0.8f + user.getEntityWorld().getRandom().nextFloat() * 0.4f);
     }
 }

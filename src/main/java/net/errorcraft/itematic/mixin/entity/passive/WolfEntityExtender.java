@@ -29,7 +29,7 @@ public abstract class WolfEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack getDefaultStackForArmadilloScuteUseCreateStack(Item instance) {
-        return this.getWorld().itematic$createStack(ItemKeys.ARMADILLO_SCUTE);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.ARMADILLO_SCUTE);
     }
 
     @Redirect(

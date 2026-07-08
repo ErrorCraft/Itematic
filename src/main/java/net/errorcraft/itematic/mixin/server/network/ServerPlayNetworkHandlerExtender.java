@@ -69,6 +69,6 @@ public class ServerPlayNetworkHandlerExtender {
         )
     )
     private IngredientPlacement getIngredientPlacementUseDynamicRegistry(Recipe<?> instance) {
-        return ((RecipeAccess) instance).itematic$ingredientPlacement(this.player.getWorld().getRegistryManager().getOrThrow(RegistryKeys.ITEM));
+        return ((RecipeAccess) instance).itematic$ingredientPlacement(this.player.getRegistryManager().getOrThrow(RegistryKeys.ITEM));
     }
 }

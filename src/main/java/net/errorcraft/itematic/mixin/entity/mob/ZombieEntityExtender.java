@@ -79,7 +79,7 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForIronSwordUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.IRON_SWORD);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_SWORD);
     }
 
     @Redirect(
@@ -98,7 +98,7 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForIronShovelUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.IRON_SHOVEL);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_SHOVEL);
     }
 
     @Override

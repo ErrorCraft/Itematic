@@ -45,14 +45,17 @@ public abstract class PillagerEntityExtender extends MobEntityExtender implement
     }
 
     @Redirect(
-        method = { "initEquipment", "addBonusForWave" },
+        method = {
+            "initEquipment",
+            "addBonusForWave"
+        },
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
     private ItemStack newItemStackForCrossbowUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.CROSSBOW);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.CROSSBOW);
     }
 
     @Redirect(

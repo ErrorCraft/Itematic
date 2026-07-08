@@ -41,7 +41,7 @@ public abstract class WitchEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForPotionUseCreateStack(Item item, RegistryEntry<Potion> potion) {
-        return PotionContentsComponentUtil.setPotion(this.getWorld().itematic$createStack(ItemKeys.POTION), potion);
+        return PotionContentsComponentUtil.setPotion(this.getEntityWorld().itematic$createStack(ItemKeys.POTION), potion);
     }
 
     @Redirect(
@@ -52,7 +52,7 @@ public abstract class WitchEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForSplashPotionUseCreateStack(Item item, RegistryEntry<Potion> potion) {
-        return PotionContentsComponentUtil.setPotion(this.getWorld().itematic$createStack(ItemKeys.SPLASH_POTION), potion);
+        return PotionContentsComponentUtil.setPotion(this.getEntityWorld().itematic$createStack(ItemKeys.SPLASH_POTION), potion);
     }
 
     @Override

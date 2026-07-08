@@ -50,7 +50,7 @@ public abstract class MerchantEntityExtender extends MobEntityExtender {
 
     @Unique
     protected void fillRecipesFromContext() {
-        if (!(this.getWorld() instanceof ServerWorld world)) {
+        if (!(this.getEntityWorld() instanceof ServerWorld world)) {
             return;
         }
 

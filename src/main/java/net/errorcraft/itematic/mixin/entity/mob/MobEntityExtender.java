@@ -137,7 +137,7 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
     )
     private Item getEquipmentForSlotUseRegistryKey(EquipmentSlot equipmentSlot, int equipmentLevel, @Share("item") LocalRef<RegistryEntry<Item>> item) {
         RegistryKey<Item> key = LEVEL_TO_EQUIPMENT.get(equipmentLevel).get(equipmentSlot);
-        Optional<RegistryEntry.Reference<Item>> optionalEntry = this.getWorld().itematic$getItemAccess().getOptionalEntry(key);
+        Optional<RegistryEntry.Reference<Item>> optionalEntry = this.getEntityWorld().itematic$getItemAccess().getOptionalEntry(key);
         if (optionalEntry.isEmpty()) {
             return null;
         }
@@ -188,7 +188,7 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
             return null;
         }
 
-        return this.getWorld().itematic$createStack(key);
+        return this.getEntityWorld().itematic$createStack(key);
     }
 
     @Unique

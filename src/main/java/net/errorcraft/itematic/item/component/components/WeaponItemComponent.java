@@ -72,7 +72,7 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
             DUMMY.postHit(stack, target, attacker);
         }
 
-        if (!(attacker.getWorld() instanceof ServerWorld serverWorld)) {
+        if (!(attacker.getEntityWorld() instanceof ServerWorld serverWorld)) {
             return;
         }
 

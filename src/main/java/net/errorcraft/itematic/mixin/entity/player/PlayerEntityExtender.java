@@ -130,7 +130,7 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
             }
         }
 
-        return this.abilities.creativeMode ? this.getWorld().itematic$createStack(ItemKeys.ARROW) : ItemStack.EMPTY;
+        return this.abilities.creativeMode ? this.getEntityWorld().itematic$createStack(ItemKeys.ARROW) : ItemStack.EMPTY;
     }
 
     @Unique

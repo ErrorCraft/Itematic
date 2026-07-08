@@ -236,7 +236,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private void invokeBeforeDeathHolderEvent(DeathProtectionComponent instance, ItemStack stack, LivingEntity entity) {
-        if (!(entity.getWorld() instanceof ServerWorld serverWorld)) {
+        if (!(entity.getEntityWorld() instanceof ServerWorld serverWorld)) {
             return;
         }
 
@@ -404,7 +404,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private ItemStack newItemStackForWitherRoseUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.WITHER_ROSE);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.WITHER_ROSE);
     }
 
     @ModifyReturnValue(

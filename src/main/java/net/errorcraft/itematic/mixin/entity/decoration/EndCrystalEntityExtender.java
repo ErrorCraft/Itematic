@@ -25,6 +25,6 @@ public abstract class EndCrystalEntityExtender extends Entity {
         )
     )
     private ItemStack newItemStackForEndCrystalUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.END_CRYSTAL);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.END_CRYSTAL);
     }
 }

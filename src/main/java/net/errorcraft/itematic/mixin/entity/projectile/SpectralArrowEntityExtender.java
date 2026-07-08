@@ -25,6 +25,6 @@ public abstract class SpectralArrowEntityExtender extends PersistentProjectileEn
         )
     )
     private ItemStack newItemStackForSpectralArrowUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.SPECTRAL_ARROW);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.SPECTRAL_ARROW);
     }
 }

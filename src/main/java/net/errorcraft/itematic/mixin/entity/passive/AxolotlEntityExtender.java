@@ -40,7 +40,7 @@ public abstract class AxolotlEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForWaterBucketUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.WATER_BUCKET);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.WATER_BUCKET);
     }
 
     @Redirect(
@@ -51,7 +51,7 @@ public abstract class AxolotlEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForAxolotlBucketUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.AXOLOTL_BUCKET);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.AXOLOTL_BUCKET);
     }
 
     @Override

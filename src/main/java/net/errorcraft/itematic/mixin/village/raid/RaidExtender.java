@@ -48,6 +48,6 @@ public abstract class RaidExtender {
         )
     )
     private void createOminousBannerSetDataDrivenItemStack(int wave, RaiderEntity entity, CallbackInfo info) {
-        RaidUtil.createOminousBanner(entity.getWorld());
+        RaidUtil.createOminousBanner(entity.getEntityWorld());
     }
 }

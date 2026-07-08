@@ -29,7 +29,7 @@ public abstract class PufferfishEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForPufferfishBucketUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.PUFFERFISH_BUCKET);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.PUFFERFISH_BUCKET);
     }
 
     @Override

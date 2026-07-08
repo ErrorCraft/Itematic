@@ -28,7 +28,7 @@ public abstract class WitherSkeletonEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForStoneSwordUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.STONE_SWORD);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.STONE_SWORD);
     }
 
     @Override

@@ -80,7 +80,7 @@ public class HostileEntityExtender extends PathAwareEntity implements LivingEnti
         )
     )
     private ItemStack newItemStackForArrowUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.ARROW);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.ARROW);
     }
 
     @Override
@@ -91,6 +91,6 @@ public class HostileEntityExtender extends PathAwareEntity implements LivingEnti
             return heldStack;
         }
 
-        return this.getWorld().itematic$createStack(ItemKeys.ARROW);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.ARROW);
     }
 }

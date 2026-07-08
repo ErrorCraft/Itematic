@@ -28,7 +28,7 @@ public abstract class VexEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForIronSwordUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.IRON_SWORD);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_SWORD);
     }
 
     @Override

@@ -50,7 +50,7 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
         )
     )
     private ItemStack newItemStackForPotionUseCreateStack(Item item, RegistryEntry<Potion> potion) {
-        return PotionContentsComponentUtil.setPotion(this.getWorld().itematic$createStack(ItemKeys.POTION), potion);
+        return PotionContentsComponentUtil.setPotion(this.getEntityWorld().itematic$createStack(ItemKeys.POTION), potion);
     }
 
     @Redirect(
@@ -69,7 +69,7 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
         )
     )
     private ItemStack newItemStackForMilkBucketUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.MILK_BUCKET);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.MILK_BUCKET);
     }
 
     @Redirect(
