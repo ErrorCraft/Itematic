@@ -17,14 +17,14 @@ import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.event.GameEvent;
 
-public record TeleportAction(int distance, LootContext.EntityTarget entity) implements Action<TeleportAction> {
+public record TeleportAction(int distance, LootContext.EntityReference entity) implements Action<TeleportAction> {
     public static final MapCodec<TeleportAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codecs.POSITIVE_INT.fieldOf("distance").forGetter(TeleportAction::distance),
-        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(TeleportAction::entity)
+        LootContext.EntityReference.CODEC.fieldOf("entity").forGetter(TeleportAction::entity)
     ).apply(instance, TeleportAction::new));
     private static final int MAX_TELEPORT_ATTEMPTS = 16;
 
-    public static TeleportAction of(int distance, LootContext.EntityTarget entity) {
+    public static TeleportAction of(int distance, LootContext.EntityReference entity) {
         return new TeleportAction(distance, entity);
     }
 

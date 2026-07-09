@@ -38,4 +38,4 @@ inject-interface    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWid
 
 extend-enum    net/minecraft/recipe/book/RecipeBookType    ITEMATIC_BREWING
 extend-enum    net/minecraft/client/recipebook/RecipeBookType    ITEMATIC_BREWING
-extend-enum    net/minecraft/loot/context/LootContext$EntityTarget    ITEMATIC_SPAWNED_ENTITY
+extend-enum    net/minecraft/loot/context/LootContext$EntityReference    ITEMATIC_SPAWNED_ENTITY

@@ -36,7 +36,6 @@ import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.Actions;
 import net.errorcraft.itematic.world.action.actions.*;
-import net.errorcraft.itematic.world.action.context.ItemStackTarget;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
@@ -211,7 +210,7 @@ public class ItemUtil {
                         .build())
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ClearStatusEffectsAction.of(LootContext.EntityTarget.THIS)))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ClearStatusEffectsAction.of(LootContext.EntityReference.THIS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POTION, create(
@@ -261,7 +260,7 @@ public class ItemUtil {
                                 .build())
                             .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_EMPTY), SoundCategory.BLOCKS))
                             .add(SetBlockStateAction.of(PositionTarget.INTERACTED, this.blocks.getOrThrow(BlockKeys.MUD)))
-                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                            .add(SwingHandAction.of(LootContext.EntityReference.THIS))
                     ))
                     .build()
             ));
@@ -352,7 +351,7 @@ public class ItemUtil {
                         .build())
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(TeleportAction.of(16, LootContext.EntityTarget.THIS)))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(TeleportAction.of(16, LootContext.EntityReference.THIS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BEETROOT, create(
@@ -608,7 +607,7 @@ public class ItemUtil {
                         .build())
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ApplySuspiciousStewEffectsFromItemAction.of(LootContext.EntityTarget.THIS)))
+                    .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(ApplySuspiciousStewEffectsFromItemAction.of(LootContext.EntityReference.THIS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ROTTEN_FLESH, create(
@@ -734,7 +733,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         RemoveStatusEffectsAction.of(
-                            LootContext.EntityTarget.THIS,
+                            LootContext.EntityReference.THIS,
                             this.statusEffects.getOrThrow(StatusEffectKeys.POISON)
                         )
                     ))
@@ -5911,7 +5910,7 @@ public class ItemUtil {
                     .add(ItemEvents.STOPPED_USING, ActionEntry.of(
                         AllOfLootCondition.builder(
                             EntityPropertiesLootCondition.builder(
-                                LootContext.EntityTarget.THIS,
+                                LootContext.EntityReference.THIS,
                                 EntityPredicate.Builder.create()
                                     .itematic$usedItemAtLeast(TridentItem.MIN_DRAW_DURATION)
                                     .itematic$inWaterOrRain(true)
@@ -10460,7 +10459,7 @@ public class ItemUtil {
                                 .pushEntitiesUpwards()
                                 .build())
                             .add(DecrementItemAction.of(1))
-                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                            .add(SwingHandAction.of(LootContext.EntityReference.THIS))
                             .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.END_PORTAL_FRAME_FILL), SoundCategory.BLOCKS))
                             .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SMOKE)
                                 .count(16)
@@ -11775,7 +11774,7 @@ public class ItemUtil {
                         ),
                         PassingSequenceHandler.builder()
                             .add(ModifyItemAction.of(
-                                ItemStackTarget.TOOL,
+                                LootContext.ItemStackReference.TOOL,
                                 SplitItemModifier.builder(1),
                                 SetItemPointerLocationItemModifier.builder(PositionTarget.INTERACTED),
                                 SetNameLootFunction.builder(
@@ -11792,7 +11791,7 @@ public class ItemUtil {
                                 this.soundEvents.getOrThrow(SoundEventKeys.LODESTONE_COMPASS_LOCK),
                                 SoundCategory.PLAYERS
                             ))
-                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                            .add(SwingHandAction.of(LootContext.EntityReference.THIS))
                     ))
                     .build()
             ));
@@ -11994,7 +11993,7 @@ public class ItemUtil {
                             .add(InvokeGameEventAction.of(
                                 GameEvent.ITEM_INTERACT_FINISH,
                                 PositionTarget.ORIGIN,
-                                LootContext.EntityTarget.THIS
+                                LootContext.EntityReference.THIS
                             ))
                             .add(DecrementItemAction.of(1))
                     ))
@@ -12022,7 +12021,7 @@ public class ItemUtil {
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
                             .add(MarkBannerOnItemAction.of(PositionTarget.INTERACTED))
-                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                            .add(SwingHandAction.of(LootContext.EntityReference.THIS))
                     ))
                     .build()
             ));
@@ -12059,9 +12058,9 @@ public class ItemUtil {
                                 ComponentChanges.builder()
                                     .add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(this.potions.getOrThrow(PotionKeys.WATER)))
                                     .build()))
-                            .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, PositionTarget.INTERACTED, LootContext.EntityTarget.THIS))
+                            .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, PositionTarget.INTERACTED, LootContext.EntityReference.THIS))
                             .add(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundCategory.NEUTRAL))
-                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                            .add(SwingHandAction.of(LootContext.EntityReference.THIS))
                     ))
                     .build()
             ));
@@ -12168,7 +12167,7 @@ public class ItemUtil {
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
                         PassingSequenceHandler.builder()
                             .add(AttachLeashedEntitiesOnBlockAction.of(PositionTarget.INTERACTED))
-                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                            .add(SwingHandAction.of(LootContext.EntityReference.THIS))
                     ))
                     .build()
             ));
@@ -12180,9 +12179,9 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_ENTITY, ActionEntry.of(
                         PassingSequenceHandler.builder()
-                            .add(SetEntityNameFromItemAction.of(LootContext.EntityTarget.TARGET_ENTITY))
+                            .add(SetEntityNameFromItemAction.of(LootContext.EntityReference.TARGET_ENTITY))
                             .add(DecrementItemAction.of(1))
-                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                            .add(SwingHandAction.of(LootContext.EntityReference.THIS))
                     ))
                     .build()
             ));
@@ -12292,7 +12291,7 @@ public class ItemUtil {
                             .add(PassingSequenceHandler.builder()
                                 .add(WaxBlockAction.of(PositionTarget.INTERACTED))
                                 .add(DecrementItemAction.of(1))
-                                .add(SwingHandAction.of(LootContext.EntityTarget.THIS)))))
+                                .add(SwingHandAction.of(LootContext.EntityReference.THIS)))))
                     .build()
             ));
             this.registerable.register(ItemKeys.ECHO_SHARD, create(

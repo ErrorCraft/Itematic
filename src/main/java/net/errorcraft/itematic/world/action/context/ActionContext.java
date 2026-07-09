@@ -112,9 +112,9 @@ public class ActionContext {
         return new LootContext.Builder(context).build(Optional.empty());
     }
 
-    public ServerCommandSource commandSource(CommandFunctionManager functionManager, Optional<LootContext.EntityTarget> entity, Optional<PositionTarget> position) {
+    public ServerCommandSource commandSource(CommandFunctionManager functionManager, Optional<LootContext.EntityReference> entity, Optional<PositionTarget> position) {
         ServerCommandSource source = functionManager.getScheduledCommandSource();
-        source = entity.map(LootContext.EntityTarget::getParameter)
+        source = entity.map(LootContext.EntityReference::getParameter)
             .map(this::get)
             .map(source::withEntity)
             .orElse(source);

@@ -15,12 +15,12 @@ import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.text.Text;
 
-public record SetEntityNameFromItemAction(LootContext.EntityTarget entity) implements Action<SetEntityNameFromItemAction> {
+public record SetEntityNameFromItemAction(LootContext.EntityReference entity) implements Action<SetEntityNameFromItemAction> {
     public static final MapCodec<SetEntityNameFromItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(SetEntityNameFromItemAction::entity)
+        LootContext.EntityReference.CODEC.fieldOf("entity").forGetter(SetEntityNameFromItemAction::entity)
     ).apply(instance, SetEntityNameFromItemAction::new));
 
-    public static SetEntityNameFromItemAction of(LootContext.EntityTarget entity) {
+    public static SetEntityNameFromItemAction of(LootContext.EntityReference entity) {
         return new SetEntityNameFromItemAction(entity);
     }
 

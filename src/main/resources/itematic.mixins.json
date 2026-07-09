@@ -291,7 +291,7 @@
     "loot.ContainerComponentModifiersExtender$BundleContentsExtender",
     "loot.condition.LocationCheckLootConditionExtender",
     "loot.condition.LootConditionTypesAccessor",
-    "loot.context.LootContextExtender$EntityTargetExtender",
+    "loot.context.LootContextExtender$EntityReferenceExtender",
     "loot.context.LootContextTypesAccessor",
     "loot.entry.TagEntryExtender",
     "loot.function.EnchantRandomlyLootFunctionExtender",
