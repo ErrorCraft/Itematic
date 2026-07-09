@@ -51,24 +51,30 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
             EquipmentSlot.FEET, ItemKeys.LEATHER_BOOTS
         ));
         map.put(1, Map.of(
+            EquipmentSlot.HEAD, ItemKeys.COPPER_HELMET,
+            EquipmentSlot.CHEST, ItemKeys.COPPER_CHESTPLATE,
+            EquipmentSlot.LEGS, ItemKeys.COPPER_LEGGINGS,
+            EquipmentSlot.FEET, ItemKeys.COPPER_BOOTS
+        ));
+        map.put(2, Map.of(
             EquipmentSlot.HEAD, ItemKeys.GOLDEN_HELMET,
             EquipmentSlot.CHEST, ItemKeys.GOLDEN_CHESTPLATE,
             EquipmentSlot.LEGS, ItemKeys.GOLDEN_LEGGINGS,
             EquipmentSlot.FEET, ItemKeys.GOLDEN_BOOTS
         ));
-        map.put(2, Map.of(
+        map.put(3, Map.of(
             EquipmentSlot.HEAD, ItemKeys.CHAINMAIL_HELMET,
             EquipmentSlot.CHEST, ItemKeys.CHAINMAIL_CHESTPLATE,
             EquipmentSlot.LEGS, ItemKeys.CHAINMAIL_LEGGINGS,
             EquipmentSlot.FEET, ItemKeys.CHAINMAIL_BOOTS
         ));
-        map.put(3, Map.of(
+        map.put(4, Map.of(
             EquipmentSlot.HEAD, ItemKeys.IRON_HELMET,
             EquipmentSlot.CHEST, ItemKeys.IRON_CHESTPLATE,
             EquipmentSlot.LEGS, ItemKeys.IRON_LEGGINGS,
             EquipmentSlot.FEET, ItemKeys.IRON_BOOTS
         ));
-        map.put(4, Map.of(
+        map.put(5, Map.of(
             EquipmentSlot.HEAD, ItemKeys.DIAMOND_HELMET,
             EquipmentSlot.CHEST, ItemKeys.DIAMOND_CHESTPLATE,
             EquipmentSlot.LEGS, ItemKeys.DIAMOND_LEGGINGS,
