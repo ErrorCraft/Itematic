@@ -10,7 +10,7 @@ accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternat
 accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternativesWidget$AlternativeButtonWidget$InputSlot
 accessible    class    net/minecraft/predicate/StatePredicate$Condition
 accessible    class    net/minecraft/predicate/StatePredicate$RangedValueMatcher
-accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry$class_11775
+accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry$ItemStackInSlotWidget
 
 inject-interface    net/minecraft/util/DyeColor    net/errorcraft/itematic/access/util/DyeColorAccess
 inject-interface    net/minecraft/item/tooltip/BundleTooltipData    net/errorcraft/itematic/access/item/tooltip/BundleTooltipDataAccess

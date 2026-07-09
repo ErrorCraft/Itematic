@@ -1,0 +1,26 @@
+package net.errorcraft.itematic.predicate;
+
+import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.mixin.predicate.NumberRangeAccessor;
+import net.minecraft.predicate.NumberRange;
+
+public class NumberRanges {
+    private NumberRanges() {}
+
+    public record FloatRange(Bounds<Float> bounds) implements NumberRange<Float> {
+        public static final Codec<FloatRange> CODEC = NumberRangeAccessor.BoundsAccessor.createCodec(Codec.FLOAT)
+            .xmap(FloatRange::new, FloatRange::bounds);
+
+        public static FloatRange exactly(float value) {
+            return new FloatRange(Bounds.exactly(value));
+        }
+
+        public boolean test(float value) {
+            if (this.bounds.min().isPresent() && this.bounds.min().get() > value) {
+                return false;
+            }
+
+            return this.bounds.max().isEmpty() || value <= this.bounds.max().get();
+        }
+    }
+}

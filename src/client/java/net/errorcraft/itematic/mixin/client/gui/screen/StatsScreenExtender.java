@@ -324,7 +324,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             @Shadow
             @Final
             @Mutable
-            private StatsScreen.ItemStatsListWidget.Entry.class_11775 field_62169;
+            private StatsScreen.ItemStatsListWidget.Entry.ItemStackInSlotWidget field_62169;
 
             @Unique
             private RegistryEntry<Item> entry;
