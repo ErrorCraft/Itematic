@@ -137,7 +137,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
         ActionContext context = ActionContext.builder(world)
             .stackExchanger(shooter, stack)
             .add(LootContextParameters.THIS_ENTITY, shooter)
-            .add(LootContextParameters.ORIGIN, shooter.getPos())
+            .add(LootContextParameters.ORIGIN, shooter.getEntityPos())
             .add(LootContextParameters.TOOL, stack)
             .add(ItematicContextParameters.HAND, hand)
             .build();

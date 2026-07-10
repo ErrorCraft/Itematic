@@ -56,7 +56,7 @@ public abstract class MerchantEntityExtender extends MobEntityExtender {
 
         LootWorldContext set = new LootWorldContext.Builder(world)
             .add(LootContextParameters.THIS_ENTITY, this)
-            .add(LootContextParameters.ORIGIN, this.getPos())
+            .add(LootContextParameters.ORIGIN, this.getEntityPos())
             .build(ItematicContextTypes.TRADE);
         LootContext context = new LootContext.Builder(set).build(Optional.empty());
         this.fillRecipes(context);

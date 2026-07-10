@@ -118,7 +118,7 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
         world.spawnEntityAndPassengers(entity);
         ActionContext spawnedActionContext = spawnActionContext.extend()
             .add(ItematicContextParameters.SPAWNED_ENTITY, entity)
-            .add(ItematicContextParameters.SPAWNED_POSITION, entity.getPos())
+            .add(ItematicContextParameters.SPAWNED_POSITION, entity.getEntityPos())
             .build();
         this.spawned(entity, world, spawnedActionContext);
         return entity;
@@ -152,7 +152,7 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
     private void spawned(Entity entity, World world, ActionContext spawnedContext) {
         this.spawnSound.ifPresent(spawnSound -> world.itematic$playSound(
             null,
-            entity.getPos(),
+            entity.getEntityPos(),
             spawnSound.value(),
             SoundCategory.BLOCKS,
             0.75f,
@@ -161,7 +161,7 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
         world.emitGameEvent(
             spawnedContext.get(LootContextParameters.THIS_ENTITY),
             GameEvent.ENTITY_PLACE,
-            entity.getPos()
+            entity.getEntityPos()
         );
         spawnedContext.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
             .itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, spawnedContext);

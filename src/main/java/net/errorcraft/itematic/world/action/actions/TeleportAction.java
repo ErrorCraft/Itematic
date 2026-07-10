@@ -48,7 +48,7 @@ public record TeleportAction(int distance, LootContext.EntityReference entity) i
     }
 
     private boolean teleport(LivingEntity target, ServerWorld world) {
-        Vec3d position = target.getPos();
+        Vec3d position = target.getEntityPos();
         for (int i = 0; i < MAX_TELEPORT_ATTEMPTS; i++) {
             double newX = position.getX() + (target.getRandom().nextDouble() - 0.5d) * this.distance;
             double newY = Math.clamp(

@@ -242,7 +242,7 @@ public record EntityItemComponent(EntitySpawner entity, boolean allowSpawnerModi
         ActionContext actionContext = ActionContext.builder(world)
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParameters.THIS_ENTITY, context.getPlayer())
-            .addOptional(LootContextParameters.ORIGIN, context.getPlayer(), Entity::getPos)
+            .addOptional(LootContextParameters.ORIGIN, context.getPlayer(), Entity::getEntityPos)
             .add(ItematicContextParameters.INTERACTED_POSITION, context.getBlockPos().toCenterPos())
             .add(LootContextParameters.TOOL, context.getStack())
             .add(ItematicContextParameters.HAND, context.getHand())
