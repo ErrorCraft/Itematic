@@ -1,0 +1,40 @@
+{
+  "behavior": {
+    "minecraft:damageable": {
+      "durability": 190
+    },
+    "minecraft:enchantable": {
+      "enchantability": 13
+    },
+    "minecraft:repairable": {
+      "items": "#minecraft:copper_tool_materials"
+    },
+    "minecraft:stackable": 1,
+    "minecraft:tool": {
+      "can_destroy_blocks_in_creative": false,
+      "damage_per_block": 2,
+      "rules": [
+        {
+          "blocks": "minecraft:cobweb",
+          "correct_for_drops": true,
+          "speed": 15.0
+        },
+        {
+          "blocks": "#minecraft:sword_efficient",
+          "speed": 1.5
+        }
+      ]
+    },
+    "minecraft:weapon": {
+      "attack_damage": {
+        "default_damage": 5.0,
+        "rules": []
+      },
+      "attack_speed": 0.4
+    }
+  },
+  "display": {
+    "model": "minecraft:copper_sword",
+    "translation_key": "item.minecraft.copper_sword"
+  }
+}

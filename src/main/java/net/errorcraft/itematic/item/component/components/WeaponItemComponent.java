@@ -72,16 +72,16 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
             DUMMY.postHit(stack, target, attacker);
         }
 
-        if (!(attacker.getWorld() instanceof ServerWorld serverWorld)) {
+        if (!(attacker.getEntityWorld() instanceof ServerWorld serverWorld)) {
             return;
         }
 
         ActionContext context = ActionContext.builder(serverWorld)
             .stackExchanger(stackExchanger)
             .add(LootContextParameters.THIS_ENTITY, attacker)
-            .add(LootContextParameters.ORIGIN, attacker.getPos())
-            .add(ItematicContextParameters.TARGET_ENTITY, target)
-            .add(ItematicContextParameters.INTERACTED_POSITION, target.getPos())
+            .add(LootContextParameters.ORIGIN, attacker.getEntityPos())
+            .add(LootContextParameters.TARGET_ENTITY, target)
+            .add(ItematicContextParameters.INTERACTED_POSITION, target.getEntityPos())
             .add(LootContextParameters.TOOL, stack)
             .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
             .build();

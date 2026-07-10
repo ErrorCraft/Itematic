@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.mixin.client.world;
 
 import net.errorcraft.itematic.item.ItemKeys;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.client.world.WorldEventHandler;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 public class WorldEventHandlerExtender {
     @Shadow
     @Final
-    private World world;
+    private ClientWorld world;
 
     @Redirect(
         method = "processWorldEvent",

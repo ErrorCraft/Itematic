@@ -1,0 +1,35 @@
+{
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:armor.helmet",
+      "type": "minecraft:armor",
+      "amount": 2.0,
+      "operation": "add_value",
+      "slot": "head"
+    }
+  ],
+  "behavior": {
+    "minecraft:damageable": {
+      "durability": 121
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:equip_entity"
+    },
+    "minecraft:enchantable": {
+      "enchantability": 8
+    },
+    "minecraft:equipment": {
+      "asset_id": "minecraft:copper",
+      "equip_sound": "minecraft:item.armor.equip_copper",
+      "slot": "head"
+    },
+    "minecraft:repairable": {
+      "items": "#minecraft:repairs_copper_armor"
+    },
+    "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:copper_helmet",
+    "translation_key": "item.minecraft.copper_helmet"
+  }
+}

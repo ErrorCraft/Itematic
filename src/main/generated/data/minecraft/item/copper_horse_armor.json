@@ -1,0 +1,30 @@
+{
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:armor.body",
+      "type": "minecraft:armor",
+      "amount": 4.0,
+      "operation": "add_value",
+      "slot": "body"
+    }
+  ],
+  "behavior": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:equip_entity"
+    },
+    "minecraft:equipment": {
+      "allowed_entities": "#minecraft:can_wear_horse_armor",
+      "asset_id": "minecraft:copper",
+      "can_be_sheared": true,
+      "damage_on_hurt": false,
+      "equip_sound": "minecraft:entity.horse.armor",
+      "shearing_sound": "minecraft:item.horse_armor.unequip",
+      "slot": "body"
+    },
+    "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:copper_horse_armor",
+    "translation_key": "item.minecraft.copper_horse_armor"
+  }
+}

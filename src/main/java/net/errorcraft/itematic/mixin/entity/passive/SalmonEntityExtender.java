@@ -29,7 +29,7 @@ public abstract class SalmonEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForSalmonBucketUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.SALMON_BUCKET);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.SALMON_BUCKET);
     }
 
     @Override

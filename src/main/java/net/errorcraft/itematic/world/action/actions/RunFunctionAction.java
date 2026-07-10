@@ -18,10 +18,10 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import java.util.Optional;
 
-public record RunFunctionAction(Identifier function, Optional<LootContext.EntityTarget> entity, Optional<PositionTarget> position) implements Action<RunFunctionAction> {
+public record RunFunctionAction(Identifier function, Optional<LootContext.EntityReference> entity, Optional<PositionTarget> position) implements Action<RunFunctionAction> {
     public static final MapCodec<RunFunctionAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Identifier.CODEC.fieldOf("function").forGetter(RunFunctionAction::function),
-        LootContext.EntityTarget.CODEC.optionalFieldOf("entity").forGetter(RunFunctionAction::entity),
+        LootContext.EntityReference.CODEC.optionalFieldOf("entity").forGetter(RunFunctionAction::entity),
         PositionTarget.CODEC.optionalFieldOf("position").forGetter(RunFunctionAction::position)
     ).apply(instance, RunFunctionAction::new));
 

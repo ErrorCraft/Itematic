@@ -30,7 +30,7 @@ public class InputSlotFillerExtender<R extends Recipe<?>> {
         )
     )
     private static RecipeFinder recipeFinderSetWorld(RecipeFinder original, @Local(argsOnly = true) PlayerInventory inventory) {
-        ((RecipeFinderAccess) original).itematic$setWorld(inventory.player.getWorld());
+        ((RecipeFinderAccess) original).itematic$setWorld(inventory.player.getEntityWorld());
         return original;
     }
 
@@ -42,6 +42,6 @@ public class InputSlotFillerExtender<R extends Recipe<?>> {
         )
     )
     private IngredientPlacement getIngredientPlacementUseDynamicRegistry(R instance) {
-        return ((RecipeAccess) instance).itematic$ingredientPlacement(this.inventory.player.getWorld().getRegistryManager().getOrThrow(RegistryKeys.ITEM));
+        return ((RecipeAccess) instance).itematic$ingredientPlacement(this.inventory.player.getRegistryManager().getOrThrow(RegistryKeys.ITEM));
     }
 }

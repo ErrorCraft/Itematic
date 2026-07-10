@@ -12,12 +12,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.util.Hand;
 
-public record SwingHandAction(LootContext.EntityTarget entity) implements Action<SwingHandAction> {
+public record SwingHandAction(LootContext.EntityReference entity) implements Action<SwingHandAction> {
     public static final MapCodec<SwingHandAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(SwingHandAction::entity)
+        LootContext.EntityReference.CODEC.fieldOf("entity").forGetter(SwingHandAction::entity)
     ).apply(instance, SwingHandAction::new));
 
-    public static SwingHandAction of(LootContext.EntityTarget entity) {
+    public static SwingHandAction of(LootContext.EntityReference entity) {
         return new SwingHandAction(entity);
     }
 

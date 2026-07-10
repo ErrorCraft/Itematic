@@ -1,0 +1,42 @@
+{
+  "behavior": {
+    "minecraft:damageable": {
+      "durability": 190
+    },
+    "minecraft:enchantable": {
+      "enchantability": 13
+    },
+    "minecraft:repairable": {
+      "items": "#minecraft:copper_tool_materials"
+    },
+    "minecraft:stackable": 1,
+    "minecraft:tool": {
+      "rules": [
+        {
+          "blocks": "#minecraft:incorrect_for_copper_tool",
+          "correct_for_drops": false
+        },
+        {
+          "blocks": "#minecraft:mineable/hoe",
+          "correct_for_drops": true,
+          "speed": 5.0
+        }
+      ]
+    },
+    "minecraft:weapon": {
+      "attack_damage": {
+        "default_damage": 3.0,
+        "rules": []
+      },
+      "attack_speed": 0.5,
+      "item_damage_per_attack": 2
+    }
+  },
+  "display": {
+    "model": "minecraft:copper_hoe",
+    "translation_key": "item.minecraft.copper_hoe"
+  },
+  "events": {
+    "minecraft:use_on_block": "minecraft:use_hoe_on_block"
+  }
+}

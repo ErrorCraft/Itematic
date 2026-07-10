@@ -58,7 +58,7 @@ public record ProjectileItemComponent(EntitySpawner entity) implements ItemCompo
             .stackExchanger(user, stack)
             .add(LootContextParameters.TOOL, stack)
             .add(LootContextParameters.THIS_ENTITY, user)
-            .add(LootContextParameters.ORIGIN, user.getPos())
+            .add(LootContextParameters.ORIGIN, user.getEntityPos())
             .add(ItematicContextParameters.INTERACTED_POSITION, user.getEyePos().add(0.0d, -0.1d, 0.0d))
             .build();
         return this.spawnEntity(context, PositionTarget.INTERACTED, angleOffset, speed, 1.0f);

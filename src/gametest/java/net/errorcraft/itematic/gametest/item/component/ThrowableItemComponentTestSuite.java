@@ -134,7 +134,7 @@ public class ThrowableItemComponentTestSuite {
         ItemStack trident = world.itematic$createStack(ItemKeys.TRIDENT);
         int minDrawDuration = TestUtil.getItemBehavior(context, trident, ItemComponentTypes.THROWABLE)
             .drawDuration()
-            .flatMap(NumberRange.IntRange::min)
+            .flatMap(NumberRange::getMin)
             .orElseThrow(() -> context.createError(Text.literal("Trident does not have a minimum draw duration")));
         PlayerEntity player = TestUtil.createMockPlayer(context, GameMode.SURVIVAL, SPAWN_POSITION);
         player.setStackInHand(Hand.MAIN_HAND, trident);

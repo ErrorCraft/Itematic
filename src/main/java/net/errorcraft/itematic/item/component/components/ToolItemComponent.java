@@ -83,7 +83,7 @@ public record ToolItemComponent(ToolComponent tool) implements ItemComponent<Too
         ActionContext context = ActionContext.builder(serverWorld)
             .stackExchanger(stackExchanger)
             .add(LootContextParameters.THIS_ENTITY, miner)
-            .add(LootContextParameters.ORIGIN, miner.getPos())
+            .add(LootContextParameters.ORIGIN, miner.getEntityPos())
             .add(ItematicContextParameters.INTERACTED_POSITION, pos.toCenterPos())
             .add(LootContextParameters.TOOL, stack)
             .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)

@@ -1,0 +1,9 @@
+{
+  "behavior": {
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:copper_nugget",
+    "translation_key": "item.minecraft.copper_nugget"
+  }
+}

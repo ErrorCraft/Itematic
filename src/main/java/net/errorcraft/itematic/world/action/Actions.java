@@ -62,7 +62,7 @@ public class Actions {
             PassingSequenceHandler.builder()
                 .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_HOE_ON_BLOCK)))
                 .add(DamageItemAction.of(1))
-                .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                .add(SwingHandAction.of(LootContext.EntityReference.THIS))
                 .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.HOE_TILL), SoundCategory.BLOCKS))
         ));
         registerable.register(TILL_DIRT, ActionEntry.of(
@@ -91,7 +91,7 @@ public class Actions {
             PassingSequenceHandler.builder()
                 .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_SHOVEL_ON_BLOCK)))
                 .add(DamageItemAction.of(1))
-                .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                .add(SwingHandAction.of(LootContext.EntityReference.THIS))
         ));
         registerable.register(FLATTEN_GROUND, ActionEntry.of(
             setBlockConditions(blocks, builder -> builder.tag(blocks, ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)),
@@ -165,7 +165,7 @@ public class Actions {
                             .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundCategory.BLOCKS))
                     )
                     .add(PlaceBlockAction.of(blocks.getOrThrow(BlockKeys.FIRE), PositionTarget.INTERACTED)))
-                .addOptional(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                .addOptional(SwingHandAction.of(LootContext.EntityReference.THIS))
         ));
     }
 
@@ -187,10 +187,10 @@ public class Actions {
             ),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(pottedBlock)))
-                .add(InvokeGameEventAction.of(GameEvent.BLOCK_CHANGE, PositionTarget.INTERACTED, LootContext.EntityTarget.THIS))
-                .add(IncrementStatAction.of(LootContext.EntityTarget.THIS, Stats.CUSTOM.getOrCreateStat(Stats.POT_FLOWER)))
+                .add(InvokeGameEventAction.of(GameEvent.BLOCK_CHANGE, PositionTarget.INTERACTED, LootContext.EntityReference.THIS))
+                .add(IncrementStatAction.of(LootContext.EntityReference.THIS, Stats.CUSTOM.getOrCreateStat(Stats.POT_FLOWER)))
                 .add(DecrementItemAction.of(1))
-                .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                .add(SwingHandAction.of(LootContext.EntityReference.THIS))
         );
     }
 
@@ -205,7 +205,7 @@ public class Actions {
             PassingSequenceHandler.builder()
                 .add(action)
                 .add(DecrementItemAction.of(1))
-                .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                .add(SwingHandAction.of(LootContext.EntityReference.THIS))
         );
     }
 

@@ -43,7 +43,7 @@ public class FarmerWorkTaskExtender {
         )
     )
     private ItemStack newItemStackForBreadUseCreateStack(ItemConvertible item, int count, @Local(argsOnly = true) VillagerEntity villager) {
-        return villager.getWorld().itematic$createStack(ItemKeys.BREAD, count);
+        return villager.getEntityWorld().itematic$createStack(ItemKeys.BREAD, count);
     }
 
     @Redirect(
@@ -66,6 +66,6 @@ public class FarmerWorkTaskExtender {
         )
     )
     private Item getWheatUseDynamicRegistry(@Local(argsOnly = true) VillagerEntity entity) {
-        return entity.getWorld().itematic$getItem(ItemKeys.WHEAT).value();
+        return entity.getEntityWorld().itematic$getItem(ItemKeys.WHEAT).value();
     }
 }

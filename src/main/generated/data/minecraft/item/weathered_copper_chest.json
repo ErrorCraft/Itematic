@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:weathered_copper_chest"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:weathered_copper_chest",
+    "translation_key": "block.minecraft.weathered_copper_chest"
+  }
+}

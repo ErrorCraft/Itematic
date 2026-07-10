@@ -242,7 +242,7 @@ public record EntityItemComponent(EntitySpawner entity, boolean allowSpawnerModi
         ActionContext actionContext = ActionContext.builder(world)
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParameters.THIS_ENTITY, context.getPlayer())
-            .addOptional(LootContextParameters.ORIGIN, context.getPlayer(), Entity::getPos)
+            .addOptional(LootContextParameters.ORIGIN, context.getPlayer(), Entity::getEntityPos)
             .add(ItematicContextParameters.INTERACTED_POSITION, context.getBlockPos().toCenterPos())
             .add(LootContextParameters.TOOL, context.getStack())
             .add(ItematicContextParameters.HAND, context.getHand())
@@ -273,10 +273,7 @@ public record EntityItemComponent(EntitySpawner entity, boolean allowSpawnerModi
     }
 
     private void modifySpawner(ItemUsageContext context, World world, MobSpawnerBlockEntity blockEntity, BlockPos pos, BlockState state) {
-        EntityType<?> type = this.entity.entityType(
-            context.getStack(),
-            context.getWorld().getRegistryManager()
-        );
+        EntityType<?> type = this.entity.entityType(context.getStack());
         blockEntity.setEntityType(type, world.getRandom());
         blockEntity.markDirty();
         world.updateListeners(pos, state, state, Block.NOTIFY_ALL);

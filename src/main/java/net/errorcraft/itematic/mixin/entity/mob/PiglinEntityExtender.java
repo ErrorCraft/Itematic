@@ -25,17 +25,6 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
     }
 
     @Redirect(
-        method = "dropEquipment",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack newItemStackForPiglinHeadUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.PIGLIN_HEAD);
-    }
-
-    @Redirect(
         method = "makeInitialWeapon",
         at = @At(
             value = "NEW",
@@ -44,7 +33,7 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         )
     )
     private ItemStack newItemStackForCrossbowUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.CROSSBOW);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.CROSSBOW);
     }
 
     @Redirect(
@@ -62,7 +51,7 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         )
     )
     private ItemStack newItemStackForGoldenSwordUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
     }
 
     @Redirect(
@@ -103,7 +92,7 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         )
     )
     private ItemStack newItemStackForGoldenHelmetUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_HELMET);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_HELMET);
     }
 
     @Redirect(
@@ -122,7 +111,7 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         )
     )
     private ItemStack newItemStackForGoldenChestplateUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_CHESTPLATE);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_CHESTPLATE);
     }
 
     @Redirect(
@@ -141,7 +130,7 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         )
     )
     private ItemStack newItemStackForGoldenLeggingsUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_LEGGINGS);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_LEGGINGS);
     }
 
     @Redirect(
@@ -160,7 +149,7 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         )
     )
     private ItemStack newItemStackForGoldenBootsUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_BOOTS);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_BOOTS);
     }
 
     @Override

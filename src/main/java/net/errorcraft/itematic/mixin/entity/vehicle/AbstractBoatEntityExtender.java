@@ -42,7 +42,7 @@ public abstract class AbstractBoatEntityExtender extends VehicleEntityExtender {
         )
     )
     private ItemStack newItemStackUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(this.itemKey);
+        return this.getEntityWorld().itematic$createStack(this.itemKey);
     }
 
     @Override

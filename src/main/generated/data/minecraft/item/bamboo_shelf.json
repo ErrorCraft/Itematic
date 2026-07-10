@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:bamboo_shelf"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:bamboo_shelf",
+    "translation_key": "block.minecraft.bamboo_shelf"
+  }
+}

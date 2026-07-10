@@ -46,7 +46,7 @@ public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemC
         ActionContext actionContext = ActionContext.builder(world)
             .possibleStackExchanger(player, stack)
             .addOptional(LootContextParameters.THIS_ENTITY, player)
-            .addOptional(LootContextParameters.ORIGIN, player, Entity::getPos)
+            .addOptional(LootContextParameters.ORIGIN, player, Entity::getEntityPos)
             .add(ItematicContextParameters.INTERACTED_POSITION, context.getBlockPos().toCenterPos())
             .add(LootContextParameters.TOOL, stack)
             .build();

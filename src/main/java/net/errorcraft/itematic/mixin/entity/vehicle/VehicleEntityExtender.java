@@ -28,7 +28,7 @@ public abstract class VehicleEntityExtender extends Entity {
         )
     )
     private ItemStack newItemStackUseRegistryEntry(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(this.asItemKey());
+        return this.getEntityWorld().itematic$createStack(this.asItemKey());
     }
 
     @Unique

@@ -56,7 +56,7 @@ public class CastableItemComponent implements ItemComponent<CastableItemComponen
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.ORIGIN, user.getEntityPos())
                 .add(LootContextParameters.TOOL, stack)
                 .build();
             stack.itematic$damage(user.fishHook.use(stack), context);

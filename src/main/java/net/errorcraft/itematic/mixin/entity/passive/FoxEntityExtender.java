@@ -33,7 +33,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForEmeraldUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.EMERALD);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.EMERALD);
     }
 
     @Redirect(
@@ -45,7 +45,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForEggUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.EGG);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.EGG);
     }
 
     @Redirect(
@@ -63,7 +63,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForRabbitFootUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.RABBIT_FOOT);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.RABBIT_FOOT);
     }
 
     @Redirect(
@@ -81,7 +81,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForRabbitHideUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.RABBIT_HIDE);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.RABBIT_HIDE);
     }
 
     @Redirect(
@@ -99,7 +99,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForWheatUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.WHEAT);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.WHEAT);
     }
 
     @Redirect(
@@ -117,7 +117,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForLeatherUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.LEATHER);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.LEATHER);
     }
 
     @Redirect(
@@ -135,7 +135,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForFeatherUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.FEATHER);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.FEATHER);
     }
 
     @Override
@@ -158,7 +158,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
             )
         )
         private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemConvertible item) {
-            return this.field_17975.getWorld().itematic$createStack(ItemKeys.SWEET_BERRIES);
+            return this.field_17975.getEntityWorld().itematic$createStack(ItemKeys.SWEET_BERRIES);
         }
 
         @Redirect(
@@ -176,7 +176,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
             )
         )
         private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemConvertible item, int count) {
-            return this.field_17975.getWorld().itematic$createStack(ItemKeys.SWEET_BERRIES, count);
+            return this.field_17975.getEntityWorld().itematic$createStack(ItemKeys.SWEET_BERRIES, count);
         }
     }
 }

@@ -29,7 +29,7 @@ public abstract class CodEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForCodBucketUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.COD_BUCKET);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.COD_BUCKET);
     }
 
     @Override

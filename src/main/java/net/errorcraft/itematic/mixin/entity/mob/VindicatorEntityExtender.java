@@ -21,14 +21,17 @@ public abstract class VindicatorEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = { "initEquipment", "addBonusForWave" },
+        method = {
+            "initEquipment",
+            "addBonusForWave"
+        },
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
     private ItemStack newItemStackForIronAxeUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.IRON_AXE);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_AXE);
     }
 
     @Override

@@ -47,6 +47,51 @@
     },
     {
       "type": "stack",
+      "item": "minecraft:test_instance_block",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "components": {
+        "minecraft:block_state": {
+          "mode": "start"
+        }
+      },
+      "item": "minecraft:test_block",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "components": {
+        "minecraft:block_state": {
+          "mode": "log"
+        }
+      },
+      "item": "minecraft:test_block",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "components": {
+        "minecraft:block_state": {
+          "mode": "fail"
+        }
+      },
+      "item": "minecraft:test_block",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
+      "components": {
+        "minecraft:block_state": {
+          "mode": "accept"
+        }
+      },
+      "item": "minecraft:test_block",
+      "requires_permissions": true
+    },
+    {
+      "type": "stack",
       "components": {
         "minecraft:block_state": {
           "level": "15"

@@ -25,6 +25,6 @@ public class GlowItemFrameEntityExtender extends ItemFrameEntity {
         )
     )
     private ItemStack newItemStackForGlowItemFrameUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.GLOW_ITEM_FRAME);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.GLOW_ITEM_FRAME);
     }
 }

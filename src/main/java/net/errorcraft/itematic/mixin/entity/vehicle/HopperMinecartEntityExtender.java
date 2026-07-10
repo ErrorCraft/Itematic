@@ -26,7 +26,7 @@ public abstract class HopperMinecartEntityExtender extends VehicleEntityExtender
         )
     )
     private ItemStack newItemStackForHopperMinecartUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.HOPPER_MINECART);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.HOPPER_MINECART);
     }
 
     @Override

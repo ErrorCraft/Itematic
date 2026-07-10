@@ -28,7 +28,7 @@ public abstract class PiglinBruteEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForGoldenAxeUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_AXE);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_AXE);
     }
 
     @Redirect(

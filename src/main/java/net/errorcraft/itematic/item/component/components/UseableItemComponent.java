@@ -76,7 +76,7 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
             return ItemResult.PASS;
         }
 
-        return tryStartUsing(user.getWorld(), user, hand, stack);
+        return tryStartUsing(user.getEntityWorld(), user, hand, stack);
     }
 
     private static ItemResult tryStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
