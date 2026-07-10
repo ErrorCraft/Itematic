@@ -126,7 +126,7 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.ORIGIN, user.getEntityPos())
                 .add(LootContextParameters.TOOL, stack)
                 .add(ItematicContextParameters.HAND, hand)
                 .build();

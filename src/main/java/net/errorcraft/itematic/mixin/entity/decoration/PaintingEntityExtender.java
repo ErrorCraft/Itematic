@@ -38,6 +38,6 @@ public abstract class PaintingEntityExtender extends AbstractDecorationEntity {
         )
     )
     private ItemStack newItemStackForPaintingUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.PAINTING);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.PAINTING);
     }
 }

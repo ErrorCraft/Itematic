@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:weathered_lightning_rod"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:weathered_lightning_rod",
+    "translation_key": "block.minecraft.weathered_lightning_rod"
+  }
+}

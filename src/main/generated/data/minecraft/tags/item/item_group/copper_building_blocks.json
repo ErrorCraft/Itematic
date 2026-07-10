@@ -6,8 +6,10 @@
     "minecraft:cut_copper",
     "minecraft:cut_copper_stairs",
     "minecraft:cut_copper_slab",
+    "minecraft:copper_bars",
     "minecraft:copper_door",
     "minecraft:copper_trapdoor",
-    "minecraft:copper_bulb"
+    "minecraft:copper_bulb",
+    "minecraft:copper_chain"
   ]
 }

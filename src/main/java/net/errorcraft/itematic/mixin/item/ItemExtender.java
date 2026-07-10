@@ -158,7 +158,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.ORIGIN, user.getEntityPos())
                 .add(LootContextParameters.TOOL, stack)
                 .add(ItematicContextParameters.HAND, hand)
                 .build();
@@ -193,7 +193,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             ActionContext actionContext = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .addOptional(LootContextParameters.THIS_ENTITY, context.getPlayer())
-                .addOptional(LootContextParameters.ORIGIN, context.getPlayer(), Entity::getPos)
+                .addOptional(LootContextParameters.ORIGIN, context.getPlayer(), Entity::getEntityPos)
                 .add(ItematicContextParameters.INTERACTED_POSITION, context.getBlockPos().toCenterPos())
                 .add(LootContextParameters.TOOL, stack)
                 .add(ItematicContextParameters.HAND, context.getHand())
@@ -226,13 +226,13 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             result = result.max(newResult);
         }
 
-        if (user.getWorld() instanceof ServerWorld serverWorld) {
+        if (user.getEntityWorld() instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getPos())
-                .add(ItematicContextParameters.TARGET_ENTITY, entity)
-                .add(ItematicContextParameters.INTERACTED_POSITION, entity.getPos())
+                .add(LootContextParameters.ORIGIN, user.getEntityPos())
+                .add(LootContextParameters.TARGET_ENTITY, entity)
+                .add(ItematicContextParameters.INTERACTED_POSITION, entity.getEntityPos())
                 .add(LootContextParameters.TOOL, stack)
                 .add(ItematicContextParameters.HAND, hand)
                 .build();
@@ -261,13 +261,13 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             component.postHit(stack, target, attacker, stackExchanger);
         }
 
-        if (attacker.getWorld() instanceof ServerWorld serverWorld) {
+        if (attacker.getEntityWorld() instanceof ServerWorld serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, attacker)
-                .add(LootContextParameters.ORIGIN, attacker.getPos())
-                .add(ItematicContextParameters.TARGET_ENTITY, target)
-                .add(ItematicContextParameters.INTERACTED_POSITION, target.getPos())
+                .add(LootContextParameters.ORIGIN, attacker.getEntityPos())
+                .add(LootContextParameters.TARGET_ENTITY, target)
+                .add(ItematicContextParameters.INTERACTED_POSITION, target.getEntityPos())
                 .add(LootContextParameters.TOOL, stack)
                 .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
                 .build();
@@ -293,7 +293,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, miner)
-                .add(LootContextParameters.ORIGIN, miner.getPos())
+                .add(LootContextParameters.ORIGIN, miner.getEntityPos())
                 .add(ItematicContextParameters.INTERACTED_POSITION, pos.toCenterPos())
                 .add(LootContextParameters.TOOL, stack)
                 .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
@@ -345,7 +345,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.ORIGIN, user.getEntityPos())
                 .add(LootContextParameters.TOOL, stack)
                 .add(ItematicContextParameters.HAND, user.getActiveHand())
                 .build();
@@ -372,7 +372,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.ORIGIN, user.getEntityPos())
                 .add(LootContextParameters.TOOL, stack)
                 .add(ItematicContextParameters.HAND, user.getActiveHand())
                 .build();

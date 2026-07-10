@@ -99,7 +99,7 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
         return VillagerEntityUtil.ITEM_FOOD_POINTS.entrySet()
             .stream()
             .map(entry -> {
-                Item item = this.getWorld().itematic$getItem(entry.getKey()).value();
+                Item item = this.getEntityWorld().itematic$getItem(entry.getKey()).value();
                 return new AbstractMap.SimpleImmutableEntry<>(item, entry.getValue());
             });
     }

@@ -15,12 +15,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 
-public record ApplySuspiciousStewEffectsFromItemAction(LootContext.EntityTarget entity) implements Action<ApplySuspiciousStewEffectsFromItemAction> {
+public record ApplySuspiciousStewEffectsFromItemAction(LootContext.EntityReference entity) implements Action<ApplySuspiciousStewEffectsFromItemAction> {
     public static final MapCodec<ApplySuspiciousStewEffectsFromItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(ApplySuspiciousStewEffectsFromItemAction::entity)
+        LootContext.EntityReference.CODEC.fieldOf("entity").forGetter(ApplySuspiciousStewEffectsFromItemAction::entity)
     ).apply(instance, ApplySuspiciousStewEffectsFromItemAction::new));
 
-    public static ApplySuspiciousStewEffectsFromItemAction of(LootContext.EntityTarget entity) {
+    public static ApplySuspiciousStewEffectsFromItemAction of(LootContext.EntityReference entity) {
         return new ApplySuspiciousStewEffectsFromItemAction(entity);
     }
 

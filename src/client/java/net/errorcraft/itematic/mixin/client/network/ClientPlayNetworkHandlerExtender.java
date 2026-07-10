@@ -62,7 +62,7 @@ public abstract class ClientPlayNetworkHandlerExtender extends ClientCommonNetwo
         )
     )
     private static ItemStack newItemStackForTotemOfUndyingUseCreateStack(ItemConvertible item, PlayerEntity player) {
-        return player.getWorld().itematic$createStack(ItemKeys.TOTEM_OF_UNDYING);
+        return player.getEntityWorld().itematic$createStack(ItemKeys.TOTEM_OF_UNDYING);
     }
 
     @Override

@@ -1,0 +1,35 @@
+{
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:armor.leggings",
+      "type": "minecraft:armor",
+      "amount": 3.0,
+      "operation": "add_value",
+      "slot": "legs"
+    }
+  ],
+  "behavior": {
+    "minecraft:damageable": {
+      "durability": 165
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:equip_entity"
+    },
+    "minecraft:enchantable": {
+      "enchantability": 8
+    },
+    "minecraft:equipment": {
+      "asset_id": "minecraft:copper",
+      "equip_sound": "minecraft:item.armor.equip_copper",
+      "slot": "legs"
+    },
+    "minecraft:repairable": {
+      "items": "#minecraft:repairs_copper_armor"
+    },
+    "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:copper_leggings",
+    "translation_key": "item.minecraft.copper_leggings"
+  }
+}

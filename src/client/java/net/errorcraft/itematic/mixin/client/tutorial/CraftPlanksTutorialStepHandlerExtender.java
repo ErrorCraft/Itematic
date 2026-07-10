@@ -23,7 +23,7 @@ public class CraftPlanksTutorialStepHandlerExtender {
         )
     )
     private static Iterable<RegistryEntry<Item>> iterateEntriesUseDynamicRegistry(DefaultedRegistry<Item> instance, TagKey<Item> tag, ClientPlayerEntity player) {
-        return player.getWorld()
+        return player.getEntityWorld()
             .itematic$getItemAccess()
             .iterateEntries(tag);
     }

@@ -54,7 +54,7 @@ public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int dam
         ActionContext context = ActionContext.builder((ServerWorld) world)
             .stackExchanger(stackExchanger)
             .add(LootContextParameters.THIS_ENTITY, user)
-            .add(LootContextParameters.ORIGIN, user.getPos())
+            .add(LootContextParameters.ORIGIN, user.getEntityPos())
             .add(LootContextParameters.TOOL, stack)
             .add(ItematicContextParameters.HAND, hand)
             .build();

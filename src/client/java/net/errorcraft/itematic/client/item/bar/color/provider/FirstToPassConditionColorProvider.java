@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.client.item.bar.color.ColorProvider;
 import net.errorcraft.itematic.client.item.bar.color.ColorProviderType;
 import net.errorcraft.itematic.client.item.bar.color.ColorProviderTypes;
-import net.errorcraft.itematic.predicate.NumberRangeUtil;
+import net.errorcraft.itematic.predicate.NumberRanges;
 import net.minecraft.util.dynamic.Codecs;
 
 import java.util.List;
@@ -44,13 +44,16 @@ public record FirstToPassConditionColorProvider(List<Entry> entries, ColorProvid
         ).apply(instance, Entry::new));
 
         public static Entry of(int color, float progress) {
-            return new Entry(new ConstantColorProvider(color), new Condition(NumberRangeUtil.FloatRange.exactly(progress)));
+            return new Entry(
+                new ConstantColorProvider(color),
+                new Condition(NumberRanges.FloatRange.exactly(progress))
+            );
         }
     }
 
-    public record Condition(NumberRangeUtil.FloatRange progress) {
+    public record Condition(NumberRanges.FloatRange progress) {
         public static final Codec<Condition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            NumberRangeUtil.FloatRange.CODEC.fieldOf("progress").forGetter(Condition::progress)
+            NumberRanges.FloatRange.CODEC.fieldOf("progress").forGetter(Condition::progress)
         ).apply(instance, Condition::new));
 
         public boolean test(float progress) {

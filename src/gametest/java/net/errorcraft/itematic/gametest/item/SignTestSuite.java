@@ -7,11 +7,10 @@ import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.TypedEntityData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
@@ -46,13 +45,18 @@ public class SignTestSuite {
     }
 
     @GameTest(structure = "itematic:item.sign.platform")
-    @SuppressWarnings("DataFlowIssue")
     public void placingSignWithBlockEntityDataDoesNotOpenSignMenu(TestContext context) {
         ServerWorld world = context.getWorld();
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         player.setPitch(90.0f);
         ItemStack oakSign = world.itematic$createStack(ItemKeys.OAK_SIGN);
-        NbtComponent.set(DataComponentTypes.BLOCK_ENTITY_DATA, oakSign, nbt -> nbt.putString(Entity.ID_KEY, Registries.BLOCK_ENTITY_TYPE.getId(BlockEntityType.SIGN).toString()));
+        oakSign.set(
+            DataComponentTypes.BLOCK_ENTITY_DATA,
+            TypedEntityData.create(
+                BlockEntityType.SIGN,
+                new NbtCompound()
+            )
+        );
         player.setStackInHand(Hand.MAIN_HAND, oakSign);
         world.spawnEntity(player);
         TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
@@ -91,13 +95,18 @@ public class SignTestSuite {
     }
 
     @GameTest(structure = "itematic:item.sign.platform.ceiling")
-    @SuppressWarnings("DataFlowIssue")
     public void placingHangingSignWithBlockEntityDataDoesNotOpenSignMenu(TestContext context) {
         ServerWorld world = context.getWorld();
         PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
         player.setPitch(-90.0f);
         ItemStack oakHangingSign = world.itematic$createStack(ItemKeys.OAK_HANGING_SIGN);
-        NbtComponent.set(DataComponentTypes.BLOCK_ENTITY_DATA, oakHangingSign, nbt -> nbt.putString(Entity.ID_KEY, Registries.BLOCK_ENTITY_TYPE.getId(BlockEntityType.SIGN).toString()));
+        oakHangingSign.set(
+            DataComponentTypes.BLOCK_ENTITY_DATA,
+            TypedEntityData.create(
+                BlockEntityType.SIGN,
+                new NbtCompound()
+            )
+        );
         player.setStackInHand(Hand.MAIN_HAND, oakHangingSign);
         world.spawnEntity(player);
         TestUtil.useBlock(context, ABOVE_PLACED_BLOCK_POSITION, player, Direction.DOWN);

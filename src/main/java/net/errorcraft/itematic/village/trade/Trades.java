@@ -864,7 +864,7 @@ public class Trades {
             .tradeExperience(tradeExperience)
             .merchantPredicate(
                 EntityPropertiesLootCondition.builder(
-                    LootContext.EntityTarget.THIS,
+                    LootContext.EntityReference.THIS,
                     EntityPredicate.Builder.create()
                         .typeSpecific(VillagerEntitySubPredicate.of(
                             RegistryEntryList.of(Registries.VILLAGER_TYPE::getOrThrow, types)
@@ -972,7 +972,7 @@ public class Trades {
             .tradeExperience(experience)
             .merchantPredicate(
                 EntityPropertiesLootCondition.builder(
-                    LootContext.EntityTarget.THIS,
+                    LootContext.EntityReference.THIS,
                     EntityPredicate.Builder.create()
                         .typeSpecific(VillagerEntitySubPredicate.of(
                             RegistryEntryList.of(Registries.VILLAGER_TYPE::getOrThrow, types)

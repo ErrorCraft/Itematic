@@ -26,7 +26,7 @@ public abstract class ChestMinecartEntityExtender extends VehicleEntityExtender 
         )
     )
     private ItemStack newItemStackForChestMinecartUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.CHEST_MINECART);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.CHEST_MINECART);
     }
 
     @Override

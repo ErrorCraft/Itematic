@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:test_instance_block"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:test_instance_block",
+    "translation_key": "block.minecraft.test_instance_block"
+  }
+}

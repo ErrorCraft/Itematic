@@ -25,6 +25,6 @@ public class AbstractFireballEntityExtender extends ExplosiveProjectileEntity {
         )
     )
     private ItemStack newItemStackForFireChargeUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.FIRE_CHARGE);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.FIRE_CHARGE);
     }
 }

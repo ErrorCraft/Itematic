@@ -26,7 +26,7 @@ public abstract class FurnaceMinecartEntityExtender extends VehicleEntityExtende
         )
     )
     private ItemStack newItemStackForFurnaceMinecartUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.FURNACE_MINECART);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.FURNACE_MINECART);
     }
 
     @Override

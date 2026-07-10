@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.predicate.item;
 
 import net.errorcraft.itematic.access.predicate.item.ItemPredicateAccess;
-import net.errorcraft.itematic.predicate.NumberRangeUtil;
 import net.minecraft.item.Item;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -17,7 +16,7 @@ import java.util.Optional;
 public class ItemPredicateUtil {
     public static final PacketCodec<RegistryByteBuf, ItemPredicate> PACKET_CODEC = PacketCodec.tuple(
         PacketCodecs.optional(PacketCodecs.registryEntryList(RegistryKeys.ITEM)), ItemPredicate::items,
-        NumberRangeUtil.INTEGER_RANGE_PACKET_CODEC, ItemPredicate::count,
+        NumberRange.IntRange.PACKET_CODEC, ItemPredicate::count,
         ComponentsPredicate.PACKET_CODEC, ItemPredicate::components,
         ItemPredicateExtraFields.PACKET_CODEC, itemPredicate -> ((ItemPredicateAccess)(Object) itemPredicate).itematic$extraFields(),
         ItemPredicateUtil::create

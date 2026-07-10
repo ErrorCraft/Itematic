@@ -28,6 +28,6 @@ public abstract class ArrowEntityExtender extends PersistentProjectileEntity {
         )
     )
     private ItemStack newItemStackForArrowUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.ARROW);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.ARROW);
     }
 }

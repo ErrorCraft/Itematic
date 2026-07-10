@@ -112,7 +112,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Entit
         ActionContext context = ActionContext.builder(world)
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParameters.THIS_ENTITY, user)
-            .addOptional(LootContextParameters.ORIGIN, user, Entity::getPos)
+            .addOptional(LootContextParameters.ORIGIN, user, Entity::getEntityPos)
             .add(ItematicContextParameters.INTERACTED_POSITION, blockHitResult.getBlockPos().toCenterPos())
             .add(LootContextParameters.TOOL, stack)
             .add(ItematicContextParameters.HAND, hand)

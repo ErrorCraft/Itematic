@@ -38,7 +38,7 @@ public class AbstractSkeletonEntityExtender extends HostileEntity implements Mob
         )
     )
     private ItemStack newItemStackForBowUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.BOW);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.BOW);
     }
 
     @ModifyExpressionValue(

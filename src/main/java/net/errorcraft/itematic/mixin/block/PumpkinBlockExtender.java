@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.PumpkinBlock;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
@@ -35,16 +34,5 @@ public class PumpkinBlockExtender {
     )
     private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local(argsOnly = true) World world) {
         return instance.itematic$getOrCreateStat(world.itematic$getItem(ItemKeys.SHEARS));
-    }
-
-    @Redirect(
-        method = "onUseWithItem",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack newItemStackForPumpkinSeedsUseCreateStack(ItemConvertible item, int count, @Local(argsOnly = true) World world) {
-        return world.itematic$createStack(ItemKeys.PUMPKIN_SEEDS);
     }
 }

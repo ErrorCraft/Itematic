@@ -31,7 +31,7 @@ public abstract class ThrownItemEntityExtender extends ThrownEntity {
         )
     )
     private ItemStack newItemStackUseRegistryEntry(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(this.getDefaultItemKey());
+        return this.getEntityWorld().itematic$createStack(this.getDefaultItemKey());
     }
 
     @Unique

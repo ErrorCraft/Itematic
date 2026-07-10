@@ -26,7 +26,10 @@
     "minecraft:string",
     "minecraft:lectern",
     "minecraft:daylight_detector",
-    "minecraft:lightning_rod",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/lightning_rods"
+    },
     "minecraft:piston",
     "minecraft:sticky_piston",
     "minecraft:slime_block",
@@ -35,9 +38,16 @@
     "minecraft:dropper",
     "minecraft:crafter",
     "minecraft:hopper",
-    "minecraft:chest",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/chests"
+    },
     "minecraft:barrel",
     "minecraft:chiseled_bookshelf",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/shelves"
+    },
     "minecraft:furnace",
     "minecraft:trapped_chest",
     "minecraft:jukebox",

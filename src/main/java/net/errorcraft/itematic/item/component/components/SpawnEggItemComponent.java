@@ -39,7 +39,7 @@ public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponen
             return Optional.empty();
         }
 
-        if (entityBehavior.get().entity().entityType(stack, world.getRegistryManager()) != entityType) {
+        if (entityBehavior.get().entity().entityType(stack) != entityType) {
             return Optional.empty();
         }
 

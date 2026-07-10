@@ -96,7 +96,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.TOOL, stack)
                 .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.ORIGIN, user.getEntityPos())
                 .add(ItematicContextParameters.INTERACTED_POSITION, user.getEyePos().add(0.0d, -0.1d, 0.0d))
                 .build();
             this.createEntity(context, serverWorld, stack);
@@ -122,7 +122,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
 
         ActionContext spawnedContext = context.extend()
             .add(ItematicContextParameters.SPAWNED_ENTITY, projectileEntity)
-            .add(ItematicContextParameters.SPAWNED_POSITION, projectileEntity.getPos())
+            .add(ItematicContextParameters.SPAWNED_POSITION, projectileEntity.getEntityPos())
             .build();
         stack.itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, spawnedContext);
     }

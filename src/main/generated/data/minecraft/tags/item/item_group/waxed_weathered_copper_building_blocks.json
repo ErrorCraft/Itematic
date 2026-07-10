@@ -6,8 +6,10 @@
     "minecraft:waxed_weathered_cut_copper",
     "minecraft:waxed_weathered_cut_copper_stairs",
     "minecraft:waxed_weathered_cut_copper_slab",
+    "minecraft:waxed_weathered_copper_bars",
     "minecraft:waxed_weathered_copper_door",
     "minecraft:waxed_weathered_copper_trapdoor",
-    "minecraft:waxed_weathered_copper_bulb"
+    "minecraft:waxed_weathered_copper_bulb",
+    "minecraft:waxed_weathered_copper_chain"
   ]
 }

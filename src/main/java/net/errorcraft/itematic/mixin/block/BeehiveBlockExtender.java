@@ -71,17 +71,6 @@ public class BeehiveBlockExtender implements AbstractBlockAccess {
     }
 
     @Redirect(
-        method = "dropHoneycomb",
-        at = @At(
-            value = "NEW",
-            target = "net/minecraft/item/ItemStack"
-        )
-    )
-    private static ItemStack newItemStackForHoneycombUseCreateStack(ItemConvertible item, int count, @Local(argsOnly = true) World world) {
-        return world.itematic$createStack(ItemKeys.HONEYCOMB);
-    }
-
-    @Redirect(
         method = "onBreak",
         at = @At(
             value = "NEW",

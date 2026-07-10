@@ -25,6 +25,6 @@ public abstract class ItemFrameEntityExtender extends AbstractDecorationEntity {
         )
     )
     private ItemStack newItemStackForItemFrameUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.ITEM_FRAME);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.ITEM_FRAME);
     }
 }

@@ -1,12 +1,10 @@
 package net.errorcraft.itematic.mixin.block;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.minecraft.block.SweetBerryBushBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,16 +32,5 @@ public class SweetBerryBushBlockExtender {
     )
     private boolean isOfForBoneMealUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.BONE_MEAL);
-    }
-
-    @Redirect(
-        method = "onUse",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemConvertible item, int count, @Local(argsOnly = true) World world) {
-        return world.itematic$createStack(ItemKeys.SWEET_BERRIES, count);
     }
 }

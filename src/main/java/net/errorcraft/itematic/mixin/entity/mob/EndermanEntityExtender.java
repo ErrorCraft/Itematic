@@ -28,7 +28,7 @@ public abstract class EndermanEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForDiamondAxeUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.DIAMOND_AXE);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.DIAMOND_AXE);
     }
 
     @Override

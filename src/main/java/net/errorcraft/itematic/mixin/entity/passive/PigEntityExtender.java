@@ -62,7 +62,7 @@ public abstract class PigEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForGoldenSwordUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
     }
 
     @Redirect(
