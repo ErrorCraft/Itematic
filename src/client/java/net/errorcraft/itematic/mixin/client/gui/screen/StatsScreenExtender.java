@@ -19,7 +19,10 @@ import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatHandler;
 import net.minecraft.stat.StatType;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -105,7 +108,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
         )
         private void addEntries(StatsScreen statsScreen, MinecraftClient client, CallbackInfo info, @Share("items") LocalRef<Set<RegistryEntry<Item>>> items) {
             for (RegistryEntry<Item> entry : items.get()) {
-                StatsScreen.ItemStatsListWidget.Entry itemEntry = StatsScreenAccessor.ItemStatsListWidgetAccessor.EntryAccessor.create((StatsScreen.ItemStatsListWidget)(Object) this, null);
+                StatsScreen.ItemStatsListWidget.StatEntry itemEntry = StatsScreenAccessor.ItemStatsListWidgetAccessor.StatEntryAccessor.create((StatsScreen.ItemStatsListWidget)(Object) this, null);
                 itemEntry.itematic$setRegistryEntry(entry);
                 this.addEntry(itemEntry);
             }
@@ -156,20 +159,20 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
         @Mixin(targets = "net.minecraft.client.gui.screen.StatsScreen$ItemStatsListWidget$ItemComparator")
         public static class ItemComparatorExtender {
             @ModifyConstant(
-                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;)I",
+                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;)I",
                 constant = @Constant(
                     classValue = BlockItem.class,
                     ordinal = 0
                 )
             )
-            private boolean instanceOfBlockItemForFirstItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, StatsScreen.ItemStatsListWidget.Entry first, @Share("blockItemComponentFirst") LocalRef<BlockItemComponent> blockItemComponentFirst) {
+            private boolean instanceOfBlockItemForFirstItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, StatsScreen.ItemStatsListWidget.StatEntry first, @Share("blockItemComponentFirst") LocalRef<BlockItemComponent> blockItemComponentFirst) {
                 Optional<BlockItemComponent> optionalComponent = first.itematic$registryEntry().value().itematic$getBehavior(ItemComponentTypes.BLOCK);
                 optionalComponent.ifPresent(blockItemComponentFirst::set);
                 return optionalComponent.isPresent();
             }
 
             @ModifyConstant(
-                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;)I",
+                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;)I",
                 constant = @Constant(
                     classValue = BlockItem.class,
                     ordinal = 0
@@ -181,25 +184,25 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private boolean instanceOfBlockItemForSecondItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, StatsScreen.ItemStatsListWidget.Entry first, StatsScreen.ItemStatsListWidget.Entry second, @Share("blockItemComponentSecond") LocalRef<BlockItemComponent> blockItemComponentSecond) {
+            private boolean instanceOfBlockItemForSecondItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, StatsScreen.ItemStatsListWidget.StatEntry first, StatsScreen.ItemStatsListWidget.StatEntry second, @Share("blockItemComponentSecond") LocalRef<BlockItemComponent> blockItemComponentSecond) {
                 Optional<BlockItemComponent> optionalComponent = second.itematic$registryEntry().value().itematic$getBehavior(ItemComponentTypes.BLOCK);
                 optionalComponent.ifPresent(blockItemComponentSecond::set);
                 return optionalComponent.isPresent();
             }
 
             @Redirect(
-                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;)I",
+                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;)I",
                 at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;getItem()Lnet/minecraft/item/Item;"
+                    target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;getItem()Lnet/minecraft/item/Item;"
                 )
             )
-            private Item getItemReturnNull(StatsScreen.ItemStatsListWidget.Entry instance) {
+            private Item getItemReturnNull(StatsScreen.ItemStatsListWidget.StatEntry instance) {
                 return null;
             }
 
             @Redirect(
-                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;)I",
+                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;)I",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/item/BlockItem;getBlock()Lnet/minecraft/block/Block;"
@@ -210,7 +213,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @Redirect(
-                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;)I",
+                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;)I",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/stat/StatHandler;getStat(Lnet/minecraft/stat/StatType;Ljava/lang/Object;)I",
@@ -234,7 +237,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @Redirect(
-                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;)I",
+                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;)I",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/stat/StatHandler;getStat(Lnet/minecraft/stat/StatType;Ljava/lang/Object;)I",
@@ -258,7 +261,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @Redirect(
-                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;)I",
+                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;)I",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/stat/StatHandler;getStat(Lnet/minecraft/stat/StatType;Ljava/lang/Object;)I",
@@ -272,12 +275,12 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> int getStatForFirstItemUseRegistryEntry(StatHandler instance, StatType<Item> type, T stat, StatsScreen.ItemStatsListWidget.Entry first) {
+            private <T> int getStatForFirstItemUseRegistryEntry(StatHandler instance, StatType<Item> type, T stat, StatsScreen.ItemStatsListWidget.StatEntry first) {
                 return instance.getStat(type.itematic$getOrCreateStat(first.itematic$registryEntry()));
             }
 
             @Redirect(
-                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;)I",
+                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;)I",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/stat/StatHandler;getStat(Lnet/minecraft/stat/StatType;Ljava/lang/Object;)I",
@@ -291,12 +294,12 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> int getStatForSecondItemUseRegistryEntry(StatHandler instance, StatType<Item> type, T stat, StatsScreen.ItemStatsListWidget.Entry first, StatsScreen.ItemStatsListWidget.Entry second) {
+            private <T> int getStatForSecondItemUseRegistryEntry(StatHandler instance, StatType<Item> type, T stat, StatsScreen.ItemStatsListWidget.StatEntry first, StatsScreen.ItemStatsListWidget.StatEntry second) {
                 return instance.getStat(type.itematic$getOrCreateStat(second.itematic$registryEntry()));
             }
 
             @Redirect(
-                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;)I",
+                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;)I",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/item/Item;getRawId(Lnet/minecraft/item/Item;)I"
@@ -307,24 +310,23 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @Redirect(
-                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;)I",
+                method = "compare(Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;)I",
                 at = @At(
                     value = "INVOKE",
                     target = "Ljava/lang/Integer;compare(II)I",
                     ordinal = 0
                 )
             )
-            private int compareUseRegistryKeys(int x, int y, StatsScreen.ItemStatsListWidget.Entry first, StatsScreen.ItemStatsListWidget.Entry second) {
+            private int compareUseRegistryKeys(int x, int y, StatsScreen.ItemStatsListWidget.StatEntry first, StatsScreen.ItemStatsListWidget.StatEntry second) {
                 return first.itematic$registryEntry().compareTo(second.itematic$registryEntry());
             }
         }
 
-        @Mixin(StatsScreen.ItemStatsListWidget.Entry.class)
-        public static class EntryExtender implements StatsScreenAccess.ItemStatsListWidgetAccess.EntryAccess {
+        @Mixin(StatsScreen.ItemStatsListWidget.StatEntry.class)
+        public static class StatEntryExtender implements ItemStatsListWidgetAccess.StatEntryAccess {
             @Shadow
             @Final
-            @Mutable
-            private StatsScreen.ItemStatsListWidget.Entry.ItemStackInSlotWidget field_62169;
+            private StatsScreen.ItemStatsListWidget.StatEntry.ItemStackInSlotWidget button;
 
             @Unique
             private RegistryEntry<Item> entry;
@@ -357,11 +359,11 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 method = "render(Lnet/minecraft/client/gui/DrawContext;IIZF)V",
                 at = @At(
                     value = "FIELD",
-                    target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry;item:Lnet/minecraft/item/Item;",
+                    target = "Lnet/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry;item:Lnet/minecraft/item/Item;",
                     opcode = Opcodes.GETFIELD
                 )
             )
-            private Item getItemUseNull(StatsScreen.ItemStatsListWidget.Entry instance) {
+            private Item getItemUseNull(StatsScreen.ItemStatsListWidget.StatEntry instance) {
                 return null;
             }
 
@@ -422,7 +424,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             @Override
             public void itematic$setRegistryEntry(RegistryEntry<Item> entry) {
                 this.entry = entry;
-                this.field_62169.itematic$setStack(new ItemStack(entry));
+                this.button.itematic$setStack(new ItemStack(entry));
             }
         }
     }

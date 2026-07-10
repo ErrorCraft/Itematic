@@ -4,13 +4,13 @@ accessible    class    net/minecraft/registry/Registries$Initializer
 accessible    class    net/minecraft/entity/passive/OcelotEntity$OcelotTemptGoal
 accessible    class    net/minecraft/client/gui/screen/GameModeSwitcherScreen$GameModeSelection
 accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget
-accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry
+accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry
 accessible    class    net/minecraft/client/gui/screen/world/CustomizeFlatLevelScreen$SuperflatLayersListWidget
 accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternativesWidget$AlternativeButtonWidget
 accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternativesWidget$AlternativeButtonWidget$InputSlot
 accessible    class    net/minecraft/predicate/StatePredicate$Condition
 accessible    class    net/minecraft/predicate/StatePredicate$RangedValueMatcher
-accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry$ItemStackInSlotWidget
+accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry$ItemStackInSlotWidget
 
 inject-interface    net/minecraft/util/DyeColor    net/errorcraft/itematic/access/util/DyeColorAccess
 inject-interface    net/minecraft/item/tooltip/BundleTooltipData    net/errorcraft/itematic/access/item/tooltip/BundleTooltipDataAccess
@@ -34,7 +34,7 @@ inject-interface    net/minecraft/client/MinecraftClient    net/errorcraft/itema
 inject-interface    net/minecraft/recipe/book/RecipeBookOptions    net/errorcraft/itematic/access/recipe/book/RecipeBookOptionsAccess
 inject-interface    net/minecraft/client/gui/widget/ItemStackWidget    net/errorcraft/itematic/access/client/gui/widget/ItemStackWidgetAccess
 inject-interface    net/minecraft/client/gui/screen/StatsScreen    net/errorcraft/itematic/access/client/gui/screen/StatsScreenAccess
-inject-interface    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry    net/errorcraft/itematic/access/client/gui/screen/StatsScreenAccess$ItemStatsListWidgetAccess$EntryAccess
+inject-interface    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry    net/errorcraft/itematic/access/client/gui/screen/StatsScreenAccess$ItemStatsListWidgetAccess$StatEntryAccess
 
 extend-enum    net/minecraft/recipe/book/RecipeBookType    ITEMATIC_BREWING
 extend-enum    net/minecraft/client/recipebook/RecipeBookType    ITEMATIC_BREWING

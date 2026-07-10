@@ -10,7 +10,7 @@ public interface StatsScreenAccess {
     }
 
     interface ItemStatsListWidgetAccess {
-        interface EntryAccess {
+        interface StatEntryAccess {
             default RegistryEntry<Item> itematic$registryEntry() {
                 return null;
             }

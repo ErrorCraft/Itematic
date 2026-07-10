@@ -44,7 +44,7 @@ public class BrewingRecipeBookWidget extends RecipeBookWidget<BrewingStandMenuDe
     }
 
     @Override
-    protected boolean isValid(Slot slot) {
+    protected boolean isCraftingSlot(Slot slot) {
         return false;
     }
 
