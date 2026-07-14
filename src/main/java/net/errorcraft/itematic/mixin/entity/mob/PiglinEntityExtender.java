@@ -1,5 +1,8 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import net.errorcraft.itematic.access.entity.mob.MobEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
@@ -36,6 +39,18 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         return this.getEntityWorld().itematic$createStack(ItemKeys.CROSSBOW);
     }
 
+    @ModifyExpressionValue(
+        method = "makeInitialWeapon",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/util/math/random/Random;nextInt(I)I"
+        )
+    )
+    private int storeSpearChance(int original, @Share("spearChance") LocalIntRef spearChance) {
+        spearChance.set(original);
+        return original;
+    }
+
     @Redirect(
         method = "makeInitialWeapon",
         at = @At(
@@ -50,8 +65,11 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
             )
         )
     )
-    private ItemStack newItemStackForGoldenSwordUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
+    private ItemStack newItemStackForGoldenWeaponUseCreateStack(ItemConvertible item, @Share("spearChance") LocalIntRef spearChance) {
+        return this.getEntityWorld().itematic$createStack(spearChance.get() == 0
+            ? ItemKeys.GOLDEN_SPEAR
+            : ItemKeys.GOLDEN_SWORD
+        );
     }
 
     @Redirect(

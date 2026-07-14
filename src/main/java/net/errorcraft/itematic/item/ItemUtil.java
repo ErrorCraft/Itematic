@@ -23,6 +23,8 @@ import net.errorcraft.itematic.item.fuel.FuelTimes;
 import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
 import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
+import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponComponents;
+import net.errorcraft.itematic.item.weapon.melee.component.SmashingMeleeWeapon;
 import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionUtil;
 import net.errorcraft.itematic.loot.function.SetItemPointerLocationItemModifier;
 import net.errorcraft.itematic.loot.function.SplitItemModifier;
@@ -52,6 +54,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.ChickenVariant;
@@ -159,6 +162,7 @@ public class ItemUtil {
         private final RegistryEntryLookup<Instrument> instruments;
         private final RegistryEntryLookup<ArmorTrimMaterial> trimMaterials;
         private final RegistryEntryLookup<ChickenVariant> chickenVariants;
+        private final RegistryEntryLookup<DamageType> damageTypes;
 
         private Bootstrapper(Registerable<Item> registerable) {
             this.registerable = registerable;
@@ -177,6 +181,7 @@ public class ItemUtil {
             this.instruments = registerable.getRegistryLookup(RegistryKeys.INSTRUMENT);
             this.trimMaterials = registerable.getRegistryLookup(RegistryKeys.TRIM_MATERIAL);
             this.chickenVariants = registerable.getRegistryLookup(RegistryKeys.CHICKEN_VARIANT);
+            this.damageTypes = registerable.getRegistryLookup(RegistryKeys.DAMAGE_TYPE);
         }
 
         private void bootstrap() {
@@ -5606,6 +5611,147 @@ public class ItemUtil {
                     .add(ItemEvents.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
                     .build()
             ));
+            this.registerable.register(ItemKeys.WOODEN_SPEAR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.WOODEN_SPEAR).build(),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.spear(
+                        ToolMaterial.WOOD,
+                        this.damageTypes,
+                        0.65f,
+                        0.7f,
+                        0.75f,
+                        5.0f,
+                        14.0f,
+                        6.0f,
+                        5.1f,
+                        15.0f,
+                        4.6f,
+                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.soundEvents
+                    ))
+                    .with(FuelItemComponent.of(FuelTimes.TOOL))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.STONE_SPEAR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.STONE_SPEAR).build(),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.spear(
+                        ToolMaterial.STONE,
+                        this.damageTypes,
+                        0.75f,
+                        0.82f,
+                        0.7f,
+                        4.5f,
+                        10.0f,
+                        5.5f,
+                        5.1f,
+                        13.75f,
+                        4.6f,
+                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.soundEvents
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COPPER_SPEAR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.COPPER_SPEAR).build(),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.spear(
+                        ToolMaterial.COPPER,
+                        this.damageTypes,
+                        0.85f,
+                        0.82f,
+                        0.65f,
+                        4.0f,
+                        9.0f,
+                        5.0f,
+                        5.1f,
+                        12.5f,
+                        4.6f,
+                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.soundEvents
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_SPEAR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.IRON_SPEAR).build(),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.spear(
+                        ToolMaterial.IRON,
+                        this.damageTypes,
+                        0.95f,
+                        0.95f,
+                        0.6f,
+                        2.5f,
+                        8.0f,
+                        4.5f,
+                        5.1f,
+                        11.25f,
+                        4.6f,
+                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.soundEvents
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_SPEAR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.GOLDEN_SPEAR).build(),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.spear(
+                        ToolMaterial.GOLD,
+                        this.damageTypes,
+                        0.95f,
+                        0.7f,
+                        0.7f,
+                        3.5f,
+                        10.0f,
+                        5.5f,
+                        5.1f,
+                        13.75f,
+                        4.6f,
+                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.soundEvents
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_SPEAR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.DIAMOND_SPEAR).build(),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.spear(
+                        ToolMaterial.DIAMOND,
+                        this.damageTypes,
+                        1.05f,
+                        1.075f,
+                        0.5f,
+                        3.0f,
+                        7.5f,
+                        4.0f,
+                        5.1f,
+                        10.0f,
+                        4.6f,
+                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.soundEvents
+                    ))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_SPEAR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.NETHERITE_SPEAR).build(),
+                ItemComponentSet.builder()
+                    .with(DamageableItemComponent.spear(
+                        ToolMaterial.NETHERITE,
+                        this.damageTypes,
+                        1.15f,
+                        1.2f,
+                        0.4f,
+                        2.5f,
+                        7.0f,
+                        3.5f,
+                        5.1f,
+                        8.75f,
+                        4.6f,
+                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.soundEvents
+                    ))
+                    .build()
+            ));
             this.registerable.register(ItemKeys.STONE_SWORD, create(
                 ItemDisplay.Builder.forItem(ItemKeys.STONE_SWORD).build(),
                 ItemComponentSet.builder()
@@ -5901,7 +6047,8 @@ public class ItemUtil {
                     .with(ToolItemComponent.builder(2)
                         .preventCreativeDestruction()
                         .build())
-                    .with(WeaponItemComponent.of(1, 0.0f, TridentItem.ATTACK_DAMAGE, 0.275d))
+                    .with(WeaponItemComponent.builder(1, TridentItem.ATTACK_DAMAGE, 0.275d)
+                        .build())
                     .with(ThrowableItemComponent.trident(TridentItem.THROW_SPEED, 0.0f, TridentItem.MIN_DRAW_DURATION))
                     .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.TRIDENT)))
                     .with(EnchantableItemComponent.of(1))
@@ -5989,7 +6136,9 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(500))
                     .with(ToolItemComponent.builder(2).build())
-                    .with(WeaponItemComponent.ofSmashing(1, 5.0d, 0.15d))
+                    .with(WeaponItemComponent.builder(1, 5.0d, 0.15d)
+                        .type(MeleeWeaponComponents.SMASHING, SmashingMeleeWeapon.INSTANCE)
+                        .build())
                     .with(EnchantableItemComponent.of(15))
                     .with(RepairableItemComponent.of(RegistryEntryList.of(
                         this.items.getOrThrow(ItemKeys.BREEZE_ROD)
@@ -6611,6 +6760,13 @@ public class ItemUtil {
                     .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.MULE), this.dispenseBehaviors))
                     .build()
             ));
+            this.registerable.register(ItemKeys.NAUTILUS_SPAWN_EGG, create(
+                ItemDisplay.Builder.forItem(ItemKeys.NAUTILUS_SPAWN_EGG).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.NAUTILUS), this.dispenseBehaviors))
+                    .build()
+            ));
             this.registerable.register(ItemKeys.OCELOT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.OCELOT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
@@ -6896,6 +7052,13 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_HORSE), this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.ZOMBIE_NAUTILUS_SPAWN_EGG, create(
+                ItemDisplay.Builder.forItem(ItemKeys.ZOMBIE_NAUTILUS_SPAWN_EGG).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_NAUTILUS), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOMBIE_VILLAGER_SPAWN_EGG, create(
@@ -8438,6 +8601,41 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(EquipmentItemComponent.ofHarness(DyeColor.BLACK, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.COPPER_NAUTILUS_ARMOR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.COPPER_NAUTILUS_ARMOR).build(),
+                AttributeModifiers.armor(ArmorMaterials.COPPER, EquipmentType.BODY),
+                ItemComponentSet.builder()
+                    .with(EquipmentItemComponent.ofNautilusArmor(ArmorMaterials.COPPER, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.IRON_NAUTILUS_ARMOR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.IRON_NAUTILUS_ARMOR).build(),
+                AttributeModifiers.armor(ArmorMaterials.IRON, EquipmentType.BODY),
+                ItemComponentSet.builder()
+                    .with(EquipmentItemComponent.ofNautilusArmor(ArmorMaterials.IRON, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.GOLDEN_NAUTILUS_ARMOR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.GOLDEN_NAUTILUS_ARMOR).build(),
+                AttributeModifiers.armor(ArmorMaterials.GOLD, EquipmentType.BODY),
+                ItemComponentSet.builder()
+                    .with(EquipmentItemComponent.ofNautilusArmor(ArmorMaterials.GOLD, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.DIAMOND_NAUTILUS_ARMOR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.DIAMOND_NAUTILUS_ARMOR).build(),
+                AttributeModifiers.armor(ArmorMaterials.DIAMOND, EquipmentType.BODY),
+                ItemComponentSet.builder()
+                    .with(EquipmentItemComponent.ofNautilusArmor(ArmorMaterials.DIAMOND, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_NAUTILUS_ARMOR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.NETHERITE_NAUTILUS_ARMOR).build(),
+                AttributeModifiers.armor(ArmorMaterials.NETHERITE, EquipmentType.BODY),
+                ItemComponentSet.builder()
+                    .with(EquipmentItemComponent.ofNautilusArmor(ArmorMaterials.NETHERITE, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
                     .build()
             ));
         }

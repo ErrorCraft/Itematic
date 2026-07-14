@@ -1,0 +1,31 @@
+{
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:armor.body",
+      "type": "minecraft:armor",
+      "amount": 4.0,
+      "operation": "add_value",
+      "slot": "body"
+    }
+  ],
+  "behavior": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:equip_entity"
+    },
+    "minecraft:equipment": {
+      "allowed_entities": "#minecraft:can_wear_nautilus_armor",
+      "asset_id": "minecraft:copper",
+      "can_be_sheared": true,
+      "damage_on_hurt": false,
+      "equip_on_interact": true,
+      "equip_sound": "minecraft:item.armor.equip_nautilus",
+      "shearing_sound": "minecraft:item.armor.unequip_nautilus",
+      "slot": "body"
+    },
+    "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:copper_nautilus_armor",
+    "translation_key": "item.minecraft.copper_nautilus_armor"
+  }
+}

@@ -15,6 +15,7 @@ import net.errorcraft.itematic.serialization.SetCodec;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.UseEffectsComponent;
 import net.minecraft.component.type.UseRemainderComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,11 +31,12 @@ import net.minecraft.world.World;
 import java.util.Optional;
 import java.util.Set;
 
-public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, UseAction animation, Optional<ItemStack> remainder, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
+public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, UseAction animation, Optional<ItemStack> remainder, UseEffectsComponent effects, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
     public static final Codec<UseableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         UseDurationDataComponent.CODEC.optionalFieldOf("ticks").forGetter(UseableItemComponent::ticks),
         UseAction.CODEC.optionalFieldOf("animation", UseAction.NONE).forGetter(UseableItemComponent::animation),
         ItemStack.CODEC.optionalFieldOf("remainder").forGetter(UseableItemComponent::remainder),
+        UseEffectsComponent.CODEC.optionalFieldOf("effects", UseEffectsComponent.DEFAULT).forGetter(UseableItemComponent::effects),
         SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(UseableItemComponent::passes)
     ).apply(instance, UseableItemComponent::new));
 
@@ -79,6 +81,18 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
         return tryStartUsing(user.getEntityWorld(), user, hand, stack);
     }
 
+    @Override
+    public void addComponents(ComponentMap.Builder builder) {
+        this.ticks.ifPresent(ticks -> builder.add(ItematicDataComponentTypes.USE_DURATION, ticks));
+        builder.add(ItematicDataComponentTypes.USE_ANIMATION, this.animation);
+        this.remainder.ifPresent(remainder -> builder.add(DataComponentTypes.USE_REMAINDER, new UseRemainderComponent(remainder)));
+        builder.add(DataComponentTypes.USE_EFFECTS, this.effects);
+    }
+
+    private boolean isUnuseable(Pass pass) {
+        return !this.passes.contains(pass);
+    }
+
     private static ItemResult tryStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
         if (!stack.itematic$mayStartUsing(world, user, hand, stack)) {
             return ItemResult.PASS;
@@ -96,22 +110,12 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
         return ItemResult.PASS;
     }
 
-    @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        this.ticks.ifPresent(ticks -> builder.add(ItematicDataComponentTypes.USE_DURATION, ticks));
-        builder.add(ItematicDataComponentTypes.USE_ANIMATION, this.animation);
-        this.remainder.ifPresent(remainder -> builder.add(DataComponentTypes.USE_REMAINDER, new UseRemainderComponent(remainder)));
-    }
-
-    private boolean isUnuseable(Pass pass) {
-        return !this.passes.contains(pass);
-    }
-
     public static class Builder {
         private IntegerProvider ticks;
         private UseAction animation = UseAction.NONE;
         private RegistryEntry<Item> remainder;
         private Set<Pass> passes = Pass.DEFAULT_PASSES;
+        private UseEffectsComponent effects = UseEffectsComponent.DEFAULT;
 
         private Builder() {}
 
@@ -120,6 +124,7 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
                 Optional.ofNullable(this.ticks).map(UseDurationDataComponent::new),
                 this.animation,
                 Optional.ofNullable(this.remainder).map(ItemStack::new),
+                this.effects,
                 this.passes
             );
         }
@@ -146,6 +151,11 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
 
         public Builder remainder(RegistryEntry<Item> remainder) {
             this.remainder = remainder;
+            return this;
+        }
+
+        public Builder effects(UseEffectsComponent effects) {
+            this.effects = effects;
             return this;
         }
 

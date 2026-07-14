@@ -420,7 +420,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @ModifyReturnValue(
-        method = "getItemUseTime",
+        method = "getItemUseTime()I",
         at = @At(
             value = "RETURN",
             ordinal = 0

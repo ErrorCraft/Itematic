@@ -6,19 +6,28 @@ import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponComponents;
+import net.errorcraft.itematic.item.weapon.melee.component.KineticMeleeWeapon;
+import net.errorcraft.itematic.item.weapon.melee.component.PiercingMeleeWeapon;
+import net.errorcraft.itematic.sound.SoundEventKeys;
+import net.minecraft.SharedConstants;
 import net.minecraft.block.Block;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ToolComponent;
+import net.minecraft.component.type.*;
+import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.SwingAnimationType;
 import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Optional;
@@ -51,12 +60,76 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                 .rule(ToolComponent.Rule.ofAlwaysDropping(RegistryEntryList.of(blocks.getOrThrow(BlockKeys.COBWEB)), 15.0f))
                 .rule(ToolComponent.Rule.of(blocks.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5f))
                 .build(),
-            WeaponItemComponent.of(
-                1,
-                0.0f,
-                4.0d + material.attackDamageBonus(),
-                0.4d
-            ),
+            WeaponItemComponent.builder(1, 4.0d + material.attackDamageBonus(), 0.4d)
+                .build(),
+            EnchantableItemComponent.of(material),
+            RepairableItemComponent.of(repairItems)
+        };
+    }
+
+    public static ItemComponent<?>[] spear(ToolMaterial material, RegistryEntryLookup<DamageType> damageTypes, float attackDuration, float damageMultiplier, float delay, float dismountTime, float dismountSpeedThreshold, float knockbackTime, float knockbackSpeedThreshold, float damageTime, float damageSpeedThreshold, RegistryEntryList<Item> repairItems, RegistryEntryLookup<SoundEvent> soundEvents) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(1),
+            DamageableItemComponent.of(material.durability()),
+            UseableItemComponent.builder()
+                .useIndefinitely()
+                .animation(UseAction.SPEAR)
+                .effects(new UseEffectsComponent(true, 1.0f))
+                .build(),
+            WeaponItemComponent.builder(1, material.attackDamageBonus(), 1 / (4 * attackDuration))
+                .type(
+                    MeleeWeaponComponents.KINETIC,
+                    KineticMeleeWeapon.of(new KineticWeaponComponent(
+                        2.0f,
+                        4.5f,
+                        0.25f,
+                        (int)(delay * SharedConstants.TICKS_PER_SECOND),
+                        KineticWeaponComponent.Condition.ofMinSpeed(
+                            (int)(dismountTime * SharedConstants.TICKS_PER_SECOND),
+                            dismountSpeedThreshold
+                        ),
+                        KineticWeaponComponent.Condition.ofMinSpeed(
+                            (int)(knockbackTime * SharedConstants.TICKS_PER_SECOND),
+                            knockbackSpeedThreshold
+                        ),
+                        KineticWeaponComponent.Condition.ofMinRelativeSpeed(
+                            (int)(damageTime * SharedConstants.TICKS_PER_SECOND),
+                            damageSpeedThreshold
+                        ),
+                        0.38f,
+                        damageMultiplier,
+                        Optional.of(material == ToolMaterial.WOOD
+                            ? soundEvents.getOrThrow(SoundEventKeys.SPEAR_WOOD_USE)
+                            : soundEvents.getOrThrow(SoundEventKeys.SPEAR_USE)
+                        ),
+                        Optional.of(material == ToolMaterial.WOOD
+                            ? soundEvents.getOrThrow(SoundEventKeys.SPEAR_WOOD_HIT)
+                            : soundEvents.getOrThrow(SoundEventKeys.SPEAR_HIT)
+                        )
+                    ))
+                )
+                .type(
+                    MeleeWeaponComponents.PIERCING,
+                    PiercingMeleeWeapon.of(new PiercingWeaponComponent(
+                        2.0F,
+                        4.5F,
+                        0.25F,
+                        true,
+                        false,
+                        Optional.of(material == ToolMaterial.WOOD
+                            ? soundEvents.getOrThrow(SoundEventKeys.SPEAR_WOOD_ATTACK)
+                            : soundEvents.getOrThrow(SoundEventKeys.SPEAR_ATTACK)
+                        ),
+                        Optional.of(material == ToolMaterial.WOOD
+                            ? soundEvents.getOrThrow(SoundEventKeys.SPEAR_WOOD_HIT)
+                            : soundEvents.getOrThrow(SoundEventKeys.SPEAR_HIT)
+                        )
+                    ))
+                )
+                .damageType(damageTypes.getOrThrow(DamageTypes.SPEAR))
+                .swingAnimation(new SwingAnimationComponent(SwingAnimationType.STAB, (int)(attackDuration * SharedConstants.TICKS_PER_SECOND)))
+                .minimumAttackCharge(1.0f)
+                .build(),
             EnchantableItemComponent.of(material),
             RepairableItemComponent.of(repairItems)
         };
@@ -83,12 +156,9 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
             StackableItemComponent.of(1),
             DamageableItemComponent.of(material.durability()),
             ToolItemComponent.of(blocks, material, mineableBlocks),
-            WeaponItemComponent.of(
-                2,
-                disableBlockingForSeconds,
-                baseAttackDamage + material.attackDamageBonus(),
-                attackSpeed
-            ),
+            WeaponItemComponent.builder(2, baseAttackDamage + material.attackDamageBonus(), attackSpeed)
+                .disableBlockingForSeconds(disableBlockingForSeconds)
+                .build(),
             EnchantableItemComponent.of(material),
             RepairableItemComponent.of(repairItems)
         };

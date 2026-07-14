@@ -50,7 +50,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
                 .useFor(TridentIntegerProvider.INSTANCE)
-                .animation(UseAction.SPEAR)
+                .animation(UseAction.TRIDENT)
                 .build(),
             new ThrowableItemComponent(speed, angleOffset, Optional.of(NumberRange.IntRange.atLeast(minDrawDuration)))
         };

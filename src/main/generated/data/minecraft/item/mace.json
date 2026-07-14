@@ -20,7 +20,9 @@
         "rules": []
       },
       "attack_speed": 0.15,
-      "may_smash": true
+      "types": {
+        "minecraft:smashing": {}
+      }
     }
   },
   "display": {

@@ -15,6 +15,7 @@ import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
+import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponComponents;
 import net.errorcraft.itematic.mixin.registry.RegistriesAccessor;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
@@ -24,6 +25,7 @@ import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.errorcraft.itematic.world.modification.WorldModificationType;
 import net.errorcraft.itematic.world.modification.WorldModificationTypes;
+import net.minecraft.component.ComponentType;
 import net.minecraft.registry.Registry;
 
 public class ItematicRegistries {
@@ -39,6 +41,7 @@ public class ItematicRegistries {
     public static final Registry<ShooterMethodType<?>> SHOOTER_METHOD_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.SHOOTER_METHOD_TYPE, r -> ShooterMethodTypes.DIRECT);
     public static final Registry<WorldModificationType<?>> WORLD_MODIFICATION_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.WORLD_MODIFICATION_TYPE, r -> WorldModificationTypes.DRAIN_FLUID);
     public static final Registry<EntitySpawnRuleType<?>> ENTITY_SPAWN_RULE_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.ENTITY_SPAWN_RULE_TYPE, r -> EntitySpawnRuleType.DISCARD);
+    public static final Registry<ComponentType<?>> MELEE_WEAPON_COMPONENT_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.MELEE_WEAPON_COMPONENT_TYPE, r -> MeleeWeaponComponents.SMASHING);
 
     private ItematicRegistries() {}
 }

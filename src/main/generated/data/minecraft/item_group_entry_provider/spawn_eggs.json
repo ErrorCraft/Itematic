@@ -44,6 +44,7 @@
     "minecraft:magma_cube_spawn_egg",
     "minecraft:mooshroom_spawn_egg",
     "minecraft:mule_spawn_egg",
+    "minecraft:nautilus_spawn_egg",
     "minecraft:ocelot_spawn_egg",
     "minecraft:panda_spawn_egg",
     "minecraft:parrot_spawn_egg",
@@ -84,6 +85,7 @@
     "minecraft:zoglin_spawn_egg",
     "minecraft:zombie_spawn_egg",
     "minecraft:zombie_horse_spawn_egg",
+    "minecraft:zombie_nautilus_spawn_egg",
     "minecraft:zombie_villager_spawn_egg",
     "minecraft:zombified_piglin_spawn_egg"
   ]
