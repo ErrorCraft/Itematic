@@ -33,7 +33,7 @@ public record ShearAtPositionAction(PositionTarget position) implements Action<S
             return false;
         }
 
-        BlockPos pos = context.getBlockPos(this.position.parameter());
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
         if (pos == null) {
             return false;
         }

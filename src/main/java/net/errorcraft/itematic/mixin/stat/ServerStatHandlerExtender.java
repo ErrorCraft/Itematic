@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.server.MinecraftServer;
@@ -11,20 +12,22 @@ import net.minecraft.stat.ServerStatHandler;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatHandler;
 import net.minecraft.stat.StatType;
-import org.spongepowered.asm.mixin.Final;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.nio.file.Path;
 import java.util.function.Function;
 
 @Mixin(ServerStatHandler.class)
 public class ServerStatHandlerExtender extends StatHandler {
-    @Shadow
-    @Final
-    private MinecraftServer server;
+    @Unique
+    private RegistryWrapper.WrapperLookup registries;
 
     @Redirect(
         method = "createCodec",
@@ -63,6 +66,19 @@ public class ServerStatHandlerExtender extends StatHandler {
         return (T) stat.itematic$entry();
     }
 
+    @Inject(
+        method = "<init>",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/stat/ServerStatHandler;path:Ljava/nio/file/Path;",
+            opcode = Opcodes.PUTFIELD,
+            shift = At.Shift.AFTER
+        )
+    )
+    private void setRegistries(MinecraftServer server, Path path, CallbackInfo info) {
+        this.registries = server.getRegistryManager();
+    }
+
     @ModifyArg(
         method = "parse",
         at = @At(
@@ -72,7 +88,7 @@ public class ServerStatHandlerExtender extends StatHandler {
         )
     )
     private <T> DynamicOps<T> useRegistryOps(DynamicOps<T> ops) {
-        return this.server.getRegistryManager().getOps(ops);
+        return this.registries.getOps(ops);
     }
 
     @ModifyArg(
@@ -84,6 +100,6 @@ public class ServerStatHandlerExtender extends StatHandler {
         )
     )
     private <T> DynamicOps<T> encodeStartUseRegistryOps(DynamicOps<T> ops) {
-        return this.server.getRegistryManager().getOps(ops);
+        return this.registries.getOps(ops);
     }
 }

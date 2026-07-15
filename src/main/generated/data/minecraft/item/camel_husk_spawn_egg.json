@@ -1,0 +1,24 @@
+{
+  "behavior": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:spawn_entity_from_item"
+    },
+    "minecraft:entity": {
+      "allow_spawner_modification": true,
+      "entity": {
+        "allow_item_data": true,
+        "entity": "minecraft:camel_husk"
+      },
+      "passes": [
+        "block",
+        "fluid"
+      ]
+    },
+    "minecraft:spawn_egg": {},
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:camel_husk_spawn_egg",
+    "translation_key": "item.minecraft.camel_husk_spawn_egg"
+  }
+}

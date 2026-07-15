@@ -1146,6 +1146,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> BREEZE_SPAWN_EGG = register("breeze_spawn_egg");
     public static final RegistryKey<Item> CAT_SPAWN_EGG = register("cat_spawn_egg");
     public static final RegistryKey<Item> CAMEL_SPAWN_EGG = register("camel_spawn_egg");
+    public static final RegistryKey<Item> CAMEL_HUSK_SPAWN_EGG = register("camel_husk_spawn_egg");
     public static final RegistryKey<Item> CAVE_SPIDER_SPAWN_EGG = register("cave_spider_spawn_egg");
     public static final RegistryKey<Item> CHICKEN_SPAWN_EGG = register("chicken_spawn_egg");
     public static final RegistryKey<Item> COD_SPAWN_EGG = register("cod_spawn_egg");
@@ -1178,6 +1179,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> NAUTILUS_SPAWN_EGG = register("nautilus_spawn_egg");
     public static final RegistryKey<Item> OCELOT_SPAWN_EGG = register("ocelot_spawn_egg");
     public static final RegistryKey<Item> PANDA_SPAWN_EGG = register("panda_spawn_egg");
+    public static final RegistryKey<Item> PARCHED_SPAWN_EGG = register("parched_spawn_egg");
     public static final RegistryKey<Item> PARROT_SPAWN_EGG = register("parrot_spawn_egg");
     public static final RegistryKey<Item> PHANTOM_SPAWN_EGG = register("phantom_spawn_egg");
     public static final RegistryKey<Item> PIG_SPAWN_EGG = register("pig_spawn_egg");

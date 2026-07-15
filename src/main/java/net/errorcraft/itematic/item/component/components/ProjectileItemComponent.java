@@ -65,7 +65,7 @@ public record ProjectileItemComponent(EntitySpawner entity) implements ItemCompo
     }
 
     public Entity spawnEntity(ActionContext context, PositionTarget position, float angleOffset, float speed, float uncertainty) {
-        Vec3d pos = context.get(position.parameter());
+        Vec3d pos = context.get(position.contextParam());
         if (pos == null) {
             return null;
         }

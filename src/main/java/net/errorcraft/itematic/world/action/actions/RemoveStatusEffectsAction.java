@@ -32,7 +32,7 @@ public record RemoveStatusEffectsAction(RegistryEntryList<StatusEffect> effects,
 
     @Override
     public boolean execute(ActionContext context) {
-        if (context.get(this.entity.getParameter()) instanceof LivingEntity target) {
+        if (context.get(this.entity.contextParam()) instanceof LivingEntity target) {
             return this.removeStatusEffects(target);
         }
 

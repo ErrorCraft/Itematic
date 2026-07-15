@@ -44,7 +44,7 @@ public class SetItemPointerLocationItemModifier extends ConditionalLootFunction 
 
     @Override
     protected ItemStack process(ItemStack stack, LootContext context) {
-        Vec3d pos = context.get(this.position.parameter());
+        Vec3d pos = context.get(this.position.contextParam());
         if (pos == null) {
             return stack;
         }

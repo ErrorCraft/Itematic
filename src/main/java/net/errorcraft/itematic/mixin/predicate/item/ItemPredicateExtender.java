@@ -28,7 +28,7 @@ import java.util.function.Function;
 @Mixin(ItemPredicate.class)
 public class ItemPredicateExtender implements ItemPredicateAccess {
     @Unique
-    private Optional<Set<ItemComponentType<?>>> behavior;
+    private Optional<Set<ItemComponentType<?>>> behavior = Optional.empty();
 
     @ModifyExpressionValue(
         method = "<clinit>",

@@ -12,7 +12,7 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
 import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.item.placement.EntityPlacer;
-import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionUtil;
+import net.errorcraft.itematic.loot.condition.LocationCheckPredicates;
 import net.errorcraft.itematic.mixin.item.DecorationItemAccessor;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
 import net.errorcraft.itematic.serialization.SetCodec;
@@ -117,7 +117,7 @@ public record EntityItemComponent(EntitySpawner entity, boolean allowSpawnerModi
                 .spawnRule(
                     DiscardEntitySpawnRule.INSTANCE,
                     InvertedLootCondition.builder(
-                        LocationCheckLootConditionUtil.builder(
+                        LocationCheckPredicates.builder(
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
@@ -127,7 +127,7 @@ public record EntityItemComponent(EntitySpawner entity, boolean allowSpawnerModi
                 .spawnRule(OffsetSpawnPositionEntitySpawnRule.of(new Vec3d(0.0d, 0.0625d, 0.0d)))
                 .spawnRule(
                     OffsetSpawnPositionEntitySpawnRule.of(new Vec3d(0.0d, 0.5d, 0.0d)),
-                    LocationCheckLootConditionUtil.builder(
+                    LocationCheckPredicates.builder(
                         PositionTarget.INTERACTED,
                         LocationPredicate.Builder.create()
                             .block(BlockPredicate.Builder.create()

@@ -23,6 +23,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> BOGGED = of("bogged");
     public static final RegistryKey<EntityType<?>> BREEZE = of("breeze");
     public static final RegistryKey<EntityType<?>> CAMEL = of("camel");
+    public static final RegistryKey<EntityType<?>> CAMEL_HUSK = of("camel_husk");
     public static final RegistryKey<EntityType<?>> CAT = of("cat");
     public static final RegistryKey<EntityType<?>> CAVE_SPIDER = of("cave_spider");
     public static final RegistryKey<EntityType<?>> CHERRY_BOAT = of("cherry_boat");
@@ -84,6 +85,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> PALE_OAK_BOAT = of("pale_oak_boat");
     public static final RegistryKey<EntityType<?>> PALE_OAK_CHEST_BOAT = of("pale_oak_chest_boat");
     public static final RegistryKey<EntityType<?>> PANDA = of("panda");
+    public static final RegistryKey<EntityType<?>> PARCHED = of("parched");
     public static final RegistryKey<EntityType<?>> PARROT = of("parrot");
     public static final RegistryKey<EntityType<?>> PHANTOM = of("phantom");
     public static final RegistryKey<EntityType<?>> PIG = of("pig");

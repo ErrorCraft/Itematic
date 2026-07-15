@@ -30,7 +30,7 @@ public record TakeHoneyAction(PositionTarget position) implements Action<TakeHon
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockPos pos = context.getBlockPos(this.position.parameter());
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
         if (pos == null) {
             return false;
         }

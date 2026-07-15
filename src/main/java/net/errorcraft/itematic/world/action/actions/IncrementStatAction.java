@@ -28,7 +28,7 @@ public record IncrementStatAction(LootContext.EntityReference entity, Stat<?> st
 
     @Override
     public boolean execute(ActionContext context) {
-        if (context.get(this.entity.getParameter()) instanceof PlayerEntity player) {
+        if (context.get(this.entity.contextParam()) instanceof PlayerEntity player) {
             player.incrementStat(this.stat);
             return true;
         }

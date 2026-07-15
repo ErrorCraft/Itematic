@@ -25,7 +25,7 @@ import net.errorcraft.itematic.item.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponComponents;
 import net.errorcraft.itematic.item.weapon.melee.component.SmashingMeleeWeapon;
-import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionUtil;
+import net.errorcraft.itematic.loot.condition.LocationCheckPredicates;
 import net.errorcraft.itematic.loot.function.SetItemPointerLocationItemModifier;
 import net.errorcraft.itematic.loot.function.SplitItemModifier;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
@@ -234,7 +234,7 @@ public class ItemUtil {
                             InvertedLootCondition.builder(
                                 SideCheckPredicate.builder(Direction.DOWN)
                             ),
-                            LocationCheckLootConditionUtil.builder(
+                            LocationCheckPredicates.builder(
                                 PositionTarget.INTERACTED,
                                 LocationPredicate.Builder.create()
                                     .block(BlockPredicate.Builder.create()
@@ -6446,7 +6446,7 @@ public class ItemUtil {
                             .spawnRule(
                                 DiscardEntitySpawnRule.INSTANCE,
                                 InvertedLootCondition.builder(
-                                    LocationCheckLootConditionUtil.builder(
+                                    LocationCheckPredicates.builder(
                                         PositionTarget.INTERACTED,
                                         LocationPredicate.Builder.create()
                                             .block(BlockPredicate.Builder.create()
@@ -6458,7 +6458,7 @@ public class ItemUtil {
                             .spawnRule(
                                 DiscardEntitySpawnRule.INSTANCE,
                                 InvertedLootCondition.builder(
-                                    LocationCheckLootConditionUtil.builder(
+                                    LocationCheckPredicates.builder(
                                         PositionTarget.INTERACTED,
                                         LocationPredicate.Builder.create()
                                             .block(BlockPredicate.Builder.create()
@@ -6548,6 +6548,13 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CAMEL), this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.CAMEL_HUSK_SPAWN_EGG, create(
+                ItemDisplay.Builder.forItem(ItemKeys.CAMEL_HUSK_SPAWN_EGG).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CAMEL_HUSK), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CAVE_SPIDER_SPAWN_EGG, create(
@@ -6779,6 +6786,13 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PANDA), this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.PARCHED_SPAWN_EGG, create(
+                ItemDisplay.Builder.forItem(ItemKeys.PARCHED_SPAWN_EGG).build(),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(64))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PARCHED), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PARROT_SPAWN_EGG, create(
@@ -10643,7 +10657,7 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        LocationCheckLootConditionUtil.builder(
+                        LocationCheckPredicates.builder(
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
@@ -11964,7 +11978,7 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        LocationCheckLootConditionUtil.builder(
+                        LocationCheckPredicates.builder(
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
@@ -12244,7 +12258,7 @@ public class ItemUtil {
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.USE_ON_BLOCK, ActionEntry.of(
-                        LocationCheckLootConditionUtil.builder(
+                        LocationCheckPredicates.builder(
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .fluid(FluidPredicate.Builder.create()

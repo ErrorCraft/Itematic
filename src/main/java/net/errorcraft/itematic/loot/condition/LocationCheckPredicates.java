@@ -8,13 +8,18 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.Optional;
 
-public class LocationCheckLootConditionUtil {
-    private LocationCheckLootConditionUtil() {}
+public class LocationCheckPredicates {
+    private LocationCheckPredicates() {}
+
+    public static LocationCheckLootCondition setPosition(LocationCheckLootCondition predicate, PositionTarget position) {
+        predicate.itematic$setPosition(position);
+        return predicate;
+    }
 
     public static LootCondition.Builder builder(PositionTarget position, LocationPredicate.Builder builder) {
         return () -> {
             LocationCheckLootCondition predicate = new LocationCheckLootCondition(Optional.of(builder.build()), BlockPos.ORIGIN);
-            predicate.itematic$setExtraFields(new LocationCheckLootConditionExtraFields(position));
+            predicate.itematic$setPosition(position);
             return predicate;
         };
     }
@@ -22,7 +27,7 @@ public class LocationCheckLootConditionUtil {
     public static LootCondition.Builder builder(PositionTarget position, LocationPredicate.Builder builder, BlockPos offset) {
         return () -> {
             LocationCheckLootCondition predicate = new LocationCheckLootCondition(Optional.of(builder.build()), offset);
-            predicate.itematic$setExtraFields(new LocationCheckLootConditionExtraFields(position));
+            predicate.itematic$setPosition(position);
             return predicate;
         };
     }
