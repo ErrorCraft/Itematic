@@ -74,7 +74,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
             UseableItemComponent.builder()
                 .useIndefinitely()
                 .animation(UseAction.SPEAR)
-                .effects(new UseEffectsComponent(true, 1.0f))
+                .effects(new UseEffectsComponent(true, false, 1.0f))
                 .build(),
             WeaponItemComponent.builder(1, material.attackDamageBonus(), 1 / (4 * attackDuration))
                 .type(

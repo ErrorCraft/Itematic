@@ -10,7 +10,6 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.TagKey;
@@ -52,17 +51,6 @@ public abstract class PigEntityExtender extends MobEntityExtender {
     )
     private static boolean isInForPigFoodItemsUsePigTemptItemsItemTagCheck(ItemStack instance, TagKey<Item> tag) {
         return instance.isIn(ItematicItemTags.PIG_TEMPT_ITEMS);
-    }
-
-    @Redirect(
-        method = "method_63649",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack newItemStackForGoldenSwordUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
     }
 
     @Redirect(

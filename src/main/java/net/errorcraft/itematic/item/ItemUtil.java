@@ -11121,24 +11121,28 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.PUFFERFISH_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(FoodItemComponent.of(FoodComponents.PUFFERFISH))
                     .build()
             ));
             this.registerable.register(ItemKeys.SALMON_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SALMON_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.SALMON), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(FoodItemComponent.of(FoodComponents.SALMON))
                     .build()
             ));
             this.registerable.register(ItemKeys.COD_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.COD_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.COD), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(FoodItemComponent.of(FoodComponents.COD))
                     .build()
             ));
             this.registerable.register(ItemKeys.TROPICAL_FISH_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH_BUCKET).build(),
                 ItemComponentSet.builder()
                     .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(FoodItemComponent.of(FoodComponents.TROPICAL_FISH))
                     .build()
             ));
             this.registerable.register(ItemKeys.AXOLOTL_BUCKET, create(
