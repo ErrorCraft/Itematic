@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -14,7 +15,7 @@ import net.minecraft.world.World;
 
 public class TextHolderItemComponent implements ItemComponent<TextHolderItemComponent> {
     public static final TextHolderItemComponent INSTANCE = new TextHolderItemComponent();
-    public static final Codec<TextHolderItemComponent> CODEC = Codec.unit(INSTANCE);
+    public static final Codec<TextHolderItemComponent> CODEC = MapCodec.unitCodec(INSTANCE);
 
     private TextHolderItemComponent() {}
 

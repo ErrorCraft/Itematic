@@ -82,7 +82,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                     KineticMeleeWeapon.of(new KineticWeaponComponent(
                         2.0f,
                         4.5f,
-                        0.25f,
+                        0.125f,
                         10,
                         (int)(delay * SharedConstants.TICKS_PER_SECOND),
                         KineticWeaponComponent.Condition.ofMinSpeed(

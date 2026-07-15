@@ -5750,6 +5750,7 @@ public class ItemUtil {
                         this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
                         this.soundEvents
                     ))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_SWORD, create(
@@ -6123,7 +6124,12 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BRUSH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BrushItemComponent.of(BrushItemAccessor.maxBrushTime()))
+                    .with(UseableItemComponent.builder()
+                        .useFor(BrushItemAccessor.maxBrushTime())
+                        .animation(UseAction.BRUSH)
+                        .passes(UseableItemComponent.Pass.BLOCK)
+                        .build())
+                    .with(BrushItemComponent.INSTANCE)
                     .with(DamageableItemComponent.of(64))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.BRUSH)))
                     .build()
@@ -8477,6 +8483,16 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(EquipmentItemComponent.ofHorseArmor(ArmorMaterials.DIAMOND, this.soundEvents, this.entityTypes))
+                    .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
+                    .build()
+            ));
+            this.registerable.register(ItemKeys.NETHERITE_HORSE_ARMOR, create(
+                ItemDisplay.Builder.forItem(ItemKeys.NETHERITE_HORSE_ARMOR).build(),
+                AttributeModifiers.armor(ArmorMaterials.NETHERITE, EquipmentType.BODY),
+                ItemComponentSet.builder()
+                    .with(StackableItemComponent.of(1))
+                    .with(EquipmentItemComponent.ofHorseArmor(ArmorMaterials.NETHERITE, this.soundEvents, this.entityTypes))
+                    .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));

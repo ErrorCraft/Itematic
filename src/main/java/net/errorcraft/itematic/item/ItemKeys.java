@@ -1265,6 +1265,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> IRON_HORSE_ARMOR = register("iron_horse_armor");
     public static final RegistryKey<Item> GOLDEN_HORSE_ARMOR = register("golden_horse_armor");
     public static final RegistryKey<Item> DIAMOND_HORSE_ARMOR = register("diamond_horse_armor");
+    public static final RegistryKey<Item> NETHERITE_HORSE_ARMOR = register("netherite_horse_armor");
     public static final RegistryKey<Item> LEATHER_HORSE_ARMOR = register("leather_horse_armor");
     public static final RegistryKey<Item> LEAD = register("lead");
     public static final RegistryKey<Item> NAME_TAG = register("name_tag");

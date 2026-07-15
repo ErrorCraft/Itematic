@@ -6,6 +6,9 @@
     "minecraft:enchantable": {
       "enchantability": 15
     },
+    "minecraft:immune_to_damage": {
+      "damage": "minecraft:is_fire"
+    },
     "minecraft:repairable": {
       "items": "#minecraft:wooden_tool_materials"
     },
@@ -46,7 +49,7 @@
           },
           "forward_movement": 0.38,
           "hit_sound": "minecraft:item.spear.hit",
-          "hitbox_margin": 0.25,
+          "hitbox_margin": 0.125,
           "knockback_conditions": {
             "max_duration_ticks": 70,
             "min_speed": 5.1

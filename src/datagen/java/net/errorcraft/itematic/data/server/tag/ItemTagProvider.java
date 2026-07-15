@@ -1369,7 +1369,8 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.COPPER_HORSE_ARMOR)
             .add(ItemKeys.IRON_HORSE_ARMOR)
             .add(ItemKeys.GOLDEN_HORSE_ARMOR)
-            .add(ItemKeys.DIAMOND_HORSE_ARMOR);
+            .add(ItemKeys.DIAMOND_HORSE_ARMOR)
+            .add(ItemKeys.NETHERITE_HORSE_ARMOR);
         this.builder(ItematicItemTags.NAUTILUS_ARMOR)
             .add(ItemKeys.COPPER_NAUTILUS_ARMOR)
             .add(ItemKeys.IRON_NAUTILUS_ARMOR)

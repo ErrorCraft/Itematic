@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponent> {
     public static final SpawnEggItemComponent INSTANCE = new SpawnEggItemComponent();
-    public static final Codec<SpawnEggItemComponent> CODEC = Codec.unit(INSTANCE);
+    public static final Codec<SpawnEggItemComponent> CODEC = MapCodec.unitCodec(INSTANCE);
 
     private SpawnEggItemComponent() {}
 

@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -17,10 +18,12 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public record UnlockRecipesItemComponent() implements ItemComponent<UnlockRecipesItemComponent> {
+public class UnlockRecipesItemComponent implements ItemComponent<UnlockRecipesItemComponent> {
     public static final UnlockRecipesItemComponent INSTANCE = new UnlockRecipesItemComponent();
-    public static final Codec<UnlockRecipesItemComponent> CODEC = Codec.unit(INSTANCE);
+    public static final Codec<UnlockRecipesItemComponent> CODEC = MapCodec.unitCodec(INSTANCE);
     private static final KnowledgeBookItem DUMMY = new KnowledgeBookItem(new Item.Settings());
+
+    private UnlockRecipesItemComponent() {}
 
     @Override
     public ItemComponentType<UnlockRecipesItemComponent> type() {

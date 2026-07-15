@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -8,24 +9,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BrushItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.consume.UseAction;
 import net.minecraft.world.World;
 
-public record BrushItemComponent() implements ItemComponent<BrushItemComponent> {
+public class BrushItemComponent implements ItemComponent<BrushItemComponent> {
     public static final BrushItemComponent INSTANCE = new BrushItemComponent();
-    public static final Codec<BrushItemComponent> CODEC = Codec.unit(INSTANCE);
+    public static final Codec<BrushItemComponent> CODEC = MapCodec.unitCodec(INSTANCE);
     private static final BrushItem DUMMY = new BrushItem(new Item.Settings());
 
-    public static ItemComponent<?>[] of(int brushTicks) {
-        return new ItemComponent<?>[] {
-            UseableItemComponent.builder()
-                .useFor(brushTicks)
-                .animation(UseAction.BRUSH)
-                .passes(UseableItemComponent.Pass.BLOCK)
-                .build(),
-            INSTANCE
-        };
-    }
+    private BrushItemComponent() {}
 
     @Override
     public ItemComponentType<BrushItemComponent> type() {
