@@ -83,6 +83,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                         2.0f,
                         4.5f,
                         0.25f,
+                        10,
                         (int)(delay * SharedConstants.TICKS_PER_SECOND),
                         KineticWeaponComponent.Condition.ofMinSpeed(
                             (int)(dismountTime * SharedConstants.TICKS_PER_SECOND),

@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(DrawContext.class)
@@ -30,10 +29,10 @@ public abstract class DrawContextExtender {
     private ItemBarStyleLoader itemBarStyles;
 
     @Inject(
-        method = "<init>(Lnet/minecraft/client/MinecraftClient;Lorg/joml/Matrix3x2fStack;Lnet/minecraft/client/gui/render/state/GuiRenderState;)V",
+        method = "<init>(Lnet/minecraft/client/MinecraftClient;Lorg/joml/Matrix3x2fStack;Lnet/minecraft/client/gui/render/state/GuiRenderState;II)V",
         at = @At("TAIL")
     )
-    private void setItemBarStyles(MinecraftClient client, Matrix3x2fStack matrices, GuiRenderState state, CallbackInfo info) {
+    private void setItemBarStyles(MinecraftClient client, Matrix3x2fStack matrices, GuiRenderState state, int mouseX, int mouseY, CallbackInfo info) {
         this.itemBarStyles = client.itematic$itemBarStyles();
     }
 
@@ -84,13 +83,7 @@ public abstract class DrawContextExtender {
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/gui/DrawContext;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V"
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;isItemBarVisible()Z"
-            )
         )
     )
-    private void doNotRenderOriginalItemBar(DrawContext instance, RenderPipeline pipeline, int x1, int y1, int x2, int y2, int z) {}
+    private void doNotRenderOriginalItemBar(DrawContext instance, RenderPipeline pipeline, int x1, int y1, int x2, int y2, int color) {}
 }
