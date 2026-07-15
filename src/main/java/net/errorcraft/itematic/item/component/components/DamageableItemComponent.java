@@ -74,15 +74,16 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
             UseableItemComponent.builder()
                 .useIndefinitely()
                 .animation(UseAction.SPEAR)
-                .effects(new UseEffectsComponent(true, false, 1.0f))
+                .effects(new UseEffectsComponent(
+                    true,
+                    false,
+                    1.0f
+                ))
                 .build(),
             WeaponItemComponent.builder(1, material.attackDamageBonus(), 1 / (4 * attackDuration))
                 .type(
                     MeleeWeaponComponents.KINETIC,
                     KineticMeleeWeapon.of(new KineticWeaponComponent(
-                        2.0f,
-                        4.5f,
-                        0.125f,
                         10,
                         (int)(delay * SharedConstants.TICKS_PER_SECOND),
                         KineticWeaponComponent.Condition.ofMinSpeed(
@@ -112,9 +113,6 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                 .type(
                     MeleeWeaponComponents.PIERCING,
                     PiercingMeleeWeapon.of(new PiercingWeaponComponent(
-                        2.0F,
-                        4.5F,
-                        0.25F,
                         true,
                         false,
                         Optional.of(material == ToolMaterial.WOOD
@@ -128,7 +126,16 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                     ))
                 )
                 .damageType(damageTypes.getOrThrow(DamageTypes.SPEAR))
-                .swingAnimation(new SwingAnimationComponent(SwingAnimationType.STAB, (int)(attackDuration * SharedConstants.TICKS_PER_SECOND)))
+                .swingAnimation(new SwingAnimationComponent(
+                    SwingAnimationType.STAB,
+                    (int)(attackDuration * SharedConstants.TICKS_PER_SECOND)
+                ))
+                .attackRange(new AttackRangeComponent(
+                    2.0f,
+                    4.5f,
+                    0.125f,
+                    0.5f
+                ))
                 .minimumAttackCharge(1.0f)
                 .build(),
             EnchantableItemComponent.of(material),

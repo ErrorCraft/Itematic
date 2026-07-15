@@ -113,7 +113,6 @@
     "entity.ai.brain.task.CrossbowAttackTaskExtender",
     "entity.ai.brain.task.FarmerWorkTaskExtender",
     "entity.ai.brain.task.GatherItemsVillagerTaskExtender",
-    "entity.ai.brain.task.MeleeAttackTaskExtender",
     "entity.ai.brain.task.RamImpactTaskExtender",
     "entity.ai.brain.task.RemoveOffHandItemTaskExtender",
     "entity.ai.brain.task.TargetUtilExtender",

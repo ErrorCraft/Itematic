@@ -1,12 +1,13 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
-import net.errorcraft.itematic.access.entity.mob.MobEntityAccess;
 import net.errorcraft.itematic.entity.projectile.ItematicProjectileUtil;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
@@ -25,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(AbstractSkeletonEntity.class)
-public class AbstractSkeletonEntityExtender extends HostileEntity implements MobEntityAccess {
+public class AbstractSkeletonEntityExtender extends HostileEntity {
     protected AbstractSkeletonEntityExtender(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -87,6 +88,16 @@ public class AbstractSkeletonEntityExtender extends HostileEntity implements Mob
         return ItematicProjectileUtil.getHandPossiblyHolding(entity, ItemKeys.BOW);
     }
 
+    @ModifyReturnValue(
+        method = "canUseRangedWeapon",
+        at = @At("TAIL")
+    )
+    private boolean useItemBehaviorComponent(boolean original, ItemStack stack) {
+        return stack.itematic$getBehavior(ItemComponentTypes.SHOOTER)
+            .map(shooter -> shooter.usesMethod(ShooterMethodTypes.DIRECT))
+            .orElse(false);
+    }
+
     @Redirect(
         method = "updateAttackType",
         at = @At(
@@ -108,10 +119,5 @@ public class AbstractSkeletonEntityExtender extends HostileEntity implements Mob
     private <T extends ProjectileEntity> T onlySetSpeed(T projectile, ServerWorld world, ItemStack projectileStack, double velocityX, double velocityY, double velocityZ, float power, float divergence) {
         projectile.setVelocity(velocityX, velocityY, velocityZ, power, divergence);
         return projectile;
-    }
-
-    @Override
-    public boolean itematic$canUseShooter(ItemStack stack, ShooterItemComponent component) {
-        return stack.itematic$isOf(ItemKeys.BOW);
     }
 }

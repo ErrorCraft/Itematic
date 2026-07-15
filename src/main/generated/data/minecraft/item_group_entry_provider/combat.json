@@ -6,11 +6,11 @@
     },
     {
       "type": "tag",
-      "tag": "minecraft:item_group/axes"
+      "tag": "minecraft:item_group/spears"
     },
     {
       "type": "tag",
-      "tag": "minecraft:item_group/spears"
+      "tag": "minecraft:item_group/axes"
     },
     "minecraft:trident",
     "minecraft:mace",

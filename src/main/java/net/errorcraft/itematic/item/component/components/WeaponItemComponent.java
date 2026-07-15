@@ -20,6 +20,7 @@ import net.minecraft.component.ComponentHolder;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.AttackRangeComponent;
 import net.minecraft.component.type.SwingAnimationComponent;
 import net.minecraft.component.type.WeaponComponent;
 import net.minecraft.entity.LivingEntity;
@@ -35,7 +36,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Optional;
 
-public record WeaponItemComponent(int itemDamagePerAttack, float disableBlockingForSeconds, ComponentMap types, Optional<RegistryEntry<DamageType>> damageType, Optional<SwingAnimationComponent> swingAnimation, WeaponAttackDamageDataComponent attackDamage, double attackSpeed, Optional<Float> minimumAttackCharge) implements ItemComponent<WeaponItemComponent>, ComponentHolder {
+public record WeaponItemComponent(int itemDamagePerAttack, float disableBlockingForSeconds, ComponentMap types, Optional<RegistryEntry<DamageType>> damageType, Optional<SwingAnimationComponent> swingAnimation, WeaponAttackDamageDataComponent attackDamage, double attackSpeed, Optional<AttackRangeComponent> attackRange, Optional<Float> minimumAttackCharge) implements ItemComponent<WeaponItemComponent>, ComponentHolder {
     public static final Codec<WeaponItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.NON_NEGATIVE_INT.optionalFieldOf("item_damage_per_attack", 1).forGetter(WeaponItemComponent::itemDamagePerAttack),
         Codecs.NON_NEGATIVE_FLOAT.optionalFieldOf("disable_blocking_for_seconds", 0.0f).forGetter(WeaponItemComponent::disableBlockingForSeconds),
@@ -44,6 +45,7 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
         SwingAnimationComponent.CODEC.optionalFieldOf("swing_animation").forGetter(WeaponItemComponent::swingAnimation),
         WeaponAttackDamageDataComponent.CODEC.fieldOf("attack_damage").forGetter(WeaponItemComponent::attackDamage),
         ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("attack_speed").forGetter(WeaponItemComponent::attackSpeed),
+        AttackRangeComponent.CODEC.optionalFieldOf("attack_range").forGetter(WeaponItemComponent::attackRange),
         Codecs.rangedInclusiveFloat(0.0f, 1.0f).optionalFieldOf("minimum_attack_charge").forGetter(WeaponItemComponent::minimumAttackCharge)
     ).apply(instance, WeaponItemComponent::new));
 
@@ -103,6 +105,7 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
             .forEach(meleeWeapon -> meleeWeapon.addComponents(builder));
         this.damageType.ifPresent(damageType -> builder.add(DataComponentTypes.DAMAGE_TYPE, new LazyRegistryEntryReference<>(damageType)));
         this.swingAnimation.ifPresent(swingAnimation -> builder.add(DataComponentTypes.SWING_ANIMATION, swingAnimation));
+        this.attackRange.ifPresent(attackRange -> builder.add(DataComponentTypes.ATTACK_RANGE, attackRange));
         this.minimumAttackCharge.ifPresent(minimumAttackCharge -> builder.add(DataComponentTypes.MINIMUM_ATTACK_CHARGE, minimumAttackCharge));
     }
 
@@ -118,6 +121,7 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
         private SwingAnimationComponent swingAnimation;
         private final double attackDamage;
         private final double attackSpeed;
+        private AttackRangeComponent attackRange;
         private Float minimumAttackCharge;
         private float disableBlockingForSeconds;
 
@@ -136,6 +140,7 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
                 Optional.ofNullable(this.swingAnimation),
                 new WeaponAttackDamageDataComponent(List.of(), this.attackDamage),
                 this.attackSpeed,
+                Optional.ofNullable(this.attackRange),
                 Optional.ofNullable(this.minimumAttackCharge)
             );
         }
@@ -152,6 +157,11 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
 
         public Builder swingAnimation(SwingAnimationComponent swingAnimation) {
             this.swingAnimation = swingAnimation;
+            return this;
+        }
+
+        public Builder attackRange(AttackRangeComponent attackRange) {
+            this.attackRange = attackRange;
             return this;
         }
 

@@ -278,8 +278,8 @@ public class ItemGroupEntryProviders {
         );
         registerable.register(ItemGroupEntryProviderKeys.COMBAT, ItemGroupEntryProvider.builder()
             .add(ItematicItemTags.SWORDS)
-            .add(ItematicItemTags.AXES)
             .add(ItematicItemTags.SPEARS)
+            .add(ItematicItemTags.AXES)
             .add(items.getOrThrow(ItemKeys.TRIDENT))
             .add(items.getOrThrow(ItemKeys.MACE))
             .add(items.getOrThrow(ItemKeys.SHIELD))

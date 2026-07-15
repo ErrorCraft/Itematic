@@ -1,8 +1,9 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.access.entity.mob.MobEntityAccess;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.IllagerEntity;
 import net.minecraft.entity.mob.PillagerEntity;
@@ -17,9 +18,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PillagerEntity.class)
-public abstract class PillagerEntityExtender extends MobEntityExtender implements MobEntityAccess {
+public abstract class PillagerEntityExtender extends MobEntityExtender {
     protected PillagerEntityExtender(EntityType<? extends IllagerEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    @ModifyReturnValue(
+        method = "canUseRangedWeapon",
+        at = @At("TAIL")
+    )
+    private boolean useItemBehaviorComponent(boolean original, ItemStack stack) {
+        return stack.itematic$getBehavior(ItemComponentTypes.SHOOTER)
+            .map(shooter -> shooter.usesMethod(ShooterMethodTypes.CHARGEABLE))
+            .orElse(false);
     }
 
     @Redirect(
@@ -67,11 +78,6 @@ public abstract class PillagerEntityExtender extends MobEntityExtender implement
     )
     private boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.CROSSBOW);
-    }
-
-    @Override
-    public boolean itematic$canUseShooter(ItemStack stack, ShooterItemComponent component) {
-        return stack.itematic$isOf(ItemKeys.CROSSBOW);
     }
 
     @Override
