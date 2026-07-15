@@ -133,6 +133,8 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                 .attackRange(new AttackRangeComponent(
                     2.0f,
                     4.5f,
+                    2.0f,
+                    6.5f,
                     0.125f,
                     0.5f
                 ))
