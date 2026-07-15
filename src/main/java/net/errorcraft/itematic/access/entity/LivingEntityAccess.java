@@ -22,4 +22,7 @@ public interface LivingEntityAccess {
     default double itematic$getAttackDamage() {
         return 0.0d;
     }
+    default double itematic$getBaseAttackDamage() {
+        return 0.0d;
+    }
 }

@@ -91,6 +91,7 @@
     "component.type.KineticWeaponComponentExtender",
     "component.type.LodestoneTrackerComponentExtender",
     "component.type.MapIdComponentExtender",
+    "component.type.PiercingWeaponComponentExtender",
     "component.type.ToolComponentExtender",
     "component.type.ToolComponentExtender$RuleExtender",
     "datafixer.SchemasExtender",
