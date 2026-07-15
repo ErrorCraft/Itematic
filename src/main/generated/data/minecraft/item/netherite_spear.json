@@ -10,7 +10,7 @@
       "damage": "minecraft:is_fire"
     },
     "minecraft:repairable": {
-      "items": "#minecraft:wooden_tool_materials"
+      "items": "#minecraft:netherite_tool_materials"
     },
     "minecraft:stackable": 1,
     "minecraft:useable": {
@@ -59,7 +59,7 @@
           "forward_movement": 0.38,
           "hit_sound": "minecraft:item.spear.hit",
           "knockback_conditions": {
-            "max_duration_ticks": 70,
+            "max_duration_ticks": 110,
             "min_speed": 5.1
           },
           "sound": "minecraft:item.spear.use"

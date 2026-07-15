@@ -5622,7 +5622,7 @@ public class ItemUtil {
                         0.75f,
                         5.0f,
                         14.0f,
-                        6.0f,
+                        10.0f,
                         5.1f,
                         15.0f,
                         4.6f,
@@ -5643,11 +5643,11 @@ public class ItemUtil {
                         0.7f,
                         4.5f,
                         10.0f,
-                        5.5f,
+                        9.0f,
                         5.1f,
                         13.75f,
                         4.6f,
-                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS),
                         this.soundEvents
                     ))
                     .build()
@@ -5663,11 +5663,11 @@ public class ItemUtil {
                         0.65f,
                         4.0f,
                         9.0f,
-                        5.0f,
+                        8.25f,
                         5.1f,
                         12.5f,
                         4.6f,
-                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.items.getOrThrow(ItemTags.COPPER_TOOL_MATERIALS),
                         this.soundEvents
                     ))
                     .build()
@@ -5683,11 +5683,11 @@ public class ItemUtil {
                         0.6f,
                         2.5f,
                         8.0f,
-                        4.5f,
+                        6.75f,
                         5.1f,
                         11.25f,
                         4.6f,
-                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS),
                         this.soundEvents
                     ))
                     .build()
@@ -5703,11 +5703,11 @@ public class ItemUtil {
                         0.7f,
                         3.5f,
                         10.0f,
-                        5.5f,
+                        8.5f,
                         5.1f,
                         13.75f,
                         4.6f,
-                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS),
                         this.soundEvents
                     ))
                     .build()
@@ -5723,11 +5723,11 @@ public class ItemUtil {
                         0.5f,
                         3.0f,
                         7.5f,
-                        4.0f,
+                        6.5f,
                         5.1f,
                         10.0f,
                         4.6f,
-                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS),
                         this.soundEvents
                     ))
                     .build()
@@ -5743,11 +5743,11 @@ public class ItemUtil {
                         0.4f,
                         2.5f,
                         7.0f,
-                        3.5f,
+                        5.5f,
                         5.1f,
                         8.75f,
                         4.6f,
-                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
+                        this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS),
                         this.soundEvents
                     ))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
