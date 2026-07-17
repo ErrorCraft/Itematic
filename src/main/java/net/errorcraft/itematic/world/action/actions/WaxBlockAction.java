@@ -32,12 +32,12 @@ public record WaxBlockAction(PositionTarget position) implements Action<WaxBlock
 
     @Override
     public boolean execute(ActionContext context) {
-        World world = context.world();
-        BlockPos pos = context.get(this.position.parameter(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
         if (pos == null) {
             return false;
         }
 
+        World world = context.world();
         return HoneycombItem.getWaxedState(world.getBlockState(pos))
             .map(state -> {
                 Entity entity = context.get(LootContextParameters.THIS_ENTITY);

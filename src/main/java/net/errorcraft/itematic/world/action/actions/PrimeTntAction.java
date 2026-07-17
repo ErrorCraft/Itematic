@@ -13,7 +13,7 @@ import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.rule.GameRules;
 
 public record PrimeTntAction(PositionTarget position) implements Action<PrimeTntAction> {
     public static final MapCodec<PrimeTntAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -35,7 +35,7 @@ public record PrimeTntAction(PositionTarget position) implements Action<PrimeTnt
             return false;
         }
 
-        BlockPos pos = context.get(this.position.parameter(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
         if (pos == null) {
             return false;
         }
@@ -46,7 +46,7 @@ public record PrimeTntAction(PositionTarget position) implements Action<PrimeTnt
             return true;
         }
 
-        if (player != null && !world.getGameRules().getBoolean(GameRules.TNT_EXPLODES)) {
+        if (player != null && !world.getGameRules().getValue(GameRules.TNT_EXPLODES)) {
             player.sendMessage(Text.translatable("block.minecraft.tnt.disabled"), true);
         }
 

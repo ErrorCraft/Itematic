@@ -1,8 +1,13 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.access.entity.mob.MobEntityAccess;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
+import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
+import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponComponents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.AbstractPiglinEntity;
 import net.minecraft.entity.mob.PiglinEntity;
@@ -19,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(PiglinEntity.class)
-public abstract class PiglinEntityExtender extends MobEntityExtender implements MobEntityAccess {
+public abstract class PiglinEntityExtender extends MobEntityExtender {
     public PiglinEntityExtender(EntityType<? extends AbstractPiglinEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -36,6 +41,18 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
         return this.getEntityWorld().itematic$createStack(ItemKeys.CROSSBOW);
     }
 
+    @ModifyExpressionValue(
+        method = "makeInitialWeapon",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/util/math/random/Random;nextInt(I)I"
+        )
+    )
+    private int storeSpearChance(int original, @Share("spearChance") LocalIntRef spearChance) {
+        spearChance.set(original);
+        return original;
+    }
+
     @Redirect(
         method = "makeInitialWeapon",
         at = @At(
@@ -50,8 +67,11 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
             )
         )
     )
-    private ItemStack newItemStackForGoldenSwordUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_SWORD);
+    private ItemStack newItemStackForGoldenWeaponUseCreateStack(ItemConvertible item, @Share("spearChance") LocalIntRef spearChance) {
+        return this.getEntityWorld().itematic$createStack(spearChance.get() == 0
+            ? ItemKeys.GOLDEN_SPEAR
+            : ItemKeys.GOLDEN_SWORD
+        );
     }
 
     @Redirect(
@@ -63,6 +83,22 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
     )
     private boolean isHoldingForCrossbowUseRegistryKeyCheck(PiglinEntity instance, Item item) {
         return instance.itematic$isHolding(ItemKeys.CROSSBOW);
+    }
+
+    @ModifyReturnValue(
+        method = "canUseRangedWeapon",
+        at = @At("TAIL")
+    )
+    private boolean useItemBehaviorComponent(boolean original, ItemStack stack) {
+        if (stack.itematic$getBehavior(ItemComponentTypes.SHOOTER)
+            .map(shooter -> shooter.usesMethod(ShooterMethodTypes.CHARGEABLE))
+            .orElse(false)) {
+            return true;
+        }
+
+        return stack.itematic$getBehavior(ItemComponentTypes.WEAPON)
+            .map(weapon -> weapon.contains(MeleeWeaponComponents.KINETIC))
+            .orElse(false);
     }
 
     @Redirect(
@@ -150,11 +186,6 @@ public abstract class PiglinEntityExtender extends MobEntityExtender implements 
     )
     private ItemStack newItemStackForGoldenBootsUseCreateStack(ItemConvertible item) {
         return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_BOOTS);
-    }
-
-    @Override
-    public boolean itematic$canUseShooter(ItemStack stack, ShooterItemComponent component) {
-        return stack.itematic$isOf(ItemKeys.CROSSBOW);
     }
 
     @Override

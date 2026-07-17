@@ -41,7 +41,7 @@ public record SetEntityNameFromItemAction(LootContext.EntityReference entity) im
             return false;
         }
 
-        Entity entity = context.get(this.entity.getParameter());
+        Entity entity = context.get(this.entity.contextParam());
         if (entity instanceof LivingEntity livingEntity) {
             return trySetName(livingEntity, customName);
         }

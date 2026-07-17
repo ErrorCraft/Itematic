@@ -42,7 +42,7 @@ public record ModifyItemAction(LootContext.ItemStackReference stack, LootFunctio
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.get(this.stack.getParameter());
+        ItemStack stack = context.get(this.stack.contextParam());
         if (ItemStackUtil.isNullOrEmpty(stack)) {
             return false;
         }

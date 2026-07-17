@@ -2,7 +2,7 @@ package net.errorcraft.itematic.component.type;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.predicate.item.ItemPredicateUtil;
+import net.errorcraft.itematic.predicate.item.ItemPredicates;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -58,7 +58,7 @@ public record WeaponAttackDamageDataComponent(List<Rule> rules, double defaultDa
         ).apply(instance, Rule::new));
         public static final PacketCodec<RegistryByteBuf, Rule> PACKET_CODEC = PacketCodec.tuple(
             PacketCodecs.registryEntryList(RegistryKeys.ENTITY_TYPE).collect(PacketCodecs::optional), Rule::entities,
-            ItemPredicateUtil.PACKET_CODEC.collect(PacketCodecs::optional), Rule::item,
+            ItemPredicates.PACKET_CODEC.collect(PacketCodecs::optional), Rule::item,
             PacketCodecs.DOUBLE.collect(PacketCodecs::optional), Rule::damage,
             PacketCodecs.BOOLEAN.collect(PacketCodecs::optional), Rule::addBase,
             Rule::new

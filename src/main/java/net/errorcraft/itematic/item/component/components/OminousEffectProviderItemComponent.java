@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -13,7 +14,7 @@ import net.minecraft.world.World;
 
 public class OminousEffectProviderItemComponent implements ItemComponent<OminousEffectProviderItemComponent> {
     public static final OminousEffectProviderItemComponent INSTANCE = new OminousEffectProviderItemComponent();
-    public static final Codec<OminousEffectProviderItemComponent> CODEC = Codec.unit(INSTANCE);
+    public static final Codec<OminousEffectProviderItemComponent> CODEC = MapCodec.unitCodec(INSTANCE);
 
     private OminousEffectProviderItemComponent() {}
 

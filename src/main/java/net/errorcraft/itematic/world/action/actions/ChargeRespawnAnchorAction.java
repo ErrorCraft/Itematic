@@ -30,12 +30,12 @@ public record ChargeRespawnAnchorAction(PositionTarget position) implements Acti
 
     @Override
     public boolean execute(ActionContext context) {
-        World world = context.world();
-        BlockPos pos = context.getBlockPos(this.position.parameter());
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
         if (pos == null) {
             return false;
         }
 
+        World world = context.world();
         BlockState state = world.getBlockState(pos);
         if (!state.isOf(Blocks.RESPAWN_ANCHOR)) {
             return false;

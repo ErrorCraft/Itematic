@@ -28,6 +28,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
@@ -89,6 +90,10 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
         }
 
         EntityType<?> type = this.entityType(context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY));
+        if (!type.isAllowedInPeaceful() && world.getDifficulty() == Difficulty.PEACEFUL) {
+            return null;
+        }
+
         return new EntitySpawnContext(
             world,
             type,

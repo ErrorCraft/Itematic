@@ -32,8 +32,12 @@ public record LightEndPortalAction(PositionTarget position) implements Action<Li
 
     @Override
     public boolean execute(ActionContext context) {
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
+        if (pos == null) {
+            return false;
+        }
+
         World world = context.world();
-        BlockPos pos = context.getBlockPos(this.position.parameter());
         BlockPattern.Result result = EndPortalFrameBlock.getCompletedFramePattern()
             .searchAround(world, pos);
         if (result == null) {

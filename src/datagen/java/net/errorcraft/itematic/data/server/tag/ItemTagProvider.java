@@ -1326,6 +1326,14 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.GOLDEN_AXE)
             .add(ItemKeys.DIAMOND_AXE)
             .add(ItemKeys.NETHERITE_AXE);
+        this.builder(ItematicItemTags.SPEARS)
+            .add(ItemKeys.WOODEN_SPEAR)
+            .add(ItemKeys.STONE_SPEAR)
+            .add(ItemKeys.COPPER_SPEAR)
+            .add(ItemKeys.IRON_SPEAR)
+            .add(ItemKeys.GOLDEN_SPEAR)
+            .add(ItemKeys.DIAMOND_SPEAR)
+            .add(ItemKeys.NETHERITE_SPEAR);
         this.builder(ItematicItemTags.ARMOR)
             .add(ItemKeys.LEATHER_HELMET)
             .add(ItemKeys.LEATHER_CHESTPLATE)
@@ -1361,7 +1369,14 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemKeys.COPPER_HORSE_ARMOR)
             .add(ItemKeys.IRON_HORSE_ARMOR)
             .add(ItemKeys.GOLDEN_HORSE_ARMOR)
-            .add(ItemKeys.DIAMOND_HORSE_ARMOR);
+            .add(ItemKeys.DIAMOND_HORSE_ARMOR)
+            .add(ItemKeys.NETHERITE_HORSE_ARMOR);
+        this.builder(ItematicItemTags.NAUTILUS_ARMOR)
+            .add(ItemKeys.COPPER_NAUTILUS_ARMOR)
+            .add(ItemKeys.IRON_NAUTILUS_ARMOR)
+            .add(ItemKeys.GOLDEN_NAUTILUS_ARMOR)
+            .add(ItemKeys.DIAMOND_NAUTILUS_ARMOR)
+            .add(ItemKeys.NETHERITE_NAUTILUS_ARMOR);
         this.builder(ItematicItemTags.NUGGETS)
             .add(ItemKeys.COPPER_NUGGET)
             .add(ItemKeys.IRON_NUGGET)

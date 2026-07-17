@@ -20,9 +20,8 @@ public class BrewingStandScreenDelegate extends RecipeBookScreen<BrewingStandMen
     }
 
     @Override
-    @SuppressWarnings("DataFlowIssue")
     protected void init() {
-        this.delegate.init(this.client, this.width, this.height);
+        this.delegate.init(this.width, this.height);
         super.init();
         ((HandledScreenAccessor) this.delegate).itematic$setX(this.x);
     }

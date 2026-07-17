@@ -69,6 +69,22 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
         };
     }
 
+    public static ItemComponent<?>[] ofNautilusArmor(ArmorMaterial material, RegistryEntryLookup<SoundEvent> soundEvents, RegistryEntryLookup<EntityType<?>> entityTypes, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+        return new ItemComponent<?>[] {
+            StackableItemComponent.of(1),
+            of(EquippableComponent.builder(EquipmentSlot.BODY)
+                .equipSound(soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NAUTILUS))
+                .model(material.assetId())
+                .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_NAUTILUS_ARMOR))
+                .damageOnHurt(false)
+                .equipOnInteract(true)
+                .canBeSheared(true)
+                .shearingSound(soundEvents.getOrThrow(SoundEventKeys.ARMOR_UNEQUIP_NAUTILUS))
+                .build()),
+            DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
+        };
+    }
+
     public static ItemComponent<?>[] forArmor(ArmorMaterial material, EquipmentType type) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),

@@ -10,6 +10,7 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethod;
+import net.errorcraft.itematic.item.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.item.use.provider.providers.ShooterIntegerProvider;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -97,6 +98,10 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
         builder.add(ItematicDataComponentTypes.SHOOTER_HELD_AMMUNITION, new ItemListDataComponent(this.heldAmmunition));
         builder.add(ItematicDataComponentTypes.SHOOTER_DAMAGE_RULES, this.itemDamage);
         this.method.addComponents(builder);
+    }
+
+    public boolean usesMethod(ShooterMethodType<?> type) {
+        return this.method.type() == type;
     }
 
     public void shoot(ServerWorld world, LivingEntity shooter, Hand hand, ItemStack shooterStack, List<ItemStack> projectiles, float power, float divergence, boolean critical, @Nullable LivingEntity target) {

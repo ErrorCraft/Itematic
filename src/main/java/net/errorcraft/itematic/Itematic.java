@@ -9,6 +9,7 @@ import net.errorcraft.itematic.item.placement.block.picker.BlockPickerTypes;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
+import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponComponents;
 import net.errorcraft.itematic.loot.function.ItematicItemModifierTypes;
 import net.errorcraft.itematic.loot.predicate.ItematicPredicateTypes;
 import net.errorcraft.itematic.predicate.entity.ItematicEntitySubPredicateTypes;
@@ -51,5 +52,6 @@ public class Itematic implements ModInitializer {
         ItematicEntitySubPredicateTypes.init();
         WorldModificationTypes.init();
         EntitySpawnRuleType.init();
+        MeleeWeaponComponents.init();
     }
 }

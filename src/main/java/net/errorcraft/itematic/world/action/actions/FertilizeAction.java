@@ -31,7 +31,7 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
 
     @Override
     public boolean execute(ActionContext context) {
-        Vec3d pos = context.get(this.position.parameter());
+        Vec3d pos = context.get(this.position.contextParam());
         if (pos == null) {
             return false;
         }

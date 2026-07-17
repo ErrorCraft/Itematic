@@ -41,17 +41,6 @@ public class TargetUtilExtender {
         method = "isTargetWithinAttackRange",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/mob/MobEntity;canUseRangedWeapon(Lnet/minecraft/item/RangedWeaponItem;)Z"
-        )
-    )
-    private static boolean canUseRangedWeaponUseItemComponent(MobEntity instance, RangedWeaponItem weapon, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
-        return instance.itematic$canUseShooter(instance.getMainHandStack(), shooterItemComponent.get());
-    }
-
-    @Redirect(
-        method = "isTargetWithinAttackRange",
-        at = @At(
-            value = "INVOKE",
             target = "Lnet/minecraft/item/RangedWeaponItem;getRange()I"
         )
     )

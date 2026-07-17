@@ -44,7 +44,7 @@ public record ModifySignAction(PositionTarget position, Optional<DyeColor> color
 
     @Override
     public boolean execute(ActionContext context) {
-        Vec3d pos = context.get(this.position.parameter());
+        Vec3d pos = context.get(this.position.contextParam());
         if (pos == null) {
             return false;
         }

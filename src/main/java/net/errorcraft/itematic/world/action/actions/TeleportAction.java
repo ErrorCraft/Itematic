@@ -39,7 +39,7 @@ public record TeleportAction(int distance, LootContext.EntityReference entity) i
             return false;
         }
 
-        Entity entity = context.get(this.entity.getParameter());
+        Entity entity = context.get(this.entity.contextParam());
         if (entity instanceof LivingEntity target) {
             return this.teleport(target, world);
         }
