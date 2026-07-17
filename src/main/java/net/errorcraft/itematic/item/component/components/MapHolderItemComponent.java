@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -15,7 +16,7 @@ import net.minecraft.world.World;
 
 public class MapHolderItemComponent implements ItemComponent<MapHolderItemComponent> {
     public static final MapHolderItemComponent INSTANCE = new MapHolderItemComponent();
-    public static final Codec<MapHolderItemComponent> CODEC = Codec.unit(INSTANCE);
+    public static final Codec<MapHolderItemComponent> CODEC = MapCodec.unitCodec(INSTANCE);
     public static final FilledMapItem DUMMY = new FilledMapItem(new Item.Settings());
 
     private MapHolderItemComponent() {}

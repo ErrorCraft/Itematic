@@ -64,9 +64,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public abstract void setCurrentHand(Hand hand);
 
     @Shadow
-    public abstract ItemStack getMainHandStack();
-
-    @Shadow
     public abstract ItemStack getStackInHand(Hand hand);
 
     @Shadow
@@ -77,6 +74,9 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Shadow
     public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
+
+    @Shadow
+    public abstract Hand getActiveHand();
 
     @Unique
     private int itemUsedTicks;
@@ -420,7 +420,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @ModifyReturnValue(
-        method = "getItemUseTime",
+        method = "getItemUseTime()I",
         at = @At(
             value = "RETURN",
             ordinal = 0
@@ -452,8 +452,20 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Override
     public double itematic$getAttackDamage() {
-        Double baseAttackDamage = this.getBaseAttackDamage(this.getMainHandStack());
+        Hand usedHand = this.getActiveHand();
+        Double baseAttackDamage = this.getBaseAttackDamage(this.getStackInHand(usedHand));
         return this.getAttributes().itematic$getValue(EntityAttributes.ATTACK_DAMAGE, baseAttackDamage);
+    }
+
+    @Override
+    public double itematic$getBaseAttackDamage() {
+        Hand usedHand = this.getActiveHand();
+        Double baseAttackDamage = this.getBaseAttackDamage(this.getStackInHand(usedHand));
+        if (baseAttackDamage != null) {
+            return baseAttackDamage;
+        }
+
+        return this.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE);
     }
 
     @Unique

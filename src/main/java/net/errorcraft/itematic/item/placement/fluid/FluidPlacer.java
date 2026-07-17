@@ -16,13 +16,13 @@ import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.event.GameEvent;
 
 public class FluidPlacer {
@@ -95,11 +95,8 @@ public class FluidPlacer {
     }
 
     private boolean tryEvaporate(BlockPos pos) {
-        if (!(context.world() instanceof ServerWorld world)) {
-            return false;
-        }
-
-        if (!world.getDimension().ultrawarm()) {
+        World world = this.context.world();
+        if (!world.getEnvironmentAttributes().getAttributeValue(EnvironmentAttributes.WATER_EVAPORATES_GAMEPLAY, pos)) {
             return false;
         }
 
@@ -115,15 +112,12 @@ public class FluidPlacer {
             0.5f,
             2.6f + (world.random.nextFloat() - world.random.nextFloat()) * 0.8f
         );
-        
         for (int i = 0; i < 8; i++) {
-            world.spawnParticles(
+            world.addParticleClient(
                 ParticleTypes.LARGE_SMOKE,
                 pos.getX() + Math.random(),
                 pos.getY() + Math.random(),
                 pos.getZ() + Math.random(),
-                0,
-                0.0d,
                 0.0d,
                 0.0d,
                 0.0d

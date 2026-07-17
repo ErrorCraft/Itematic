@@ -28,7 +28,7 @@ public record SwingHandAction(LootContext.EntityReference entity) implements Act
 
     @Override
     public boolean execute(ActionContext context) {
-        Entity entity = context.get(this.entity.getParameter());
+        Entity entity = context.get(this.entity.contextParam());
         if (!(entity instanceof LivingEntity target)) {
             return false;
         }

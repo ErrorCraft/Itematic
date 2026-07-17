@@ -29,7 +29,7 @@ public record AddStatusEffectsAction(List<StatusEffectInstance> effects, LootCon
 
     @Override
     public boolean execute(ActionContext context) {
-        if (context.get(this.entity.getParameter()) instanceof LivingEntity target) {
+        if (context.get(this.entity.contextParam()) instanceof LivingEntity target) {
             return this.addStatusEffects(target);
         }
 

@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
-import net.errorcraft.itematic.predicate.item.ItemPredicateUtil;
+import net.errorcraft.itematic.predicate.item.ItemPredicates;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
@@ -21,7 +21,7 @@ public record ConditionIntegerProvider(IntegerProvider amount, ItemPredicate con
     ).apply(instance, ConditionIntegerProvider::new));
     public static final PacketCodec<RegistryByteBuf, ConditionIntegerProvider> PACKET_CODEC = PacketCodec.tuple(
         IntegerProvider.PACKET_CODEC, ConditionIntegerProvider::amount,
-        ItemPredicateUtil.PACKET_CODEC, ConditionIntegerProvider::condition,
+        ItemPredicates.PACKET_CODEC, ConditionIntegerProvider::condition,
         ConditionIntegerProvider::new
     );
 

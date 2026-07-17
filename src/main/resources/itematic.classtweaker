@@ -35,6 +35,8 @@ inject-interface    net/minecraft/recipe/book/RecipeBookOptions    net/errorcraf
 inject-interface    net/minecraft/client/gui/widget/ItemStackWidget    net/errorcraft/itematic/access/client/gui/widget/ItemStackWidgetAccess
 inject-interface    net/minecraft/client/gui/screen/StatsScreen    net/errorcraft/itematic/access/client/gui/screen/StatsScreenAccess
 inject-interface    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry    net/errorcraft/itematic/access/client/gui/screen/StatsScreenAccess$ItemStatsListWidgetAccess$StatEntryAccess
+inject-interface    net/minecraft/predicate/item/ItemPredicate    net/errorcraft/itematic/access/predicate/item/ItemPredicateAccess
+inject-interface    net/minecraft/predicate/item/ItemPredicate$Builder    net/errorcraft/itematic/access/predicate/item/ItemPredicateAccess$BuilderAccess
 
 extend-enum    net/minecraft/recipe/book/RecipeBookType    ITEMATIC_BREWING
 extend-enum    net/minecraft/client/recipebook/RecipeBookType    ITEMATIC_BREWING

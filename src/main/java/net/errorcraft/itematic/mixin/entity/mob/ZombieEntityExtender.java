@@ -97,6 +97,25 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
             )
         )
     )
+    private ItemStack newItemStackForIronSpearUseCreateStack(ItemConvertible item) {
+        return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_SPEAR);
+    }
+
+    @Redirect(
+        method = "initEquipment",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;IRON_SPEAR:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
     private ItemStack newItemStackForIronShovelUseCreateStack(ItemConvertible item) {
         return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_SHOVEL);
     }

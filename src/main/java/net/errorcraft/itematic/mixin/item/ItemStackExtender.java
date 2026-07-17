@@ -21,6 +21,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.component.*;
+import net.minecraft.component.type.KineticWeaponComponent;
 import net.minecraft.component.type.TooltipDisplayComponent;
 import net.minecraft.component.type.WeaponComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -53,10 +54,7 @@ import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -430,6 +428,24 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (this.entry == null) {
             info.setReturnValue(false);
         }
+    }
+
+    @Redirect(
+        method = "usageTick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/component/DataComponentTypes;KINETIC_WEAPON:Lnet/minecraft/component/ComponentType;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private Object getKineticWeaponReturnNull(ItemStack instance, ComponentType<KineticWeaponComponent> componentType) {
+        return null;
     }
 
     @Inject(

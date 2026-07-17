@@ -69,9 +69,6 @@
       "net/minecraft/class_2048\u0024class_2049": [
         "net/errorcraft/itematic/access/predicate/EntityPredicateBuilderAccess"
       ],
-      "net/minecraft/class_2073\u0024class_2074": [
-        "net/errorcraft/itematic/access/predicate/item/ItemPredicateBuilderAccess"
-      ],
       "net/minecraft/class_2302": [
         "net/errorcraft/itematic/access/block/CropBlockAccess"
       ],

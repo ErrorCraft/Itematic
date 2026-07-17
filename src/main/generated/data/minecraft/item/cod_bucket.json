@@ -14,6 +14,10 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:use_bucket"
     },
+    "minecraft:food": {
+      "nutrition": 2,
+      "saturation": 0.4
+    },
     "minecraft:stackable": 1
   },
   "display": {

@@ -1146,6 +1146,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> BREEZE_SPAWN_EGG = register("breeze_spawn_egg");
     public static final RegistryKey<Item> CAT_SPAWN_EGG = register("cat_spawn_egg");
     public static final RegistryKey<Item> CAMEL_SPAWN_EGG = register("camel_spawn_egg");
+    public static final RegistryKey<Item> CAMEL_HUSK_SPAWN_EGG = register("camel_husk_spawn_egg");
     public static final RegistryKey<Item> CAVE_SPIDER_SPAWN_EGG = register("cave_spider_spawn_egg");
     public static final RegistryKey<Item> CHICKEN_SPAWN_EGG = register("chicken_spawn_egg");
     public static final RegistryKey<Item> COD_SPAWN_EGG = register("cod_spawn_egg");
@@ -1175,8 +1176,10 @@ public class ItemKeys {
     public static final RegistryKey<Item> MAGMA_CUBE_SPAWN_EGG = register("magma_cube_spawn_egg");
     public static final RegistryKey<Item> MOOSHROOM_SPAWN_EGG = register("mooshroom_spawn_egg");
     public static final RegistryKey<Item> MULE_SPAWN_EGG = register("mule_spawn_egg");
+    public static final RegistryKey<Item> NAUTILUS_SPAWN_EGG = register("nautilus_spawn_egg");
     public static final RegistryKey<Item> OCELOT_SPAWN_EGG = register("ocelot_spawn_egg");
     public static final RegistryKey<Item> PANDA_SPAWN_EGG = register("panda_spawn_egg");
+    public static final RegistryKey<Item> PARCHED_SPAWN_EGG = register("parched_spawn_egg");
     public static final RegistryKey<Item> PARROT_SPAWN_EGG = register("parrot_spawn_egg");
     public static final RegistryKey<Item> PHANTOM_SPAWN_EGG = register("phantom_spawn_egg");
     public static final RegistryKey<Item> PIG_SPAWN_EGG = register("pig_spawn_egg");
@@ -1219,6 +1222,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> ZOMBIE_HORSE_SPAWN_EGG = register("zombie_horse_spawn_egg");
     public static final RegistryKey<Item> ZOMBIE_VILLAGER_SPAWN_EGG = register("zombie_villager_spawn_egg");
     public static final RegistryKey<Item> ZOMBIFIED_PIGLIN_SPAWN_EGG = register("zombified_piglin_spawn_egg");
+    public static final RegistryKey<Item> ZOMBIE_NAUTILUS_SPAWN_EGG = register("zombie_nautilus_spawn_egg");
     public static final RegistryKey<Item> EXPERIENCE_BOTTLE = register("experience_bottle");
     public static final RegistryKey<Item> FIRE_CHARGE = register("fire_charge");
     public static final RegistryKey<Item> WIND_CHARGE = register("wind_charge");
@@ -1261,6 +1265,7 @@ public class ItemKeys {
     public static final RegistryKey<Item> IRON_HORSE_ARMOR = register("iron_horse_armor");
     public static final RegistryKey<Item> GOLDEN_HORSE_ARMOR = register("golden_horse_armor");
     public static final RegistryKey<Item> DIAMOND_HORSE_ARMOR = register("diamond_horse_armor");
+    public static final RegistryKey<Item> NETHERITE_HORSE_ARMOR = register("netherite_horse_armor");
     public static final RegistryKey<Item> LEATHER_HORSE_ARMOR = register("leather_horse_armor");
     public static final RegistryKey<Item> LEAD = register("lead");
     public static final RegistryKey<Item> NAME_TAG = register("name_tag");
@@ -1297,6 +1302,13 @@ public class ItemKeys {
     public static final RegistryKey<Item> TIPPED_ARROW = register("tipped_arrow");
     public static final RegistryKey<Item> LINGERING_POTION = register("lingering_potion");
     public static final RegistryKey<Item> SHIELD = register("shield");
+    public static final RegistryKey<Item> WOODEN_SPEAR = register("wooden_spear");
+    public static final RegistryKey<Item> STONE_SPEAR = register("stone_spear");
+    public static final RegistryKey<Item> COPPER_SPEAR = register("copper_spear");
+    public static final RegistryKey<Item> IRON_SPEAR = register("iron_spear");
+    public static final RegistryKey<Item> GOLDEN_SPEAR = register("golden_spear");
+    public static final RegistryKey<Item> DIAMOND_SPEAR = register("diamond_spear");
+    public static final RegistryKey<Item> NETHERITE_SPEAR = register("netherite_spear");
     public static final RegistryKey<Item> TOTEM_OF_UNDYING = register("totem_of_undying");
     public static final RegistryKey<Item> SHULKER_SHELL = register("shulker_shell");
     public static final RegistryKey<Item> IRON_NUGGET = register("iron_nugget");
@@ -1327,6 +1339,11 @@ public class ItemKeys {
     public static final RegistryKey<Item> DISC_FRAGMENT_5 = register("disc_fragment_5");
     public static final RegistryKey<Item> TRIDENT = register("trident");
     public static final RegistryKey<Item> NAUTILUS_SHELL = register("nautilus_shell");
+    public static final RegistryKey<Item> IRON_NAUTILUS_ARMOR = register("iron_nautilus_armor");
+    public static final RegistryKey<Item> GOLDEN_NAUTILUS_ARMOR = register("golden_nautilus_armor");
+    public static final RegistryKey<Item> DIAMOND_NAUTILUS_ARMOR = register("diamond_nautilus_armor");
+    public static final RegistryKey<Item> NETHERITE_NAUTILUS_ARMOR = register("netherite_nautilus_armor");
+    public static final RegistryKey<Item> COPPER_NAUTILUS_ARMOR = register("copper_nautilus_armor");
     public static final RegistryKey<Item> HEART_OF_THE_SEA = register("heart_of_the_sea");
     public static final RegistryKey<Item> CROSSBOW = register("crossbow");
     public static final RegistryKey<Item> SUSPICIOUS_STEW = register("suspicious_stew");

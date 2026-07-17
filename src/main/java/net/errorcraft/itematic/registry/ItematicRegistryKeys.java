@@ -16,6 +16,7 @@ import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.modification.WorldModificationType;
+import net.minecraft.component.ComponentType;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
@@ -37,6 +38,7 @@ public class ItematicRegistryKeys {
     public static final RegistryKey<Registry<ShooterMethodType<?>>> SHOOTER_METHOD_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("shooter_method_type"));
     public static final RegistryKey<Registry<WorldModificationType<?>>> WORLD_MODIFICATION_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("world_modification_type"));
     public static final RegistryKey<Registry<EntitySpawnRuleType<?>>> ENTITY_SPAWN_RULE_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("entity_spawn_rule_type"));
+    public static final RegistryKey<Registry<ComponentType<?>>> MELEE_WEAPON_COMPONENT_TYPE = RegistryKey.ofRegistry(Identifier.ofVanilla("melee_weapon_component_type"));
 
     private ItematicRegistryKeys() {}
 }

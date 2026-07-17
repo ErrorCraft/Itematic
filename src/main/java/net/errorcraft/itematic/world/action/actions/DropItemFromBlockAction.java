@@ -32,7 +32,7 @@ public record DropItemFromBlockAction(PositionTarget position, ItemStack item) i
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockPos pos = context.getBlockPos(this.position.parameter());
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
         if (pos == null) {
             return false;
         }

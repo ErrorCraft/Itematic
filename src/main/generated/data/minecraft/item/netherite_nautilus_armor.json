@@ -1,0 +1,45 @@
+{
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:armor.body",
+      "type": "minecraft:armor",
+      "amount": 19.0,
+      "operation": "add_value",
+      "slot": "body"
+    },
+    {
+      "id": "minecraft:armor.body",
+      "type": "minecraft:armor_toughness",
+      "amount": 3.0,
+      "operation": "add_value",
+      "slot": "body"
+    },
+    {
+      "id": "minecraft:armor.body",
+      "type": "minecraft:knockback_resistance",
+      "amount": 0.10000000149011612,
+      "operation": "add_value",
+      "slot": "body"
+    }
+  ],
+  "behavior": {
+    "minecraft:dispensable": {
+      "behavior": "minecraft:equip_entity"
+    },
+    "minecraft:equipment": {
+      "allowed_entities": "#minecraft:can_wear_nautilus_armor",
+      "asset_id": "minecraft:netherite",
+      "can_be_sheared": true,
+      "damage_on_hurt": false,
+      "equip_on_interact": true,
+      "equip_sound": "minecraft:item.armor.equip_nautilus",
+      "shearing_sound": "minecraft:item.armor.unequip_nautilus",
+      "slot": "body"
+    },
+    "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:netherite_nautilus_armor",
+    "translation_key": "item.minecraft.netherite_nautilus_armor"
+  }
+}

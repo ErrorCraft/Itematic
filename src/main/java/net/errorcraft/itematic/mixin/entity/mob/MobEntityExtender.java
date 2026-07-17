@@ -86,6 +86,17 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
         super(entityType, world);
     }
 
+    @Redirect(
+        method = "interactWithItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
+        )
+    )
+    private Item getItemReturnNull(ItemStack instance) {
+        return null;
+    }
+
     @ModifyConstant(
         method = "interactWithItem",
         constant = @Constant(
@@ -97,18 +108,6 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
         Optional<SpawnEggItemComponent> optionalSpawnEggItemComponent = itemStack.itematic$getBehavior(ItemComponentTypes.SPAWN_EGG);
         optionalSpawnEggItemComponent.ifPresent(spawnEggItemComponent::set);
         return optionalSpawnEggItemComponent.isPresent();
-    }
-
-    @Redirect(
-        method = "interactWithItem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;",
-            ordinal = 1
-        )
-    )
-    private Item getItemReturnNull(ItemStack instance) {
-        return null;
     }
 
     @Redirect(

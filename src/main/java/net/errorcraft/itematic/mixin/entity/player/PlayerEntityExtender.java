@@ -79,7 +79,7 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
     }
 
     @Redirect(
-        method = "attack",
+        method = "onTargetDamaged",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/player/PlayerEntity;setStackInHand(Lnet/minecraft/util/Hand;Lnet/minecraft/item/ItemStack;)V"

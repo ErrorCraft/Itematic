@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.action;
 import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionUtil;
+import net.errorcraft.itematic.loot.condition.LocationCheckPredicates;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
@@ -74,7 +74,7 @@ public class Actions {
             SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockKeys.DIRT))
         ));
         registerable.register(TILL_ROOTED_DIRT, ActionEntry.of(
-            LocationCheckLootConditionUtil.builder(
+            LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
@@ -100,7 +100,7 @@ public class Actions {
                 .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.SHOVEL_FLATTEN), SoundCategory.BLOCKS))
         ));
         registerable.register(EXTINGUISH_CAMPFIRE, ActionEntry.of(
-            LocationCheckLootConditionUtil.builder(
+            LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
@@ -118,7 +118,7 @@ public class Actions {
                     .build())
                 .add(FirstToPassRequirementsSequenceHandler.builder()
                     .add(
-                        LocationCheckLootConditionUtil.builder(
+                        LocationCheckPredicates.builder(
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
@@ -135,14 +135,14 @@ public class Actions {
                 .add(FirstToPassRequirementsSequenceHandler.builder()
                     .add(
                         AllOfLootCondition.builder(
-                            LocationCheckLootConditionUtil.builder(
+                            LocationCheckPredicates.builder(
                                 PositionTarget.INTERACTED,
                                 LocationPredicate.Builder.create()
                                     .block(BlockPredicate.Builder.create()
                                         .state(StatePredicate.Builder.create()
                                             .exactMatch(Properties.LIT, false)))),
                             InvertedLootCondition.builder(
-                                LocationCheckLootConditionUtil.builder(
+                                LocationCheckPredicates.builder(
                                     PositionTarget.INTERACTED,
                                     LocationPredicate.Builder.create()
                                         .block(BlockPredicate.Builder.create()
@@ -154,7 +154,7 @@ public class Actions {
                             .build()
                     )
                     .add(
-                        LocationCheckLootConditionUtil.builder(
+                        LocationCheckPredicates.builder(
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.create()
                                 .block(BlockPredicate.Builder.create()
@@ -179,7 +179,7 @@ public class Actions {
 
     public static ActionEntry potBlock(RegistryEntryLookup<Block> blocks, RegistryKey<Block> pottedBlock) {
         return ActionEntry.of(
-            LocationCheckLootConditionUtil.builder(
+            LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
@@ -196,7 +196,7 @@ public class Actions {
 
     private static ActionEntry modifySign(RegistryEntryLookup<Block> blocks, ModifySignAction action) {
         return ActionEntry.of(
-            LocationCheckLootConditionUtil.builder(
+            LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()
@@ -211,7 +211,7 @@ public class Actions {
 
     private static LootCondition.Builder setBlockConditions(RegistryEntryLookup<Block> blocks, UnaryOperator<BlockPredicate.Builder> blockPredicateBuilder) {
         return AllOfLootCondition.builder(
-            LocationCheckLootConditionUtil.builder(
+            LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
                 LocationPredicate.Builder.create()
                     .block(blockPredicateBuilder.apply(BlockPredicate.Builder.create()))
@@ -219,7 +219,7 @@ public class Actions {
             InvertedLootCondition.builder(
                 SideCheckPredicate.builder(Direction.DOWN)
             ),
-            LocationCheckLootConditionUtil.builder(
+            LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
                 LocationPredicate.Builder.create()
                     .block(BlockPredicate.Builder.create()

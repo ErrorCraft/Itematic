@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -23,7 +24,7 @@ import net.minecraft.world.WorldAccess;
 
 public class DebugStickItemComponent implements ItemComponent<DebugStickItemComponent> {
     public static final DebugStickItemComponent INSTANCE = new DebugStickItemComponent();
-    public static final Codec<DebugStickItemComponent> CODEC = Codec.unit(INSTANCE);
+    public static final Codec<DebugStickItemComponent> CODEC = MapCodec.unitCodec(INSTANCE);
     private static final DebugStickItemAccessor DUMMY = (DebugStickItemAccessor) new DebugStickItem(new Item.Settings());
 
     private DebugStickItemComponent() {}

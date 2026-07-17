@@ -1,10 +1,11 @@
 package net.errorcraft.itematic.mixin.loot.condition;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.loot.condition.LocationCheckLootConditionAccess;
-import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionExtraFields;
+import net.errorcraft.itematic.loot.condition.LocationCheckPredicates;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.loot.condition.LocationCheckLootCondition;
 import net.minecraft.util.context.ContextParameter;
 import net.minecraft.util.math.Vec3d;
@@ -13,10 +14,12 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
+import java.util.function.Function;
+
 @Mixin(LocationCheckLootCondition.class)
 public class LocationCheckLootConditionExtender implements LocationCheckLootConditionAccess {
     @Unique
-    private LocationCheckLootConditionExtraFields extraFields = LocationCheckLootConditionExtraFields.DEFAULT;
+    private PositionTarget position = PositionTarget.ORIGIN;
 
     @ModifyExpressionValue(
         method = "<clinit>",
@@ -27,18 +30,11 @@ public class LocationCheckLootConditionExtender implements LocationCheckLootCond
             remap = false
         )
     )
-    private static MapCodec<LocationCheckLootCondition> mapCodecAddExtraFields(MapCodec<LocationCheckLootCondition> original) {
-        return original.dependent(
-            LocationCheckLootConditionExtraFields.CODEC,
-            locationCheck -> Pair.of(
-                locationCheck.itematic$extraFields(),
-                LocationCheckLootConditionExtraFields.CODEC
-            ),
-            (locationCheck, extraFields) -> {
-                locationCheck.itematic$setExtraFields(extraFields);
-                return locationCheck;
-            }
-        );
+    private static MapCodec<LocationCheckLootCondition> addExtraMapCodecFields(MapCodec<LocationCheckLootCondition> original) {
+        return RecordCodecBuilder.mapCodec(instance -> instance.group(
+            original.forGetter(Function.identity()),
+            PositionTarget.CODEC.optionalFieldOf("position", PositionTarget.ORIGIN).forGetter(LocationCheckLootCondition::itematic$position)
+        ).apply(instance, LocationCheckPredicates::setPosition));
     }
 
     @ModifyArg(
@@ -48,17 +44,17 @@ public class LocationCheckLootConditionExtender implements LocationCheckLootCond
             target = "Lnet/minecraft/loot/context/LootContext;get(Lnet/minecraft/util/context/ContextParameter;)Ljava/lang/Object;"
         )
     )
-    private ContextParameter<Vec3d> usePositionTarget(ContextParameter<Vec3d> parameter) {
-        return this.extraFields.position().parameter();
+    private ContextParameter<? extends Vec3d> usePositionTarget(ContextParameter<Vec3d> parameter) {
+        return this.position.contextParam();
     }
 
     @Override
-    public LocationCheckLootConditionExtraFields itematic$extraFields() {
-        return this.extraFields;
+    public PositionTarget itematic$position() {
+        return this.position;
     }
 
     @Override
-    public void itematic$setExtraFields(LocationCheckLootConditionExtraFields extraFields) {
-        this.extraFields = extraFields;
+    public void itematic$setPosition(PositionTarget position) {
+        this.position = position;
     }
 }

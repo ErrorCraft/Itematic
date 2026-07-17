@@ -34,12 +34,12 @@ public record InvokeGameEventAction(RegistryEntry<GameEvent> event, PositionTarg
 
     @Override
     public boolean execute(ActionContext context) {
-        Vec3d pos = context.get(this.position.parameter());
+        Vec3d pos = context.get(this.position.contextParam());
         if (pos == null) {
             return false;
         }
 
-        Entity entity = this.entity.map(LootContext.EntityReference::getParameter)
+        Entity entity = this.entity.map(LootContext.EntityReference::contextParam)
             .map(context::get)
             .orElse(null);
         context.world().emitGameEvent(entity, this.event, pos);

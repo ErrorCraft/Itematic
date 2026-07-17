@@ -137,8 +137,10 @@ public class ItematicItemTags {
     public static final TagKey<Item> MUSIC_DISCS = of("item_group/music_discs");
     public static final TagKey<Item> SWORDS = of("item_group/swords");
     public static final TagKey<Item> AXES = of("item_group/axes");
+    public static final TagKey<Item> SPEARS = of("item_group/spears");
     public static final TagKey<Item> ARMOR = of("item_group/armor");
     public static final TagKey<Item> HORSE_ARMOR = of("item_group/horse_armor");
+    public static final TagKey<Item> NAUTILUS_ARMOR = of("item_group/nautilus_armor");
     public static final TagKey<Item> NUGGETS = of("item_group/nuggets");
     public static final TagKey<Item> EGGS = of("item_group/eggs");
     public static final TagKey<Item> FOOD = of("item_group/food");

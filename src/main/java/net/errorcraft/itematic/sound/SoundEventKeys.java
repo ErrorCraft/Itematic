@@ -10,6 +10,8 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> ARMOR_EQUIP_GENERIC = of("item.armor.equip_generic");
     public static final RegistryKey<SoundEvent> ARMOR_STAND_PLACE = of("entity.armor_stand.place");
     public static final RegistryKey<SoundEvent> ARMOR_UNEQUIP_WOLF = of("item.armor.unequip_wolf");
+    public static final RegistryKey<SoundEvent> ARMOR_EQUIP_NAUTILUS = of("item.armor.equip_nautilus");
+    public static final RegistryKey<SoundEvent> ARMOR_UNEQUIP_NAUTILUS = of("item.armor.unequip_nautilus");
     public static final RegistryKey<SoundEvent> BOTTLE_EMPTY = of("item.bottle.empty");
     public static final RegistryKey<SoundEvent> BOTTLE_FILL = of("item.bottle.fill");
     public static final RegistryKey<SoundEvent> BUCKET_EMPTY = of("item.bucket.empty");
@@ -59,6 +61,12 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> SHIELD_BLOCK = of("item.shield.block");
     public static final RegistryKey<SoundEvent> SHIELD_BREAK = of("item.shield.break");
     public static final RegistryKey<SoundEvent> SHOVEL_FLATTEN = of("item.shovel.flatten");
+    public static final RegistryKey<SoundEvent> SPEAR_USE = of("item.spear.use");
+    public static final RegistryKey<SoundEvent> SPEAR_HIT = of("item.spear.hit");
+    public static final RegistryKey<SoundEvent> SPEAR_ATTACK = of("item.spear.attack");
+    public static final RegistryKey<SoundEvent> SPEAR_WOOD_USE = of("item.spear_wood.use");
+    public static final RegistryKey<SoundEvent> SPEAR_WOOD_HIT = of("item.spear_wood.hit");
+    public static final RegistryKey<SoundEvent> SPEAR_WOOD_ATTACK = of("item.spear_wood.attack");
     public static final RegistryKey<SoundEvent> SPYGLASS_USE = of("item.spyglass.use");
     public static final RegistryKey<SoundEvent> SPYGLASS_STOP_USING = of("item.spyglass.stop_using");
     public static final RegistryKey<SoundEvent> TNT_PRIMED = of("entity.tnt.primed");
