@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
+import net.errorcraft.itematic.component.type.SmashingWeaponDataComponent;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
 import net.errorcraft.itematic.entity.spawn.EntitySpawner;
@@ -31,6 +32,7 @@ import net.errorcraft.itematic.loot.function.SplitItemModifier;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
+import net.errorcraft.itematic.mixin.item.MaceItemAccessor;
 import net.errorcraft.itematic.potion.PotionKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
@@ -6143,7 +6145,15 @@ public class ItemUtil {
                     .with(DamageableItemComponent.of(500))
                     .with(ToolItemComponent.builder(2).build())
                     .with(WeaponItemComponent.builder(1, 5.0d, 0.15d)
-                        .type(MeleeWeaponComponents.SMASHING, SmashingMeleeWeapon.INSTANCE)
+                        .type(MeleeWeaponComponents.SMASHING, SmashingMeleeWeapon.of(SmashingWeaponDataComponent.of(
+                            SmashingWeaponDataComponent.HitSounds.of(
+                                this.soundEvents.getOrThrow(SoundEventKeys.MACE_SMASH_AIR),
+                                this.soundEvents.getOrThrow(SoundEventKeys.MACE_SMASH_GROUND),
+                                this.soundEvents.getOrThrow(SoundEventKeys.MACE_SMASH_GROUND_HEAVY)
+                            ),
+                            MaceItem.MINING_SPEED_MULTIPLIER,
+                            MaceItemAccessor.heavySmashAttackFallDistance()
+                        )))
                         .build())
                     .with(EnchantableItemComponent.of(15))
                     .with(RepairableItemComponent.of(RegistryEntryList.of(

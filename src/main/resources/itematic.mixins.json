@@ -288,6 +288,8 @@
     "item.ItemStackExtender",
     "item.ItemUsageContextExtender",
     "item.KnowledgeBookItemExtender",
+    "item.MaceItemAccessor",
+    "item.MaceItemExtender",
     "item.RangedWeaponItemAccessor",
     "item.SmithingTemplateItemAccessor",
     "item.tooltip.BundleTooltipDataExtender",

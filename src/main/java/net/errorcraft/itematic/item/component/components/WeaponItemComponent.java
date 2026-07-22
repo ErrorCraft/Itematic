@@ -23,7 +23,9 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttackRangeComponent;
 import net.minecraft.component.type.SwingAnimationComponent;
 import net.minecraft.component.type.WeaponComponent;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameters;
@@ -112,6 +114,31 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
     @Override
     public ComponentMap getComponents() {
         return this.types;
+    }
+
+    public float bonusAttackDamage(Entity target, float baseAttackDamage, DamageSource damageSource) {
+        SmashingMeleeWeapon smashing = this.types.get(MeleeWeaponComponents.SMASHING);
+        if (smashing != null) {
+            return smashing.bonusAttackDamage(target, baseAttackDamage, damageSource);
+        }
+
+        return 0.0f;
+    }
+
+    public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        SmashingMeleeWeapon smashing = this.types.get(MeleeWeaponComponents.SMASHING);
+        if (smashing != null) {
+            smashing.postDamageEntity(stack, target, attacker);
+        }
+    }
+
+    public DamageSource damageSource(ItemStack stack, LivingEntity attacker) {
+        SmashingMeleeWeapon smashing = this.types.get(MeleeWeaponComponents.SMASHING);
+        if (smashing != null) {
+            return smashing.damageSource(stack, attacker);
+        }
+
+        return null;
     }
 
     public static class Builder {

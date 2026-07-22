@@ -28,6 +28,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
@@ -671,6 +672,20 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         if (!this.itematic$hasBehavior(ItemComponentTypes.USEABLE)) {
             info.setReturnValue((ItemStack) (Object) this);
         }
+    }
+
+    @Redirect(
+        method = "method_75224",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/Item;getDamageSource(Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/damage/DamageSource;"
+        )
+    )
+    @SuppressWarnings("ConstantValue")
+    private DamageSource getDamageSourceUseItemComponent(Item instance, LivingEntity user) {
+        return this.itematic$getBehavior(ItemComponentTypes.WEAPON)
+            .map(weapon -> weapon.damageSource((ItemStack)(Object) this, user))
+            .orElse(null);
     }
 
     /**

@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.item;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
@@ -35,6 +36,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
@@ -277,6 +279,15 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         tryUpdateItemStack(attacker, Hand.MAIN_HAND, stack, stackExchanger);
     }
 
+    @Inject(
+        method = "postDamageEntity",
+        at = @At("HEAD")
+    )
+    private void postDamageEntityUseItemComponent(ItemStack stack, LivingEntity target, LivingEntity attacker, CallbackInfo info) {
+        this.itematic$getBehavior(ItemComponentTypes.WEAPON)
+            .ifPresent(weapon -> weapon.postDamageEntity(stack, target, attacker));
+    }
+
     /**
      * @author ErrorCraft
      * @reason Uses the ItemComponent implementation for data-driven items.
@@ -420,6 +431,16 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
         cursorStackReference.set(stackExchanger.result());
         return result;
+    }
+
+    @ModifyReturnValue(
+        method = "getBonusAttackDamage",
+        at = @At("TAIL")
+    )
+    private float getBonusAttackDamageUseItemComponent(float original, Entity target, float baseAttackDamage, DamageSource damageSource) {
+        return this.itematic$getBehavior(ItemComponentTypes.WEAPON)
+            .map(weapon -> weapon.bonusAttackDamage(target, baseAttackDamage, damageSource))
+            .orElse(0.0f);
     }
 
     @Inject(
