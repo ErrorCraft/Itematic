@@ -37,6 +37,9 @@ public class SoundEventKeys {
     public static final RegistryKey<SoundEvent> HORSE_ARMOR_UNEQUIP = of("item.horse_armor.unequip");
     public static final RegistryKey<SoundEvent> HORSE_SADDLE = of("entity.horse.saddle");
     public static final RegistryKey<SoundEvent> LODESTONE_COMPASS_LOCK = of("item.lodestone_compass.lock");
+    public static final RegistryKey<SoundEvent> MACE_SMASH_AIR = of("item.mace.smash_air");
+    public static final RegistryKey<SoundEvent> MACE_SMASH_GROUND = of("item.mace.smash_ground");
+    public static final RegistryKey<SoundEvent> MACE_SMASH_GROUND_HEAVY = of("item.mace.smash_ground_heavy");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_5 = of("music_disc.5");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_11 = of("music_disc.11");
     public static final RegistryKey<SoundEvent> MUSIC_DISC_13 = of("music_disc.13");

@@ -11,12 +11,21 @@ public class ItematicCodecs {
         if (value >= 0 && value <= Float.MAX_VALUE) {
             return DataResult.success(value);
         }
+
         return DataResult.error(() -> "Value must be non-negative: " + value);
+    });
+    public static final Codec<Double> POSITIVE_DOUBLE = Codec.DOUBLE.validate(value -> {
+        if (value > 0 && value <= Double.MAX_VALUE) {
+            return DataResult.success(value);
+        }
+
+        return DataResult.error(() -> "Value must be positive: " + value);
     });
     public static final Codec<Double> NON_NEGATIVE_DOUBLE = Codec.DOUBLE.validate(value -> {
         if (value >= 0 && value <= Double.MAX_VALUE) {
             return DataResult.success(value);
         }
+
         return DataResult.error(() -> "Value must be non-negative: " + value);
     });
     public static final Codec<Integer> HUE = Codec.intRange(0, 360);
@@ -31,10 +40,12 @@ public class ItematicCodecs {
         if (size <= 0) {
             throw new IllegalArgumentException("size must be positive: " + size);
         }
+
         return Codec.INT.validate(i -> {
             if (i >= 0 && i <= size) {
                 return DataResult.success(i);
             }
+
             return DataResult.error(() -> "Index must be non-negative and less than " + size + ": " + i);
         });
     }
@@ -57,10 +68,12 @@ public class ItematicCodecs {
         if (maxInclusive <= 0) {
             throw new IllegalArgumentException("maxInclusive must be positive, got " + maxInclusive + " instead");
         }
+
         return POSITIVE_FRACTION.validate(fraction -> {
             if (fraction.intValue() > maxInclusive) {
                 return DataResult.error(() -> "Fraction must be at most " + maxInclusive);
             }
+
             return DataResult.success(fraction);
         });
     }

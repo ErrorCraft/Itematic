@@ -40,6 +40,7 @@
       "net.errorcraft.itematic.gametest.item.FlowerPotItemTestSuite",
       "net.errorcraft.itematic.gametest.item.GlowItemFrameTestSuite",
       "net.errorcraft.itematic.gametest.item.HoneyBottleTestSuite",
+      "net.errorcraft.itematic.gametest.item.IronSwordTestSuite",
       "net.errorcraft.itematic.gametest.item.ItemFrameTestSuite",
       "net.errorcraft.itematic.gametest.item.LeadTestSuite",
       "net.errorcraft.itematic.gametest.item.MinecartTestSuite",
