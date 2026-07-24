@@ -6152,7 +6152,8 @@ public class ItemUtil {
                                 this.soundEvents.getOrThrow(SoundEventKeys.MACE_SMASH_GROUND_HEAVY)
                             ),
                             MaceItem.MINING_SPEED_MULTIPLIER,
-                            MaceItemAccessor.heavySmashAttackFallDistance()
+                            MaceItemAccessor.heavySmashAttackFallDistance(),
+                            MaceItemAccessor.knockbackPower()
                         )))
                         .build())
                     .with(EnchantableItemComponent.of(15))

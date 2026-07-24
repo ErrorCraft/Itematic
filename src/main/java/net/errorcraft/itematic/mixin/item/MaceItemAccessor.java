@@ -10,4 +10,9 @@ public interface MaceItemAccessor {
     static float heavySmashAttackFallDistance() {
         throw new AssertionError();
     }
+
+    @Accessor("KNOCKBACK_POWER")
+    static float knockbackPower() {
+        throw new AssertionError();
+    }
 }

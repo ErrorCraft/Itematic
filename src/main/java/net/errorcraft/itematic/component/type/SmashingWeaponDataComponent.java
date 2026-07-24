@@ -11,21 +11,23 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
 
-public record SmashingWeaponDataComponent(HitSounds hitSounds, double smashAttackFallDistance, double heavySmashAttackFallDistance) {
+public record SmashingWeaponDataComponent(HitSounds hitSounds, double smashAttackFallDistance, double heavySmashAttackFallDistance, double knockbackPower) {
     public static final Codec<SmashingWeaponDataComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         HitSounds.CODEC.fieldOf("hit_sounds").forGetter(SmashingWeaponDataComponent::hitSounds),
         ItematicCodecs.POSITIVE_DOUBLE.fieldOf("smash_attack_fall_distance").forGetter(SmashingWeaponDataComponent::smashAttackFallDistance),
-        ItematicCodecs.POSITIVE_DOUBLE.fieldOf("heavy_smash_attack_fall_distance").forGetter(SmashingWeaponDataComponent::heavySmashAttackFallDistance)
+        ItematicCodecs.POSITIVE_DOUBLE.fieldOf("heavy_smash_attack_fall_distance").forGetter(SmashingWeaponDataComponent::heavySmashAttackFallDistance),
+        ItematicCodecs.POSITIVE_DOUBLE.fieldOf("knockback_power").forGetter(SmashingWeaponDataComponent::knockbackPower)
     ).apply(instance, SmashingWeaponDataComponent::new));
     public static final PacketCodec<RegistryByteBuf, SmashingWeaponDataComponent> PACKET_CODEC = PacketCodec.tuple(
         HitSounds.PACKET_CODEC, SmashingWeaponDataComponent::hitSounds,
         PacketCodecs.DOUBLE, SmashingWeaponDataComponent::smashAttackFallDistance,
         PacketCodecs.DOUBLE, SmashingWeaponDataComponent::heavySmashAttackFallDistance,
+        PacketCodecs.DOUBLE, SmashingWeaponDataComponent::knockbackPower,
         SmashingWeaponDataComponent::new
     );
 
-    public static SmashingWeaponDataComponent of(HitSounds hitSounds, double smashAttackFallDistance, double heavySmashAttackFallDistance) {
-        return new SmashingWeaponDataComponent(hitSounds, smashAttackFallDistance, heavySmashAttackFallDistance);
+    public static SmashingWeaponDataComponent of(HitSounds hitSounds, double smashAttackFallDistance, double heavySmashAttackFallDistance, double knockbackPower) {
+        return new SmashingWeaponDataComponent(hitSounds, smashAttackFallDistance, heavySmashAttackFallDistance, knockbackPower);
     }
 
     public boolean canSmash(LivingEntity attacker) {

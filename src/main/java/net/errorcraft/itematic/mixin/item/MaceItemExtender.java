@@ -152,6 +152,19 @@ public class MaceItemExtender {
     }
 
     @ModifyConstant(
+        method = {
+            "method_58409",
+            "getKnockback"
+        },
+        constant = @Constant(
+            doubleValue = 0.699999988079071d
+        )
+    )
+    private static double knockbackPowerUseDataComponent(double constant) {
+        return usedStackSmashingWeaponDataComponent.knockbackPower();
+    }
+
+    @ModifyConstant(
         method = "getKnockback",
         constant = @Constant(
             doubleValue = 5.0d
