@@ -75,6 +75,7 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
         Hand usedHand = attacker.getActiveHand();
         ActionContext context = ActionContext.builder(attacker.getEntityWorld())
             .stackExchanger(stackExchanger)
+            .add(LootContextParameters.THIS_ENTITY, attacker)
             .add(LootContextParameters.ATTACKING_ENTITY, attacker)
             .add(LootContextParameters.ORIGIN, attacker.getEntityPos())
             .add(LootContextParameters.TARGET_ENTITY, target)
