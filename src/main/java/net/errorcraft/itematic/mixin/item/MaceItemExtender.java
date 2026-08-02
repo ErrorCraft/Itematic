@@ -15,7 +15,10 @@ import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
@@ -40,14 +43,14 @@ public class MaceItemExtender {
         smashingWeapon.set(smashingWeaponDataComponent);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "postHit",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/MaceItem;shouldDealAdditionalDamage(Lnet/minecraft/entity/LivingEntity;)Z"
         )
     )
-    private boolean shouldDealAdditionalDamageUseDataComponent(LivingEntity attacker, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
+    private boolean shouldDealAdditionalDamageUseDataComponent(LivingEntity attacker, Operation<Boolean> original, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
         return smashingWeapon.get().canSmash(attacker);
     }
 
@@ -61,7 +64,7 @@ public class MaceItemExtender {
         return smashingWeapon.get().heavySmashAttackFallDistance();
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "postHit",
         at = @At(
             value = "FIELD",
@@ -69,14 +72,14 @@ public class MaceItemExtender {
             opcode = Opcodes.GETSTATIC
         )
     )
-    private SoundEvent getOnGroundLargeFallDistanceSoundUseDataComponent(@Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
+    private SoundEvent getOnGroundLargeFallDistanceSoundUseDataComponent(Operation<SoundEvent> original, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
         return smashingWeapon.get()
             .hitSounds()
             .onGroundLargeFallDistance()
             .value();
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "postHit",
         at = @At(
             value = "FIELD",
@@ -84,21 +87,22 @@ public class MaceItemExtender {
             opcode = Opcodes.GETSTATIC
         )
     )
-    private SoundEvent getOnGroundSmallFallDistanceSoundUseDataComponent(@Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
+    private SoundEvent getOnGroundSmallFallDistanceSoundUseDataComponent(Operation<SoundEvent> original, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
         return smashingWeapon.get()
             .hitSounds()
-            .onGroundLargeFallDistance()
+            .onGroundSmallFallDistance()
             .value();
     }
 
-    @ModifyArg(
+    @WrapOperation(
         method = "postHit",
         at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/server/world/ServerWorld;playSound(Lnet/minecraft/entity/Entity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"
+            value = "FIELD",
+            target = "Lnet/minecraft/sound/SoundEvents;ITEM_MACE_SMASH_AIR:Lnet/minecraft/sound/SoundEvent;",
+            opcode = Opcodes.GETSTATIC
         )
     )
-    private SoundEvent getInAirSoundUseDataComponent(SoundEvent sound, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
+    private SoundEvent getInAirSoundUseDataComponent(Operation<SoundEvent> original, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
         return smashingWeapon.get()
             .hitSounds()
             .inAir()
@@ -118,14 +122,14 @@ public class MaceItemExtender {
         usedStackSmashingWeaponDataComponent = null;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "postDamageEntity",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/MaceItem;shouldDealAdditionalDamage(Lnet/minecraft/entity/LivingEntity;)Z"
         )
     )
-    private boolean shouldDealAdditionalDamageUseDataComponent(LivingEntity attacker, ItemStack stack) {
+    private boolean shouldDealAdditionalDamageUseDataComponent(LivingEntity attacker, Operation<Boolean> original, ItemStack stack) {
         SmashingWeaponDataComponent smashingWeapon = stack.get(ItematicDataComponentTypes.SMASHING_WEAPON);
         if (smashingWeapon == null) {
             return false;
@@ -134,14 +138,14 @@ public class MaceItemExtender {
         return smashingWeapon.canSmash(attacker);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "getBonusAttackDamage",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/item/MaceItem;shouldDealAdditionalDamage(Lnet/minecraft/entity/LivingEntity;)Z"
         )
     )
-    private boolean shouldDealAdditionalDamageUseDataComponent(LivingEntity attacker) {
+    private boolean shouldDealAdditionalDamageUseDataComponent(LivingEntity attacker, Operation<Boolean> original) {
         SmashingWeaponDataComponent smashingWeapon = Objects.requireNonNull(attacker.getWeaponStack())
             .get(ItematicDataComponentTypes.SMASHING_WEAPON);
         if (smashingWeapon == null) {
