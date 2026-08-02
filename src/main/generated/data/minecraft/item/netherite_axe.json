@@ -32,8 +32,12 @@
         "rules": []
       },
       "attack_speed": 0.25,
-      "disable_blocking_for_seconds": 5.0,
-      "item_damage_per_attack": 2
+      "item_damage_per_attack": 2,
+      "types": {
+        "minecraft:disables_blocking": {
+          "seconds": 5.0
+        }
+      }
     }
   },
   "display": {

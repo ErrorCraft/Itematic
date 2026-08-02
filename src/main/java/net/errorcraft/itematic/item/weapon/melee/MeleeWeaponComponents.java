@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.weapon.melee;
 
 import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.item.weapon.melee.component.DisablesBlockingMeleeWeapon;
 import net.errorcraft.itematic.item.weapon.melee.component.KineticMeleeWeapon;
 import net.errorcraft.itematic.item.weapon.melee.component.PiercingMeleeWeapon;
 import net.errorcraft.itematic.item.weapon.melee.component.SmashingMeleeWeapon;
@@ -17,6 +18,7 @@ public class MeleeWeaponComponents {
     public static final ComponentType<SmashingMeleeWeapon> SMASHING = register("smashing", builder -> builder.codec(SmashingMeleeWeapon.CODEC));
     public static final ComponentType<KineticMeleeWeapon> KINETIC = register("kinetic", builder -> builder.codec(KineticMeleeWeapon.CODEC));
     public static final ComponentType<PiercingMeleeWeapon> PIERCING = register("piercing", builder -> builder.codec(PiercingMeleeWeapon.CODEC));
+    public static final ComponentType<DisablesBlockingMeleeWeapon> DISABLES_BLOCKING = register("disables_blocking", builder -> builder.codec(DisablesBlockingMeleeWeapon.CODEC));
 
     private MeleeWeaponComponents() {}
 
