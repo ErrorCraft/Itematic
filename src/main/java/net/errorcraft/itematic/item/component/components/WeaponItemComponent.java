@@ -10,6 +10,7 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponComponents;
 import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponWithDataComponents;
+import net.errorcraft.itematic.item.weapon.melee.component.DisablesBlockingMeleeWeapon;
 import net.errorcraft.itematic.item.weapon.melee.component.KineticMeleeWeapon;
 import net.errorcraft.itematic.item.weapon.melee.component.SmashingMeleeWeapon;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
@@ -38,10 +39,9 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Optional;
 
-public record WeaponItemComponent(int itemDamagePerAttack, float disableBlockingForSeconds, ComponentMap types, Optional<RegistryEntry<DamageType>> damageType, Optional<SwingAnimationComponent> swingAnimation, WeaponAttackDamageDataComponent attackDamage, double attackSpeed, Optional<AttackRangeComponent> attackRange, Optional<Float> minimumAttackCharge) implements ItemComponent<WeaponItemComponent>, ComponentHolder {
+public record WeaponItemComponent(int itemDamagePerAttack, ComponentMap types, Optional<RegistryEntry<DamageType>> damageType, Optional<SwingAnimationComponent> swingAnimation, WeaponAttackDamageDataComponent attackDamage, double attackSpeed, Optional<AttackRangeComponent> attackRange, Optional<Float> minimumAttackCharge) implements ItemComponent<WeaponItemComponent>, ComponentHolder {
     public static final Codec<WeaponItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codecs.NON_NEGATIVE_INT.optionalFieldOf("item_damage_per_attack", 1).forGetter(WeaponItemComponent::itemDamagePerAttack),
-        Codecs.NON_NEGATIVE_FLOAT.optionalFieldOf("disable_blocking_for_seconds", 0.0f).forGetter(WeaponItemComponent::disableBlockingForSeconds),
         MeleeWeaponComponents.CODEC.optionalFieldOf("types", ComponentMap.EMPTY).forGetter(WeaponItemComponent::types),
         DamageType.ENTRY_CODEC.optionalFieldOf("damage_type").forGetter(WeaponItemComponent::damageType),
         SwingAnimationComponent.CODEC.optionalFieldOf("swing_animation").forGetter(WeaponItemComponent::swingAnimation),
@@ -101,7 +101,11 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
 
     @Override
     public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.WEAPON, new WeaponComponent(this.itemDamagePerAttack, this.disableBlockingForSeconds));
+        DisablesBlockingMeleeWeapon disablesBlocking = this.types.get(MeleeWeaponComponents.DISABLES_BLOCKING);
+        builder.add(DataComponentTypes.WEAPON, new WeaponComponent(
+            this.itemDamagePerAttack,
+            disablesBlocking != null ? disablesBlocking.seconds() : 0.0f
+        ));
         builder.add(ItematicDataComponentTypes.WEAPON_ATTACK_DAMAGE, this.attackDamage);
         builder.add(ItematicDataComponentTypes.ATTACK_SPEED_MULTIPLIER, this.attackSpeed);
         this.streamAll(MeleeWeaponWithDataComponents.class)
@@ -151,7 +155,6 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
         private final double attackSpeed;
         private AttackRangeComponent attackRange;
         private Float minimumAttackCharge;
-        private float disableBlockingForSeconds;
 
         private Builder(int itemDamagePerAttack, double attackDamage, double attackSpeed) {
             this.itemDamagePerAttack = itemDamagePerAttack;
@@ -162,7 +165,6 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
         public WeaponItemComponent build() {
             return new WeaponItemComponent(
                 this.itemDamagePerAttack,
-                this.disableBlockingForSeconds,
                 this.types.build(),
                 Optional.ofNullable(this.damageType),
                 Optional.ofNullable(this.swingAnimation),
@@ -199,7 +201,10 @@ public record WeaponItemComponent(int itemDamagePerAttack, float disableBlocking
         }
 
         public Builder disableBlockingForSeconds(float disableBlockingForSeconds) {
-            this.disableBlockingForSeconds = disableBlockingForSeconds;
+            if (disableBlockingForSeconds > 0.0f) {
+                this.type(MeleeWeaponComponents.DISABLES_BLOCKING, new DisablesBlockingMeleeWeapon(disableBlockingForSeconds));
+            }
+
             return this;
         }
     }
