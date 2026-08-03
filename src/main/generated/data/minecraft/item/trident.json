@@ -24,7 +24,7 @@
       "rules": []
     },
     "minecraft:useable": {
-      "animation": "spear",
+      "animation": "trident",
       "ticks": {
         "type": "minecraft:trident"
       }

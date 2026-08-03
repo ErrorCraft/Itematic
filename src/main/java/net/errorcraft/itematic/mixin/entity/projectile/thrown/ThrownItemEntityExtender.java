@@ -21,14 +21,17 @@ public abstract class ThrownItemEntityExtender extends ThrownEntity {
     }
 
     @Redirect(
-        method = { "initDataTracker", "readCustomDataFromNbt", "method_57319" },
+        method = {
+            "initDataTracker",
+            "method_57319"
+        },
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
         )
     )
     private ItemStack newItemStackUseRegistryEntry(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(this.getDefaultItemKey());
+        return this.getEntityWorld().itematic$createStack(this.getDefaultItemKey());
     }
 
     @Unique

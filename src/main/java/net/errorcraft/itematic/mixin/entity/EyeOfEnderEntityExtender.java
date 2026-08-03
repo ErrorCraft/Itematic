@@ -25,6 +25,6 @@ public abstract class EyeOfEnderEntityExtender extends Entity {
         )
     )
     private ItemStack newItemStackForEnderEyeUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.ENDER_EYE);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.ENDER_EYE);
     }
 }

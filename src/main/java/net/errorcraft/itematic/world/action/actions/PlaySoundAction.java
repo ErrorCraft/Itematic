@@ -80,7 +80,7 @@ public record PlaySoundAction(PositionTarget position, RegistryEntry<SoundEvent>
             return true;
         }
 
-        Vec3d pos = context.get(this.position.parameter());
+        Vec3d pos = context.get(this.position.contextParam());
         if (pos == null) {
             return false;
         }

@@ -10,6 +10,7 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethod;
+import net.errorcraft.itematic.item.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.item.use.provider.providers.ShooterIntegerProvider;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -99,6 +100,10 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
         this.method.addComponents(builder);
     }
 
+    public boolean usesMethod(ShooterMethodType<?> type) {
+        return this.method.type() == type;
+    }
+
     public void shoot(ServerWorld world, LivingEntity shooter, Hand hand, ItemStack shooterStack, List<ItemStack> projectiles, float power, float divergence, boolean critical, @Nullable LivingEntity target) {
         float maxAngle = EnchantmentHelper.getProjectileSpread(world, shooterStack, shooter, 0.0f);
         float angleStep = projectiles.size() == 1 ?
@@ -137,7 +142,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
         ActionContext context = ActionContext.builder(world)
             .stackExchanger(shooter, stack)
             .add(LootContextParameters.THIS_ENTITY, shooter)
-            .add(LootContextParameters.ORIGIN, shooter.getPos())
+            .add(LootContextParameters.ORIGIN, shooter.getEntityPos())
             .add(LootContextParameters.TOOL, stack)
             .add(ItematicContextParameters.HAND, hand)
             .build();

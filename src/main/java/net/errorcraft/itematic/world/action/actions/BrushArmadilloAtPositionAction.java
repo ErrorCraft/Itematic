@@ -7,7 +7,10 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.ArmadilloEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -30,7 +33,7 @@ public record BrushArmadilloAtPositionAction(PositionTarget position) implements
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockPos pos = context.getBlockPos(this.position.parameter());
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
         if (pos == null) {
             return false;
         }
@@ -44,8 +47,10 @@ public record BrushArmadilloAtPositionAction(PositionTarget position) implements
             return false;
         }
 
+        Entity interactingEntity = context.get(LootContextParameters.THIS_ENTITY);
+        ItemStack usedStack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
         for (ArmadilloEntity armadillo : armadillos) {
-            if (armadillo.brushScute()) {
+            if (armadillo.brushScute(interactingEntity, usedStack)) {
                 return true;
             }
         }

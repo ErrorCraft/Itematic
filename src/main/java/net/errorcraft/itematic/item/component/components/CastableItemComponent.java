@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -24,7 +25,7 @@ import net.minecraft.world.event.GameEvent;
 
 public class CastableItemComponent implements ItemComponent<CastableItemComponent> {
     public static final CastableItemComponent INSTANCE = new CastableItemComponent();
-    public static final Codec<CastableItemComponent> CODEC = Codec.unit(INSTANCE);
+    public static final Codec<CastableItemComponent> CODEC = MapCodec.unitCodec(INSTANCE);
 
     private CastableItemComponent() {}
 
@@ -56,7 +57,7 @@ public class CastableItemComponent implements ItemComponent<CastableItemComponen
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getPos())
+                .add(LootContextParameters.ORIGIN, user.getEntityPos())
                 .add(LootContextParameters.TOOL, stack)
                 .build();
             stack.itematic$damage(user.fishHook.use(stack), context);

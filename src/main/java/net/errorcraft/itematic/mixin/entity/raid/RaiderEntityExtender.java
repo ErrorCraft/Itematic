@@ -28,7 +28,7 @@ public class RaiderEntityExtender extends PatrolEntity {
         )
     )
     private void createOminousBannerSetDataDrivenItemStack(CallbackInfoReturnable<Boolean> info) {
-        RaidUtil.createOminousBanner(this.getWorld());
+        RaidUtil.createOminousBanner(this.getEntityWorld());
     }
 
     @Inject(
@@ -39,7 +39,7 @@ public class RaiderEntityExtender extends PatrolEntity {
         )
     )
     private void createOminousBannerSetDataDrivenItemStack(CallbackInfo info) {
-        RaidUtil.createOminousBanner(this.getWorld());
+        RaidUtil.createOminousBanner(this.getEntityWorld());
     }
 
     @Inject(
@@ -50,7 +50,7 @@ public class RaiderEntityExtender extends PatrolEntity {
         )
     )
     private static void createOminousBannerSetDataDrivenItemStack(ItemEntity itemEntity, CallbackInfoReturnable<Boolean> info) {
-        RaidUtil.createOminousBanner(itemEntity.getWorld());
+        RaidUtil.createOminousBanner(itemEntity.getEntityWorld());
     }
 
     @Mixin(RaiderEntity.PickUpBannerAsLeaderGoal.class)
@@ -67,7 +67,7 @@ public class RaiderEntityExtender extends PatrolEntity {
             )
         )
         private void createOminousBannerSetDataDrivenItemStack(CallbackInfoReturnable<Boolean> info) {
-            RaidUtil.createOminousBanner(this.actor.getWorld());
+            RaidUtil.createOminousBanner(this.actor.getEntityWorld());
         }
     }
 }

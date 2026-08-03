@@ -31,7 +31,7 @@ public class ItemPlacementContextExtender extends ItemUsageContext implements It
         return ActionContext.builder(this.getWorld())
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParameters.THIS_ENTITY, this.getPlayer())
-            .addOptional(LootContextParameters.ORIGIN, this.getPlayer(), Entity::getPos)
+            .addOptional(LootContextParameters.ORIGIN, this.getPlayer(), Entity::getEntityPos)
             .add(ItematicContextParameters.INTERACTED_POSITION, this.getBlockPos().toCenterPos())
             .add(LootContextParameters.TOOL, this.getStack())
             .add(ItematicContextParameters.HAND, this.getHand())

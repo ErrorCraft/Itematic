@@ -25,6 +25,6 @@ public class SkeletonHorseTrapTriggerGoalExtender {
         )
     )
     private ItemStack newItemStackForIronHelmetUseCreateStack(ItemConvertible item) {
-        return this.skeletonHorse.getWorld().itematic$createStack(ItemKeys.IRON_HELMET);
+        return this.skeletonHorse.getEntityWorld().itematic$createStack(ItemKeys.IRON_HELMET);
     }
 }

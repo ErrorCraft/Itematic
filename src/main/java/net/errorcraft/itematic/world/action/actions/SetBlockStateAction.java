@@ -32,7 +32,7 @@ public record SetBlockStateAction(PositionTarget position, BlockState state) imp
     @Override
     public boolean execute(ActionContext context) {
         World world = context.world();
-        BlockPos pos = context.getBlockPos(this.position.parameter());
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
         if (pos == null) {
             return false;
         }

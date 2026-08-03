@@ -16,14 +16,14 @@ import net.minecraft.world.event.GameEvent;
 
 import java.util.Optional;
 
-public record InvokeGameEventAction(RegistryEntry<GameEvent> event, PositionTarget position, Optional<LootContext.EntityTarget> entity) implements Action<InvokeGameEventAction> {
+public record InvokeGameEventAction(RegistryEntry<GameEvent> event, PositionTarget position, Optional<LootContext.EntityReference> entity) implements Action<InvokeGameEventAction> {
     public static final MapCodec<InvokeGameEventAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Registries.GAME_EVENT.getEntryCodec().fieldOf("event").forGetter(InvokeGameEventAction::event),
         PositionTarget.CODEC.fieldOf("position").forGetter(InvokeGameEventAction::position),
-        LootContext.EntityTarget.CODEC.optionalFieldOf("entity").forGetter(InvokeGameEventAction::entity)
+        LootContext.EntityReference.CODEC.optionalFieldOf("entity").forGetter(InvokeGameEventAction::entity)
     ).apply(instance, InvokeGameEventAction::new));
 
-    public static InvokeGameEventAction of(RegistryEntry<GameEvent> event, PositionTarget position, LootContext.EntityTarget entity) {
+    public static InvokeGameEventAction of(RegistryEntry<GameEvent> event, PositionTarget position, LootContext.EntityReference entity) {
         return new InvokeGameEventAction(event, position, Optional.of(entity));
     }
 
@@ -34,12 +34,12 @@ public record InvokeGameEventAction(RegistryEntry<GameEvent> event, PositionTarg
 
     @Override
     public boolean execute(ActionContext context) {
-        Vec3d pos = context.get(this.position.parameter());
+        Vec3d pos = context.get(this.position.contextParam());
         if (pos == null) {
             return false;
         }
 
-        Entity entity = this.entity.map(LootContext.EntityTarget::getParameter)
+        Entity entity = this.entity.map(LootContext.EntityReference::contextParam)
             .map(context::get)
             .orElse(null);
         context.world().emitGameEvent(entity, this.event, pos);

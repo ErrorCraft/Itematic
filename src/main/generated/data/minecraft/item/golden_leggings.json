@@ -24,7 +24,7 @@
       "slot": "legs"
     },
     "minecraft:repairable": {
-      "items": "#minecraft:repairs_golden_armor"
+      "items": "#minecraft:repairs_gold_armor"
     },
     "minecraft:stackable": 1
   },

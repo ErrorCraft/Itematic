@@ -39,12 +39,12 @@ public class BrewingRecipeBookWidget extends RecipeBookWidget<BrewingStandMenuDe
     }
 
     @Override
-    protected void setBookButtonTexture() {
-        this.toggleCraftableButton.setTextures(TEXTURES);
+    protected ButtonTextures getBookButtonTextures() {
+        return TEXTURES;
     }
 
     @Override
-    protected boolean isValid(Slot slot) {
+    protected boolean isCraftingSlot(Slot slot) {
         return false;
     }
 

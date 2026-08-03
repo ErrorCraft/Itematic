@@ -1,0 +1,35 @@
+{
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:armor.chestplate",
+      "type": "minecraft:armor",
+      "amount": 4.0,
+      "operation": "add_value",
+      "slot": "chest"
+    }
+  ],
+  "behavior": {
+    "minecraft:damageable": {
+      "durability": 176
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:equip_entity"
+    },
+    "minecraft:enchantable": {
+      "enchantability": 8
+    },
+    "minecraft:equipment": {
+      "asset_id": "minecraft:copper",
+      "equip_sound": "minecraft:item.armor.equip_copper",
+      "slot": "chest"
+    },
+    "minecraft:repairable": {
+      "items": "#minecraft:repairs_copper_armor"
+    },
+    "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:copper_chestplate",
+    "translation_key": "item.minecraft.copper_chestplate"
+  }
+}

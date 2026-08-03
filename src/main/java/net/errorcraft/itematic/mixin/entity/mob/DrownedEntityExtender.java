@@ -30,7 +30,7 @@ public abstract class DrownedEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForNautilusShellUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.NAUTILUS_SHELL);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.NAUTILUS_SHELL);
     }
 
     @Redirect(
@@ -45,7 +45,7 @@ public abstract class DrownedEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForTridentUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.TRIDENT);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.TRIDENT);
     }
 
     @Redirect(
@@ -64,7 +64,7 @@ public abstract class DrownedEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForFishingRodUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.FISHING_ROD);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.FISHING_ROD);
     }
 
     @Redirect(

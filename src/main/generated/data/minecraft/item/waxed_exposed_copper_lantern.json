@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:waxed_exposed_copper_lantern"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:waxed_exposed_copper_lantern",
+    "translation_key": "block.minecraft.waxed_exposed_copper_lantern"
+  }
+}

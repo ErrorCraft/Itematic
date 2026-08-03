@@ -6,8 +6,10 @@
     "minecraft:oxidized_cut_copper",
     "minecraft:oxidized_cut_copper_stairs",
     "minecraft:oxidized_cut_copper_slab",
+    "minecraft:oxidized_copper_bars",
     "minecraft:oxidized_copper_door",
     "minecraft:oxidized_copper_trapdoor",
-    "minecraft:oxidized_copper_bulb"
+    "minecraft:oxidized_copper_bulb",
+    "minecraft:oxidized_copper_chain"
   ]
 }

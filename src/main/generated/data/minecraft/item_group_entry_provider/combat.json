@@ -6,6 +6,10 @@
     },
     {
       "type": "tag",
+      "tag": "minecraft:item_group/spears"
+    },
+    {
+      "type": "tag",
       "tag": "minecraft:item_group/axes"
     },
     "minecraft:trident",
@@ -20,6 +24,10 @@
       "tag": "minecraft:item_group/horse_armor"
     },
     "minecraft:wolf_armor",
+    {
+      "type": "tag",
+      "tag": "minecraft:item_group/nautilus_armor"
+    },
     "minecraft:totem_of_undying",
     "minecraft:tnt",
     "minecraft:end_crystal",

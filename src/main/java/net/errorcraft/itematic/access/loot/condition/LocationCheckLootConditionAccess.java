@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.access.loot.condition;
 
-import net.errorcraft.itematic.loot.condition.LocationCheckLootConditionExtraFields;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 
 public interface LocationCheckLootConditionAccess {
-    default void itematic$setExtraFields(LocationCheckLootConditionExtraFields extraFields) {}
-    default LocationCheckLootConditionExtraFields itematic$extraFields() {
+    default PositionTarget itematic$position() {
         return null;
     }
+    default void itematic$setPosition(PositionTarget position) {}
 }

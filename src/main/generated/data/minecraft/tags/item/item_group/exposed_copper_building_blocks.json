@@ -6,8 +6,10 @@
     "minecraft:exposed_cut_copper",
     "minecraft:exposed_cut_copper_stairs",
     "minecraft:exposed_cut_copper_slab",
+    "minecraft:exposed_copper_bars",
     "minecraft:exposed_copper_door",
     "minecraft:exposed_copper_trapdoor",
-    "minecraft:exposed_copper_bulb"
+    "minecraft:exposed_copper_bulb",
+    "minecraft:exposed_copper_chain"
   ]
 }

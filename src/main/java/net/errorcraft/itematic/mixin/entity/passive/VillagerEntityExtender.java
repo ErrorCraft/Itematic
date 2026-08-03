@@ -15,6 +15,7 @@ import net.minecraft.loot.context.LootContext;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.village.VillagerData;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -58,11 +59,11 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
         method = "levelUp",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/VillagerEntity;fillRecipes()V"
+            target = "Lnet/minecraft/entity/passive/VillagerEntity;fillRecipes(Lnet/minecraft/server/world/ServerWorld;)V"
         )
     )
-    private void fillRecipesUseDynamicRegistry(VillagerEntity instance) {
-        this.fillRecipesFromContext();
+    private void fillRecipesUseDynamicRegistry(VillagerEntity instance, ServerWorld world) {
+        this.fillRecipesFromContext(world);
     }
 
     @Redirect(
@@ -99,7 +100,7 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
         return VillagerEntityUtil.ITEM_FOOD_POINTS.entrySet()
             .stream()
             .map(entry -> {
-                Item item = this.getWorld().itematic$getItem(entry.getKey()).value();
+                Item item = this.getEntityWorld().itematic$getItem(entry.getKey()).value();
                 return new AbstractMap.SimpleImmutableEntry<>(item, entry.getValue());
             });
     }

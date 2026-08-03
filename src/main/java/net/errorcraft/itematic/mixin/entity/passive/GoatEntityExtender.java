@@ -35,7 +35,7 @@ public abstract class GoatEntityExtender extends MobEntityExtender {
     )
     private Function<? super RegistryEntry<Instrument>, ? extends ItemStack> getStackForInstrumentUseCreateStack(Function<? super RegistryEntry<Instrument>, ? extends ItemStack> mapper) {
         return instrument -> {
-            ItemStack stack = this.getWorld().itematic$createStack(ItemKeys.GOAT_HORN);
+            ItemStack stack = this.getEntityWorld().itematic$createStack(ItemKeys.GOAT_HORN);
             stack.set(DataComponentTypes.INSTRUMENT, new InstrumentComponent(instrument));
             return stack;
         };

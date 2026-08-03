@@ -38,25 +38,21 @@ public abstract class MerchantEntityExtender extends MobEntityExtender {
         method = "getOffers",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/MerchantEntity;fillRecipes()V"
+            target = "Lnet/minecraft/entity/passive/MerchantEntity;fillRecipes(Lnet/minecraft/server/world/ServerWorld;)V"
         )
     )
-    private void fillRecipesUseDynamicRegistry(MerchantEntity instance) {
-        this.fillRecipesFromContext();
+    private void fillRecipesUseDynamicRegistry(MerchantEntity instance, ServerWorld serverWorld) {
+        this.fillRecipesFromContext(serverWorld);
     }
 
     @Unique
     protected void fillRecipes(LootContext context) {}
 
     @Unique
-    protected void fillRecipesFromContext() {
-        if (!(this.getWorld() instanceof ServerWorld world)) {
-            return;
-        }
-
+    protected void fillRecipesFromContext(ServerWorld world) {
         LootWorldContext set = new LootWorldContext.Builder(world)
             .add(LootContextParameters.THIS_ENTITY, this)
-            .add(LootContextParameters.ORIGIN, this.getPos())
+            .add(LootContextParameters.ORIGIN, this.getEntityPos())
             .build(ItematicContextTypes.TRADE);
         LootContext context = new LootContext.Builder(set).build(Optional.empty());
         this.fillRecipes(context);

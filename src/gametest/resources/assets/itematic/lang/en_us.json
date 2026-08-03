@@ -6,6 +6,7 @@
   "test.error.did_not_expect_type": "Expected %s not to be %s",
   "test.error.expected_tag": "Expected %s to be #%s",
   "test.error.block_entity.expected_block_entity_type": "Expected block entity type to be %s",
+  "test.error.entity.too_many_entities": "Expected only one %s to exist, but found %s",
   "test.error.entity.expected_effect": "Expected entity %s to have effect %s",
   "test.error.entity.did_not_expect_effect": "Expected entity %s not to have effect %s",
   "test.error.entity_type.cannot_create_entity": "Cannot create entity with type %s",

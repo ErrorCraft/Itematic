@@ -51,10 +51,6 @@ public class ActionContext {
         return this.world;
     }
 
-    public <T> boolean has(ContextParameter<T> parameter) {
-        return this.parameters.contains(parameter);
-    }
-
     @Nullable
     public <T> T get(ContextParameter<T> parameter) {
         return this.parameters.getNullable(parameter);
@@ -84,11 +80,6 @@ public class ActionContext {
         return this.parameters.getOrDefault(parameter, defaultValue);
     }
 
-    @Nullable
-    public BlockPos getBlockPos(ContextParameter<Vec3d> parameter) {
-        return this.get(parameter, BlockPos::ofFloored);
-    }
-
     public ItemStack resultStack() {
         return this.stackExchanger.result();
     }
@@ -112,13 +103,13 @@ public class ActionContext {
         return new LootContext.Builder(context).build(Optional.empty());
     }
 
-    public ServerCommandSource commandSource(CommandFunctionManager functionManager, Optional<LootContext.EntityTarget> entity, Optional<PositionTarget> position) {
+    public ServerCommandSource commandSource(CommandFunctionManager functionManager, Optional<LootContext.EntityReference> entity, Optional<PositionTarget> position) {
         ServerCommandSource source = functionManager.getScheduledCommandSource();
-        source = entity.map(LootContext.EntityTarget::getParameter)
+        source = entity.map(LootContext.EntityReference::contextParam)
             .map(this::get)
             .map(source::withEntity)
             .orElse(source);
-        source = position.map(PositionTarget::parameter)
+        source = position.map(PositionTarget::contextParam)
             .map(this::get)
             .map(source::withPosition)
             .orElse(source);
@@ -127,7 +118,7 @@ public class ActionContext {
 
     @Nullable
     public ItemPlacementContext blockPlaceContext(PositionTarget position, BlockPicker<?> block) {
-        Vec3d pos = this.get(position.parameter());
+        Vec3d pos = this.get(position.contextParam());
         if (pos == null) {
             return null;
         }

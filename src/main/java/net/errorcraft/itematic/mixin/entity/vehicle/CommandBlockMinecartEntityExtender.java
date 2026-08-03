@@ -25,6 +25,6 @@ public abstract class CommandBlockMinecartEntityExtender extends AbstractMinecar
         )
     )
     private ItemStack newItemStackForCommandBlockMinecartUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.COMMAND_BLOCK_MINECART);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.COMMAND_BLOCK_MINECART);
     }
 }

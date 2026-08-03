@@ -15,8 +15,10 @@
     "minecraft:equipment": {
       "allowed_entities": "#minecraft:can_wear_horse_armor",
       "asset_id": "minecraft:gold",
+      "can_be_sheared": true,
       "damage_on_hurt": false,
       "equip_sound": "minecraft:entity.horse.armor",
+      "shearing_sound": "minecraft:item.horse_armor.unequip",
       "slot": "body"
     },
     "minecraft:stackable": 1

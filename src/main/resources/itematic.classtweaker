@@ -4,12 +4,13 @@ accessible    class    net/minecraft/registry/Registries$Initializer
 accessible    class    net/minecraft/entity/passive/OcelotEntity$OcelotTemptGoal
 accessible    class    net/minecraft/client/gui/screen/GameModeSwitcherScreen$GameModeSelection
 accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget
-accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$Entry
+accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry
 accessible    class    net/minecraft/client/gui/screen/world/CustomizeFlatLevelScreen$SuperflatLayersListWidget
 accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternativesWidget$AlternativeButtonWidget
 accessible    class    net/minecraft/client/gui/screen/recipebook/RecipeAlternativesWidget$AlternativeButtonWidget$InputSlot
 accessible    class    net/minecraft/predicate/StatePredicate$Condition
 accessible    class    net/minecraft/predicate/StatePredicate$RangedValueMatcher
+accessible    class    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry$ItemStackInSlotWidget
 
 inject-interface    net/minecraft/util/DyeColor    net/errorcraft/itematic/access/util/DyeColorAccess
 inject-interface    net/minecraft/item/tooltip/BundleTooltipData    net/errorcraft/itematic/access/item/tooltip/BundleTooltipDataAccess
@@ -26,8 +27,17 @@ inject-interface    net/minecraft/village/VillagerProfession    net/errorcraft/i
 inject-interface    net/minecraft/client/gui/screen/GameModeSwitcherScreen$GameModeSelection    net/errorcraft/itematic/access/client/gui/screen/GameModeSwitcherScreenAccess$GameModeSelectionAccess
 inject-interface    net/minecraft/item/ItemPlacementContext    net/errorcraft/itematic/access/item/ItemPlacementContextAccess
 inject-interface    net/minecraft/predicate/StatePredicate$Builder    net/errorcraft/itematic/access/predicate/StatePredicateAccess$BuilderAccess
+inject-interface    net/minecraft/entity/attribute/AttributeContainer    net/errorcraft/itematic/access/entity/attribute/AttributeContainerAccess
+inject-interface    net/minecraft/entity/attribute/EntityAttributeInstance    net/errorcraft/itematic/access/entity/attribute/EntityAttributeInstanceAccess
+inject-interface    net/minecraft/entity/attribute/DefaultAttributeContainer    net/errorcraft/itematic/access/entity/attribute/DefaultAttributeContainerAccess
+inject-interface    net/minecraft/client/MinecraftClient    net/errorcraft/itematic/access/client/MinecraftClientAccess
+inject-interface    net/minecraft/recipe/book/RecipeBookOptions    net/errorcraft/itematic/access/recipe/book/RecipeBookOptionsAccess
+inject-interface    net/minecraft/client/gui/widget/ItemStackWidget    net/errorcraft/itematic/access/client/gui/widget/ItemStackWidgetAccess
+inject-interface    net/minecraft/client/gui/screen/StatsScreen    net/errorcraft/itematic/access/client/gui/screen/StatsScreenAccess
+inject-interface    net/minecraft/client/gui/screen/StatsScreen$ItemStatsListWidget$StatEntry    net/errorcraft/itematic/access/client/gui/screen/StatsScreenAccess$ItemStatsListWidgetAccess$StatEntryAccess
+inject-interface    net/minecraft/predicate/item/ItemPredicate    net/errorcraft/itematic/access/predicate/item/ItemPredicateAccess
+inject-interface    net/minecraft/predicate/item/ItemPredicate$Builder    net/errorcraft/itematic/access/predicate/item/ItemPredicateAccess$BuilderAccess
 
 extend-enum    net/minecraft/recipe/book/RecipeBookType    ITEMATIC_BREWING
 extend-enum    net/minecraft/client/recipebook/RecipeBookType    ITEMATIC_BREWING
-extend-enum    net/minecraft/loot/context/LootContext$EntityTarget    ITEMATIC_TARGET_ENTITY
-extend-enum    net/minecraft/loot/context/LootContext$EntityTarget    ITEMATIC_SPAWNED_ENTITY
+extend-enum    net/minecraft/loot/context/LootContext$EntityReference    ITEMATIC_SPAWNED_ENTITY

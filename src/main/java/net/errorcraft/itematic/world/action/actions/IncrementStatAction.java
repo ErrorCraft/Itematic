@@ -11,13 +11,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.stat.Stat;
 
-public record IncrementStatAction(LootContext.EntityTarget entity, Stat<?> stat) implements Action<IncrementStatAction> {
+public record IncrementStatAction(LootContext.EntityReference entity, Stat<?> stat) implements Action<IncrementStatAction> {
     public static final MapCodec<IncrementStatAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(IncrementStatAction::entity),
+        LootContext.EntityReference.CODEC.fieldOf("entity").forGetter(IncrementStatAction::entity),
         StatUtil.CODEC.fieldOf("stat").forGetter(IncrementStatAction::stat)
     ).apply(instance, IncrementStatAction::new));
 
-    public static IncrementStatAction of(LootContext.EntityTarget entity, Stat<?> stat) {
+    public static IncrementStatAction of(LootContext.EntityReference entity, Stat<?> stat) {
         return new IncrementStatAction(entity, stat);
     }
 
@@ -28,7 +28,7 @@ public record IncrementStatAction(LootContext.EntityTarget entity, Stat<?> stat)
 
     @Override
     public boolean execute(ActionContext context) {
-        if (context.get(this.entity.getParameter()) instanceof PlayerEntity player) {
+        if (context.get(this.entity.contextParam()) instanceof PlayerEntity player) {
             player.incrementStat(this.stat);
             return true;
         }

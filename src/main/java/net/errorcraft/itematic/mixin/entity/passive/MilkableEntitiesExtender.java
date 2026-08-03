@@ -50,6 +50,6 @@ public abstract class MilkableEntitiesExtender extends AnimalEntity {
         )
     )
     private ItemStack getDefaultStackForMilkBucketUseRegistryEntry(Item instance) {
-        return this.getWorld().itematic$createStack(ItemKeys.MILK_BUCKET);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.MILK_BUCKET);
     }
 }

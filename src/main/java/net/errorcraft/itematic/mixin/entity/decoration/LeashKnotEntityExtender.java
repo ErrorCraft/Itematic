@@ -25,6 +25,6 @@ public abstract class LeashKnotEntityExtender extends BlockAttachedEntity {
         )
     )
     private ItemStack newItemStackForLeadUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.LEAD);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.LEAD);
     }
 }

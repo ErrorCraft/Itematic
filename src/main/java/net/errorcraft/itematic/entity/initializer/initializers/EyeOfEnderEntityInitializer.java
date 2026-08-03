@@ -53,6 +53,15 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
         return entity;
     }
 
+    private BlockPos getBlockPos(ActionContext context) {
+        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
+        if (entity != null) {
+            return entity.getBlockPos();
+        }
+
+        return context.get(ItematicContextParameters.INTERACTED_POSITION, BlockPos::ofFloored);
+    }
+
     private Vec3d getPosition(ActionContext context) {
         Entity entity = context.get(LootContextParameters.THIS_ENTITY);
         if (entity != null) {
@@ -62,22 +71,13 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
         return context.get(ItematicContextParameters.INTERACTED_POSITION);
     }
 
-    private BlockPos getBlockPos(ActionContext context) {
-        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
-        if (entity != null) {
-            return entity.getBlockPos();
-        }
-
-        return context.getBlockPos(ItematicContextParameters.INTERACTED_POSITION);
-    }
-
     private EyeOfEnderEntity createEntity(ServerWorld world, Vec3d pos, ItemStack stack, BlockPos strongholdPos) {
         EyeOfEnderEntity entity = new EyeOfEnderEntity(world, pos.getX(), pos.getY(), pos.getZ());
         if (stack != null) {
             entity.setItem(stack);
         }
 
-        entity.initTargetPos(strongholdPos);
+        entity.initTargetPos(Vec3d.of(strongholdPos));
         return entity;
     }
 }

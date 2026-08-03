@@ -67,7 +67,7 @@ public record DisplayParticleAction(PositionTarget position, ParticleEffect part
     }
 
     private Vec3d position(ActionContext context, Random random) {
-        Vec3d pos = context.get(this.position.parameter());
+        Vec3d pos = context.get(this.position.contextParam());
         if (pos == null) {
             return null;
         }

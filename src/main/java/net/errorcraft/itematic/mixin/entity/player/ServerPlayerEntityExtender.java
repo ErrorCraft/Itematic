@@ -11,7 +11,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,8 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityExtender extends PlayerEntity {
-    public ServerPlayerEntityExtender(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
-        super(world, pos, yaw, gameProfile);
+    public ServerPlayerEntityExtender(World world, GameProfile profile) {
+        super(world, profile);
     }
 
     @Inject(
@@ -66,7 +65,7 @@ public abstract class ServerPlayerEntityExtender extends PlayerEntity {
         )
     )
     private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key) {
-        RegistryEntry<Item> itemEntry = this.getWorld()
+        RegistryEntry<Item> itemEntry = this.getEntityWorld()
             .getRegistryManager()
             .getOrThrow(RegistryKeys.ITEM)
             .getEntry((Item) key);

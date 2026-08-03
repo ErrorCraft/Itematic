@@ -29,7 +29,7 @@ public abstract class TadpoleEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForTadpoleBucketUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.TADPOLE_BUCKET);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.TADPOLE_BUCKET);
     }
 
     @Override

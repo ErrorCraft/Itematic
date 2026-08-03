@@ -6,7 +6,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.entity.LivingEntityAccess;
-import net.errorcraft.itematic.access.entity.attribute.AttributeContainerAccess;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
@@ -65,9 +64,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public abstract void setCurrentHand(Hand hand);
 
     @Shadow
-    public abstract ItemStack getMainHandStack();
-
-    @Shadow
     public abstract ItemStack getStackInHand(Hand hand);
 
     @Shadow
@@ -78,6 +74,9 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Shadow
     public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
+
+    @Shadow
+    public abstract Hand getActiveHand();
 
     @Unique
     private int itemUsedTicks;
@@ -237,14 +236,14 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private void invokeBeforeDeathHolderEvent(DeathProtectionComponent instance, ItemStack stack, LivingEntity entity) {
-        if (!(entity.getWorld() instanceof ServerWorld serverWorld)) {
+        if (!(entity.getEntityWorld() instanceof ServerWorld serverWorld)) {
             return;
         }
 
         ActionContext context = ActionContext.builder(serverWorld)
             .stackExchanger(entity, stack)
             .add(LootContextParameters.THIS_ENTITY, entity)
-            .add(LootContextParameters.ORIGIN, entity.getPos())
+            .add(LootContextParameters.ORIGIN, entity.getEntityPos())
             .add(LootContextParameters.TOOL, stack)
             .build();
         stack.itematic$invokeEvent(ItemEvents.BEFORE_DEATH_HOLDER, context);
@@ -405,7 +404,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private ItemStack newItemStackForWitherRoseUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.WITHER_ROSE);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.WITHER_ROSE);
     }
 
     @ModifyReturnValue(
@@ -421,7 +420,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @ModifyReturnValue(
-        method = "getItemUseTime",
+        method = "getItemUseTime()I",
         at = @At(
             value = "RETURN",
             ordinal = 0
@@ -453,9 +452,20 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Override
     public double itematic$getAttackDamage() {
-        Double baseAttackDamage = this.getBaseAttackDamage(this.getMainHandStack());
-        return ((AttributeContainerAccess) this.getAttributes())
-            .itematic$getValue(EntityAttributes.ATTACK_DAMAGE, baseAttackDamage);
+        Hand usedHand = this.getActiveHand();
+        Double baseAttackDamage = this.getBaseAttackDamage(this.getStackInHand(usedHand));
+        return this.getAttributes().itematic$getValue(EntityAttributes.ATTACK_DAMAGE, baseAttackDamage);
+    }
+
+    @Override
+    public double itematic$getBaseAttackDamage() {
+        Hand usedHand = this.getActiveHand();
+        Double baseAttackDamage = this.getBaseAttackDamage(this.getStackInHand(usedHand));
+        if (baseAttackDamage != null) {
+            return baseAttackDamage;
+        }
+
+        return this.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE);
     }
 
     @Unique

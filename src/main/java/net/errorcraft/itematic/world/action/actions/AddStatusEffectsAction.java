@@ -12,14 +12,14 @@ import net.minecraft.loot.context.LootContext;
 
 import java.util.List;
 
-public record AddStatusEffectsAction(List<StatusEffectInstance> effects, LootContext.EntityTarget entity) implements Action<AddStatusEffectsAction> {
+public record AddStatusEffectsAction(List<StatusEffectInstance> effects, LootContext.EntityReference entity) implements Action<AddStatusEffectsAction> {
     public static final MapCodec<AddStatusEffectsAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         StatusEffectInstance.CODEC.listOf().fieldOf("effects").forGetter(AddStatusEffectsAction::effects),
-        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(AddStatusEffectsAction::entity)
+        LootContext.EntityReference.CODEC.fieldOf("entity").forGetter(AddStatusEffectsAction::entity)
     ).apply(instance, AddStatusEffectsAction::new));
 
     public static AddStatusEffectsAction of(StatusEffectInstance... effects) {
-        return new AddStatusEffectsAction(List.of(effects), LootContext.EntityTarget.THIS);
+        return new AddStatusEffectsAction(List.of(effects), LootContext.EntityReference.THIS);
     }
 
     @Override
@@ -29,7 +29,7 @@ public record AddStatusEffectsAction(List<StatusEffectInstance> effects, LootCon
 
     @Override
     public boolean execute(ActionContext context) {
-        if (context.get(this.entity.getParameter()) instanceof LivingEntity target) {
+        if (context.get(this.entity.contextParam()) instanceof LivingEntity target) {
             return this.addStatusEffects(target);
         }
 

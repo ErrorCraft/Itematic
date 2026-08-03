@@ -24,7 +24,7 @@
       "slot": "head"
     },
     "minecraft:repairable": {
-      "items": "#minecraft:repairs_turtle_armor"
+      "items": "#minecraft:repairs_turtle_helmet"
     },
     "minecraft:stackable": 1
   },

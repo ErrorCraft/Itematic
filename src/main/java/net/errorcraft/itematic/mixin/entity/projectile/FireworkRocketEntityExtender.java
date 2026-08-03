@@ -26,13 +26,13 @@ public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
         )
     )
     private Item getHandPosOffsetUseRegistryEntry(Item item) {
-        return this.getWorld().itematic$getItem(ItemKeys.FIREWORK_ROCKET).value();
+        return this.getEntityWorld().itematic$getItem(ItemKeys.FIREWORK_ROCKET).value();
     }
 
     @Redirect(
         method = {
             "initDataTracker",
-            "readCustomDataFromNbt"
+            "readCustomData"
         },
         at = @At(
             value = "INVOKE",
@@ -40,6 +40,6 @@ public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
         )
     )
     private ItemStack newItemStackForFireworkRocketUseCreateStack() {
-        return this.getWorld().itematic$createStack(ItemKeys.FIREWORK_ROCKET);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.FIREWORK_ROCKET);
     }
 }

@@ -33,12 +33,13 @@ public record ShearAtPositionAction(PositionTarget position) implements Action<S
             return false;
         }
 
-        BlockPos pos = context.getBlockPos(this.position.parameter());
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
         if (pos == null) {
             return false;
         }
 
-        return ShearsDispenserBehaviorAccessor.tryShearBlock(world, pos)
-            || ShearsDispenserBehaviorAccessor.tryShearEntity(world, pos, context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY));
+        ItemStack tool = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
+        return ShearsDispenserBehaviorAccessor.tryShearBlock(world, tool, pos)
+            || ShearsDispenserBehaviorAccessor.tryShearEntity(world, pos, tool);
     }
 }

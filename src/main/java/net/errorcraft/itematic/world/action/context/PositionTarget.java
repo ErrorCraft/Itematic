@@ -3,11 +3,12 @@ package net.errorcraft.itematic.world.action.context;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.loot.context.LootEntityValueSource;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.context.ContextParameter;
 import net.minecraft.util.math.Vec3d;
 
-public enum PositionTarget implements StringIdentifiable {
+public enum PositionTarget implements StringIdentifiable, LootEntityValueSource.ContextBased<Vec3d> {
     ORIGIN("origin", LootContextParameters.ORIGIN),
     INTERACTED("interacted", ItematicContextParameters.INTERACTED_POSITION),
     SPAWNED("spawned", ItematicContextParameters.SPAWNED_POSITION);
@@ -27,7 +28,8 @@ public enum PositionTarget implements StringIdentifiable {
         return this.name;
     }
 
-    public ContextParameter<Vec3d> parameter() {
+    @Override
+    public ContextParameter<? extends Vec3d> contextParam() {
         return this.parameter;
     }
 }

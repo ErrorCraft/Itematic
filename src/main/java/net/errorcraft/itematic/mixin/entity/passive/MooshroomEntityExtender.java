@@ -46,7 +46,7 @@ public abstract class MooshroomEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForSuspiciousStewUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.SUSPICIOUS_STEW);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.SUSPICIOUS_STEW);
     }
 
     @Redirect(
@@ -65,7 +65,7 @@ public abstract class MooshroomEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForMushroomStewUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.MUSHROOM_STEW);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.MUSHROOM_STEW);
     }
 
     @Redirect(

@@ -25,6 +25,6 @@ public abstract class TridentEntityExtender extends PersistentProjectileEntity {
         )
     )
     private ItemStack newItemStackForTridentUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.TRIDENT);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.TRIDENT);
     }
 }

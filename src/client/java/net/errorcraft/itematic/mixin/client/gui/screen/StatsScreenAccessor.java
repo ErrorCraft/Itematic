@@ -7,10 +7,10 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 public interface StatsScreenAccessor {
     interface ItemStatsListWidgetAccessor {
-        @Mixin(StatsScreen.ItemStatsListWidget.Entry.class)
-        interface EntryAccessor {
+        @Mixin(StatsScreen.ItemStatsListWidget.StatEntry.class)
+        interface StatEntryAccessor {
             @Invoker("<init>")
-            static StatsScreen.ItemStatsListWidget.Entry create(StatsScreen.ItemStatsListWidget widget, Item item) {
+            static StatsScreen.ItemStatsListWidget.StatEntry create(StatsScreen.ItemStatsListWidget widget, Item item) {
                 throw new UnsupportedOperationException();
             }
         }

@@ -20,7 +20,18 @@
         "rules": []
       },
       "attack_speed": 0.15,
-      "may_smash": true
+      "types": {
+        "minecraft:smashing": {
+          "heavy_smash_attack_fall_distance": 5.0,
+          "hit_sounds": {
+            "in_air": "minecraft:item.mace.smash_air",
+            "on_ground_large_fall_distance": "minecraft:item.mace.smash_ground_heavy",
+            "on_ground_small_fall_distance": "minecraft:item.mace.smash_ground"
+          },
+          "knockback_power": 0.699999988079071,
+          "smash_attack_fall_distance": 1.5
+        }
+      }
     }
   },
   "display": {

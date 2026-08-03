@@ -26,7 +26,7 @@ public abstract class TntMinecartEntityExtender extends VehicleEntityExtender {
         )
     )
     private ItemStack newItemStackForTntMinecartUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.TNT_MINECART);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.TNT_MINECART);
     }
 
     @Override

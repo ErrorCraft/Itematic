@@ -1,0 +1,75 @@
+{
+  "behavior": {
+    "minecraft:damageable": {
+      "durability": 190
+    },
+    "minecraft:enchantable": {
+      "enchantability": 13
+    },
+    "minecraft:repairable": {
+      "items": "#minecraft:copper_tool_materials"
+    },
+    "minecraft:stackable": 1,
+    "minecraft:useable": {
+      "animation": "spear",
+      "effects": {
+        "can_sprint": true,
+        "interact_vibrations": false,
+        "speed_multiplier": 1.0
+      },
+      "ticks": {
+        "type": "minecraft:indefinite"
+      }
+    },
+    "minecraft:weapon": {
+      "attack_damage": {
+        "default_damage": 1.0,
+        "rules": []
+      },
+      "attack_range": {
+        "hitbox_margin": 0.125,
+        "max_creative_reach": 6.5,
+        "max_reach": 4.5,
+        "min_creative_reach": 2.0,
+        "min_reach": 2.0,
+        "mob_factor": 0.5
+      },
+      "attack_speed": 0.29411762952804565,
+      "damage_type": "minecraft:spear",
+      "minimum_attack_charge": 1.0,
+      "swing_animation": {
+        "type": "stab",
+        "duration": 17
+      },
+      "types": {
+        "minecraft:kinetic": {
+          "damage_conditions": {
+            "max_duration_ticks": 250,
+            "min_relative_speed": 4.6
+          },
+          "damage_multiplier": 0.82,
+          "delay_ticks": 13,
+          "dismount_conditions": {
+            "max_duration_ticks": 80,
+            "min_speed": 9.0
+          },
+          "forward_movement": 0.38,
+          "hit_sound": "minecraft:item.spear.hit",
+          "knockback_conditions": {
+            "max_duration_ticks": 165,
+            "min_speed": 5.1
+          },
+          "sound": "minecraft:item.spear.use"
+        },
+        "minecraft:piercing": {
+          "hit_sound": "minecraft:item.spear.hit",
+          "sound": "minecraft:item.spear.attack"
+        }
+      }
+    }
+  },
+  "display": {
+    "model": "minecraft:copper_spear",
+    "translation_key": "item.minecraft.copper_spear"
+  }
+}

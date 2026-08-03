@@ -23,6 +23,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> BOGGED = of("bogged");
     public static final RegistryKey<EntityType<?>> BREEZE = of("breeze");
     public static final RegistryKey<EntityType<?>> CAMEL = of("camel");
+    public static final RegistryKey<EntityType<?>> CAMEL_HUSK = of("camel_husk");
     public static final RegistryKey<EntityType<?>> CAT = of("cat");
     public static final RegistryKey<EntityType<?>> CAVE_SPIDER = of("cave_spider");
     public static final RegistryKey<EntityType<?>> CHERRY_BOAT = of("cherry_boat");
@@ -30,6 +31,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> CHEST_MINECART = of("chest_minecart");
     public static final RegistryKey<EntityType<?>> CHICKEN = of("chicken");
     public static final RegistryKey<EntityType<?>> COD = of("cod");
+    public static final RegistryKey<EntityType<?>> COPPER_GOLEM = of("copper_golem");
     public static final RegistryKey<EntityType<?>> COMMAND_BLOCK_MINECART = of("command_block_minecart");
     public static final RegistryKey<EntityType<?>> COW = of("cow");
     public static final RegistryKey<EntityType<?>> CREAKING = of("creaking");
@@ -58,6 +60,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> GLOW_SQUID = of("glow_squid");
     public static final RegistryKey<EntityType<?>> GOAT = of("goat");
     public static final RegistryKey<EntityType<?>> GUARDIAN = of("guardian");
+    public static final RegistryKey<EntityType<?>> HAPPY_GHAST = of("happy_ghast");
     public static final RegistryKey<EntityType<?>> HOGLIN = of("hoglin");
     public static final RegistryKey<EntityType<?>> HOPPER_MINECART = of("hopper_minecart");
     public static final RegistryKey<EntityType<?>> HORSE = of("horse");
@@ -74,6 +77,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> MINECART = of("minecart");
     public static final RegistryKey<EntityType<?>> MOOSHROOM = of("mooshroom");
     public static final RegistryKey<EntityType<?>> MULE = of("mule");
+    public static final RegistryKey<EntityType<?>> NAUTILUS = of("nautilus");
     public static final RegistryKey<EntityType<?>> OAK_BOAT = of("oak_boat");
     public static final RegistryKey<EntityType<?>> OAK_CHEST_BOAT = of("oak_chest_boat");
     public static final RegistryKey<EntityType<?>> OCELOT = of("ocelot");
@@ -81,6 +85,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> PALE_OAK_BOAT = of("pale_oak_boat");
     public static final RegistryKey<EntityType<?>> PALE_OAK_CHEST_BOAT = of("pale_oak_chest_boat");
     public static final RegistryKey<EntityType<?>> PANDA = of("panda");
+    public static final RegistryKey<EntityType<?>> PARCHED = of("parched");
     public static final RegistryKey<EntityType<?>> PARROT = of("parrot");
     public static final RegistryKey<EntityType<?>> PHANTOM = of("phantom");
     public static final RegistryKey<EntityType<?>> PIG = of("pig");
@@ -130,6 +135,7 @@ public class EntityTypeKeys {
     public static final RegistryKey<EntityType<?>> ZOGLIN = of("zoglin");
     public static final RegistryKey<EntityType<?>> ZOMBIE = of("zombie");
     public static final RegistryKey<EntityType<?>> ZOMBIE_HORSE = of("zombie_horse");
+    public static final RegistryKey<EntityType<?>> ZOMBIE_NAUTILUS = of("zombie_nautilus");
     public static final RegistryKey<EntityType<?>> ZOMBIE_VILLAGER = of("zombie_villager");
     public static final RegistryKey<EntityType<?>> ZOMBIFIED_PIGLIN = of("zombified_piglin");
 

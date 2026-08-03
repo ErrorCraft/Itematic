@@ -14,14 +14,14 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 
-public record RemoveStatusEffectsAction(RegistryEntryList<StatusEffect> effects, LootContext.EntityTarget entity) implements Action<RemoveStatusEffectsAction> {
+public record RemoveStatusEffectsAction(RegistryEntryList<StatusEffect> effects, LootContext.EntityReference entity) implements Action<RemoveStatusEffectsAction> {
     public static final MapCodec<RemoveStatusEffectsAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         RegistryCodecs.entryList(RegistryKeys.STATUS_EFFECT).fieldOf("effects").forGetter(RemoveStatusEffectsAction::effects),
-        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(RemoveStatusEffectsAction::entity)
+        LootContext.EntityReference.CODEC.fieldOf("entity").forGetter(RemoveStatusEffectsAction::entity)
     ).apply(instance, RemoveStatusEffectsAction::new));
 
     @SafeVarargs
-    public static RemoveStatusEffectsAction of(LootContext.EntityTarget entity, RegistryEntry<StatusEffect>... effects) {
+    public static RemoveStatusEffectsAction of(LootContext.EntityReference entity, RegistryEntry<StatusEffect>... effects) {
         return new RemoveStatusEffectsAction(RegistryEntryList.of(effects), entity);
     }
 
@@ -32,7 +32,7 @@ public record RemoveStatusEffectsAction(RegistryEntryList<StatusEffect> effects,
 
     @Override
     public boolean execute(ActionContext context) {
-        if (context.get(this.entity.getParameter()) instanceof LivingEntity target) {
+        if (context.get(this.entity.contextParam()) instanceof LivingEntity target) {
             return this.removeStatusEffects(target);
         }
 

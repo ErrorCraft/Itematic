@@ -10,12 +10,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.loot.context.LootContext;
 
-public record ClearStatusEffectsAction(LootContext.EntityTarget entity) implements Action<ClearStatusEffectsAction> {
+public record ClearStatusEffectsAction(LootContext.EntityReference entity) implements Action<ClearStatusEffectsAction> {
     public static final MapCodec<ClearStatusEffectsAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(ClearStatusEffectsAction::entity)
+        LootContext.EntityReference.CODEC.fieldOf("entity").forGetter(ClearStatusEffectsAction::entity)
     ).apply(instance, ClearStatusEffectsAction::new));
 
-    public static ClearStatusEffectsAction of(LootContext.EntityTarget entity) {
+    public static ClearStatusEffectsAction of(LootContext.EntityReference entity) {
         return new ClearStatusEffectsAction(entity);
     }
 
@@ -26,7 +26,7 @@ public record ClearStatusEffectsAction(LootContext.EntityTarget entity) implemen
 
     @Override
     public boolean execute(ActionContext context) {
-        Entity entity = context.get(this.entity.getParameter());
+        Entity entity = context.get(this.entity.contextParam());
         if (entity instanceof LivingEntity target) {
             return target.clearStatusEffects();
         }

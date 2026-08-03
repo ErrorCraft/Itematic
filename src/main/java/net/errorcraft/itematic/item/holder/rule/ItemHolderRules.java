@@ -2,7 +2,7 @@ package net.errorcraft.itematic.item.holder.rule;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.predicate.item.ItemPredicateUtil;
+import net.errorcraft.itematic.predicate.item.ItemPredicates;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -64,7 +64,7 @@ public record ItemHolderRules(List<Rule> rules) {
             ItemHolderRule.CODEC.forGetter(Rule::rule)
         ).apply(instance, Rule::new));
         public static final PacketCodec<RegistryByteBuf, Rule> PACKET_CODEC = PacketCodec.tuple(
-            ItemPredicateUtil.PACKET_CODEC.collect(PacketCodecs::optional), Rule::condition,
+            ItemPredicates.PACKET_CODEC.collect(PacketCodecs::optional), Rule::condition,
             ItemHolderRule.PACKET_CODEC, Rule::rule,
             Rule::new
         );

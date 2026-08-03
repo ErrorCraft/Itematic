@@ -29,7 +29,7 @@ public abstract class TropicalFishEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForTropicalFishBucketUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.TROPICAL_FISH_BUCKET);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.TROPICAL_FISH_BUCKET);
     }
 
     @Override

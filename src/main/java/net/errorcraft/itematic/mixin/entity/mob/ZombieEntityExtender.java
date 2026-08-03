@@ -60,17 +60,6 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "getSkull",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
-        )
-    )
-    private ItemStack newItemStackForZombieHeadUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.ZOMBIE_HEAD);
-    }
-
-    @Redirect(
         method = "canGather",
         at = @At(
             value = "INVOKE",
@@ -90,7 +79,7 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForIronSwordUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.IRON_SWORD);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_SWORD);
     }
 
     @Redirect(
@@ -108,8 +97,27 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
             )
         )
     )
+    private ItemStack newItemStackForIronSpearUseCreateStack(ItemConvertible item) {
+        return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_SPEAR);
+    }
+
+    @Redirect(
+        method = "initEquipment",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/item/Items;IRON_SPEAR:Lnet/minecraft/item/Item;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
     private ItemStack newItemStackForIronShovelUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.IRON_SHOVEL);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_SHOVEL);
     }
 
     @Override

@@ -2,7 +2,7 @@ package net.errorcraft.itematic.component.type;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.predicate.item.ItemPredicateUtil;
+import net.errorcraft.itematic.predicate.item.ItemPredicates;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
@@ -15,7 +15,7 @@ public record ToolComponentRuleExtraFields(Optional<ItemPredicate> item) {
         ItemPredicate.CODEC.optionalFieldOf("item").forGetter(ToolComponentRuleExtraFields::item)
     ).apply(instance, ToolComponentRuleExtraFields::new));
     public static final PacketCodec<RegistryByteBuf, ToolComponentRuleExtraFields> PACKET_CODEC = PacketCodec.tuple(
-        ItemPredicateUtil.PACKET_CODEC.collect(PacketCodecs::optional), ToolComponentRuleExtraFields::item,
+        ItemPredicates.PACKET_CODEC.collect(PacketCodecs::optional), ToolComponentRuleExtraFields::item,
         ToolComponentRuleExtraFields::new
     );
 }

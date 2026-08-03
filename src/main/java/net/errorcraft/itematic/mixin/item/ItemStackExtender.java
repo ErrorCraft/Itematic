@@ -21,12 +21,14 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.component.*;
+import net.minecraft.component.type.KineticWeaponComponent;
 import net.minecraft.component.type.TooltipDisplayComponent;
 import net.minecraft.component.type.WeaponComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
@@ -53,10 +55,7 @@ import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -432,6 +431,24 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
     }
 
+    @Redirect(
+        method = "usageTick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/component/DataComponentTypes;KINETIC_WEAPON:Lnet/minecraft/component/ComponentType;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private Object getKineticWeaponReturnNull(ItemStack instance, ComponentType<KineticWeaponComponent> componentType) {
+        return null;
+    }
+
     @Inject(
         method = "canRepairWith",
         at = @At("HEAD"),
@@ -657,6 +674,20 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         }
     }
 
+    @Redirect(
+        method = "method_75224",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/Item;getDamageSource(Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/damage/DamageSource;"
+        )
+    )
+    @SuppressWarnings("ConstantValue")
+    private DamageSource getDamageSourceUseItemComponent(Item instance, LivingEntity user) {
+        return this.itematic$getBehavior(ItemComponentTypes.WEAPON)
+            .map(weapon -> weapon.damageSource((ItemStack)(Object) this, user))
+            .orElse(null);
+    }
+
     /**
      * @author ErrorCraft
      * @reason Uses a registry entry on the item stack for data-driven items.
@@ -825,7 +856,6 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         this.entry = entry;
         if (entry.hasKeyAndValue()) {
             this.components = new MergedComponentMap(entry.value().getComponents());
-            entry.value().postProcessComponents((ItemStack) (Object) this);
         } else {
             this.components = new MergedComponentMap(ComponentMap.EMPTY);
         }
@@ -836,7 +866,6 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         this.entry = entry;
         if (entry.hasKeyAndValue()) {
             this.components = MergedComponentMap.create(entry.value().getComponents(), changes);
-            entry.value().postProcessComponents((ItemStack) (Object) this);
         } else {
             this.components = MergedComponentMap.create(ComponentMap.EMPTY, changes);
         }

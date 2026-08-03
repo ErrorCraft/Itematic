@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -22,10 +23,12 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public record FireworkItemComponent() implements ItemComponent<FireworkItemComponent> {
+public class FireworkItemComponent implements ItemComponent<FireworkItemComponent> {
     public static final FireworkItemComponent INSTANCE = new FireworkItemComponent();
-    public static final Codec<FireworkItemComponent> CODEC = Codec.unit(INSTANCE);
+    public static final Codec<FireworkItemComponent> CODEC = MapCodec.unitCodec(INSTANCE);
     private static final FireworksComponent DEFAULT_DATA_COMPONENT = new FireworksComponent(1, List.of());
+
+    private FireworkItemComponent() {}
 
     @Override
     public ItemComponentType<FireworkItemComponent> type() {
@@ -56,6 +59,11 @@ public record FireworkItemComponent() implements ItemComponent<FireworkItemCompo
 
     @Override
     public ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
+        PlayerEntity player = context.getPlayer();
+        if (player != null && player.isGliding()) {
+            return ItemResult.PASS;
+        }
+
         World world = context.getWorld();
         ItemStack stack = context.getStack();
         if (world.isClient()) {

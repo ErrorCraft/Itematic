@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -30,7 +29,7 @@ public abstract class WolfEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack getDefaultStackForArmadilloScuteUseCreateStack(Item instance) {
-        return this.getWorld().itematic$createStack(ItemKeys.ARMADILLO_SCUTE);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.ARMADILLO_SCUTE);
     }
 
     @Redirect(
@@ -42,25 +41,6 @@ public abstract class WolfEntityExtender extends MobEntityExtender {
     )
     private boolean isOfForWolfArmorUseRegistryKeyCheck(ItemStack instance, Item item) {
         return instance.itematic$isOf(ItemKeys.WOLF_ARMOR);
-    }
-
-    @Redirect(
-        method = "interactMob",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/item/Items;SHEARS:Lnet/minecraft/item/Item;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SHEARS);
     }
 
     @Redirect(

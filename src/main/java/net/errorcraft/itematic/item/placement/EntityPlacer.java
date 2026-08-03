@@ -36,7 +36,7 @@ public class EntityPlacer {
             return null;
         }
 
-        BlockPos pos = context.get(position.parameter(), BlockPos::ofFloored);
+        BlockPos pos = context.get(position.contextParam(), BlockPos::ofFloored);
         if (pos == null) {
             return null;
         }

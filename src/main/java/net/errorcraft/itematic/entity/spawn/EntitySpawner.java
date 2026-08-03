@@ -13,23 +13,22 @@ import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.MergedComponentMap;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.TypedEntityData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
@@ -56,15 +55,14 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
         return new Builder(entity);
     }
 
-    public EntityType<?> entityType(ItemStack stack, RegistryWrapper.WrapperLookup registries) {
+    public EntityType<?> entityType(ItemStack stack) {
         if (!this.allowItemData) {
             return this.entity.value();
         }
 
-        NbtComponent entityData = stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT);
-        EntityType<?> entityType = entityData.getRegistryValueOfId(registries, RegistryKeys.ENTITY_TYPE);
-        if (entityType != null) {
-            return entityType;
+        TypedEntityData<EntityType<?>> entityData = stack.get(DataComponentTypes.ENTITY_DATA);
+        if (entityData != null) {
+            return entityData.getType();
         }
 
         return this.entity.value();
@@ -91,10 +89,11 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
             return null;
         }
 
-        EntityType<?> type = this.entityType(
-            context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY),
-            context.world().getRegistryManager()
-        );
+        EntityType<?> type = this.entityType(context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY));
+        if (!type.isAllowedInPeaceful() && world.getDifficulty() == Difficulty.PEACEFUL) {
+            return null;
+        }
+
         return new EntitySpawnContext(
             world,
             type,
@@ -124,7 +123,7 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
         world.spawnEntityAndPassengers(entity);
         ActionContext spawnedActionContext = spawnActionContext.extend()
             .add(ItematicContextParameters.SPAWNED_ENTITY, entity)
-            .add(ItematicContextParameters.SPAWNED_POSITION, entity.getPos())
+            .add(ItematicContextParameters.SPAWNED_POSITION, entity.getEntityPos())
             .build();
         this.spawned(entity, world, spawnedActionContext);
         return entity;
@@ -158,7 +157,7 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
     private void spawned(Entity entity, World world, ActionContext spawnedContext) {
         this.spawnSound.ifPresent(spawnSound -> world.itematic$playSound(
             null,
-            entity.getPos(),
+            entity.getEntityPos(),
             spawnSound.value(),
             SoundCategory.BLOCKS,
             0.75f,
@@ -167,7 +166,7 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
         world.emitGameEvent(
             spawnedContext.get(LootContextParameters.THIS_ENTITY),
             GameEvent.ENTITY_PLACE,
-            entity.getPos()
+            entity.getEntityPos()
         );
         spawnedContext.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
             .itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, spawnedContext);

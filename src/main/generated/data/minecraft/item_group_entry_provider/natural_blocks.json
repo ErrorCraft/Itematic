@@ -67,6 +67,7 @@
       "type": "tag",
       "tag": "minecraft:item_group/egg_like_blocks"
     },
+    "minecraft:dried_ghast",
     {
       "type": "tag",
       "tag": "minecraft:item_group/seeds"

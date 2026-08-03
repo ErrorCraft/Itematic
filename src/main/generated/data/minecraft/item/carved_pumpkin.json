@@ -1,4 +1,16 @@
 {
+  "attribute_modifiers": [
+    {
+      "id": "minecraft:waypoint_transmit_range_hide",
+      "type": "minecraft:waypoint_transmit_range",
+      "amount": -1.0,
+      "display": {
+        "type": "hidden"
+      },
+      "operation": "add_multiplied_total",
+      "slot": "head"
+    }
+  ],
   "behavior": {
     "minecraft:block": {
       "block": "minecraft:carved_pumpkin"

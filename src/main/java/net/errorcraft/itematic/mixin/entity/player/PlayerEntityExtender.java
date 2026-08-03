@@ -79,7 +79,7 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
     }
 
     @Redirect(
-        method = "attack",
+        method = "onTargetDamaged",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/player/PlayerEntity;setStackInHand(Lnet/minecraft/util/Hand;Lnet/minecraft/item/ItemStack;)V"
@@ -130,7 +130,7 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
             }
         }
 
-        return this.abilities.creativeMode ? this.getWorld().itematic$createStack(ItemKeys.ARROW) : ItemStack.EMPTY;
+        return this.abilities.creativeMode ? this.getEntityWorld().itematic$createStack(ItemKeys.ARROW) : ItemStack.EMPTY;
     }
 
     @Unique

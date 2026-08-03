@@ -25,6 +25,6 @@ public abstract class MinecartEntityExtender extends AbstractMinecartEntity {
         )
     )
     private ItemStack newItemStackForMinecartUseCreateStack(ItemConvertible item) {
-        return this.getWorld().itematic$createStack(ItemKeys.MINECART);
+        return this.getEntityWorld().itematic$createStack(ItemKeys.MINECART);
     }
 }

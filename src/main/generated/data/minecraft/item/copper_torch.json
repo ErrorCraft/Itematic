@@ -1,0 +1,17 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": {
+        "type": "minecraft:attached_to_side",
+        "attached_block": "minecraft:copper_torch",
+        "attached_side": "down",
+        "other_block": "minecraft:copper_wall_torch"
+      }
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:copper_torch",
+    "translation_key": "block.minecraft.copper_torch"
+  }
+}
